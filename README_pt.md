@@ -4,6 +4,8 @@
 
 Pororoca é uma ferramenta de testes de HTTP, como o Postman, mas com diversas melhorias.
 
+![TelaDeExemplo](./docs/pt-BR/imgs/example_screen.jpg)
+
 ## Instalação
 
 Leia as [instruções](./docs/pt-BR/Instalação.md) e baixe o programa [aqui](https://github.com/alexandrehtrb/Pororoca/releases).
