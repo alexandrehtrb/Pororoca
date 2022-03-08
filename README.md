@@ -2,7 +2,7 @@
 
 [Ler em português](README_pt.md)
 
-Pororoca is a HTTP testing tool, inspired on Postman, but with many improvements.
+Pororoca is a HTTP testing tool, inspired by Postman, but with many improvements.
 
 It is available for Windows, Mac OSX and Linux.
 
