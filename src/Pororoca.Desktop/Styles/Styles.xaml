@@ -1,0 +1,17 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Design.PreviewWith>
+    <Border Padding="20">
+      <StackPanel Spacing="5">        
+        <TextBlock Text="Code Font Family" FontFamily="{StaticResource CodeFontFamily}" />
+      </StackPanel>
+    </Border>
+  </Design.PreviewWith>
+  <Styles.Resources>
+    <Thickness x:Key="PageMargin">40 0 40 0</Thickness>    
+    <FontFamily x:Key="CodeFontFamily">avares://Pororoca.Desktop/Assets/Fonts#Source Code Pro</FontFamily>
+    <Color x:Key="SystemAccentColor">#A55B1E</Color><!--A55B1E-->
+    <!--FontFamily x:Key="CodeFontFamily">avares://Pororoca.Desktop/Assets/Fonts#Segoe UI</FontFamily-->
+  </Styles.Resources>
+
+</Styles>

@@ -1,0 +1,446 @@
+﻿{
+  "schema": "Pororoca/1",
+  "id": "8699d3cb-f815-47a9-8e53-0b2196938d37",
+  "name": "PororocaTestCollection",
+  "createdAt": "2022-03-06T20:23:18.9787734-03:00",
+  "folders": [
+    {
+      "id": "b4e2e70f-5684-464e-84d2-00f2bfa7d2e3",
+      "name": "GET",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "id": "fa00908e-cb28-4d40-84d2-033f07953e1a",
+          "name": "JSON",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{HttpBinUrl}}/json"
+        },
+        {
+          "requestType": "http",
+          "id": "4271a3f9-8ff9-4eaa-81b6-8b00668d08bb",
+          "name": "HEADERS",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{HttpBinUrl}}/headers",
+          "headers": [
+            {
+              "enabled": true,
+              "key": "MyIdSecret",
+              "value": "{{MyIdSecret}}"
+            },
+            {
+              "enabled": true,
+              "key": "Header1",
+              "value": "oi"
+            }
+          ]
+        },
+        {
+          "requestType": "http",
+          "id": "15867839-a7e4-4596-9d6e-74470ec45ef2",
+          "name": "GZIP",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{HttpBinUrl}}/gzip"
+        }
+      ]
+    },
+    {
+      "id": "27581e73-e70e-47fa-a7c4-34399d33c123",
+      "name": "POST",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "id": "113061c7-244c-47ce-8814-53f12332c4a9",
+          "name": "EMPTY",
+          "httpVersion": 1.1,
+          "httpMethod": "POST",
+          "url": "{{HttpBinUrl}}/anything"
+        },
+        {
+          "requestType": "http",
+          "id": "220c3635-2723-461e-ac79-70119d6f61c9",
+          "name": "RAW JSON",
+          "httpVersion": 1.1,
+          "httpMethod": "POST",
+          "url": "{{HttpBinUrl}}/anything",
+          "body": {
+            "mode": "raw",
+            "contentType": "application/json",
+            "rawContent": "{\r\n\t\"id\":1,\r\n\t\"name\":\"Alexandre\"\r\n}"
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "99a6a21c-749c-4d86-88d0-3ab26a7b8491",
+          "name": "FILE",
+          "httpVersion": 1.1,
+          "httpMethod": "POST",
+          "url": "{{HttpBinUrl}}/anything",
+          "body": {
+            "mode": "file",
+            "contentType": "text/plain",
+            "fileSrcPath": "C:\\Users\\Alexandre\\Desktop\\aaa.txt"
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "44762cbd-83c3-41e9-9c84-3a70abf60754",
+          "name": "FORM URL ENCODED",
+          "httpVersion": 1.1,
+          "httpMethod": "POST",
+          "url": "{{HttpBinUrl}}/anything",
+          "body": {
+            "mode": "urlEncoded",
+            "urlEncodedValues": [
+              {
+                "enabled": true,
+                "key": "a",
+                "value": "xyz"
+              },
+              {
+                "enabled": true,
+                "key": "b",
+                "value": "123"
+              },
+              {
+                "enabled": false,
+                "key": "c",
+                "value": "false"
+              },
+              {
+                "enabled": true,
+                "key": "c",
+                "value": "true"
+              },
+              {
+                "enabled": true,
+                "key": "myIdSecret",
+                "value": "{{MyIdSecret}}"
+              }
+            ]
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "bd4b913a-f19d-453d-a735-d8384815679a",
+          "name": "MULTIPART FORM DATA",
+          "httpVersion": 1.1,
+          "httpMethod": "POST",
+          "url": "{{HttpBinUrl}}/anything",
+          "body": {
+            "mode": "formData",
+            "formDataValues": [
+              {
+                "enabled": true,
+                "type": "text",
+                "key": "a",
+                "textValue": "xyz",
+                "contentType": "text/plain"
+              },
+              {
+                "enabled": true,
+                "type": "text",
+                "key": "b",
+                "textValue": "{\"id\":2}",
+                "contentType": "application/json"
+              },
+              {
+                "enabled": true,
+                "type": "text",
+                "key": "myIdSecret",
+                "textValue": "{{MyIdSecret}}",
+                "contentType": "text/plain"
+              },
+              {
+                "enabled": true,
+                "type": "file",
+                "key": "arq",
+                "contentType": "text/plain",
+                "fileSrcPath": "C:\\Users\\Alexandre\\Desktop\\aaa.txt"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "1202a555-f79d-428b-98be-392048c44f22",
+      "name": "AUTH",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "id": "d08c5793-1aa5-43aa-9b66-00447fff6415",
+          "name": "BASIC",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{HttpBinUrl}}/headers",
+          "customAuth": {
+            "mode": "basic",
+            "basicAuthLogin": "{{BasicAuthLogin}}",
+            "basicAuthPassword": "{{BasicAuthPassword}}"
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "169e7bbf-750d-4dfa-8804-705b993e994e",
+          "name": "BEARER",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{HttpBinUrl}}/headers",
+          "customAuth": {
+            "mode": "bearer",
+            "bearerToken": "{{BearerAuthToken}}"
+          }
+        }
+      ]
+    },
+    {
+      "id": "4689466a-2fba-429d-8351-ece111a5a330",
+      "name": "BAD SSL",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "id": "24b39e57-c759-4c61-9127-a09cc621e9b2",
+          "name": "SELF-SIGNED",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "https://self-signed.badssl.com/"
+        }
+      ]
+    },
+    {
+      "id": "25204863-d585-4093-b362-cf3f45e36066",
+      "name": "HTTP/2",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "id": "47af1649-6830-47df-8db0-508eb2148275",
+          "name": "GET TEXT",
+          "httpVersion": 2.0,
+          "httpMethod": "GET",
+          "url": "{{BaseUrlHttps}}/test/get/txt"
+        },
+        {
+          "requestType": "http",
+          "id": "75fbea63-5f1b-4caf-9d9e-e8c8ffc8d3d6",
+          "name": "POST JSON",
+          "httpVersion": 2.0,
+          "httpMethod": "POST",
+          "url": "{{BaseUrlHttps}}/test/post/json",
+          "body": {
+            "mode": "raw",
+            "contentType": "application/json",
+            "rawContent": "{\"name\":\"Alexandre\",\"id\":{{MyId}}}"
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "beb16747-7da4-41ea-8a66-151021de8c95",
+          "name": "AKAMAI",
+          "httpVersion": 2.0,
+          "httpMethod": "GET",
+          "url": "https://http2.akamai.com/"
+        }
+      ]
+    },
+    {
+      "id": "c7080f09-970e-4088-907d-0c87400a6b27",
+      "name": "HTTP/3",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "id": "55e05e66-6c5c-4138-a224-1d830113619c",
+          "name": "GET TEXT",
+          "httpVersion": 3.0,
+          "httpMethod": "GET",
+          "url": "{{BaseUrlHttps}}/test/get/txt"
+        },
+        {
+          "requestType": "http",
+          "id": "b2df40b8-1dc1-4e38-8920-83c2b07810de",
+          "name": "POST JSON",
+          "httpVersion": 3.0,
+          "httpMethod": "POST",
+          "url": "{{BaseUrlHttps}}/test/post/json",
+          "body": {
+            "mode": "raw",
+            "contentType": "application/json",
+            "rawContent": "{\"name\":\"Alexandre\",\"id\":{{MyId}}}"
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "665e1be1-297c-4c5a-830b-d418e42445d2",
+          "name": "CLOUDFLARE",
+          "httpVersion": 3.0,
+          "httpMethod": "GET",
+          "url": "https://cloudflare-quic.com/"
+        }
+      ]
+    },
+    {
+      "id": "e47a8eda-518b-4759-a516-64d4339bbf94",
+      "name": "FILES",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "id": "eee7e6e4-d83a-4079-a964-c7656132a161",
+          "name": "TXT",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "https://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-test.txt"
+        },
+        {
+          "requestType": "http",
+          "id": "85a6c90c-e853-411e-a5a6-1a9af39893d6",
+          "name": "HTML",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "http://www.pudim.com.br/index.html"
+        },
+        {
+          "requestType": "http",
+          "id": "65cd89de-017e-49e5-b445-2bd9bff339a9",
+          "name": "JPG",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "http://www.pudim.com.br/pudim.jpg"
+        }
+      ]
+    }
+  ],
+  "requests": [],
+  "variables": [
+    {
+      "enabled": true,
+      "key": "MyId",
+      "value": "123",
+      "isSecret": false
+    },
+    {
+      "enabled": true,
+      "key": "Secret4",
+      "value": "4",
+      "isSecret": true
+    },
+    {
+      "enabled": true,
+      "key": "MyIdSecret",
+      "value": "789",
+      "isSecret": true
+    }
+  ],
+  "environments": [
+    {
+      "schema": "Pororoca/1",
+      "id": "ac44f13d-422a-462f-b1ba-ed692f2b215c",
+      "createdAt": "2022-03-06T20:36:09.7725771-03:00",
+      "name": "Local",
+      "isCurrent": true,
+      "variables": [
+        {
+          "enabled": true,
+          "key": "BaseUrlHttp",
+          "value": "http://localhost:5000",
+          "isSecret": false
+        },
+        {
+          "enabled": true,
+          "key": "BaseUrlHttps",
+          "value": "https://localhost:5001",
+          "isSecret": false
+        },
+        {
+          "enabled": true,
+          "key": "BasicAuthLogin",
+          "value": "usr",
+          "isSecret": false
+        },
+        {
+          "enabled": true,
+          "key": "BasicAuthPassword",
+          "value": "pwd",
+          "isSecret": false
+        },
+        {
+          "enabled": true,
+          "key": "BearerAuthToken",
+          "value": "token_local",
+          "isSecret": false
+        },
+        {
+          "enabled": true,
+          "key": "MyIdSecret",
+          "value": "456",
+          "isSecret": true
+        },
+        {
+          "enabled": true,
+          "key": "CustomFile",
+          "value": "C:\\PROJETOS\\Pirate.gif",
+          "isSecret": false
+        },
+        {
+          "enabled": true,
+          "key": "HttpBinUrl",
+          "value": "https://httpbin.org",
+          "isSecret": false
+        }
+      ]
+    },
+    {
+      "schema": "Pororoca/1",
+      "id": "f1e29d60-e61c-4b51-bd23-03241c5875af",
+      "createdAt": "2022-03-06T20:36:09.7725771-03:00",
+      "name": "Development",
+      "isCurrent": false,
+      "variables": [
+        {
+          "enabled": true,
+          "key": "BaseUrlHttp",
+          "value": "http://localhost:5000",
+          "isSecret": false
+        },
+        {
+          "enabled": true,
+          "key": "BaseUrlHttps",
+          "value": "https://localhost:5001",
+          "isSecret": false
+        },
+        {
+          "enabled": true,
+          "key": "BasicAuthLogin",
+          "value": "usr",
+          "isSecret": false
+        },
+        {
+          "enabled": true,
+          "key": "BasicAuthPassword",
+          "value": "pwd",
+          "isSecret": false
+        },
+        {
+          "enabled": true,
+          "key": "BearerAuthToken",
+          "value": "token_development",
+          "isSecret": false
+        },
+        {
+          "enabled": true,
+          "key": "HttpBinUrl",
+          "value": "https://httpbin.org",
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}

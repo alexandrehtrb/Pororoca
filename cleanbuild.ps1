@@ -1,0 +1,1 @@
+Get-ChildItem -Include bin,obj,TestResults -Recurse | Remove-Item -Force -Recurse -ErrorAction Ignore

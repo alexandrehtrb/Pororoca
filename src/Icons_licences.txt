@@ -1,0 +1,14 @@
+Edit icon:
+    Source: https://www.kissclipart.com/article-icon-edit-icon-note-icon-8dlzn0/
+    Licence: Unknown, believed to be public domain.
+Check icon:
+    Source: https://commons.wikimedia.org/wiki/File:White_check.svg
+    Licence: Public domain.
+Add folder icon,
+Add icon,
+Export icon,
+Import icon,
+Leaf icon:
+    Source: https://fontawesome.com/
+    Licence: CC BY 4.0 License (https://fontawesome.com/license/free)
+    Changes: Icons changed from blue to white.

@@ -1,0 +1,23 @@
+<ContentControl xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  x:Class="Pororoca.Desktop.Controls.IconButton"
+  xmlns:controls="clr-namespace:Pororoca.Desktop.Controls">
+  <ContentControl.Styles>
+    <Style Selector="controls|IconButton">
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Button Classes="Primary" Command="{TemplateBinding Command}">
+            <Button.Content>
+              <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal" Background="Transparent" Height="16" Width="180">
+                <Image Source="{TemplateBinding Icon}" Width="16" Height="16" Margin="4 0 8 0" />
+                <TextBlock Text="{TemplateBinding Text}" Margin="4 0 8 0" FontSize="14"/>
+              </StackPanel>
+            </Button.Content>
+          </Button>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+  </ContentControl.Styles>
+</ContentControl>

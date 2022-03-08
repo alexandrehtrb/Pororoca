@@ -1,0 +1,68 @@
+<Application xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Pororoca.Desktop" x:Class="Pororoca.Desktop.App">
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <FluentTheme Mode="Dark"/>
+        <StyleInclude Source="/Styles/Styles.xaml" />
+        <StyleInclude Source="/Styles/SideBar.xaml" />
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
+
+        <Style Selector="TabControl WrapPanel">
+            <Setter Property="Background" Value="#0A1929"/>
+        </Style>
+
+        <Style Selector="TextBlock.TabItemHeader">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Light"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <!-- FontSize="18" FontWeight="Light" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"  -->
+        </Style>
+
+        <Style Selector="DataGridColumnHeader">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="TextBlock.Foreground" Value="White"/>
+            <Setter Property="TextBlock.FontSize" Value="12"/>
+            <Setter Property="TextBlock.FontWeight" Value="Light"/>
+        </Style>
+
+        <Style Selector="Button.Primary">
+            <Setter Property="Background" Value="#A55B1E"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style Selector="Button.Primary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#C26B24"/>
+            <Setter Property="Button.Foreground" Value="White"/>
+        </Style>
+
+        <Style Selector="Button.PrimaryInverted">
+            <Setter Property="Background" Value="#38C7AD"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+
+        <Style Selector="Button.PrimaryInverted:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#98E2D4"/>
+            <Setter Property="Button.Foreground" Value="Black"/>
+        </Style>
+
+        <Style Selector="Button.Secondary">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#DB843D"/>
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="BorderBrush" Value = "#DB843D" />
+        </Style>
+
+        <Style Selector="Button.Secondary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Button.Foreground" Value="#E3A068"/>
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="BorderBrush" Value = "#E3A068" />
+        </Style>
+    </Application.Styles>
+</Application>

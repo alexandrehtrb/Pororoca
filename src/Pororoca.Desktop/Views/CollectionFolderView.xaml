@@ -1,0 +1,27 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:v="using:Pororoca.Desktop.Views"
+  xmlns:controls="clr-namespace:Pororoca.Desktop.Controls;assembly=Pororoca.Desktop"
+  xmlns:i18n="clr-namespace:Pororoca.Desktop.Localization"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:DataType="vm:CollectionFolderViewModel" mc:Ignorable="d" d:DesignWidth="1350" d:DesignHeight="700"
+  xmlns:pages="clr-namespace:Pororoca.Desktop.Pages;assembly=Pororoca.Desktop" x:Class="Pororoca.Desktop.Views.CollectionFolderView" FontSize="14" Foreground="{StaticResource SystemBaseHighColor}">
+
+  <StackPanel Spacing="36" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="24,0,24,0">
+
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,24,0,0">
+      <v:EditableTextBlockView DataContext="{Binding NameEditableTextBlockViewDataCtx}"/>
+    </Grid>
+
+    <StackPanel Orientation="Vertical" Spacing="16" Margin="0,12,0,0">
+
+      <controls:IconButton Icon="/Assets/Images/icon_white_add_folder.png" Text="{i18n:Localize AddFolder, Context=CollectionFolder}" Command="{Binding AddNewFolderCmd}"/>
+
+      <controls:IconButton Icon="/Assets/Images/icon_white_add.png" Text="{i18n:Localize AddRequest, Context=CollectionFolder}" Command="{Binding AddNewRequestCmd}"/>
+
+    </StackPanel>
+
+  </StackPanel>
+
+</UserControl>

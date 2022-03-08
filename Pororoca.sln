@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{332DAD93-C16B-4760-81DC-39A4F7A6ECB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pororoca.Domain", "src\Pororoca.Domain\Pororoca.Domain.csproj", "{C0A7ACBE-FA4B-4609-9754-A1416E79DFD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pororoca.Infrastructure", "src\Pororoca.Infrastructure\Pororoca.Infrastructure.csproj", "{E40EB98B-7F03-4ECD-A969-A5EFB63649D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0B5C94C5-E2E0-4BD4-A93C-E2AE91A325FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pororoca.Domain.Tests", "tests\Pororoca.Domain.Tests\Pororoca.Domain.Tests.csproj", "{C35E9A36-47C1-43B9-A109-4CD6C5189E7C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pororoca.Desktop", "src\Pororoca.Desktop\Pororoca.Desktop.csproj", "{7C6F40A9-8559-4DA2-B4E6-986CC90AC1E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pororoca.TestServer", "src\Pororoca.TestServer\Pororoca.TestServer.csproj", "{390FD9D8-0747-4B39-B192-ECCE4F05DBC5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C0A7ACBE-FA4B-4609-9754-A1416E79DFD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0A7ACBE-FA4B-4609-9754-A1416E79DFD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0A7ACBE-FA4B-4609-9754-A1416E79DFD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0A7ACBE-FA4B-4609-9754-A1416E79DFD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E40EB98B-7F03-4ECD-A969-A5EFB63649D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E40EB98B-7F03-4ECD-A969-A5EFB63649D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E40EB98B-7F03-4ECD-A969-A5EFB63649D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E40EB98B-7F03-4ECD-A969-A5EFB63649D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C35E9A36-47C1-43B9-A109-4CD6C5189E7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C35E9A36-47C1-43B9-A109-4CD6C5189E7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C35E9A36-47C1-43B9-A109-4CD6C5189E7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C35E9A36-47C1-43B9-A109-4CD6C5189E7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C6F40A9-8559-4DA2-B4E6-986CC90AC1E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C6F40A9-8559-4DA2-B4E6-986CC90AC1E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C6F40A9-8559-4DA2-B4E6-986CC90AC1E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C6F40A9-8559-4DA2-B4E6-986CC90AC1E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{390FD9D8-0747-4B39-B192-ECCE4F05DBC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{390FD9D8-0747-4B39-B192-ECCE4F05DBC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{390FD9D8-0747-4B39-B192-ECCE4F05DBC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{390FD9D8-0747-4B39-B192-ECCE4F05DBC5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C0A7ACBE-FA4B-4609-9754-A1416E79DFD0} = {332DAD93-C16B-4760-81DC-39A4F7A6ECB2}
+		{E40EB98B-7F03-4ECD-A969-A5EFB63649D9} = {332DAD93-C16B-4760-81DC-39A4F7A6ECB2}
+		{C35E9A36-47C1-43B9-A109-4CD6C5189E7C} = {0B5C94C5-E2E0-4BD4-A93C-E2AE91A325FA}
+		{7C6F40A9-8559-4DA2-B4E6-986CC90AC1E9} = {332DAD93-C16B-4760-81DC-39A4F7A6ECB2}
+		{390FD9D8-0747-4B39-B192-ECCE4F05DBC5} = {332DAD93-C16B-4760-81DC-39A4F7A6ECB2}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,73 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Pororoca.Desktop.ViewModels"
+        xmlns:v="using:Pororoca.Desktop.Views"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i18n="clr-namespace:Pororoca.Desktop.Localization"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Pororoca.Desktop.Views.MainWindow"
+        Icon="/Assets/pororoca_icon.ico"
+        Title="Pororoca">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Panel>
+    <DockPanel HorizontalAlignment="Stretch">
+      <Menu DockPanel.Dock="Top">
+        <MenuItem Header="{i18n:Localize File, Context=TopMenu}">
+          <MenuItem Header="{i18n:Localize NewCollection, Context=TopMenuFile}" Command="{Binding AddNewCollectionCmd}" />
+          <Separator/>
+          <MenuItem Header="{i18n:Localize ImportCollection, Context=TopMenuFile}" Command="{Binding ImportCollectionsCmd}"/>
+          <Separator/>
+          <MenuItem Header="{i18n:Localize Exit, Context=TopMenuFile}" Click="OnCloseMainWindow"/>
+        </MenuItem>
+        <MenuItem Header="{i18n:Localize Options, Context=TopMenu}">
+          <MenuItem Header="{i18n:Localize Language, Context=TopMenuOptions}">
+            <MenuItem Header="{i18n:Localize Português, Context=TopMenuLanguage}" Command="{Binding SelectLanguagePortuguesCmd}"/>
+            <MenuItem Header="{i18n:Localize English, Context=TopMenuLanguage}" Command="{Binding SelectLanguageEnglishCmd}"/>
+          </MenuItem>
+          <MenuItem Header="{i18n:Localize DisableTlsVerification, Context=TopMenuOptions}" Command="{Binding ToggleSslVerification}">
+            <MenuItem.Icon>
+              <Image Source="/Assets/Images/icon_white_check.png" IsVisible="{Binding IsSslVerificationDisabled}" Width="12" Height="12" Margin="0,0,8,0" VerticalAlignment="Center" HorizontalAlignment="Center" />
+            </MenuItem.Icon>
+          </MenuItem>
+        </MenuItem>
+        <!--MenuItem Header="{i18n:Localize Contribute, Context=TopMenu}"/-->
+      </Menu>
+      
+      <Panel DockPanel.Dock="Left" Width="240" Background="Black">
+        <!--ExperimentalAcrylicBorder.Material>
+          <ExperimentalAcrylicMaterial TintColor="Black" MaterialOpacity="1" TintOpacity="1" />
+        </ExperimentalAcrylicBorder.Material-->
+        <v:CollectionsGroupView DataContext="{Binding CollectionsGroupViewDataCtx}"/>
+      </Panel>
+      
+      <Panel IsHitTestVisible="True" Background="#0F263F">
+        <!--ExperimentalAcrylicBorder.Material>
+          <ExperimentalAcrylicMaterial TintColor="#0F263F" MaterialOpacity="1" TintOpacity="1" />
+        </ExperimentalAcrylicBorder.Material-->
+        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+          <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsVisible="{Binding IsCollectionViewVisible}">
+            <v:CollectionView DataContext="{Binding CollectionViewDataCtx}"/>
+          </Grid>
+          <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsVisible="{Binding IsCollectionVariablesViewVisible}">
+            <v:CollectionVariablesView DataContext="{Binding CollectionVariablesViewDataCtx}"/>
+          </Grid>
+          <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsVisible="{Binding IsEnvironmentViewVisible}">
+            <v:EnvironmentView DataContext="{Binding EnvironmentViewDataCtx}"/>
+          </Grid>
+          <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsVisible="{Binding IsCollectionFolderViewVisible}">
+            <v:CollectionFolderView DataContext="{Binding CollectionFolderViewDataCtx}"/>
+          </Grid>
+          <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsVisible="{Binding IsRequestViewVisible}">
+            <v:RequestView DataContext="{Binding RequestViewDataCtx}"/>
+          </Grid>
+        </Grid>
+      </Panel>
+
+    </DockPanel>
+  </Panel>
+</Window>
