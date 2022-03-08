@@ -22,6 +22,8 @@ Read the [instructions](./docs/en-GB/Installation.md) and download the program [
 * Fast startup time.
 * Open-source.
 
+Check the [documentation](./docs/en-GB/HomePage.md) to know more.
+
 *Note*: Support for HTTP/2 requires Linux or Windows 10 and later, and support for HTTP/3 requires Linux or Windows 11 and later.
 
 ### HTTP/3 and traceability
