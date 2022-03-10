@@ -136,24 +136,21 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
               </Grid.RowDefinitions>
-              <ComboBox Grid.Column="0" Grid.Row="0" MinHeight="36" Width="180" FontSize="14" FontWeight="Light" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Stretch" SelectedIndex="{Binding RequestBodyModeSelectedIndex}">
-                <ComboBoxItem IsSelected="{Binding IsRequestBodyModeNoneSelected, Mode=TwoWay}" Content="{i18n:Localize BodyModeNone, Context=Request}"/>
-                <ComboBoxItem x:Name="reqScrRequestBodyModeSelectionRaw" IsSelected="{Binding IsRequestBodyModeRawSelected, Mode=TwoWay}" Content="{i18n:Localize BodyModeRaw, Context=Request}"/>
-                <ComboBoxItem x:Name="reqScrRequestBodyModeSelectionFile" IsSelected="{Binding IsRequestBodyModeFileSelected, Mode=TwoWay}" Content="{i18n:Localize BodyModeFile, Context=Request}"/>
-                <ComboBoxItem x:Name="reqScrRequestBodyModeSelectionUrlEncoded" IsSelected="{Binding IsRequestBodyModeUrlEncodedSelected, Mode=TwoWay}" Content="{i18n:Localize BodyModeUrlEncoded, Context=Request}"/>
-                <ComboBoxItem x:Name="reqScrRequestBodyModeSelectionFormData" IsSelected="{Binding IsRequestBodyModeFormDataSelected, Mode=TwoWay}" Content="{i18n:Localize BodyModeFormData, Context=Request}"/>
-              </ComboBox>
-              <Grid Grid.Column="0" Grid.Row="1" Margin="0,12,0,0" VerticalAlignment="Stretch" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto"/>
-                  <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <AutoCompleteBox Grid.Column="0" Grid.Row="0" Height="36" Width="180" FontSize="14" HorizontalAlignment="Left" Watermark="{i18n:Localize BodyRawContentTypeWatermark, Context=Request}" Text="{Binding RequestRawContentType}" Items="{Binding AllMimeTypes}" FilterMode="Contains"/>
-                <TextBox Grid.Column="0" Grid.Row="1" Margin="0,12,0,0" FontFamily="/Assets/Fonts/SourceCodePro-Regular.ttf#Source Code Pro" FontSize="14" Watermark="{i18n:Localize BodyRawContentWatermark, Context=Request}" AcceptsReturn="True" AcceptsTab="True" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Text="{Binding RequestRawContent, Mode=TwoWay}"/>
-              </Grid>
+
+              <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Spacing="12">
+
+                <ComboBox Height="36" Width="130" FontSize="14" FontWeight="Light" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Stretch" SelectedIndex="{Binding RequestBodyModeSelectedIndex}">
+                  <ComboBoxItem IsSelected="{Binding IsRequestBodyModeNoneSelected, Mode=TwoWay}" Content="{i18n:Localize BodyModeNone, Context=Request}"/>
+                  <ComboBoxItem x:Name="reqScrRequestBodyModeSelectionRaw" IsSelected="{Binding IsRequestBodyModeRawSelected, Mode=TwoWay}" Content="{i18n:Localize BodyModeRaw, Context=Request}"/>
+                  <ComboBoxItem x:Name="reqScrRequestBodyModeSelectionFile" IsSelected="{Binding IsRequestBodyModeFileSelected, Mode=TwoWay}" Content="{i18n:Localize BodyModeFile, Context=Request}"/>
+                  <ComboBoxItem x:Name="reqScrRequestBodyModeSelectionUrlEncoded" IsSelected="{Binding IsRequestBodyModeUrlEncodedSelected, Mode=TwoWay}" Content="{i18n:Localize BodyModeUrlEncoded, Context=Request}"/>
+                  <ComboBoxItem x:Name="reqScrRequestBodyModeSelectionFormData" IsSelected="{Binding IsRequestBodyModeFormDataSelected, Mode=TwoWay}" Content="{i18n:Localize BodyModeFormData, Context=Request}"/>
+                </ComboBox>
+
+                <AutoCompleteBox Height="36" Width="200" FontSize="14" HorizontalAlignment="Left" Watermark="{i18n:Localize BodyRawContentTypeWatermark, Context=Request}" Text="{Binding RequestRawContentType}" Items="{Binding AllMimeTypes}" FilterMode="Contains" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}" />
+              </StackPanel>
+
+              <TextBox Grid.Column="0" Grid.Row="1" Margin="0,12,0,0" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}" VerticalAlignment="Stretch" FontFamily="/Assets/Fonts/SourceCodePro-Regular.ttf#Source Code Pro" FontSize="12" Watermark="{i18n:Localize BodyRawContentWatermark, Context=Request}" AcceptsReturn="True" AcceptsTab="True" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Text="{Binding RequestRawContent, Mode=TwoWay}"/>
               <Grid Grid.Column="0" Grid.Row="1" Margin="0,12,0,0" VerticalAlignment="Stretch" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionFile}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*" />
@@ -311,15 +308,13 @@
                 <ColumnDefinition Width="*" />
               </Grid.ColumnDefinitions>
               <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
               </Grid.RowDefinitions>
 
-              <TextBox Grid.Column="0" Grid.Row="0" Height="36" Width="200" FontSize="14" HorizontalAlignment="Left" VerticalContentAlignment="Center" IsReadOnly="True" Watermark="{i18n:Localize BodyContentTypeWatermark, Context=Response}" Text="{Binding ResponseDataCtx.ResponseRawContentType}"/>
               <!-- AcceptsReturn="True" allows for horizontal scrollbar -->
-              <TextBox Grid.Column="0" Grid.Row="1" Margin="0,12,12,0" FontFamily="/Assets/Fonts/SourceCodePro-Regular.ttf#Source Code Pro" FontSize="14" Watermark="{i18n:Localize BodyContentWatermark, Context=Response}" TextWrapping="NoWrap" IsReadOnly="True" AcceptsReturn="True" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Text="{Binding ResponseDataCtx.ResponseRawContent}"/>
-              <Button Grid.Column="0" Grid.Row="2" Content="{i18n:Localize BodySaveToFile, Context=Response}" Margin="0,12,0,0" IsVisible="{Binding ResponseDataCtx.IsSaveResponseBodyToFileVisible}" Command="{Binding ResponseDataCtx.SaveResponseBodyToFileCmd}" Classes="Primary"/>
+              <TextBox Grid.Column="0" Grid.Row="0" Margin="0,0,12,0" FontFamily="/Assets/Fonts/SourceCodePro-Regular.ttf#Source Code Pro" FontSize="12" Watermark="{i18n:Localize BodyContentWatermark, Context=Response}" TextWrapping="NoWrap" IsReadOnly="True" AcceptsReturn="True" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Text="{Binding ResponseDataCtx.ResponseRawContent}"/>
+              <Button Grid.Column="0" Grid.Row="1" Content="{i18n:Localize BodySaveToFile, Context=Response}" Margin="0,12,0,0" IsVisible="{Binding ResponseDataCtx.IsSaveResponseBodyToFileVisible}" Command="{Binding ResponseDataCtx.SaveResponseBodyToFileCmd}" Classes="Primary"/>
 
 
 

@@ -44,16 +44,6 @@ namespace Pororoca.Desktop.ViewModels
 
         public ObservableCollection<KeyValueParamViewModel> ResponseHeaders { get; }
 
-        private string? _responseRawContentType;
-        public string? ResponseRawContentType
-        {
-            get => _responseRawContentType;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _responseRawContentType, value);
-            }
-        }
-
         private string? _responseRawContent;
         public string? ResponseRawContent
         {
@@ -135,7 +125,6 @@ namespace Pororoca.Desktop.ViewModels
                 _res = res;
                 ResponseStatusCodeElapsedTimeTitle = FormatSuccessfulResponseTitle(res.ElapsedTime, (HttpStatusCode)res.StatusCode!);
                 UpdateHeaders(res.Headers);
-                ResponseRawContentType = res.ContentType;
                 ResponseRawContent = res.CanDisplayTextBody ? res.GetBodyAsText() : string.Format(Localizer.Instance["Response/BodyContentBinaryNotShown"], res.GetBodyAsBinary()!.Length);
                 IsSaveResponseBodyToFileVisible = res.HasBody;
             }
@@ -144,7 +133,6 @@ namespace Pororoca.Desktop.ViewModels
                 _res = res;
                 ResponseStatusCodeElapsedTimeTitle = FormatFailedResponseTitle(res.ElapsedTime);
                 UpdateHeaders(res.Headers);
-                ResponseRawContentType = Localizer.Instance["Response/BodyContentTypeException"];
                 ResponseRawContent = res.Exception!.ToString();
                 IsSaveResponseBodyToFileVisible = false;
             }
@@ -152,7 +140,6 @@ namespace Pororoca.Desktop.ViewModels
             {
                 ResponseStatusCodeElapsedTimeTitle = Localizer.Instance["Response/SectionTitle"];
                 
-                ResponseRawContentType = string.Empty;
                 ResponseRawContent = string.Empty;
             }
         }

@@ -121,7 +121,6 @@
   "Request/ValidationInvalidUrl": "URL inválida. Por favor, verifique-a e tente novamente.",
   "Response/Body": "Corpo",
   "Response/BodyContentBinaryNotShown": "(conteúdo binário não-exibido, {0} bytes)",
-  "Response/BodyContentTypeException": "Exceção",
   "Response/BodyContentTypeWatermark": "(content-type da resposta aqui)",
   "Response/BodyContentWatermark": "(corpo da resposta aqui)",
   "Response/BodySaveToFile": "Salvar como…",
