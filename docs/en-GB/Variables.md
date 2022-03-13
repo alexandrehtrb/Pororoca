@@ -37,6 +37,7 @@ Variables can be used for the following fields of a request:
     * File body: file source path
     * Form URL encoded body: parameters' names and values
     * Multipart form data body: parameters' names and values, including file source paths
+    * GraphQL body: variables content
 
 To use a variable, type `{{VariableName}}` on the field you want to apply it, where `VariableName` is the declared variable's name.
 

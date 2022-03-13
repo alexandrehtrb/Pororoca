@@ -173,6 +173,7 @@ namespace Pororoca.Desktop.ViewModels
                 if (IsRequestBodyModeUrlEncodedSelected) return PororocaRequestBodyMode.UrlEncoded;
                 if (IsRequestBodyModeFileSelected) return PororocaRequestBodyMode.File;
                 if (IsRequestBodyModeRawSelected) return PororocaRequestBodyMode.Raw;
+                if (IsRequestBodyModeGraphQlSelected) return PororocaRequestBodyMode.GraphQl;
                 else return null;
             }
         }
@@ -285,6 +286,40 @@ namespace Pororoca.Desktop.ViewModels
         public ReactiveCommand<Unit, Unit> AddNewFormDataTextParamCmd { get; }
         public ReactiveCommand<Unit, Unit> AddNewFormDataFileParamCmd { get; }
         public ReactiveCommand<Unit, Unit> RemoveSelectedFormDataParamCmd { get; }
+
+        #endregion
+
+        #region REQUEST BODY GRAPHQL
+
+        private bool _isRequestBodyModeGraphQlSelected;
+        public bool IsRequestBodyModeGraphQlSelected
+        {
+            get => _isRequestBodyModeGraphQlSelected;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _isRequestBodyModeGraphQlSelected, value);
+            }
+        }
+
+        private string? _requestBodyGraphQlQuery;
+        public string? RequestBodyGraphQlQuery
+        {
+            get => _requestBodyGraphQlQuery;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _requestBodyGraphQlQuery, value);
+            }
+        }
+
+        private string? _requestBodyGraphQlVariables;
+        public string? RequestBodyGraphQlVariables
+        {
+            get => _requestBodyGraphQlVariables;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _requestBodyGraphQlVariables, value);
+            }
+        }
 
         #endregion
 
@@ -458,6 +493,10 @@ namespace Pororoca.Desktop.ViewModels
             // TODO: Improve this, do not use fixed values to resolve index
             switch (req.Body?.Mode)
             {
+                case PororocaRequestBodyMode.GraphQl:
+                    RequestBodyModeSelectedIndex = 5;
+                    IsRequestBodyModeGraphQlSelected = true;
+                    break;
                 case PororocaRequestBodyMode.FormData:
                     RequestBodyModeSelectedIndex = 4;
                     IsRequestBodyModeFormDataSelected = true;
@@ -495,6 +534,9 @@ namespace Pororoca.Desktop.ViewModels
             AddNewFormDataTextParamCmd = ReactiveCommand.Create(AddNewFormDataTextParam);
             AddNewFormDataFileParamCmd = ReactiveCommand.CreateFromTask(AddNewFormDataFileParam);
             RemoveSelectedFormDataParamCmd = ReactiveCommand.Create(RemoveSelectedFormDataParam);
+            // GRAPHQL
+            RequestBodyGraphQlQuery = req.Body?.GraphQlValues?.Query;
+            RequestBodyGraphQlVariables = req.Body?.GraphQlValues?.Variables;
             #endregion
 
             #region REQUEST AUTH
@@ -684,6 +726,9 @@ namespace Pororoca.Desktop.ViewModels
             PororocaRequestBody body = new();
             switch (RequestBodyMode)
             {
+                case PororocaRequestBodyMode.GraphQl:
+                    body.SetGraphQlContent(RequestBodyGraphQlQuery, RequestBodyGraphQlVariables);
+                    break;
                 case PororocaRequestBodyMode.FormData:
                     body.SetFormDataContent(FormDataParams.Select(p => p.ToFormDataParam()));
                     break;

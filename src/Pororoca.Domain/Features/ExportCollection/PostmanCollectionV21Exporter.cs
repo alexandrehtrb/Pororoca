@@ -209,7 +209,14 @@ public static class PostmanCollectionV21Exporter
                 body.Mode = PostmanRequestBodyMode.Formdata;
                 body.Formdata = ConvertToPostmanFormDataParams(reqBody.FormDataValues);
                 break;
-            // TODO: GraphQL?
+            case PororocaRequestBodyMode.GraphQl:
+                body.Mode = PostmanRequestBodyMode.Graphql;
+                body.Graphql = new()
+                {
+                    Query = reqBody.GraphQlValues?.Query ?? string.Empty,
+                    Variables = reqBody.GraphQlValues?.Variables ?? string.Empty
+                };
+                break;
             default:
                 return null;
         }

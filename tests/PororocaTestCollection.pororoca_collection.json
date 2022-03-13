@@ -1,6 +1,6 @@
 ﻿{
   "schema": "Pororoca/1",
-  "id": "8699d3cb-f815-47a9-8e53-0b2196938d37",
+  "id": "b03b54bb-707d-44b5-8cad-34d748a4550c",
   "name": "PororocaTestCollection",
   "createdAt": "2022-03-06T20:23:18.9787734-03:00",
   "folders": [
@@ -70,7 +70,7 @@
           "body": {
             "mode": "raw",
             "contentType": "application/json",
-            "rawContent": "{\r\n\t\"id\":1,\r\n\t\"name\":\"Alexandre\"\r\n}"
+            "rawContent": "{\r\n\t\"id\": 1,\r\n\t\"name\": \"Alexandre\"\r\n}"
           }
         },
         {
@@ -279,7 +279,7 @@
         {
           "requestType": "http",
           "id": "665e1be1-297c-4c5a-830b-d418e42445d2",
-          "name": "CLOUDFLARE",
+          "name": "CLOUDFLARE QUIC HTTP/3 TEST PAGE",
           "httpVersion": 3.0,
           "httpMethod": "GET",
           "url": "https://cloudflare-quic.com/"
@@ -316,6 +316,72 @@
           "url": "http://www.pudim.com.br/pudim.jpg"
         }
       ]
+    },
+    {
+      "id": "9580437f-7b2c-482d-b281-672bbca0970f",
+      "name": "GRAPHQL",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "id": "26960f79-9e10-4e4f-b65d-424104378685",
+          "name": "Get all fruits",
+          "httpVersion": 1.1,
+          "httpMethod": "POST",
+          "url": "https://fruits-api.netlify.app/graphql",
+          "body": {
+            "mode": "graphQl",
+            "graphQlValues": {
+              "query": "query allFruits\r\n{\r\n  fruits\r\n  {\r\n    id\r\n    scientific_name\r\n    tree_name\r\n    fruit_name\r\n    family\r\n    origin\r\n    description\r\n    bloom\r\n    maturation_fruit\r\n    life_cycle\r\n    climatic_zone\r\n\tproducing_countries\r\n\t{\r\n\t\tcountry\t\r\n\t}\r\n  }\r\n}"
+            }
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "3bbe90e2-d8d4-4552-a331-76777ad1021d",
+          "name": "Get fruit Goiaba",
+          "httpVersion": 1.1,
+          "httpMethod": "POST",
+          "url": "https://fruits-api.netlify.app/graphql",
+          "body": {
+            "mode": "graphQl",
+            "graphQlValues": {
+              "query": "query getFruit($id: ID!)\r\n{\r\n  fruit(id: $id)\r\n  {\r\n    id\r\n    fruit_name\r\n    origin\r\n    producing_countries\r\n    {\r\n      country\r\n    }\r\n  }\r\n}",
+              "variables": "{\r\n    \"id\": 17\r\n}"
+            }
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "4bbbc966-782e-4156-95a6-8c9812dc1d01",
+          "name": "Add fruit Acerola",
+          "httpVersion": 1.1,
+          "httpMethod": "POST",
+          "url": "https://fruits-api.netlify.app/graphql",
+          "body": {
+            "mode": "graphQl",
+            "graphQlValues": {
+              "query": "mutation addFruit($acerolaId: ID!) {\r\n addFruit(\r\n    id: $acerolaId\r\n    scientific_name: \"Malpighia emarginata\"\r\n    tree_name: \"Aceroleira\"\r\n    fruit_name: \"Acerola\"\r\n    family: \"Malpighiaceae\"\r\n    origin: \"América Central, Antilhas, norte da América do Sul\"\r\n    description: \"Sua superfície é lisa ou dividida em três gomos. Possui três sementes no seu interior. O sabor do fruto é levemente ácido e o perfume é semelhante ao da uva.\"\r\n    bloom: \"Todo o ano\"\r\n    maturation_fruit: \"Todo o ano\"\r\n    life_cycle: \"-\"\r\n    climatic_zone: \"Tropical\"\r\n ) {\r\n    id\r\n    scientific_name\r\n    tree_name\r\n    fruit_name\r\n    family\r\n    origin\r\n    description\r\n    bloom\r\n    maturation_fruit\r\n    life_cycle\r\n    climatic_zone\r\n   }\r\n}",
+              "variables": "{\r\n    \"acerolaId\": {{AcerolaId}}\r\n}"
+            }
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "5a9528ad-ecc9-4c2a-918b-cc50db88ac46",
+          "name": "Get fruit Coco",
+          "httpVersion": 1.1,
+          "httpMethod": "POST",
+          "url": "https://fruits-api.netlify.app/graphql",
+          "body": {
+            "mode": "graphQl",
+            "graphQlValues": {
+              "query": "query getFruit($id: ID!)\r\n{\r\n  fruit(id: $id)\r\n  {\r\n    id\r\n    fruit_name\r\n    origin\r\n    producing_countries\r\n    {\r\n      country\r\n    }\r\n  }\r\n}",
+              "variables": "{\r\n    \"id\": {{CocoId}}\r\n}"
+            }
+          }
+        }
+      ]
     }
   ],
   "requests": [],
@@ -337,6 +403,18 @@
       "key": "MyIdSecret",
       "value": "789",
       "isSecret": true
+    },
+    {
+      "enabled": true,
+      "key": "AcerolaId",
+      "value": "28",
+      "isSecret": false
+    },
+    {
+      "enabled": true,
+      "key": "CocoId",
+      "value": "19",
+      "isSecret": false
     }
   ],
   "environments": [

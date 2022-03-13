@@ -262,6 +262,29 @@ public static class PostmanCollectionV21ImporterTests
         Assert.Equal("image/jpeg", f2f.ContentType);
     }
 
+    [Fact]
+    public static void Should_convert_postman_req_graphql_body_to_pororoca_req_body_correctly()
+    {
+        // GIVEN
+        const string qry = "query allFruits { fruits { fruit_name } }";
+        const string variables = "{\"id\":{{CocoId}}}";
+        PostmanRequestBody postmanBody = new()
+        {
+            Mode = PostmanRequestBodyMode.Graphql,
+            Graphql = new() { Query = qry, Variables = variables }
+        };
+
+        // WHEN
+        PororocaRequestBody? reqBody = ConvertToPororocaRequestBody(postmanBody);
+
+        // THEN
+        Assert.NotNull(reqBody);
+        Assert.Equal(PororocaRequestBodyMode.GraphQl, reqBody!.Mode);
+        Assert.NotNull(reqBody.GraphQlValues);
+        Assert.Equal(qry, reqBody.GraphQlValues!.Query);
+        Assert.Equal(variables, reqBody.GraphQlValues!.Variables);
+    }
+
     #endregion
 
     #region REQUEST AUTH

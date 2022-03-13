@@ -14,22 +14,26 @@ public sealed class PororocaRequestBody : ICloneable
     public string? RawContent { get; private set; }
 
     [JsonInclude]
+    public string? FileSrcPath { get; private set; }
+
+    [JsonInclude]
     public IReadOnlyList<PororocaKeyValueParam>? UrlEncodedValues { get; private set; }
 
     [JsonInclude]
     public IReadOnlyList<PororocaRequestFormDataParam>? FormDataValues { get; private set; }
 
     [JsonInclude]
-    public string? FileSrcPath { get; private set; }
+    public PororocaRequestBodyGraphQl? GraphQlValues { get; private set; }
     
     public PororocaRequestBody()
     {
         Mode = PororocaRequestBodyMode.Raw;
         ContentType = null;
         RawContent = null;
+        FileSrcPath = null;
         UrlEncodedValues = null;
         FormDataValues = null;
-        FileSrcPath = null;
+        GraphQlValues = null;
     }
 
     public void SetRawContent(string rawContent, string contentType)
@@ -37,6 +41,13 @@ public sealed class PororocaRequestBody : ICloneable
         Mode = PororocaRequestBodyMode.Raw;
         ContentType = contentType;
         RawContent = rawContent;
+    }
+
+    public void SetFileContent(string filePath, string contentType)
+    {
+        Mode = PororocaRequestBodyMode.File;
+        ContentType = contentType;
+        FileSrcPath = filePath;
     }
 
     public void SetUrlEncodedContent(IEnumerable<PororocaKeyValueParam> urlEncodedValues)
@@ -51,11 +62,10 @@ public sealed class PororocaRequestBody : ICloneable
         FormDataValues = formDataValues.ToList().AsReadOnly();
     }
 
-    public void SetFileContent(string filePath, string contentType)
+    public void SetGraphQlContent(string? query, string? variables)
     {
-        Mode = PororocaRequestBodyMode.File;
-        ContentType = contentType;
-        FileSrcPath = filePath;
+        Mode = PororocaRequestBodyMode.GraphQl;
+        GraphQlValues = new(query, variables);
     }
 
     public object Clone() =>
@@ -64,8 +74,9 @@ public sealed class PororocaRequestBody : ICloneable
             Mode = Mode,
             ContentType = ContentType,
             RawContent = RawContent,
+            FileSrcPath = FileSrcPath,
             UrlEncodedValues = UrlEncodedValues?.Select(u => (PororocaKeyValueParam)u.Clone()).ToList().AsReadOnly(),
             FormDataValues = FormDataValues?.Select(f => (PororocaRequestFormDataParam)f.Clone()).ToList().AsReadOnly(),
-            FileSrcPath = FileSrcPath
+            GraphQlValues = GraphQlValues
         };
 }

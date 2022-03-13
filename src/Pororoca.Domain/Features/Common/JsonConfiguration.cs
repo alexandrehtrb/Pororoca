@@ -11,6 +11,8 @@ public static class JsonConfiguration
 
     public static readonly JsonSerializerOptions ViewJsonResponseOptions = SetupViewJsonResponseOptions();
 
+    public static readonly JsonSerializerOptions MinifyingOptions = SetupMinifyingOptions();
+
     public static JsonSerializerOptions SetupExporterImporterJsonOptions(JsonSerializerOptions options)
     {
         options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
@@ -28,6 +30,16 @@ public static class JsonConfiguration
         options.WriteIndented = true;
         options.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
         options.PropertyNamingPolicy = null;
+        return options;
+    }
+
+    public static JsonSerializerOptions SetupMinifyingOptions()
+    {
+        JsonSerializerOptions options = new();
+        options.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+        options.WriteIndented = false;
+        options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         return options;
     }
 }

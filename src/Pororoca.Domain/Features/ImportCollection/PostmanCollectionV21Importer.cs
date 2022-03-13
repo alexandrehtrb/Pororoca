@@ -157,9 +157,13 @@ public static class PostmanCollectionV21Importer
             case PostmanRequestBodyMode.Formdata:
                 myBody.SetFormDataContent(ConvertToPororocaFormDataValues(body.Formdata));
                 break;
+            case PostmanRequestBodyMode.Graphql:
+                string? query = string.IsNullOrWhiteSpace(body.Graphql?.Query) ? null : body.Graphql.Query;
+                string? variables = string.IsNullOrWhiteSpace(body.Graphql?.Variables) ? null : body.Graphql.Variables;
+                myBody.SetGraphQlContent(query, variables);
+                break;
             default:
                 return null;
-                // TODO: GraphQL?
         }
         return myBody;
     }

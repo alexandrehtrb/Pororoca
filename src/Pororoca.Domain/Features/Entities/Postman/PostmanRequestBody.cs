@@ -24,6 +24,8 @@ namespace Pororoca.Domain.Features.Entities.Postman
         public PostmanVariable[]? Urlencoded { get; set; }
 
         public PostmanRequestBodyFileAttachment? File { get; set; }
+
+        public PostmanRequestBodyGraphQl? Graphql { get; set; }
     }
 }
 
