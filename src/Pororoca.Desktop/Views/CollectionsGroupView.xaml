@@ -3,17 +3,15 @@
   xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:i18n="clr-namespace:Pororoca.Desktop.Localization"
-  x:DataType="vm:CollectionsGroupViewModel" mc:Ignorable="d" d:DesignWidth="1350" d:DesignHeight="700"
-  x:Class="Pororoca.Desktop.Views.CollectionsGroupView" FontSize="14" Foreground="{StaticResource SystemBaseHighColor}">
+  xmlns:i18n="clr-namespace:Pororoca.Desktop.Localization" x:DataType="vm:CollectionsGroupViewModel" mc:Ignorable="d" d:DesignWidth="1350" d:DesignHeight="700" x:Class="Pororoca.Desktop.Views.CollectionsGroupView" FontSize="14" Foreground="{StaticResource SystemBaseHighColor}">
 
-  <TreeView Classes="sidebar" Margin="0 40 0 20" Items="{Binding Items}" SelectedItem="{Binding CollectionGroupSelectedItem, Mode=TwoWay}">
-    
+  <TreeView Classes="sidebar" Margin="0 40 0 20" Items="{Binding Items}" SelectedItem="{Binding CollectionGroupSelectedItem, Mode=TwoWay}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
     <TreeView.DataTemplates>
-      
+
       <TreeDataTemplate DataType="{x:Type vm:CollectionViewModel}" ItemsSource="{Binding Items}">
-        <StackPanel Orientation="Horizontal">
-          <StackPanel.ContextMenu>
+        <TextBlock Text="{Binding Name}">
+          <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem Header="{i18n:Localize NewFolder, Context=CollectionsGroupContextMenu}" Command="{Binding AddNewFolderCmd}"/>
               <MenuItem Header="{i18n:Localize NewRequest, Context=CollectionsGroupContextMenu}" Command="{Binding AddNewRequestCmd}"/>
@@ -24,13 +22,12 @@
               <MenuItem Header="{i18n:Localize MoveDown, Context=CollectionsGroupContextMenu}" IsEnabled="{Binding CanMoveDown}" Command="{Binding MoveDownCmd}"/>
               <MenuItem Header="{i18n:Localize Delete, Context=CollectionsGroupContextMenu}" Command="{Binding DeleteCollectionCmd}"/>
             </ContextMenu>
-          </StackPanel.ContextMenu>
-          <TextBlock Foreground="White" Text="{Binding Name}" />
-        </StackPanel>
+          </TextBlock.ContextMenu>
+        </TextBlock>
       </TreeDataTemplate>
       <TreeDataTemplate DataType="{x:Type vm:CollectionFolderViewModel}" ItemsSource="{Binding Items}">
-        <StackPanel Orientation="Horizontal">
-          <StackPanel.ContextMenu>
+        <TextBlock Text="{Binding Name}">
+          <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem Header="{i18n:Localize NewFolder, Context=CollectionsGroupContextMenu}" Command="{Binding AddNewFolderCmd}"/>
               <MenuItem Header="{i18n:Localize NewRequest, Context=CollectionsGroupContextMenu}" Command="{Binding AddNewRequestCmd}"/>
@@ -41,26 +38,24 @@
               <MenuItem Header="{i18n:Localize MoveDown, Context=CollectionsGroupContextMenu}" IsEnabled="{Binding CanMoveDown}" Command="{Binding MoveDownCmd}"/>
               <MenuItem Header="{i18n:Localize Delete, Context=CollectionsGroupContextMenu}" Command="{Binding DeleteFolderCmd}"/>
             </ContextMenu>
-          </StackPanel.ContextMenu>
-          <TextBlock Foreground="White" Text="{Binding Name}" />
-        </StackPanel>
+          </TextBlock.ContextMenu>
+        </TextBlock>
       </TreeDataTemplate>
       <TreeDataTemplate DataType="{x:Type vm:EnvironmentsGroupViewModel}" ItemsSource="{Binding Items}">
-        <StackPanel Orientation="Horizontal">
-          <StackPanel.ContextMenu>
+        <TextBlock Text="{i18n:Localize Environments, Context=CollectionsGroup}">
+          <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem Header="{i18n:Localize NewEnvironment, Context=CollectionsGroupContextMenu}" Command="{Binding AddNewEnvironmentCmd}"/>
               <MenuItem Header="{i18n:Localize Paste, Context=CollectionsGroupContextMenu}" IsEnabled="{Binding ClipboardAreaDataCtx.CanPasteEnvironment}" Command="{Binding PasteToEnvironmentsCmd}"/>
               <MenuItem Header="{i18n:Localize ImportEnvironment, Context=CollectionsGroupContextMenu}" Command="{Binding ImportEnvironmentsCmd}"/>
             </ContextMenu>
-          </StackPanel.ContextMenu>
-          <TextBlock Foreground="White" Text="{i18n:Localize Environments, Context=CollectionsGroup}" />
-        </StackPanel>
+          </TextBlock.ContextMenu>
+        </TextBlock>
       </TreeDataTemplate>
 
       <DataTemplate DataType="{x:Type vm:RequestViewModel}">
-        <StackPanel Orientation="Horizontal">
-          <StackPanel.ContextMenu>
+        <TextBlock Text="{Binding Name}">
+          <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem Header="{i18n:Localize Copy, Context=CollectionsGroupContextMenu}" Command="{Binding CopyRequestCmd}"/>
               <MenuItem Header="{i18n:Localize Rename, Context=CollectionsGroupContextMenu}" Command="{Binding RenameRequestCmd}"/>
@@ -68,9 +63,8 @@
               <MenuItem Header="{i18n:Localize MoveDown, Context=CollectionsGroupContextMenu}" IsEnabled="{Binding CanMoveDown}" Command="{Binding MoveDownCmd}"/>
               <MenuItem Header="{i18n:Localize Delete, Context=CollectionsGroupContextMenu}" Command="{Binding DeleteRequestCmd}"/>
             </ContextMenu>
-          </StackPanel.ContextMenu>
-          <TextBlock Foreground="White" Text="{Binding Name}" />
-        </StackPanel>
+          </TextBlock.ContextMenu>
+        </TextBlock>
       </DataTemplate>
       <DataTemplate DataType="{x:Type vm:EnvironmentViewModel}">
         <StackPanel Orientation="Horizontal">
@@ -91,7 +85,7 @@
       <DataTemplate DataType="{x:Type vm:CollectionVariablesViewModel}">
         <TextBlock Text="{i18n:Localize Variables, Context=CollectionsGroup}" />
       </DataTemplate>
-      
+
     </TreeView.DataTemplates>
 
   </TreeView>
