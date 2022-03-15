@@ -1,13 +1,12 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Text.Unicode;
 
 namespace Pororoca.Domain.Features.Common;
 
-public static class JsonConfiguration
+internal static class JsonConfiguration
 {
-    public static readonly JsonSerializerOptions ExporterImporterJsonOptions = SetupExporterImporterJsonOptions(new JsonSerializerOptions());
+    internal static readonly JsonSerializerOptions ExporterImporterJsonOptions = SetupExporterImporterJsonOptions(new JsonSerializerOptions());
 
     internal static readonly JsonSerializerOptions ViewJsonResponseOptions = SetupViewJsonResponseOptions();
 
