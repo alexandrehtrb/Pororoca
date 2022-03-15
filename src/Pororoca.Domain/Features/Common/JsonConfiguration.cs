@@ -9,11 +9,11 @@ public static class JsonConfiguration
 {
     public static readonly JsonSerializerOptions ExporterImporterJsonOptions = SetupExporterImporterJsonOptions(new JsonSerializerOptions());
 
-    public static readonly JsonSerializerOptions ViewJsonResponseOptions = SetupViewJsonResponseOptions();
+    internal static readonly JsonSerializerOptions ViewJsonResponseOptions = SetupViewJsonResponseOptions();
 
-    public static readonly JsonSerializerOptions MinifyingOptions = SetupMinifyingOptions();
+    internal static readonly JsonSerializerOptions MinifyingOptions = SetupMinifyingOptions();
 
-    public static JsonSerializerOptions SetupExporterImporterJsonOptions(JsonSerializerOptions options)
+    private static JsonSerializerOptions SetupExporterImporterJsonOptions(JsonSerializerOptions options)
     {
         options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
         options.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
@@ -33,7 +33,7 @@ public static class JsonConfiguration
         return options;
     }
 
-    public static JsonSerializerOptions SetupMinifyingOptions()
+    private static JsonSerializerOptions SetupMinifyingOptions()
     {
         JsonSerializerOptions options = new();
         options.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;

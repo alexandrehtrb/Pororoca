@@ -80,8 +80,11 @@ namespace Pororoca.Desktop.ViewModels
 
         private async Task SaveResponseBodyToFileAsync()
         {
-            string GenerateDefaultInitialFileName(string fileExtensionWithoutDot) =>
-                $"response-{_res.ReceivedAt:yyyyMMdd-HHmmss}.{fileExtensionWithoutDot}";
+            string GenerateDefaultInitialFileName(string fileExtensionWithoutDot)
+            {
+                DateTime receivedAtDt = _res.ReceivedAt.DateTime;
+                return $"response-{receivedAtDt:yyyyMMdd-HHmmss}.{fileExtensionWithoutDot}";
+            }
 
             if (_res != null && _res.HasBody)
             {
@@ -120,7 +123,7 @@ namespace Pororoca.Desktop.ViewModels
 
         public void UpdateWithResponse(PororocaResponse? res)
         {
-            if (res != null && res.Success)
+            if (res != null && res.Successful)
             {
                 _res = res;
                 ResponseStatusCodeElapsedTimeTitle = FormatSuccessfulResponseTitle(res.ElapsedTime, (HttpStatusCode)res.StatusCode!);
@@ -144,14 +147,15 @@ namespace Pororoca.Desktop.ViewModels
             }
         }
 
-        private void UpdateHeaders(IEnumerable<PororocaKeyValueParam>? resHeaders)
+        private void UpdateHeaders(IEnumerable<KeyValuePair<string, string>>? resHeaders)
         {
             ResponseHeaders.Clear();
             if (resHeaders != null)
             {
-                foreach (PororocaKeyValueParam kvp in resHeaders)
+                foreach (KeyValuePair<string, string> kvp in resHeaders)
                 {
-                    ResponseHeaders.Add(new KeyValueParamViewModel(kvp));
+                    PororocaKeyValueParam pkvp = new(true, kvp.Key, kvp.Value);
+                    ResponseHeaders.Add(new KeyValueParamViewModel(pkvp));
                 }
             }
         }
