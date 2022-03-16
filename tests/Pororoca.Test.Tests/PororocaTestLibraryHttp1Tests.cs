@@ -95,6 +95,20 @@ public class PororocaTestLibraryHttp1Tests
         var bodyText = res.GetBodyAsText();
         Assert.Contains("application/x-www-form-urlencoded", bodyText);
         Assert.Contains("a=xyz&b=123&c=true&myIdSecret=789", bodyText);
+
+        // lets change {{MyIdSecret}} to another value using PororocaTest
+        pororocaTest.AndSetCollectionVariable("MyIdSecret", "999");
+
+        // sending request with new {{MyIdSecret}} value
+        res = await pororocaTest.SendRequestAsync("Post form URL encoded");
+
+        Assert.NotNull(res);
+        Assert.Equal(HttpStatusCode.OK, res.StatusCode);
+        Assert.Equal("text/plain; charset=utf-8", res.ContentType);
+
+        bodyText = res.GetBodyAsText();
+        Assert.Contains("application/x-www-form-urlencoded", bodyText);
+        Assert.Contains("a=xyz&b=123&c=true&myIdSecret=999", bodyText);
     }
 
     [Fact]
@@ -139,6 +153,23 @@ public class PororocaTestLibraryHttp1Tests
 
         var bodyText = res.GetBodyAsText();
         Assert.Contains("Bearer token_local", bodyText);
+
+        // lets change {{BearerAuthToken}} to another value using PororocaTest
+        pororocaTest.AndSetEnvironmentVariable("Local", "BearerAuthToken", "token_development");
+
+        // xUnit tests run in sequence when they are in the same class
+        // hence, no risk of causing troubles in other tests
+        // https://xunit.net/docs/running-tests-in-parallel
+
+        // sending request with new {{BearerAuthToken}} value
+        res = await pororocaTest.SendRequestAsync(Guid.Parse("af41ca31-6731-4b68-a596-f59d837bc985"));
+
+        Assert.NotNull(res);
+        Assert.Equal(HttpStatusCode.OK, res.StatusCode);
+        Assert.Equal("text/plain; charset=utf-8", res.ContentType);
+
+        bodyText = res.GetBodyAsText();
+        Assert.Contains("Bearer token_development", bodyText);
     }
 
     private static string GetTestCollectionFilePath()

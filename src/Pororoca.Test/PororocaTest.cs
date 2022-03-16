@@ -55,6 +55,40 @@ public sealed class PororocaTest
         return this;
     }
 
+    public PororocaTest AndSetCollectionVariable(string key, string value)
+    {
+        PororocaVariable? variable = Collection.Variables.FirstOrDefault(v => v.Key == key);
+        if (variable != null)
+        {
+            variable.Value = value;
+        }
+        else
+        {
+            Collection.AddVariable(new(true, key, value, false));
+        }
+        return this;
+    }
+
+    public PororocaTest AndSetEnvironmentVariable(string environmentName, string key, string value)
+    {
+        PororocaEnvironment? env = Collection.Environments.FirstOrDefault(e => e.Name == environmentName);
+        if (env is null)
+        {
+            throw new Exception($"Error: Environment with the name '{environmentName}' was not found.");
+        }
+
+        PororocaVariable? variable = env.Variables.FirstOrDefault(v => v.Key == key);
+        if (variable != null)
+        {
+            variable.Value = value;
+        }
+        else
+        {
+            env.AddVariable(new(true, key, value, false));
+        }
+        return this;
+    }
+
     public PororocaRequest? FindRequestInCollection(Func<PororocaRequest, bool> criteria)
     {
         static PororocaRequest? FindRequestInFolder(PororocaCollectionFolder folder, Func<PororocaRequest, bool> criteria)
