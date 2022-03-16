@@ -20,7 +20,7 @@ public sealed class PororocaTest
 
     public static PororocaTest LoadCollectionFromFile(string filePath)
     {
-        const string loadCollectionFailedMsg = "Error: Pororoca collection file loading failed, please check the file.";
+        const string loadCollectionFailedMsg = "Error: Pororoca collection file loading failed. Please, check the file.";
         
         try
         {
@@ -42,6 +42,12 @@ public sealed class PororocaTest
 
     public PororocaTest AndUseTheEnvironment(string environmentName)
     {
+        PororocaEnvironment? selectedEnv = Collection.Environments.FirstOrDefault(e => e.Name == environmentName);
+        if (selectedEnv == null)
+        {
+            throw new Exception($"Error: Environment with the name '{environmentName}' was not found.");
+        }
+
         foreach (PororocaEnvironment env in Collection.Environments)
         {
             env.IsCurrent = env.Name == environmentName;
@@ -55,7 +61,7 @@ public sealed class PororocaTest
         return this;
     }
 
-    public PororocaTest AndSetCollectionVariable(string key, string value)
+    public void SetCollectionVariable(string key, string? value)
     {
         PororocaVariable? variable = Collection.Variables.FirstOrDefault(v => v.Key == key);
         if (variable != null)
@@ -66,10 +72,9 @@ public sealed class PororocaTest
         {
             Collection.AddVariable(new(true, key, value, false));
         }
-        return this;
     }
 
-    public PororocaTest AndSetEnvironmentVariable(string environmentName, string key, string value)
+    public void SetEnvironmentVariable(string environmentName, string key, string? value)
     {
         PororocaEnvironment? env = Collection.Environments.FirstOrDefault(e => e.Name == environmentName);
         if (env is null)
@@ -86,7 +91,6 @@ public sealed class PororocaTest
         {
             env.AddVariable(new(true, key, value, false));
         }
-        return this;
     }
 
     public PororocaRequest? FindRequestInCollection(Func<PororocaRequest, bool> criteria)

@@ -97,7 +97,7 @@ public class PororocaTestLibraryHttp1Tests
         Assert.Contains("a=xyz&b=123&c=true&myIdSecret=789", bodyText);
 
         // lets change {{MyIdSecret}} to another value using PororocaTest
-        pororocaTest.AndSetCollectionVariable("MyIdSecret", "999");
+        pororocaTest.SetCollectionVariable("MyIdSecret", "999");
 
         // sending request with new {{MyIdSecret}} value
         res = await pororocaTest.SendRequestAsync("Post form URL encoded");
@@ -155,7 +155,7 @@ public class PororocaTestLibraryHttp1Tests
         Assert.Contains("Bearer token_local", bodyText);
 
         // lets change {{BearerAuthToken}} to another value using PororocaTest
-        pororocaTest.AndSetEnvironmentVariable("Local", "BearerAuthToken", "token_development");
+        pororocaTest.SetEnvironmentVariable("Local", "BearerAuthToken", "token_development");
 
         // xUnit tests run in sequence when they are in the same class
         // hence, no risk of causing troubles in other tests
