@@ -2,7 +2,7 @@
 
 namespace Pororoca.Domain.Features.Entities.Postman;
 
-public class PostmanRequestBodyGraphQl
+internal class PostmanRequestBodyGraphQl
 {
     public string Query { get; set; }
 

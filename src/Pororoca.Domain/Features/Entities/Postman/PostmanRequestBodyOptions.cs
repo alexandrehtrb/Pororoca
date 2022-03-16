@@ -1,11 +1,11 @@
 ﻿#nullable disable warnings
 
-namespace Pororoca.Domain.Features.Entities.Postman
+namespace Pororoca.Domain.Features.Entities.Postman;
+
+internal class PostmanRequestBodyOptions
 {
-    public class PostmanRequestBodyOptions
-    {
-        public PostmanRequestBodyRawOptions Raw { get; set; }
-    }
+    public PostmanRequestBodyRawOptions Raw { get; set; }
 }
+
 
 #nullable enable warnings

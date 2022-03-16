@@ -12,7 +12,7 @@ public static class PostmanEnvironmentExporter
     public static string ExportAsPostmanEnvironment(PororocaEnvironment env, bool shouldHideSecrets) =>
         JsonSerializer.Serialize(ConvertToPostmanEnvironment(env, shouldHideSecrets), options: ExporterImporterJsonOptions);
 
-    public static PostmanEnvironment ConvertToPostmanEnvironment(PororocaEnvironment env, bool shouldHideSecrets) =>
+    internal static PostmanEnvironment ConvertToPostmanEnvironment(PororocaEnvironment env, bool shouldHideSecrets) =>
         new()
         {
             Id = env.Id,

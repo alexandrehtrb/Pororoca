@@ -2,16 +2,16 @@
 
 using System.Collections.Immutable;
 
-namespace Pororoca.Domain.Features.Entities.Postman
-{
-    public class PostmanRequestBodyRawOptions
-    {
-        public static readonly ImmutableList<string> PostmanRequestBodyRawLanguages = ImmutableList.Create<string>(
-            "json", "javascript", "html", "xml", "text"
-        );
+namespace Pororoca.Domain.Features.Entities.Postman;
 
-        public string Language { get; set; }
-    }
+internal class PostmanRequestBodyRawOptions
+{
+    public static readonly ImmutableList<string> PostmanRequestBodyRawLanguages = ImmutableList.Create<string>(
+        "json", "javascript", "html", "xml", "text"
+    );
+
+    public string Language { get; set; }
 }
+
 
 #nullable enable warnings
