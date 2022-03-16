@@ -3,7 +3,7 @@
   <PropertyGroup>
     <PackageId>Pororoca.Test</PackageId>
     <PackageIcon>pororoca.png</PackageIcon>
-    <PackageVersion>0.1.0</PackageVersion><!-- TODO: Test publishing and change version to 1.1.0 -->
+    <PackageVersion>0.1.1</PackageVersion>    <!-- TODO: Test publishing and change version to 1.1.0 -->
     <Description>Package for running Pororoca requests from tests.</Description>
     <RepositoryUrl>https://github.com/alexandrehtrb/Pororoca.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -19,6 +19,9 @@
     <Nullable>enable</Nullable>
     <DebugType>embedded</DebugType>
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
+    <!-- Including other projects as part of the package -->
+    <!-- https://yer.ac/blog/2019/09/05/dotnet-pack-project-reference-and-nuget-dependency/ -->
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
     <!-- Do not use trimming here -->
     <!-- Licence also available at https://github.com/alexandrehtrb/Pororoca/LICENCE.md -->
   </PropertyGroup>
@@ -30,8 +33,18 @@
     <None Include="..\..\LICENCE.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Pororoca.Domain\Pororoca.Domain.csproj"/>
-    <ProjectReference Include="..\Pororoca.Infrastructure\Pororoca.Infrastructure.csproj"/>
+    <ProjectReference Include="..\Pororoca.Domain\Pororoca.Domain.csproj">
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <IncludeAssets>Pororoca.Domain.dll</IncludeAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\Pororoca.Infrastructure\Pororoca.Infrastructure.csproj">
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <IncludeAssets>Pororoca.Infrastructure.dll</IncludeAssets>
+    </ProjectReference>
   </ItemGroup>
-
+  <Target DependsOnTargets="ResolveReferences" Name="CopyProjectReferencesToPackage">
+    <ItemGroup>
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))"/>
+    </ItemGroup>
+  </Target>
 </Project>
