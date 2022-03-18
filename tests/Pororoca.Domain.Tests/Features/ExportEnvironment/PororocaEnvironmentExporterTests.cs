@@ -17,9 +17,27 @@ public static class PororocaEnvironmentExporterTests
         PororocaEnvironment pororocaEnvironment = CreateTestPororocaEnvironment();
 
         // WHEN
-        PororocaEnvironment env = GenerateEnvironmentWithHiddenSecrets(pororocaEnvironment);
+        PororocaEnvironment env = GenerateEnvironmentToExport(pororocaEnvironment, true);
 
         // THEN
+        AssertEnvironment(env, true);
+    }
+
+    [Fact]
+    public static void Should_keep_visible_pororoca_environment_secrets_correctly()
+    {
+        // GIVEN
+        PororocaEnvironment pororocaEnvironment = CreateTestPororocaEnvironment();
+
+        // WHEN
+        PororocaEnvironment env = GenerateEnvironmentToExport(pororocaEnvironment, false);
+
+        // THEN
+        AssertEnvironment(env, false);
+    }
+
+    private static void AssertEnvironment(PororocaEnvironment env, bool areSecretsHidden)
+    {
         Assert.NotNull(env);
         Assert.Equal(testEnvId, env.Id);
         Assert.Equal(testEnvName, env.Name);
@@ -38,8 +56,16 @@ public static class PororocaEnvironmentExporterTests
         PororocaVariable var2 = env.Variables[1];
         Assert.False(var2.Enabled);
         Assert.Equal("Key2", var2.Key);
-        Assert.Equal(string.Empty, var2.Value); // Hidden secret value
         Assert.True(var2.IsSecret);
+
+        if (areSecretsHidden)
+        {
+            Assert.Equal(string.Empty, var2.Value); // Hidden secret value
+        }
+        else
+        {
+            Assert.Equal("Value2", var2.Value);
+        }
     }
 
     private static PororocaEnvironment CreateTestPororocaEnvironment()

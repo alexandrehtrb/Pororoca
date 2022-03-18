@@ -26,13 +26,13 @@ public static class PostmanCollectionV21Exporter
             },
             Items = ConvertToPostmanItems(col.Folders, col.Requests),
             Variable = col.Variables
-                              .Select(v => new PostmanVariable()
-                              {
-                                  Key = v.Key,
-                                  Value = shouldHideSecrets && v.IsSecret ? string.Empty : v.Value,
-                                  Disabled = !v.Enabled
-                              })
-                              .ToArray()
+                          .Select(v => new PostmanVariable()
+                          {
+                              Key = v.Key,
+                              Value = shouldHideSecrets && v.IsSecret ? string.Empty : v.Value,
+                              Disabled = !v.Enabled
+                          })
+                          .ToArray()
         };
 
     internal static PostmanAuth ConvertToPostmanAuth(PororocaRequestAuth? auth)

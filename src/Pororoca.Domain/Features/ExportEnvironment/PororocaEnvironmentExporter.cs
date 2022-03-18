@@ -7,18 +7,21 @@ namespace Pororoca.Domain.Features.ExportEnvironment;
 public static class PororocaEnvironmentExporter
 {
     public static string ExportAsPororocaEnvironment(PororocaEnvironment env, bool shouldHideSecrets) =>
-        JsonSerializer.Serialize(shouldHideSecrets ? GenerateEnvironmentWithHiddenSecrets(env) : env, options: ExporterImporterJsonOptions);
+        JsonSerializer.Serialize(GenerateEnvironmentToExport(env, shouldHideSecrets), options: ExporterImporterJsonOptions);
 
-    internal static PororocaEnvironment GenerateEnvironmentWithHiddenSecrets(PororocaEnvironment env)
+    internal static PororocaEnvironment GenerateEnvironmentToExport(PororocaEnvironment env, bool shouldHideSecrets)
     {
-        static PororocaVariable HideSecretVariableInNewVariable(PororocaVariable v) =>
-            v.IsSecret ? new PororocaVariable(v.Enabled, v.Key, string.Empty, v.IsSecret) : v;
-
         PororocaEnvironment shallowClonedEnv = new(env.Id, env.Name, env.CreatedAt);
         shallowClonedEnv.IsCurrent = false; // Always export as non current environment
+        
         shallowClonedEnv.UpdateVariables(
-            env.Variables.Select(HideSecretVariableInNewVariable)
-        );
+            shouldHideSecrets ?
+            env.Variables.Select(HideSecretVariableInNewVariable) :
+            env.Variables);
+                
         return shallowClonedEnv;
     }
+
+    private static PororocaVariable HideSecretVariableInNewVariable(PororocaVariable v) =>
+        v.IsSecret ? new PororocaVariable(v.Enabled, v.Key, string.Empty, v.IsSecret) : v;
 }
