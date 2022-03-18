@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <!-- To generate the package: 'dotnet pack -c Release' -->
     <PackageId>Pororoca.Test</PackageId>
     <PackageIcon>pororoca.png</PackageIcon>
-    <PackageVersion>0.1.1</PackageVersion>    <!-- TODO: Test publishing and change version to 1.1.0 -->
+    <PackageVersion>1.1.0</PackageVersion>
     <Description>Package for running Pororoca requests from tests.</Description>
     <RepositoryUrl>https://github.com/alexandrehtrb/Pororoca.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
