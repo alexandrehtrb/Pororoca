@@ -18,7 +18,7 @@
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
-    <TextBlock Grid.Column="0" Grid.Row="0" Text="{i18n:Localize Title, Context=CollectionVariables}" Margin="0,24,0,0" FontSize="36" FontWeight="Light" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap"/>
+    <TextBlock Grid.Column="0" Grid.Row="0" Text="{i18n:Localize Title, Context=CollectionVariables}" Margin="0,24,0,0" FontSize="32" FontWeight="Light" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap"/>
 
     <DataGrid Grid.Column="0" Grid.Row="1" Margin="0,36,0,0" AutoGenerateColumns="False" Items="{Binding Variables}" SelectedItem="{Binding Path=SelectedVariable, Mode=TwoWay}" CanUserResizeColumns="True">
       <DataGrid.Columns>

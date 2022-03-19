@@ -30,7 +30,7 @@
         <v:EditableTextBlockView DataContext="{Binding NameEditableTextBlockViewDataCtx}"/>
       </Grid>
 
-      <Grid ShowGridLines="False" Margin="12,48,16,0">
+      <Grid ShowGridLines="False" Margin="12,40,16,0">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="140"></ColumnDefinition>
           <ColumnDefinition Width="*"></ColumnDefinition>
@@ -63,7 +63,7 @@
 
       </Grid>
 
-      <Separator Background="Black" Height="6" Margin="0,48,0,0"/>
+      <Separator Background="Black" Height="6" Margin="0,36,0,0"/>
     </StackPanel>
 
     <Grid Grid.Column="0" Grid.Row="1" Margin="12,0,12,0" VerticalAlignment="Stretch">
@@ -85,8 +85,8 @@
           <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Column="0" Grid.Row="0" Margin="12,36,12,0" FontSize="24" FontWeight="Light" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" Text="{i18n:Localize SectionTitle, Context=Request}"/>
-        <TabControl Grid.Column="0" Grid.Row="1" Margin="12,28,12,12" TabStripPlacement="Top" SelectedIndex="{Binding RequestTabsSelectedIndex}">
+        <TextBlock Grid.Column="0" Grid.Row="0" Margin="12,28,12,0" FontSize="20" FontWeight="Light" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" Text="{i18n:Localize SectionTitle, Context=Request}"/>
+        <TabControl Grid.Column="0" Grid.Row="1" Margin="12,24,12,12" TabStripPlacement="Top" SelectedIndex="{Binding RequestTabsSelectedIndex}">
           <TabItem>
             <TabItem.Header>
               <TextBlock Classes="TabItemHeader" Text="{i18n:Localize Headers, Context=Request}"/>
@@ -291,8 +291,8 @@
           <RowDefinition Height="*"/>
           <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Column="0" Grid.Row="0" Margin="12,36,12,0" FontSize="24" FontWeight="Light" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding ResponseDataCtx.ResponseStatusCodeElapsedTimeTitle}"/>
-        <TabControl Grid.Column="0" Grid.Row="1" Margin="12,28,12,12" TabStripPlacement="Top" VerticalAlignment="Stretch" SelectedIndex="{Binding ResponseDataCtx.ResponseTabsSelectedIndex}">
+        <TextBlock Grid.Column="0" Grid.Row="0" Margin="12,28,12,0" FontSize="20" FontWeight="Light" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding ResponseDataCtx.ResponseStatusCodeElapsedTimeTitle}"/>
+        <TabControl Grid.Column="0" Grid.Row="1" Margin="12,24,12,12" TabStripPlacement="Top" VerticalAlignment="Stretch" SelectedIndex="{Binding ResponseDataCtx.ResponseTabsSelectedIndex}">
           <TabItem>
             <TabItem.Header>
               <TextBlock Classes="TabItemHeader" Text="{i18n:Localize Headers, Context=Response}"/>
