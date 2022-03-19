@@ -30,7 +30,7 @@ public static class PostmanCollectionV21Exporter
                           {
                               Key = v.Key,
                               Value = shouldHideSecrets && v.IsSecret ? string.Empty : v.Value,
-                              Disabled = !v.Enabled
+                              Disabled = v.Enabled ? null : true
                           })
                           .ToArray()
         };
@@ -98,7 +98,8 @@ public static class PostmanCollectionV21Exporter
                 Url = ConvertToPostmanRequestUrl(req.Url),
                 Header = ConvertToPostmanHeaders(req.Headers),
                 Body = ConvertToPostmanRequestBody(req.Body)
-            }
+            },
+            Response = Array.Empty<object>()
         };
 
     internal static PostmanRequestUrl ConvertToPostmanRequestUrl(string rawUrl)

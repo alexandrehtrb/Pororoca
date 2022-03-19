@@ -12,6 +12,8 @@ internal class PostmanCollectionItem
     public PostmanCollectionItem[]? Items { get; set; }
 
     public PostmanRequest? Request { get; set; }
+
+    public object[] Response { get; set; }
 }
 
 

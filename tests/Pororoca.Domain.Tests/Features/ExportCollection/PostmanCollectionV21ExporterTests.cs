@@ -366,6 +366,8 @@ public static class PostmanCollectionV21ExporterTests
         Assert.Equal("Req1", postmanReq.Name);
         Assert.Null(postmanReq.Items);
         Assert.NotNull(postmanReq.Request);
+        Assert.NotNull(postmanReq.Response);
+        Assert.Empty(postmanReq.Response);
 
         PostmanVariable[]? hdrs = postmanReq.Request?.Header;
 
@@ -486,7 +488,7 @@ public static class PostmanCollectionV21ExporterTests
         Assert.Equal(2, postmanCollection.Variable!.Length);
 
         PostmanVariable var1 = postmanCollection.Variable[0];
-        Assert.False(var1.Disabled);
+        Assert.Null(var1.Disabled);
         Assert.Equal("Key1", var1.Key);
         Assert.Equal("Value1", var1.Value);
 

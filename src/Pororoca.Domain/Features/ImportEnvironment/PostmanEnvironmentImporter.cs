@@ -33,7 +33,7 @@ public static class PostmanEnvironmentImporter
         try
         {
             // Always generating new id, in case user imports the same environment twice
-            PororocaEnvironment myEnv = new(Guid.NewGuid(), postmanEnvironment.Name, postmanEnvironment.ExportedAt);
+            PororocaEnvironment myEnv = new(Guid.NewGuid(), postmanEnvironment.Name, DateTimeOffset.Now);
             if (postmanEnvironment.Values != null)
             {
                 foreach (PostmanEnvironmentVariable envVar in postmanEnvironment.Values)

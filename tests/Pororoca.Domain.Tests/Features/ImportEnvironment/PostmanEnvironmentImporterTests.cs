@@ -12,7 +12,6 @@ public static class PostmanEnvironmentImporterTests
 {
     private static readonly Guid testEnvId = Guid.Parse("8b34e2c4-3384-4ebd-996e-24c0e63ee256");
     private const string testEnvName = "TestEnvironment";
-    private static readonly DateTimeOffset testEnvExportedDateTime = DateTimeOffset.Parse("2021-04-01T00:57:06.703Z");
 
 
     [Fact]
@@ -45,7 +44,7 @@ public static class PostmanEnvironmentImporterTests
         Assert.NotNull(env);
         Assert.NotEqual(testEnvId, env.Id);
         Assert.Equal(testEnvName, env.Name);
-        Assert.Equal(testEnvExportedDateTime, env.CreatedAt);
+        Assert.Equal(DateTimeOffset.Now.Date, env.CreatedAt.Date);
         Assert.False(env.IsCurrent);
         Assert.Equal(2, env.Variables.Count);
 
@@ -75,7 +74,7 @@ public static class PostmanEnvironmentImporterTests
             Id = testEnvId,
             Name = testEnvName,
             Scope = "environment",
-            ExportedAt = testEnvExportedDateTime,
+            ExportedAt = "2021-04-01T00:57:06.703Z",
             ExportedUsing = "Postman/8.0.10",
             Values = new PostmanEnvironmentVariable[]
             {

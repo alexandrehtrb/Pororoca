@@ -16,7 +16,7 @@ internal class PostmanEnvironment
     public string Scope { get; set; }
 
     [JsonPropertyName("_postman_exported_at")]
-    public DateTimeOffset ExportedAt { get; set; }
+    public string ExportedAt { get; set; }
 
     [JsonPropertyName("_postman_exported_using")]
     public string ExportedUsing { get; set; }

@@ -12,7 +12,6 @@ public static class PostmanEnvironmentExporterTests
 {
     private static readonly Guid testEnvId = Guid.NewGuid();
     private const string testEnvName = "TestEnvironment";
-    private static readonly DateTimeOffset testEnvCreationDate = DateTimeOffset.Now;
 
     [Fact]
     public static void Should_convert_pororoca_environment_without_secrets_correctly()
@@ -36,8 +35,8 @@ public static class PostmanEnvironmentExporterTests
         Assert.Equal(testEnvId, env.Id);
         Assert.Equal(testEnvName, env.Name);
         Assert.Equal("environment", env.Scope);
-        Assert.Equal(DateTimeOffset.Now.Date, env.ExportedAt.Date);
-        Assert.Contains("Pororoca/", env.ExportedUsing);
+        Assert.Contains(DateTimeOffset.UtcNow.ToString("yyyy-MM-dd'T'"), env.ExportedAt);
+        Assert.Equal("Postman/9.15.2", env.ExportedUsing);
         Assert.Equal(2, env.Values.Length);
 
         PostmanEnvironmentVariable var1 = env.Values[0];
@@ -56,7 +55,7 @@ public static class PostmanEnvironmentExporterTests
 
     private static PororocaEnvironment CreateTestPororocaEnvironment()
     {
-        PororocaEnvironment env = new(testEnvId, testEnvName, testEnvCreationDate)
+        PororocaEnvironment env = new(testEnvId, testEnvName, DateTimeOffset.Now)
         {
             IsCurrent = false
         };
