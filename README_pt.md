@@ -22,7 +22,7 @@ Leia as [instruções](./docs/pt-BR/Instalação.md) e baixe o programa [aqui](h
 * Compatibilidade total com o Postman ao importar ou exportar.
 * Consumo muito menor de memória - cerca de seis vezes menos do que o Postman.
 * Inicialização rápida.
-* Código-aberto.
+* Gratuito e código-aberto.
 
 Confira a [documentação](./docs/pt-BR/PáginaInicial.md) para saber mais.
 
@@ -32,14 +32,22 @@ Confira a [documentação](./docs/pt-BR/PáginaInicial.md) para saber mais.
 
 HTTP/3 usa o protocolo de transporte QUIC e há algumas preocupações de rastreabilidade quanto a este. Isso não é um problema para comunicações em redes internas e para a maioria das aplicações de negócios, contudo. Há um [artigo](https://svs.informatik.uni-hamburg.de/publications/2019/2019-02-26-Sy-PET_Symposium-A_QUIC_Look_at_Web_Tracking.pdf) interessante sobre isso que vale a pena ler.
 
+## Design
+
+Logo criado por [Anderson Martins](https://www.behance.net/am-dsgn).
+
 ## Contribuindo
 
 Você pode contribuir com esse projeto através de pull requests, abrindo issues, reportando bugs e sugerindo melhorias. Divulgue o Pororoca para seus amigos se você gostar dele!
 
-O Pororoca é gratuito e regido pela licença GPLv3. Nós aceitamos doações em dinheiro - se estiver interessado em doar, por favor, contacte-nos.
-
 Também entre em contato se desejar suporte mais avançado, customizações especiais ou treinamentos.
 
-## Design
+## Doações
 
-Logo criado por [Anderson Martins](https://www.behance.net/am-dsgn).
+Você também pode contribuir com doações em dinheiro.
+
+Chave PIX: alexandrehtrb@outlook.com
+
+| ![DoeComPIX](./misc/pix_botao_doacao.png) | [![DoeComPayPal](./misc/paypal_donation_button.png)](https://www.paypal.com/donate/?hosted_button_id=NUADRWF3WNYQ2) |
+|--|--|
+| [Ver QR Code](./misc/pix_doacao_qr_code.png) | [Ver QR Code](./misc/paypal_donation_qr_code.png) |
