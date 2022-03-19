@@ -28,9 +28,9 @@ Check the [documentation](./docs/en-GB/HomePage.md) to know more.
 
 *Note*: Support for HTTP/2 requires Linux or Windows 10 and later, and support for HTTP/3 requires Linux or Windows 11 and later.
 
-### HTTP/3 and traceability
+### HTTP/3 and privacy
 
-HTTP/3 uses the QUIC transport protocol and there are some traceability concerns about it. It might not be a problem on internal network communications and for most business applications, though. There is an interesting article about it [here](https://svs.informatik.uni-hamburg.de/publications/2019/2019-02-26-Sy-PET_Symposium-A_QUIC_Look_at_Web_Tracking.pdf).
+HTTP/3 uses the QUIC transport protocol and there are some privacy concerns about it. It might not be a problem on internal network communications and for most business applications, though. There is an interesting article about it [here](https://svs.informatik.uni-hamburg.de/publications/2019/2019-02-26-Sy-PET_Symposium-A_QUIC_Look_at_Web_Tracking.pdf).
 
 ## Design
 
