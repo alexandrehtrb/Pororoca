@@ -53,6 +53,7 @@ public static class PororocaCollectionExporterTests
             new(false, "Key2", "Value2", true)
         });
         PororocaEnvironment env1 = new("MyEnvironment");
+        env1.IsCurrent = true;
         env1.UpdateVariables(new PororocaVariable[]
         {
             new(true, "Key3", "Value3", true),
@@ -71,9 +72,6 @@ public static class PororocaCollectionExporterTests
         Assert.Equal(1, col.Requests.Count);
         Assert.Equal(1, col.Environments.Count);
         Assert.Equal(2, col.Variables.Count);
-
-        
-
 
         PororocaRequest req1 = col.Requests[0];
         Assert.Equal("Req1", req1.Name);
@@ -112,6 +110,7 @@ public static class PororocaCollectionExporterTests
         }
 
         PororocaEnvironment env1 = col.Environments[0];
+        Assert.True(env1.IsCurrent); // Should preserve environment.IsCurrent when exporting it inside of a collection
 
         PororocaVariable var3 = env1.Variables[0];
         Assert.True(var3.Enabled);

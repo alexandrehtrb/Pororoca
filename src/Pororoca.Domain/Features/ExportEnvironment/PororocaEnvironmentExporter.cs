@@ -7,12 +7,14 @@ namespace Pororoca.Domain.Features.ExportEnvironment;
 public static class PororocaEnvironmentExporter
 {
     public static string ExportAsPororocaEnvironment(PororocaEnvironment env, bool shouldHideSecrets) =>
-        JsonSerializer.Serialize(GenerateEnvironmentToExport(env, shouldHideSecrets), options: ExporterImporterJsonOptions);
+        JsonSerializer.Serialize(GenerateEnvironmentToExport(env, shouldHideSecrets, false), options: ExporterImporterJsonOptions);
 
-    internal static PororocaEnvironment GenerateEnvironmentToExport(PororocaEnvironment env, bool shouldHideSecrets)
+    internal static PororocaEnvironment GenerateEnvironmentToExport(PororocaEnvironment env, bool shouldHideSecrets, bool preserveIsCurrentEnvironment)
     {
         PororocaEnvironment shallowClonedEnv = new(env.Id, env.Name, env.CreatedAt);
-        shallowClonedEnv.IsCurrent = false; // Always export as non current environment
+        // Always export as non current environment,
+        // unless if exporting environment inside of a collection
+        shallowClonedEnv.IsCurrent = env.IsCurrent && preserveIsCurrentEnvironment;
         
         shallowClonedEnv.UpdateVariables(
             shouldHideSecrets ?

@@ -21,7 +21,7 @@ public static class PororocaCollectionExporter
             col.Variables);
 
         shallowClonedCol.UpdateEnvironments(
-            col.Environments.Select(e => GenerateEnvironmentToExport(e, shouldHideSecrets)));
+            col.Environments.Select(e => GenerateEnvironmentToExport(e, shouldHideSecrets, true)));
 
         return shallowClonedCol;
     }

@@ -10,39 +10,40 @@ public static class PororocaEnvironmentExporterTests
     private const string testEnvName = "TestEnvironment";
     private static readonly DateTimeOffset testEnvCreationDate = DateTimeOffset.Now;
 
-    [Fact]
-    public static void Should_hide_pororoca_environment_secrets_correctly()
+
+    [Theory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public static void Should_hide_pororoca_environment_secrets_correctly(bool shouldHideSecrets, bool preserveIsCurrentEnvironment)
     {
         // GIVEN
         PororocaEnvironment pororocaEnvironment = CreateTestPororocaEnvironment();
 
         // WHEN
-        PororocaEnvironment env = GenerateEnvironmentToExport(pororocaEnvironment, true);
+        PororocaEnvironment env = GenerateEnvironmentToExport(pororocaEnvironment, shouldHideSecrets, preserveIsCurrentEnvironment);
 
         // THEN
-        AssertEnvironment(env, true);
+        AssertEnvironment(env, shouldHideSecrets, preserveIsCurrentEnvironment);
     }
 
-    [Fact]
-    public static void Should_keep_visible_pororoca_environment_secrets_correctly()
-    {
-        // GIVEN
-        PororocaEnvironment pororocaEnvironment = CreateTestPororocaEnvironment();
-
-        // WHEN
-        PororocaEnvironment env = GenerateEnvironmentToExport(pororocaEnvironment, false);
-
-        // THEN
-        AssertEnvironment(env, false);
-    }
-
-    private static void AssertEnvironment(PororocaEnvironment env, bool areSecretsHidden)
+    private static void AssertEnvironment(PororocaEnvironment env, bool areSecretsHidden, bool shouldPreserveIsCurrentEnv)
     {
         Assert.NotNull(env);
         Assert.Equal(testEnvId, env.Id);
         Assert.Equal(testEnvName, env.Name);
         Assert.Equal(testEnvCreationDate, env.CreatedAt);
-        Assert.False(env.IsCurrent);  // Always export as non current environment
+        // Always export as non current environment,
+        // unless if exporting environment inside of a collection
+        if (shouldPreserveIsCurrentEnv)
+        {
+            Assert.True(env.IsCurrent);
+        }
+        else
+        {
+            Assert.False(env.IsCurrent);
+        }
 
         Assert.NotNull(env.Variables);
         Assert.Equal(2, env.Variables.Count);
