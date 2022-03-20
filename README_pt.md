@@ -21,6 +21,7 @@ Leia as [instruções](./docs/pt-BR/Instalação.md) e baixe o programa [aqui](h
 * Coleções e ambientes podem ser exportados juntos em um mesmo arquivo.
 * Compatibilidade total com o Postman ao importar ou exportar.
 * Consumo muito menor de memória - cerca de seis vezes menos do que o Postman.
+* Testes automatizados.
 * Inicialização rápida.
 * Gratuito e código-aberto.
 
@@ -40,7 +41,7 @@ Logo criado por [Anderson Martins](https://www.behance.net/am-dsgn).
 
 Você pode contribuir com esse projeto através de pull requests, abrindo issues, reportando bugs e sugerindo melhorias. Divulgue o Pororoca para seus amigos se você gostar dele!
 
-Também entre em contato se desejar suporte mais avançado, customizações especiais ou treinamentos.
+Entre em contato se desejar suporte mais avançado, customizações especiais ou treinamentos.
 
 ## Doações
 
