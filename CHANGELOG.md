@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.1.0](https://github.com/alexandrehtrb/Pororoca/tree/1.1.0) (2022-03-17)
+## [1.1.0](https://github.com/alexandrehtrb/Pororoca/tree/1.1.0) (2022-03-20)
 
 ### Features
 
@@ -15,6 +15,7 @@
 ### Bug Fixes
 
 * Now always exporting environments as non-current environments
+* Now detects correctly Windows 11 to check for HTTP/3 support
 
 ### Improvements
 
