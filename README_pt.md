@@ -27,7 +27,7 @@ Leia as [instruções](./docs/pt-BR/Instalação.md) e baixe o programa [aqui](h
 
 Confira a [documentação](./docs/pt-BR/PáginaInicial.md) para saber mais.
 
-*Nota*: Suporte ao HTTP/2 requer Linux ou Windows 10 e acima, e suporte ao HTTP/3 requer de Linux ou Windows 11 e acima.
+*Nota*: Suporte ao HTTP/2 requer Linux ou Windows 10 e acima, e suporte ao HTTP/3 requer de Linux ou Windows 11 e acima. HTTP/3 está em fase experimental.
 
 ### HTTP/3 e privacidade
 
