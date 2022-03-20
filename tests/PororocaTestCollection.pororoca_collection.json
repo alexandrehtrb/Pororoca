@@ -279,10 +279,10 @@
         {
           "requestType": "http",
           "id": "665e1be1-297c-4c5a-830b-d418e42445d2",
-          "name": "CLOUDFLARE QUIC HTTP/3 TEST PAGE",
+          "name": "AIOQUIC HTTP/3 TEST PAGE",
           "httpVersion": 3.0,
           "httpMethod": "GET",
-          "url": "https://cloudflare-quic.com/"
+          "url": "https://quic.aiortc.org/"
         }
       ]
     },
