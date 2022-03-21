@@ -32,7 +32,7 @@ After that, in the created test project, the .csproj file must be edited to incl
   </ItemGroup>
   <ItemGroup>
     <!-- The line below adds Pororoca.Test package to the project -->
-    <PackageReference Include="Pororoca.Test" Version="1.1.0" />
+    <PackageReference Include="Pororoca.Test" Version="1.1.1" />
     ...
   </ItemGroup>
 
