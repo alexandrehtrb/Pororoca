@@ -1,12 +1,11 @@
 using System.Text;
 using System.Text.Json;
-using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.ExportCollection;
-using static Pororoca.Domain.Features.Common.JsonConfiguration;
 using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
-using System.Reflection;
-using System.Diagnostics;
+using Pororoca.Domain.Features.ImportCollection;
+using System.Text.Json.Serialization;
+using System.Text.Encodings.Web;
 
 namespace Pororoca.Desktop.UserData;
 
@@ -14,6 +13,18 @@ public sealed class UserDataManager
 {
     private const string UserDataFolderName = "PororocaUserData";
     private const string UserPreferencesFileName = "userPreferences.json";
+    private static readonly JsonSerializerOptions UserPreferencesJsonOptions = SetupUserPreferencesJsonOptions();
+
+    private static JsonSerializerOptions SetupUserPreferencesJsonOptions()
+    {
+        JsonSerializerOptions options = new();
+        options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+        options.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+        options.WriteIndented = true;
+        options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        return options;
+    }
 
     public static UserPreferences? LoadUserPreferences()
     {
@@ -27,7 +38,7 @@ public sealed class UserDataManager
             try
             {
                 FileStream fs = File.Open(userPreferencesFilePath, FileMode.Open, FileAccess.Read);
-                return JsonSerializer.Deserialize<UserPreferences>(fs, options: ExporterImporterJsonOptions);
+                return JsonSerializer.Deserialize<UserPreferences>(fs, options: UserPreferencesJsonOptions);
             }
             catch
             {
@@ -53,9 +64,15 @@ public sealed class UserDataManager
                 {
                     try
                     {
-                        FileStream fs = File.Open(f.FullName, FileMode.Open, FileAccess.Read);
-                        PororocaCollection? col = JsonSerializer.Deserialize<PororocaCollection>(fs, options: ExporterImporterJsonOptions);
-                        return col;
+                        string json = File.ReadAllText(f.FullName, Encoding.UTF8);
+                        if (PororocaCollectionImporter.TryImportPororocaCollection(json, out PororocaCollection? col))
+                        {
+                            return col;
+                        }
+                        else
+                        {
+                            return null;
+                        }
                     }
                     catch
                     {
@@ -82,7 +99,7 @@ public sealed class UserDataManager
     private static Task SaveUserPreferences(UserPreferences userPrefs)
     {
         string path = GetUserDataFilePath(UserPreferencesFileName);
-        string json = JsonSerializer.Serialize(userPrefs, options: ExporterImporterJsonOptions);
+        string json = JsonSerializer.Serialize(userPrefs, options: UserPreferencesJsonOptions);
         return File.WriteAllTextAsync(path, json, Encoding.UTF8);
     }
 

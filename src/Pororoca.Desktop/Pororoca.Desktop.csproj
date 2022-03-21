@@ -10,9 +10,9 @@
     <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
     <PublishReadyToRun>True</PublishReadyToRun>
     <ApplicationIcon>Assets/pororoca_icon.ico</ApplicationIcon>
-    <Version>1.0.0</Version>
-    <FileVersion>1.0.0</FileVersion>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <Version>1.1.0</Version>
+    <FileVersion>1.1.0</FileVersion>
+    <AssemblyVersion>1.1.0</AssemblyVersion>
     <Copyright>AlexandreHTRB</Copyright>
     <!-- Licence also available at https://github.com/alexandrehtrb/Pororoca/LICENCE.md -->
   </PropertyGroup>

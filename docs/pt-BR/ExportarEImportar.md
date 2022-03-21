@@ -12,7 +12,7 @@ A opção "Incluir variáveis secretas", se selecionada, incluirá os valores de
 
 Ao exportar uma coleção em formato Pororoca, os ambientes da coleção também serão transportados no arquivo - não há necessidade de exportar cada ambiente individualmente.
 
-Os arquivos exportados são arquivos textos em formato JSON, que podem ser inspecionados e editados em um edito de texto de sua escolha.
+Os arquivos exportados são arquivos textos em formato JSON, que podem ser inspecionados e editados em um editor de texto de sua escolha.
 
 ![ExportarColeção](./imgs/export_collection.jpg)
 

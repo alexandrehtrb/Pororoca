@@ -1,9 +1,7 @@
 using System.Text.Json;
-using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Postman;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
-using System.Reflection;
 
 namespace Pororoca.Domain.Features.ExportEnvironment;
 
@@ -12,7 +10,7 @@ public static class PostmanEnvironmentExporter
     public static string ExportAsPostmanEnvironment(PororocaEnvironment env, bool shouldHideSecrets) =>
         JsonSerializer.Serialize(ConvertToPostmanEnvironment(env, shouldHideSecrets), options: ExporterImporterJsonOptions);
 
-    public static PostmanEnvironment ConvertToPostmanEnvironment(PororocaEnvironment env, bool shouldHideSecrets) =>
+    internal static PostmanEnvironment ConvertToPostmanEnvironment(PororocaEnvironment env, bool shouldHideSecrets) =>
         new()
         {
             Id = env.Id,
@@ -26,7 +24,7 @@ public static class PostmanEnvironmentExporter
                         })
                         .ToArray(),
             Scope = "environment",
-            ExportedAt = DateTimeOffset.Now,
-            ExportedUsing = $"Pororoca/{Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion}"
+            ExportedAt = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss.fff'Z'"),
+            ExportedUsing = "Postman/9.15.2" // Exporting with Postman label to avoid blocking by them
         };
 }

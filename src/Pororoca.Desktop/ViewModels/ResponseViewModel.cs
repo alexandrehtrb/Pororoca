@@ -44,16 +44,6 @@ namespace Pororoca.Desktop.ViewModels
 
         public ObservableCollection<KeyValueParamViewModel> ResponseHeaders { get; }
 
-        private string? _responseRawContentType;
-        public string? ResponseRawContentType
-        {
-            get => _responseRawContentType;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _responseRawContentType, value);
-            }
-        }
-
         private string? _responseRawContent;
         public string? ResponseRawContent
         {
@@ -90,8 +80,11 @@ namespace Pororoca.Desktop.ViewModels
 
         private async Task SaveResponseBodyToFileAsync()
         {
-            string GenerateDefaultInitialFileName(string fileExtensionWithoutDot) =>
-                $"response-{_res.ReceivedAt:yyyyMMdd-HHmmss}.{fileExtensionWithoutDot}";
+            string GenerateDefaultInitialFileName(string fileExtensionWithoutDot)
+            {
+                DateTime receivedAtDt = _res.ReceivedAt.DateTime;
+                return $"response-{receivedAtDt:yyyyMMdd-HHmmss}.{fileExtensionWithoutDot}";
+            }
 
             if (_res != null && _res.HasBody)
             {
@@ -130,12 +123,11 @@ namespace Pororoca.Desktop.ViewModels
 
         public void UpdateWithResponse(PororocaResponse? res)
         {
-            if (res != null && res.Success)
+            if (res != null && res.Successful)
             {
                 _res = res;
                 ResponseStatusCodeElapsedTimeTitle = FormatSuccessfulResponseTitle(res.ElapsedTime, (HttpStatusCode)res.StatusCode!);
                 UpdateHeaders(res.Headers);
-                ResponseRawContentType = res.ContentType;
                 ResponseRawContent = res.CanDisplayTextBody ? res.GetBodyAsText() : string.Format(Localizer.Instance["Response/BodyContentBinaryNotShown"], res.GetBodyAsBinary()!.Length);
                 IsSaveResponseBodyToFileVisible = res.HasBody;
             }
@@ -144,7 +136,6 @@ namespace Pororoca.Desktop.ViewModels
                 _res = res;
                 ResponseStatusCodeElapsedTimeTitle = FormatFailedResponseTitle(res.ElapsedTime);
                 UpdateHeaders(res.Headers);
-                ResponseRawContentType = Localizer.Instance["Response/BodyContentTypeException"];
                 ResponseRawContent = res.Exception!.ToString();
                 IsSaveResponseBodyToFileVisible = false;
             }
@@ -152,19 +143,19 @@ namespace Pororoca.Desktop.ViewModels
             {
                 ResponseStatusCodeElapsedTimeTitle = Localizer.Instance["Response/SectionTitle"];
                 
-                ResponseRawContentType = string.Empty;
                 ResponseRawContent = string.Empty;
             }
         }
 
-        private void UpdateHeaders(IEnumerable<PororocaKeyValueParam>? resHeaders)
+        private void UpdateHeaders(IEnumerable<KeyValuePair<string, string>>? resHeaders)
         {
             ResponseHeaders.Clear();
             if (resHeaders != null)
             {
-                foreach (PororocaKeyValueParam kvp in resHeaders)
+                foreach (KeyValuePair<string, string> kvp in resHeaders)
                 {
-                    ResponseHeaders.Add(new KeyValueParamViewModel(kvp));
+                    PororocaKeyValueParam pkvp = new(true, kvp.Key, kvp.Value);
+                    ResponseHeaders.Add(new KeyValueParamViewModel(pkvp));
                 }
             }
         }

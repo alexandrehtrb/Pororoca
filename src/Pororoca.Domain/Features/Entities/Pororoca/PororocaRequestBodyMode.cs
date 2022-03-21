@@ -5,6 +5,6 @@ public enum PororocaRequestBodyMode
     Raw,
     File,
     UrlEncoded,
-    FormData
-    // TODO: GraphQl?
+    FormData,
+    GraphQl
 }

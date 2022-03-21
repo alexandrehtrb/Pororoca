@@ -3,7 +3,6 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using Pororoca.Domain.Features.Common;
-using Pororoca.Domain.Features.Entities.Pororoca;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca;
@@ -12,15 +11,15 @@ public sealed class PororocaResponse
 {
     public TimeSpan ElapsedTime { get; }
 
-    public DateTime ReceivedAt { get; }
+    public DateTimeOffset ReceivedAt { get; }
 
     public Exception? Exception { get; }
 
-    public bool Success { get; }
+    public bool Successful { get; }
 
     public HttpStatusCode? StatusCode { get; }
 
-    public IEnumerable<PororocaKeyValueParam>? Headers { get; }
+    public IEnumerable<KeyValuePair<string, string>>? Headers { get; }
 
     private readonly byte[]? _binaryBody;
     
@@ -34,7 +33,7 @@ public sealed class PororocaResponse
     {
         get
         {
-            PororocaKeyValueParam? contentTypeHeaders = Headers?.FirstOrDefault(h => h.Key == "Content-Type");
+            KeyValuePair<string, string>? contentTypeHeaders = Headers?.FirstOrDefault(h => h.Key == "Content-Type");
             return contentTypeHeaders?.Value;
         }
     }
@@ -82,10 +81,17 @@ public sealed class PororocaResponse
 
     public byte[]? GetBodyAsBinary() =>
         _binaryBody;
+    
+    public T? GetJsonBodyAs<T>() =>
+        GetJsonBodyAs<T>(MinifyingOptions);
 
+    public T? GetJsonBodyAs<T>(JsonSerializerOptions jsonOptions) =>
+        JsonSerializer.Deserialize<T>(_binaryBody, jsonOptions);
+    
     public string? GetContentDispositionFileName()
     {
-        string? contentDispositionValue = Headers?.FirstOrDefault(h => h.Key == "Content-Disposition")?.Value;
+        KeyValuePair<string, string>? contentDispositionHeader = Headers?.FirstOrDefault(h => h.Key == "Content-Disposition");
+        string? contentDispositionValue = contentDispositionHeader?.Value;
         if (contentDispositionValue != null)
         {
             string[] contentDispositionParts = contentDispositionValue.Split("; ", StringSplitOptions.RemoveEmptyEntries);
@@ -114,14 +120,14 @@ public sealed class PororocaResponse
     private PororocaResponse(TimeSpan elapsedTime, HttpResponseMessage responseMessage, byte[] binaryBody)
     {
         ElapsedTime = elapsedTime;
-        ReceivedAt = DateTime.Now;
-        Success = true;
+        ReceivedAt = DateTimeOffset.Now;
+        Successful = true;
         StatusCode = responseMessage.StatusCode;
         
         HttpHeaders nonContentHeaders = responseMessage.Headers;
         HttpHeaders contentHeaders = responseMessage.Content.Headers;
 
-        Headers = nonContentHeaders.Concat(contentHeaders).Select(h => new PororocaKeyValueParam(true, h.Key, string.Join(';', h.Value)));
+        Headers = nonContentHeaders.Concat(contentHeaders).Select(h => new KeyValuePair<string, string>(h.Key, string.Join(';', h.Value)));
 
         this._binaryBody = binaryBody;
     }
@@ -129,7 +135,7 @@ public sealed class PororocaResponse
     private PororocaResponse(TimeSpan elapsedTime, Exception exception)
     {
         ElapsedTime = elapsedTime;
-        Success = false;
+        Successful = false;
         Exception = exception;
     }
 }

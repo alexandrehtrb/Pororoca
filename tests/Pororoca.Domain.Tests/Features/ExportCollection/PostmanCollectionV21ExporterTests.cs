@@ -71,6 +71,7 @@ public static class PostmanCollectionV21ExporterTests
         Assert.Null(postmanBody.File);
         Assert.Null(postmanBody.Formdata);
         Assert.Null(postmanBody.Urlencoded);
+        Assert.Null(postmanBody.Graphql);
         Assert.Equal("[]", postmanBody.Raw);
         Assert.Equal("json", postmanBody.Options!.Raw!.Language);
     }
@@ -91,6 +92,7 @@ public static class PostmanCollectionV21ExporterTests
         Assert.Null(postmanBody.File);
         Assert.Null(postmanBody.Formdata);
         Assert.Null(postmanBody.Urlencoded);
+        Assert.Null(postmanBody.Graphql);
         Assert.Equal("aeiou", postmanBody.Raw);
         Assert.Equal("text", postmanBody.Options!.Raw!.Language);
     }
@@ -111,6 +113,7 @@ public static class PostmanCollectionV21ExporterTests
         Assert.Null(postmanBody.File);
         Assert.Null(postmanBody.Formdata);
         Assert.Null(postmanBody.Urlencoded);
+        Assert.Null(postmanBody.Graphql);
         Assert.Equal("<a k=\"1\"/>", postmanBody.Raw);
         Assert.Equal("xml", postmanBody.Options!.Raw!.Language);
     }
@@ -134,6 +137,7 @@ public static class PostmanCollectionV21ExporterTests
         Assert.Null(postmanBody.Options);
         Assert.Null(postmanBody.File);
         Assert.Null(postmanBody.Formdata);
+        Assert.Null(postmanBody.Graphql);
         Assert.NotNull(postmanBody.Urlencoded);
         Assert.Equal(2, postmanBody.Urlencoded!.Length);
 
@@ -165,6 +169,7 @@ public static class PostmanCollectionV21ExporterTests
         Assert.Null(postmanBody.Urlencoded);
         Assert.Null(postmanBody.Raw);
         Assert.Null(postmanBody.Options);
+        Assert.Null(postmanBody.Graphql);
         Assert.NotNull(postmanBody.File);
         Assert.Equal(@"C:\Pasta1\arq.txt", postmanBody.File!.Src);
     }
@@ -194,8 +199,7 @@ public static class PostmanCollectionV21ExporterTests
         Assert.Null(postmanBody.Raw);
         Assert.Null(postmanBody.Options);
         Assert.Null(postmanBody.File);
-        Assert.NotNull(postmanBody.Formdata);
-
+        Assert.Null(postmanBody.Graphql);
         Assert.NotNull(postmanBody.Formdata);
         Assert.Equal(4, postmanBody.Formdata!.Length);
 
@@ -230,6 +234,31 @@ public static class PostmanCollectionV21ExporterTests
         Assert.Null(fp4.Value);
         Assert.Equal("image/jpeg", fp4.ContentType);
         Assert.Equal(@"C:\Pasta1\arq2.jpg", fp4.Src);
+    }
+
+    [Fact]
+    public static void Should_convert_pororoca_req_graphql_body_to_postman_req_body_correctly()
+    {  
+        // GIVEN
+        const string qry = "query allFruits { fruits { fruit_name } }";
+        const string variables = "{\"id\":{{CocoId}}}";
+        PororocaRequestBody reqBody = new();
+        reqBody.SetGraphQlContent(qry, variables);
+
+        // WHEN
+        PostmanRequestBody? postmanBody = ConvertToPostmanRequestBody(reqBody);
+
+        // THEN
+        Assert.NotNull(postmanBody);
+        Assert.Equal(PostmanRequestBodyMode.Graphql, postmanBody!.Mode);
+        Assert.Null(postmanBody.Formdata);
+        Assert.Null(postmanBody.Urlencoded);
+        Assert.Null(postmanBody.Raw);
+        Assert.Null(postmanBody.Options);
+        Assert.Null(postmanBody.File);
+        Assert.NotNull(postmanBody.Graphql);
+        Assert.Equal(qry, postmanBody.Graphql!.Query);
+        Assert.Equal(variables, postmanBody.Graphql!.Variables);
     }
 
     #endregion
@@ -337,6 +366,8 @@ public static class PostmanCollectionV21ExporterTests
         Assert.Equal("Req1", postmanReq.Name);
         Assert.Null(postmanReq.Items);
         Assert.NotNull(postmanReq.Request);
+        Assert.NotNull(postmanReq.Response);
+        Assert.Empty(postmanReq.Response);
 
         PostmanVariable[]? hdrs = postmanReq.Request?.Header;
 
@@ -457,7 +488,7 @@ public static class PostmanCollectionV21ExporterTests
         Assert.Equal(2, postmanCollection.Variable!.Length);
 
         PostmanVariable var1 = postmanCollection.Variable[0];
-        Assert.False(var1.Disabled);
+        Assert.Null(var1.Disabled);
         Assert.Equal("Key1", var1.Key);
         Assert.Equal("Value1", var1.Value);
 

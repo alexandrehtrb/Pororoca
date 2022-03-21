@@ -1,34 +1,31 @@
 using System.Text.Json;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
+using static Pororoca.Domain.Features.ExportEnvironment.PororocaEnvironmentExporter;
 
 namespace Pororoca.Domain.Features.ExportCollection;
 
 public static class PororocaCollectionExporter
 {
     public static string ExportAsPororocaCollection(PororocaCollection col, bool shouldHideSecrets) =>
-        JsonSerializer.Serialize(shouldHideSecrets ? GenerateCollectionWithHiddenSecrets(col) : col, options: ExporterImporterJsonOptions);
+        JsonSerializer.Serialize(GenerateCollectionToExport(col, shouldHideSecrets), options: ExporterImporterJsonOptions);
 
-    internal static PororocaCollection GenerateCollectionWithHiddenSecrets(PororocaCollection col)
+    internal static PororocaCollection GenerateCollectionToExport(PororocaCollection col, bool shouldHideSecrets)
     {
-        static PororocaVariable HideSecretVariableInNewVariable(PororocaVariable v) =>
-            v.IsSecret ? new PororocaVariable(v.Enabled, v.Key, string.Empty, v.IsSecret) : v;
-
         PororocaCollection shallowClonedCol = (PororocaCollection) col.Clone();
         shallowClonedCol.Id = col.Id;
+
         shallowClonedCol.UpdateVariables(
-            col.Variables.Select(HideSecretVariableInNewVariable));
+            shouldHideSecrets ?
+            col.Variables.Select(HideSecretVariableInNewVariable) :
+            col.Variables);
+
         shallowClonedCol.UpdateEnvironments(
-            col.Environments.Select(e =>
-            {
-                PororocaEnvironment shallowClonedEnv = (PororocaEnvironment) e.Clone();
-                shallowClonedEnv.Id = e.Id;
-                shallowClonedEnv.UpdateVariables(
-                    shallowClonedEnv.Variables.Select(HideSecretVariableInNewVariable)
-                );
-                return shallowClonedEnv;
-            })
-        );
+            col.Environments.Select(e => GenerateEnvironmentToExport(e, shouldHideSecrets, true)));
+
         return shallowClonedCol;
     }
+
+    private static PororocaVariable HideSecretVariableInNewVariable(PororocaVariable v) =>
+        v.IsSecret ? new PororocaVariable(v.Enabled, v.Key, string.Empty, v.IsSecret) : v;
 }

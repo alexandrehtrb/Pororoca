@@ -794,6 +794,40 @@ public static class PororocaRequestTranslatorTests
     }
 
     [Fact]
+    public static async Task Should_resolve_graphql_content_correctly()
+    {  
+        // GIVEN
+        const string qry = "myGraphQlQuery";
+        const string variables = "{\"id\":{{CocoId}}}";
+        const string resolvedVariables = "{\"id\":19}";
+        var mockedVariableResolver = MockVariableResolver(variables, resolvedVariables);
+        Dictionary<string, string> resolvedContentHeaders = new(1)
+        {
+            { "Content-Language", "pt-BR" }
+        };
+
+        PororocaRequest req = new();
+        PororocaRequestBody body = new();
+        body.SetGraphQlContent(qry, variables);
+        req.UpdateBody(body);
+
+        // WHEN
+        var resolvedReqContent = ResolveRequestContent(mockedVariableResolver.Object, req.Body, resolvedContentHeaders);
+
+        // THEN
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates(variables), Times.Once);
+
+        Assert.NotNull(resolvedReqContent);
+        Assert.True(resolvedReqContent is StringContent);
+        Assert.NotNull(resolvedReqContent!.Headers.ContentType);
+        Assert.Equal("application/json", resolvedReqContent.Headers.ContentType!.MediaType);
+        Assert.Contains("pt-BR", resolvedReqContent!.Headers.ContentLanguage);
+
+        string? contentText = await resolvedReqContent.ReadAsStringAsync();
+        Assert.Equal("{\"query\":\"myGraphQlQuery\",\"variables\":{\"id\":19}}", contentText);
+    }
+
+    [Fact]
     public static async Task Should_resolve_form_url_encoded_content_correctly()
     {  
         // GIVEN

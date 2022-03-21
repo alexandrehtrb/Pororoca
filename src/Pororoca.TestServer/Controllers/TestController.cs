@@ -37,7 +37,6 @@ public class TestController : ControllerBase
     [HttpGet]
     public IActionResult TestGetTxt()
     {
-        Thread.Sleep(10000);
         const string fileName = "ascii.txt";
         string testFilePath = GetTestFilePath(fileName);
         return File(System.IO.File.OpenRead(testFilePath), "text/plain", fileName);

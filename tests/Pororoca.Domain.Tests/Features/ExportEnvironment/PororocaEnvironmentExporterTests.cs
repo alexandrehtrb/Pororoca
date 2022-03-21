@@ -10,21 +10,40 @@ public static class PororocaEnvironmentExporterTests
     private const string testEnvName = "TestEnvironment";
     private static readonly DateTimeOffset testEnvCreationDate = DateTimeOffset.Now;
 
-    [Fact]
-    public static void Should_hide_pororoca_environment_secrets_correctly()
+
+    [Theory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public static void Should_hide_pororoca_environment_secrets_correctly(bool shouldHideSecrets, bool preserveIsCurrentEnvironment)
     {
         // GIVEN
         PororocaEnvironment pororocaEnvironment = CreateTestPororocaEnvironment();
 
         // WHEN
-        PororocaEnvironment env = GenerateEnvironmentWithHiddenSecrets(pororocaEnvironment);
+        PororocaEnvironment env = GenerateEnvironmentToExport(pororocaEnvironment, shouldHideSecrets, preserveIsCurrentEnvironment);
 
         // THEN
+        AssertEnvironment(env, shouldHideSecrets, preserveIsCurrentEnvironment);
+    }
+
+    private static void AssertEnvironment(PororocaEnvironment env, bool areSecretsHidden, bool shouldPreserveIsCurrentEnv)
+    {
         Assert.NotNull(env);
         Assert.Equal(testEnvId, env.Id);
         Assert.Equal(testEnvName, env.Name);
         Assert.Equal(testEnvCreationDate, env.CreatedAt);
-        Assert.False(env.IsCurrent);  // Always export as non current environment
+        // Always export as non current environment,
+        // unless if exporting environment inside of a collection
+        if (shouldPreserveIsCurrentEnv)
+        {
+            Assert.True(env.IsCurrent);
+        }
+        else
+        {
+            Assert.False(env.IsCurrent);
+        }
 
         Assert.NotNull(env.Variables);
         Assert.Equal(2, env.Variables.Count);
@@ -38,8 +57,16 @@ public static class PororocaEnvironmentExporterTests
         PororocaVariable var2 = env.Variables[1];
         Assert.False(var2.Enabled);
         Assert.Equal("Key2", var2.Key);
-        Assert.Equal(string.Empty, var2.Value); // Hidden secret value
         Assert.True(var2.IsSecret);
+
+        if (areSecretsHidden)
+        {
+            Assert.Equal(string.Empty, var2.Value); // Hidden secret value
+        }
+        else
+        {
+            Assert.Equal("Value2", var2.Value);
+        }
     }
 
     private static PororocaEnvironment CreateTestPororocaEnvironment()

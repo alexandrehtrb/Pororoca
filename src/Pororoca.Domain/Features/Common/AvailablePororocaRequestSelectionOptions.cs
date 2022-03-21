@@ -28,9 +28,12 @@ public static class AvailablePororocaRequestSelectionOptions
 
     public static bool IsHttpVersionAvailableInOS(decimal httpVersion, out string? errorCode)
     {
-        if (httpVersion == 3.0m && !(OperatingSystem.IsLinux() || OperatingSystem.IsWindowsVersionAtLeast(11)))
+        if (httpVersion == 3.0m && !(OperatingSystem.IsLinux() || OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000)))
         {
-            // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel/http3
+            // https://docs.microsoft.com/en-us/windows/win32/sysinfo/operating-system-version
+            // https://en.wikipedia.org/wiki/Windows_11_version_history
+            // https://devblogs.microsoft.com/dotnet/http-3-support-in-dotnet-6/#prerequisites
+            // Windows 11 Build 22000 still uses major version as 10, but build number is 22000 or higher
             // If Linux, requires msquic installed
             errorCode = TranslateRequestErrors.Http3UnavailableInOSVersion;
             return false;

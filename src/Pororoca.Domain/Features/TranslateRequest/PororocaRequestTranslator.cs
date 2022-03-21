@@ -2,6 +2,8 @@ using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.VariableResolution;
 using System.Text;
+using System.Text.Json;
+using static Pororoca.Domain.Features.Common.JsonConfiguration;
 
 namespace Pororoca.Domain.Features.TranslateRequest;
 
@@ -271,13 +273,39 @@ public static class PororocaRequestTranslator
             return formDataContent;
         }
 
+        StringContent MakeGraphQlContent()
+        {
+            string? variables = reqBody!.GraphQlValues!.Variables;
+            dynamic? variablesJsonObj = null;
+            if (!string.IsNullOrWhiteSpace(variables))
+            {
+                variables = variableResolver.ReplaceTemplates(variables);
+                try
+                {
+                    variablesJsonObj = JsonSerializer.Deserialize<dynamic?>(variables, ExporterImporterJsonOptions);
+                }
+                catch
+                {                    
+                }
+            }
+            dynamic reqObj = new
+            {
+                reqBody!.GraphQlValues!.Query,
+                Variables = variablesJsonObj
+            };
+            string json = JsonSerializer.Serialize(reqObj, MinifyingOptions);
+
+            return new(json, Encoding.UTF8, MimeTypesDetector.DefaultMimeTypeForJson);
+        }
+
         HttpContent? content = reqBody?.Mode switch
         {
             PororocaRequestBodyMode.Raw => MakeRawContent(),
             PororocaRequestBodyMode.File => MakeFileContent(reqBody.FileSrcPath!, reqBody.ContentType),
             PororocaRequestBodyMode.UrlEncoded => MakeFormUrlEncodedContent(),
             PororocaRequestBodyMode.FormData => MakeFormDataContent(),
-            _ => null // TODO: GraphQL?
+            PororocaRequestBodyMode.GraphQl => MakeGraphQlContent(),
+            _ => null
         };
 
         if (content != null)

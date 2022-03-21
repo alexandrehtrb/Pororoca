@@ -37,6 +37,7 @@ Variáveis podem ser usadas nos seguintes campos de uma requisição:
     * Corpo-arquivo: caminho do arquivo
     * Corpo form URL encoded: nomes e valores dos parâmetros
     * Corpo multipart form data: nomes e valores dos parâmetros, incluindo caminhos de arquivos
+    * Corpo GraphQL: conteúdo do campo variáveis
 
 Para usar uma variável, digite `{{NomeDaVariável}}` no campo onde deseja aplicá-la, sendo que `NomeDaVariável` é o nome da variável declarada.
 

@@ -11,16 +11,29 @@ public static class PororocaCollectionExporterTests
     private const string testName = "MyCollection";
 
     [Fact]
-    public static void Should_hide_pororoca_collection_secrets()
+    public static void Should_hide_pororoca_collection_and_environment_secrets()
     {  
         // GIVEN
         PororocaCollection col = CreateTestCollection();
 
         // WHEN
-        PororocaCollection colWithHiddenSecrets = GenerateCollectionWithHiddenSecrets(col);
+        PororocaCollection colWithHiddenSecrets = GenerateCollectionToExport(col, true);
 
         // THEN
         AssertCollection(colWithHiddenSecrets, true);
+    }
+
+    [Fact]
+    public static void Should_not_hide_pororoca_collection_and_environment_secrets()
+    {  
+        // GIVEN
+        PororocaCollection col = CreateTestCollection();
+
+        // WHEN
+        PororocaCollection colWithHiddenSecrets = GenerateCollectionToExport(col, false);
+
+        // THEN
+        AssertCollection(colWithHiddenSecrets, false);
     }
 
     private static PororocaCollection CreateTestCollection()
@@ -40,6 +53,7 @@ public static class PororocaCollectionExporterTests
             new(false, "Key2", "Value2", true)
         });
         PororocaEnvironment env1 = new("MyEnvironment");
+        env1.IsCurrent = true;
         env1.UpdateVariables(new PororocaVariable[]
         {
             new(true, "Key3", "Value3", true),
@@ -58,9 +72,6 @@ public static class PororocaCollectionExporterTests
         Assert.Equal(1, col.Requests.Count);
         Assert.Equal(1, col.Environments.Count);
         Assert.Equal(2, col.Variables.Count);
-
-        
-
 
         PororocaRequest req1 = col.Requests[0];
         Assert.Equal("Req1", req1.Name);
@@ -88,31 +99,30 @@ public static class PororocaCollectionExporterTests
         PororocaVariable var2 = col.Variables[1];
         Assert.False(var2.Enabled);
         Assert.Equal("Key2", var2.Key);
+        Assert.True(var2.IsSecret);
         if (areSecretsHidden)
         {
             Assert.Equal(string.Empty, var2.Value);
-            Assert.True(var2.IsSecret);
         }
         else
         {
             Assert.Equal("Value2", var2.Value);
-            Assert.False(var2.IsSecret);
         }
 
         PororocaEnvironment env1 = col.Environments[0];
+        Assert.True(env1.IsCurrent); // Should preserve environment.IsCurrent when exporting it inside of a collection
 
         PororocaVariable var3 = env1.Variables[0];
         Assert.True(var3.Enabled);
         Assert.Equal("Key3", var3.Key);
+        Assert.True(var3.IsSecret);
         if (areSecretsHidden)
         {
             Assert.Equal(string.Empty, var3.Value);
-            Assert.True(var3.IsSecret);
         }
         else
         {
             Assert.Equal("Value3", var3.Value);
-            Assert.False(var3.IsSecret);
         }
 
         PororocaVariable var4 = env1.Variables[1];

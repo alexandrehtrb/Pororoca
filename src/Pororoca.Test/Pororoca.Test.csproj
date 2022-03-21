@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- To generate the package: 'dotnet pack -c Release' -->
+    <PackageId>Pororoca.Test</PackageId>
+    <PackageIcon>pororoca.png</PackageIcon>
+    <PackageVersion>1.1.1</PackageVersion>
+    <Description>Package for running Pororoca requests from tests.</Description>
+    <RepositoryUrl>https://github.com/alexandrehtrb/Pororoca.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Authors>Alexandre H. T. R. Bonfitto</Authors>
+    <Copyright>AlexandreHTRB</Copyright>
+    <PackageLicenseFile>LICENCE.md</PackageLicenseFile>
+
+    <RootNamespace>Pororoca.Test</RootNamespace>
+    <OutputType>Library</OutputType>
+    <IsPackable>True</IsPackable>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <DebugType>embedded</DebugType>
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
+    <!-- Including other projects as part of the package -->
+    <!-- https://yer.ac/blog/2019/09/05/dotnet-pack-project-reference-and-nuget-dependency/ -->
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
+    <!-- Do not use trimming here -->
+    <!-- Licence also available at https://github.com/alexandrehtrb/Pororoca/LICENCE.md -->
+  </PropertyGroup>
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="System.Net.SocketsHttpHandler.Http3Support" Value="true" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\pororoca.png" Pack="true" PackagePath="\"/>
+    <None Include="..\..\LICENCE.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pororoca.Domain\Pororoca.Domain.csproj">
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <IncludeAssets>Pororoca.Domain.dll</IncludeAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\Pororoca.Infrastructure\Pororoca.Infrastructure.csproj">
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <IncludeAssets>Pororoca.Infrastructure.dll</IncludeAssets>
+    </ProjectReference>
+  </ItemGroup>
+  <Target DependsOnTargets="ResolveReferences" Name="CopyProjectReferencesToPackage">
+    <ItemGroup>
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))"/>
+    </ItemGroup>
+  </Target>
+</Project>

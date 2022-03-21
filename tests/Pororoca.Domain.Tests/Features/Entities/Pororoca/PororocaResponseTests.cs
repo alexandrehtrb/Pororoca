@@ -22,7 +22,7 @@ public static class PororocaResponseTests
         PororocaResponse res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
-        Assert.True(res.Success);
+        Assert.True(res.Successful);
         Assert.Equal(HttpStatusCode.Accepted, res.StatusCode);
     }
 
@@ -36,7 +36,7 @@ public static class PororocaResponseTests
         PororocaResponse res = PororocaResponse.Failed(testElapsedTime, testException);
 
         // THEN
-        Assert.False(res.Success);
+        Assert.False(res.Successful);
         Assert.Equal(testException, res.Exception);
     }
 
@@ -52,10 +52,10 @@ public static class PororocaResponseTests
         // THEN
         Assert.NotNull(res.Headers);
         Assert.Equal(4, res.Headers!.Count());
-        Assert.Contains(new(true, "Header1", "Value1"), res.Headers);
-        Assert.Contains(new(true, "Content-Type", "text/plain"), res.Headers);
-        Assert.Contains(new(true, "Content-Disposition", "inline"), res.Headers);
-        Assert.Contains(new(true, "Content-Length", "2"), res.Headers);
+        Assert.Contains(new("Header1", "Value1"), res.Headers);
+        Assert.Contains(new("Content-Type", "text/plain"), res.Headers);
+        Assert.Contains(new("Content-Disposition", "inline"), res.Headers);
+        Assert.Contains(new("Content-Length", "2"), res.Headers);
     }
 
     [Fact]

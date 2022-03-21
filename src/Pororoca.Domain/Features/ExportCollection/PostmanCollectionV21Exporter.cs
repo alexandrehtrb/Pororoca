@@ -26,13 +26,13 @@ public static class PostmanCollectionV21Exporter
             },
             Items = ConvertToPostmanItems(col.Folders, col.Requests),
             Variable = col.Variables
-                              .Select(v => new PostmanVariable()
-                              {
-                                  Key = v.Key,
-                                  Value = shouldHideSecrets && v.IsSecret ? string.Empty : v.Value,
-                                  Disabled = !v.Enabled
-                              })
-                              .ToArray()
+                          .Select(v => new PostmanVariable()
+                          {
+                              Key = v.Key,
+                              Value = shouldHideSecrets && v.IsSecret ? string.Empty : v.Value,
+                              Disabled = v.Enabled ? null : true
+                          })
+                          .ToArray()
         };
 
     internal static PostmanAuth ConvertToPostmanAuth(PororocaRequestAuth? auth)
@@ -98,7 +98,8 @@ public static class PostmanCollectionV21Exporter
                 Url = ConvertToPostmanRequestUrl(req.Url),
                 Header = ConvertToPostmanHeaders(req.Headers),
                 Body = ConvertToPostmanRequestBody(req.Body)
-            }
+            },
+            Response = Array.Empty<object>()
         };
 
     internal static PostmanRequestUrl ConvertToPostmanRequestUrl(string rawUrl)
@@ -209,7 +210,14 @@ public static class PostmanCollectionV21Exporter
                 body.Mode = PostmanRequestBodyMode.Formdata;
                 body.Formdata = ConvertToPostmanFormDataParams(reqBody.FormDataValues);
                 break;
-            // TODO: GraphQL?
+            case PororocaRequestBodyMode.GraphQl:
+                body.Mode = PostmanRequestBodyMode.Graphql;
+                body.Graphql = new()
+                {
+                    Query = reqBody.GraphQlValues?.Query ?? string.Empty,
+                    Variables = reqBody.GraphQlValues?.Variables ?? string.Empty
+                };
+                break;
             default:
                 return null;
         }

@@ -21,25 +21,34 @@ Read the [instructions](./docs/en-GB/Installation.md) and download the program [
 * Collections and environments can be exported together in a single file.
 * Full export and import compatibility with Postman.
 * Much lower memory usage - around six times less than Postman.
+* Automated testing.
 * Fast startup time.
-* Open-source.
+* Free and open-source.
 
 Check the [documentation](./docs/en-GB/HomePage.md) to know more.
 
-*Note*: Support for HTTP/2 requires Linux or Windows 10 and later, and support for HTTP/3 requires Linux or Windows 11 and later.
+*Note*: Support for HTTP/2 requires Linux or Windows 10 and later, and support for HTTP/3 requires Linux or Windows 11 and later. HTTP/3 is still experimental.
 
-### HTTP/3 and traceability
+### HTTP/3 and privacy
 
-HTTP/3 uses the QUIC transport protocol and there are some traceability concerns about it. It might not be a problem on internal network communications and for most business applications, though. There is an interesting article about it [here](https://svs.informatik.uni-hamburg.de/publications/2019/2019-02-26-Sy-PET_Symposium-A_QUIC_Look_at_Web_Tracking.pdf).
+HTTP/3 uses the QUIC transport protocol and there are some privacy concerns about it. It might not be a problem on internal network communications and for most business applications, though. There is an interesting article about it [here](https://svs.informatik.uni-hamburg.de/publications/2019/2019-02-26-Sy-PET_Symposium-A_QUIC_Look_at_Web_Tracking.pdf).
+
+## Design
+
+Logo created by [Anderson Martins](https://www.behance.net/am-dsgn).
 
 ## Contributing
 
 You can contribute to this project by submitting pull requests, opening issues, reporting bugs and suggesting improvements. Tell about Pororoca to your friends if you like it!
 
-Pororoca is free and its use is governed by a GPLv3 licence. We accept money donations - if you are interested in donating, please contact us.
+Contact us if you are looking for more advanced support, special customizations or training.
 
-Also contact us if you are looking for more advanced support, special customizations or training.
+## Donations
 
-## Design
+You can also contribute with money donations.
 
-Logo created by [Anderson Martins](https://www.behance.net/am-dsgn).
+Chave PIX: alexandrehtrb@outlook.com
+
+| ![DonateWithPix](./misc/pix_botao_doacao.png) | [![DonateWithPayPal](./misc/paypal_donation_button.png)](https://www.paypal.com/donate/?hosted_button_id=NUADRWF3WNYQ2) |
+|--|--|
+| [View QR Code](./misc/pix_doacao_qr_code.png) | [View QR Code](./misc/paypal_donation_qr_code.png) |
