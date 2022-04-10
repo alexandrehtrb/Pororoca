@@ -26,12 +26,20 @@
         </MenuItem>
         <MenuItem Header="{i18n:Localize Options, Context=TopMenu}">
           <MenuItem Header="{i18n:Localize Language, Context=TopMenuOptions}">
-            <MenuItem Header="{i18n:Localize Português, Context=TopMenuLanguage}" Command="{Binding SelectLanguagePortuguesCmd}"/>
-            <MenuItem Header="{i18n:Localize English, Context=TopMenuLanguage}" Command="{Binding SelectLanguageEnglishCmd}"/>
+            <MenuItem Header="{i18n:Localize Português, Context=TopMenuLanguage}" Command="{Binding SelectLanguagePortuguesCmd}">
+              <MenuItem.Icon>
+                <Image Source="/Assets/Images/icon_white_check.png" IsVisible="{Binding IsLanguagePortuguese}" Width="12" Height="12" Margin="4,0,4,0" VerticalAlignment="Center" HorizontalAlignment="Center" />
+              </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="{i18n:Localize English, Context=TopMenuLanguage}" Command="{Binding SelectLanguageEnglishCmd}">
+              <MenuItem.Icon>
+                <Image Source="/Assets/Images/icon_white_check.png" IsVisible="{Binding IsLanguageEnglish}" Width="12" Height="12" Margin="4,0,4,0" VerticalAlignment="Center" HorizontalAlignment="Center" />
+              </MenuItem.Icon>
+            </MenuItem>
           </MenuItem>
           <MenuItem Header="{i18n:Localize DisableTlsVerification, Context=TopMenuOptions}" Command="{Binding ToggleSslVerification}">
             <MenuItem.Icon>
-              <Image Source="/Assets/Images/icon_white_check.png" IsVisible="{Binding IsSslVerificationDisabled}" Width="12" Height="12" Margin="0,0,8,0" VerticalAlignment="Center" HorizontalAlignment="Center" />
+              <Image Source="/Assets/Images/icon_white_check.png" IsVisible="{Binding IsSslVerificationDisabled}" Width="12" Height="12" Margin="4,0,4,0" VerticalAlignment="Center" HorizontalAlignment="Center" />
             </MenuItem.Icon>
           </MenuItem>
         </MenuItem>
