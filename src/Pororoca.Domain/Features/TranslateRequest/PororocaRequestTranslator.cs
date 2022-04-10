@@ -9,6 +9,8 @@ namespace Pororoca.Domain.Features.TranslateRequest;
 
 public static class PororocaRequestTranslator
 {
+    public const string ClientCertificateOptionsKey = nameof(ClientCertificateOptionsKey);
+
     internal delegate bool HttpVersionAvailableInOSVerifier(decimal httpVersion, out string? errorCode);
 
     #region IS VALID REQUEST
@@ -20,7 +22,8 @@ public static class PororocaRequestTranslator
         TryResolveRequestUri(variableResolver, req.Url, out _, out errorCode)
         && httpVersionOSVerifier(req.HttpVersion, out errorCode)
         && HasValidContentTypeForReqBody(req, out errorCode)
-        && CheckReqBodyFileExists(req, fileExistsVerifier, out errorCode);
+        && CheckReqBodyFileExists(req, fileExistsVerifier, out errorCode)
+        && CheckClientCertificateFilesExist(variableResolver, fileExistsVerifier, req, out errorCode);
 
     internal static bool HasValidContentTypeForReqBody(PororocaRequest req, out string? errorCode)
     {
@@ -77,6 +80,48 @@ public static class PororocaRequestTranslator
         }
     }
 
+    private static bool CheckClientCertificateFilesExist(IPororocaVariableResolver variableResolver, Func<string, bool> fileExistsVerifier, PororocaRequest req, out string? errorCode)
+    {
+        if (req.CustomAuth?.Mode != PororocaRequestAuthMode.ClientCertificate || req.CustomAuth?.ClientCertificate == null)
+        {
+            errorCode = null;
+            return true;
+        }
+        else
+        {
+            string resolvedCertificateFilePath = variableResolver.ReplaceTemplates(req.CustomAuth!.ClientCertificate!.CertificateFilePath);
+            string resolvedPrivateKeyFilePath = variableResolver.ReplaceTemplates(req.CustomAuth!.ClientCertificate!.PrivateKeyFilePath);
+            string resolvedFilePassword = variableResolver.ReplaceTemplates(req.CustomAuth!.ClientCertificate!.FilePassword);
+
+            bool certFileExists = fileExistsVerifier.Invoke(resolvedCertificateFilePath);
+            bool prvKeyFileSpecified = !string.IsNullOrWhiteSpace(resolvedPrivateKeyFilePath);
+            bool prvKeyFileExists = fileExistsVerifier.Invoke(resolvedPrivateKeyFilePath);
+            bool filePasswordIsBlank = string.IsNullOrWhiteSpace(resolvedFilePassword);
+
+            if (!certFileExists)
+            {
+                errorCode = TranslateRequestErrors.ClientCertificateFileNotFound;
+                return false;
+            }
+            else if (req.CustomAuth.ClientCertificate.Type == PororocaRequestAuthClientCertificateType.Pem && prvKeyFileSpecified && !prvKeyFileExists)
+            {
+                errorCode = TranslateRequestErrors.ClientCertificatePrivateKeyFileNotFound;
+                return false;
+            }
+            else if (req.CustomAuth.ClientCertificate.Type == PororocaRequestAuthClientCertificateType.Pkcs12 && filePasswordIsBlank)
+            {
+                errorCode = TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank;
+                return false;
+            }
+            else
+            {
+                errorCode = null;
+                return true;
+            }
+        }
+        
+    }
+
     #endregion
 
     #region TRANSLATE REQUEST
@@ -110,6 +155,9 @@ public static class PororocaRequestTranslator
                 {
                     reqMsg.Headers.TryAddWithoutValidation(header.Key, header.Value);
                 }
+
+                IncludeClientCertificateIfSet(variableResolver, req, reqMsg);
+
                 return true;
             }
             catch
@@ -209,6 +257,32 @@ public static class PororocaRequestTranslator
             PororocaRequestAuthMode.Basic => $"Basic {MakeBasicAuthToken()}",
             _ => null
         };
+    }
+
+    private static void IncludeClientCertificateIfSet(IPororocaVariableResolver variableResolver, PororocaRequest req, HttpRequestMessage reqMsg)
+    {
+        if (req.CustomAuth?.Mode == PororocaRequestAuthMode.ClientCertificate
+         && req.CustomAuth?.ClientCertificate != null)
+        {
+            var clientCert = req.CustomAuth?.ClientCertificate!;
+
+            string resolvedPrivateKeyFilePath = variableResolver.ReplaceTemplates(clientCert.PrivateKeyFilePath);            
+            string resolvedFilePassword = variableResolver.ReplaceTemplates(clientCert.FilePassword);
+
+            string? nulledPrivateKeyFilePath = string.IsNullOrWhiteSpace(resolvedPrivateKeyFilePath) ?
+                                               null : resolvedPrivateKeyFilePath;
+            string? nulledFilePassword = string.IsNullOrWhiteSpace(resolvedFilePassword) ?
+                                         null : resolvedFilePassword;
+
+            PororocaRequestAuthClientCertificate resolvedClientCert = new(
+                type: clientCert.Type,
+                certificateFilePath: variableResolver.ReplaceTemplates(clientCert.CertificateFilePath),
+                privateKeyFilePath: nulledPrivateKeyFilePath,
+                filePassword: nulledFilePassword
+            );
+
+            reqMsg.Options.TryAdd(ClientCertificateOptionsKey, resolvedClientCert);
+        }
     }
 
     #endregion

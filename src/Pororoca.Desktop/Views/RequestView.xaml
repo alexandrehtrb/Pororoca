@@ -76,6 +76,7 @@
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
 
+      <!-- REQUEST -->
       <Grid Grid.Column="0" Grid.Row="0">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*" />
@@ -87,6 +88,7 @@
 
         <TextBlock Grid.Column="0" Grid.Row="0" Margin="12,28,12,0" FontSize="20" FontWeight="Light" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" Text="{i18n:Localize SectionTitle, Context=Request}"/>
         <TabControl Grid.Column="0" Grid.Row="1" Margin="12,24,12,12" TabStripPlacement="Top" SelectedIndex="{Binding RequestTabsSelectedIndex}">
+          <!-- REQUEST HEADERS -->
           <TabItem>
             <TabItem.Header>
               <TextBlock Classes="TabItemHeader" Text="{i18n:Localize Headers, Context=Request}"/>
@@ -124,6 +126,7 @@
               </StackPanel>
             </Grid>
           </TabItem>
+          <!-- REQUEST BODY -->
           <TabItem>
             <TabItem.Header>
               <TextBlock Classes="TabItemHeader" Text="{i18n:Localize Body, Context=Request}"/>
@@ -150,8 +153,9 @@
 
                 <AutoCompleteBox Height="36" Width="200" FontSize="14" HorizontalAlignment="Left" Watermark="{i18n:Localize BodyRawContentTypeWatermark, Context=Request}" Text="{Binding RequestRawContentType}" Items="{Binding AllMimeTypes}" FilterMode="Contains" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}" />
               </StackPanel>
-
+              <!-- REQUEST BODY RAW -->
               <TextBox Grid.Column="0" Grid.Row="1" Margin="0,12,0,0" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}" VerticalAlignment="Stretch" FontFamily="/Assets/Fonts/SourceCodePro-Regular.ttf#Source Code Pro" FontSize="12" Watermark="{i18n:Localize BodyRawContentWatermark, Context=Request}" AcceptsReturn="True" AcceptsTab="True" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Text="{Binding RequestRawContent, Mode=TwoWay}"/>
+              <!-- REQUEST BODY FILE -->
               <Grid Grid.Column="0" Grid.Row="1" Margin="0,12,0,0" VerticalAlignment="Stretch" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionFile}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*" />
@@ -165,6 +169,7 @@
                 <TextBox Grid.Column="0" Grid.Row="1" Height="36" Margin="0,12,0,0" FontSize="14" Watermark="{i18n:Localize BodyFileSrcPathWatermark, Context=Request}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Text="{Binding RequestBodyFileSrcPath}"/>
                 <Button Grid.Column="0" Grid.Row="2" Content="{i18n:Localize BodyFileSearchFile, Context=Request}" Margin="0,12,0,0" Command="{Binding SearchRequestBodyRawFileCmd}" Classes="Primary"/>
               </Grid>
+              <!-- REQUEST BODY URL ENCODED -->
               <Grid Grid.Column="0" Grid.Row="1" Margin="0,12,0,0" VerticalAlignment="Stretch" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionUrlEncoded}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*" />
@@ -197,6 +202,7 @@
                   <Button Content="{i18n:Localize BodyUrlEncodedParamRemove, Context=Request}" Margin="6,0,0,0" Command="{Binding RemoveSelectedUrlEncodedParamCmd}" Classes="Secondary"/>
                 </StackPanel>
               </Grid>
+              <!-- REQUEST BODY MULTIPART FORM DATA -->
               <Grid Grid.Column="0" Grid.Row="1" Margin="0,12,0,0" VerticalAlignment="Stretch" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionFormData}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*" />
@@ -242,6 +248,7 @@
                 </StackPanel>
 
               </Grid>
+              <!-- REQUEST BODY GRAPH QL -->
               <Grid Grid.Column="0" Grid.Row="1" Margin="0,12,0,0" VerticalAlignment="Stretch" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionGraphQl}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="0.5*" MinWidth="40" />
@@ -257,31 +264,81 @@
               </Grid>
             </Grid>
           </TabItem>
+          <!-- REQUEST CUSTOM AUTH -->
           <TabItem>
             <TabItem.Header>
               <TextBlock Classes="TabItemHeader" Text="{i18n:Localize CustomAuth, Context=Request}"/>
             </TabItem.Header>
-            <StackPanel Margin="0,12,0,0">
-              <ComboBox Height="36" Width="160" FontSize="14" FontWeight="Light" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Stretch" SelectedIndex="{Binding RequestAuthModeSelectedIndex}">
-                <ComboBoxItem IsSelected="{Binding IsRequestAuthModeNoneSelected}" Content="{i18n:Localize AuthModeNone, Context=Request}"/>
-                <ComboBoxItem x:Name="reqScrRequestCustomAuthBasic" IsSelected="{Binding IsRequestAuthModeBasicSelected}" Content="{i18n:Localize AuthModeBasic, Context=Request}"/>
-                <ComboBoxItem x:Name="reqScrRequestCustomAuthBearer" IsSelected="{Binding IsRequestAuthModeBearerSelected}" Content="{i18n:Localize AuthModeBearer, Context=Request}"/>
-              </ComboBox>
 
-              <StackPanel Height="240" Margin="0,12,0,0" IsVisible="{Binding IsSelected, ElementName=reqScrRequestCustomAuthBasic}">
+            <Grid Margin="0,12,0,0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+              </Grid.RowDefinitions>
+
+              <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Spacing="12">
+                <ComboBox Height="36" Width="190" FontSize="14" FontWeight="Light" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Stretch" SelectedIndex="{Binding RequestAuthModeSelectedIndex}">
+                  <ComboBoxItem IsSelected="{Binding IsRequestAuthModeNoneSelected}" Content="{i18n:Localize AuthModeNone, Context=Request}"/>
+                  <ComboBoxItem x:Name="reqScrRequestCustomAuthBasic" IsSelected="{Binding IsRequestAuthModeBasicSelected}" Content="{i18n:Localize AuthModeBasic, Context=Request}"/>
+                  <ComboBoxItem x:Name="reqScrRequestCustomAuthBearer" IsSelected="{Binding IsRequestAuthModeBearerSelected}" Content="{i18n:Localize AuthModeBearer, Context=Request}"/>
+                  <!-- Mode=TwoWay in IsSelected below is required, otherwise, layout will disappear when changing between different requests -->
+                  <ComboBoxItem x:Name="reqScrRequestCustomAuthClientCertificate" IsSelected="{Binding IsRequestAuthModeClientCertificateSelected, Mode=TwoWay}" Content="{i18n:Localize AuthModeClientCertificate, Context=Request}"/>
+                </ComboBox>
+
+                <ComboBox Height="36" Width="110" FontSize="14" FontWeight="Light" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Stretch" SelectedIndex="{Binding RequestAuthClientCertificateTypeSelectedIndex}" IsVisible="{Binding IsSelected, ElementName=reqScrRequestCustomAuthClientCertificate}">
+                  <ComboBoxItem IsSelected="{Binding IsRequestAuthClientCertificateTypeNoneSelected, Mode=TwoWay}" Content="{i18n:Localize ClientCertificateTypeNone, Context=RequestAuthClientCertificate}"/>
+                  <ComboBoxItem x:Name="reqScrRequestClientCertificateAuthPkcs12" IsSelected="{Binding IsRequestAuthClientCertificateTypePkcs12Selected, Mode=TwoWay}" Content="{i18n:Localize ClientCertificateTypePkcs12, Context=RequestAuthClientCertificate}"/>
+                  <ComboBoxItem x:Name="reqScrRequestClientCertificateAuthPem" IsSelected="{Binding IsRequestAuthClientCertificateTypePemSelected, Mode=TwoWay}" Content="{i18n:Localize ClientCertificateTypePem, Context=RequestAuthClientCertificate}"/>
+                </ComboBox>
+              </StackPanel>
+
+              
+              <!-- REQUEST AUTH BASIC -->
+              <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,12,0,0" IsVisible="{Binding IsSelected, ElementName=reqScrRequestCustomAuthBasic}">
                 <TextBox Height="36" Width="200" FontSize="14" HorizontalAlignment="Left" VerticalContentAlignment="Center" Watermark="{i18n:Localize AuthModeBasicLoginWatermark, Context=Request}" Text="{Binding RequestBasicAuthLogin}"/>
                 <TextBox Height="36" Width="200" Margin="0,12,0,0" FontSize="14" HorizontalAlignment="Left" VerticalContentAlignment="Center" Watermark="{i18n:Localize AuthModeBasicPasswordWatermark, Context=Request}" Text="{Binding RequestBasicAuthPassword}"/>
               </StackPanel>
-
-              <StackPanel Height="240" Margin="0,12,0,0" IsVisible="{Binding IsSelected, ElementName=reqScrRequestCustomAuthBearer}">
+              <!-- REQUEST AUTH BEARER -->
+              <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,12,0,0" IsVisible="{Binding IsSelected, ElementName=reqScrRequestCustomAuthBearer}">
                 <TextBox Height="36" Width="200" FontSize="14" HorizontalAlignment="Left" VerticalContentAlignment="Center" Watermark="{i18n:Localize AuthModeBearerTokenWatermark, Context=Request}" Text="{Binding RequestBearerAuthToken}"/>
               </StackPanel>
+              <!-- REQUEST AUTH CLIENT CERTIFICATE -->
+              <Grid Grid.Column="0" Grid.Row="1" Margin="0,12,0,0" IsVisible="{Binding IsSelected, ElementName=reqScrRequestCustomAuthClientCertificate}">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <!-- REQUEST AUTH CLIENT CERTIFICATE PKCS#12 -->
+                <StackPanel Grid.Column="0" Grid.Row="0" IsVisible="{Binding IsSelected, ElementName=reqScrRequestClientCertificateAuthPkcs12}">
+                  <TextBox Height="36" Width="240" FontSize="14" Watermark="{i18n:Localize CertificateFilePathWatermark, Context=RequestAuthClientCertificate}" HorizontalAlignment="Left" VerticalContentAlignment="Center" Text="{Binding RequestClientCertificateAuthPkcs12CertificateFilePath}"/>
+                  <TextBox Height="36" Width="240" Margin="0,12,0,0" FontSize="14" Watermark="{i18n:Localize FilePasswordWatermark, Context=RequestAuthClientCertificate}" HorizontalAlignment="Left" VerticalContentAlignment="Center" Text="{Binding RequestClientCertificateAuthPkcs12FilePassword}"/>
+                  <Button Margin="0,12,0,0" Content="{i18n:Localize Pkcs12SearchFile, Context=RequestAuthClientCertificate}" Command="{Binding SearchClientCertificatePkcs12FileCmd}" Classes="Primary"/>
+                </StackPanel>
+                <!-- REQUEST AUTH CLIENT CERTIFICATE PEM -->
+                <StackPanel Grid.Column="0" Grid.Row="0" IsVisible="{Binding IsSelected, ElementName=reqScrRequestClientCertificateAuthPem}">
+                  <TextBox Height="36" Width="240" FontSize="14" Watermark="{i18n:Localize CertificateFilePathWatermark, Context=RequestAuthClientCertificate}" HorizontalAlignment="Left" VerticalContentAlignment="Center" Text="{Binding RequestClientCertificateAuthPemCertificateFilePath}"/>
+                  <TextBox Height="36" Width="240" Margin="0,12,0,0" FontSize="14" Watermark="{i18n:Localize PrivateKeyFilePathWatermark, Context=RequestAuthClientCertificate}" HorizontalAlignment="Left" VerticalContentAlignment="Center" Text="{Binding RequestClientCertificateAuthPemPrivateKeyFilePath}"/>
+                  <TextBox Height="36" Width="240" Margin="0,12,0,0" FontSize="14" Watermark="{i18n:Localize FilePasswordWatermark, Context=RequestAuthClientCertificate}" HorizontalAlignment="Left" VerticalContentAlignment="Center" Text="{Binding RequestClientCertificateAuthPemFilePassword}"/>
+                  <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                    <Button Content="{i18n:Localize PemSearchCertFile, Context=RequestAuthClientCertificate}" Margin="0,0,6,0" Command="{Binding SearchClientCertificatePemCertFileCmd}" Classes="Primary"/>
+                    <Button Content="{i18n:Localize PemSearchPrivateKeyFile, Context=RequestAuthClientCertificate}" Margin="6,0,0,0" Command="{Binding SearchClientCertificatePemPrivateKeyFileCmd}" Classes="Primary"/>
+                  </StackPanel>
+                  <TextBlock TextWrapping="Wrap" FontSize="12" HorizontalAlignment="Stretch" Margin="0,24,0,24" Text="{i18n:Localize PemClientCertificatesTip, Context=RequestAuthClientCertificate}"/>
+                </StackPanel>
+              </Grid>             
 
-            </StackPanel>
+            </Grid>
           </TabItem>
         </TabControl>
       </Grid>
       <GridSplitter Margin="12,0,12,0" Grid.Column="1" Grid.Row="0" Width="2" VerticalAlignment="Stretch" Background="Black" />
+      <!-- RESPONSE -->
       <Grid Grid.Column="2" Grid.Row="0">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*" />
@@ -293,6 +350,7 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="0" Grid.Row="0" Margin="12,28,12,0" FontSize="20" FontWeight="Light" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding ResponseDataCtx.ResponseStatusCodeElapsedTimeTitle}"/>
         <TabControl Grid.Column="0" Grid.Row="1" Margin="12,24,12,12" TabStripPlacement="Top" VerticalAlignment="Stretch" SelectedIndex="{Binding ResponseDataCtx.ResponseTabsSelectedIndex}">
+          <!-- RESPONSE HEADERS -->
           <TabItem>
             <TabItem.Header>
               <TextBlock Classes="TabItemHeader" Text="{i18n:Localize Headers, Context=Response}"/>
@@ -312,6 +370,7 @@
                 </DataGrid.Columns>
               </DataGrid>
           </TabItem>
+          <!-- RESPONSE BODY -->
           <TabItem>
             <TabItem.Header>
               <TextBlock Classes="TabItemHeader" Text="{i18n:Localize Body, Context=Response}"/>
@@ -334,10 +393,9 @@
             </Grid>
           </TabItem>
         </TabControl>
+        <!-- RESPONSE PROGRESS BAR -->
         <ProgressBar Grid.Column="0" Grid.Row="2" IsIndeterminate="True" Margin="12,0,12,24" HorizontalAlignment="Stretch" IsVisible="{Binding IsSendRequestProgressBarVisible}" />
       </Grid>
-
-
     </Grid>
   </Grid>
 </UserControl>

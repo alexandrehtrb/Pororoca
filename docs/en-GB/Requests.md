@@ -53,6 +53,12 @@ If Bearer authentication is used, with a bearer token "my_token", then the follo
 
 `Authorization: Bearer my_token`
 
+### Client certificate authentication
+
+Client certificate authentication differs from the methods above because it operates on TLS layer, before the HTTP request is transmitted.
+
+The two accepted client certificate types are PKCS#12 and PEM. This [page](https://www.ryadel.com/en/ssl-certificates-standards-formats-extensions-cer-crt-key-pfx-pem-p7b-p7c-pfx-p12/?msclkid=ca7bc065ae0311ec98e66e2041811628) details some of the certificate types that exist.
+
 ## Sending a request
 
 To send a request, click on the button "Send", at the top right of the screen. You can abort the request by clicking on the "Cancel" button. The timeout period is 5 minutes.
@@ -61,12 +67,12 @@ You can save the response body to a file, by clicking on the "Save as..." button
 
 ![ResponseExample](./imgs/response_save_as_example.jpg)
 
-## TLS / SSL certificate verification
+## TLS / SSL server certificate verification
 
-By default, Pororoca verifies SSL / TLS certificates on HTTPS connections, and if there are any validation failures, the request will not go forward, like in the picture below.
+By default, Pororoca verifies server SSL / TLS certificates on HTTPS connections, and if there are any validation failures, the request will not go forward, like in the picture below.
 
 ![TLSCertificateValidationFailureExample](./imgs/tls_certificate_validation_failure_example.jpg)
 
-To disable TLS certificate check, go to the top menu, "Options", and select "Disable TLS verification".
+To disable server TLS certificate check, go to the top menu, "Options", and select "Disable TLS verification".
 
 ![DisableTLSCertificateValidation](./imgs/disable_tls_certificate_check.jpg)

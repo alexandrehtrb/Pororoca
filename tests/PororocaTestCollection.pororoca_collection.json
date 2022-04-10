@@ -382,6 +382,101 @@
           }
         }
       ]
+    },
+    {
+      "id": "f82f6705-9a7b-4265-b8ce-eb0f13ec6efd",
+      "name": "Client certificates",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "id": "831b245a-3aba-4019-b7ed-410758057543",
+          "name": "No cert provided",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BadSslClientCertTestUrl}}"
+        },
+        {
+          "requestType": "http",
+          "id": "a87f3d43-4556-4047-bff2-0b97e668859a",
+          "name": "PKCS#12 cert",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BadSslClientCertTestUrl}}",
+          "customAuth": {
+            "mode": "clientCertificate",
+            "clientCertificate": {
+              "type": "pkcs12",
+              "certificateFilePath": "{{BadSslClientCertDir}}\\badssl.com-client.p12",
+              "filePassword": "{{BadSslClientCertFilePassword}}"
+            }
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "5b5cbf93-eb7f-47bb-a940-e0c94348b56d",
+          "name": "PEM cert with conjoined unencrypted private key",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BadSslClientCertTestUrl}}",
+          "customAuth": {
+            "mode": "clientCertificate",
+            "clientCertificate": {
+              "type": "pem",
+              "certificateFilePath": "{{BadSslClientCertDir}}\\badssl.com-client-certificate-with-unencrypted-private-key.pem"
+            }
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "04f9f867-4711-4935-aacc-75c402c777c3",
+          "name": "PEM cert with conjoined encrypted private key",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BadSslClientCertTestUrl}}",
+          "customAuth": {
+            "mode": "clientCertificate",
+            "clientCertificate": {
+              "type": "pem",
+              "certificateFilePath": "{{BadSslClientCertDir}}\\badssl.com-client-certificate-with-encrypted-private-key.pem",
+              "filePassword": "{{BadSslClientCertFilePassword}}"
+            }
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "c7402969-5177-40b8-9631-57ecedb50e82",
+          "name": "PEM cert with separate unencrypted private key",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BadSslClientCertTestUrl}}",
+          "customAuth": {
+            "mode": "clientCertificate",
+            "clientCertificate": {
+              "type": "pem",
+              "certificateFilePath": "{{BadSslClientCertDir}}\\badssl.com-client-certificate-without-private-key.pem",
+              "privateKeyFilePath": "{{BadSslClientCertDir}}\\badssl.com-client-unencrypted-private-key.key"
+            }
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "30878e3b-e97e-4def-8f5c-e5b6cc72436a",
+          "name": "PEM cert with separate encrypted private key",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BadSslClientCertTestUrl}}",
+          "customAuth": {
+            "mode": "clientCertificate",
+            "clientCertificate": {
+              "type": "pem",
+              "certificateFilePath": "{{BadSslClientCertDir}}\\badssl.com-client-certificate-without-private-key.pem",
+              "privateKeyFilePath": "{{BadSslClientCertDir}}\\badssl.com-client-encrypted-private-key.key",
+              "filePassword": "{{BadSslClientCertFilePassword}}"
+            }
+          }
+        }
+      ]
     }
   ],
   "requests": [],
@@ -471,6 +566,24 @@
           "enabled": true,
           "key": "HttpBinUrl",
           "value": "https://httpbin.org",
+          "isSecret": false
+        },
+        {
+          "enabled": true,
+          "key": "BadSslClientCertTestUrl",
+          "value": "https://client.badssl.com",
+          "isSecret": false
+        },
+        {
+          "enabled": true,
+          "key": "BadSslClientCertFilePassword",
+          "value": "badssl.com",
+          "isSecret": true
+        },
+        {
+          "enabled": true,
+          "key": "BadSslClientCertDir",
+          "value": "C:\\Projetos\\Pororoca\\tests\\Pororoca.Test.Tests\\BadSslClientCertificates",
           "isSecret": false
         }
       ]
