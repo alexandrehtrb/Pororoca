@@ -1,6 +1,6 @@
 ﻿namespace Pororoca.Domain.Features.Entities.Pororoca;
 
-public class PororocaRequestBodyGraphQl
+public class PororocaRequestBodyGraphQl : ICloneable
 {
     public string? Query { get; set; }
 
@@ -18,4 +18,11 @@ public class PororocaRequestBodyGraphQl
         Query = query;
         Variables = variables;
     }
+
+    public object Clone() =>
+        new PororocaRequestBodyGraphQl()
+        {
+            Query = this.Query,
+            Variables = this.Variables
+        };
 }

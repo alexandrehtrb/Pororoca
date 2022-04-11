@@ -9,6 +9,8 @@ using System.Text.Json;
 
 namespace Pororoca.Desktop.Localization;
 
+// Taken from:
+// https://www.sakya.it/wordpress/avalonia-ui-framework-localization/
 public class Localizer : INotifyPropertyChanged
 {
     private const string IndexerName = "Item";

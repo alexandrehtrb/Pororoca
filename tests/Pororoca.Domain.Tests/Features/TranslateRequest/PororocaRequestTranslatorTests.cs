@@ -13,6 +13,8 @@ namespace Pororoca.Domain.Tests.Features.TranslateRequest;
 
 public static class PororocaRequestTranslatorTests
 {
+    #region MOCKERS
+
     private static HttpVersionAvailableInOSVerifier MockHttpVersionOSVerifier(bool valid, string? errorCode) =>
         (decimal x, out string? z) =>
         {
@@ -37,6 +39,14 @@ public static class PororocaRequestTranslatorTests
 
     private static Func<string, bool> MockFileExistsVerifier(bool exists) =>
         (string s) => exists;
+
+    private static Func<string, bool> MockFileExistsVerifier(IDictionary<string, bool> fileList) =>
+        (string s) => {
+            bool exists = fileList.ContainsKey(s) && fileList[s];
+            return exists;
+        };
+
+    #endregion
 
     #region IS VALID REQUEST, REQUEST URL, CONTENT TYPE, FILE EXISTS
 
@@ -349,6 +359,213 @@ public static class PororocaRequestTranslatorTests
         mockedVariableResolver.Verify(x => x.ReplaceTemplates(urlTemplate), Times.Once);
         Assert.Null(errorCode);
     }
+
+    #region IS VALID CLIENT CERTIFICATE AUTH
+
+    [Fact]
+    public static void Should_reject_req_with_client_certificate_auth_if_PKCS12_cert_file_is_not_found()
+    {  
+        // GIVEN
+        var mockedVariableResolver = MockVariableResolver("{{CertificateFilePath}}", "./cert.p12");
+        var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
+        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string,bool>()
+        {
+            { "./cert.p12", false }
+        });
+        PororocaRequestAuth auth = new();
+        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "prvkeypwd");
+        PororocaRequest req = new();
+        req.UpdateUrl("http://www.pudim.com.br");
+        req.UpdateCustomAuth(auth);
+
+        // WHEN
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, mockedVariableResolver.Object, req, out string? errorCode));
+
+        // THEN
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{CertificateFilePath}}"), Times.Once);
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("prvkeypwd"), Times.Once);
+        Assert.Equal(TranslateRequestErrors.ClientCertificateFileNotFound, errorCode);
+    }
+
+    [Fact]
+    public static void Should_reject_req_with_client_certificate_auth_if_PEM_cert_file_is_not_found()
+    {  
+        // GIVEN
+        var mockedVariableResolver = MockVariableResolver("{{CertificateFilePath}}", "./cert.pem");
+        var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
+        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string,bool>()
+        {
+            { "./cert.pem", false },
+            { "./private_key.key", true }
+        });
+        PororocaRequestAuth auth = new();
+        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", "./private_key.key", "prvkeypwd");
+        PororocaRequest req = new();
+        req.UpdateUrl("http://www.pudim.com.br");
+        req.UpdateCustomAuth(auth);
+
+        // WHEN
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, mockedVariableResolver.Object, req, out string? errorCode));
+
+        // THEN
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{CertificateFilePath}}"), Times.Once);
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("./private_key.key"), Times.Once);
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("prvkeypwd"), Times.Once);
+        Assert.Equal(TranslateRequestErrors.ClientCertificateFileNotFound, errorCode);
+    }
+
+    [Fact]
+    public static void Should_reject_req_with_client_certificate_auth_if_PEM_private_key_file_is_specified_and_not_found()
+    {  
+        // GIVEN
+        var mockedVariableResolver = MockVariableResolver("{{PrivateKeyFilePath}}", "./private_key.key");
+        var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
+        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string,bool>()
+        {
+            { "./cert.pem", true },
+            { "./private_key.key", false }
+        });
+        PororocaRequestAuth auth = new();
+        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "./cert.pem", "{{PrivateKeyFilePath}}", "prvkeypwd");
+        PororocaRequest req = new();
+        req.UpdateUrl("http://www.pudim.com.br");
+        req.UpdateCustomAuth(auth);
+
+        // WHEN
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, mockedVariableResolver.Object, req, out string? errorCode));
+
+        // THEN
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("./cert.pem"), Times.Once);
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{PrivateKeyFilePath}}"), Times.Once);
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("prvkeypwd"), Times.Once);
+        Assert.Equal(TranslateRequestErrors.ClientCertificatePrivateKeyFileNotFound, errorCode);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("    ")]
+    public static void Should_reject_req_with_client_certificate_auth_if_PKCS12_without_password(string? filePassword)
+    {  
+        // GIVEN
+        var mockedVariableResolver = MockVariableResolver("{{CertificateFilePath}}", "./cert.p12");
+        var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
+        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string,bool>()
+        {
+            { "./cert.p12", true }
+        });
+        PororocaRequestAuth auth = new();
+        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, filePassword);
+        PororocaRequest req = new();
+        req.UpdateUrl("http://www.pudim.com.br");
+        req.UpdateCustomAuth(auth);
+
+        // WHEN
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, mockedVariableResolver.Object, req, out string? errorCode));
+
+        // THEN
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{CertificateFilePath}}"), Times.Once);
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates(null), Times.Exactly(2));
+        Assert.Equal(TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank, errorCode);
+    }
+
+    [Fact]
+    public static void Should_allow_req_with_client_certificate_auth_and_valid_PKCS12_params()
+    {  
+        // GIVEN
+        var mockedVariableResolver = MockVariableResolver(new Dictionary<string, string>()
+        {
+            {"{{CertificateFilePath}}", "./cert.p12"},
+            {"{{PrivateKeyFilePassword}}", "prvkeypwd"}
+        });
+        var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
+        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string,bool>()
+        {
+            { "./cert.p12", true }
+        });
+        PororocaRequestAuth auth = new();
+        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "{{PrivateKeyFilePassword}}");
+        PororocaRequest req = new();
+        req.UpdateUrl("http://www.pudim.com.br");
+        req.UpdateCustomAuth(auth);
+
+        // WHEN
+        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, mockedVariableResolver.Object, req, out string? errorCode));
+
+        // THEN
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{CertificateFilePath}}"), Times.Once);
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{PrivateKeyFilePassword}}"), Times.Once);
+        Assert.Null(errorCode);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("    ")]
+    [InlineData("my_password")]
+    public static void Should_allow_req_with_client_certificate_auth_and_valid_PEM_params_separate_private_key_file(string filePassword)
+    {  
+        // GIVEN
+        var mockedVariableResolver = MockVariableResolver(new Dictionary<string, string>()
+        {
+            {"{{CertificateFilePath}}", "./cert.pem"},
+            {"{{PrivateKeyFilePath}}", "./private_key.key"},
+            {"{{PrivateKeyFilePassword}}", filePassword}
+        });
+        var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
+        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string,bool>()
+        {
+            { "./cert.pem", true },
+            { "./private_key.key", true }
+        });
+        PororocaRequestAuth auth = new();
+        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", "{{PrivateKeyFilePath}}", "{{PrivateKeyFilePassword}}");
+        PororocaRequest req = new();
+        req.UpdateUrl("http://www.pudim.com.br");
+        req.UpdateCustomAuth(auth);
+
+        // WHEN
+        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, mockedVariableResolver.Object, req, out string? errorCode));
+
+        // THEN
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{CertificateFilePath}}"), Times.Once);
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{PrivateKeyFilePath}}"), Times.Once);
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{PrivateKeyFilePassword}}"), Times.Once);
+        Assert.Null(errorCode);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("    ")]
+    [InlineData("my_password")]
+    public static void Should_allow_req_with_client_certificate_auth_and_valid_PEM_params_conjoined_private_key_file(string filePassword)
+    {  
+        // GIVEN
+        var mockedVariableResolver = MockVariableResolver(new Dictionary<string, string>()
+        {
+            {"{{CertificateFilePath}}", "./cert.pem"},
+            {"{{FilePassword}}", filePassword}
+        });
+        var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
+        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string,bool>()
+        {
+            { "./cert.pem", true }
+        });
+        PororocaRequestAuth auth = new();
+        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", null, "{{FilePassword}}");
+        PororocaRequest req = new();
+        req.UpdateUrl("http://www.pudim.com.br");
+        req.UpdateCustomAuth(auth);
+
+        // WHEN
+        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, mockedVariableResolver.Object, req, out string? errorCode));
+
+        // THEN
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{CertificateFilePath}}"), Times.Once);
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{FilePassword}}"), Times.Once);
+        Assert.Null(errorCode);
+    }
+
+    #endregion
 
     #endregion
 
@@ -663,6 +880,138 @@ public static class PororocaRequestTranslatorTests
         Assert.Equal("cookie2", contentHeaders["Cookie"]);
         Assert.True(contentHeaders.ContainsKey("Authorization"));
         Assert.Equal("Bearer tkn", contentHeaders["Authorization"]);
+    }
+
+    #endregion
+
+    #region REQUEST AUTH CLIENT CERTIFICATE TRANSLATION
+
+    [Fact]
+    public static void Should_resolve_PKCS12_client_certificate_params_correctly()
+    {  
+        // GIVEN
+        var mockedHttpVersionVerifier = MockHttpVersionOSVerifier(true, null);
+        var mockedVariableResolver = MockVariableResolver(new Dictionary<string, string>()
+        {
+            { "{{CertificateFilePath}}", "./cert.p12" },
+            { "{{PrivateKeyFilePassword}}", "my_pwd" }
+        });
+        
+        PororocaRequestAuth reqAuth = new();
+        reqAuth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "{{PrivateKeyFilePassword}}");
+
+        PororocaRequest req = new();
+        req.UpdateUrl("http://www.pudim.com.br");
+        req.UpdateCustomAuth(reqAuth);
+
+        // WHEN
+        Assert.True(TryTranslateRequest(mockedHttpVersionVerifier,
+                                        mockedVariableResolver.Object,
+                                        req,
+                                        out HttpRequestMessage? reqMsg,
+                                        out string? errorCode));
+
+        // THEN
+        // Resolve headers names
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{CertificateFilePath}}"), Times.Once);
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{PrivateKeyFilePassword}}"), Times.Once);
+
+        var clientCertParamsKv = reqMsg?.Options.FirstOrDefault(o => o.Key == ClientCertificateOptionsKey);
+        var clientCertParamsObj = clientCertParamsKv != null ? clientCertParamsKv.Value.Value : (object?)null;
+
+        Assert.NotNull(clientCertParamsObj);
+        Assert.True(clientCertParamsObj is PororocaRequestAuthClientCertificate);
+        PororocaRequestAuthClientCertificate clientCertParams = (PororocaRequestAuthClientCertificate)clientCertParamsObj!;
+        Assert.Equal(PororocaRequestAuthClientCertificateType.Pkcs12, clientCertParams.Type);
+        Assert.Equal("./cert.p12", clientCertParams.CertificateFilePath);
+        Assert.Null(clientCertParams.PrivateKeyFilePath);
+        Assert.Equal("my_pwd", clientCertParams.FilePassword);
+    }
+
+    [Fact]
+    public static void Should_resolve_PEM_client_certificate_params_correctly_separate_private_key()
+    {  
+        // GIVEN
+        var mockedHttpVersionVerifier = MockHttpVersionOSVerifier(true, null);
+        var mockedVariableResolver = MockVariableResolver(new Dictionary<string, string>()
+        {
+            { "{{CertificateFilePath}}", "./cert.pem" },
+            { "{{PrivateKeyFilePath}}", "./private_key.key" },
+            { "{{PrivateKeyFilePassword}}", "my_pwd" }
+        });
+        
+        PororocaRequestAuth reqAuth = new();
+        reqAuth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", "{{PrivateKeyFilePath}}", "{{PrivateKeyFilePassword}}");
+
+        PororocaRequest req = new();
+        req.UpdateUrl("http://www.pudim.com.br");
+        req.UpdateCustomAuth(reqAuth);
+
+        // WHEN
+        Assert.True(TryTranslateRequest(mockedHttpVersionVerifier,
+                                        mockedVariableResolver.Object,
+                                        req,
+                                        out HttpRequestMessage? reqMsg,
+                                        out string? errorCode));
+
+        // THEN
+        // Resolve headers names
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{CertificateFilePath}}"), Times.Once);
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{PrivateKeyFilePath}}"), Times.Once);
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{PrivateKeyFilePassword}}"), Times.Once);
+
+        var clientCertParamsKv = reqMsg?.Options.FirstOrDefault(o => o.Key == ClientCertificateOptionsKey);
+        var clientCertParamsObj = clientCertParamsKv != null ? clientCertParamsKv.Value.Value : (object?)null;
+
+        Assert.NotNull(clientCertParamsObj);
+        Assert.True(clientCertParamsObj is PororocaRequestAuthClientCertificate);
+        PororocaRequestAuthClientCertificate clientCertParams = (PororocaRequestAuthClientCertificate)clientCertParamsObj!;
+        Assert.Equal(PororocaRequestAuthClientCertificateType.Pem, clientCertParams.Type);
+        Assert.Equal("./cert.pem", clientCertParams.CertificateFilePath);
+        Assert.Equal("./private_key.key", clientCertParams.PrivateKeyFilePath);
+        Assert.Equal("my_pwd", clientCertParams.FilePassword);
+    }
+
+    [Fact]
+    public static void Should_resolve_PEM_client_certificate_params_correctly_conjoined_private_key()
+    {  
+        // GIVEN
+        var mockedHttpVersionVerifier = MockHttpVersionOSVerifier(true, null);
+        var mockedVariableResolver = MockVariableResolver(new Dictionary<string, string>()
+        {
+            { "{{CertificateFilePath}}", "./cert.pem" },
+            { "{{FilePassword}}", "my_pwd" }
+        });
+        
+        PororocaRequestAuth reqAuth = new();
+        reqAuth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", null, "{{FilePassword}}");
+
+        PororocaRequest req = new();
+        req.UpdateUrl("http://www.pudim.com.br");
+        req.UpdateCustomAuth(reqAuth);
+
+        // WHEN
+        Assert.True(TryTranslateRequest(mockedHttpVersionVerifier,
+                                        mockedVariableResolver.Object,
+                                        req,
+                                        out HttpRequestMessage? reqMsg,
+                                        out string? errorCode));
+
+        // THEN
+        // Resolve headers names
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{CertificateFilePath}}"), Times.Once);
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{FilePassword}}"), Times.Once);
+
+        var clientCertParamsKv = reqMsg?.Options.FirstOrDefault(o => o.Key == ClientCertificateOptionsKey);
+        var clientCertParamsObj = clientCertParamsKv != null ? clientCertParamsKv.Value.Value : (object?)null;
+
+        Assert.NotNull(clientCertParamsObj);
+        Assert.True(clientCertParamsObj is PororocaRequestAuthClientCertificate);
+        PororocaRequestAuthClientCertificate clientCertParams = (PororocaRequestAuthClientCertificate)clientCertParamsObj!;
+        Assert.Equal(PororocaRequestAuthClientCertificateType.Pem, clientCertParams.Type);
+        Assert.Equal("./cert.pem", clientCertParams.CertificateFilePath);
+        Assert.Null(clientCertParams.PrivateKeyFilePath);
+        Assert.Equal("my_pwd", clientCertParams.FilePassword);
     }
 
     #endregion

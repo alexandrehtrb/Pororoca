@@ -75,8 +75,8 @@ public sealed class PororocaRequestBody : ICloneable
             ContentType = ContentType,
             RawContent = RawContent,
             FileSrcPath = FileSrcPath,
-            UrlEncodedValues = UrlEncodedValues?.Select(u => (PororocaKeyValueParam)u.Clone()).ToList().AsReadOnly(),
-            FormDataValues = FormDataValues?.Select(f => (PororocaRequestFormDataParam)f.Clone()).ToList().AsReadOnly(),
-            GraphQlValues = GraphQlValues
+            UrlEncodedValues = UrlEncodedValues?.Select(u => (PororocaKeyValueParam)u.Clone())?.ToList()?.AsReadOnly(),
+            FormDataValues = FormDataValues?.Select(f => (PororocaRequestFormDataParam)f.Clone())?.ToList()?.AsReadOnly(),
+            GraphQlValues = (PororocaRequestBodyGraphQl?)GraphQlValues?.Clone()
         };
 }

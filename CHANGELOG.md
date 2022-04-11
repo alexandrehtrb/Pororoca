@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.2.0](https://github.com/alexandrehtrb/Pororoca/tree/1.2.0) (2022-04-10)
+
+### Features
+
+* Adds support for client certificate authentication
+* Adds check mark next to selected language, changed check mark margins
+
+### Bug Fixes
+
+* Fixes possible bug when cloning some request bodies
+
+### Others
+
+* Organizes request validation i18n strings
+* Adds .gitattributes to avoid line-break problems in Linux
+
 ## [1.1.0](https://github.com/alexandrehtrb/Pororoca/tree/1.1.0) (2022-03-20)
 
 ### Features

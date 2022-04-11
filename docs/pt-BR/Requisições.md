@@ -41,18 +41,24 @@ Autenticação customizada permite que você insira valores de autenticação, a
 
 ![ExemploBasicAuthentication](./imgs/request_basic_authentication_example.jpg)
 
-### Basic authentication
+### Autenticação Basic
 
 Se autenticação Basic for usada, com um login "usr" e com uma senha "pwd", o seguinte header Authorization será adicionado na requisição enviada, de acordo com a [lógica de Basic Authentication](https://browse-tutorials.com/tools/basic-auth):
 
 
 `Authorization: Basic dXNyOnB3ZA==`
 
-### Bearer authentication
+### Autenticação Bearer
 
 Se autenticação Bearer for usada, com um bearer token "my_token", então o seguinte header Authorization será adicionado na requisição enviada:
 
 `Authorization: Bearer my_token`
+
+### Autenticação por certificado de cliente
+
+A autenticação por certificado de cliente difere dos métodos acima porque opera na camada de TLS, antes da requisição HTTP ser transmitida.
+
+Os dois tipos aceitos de certificados de cliente são o PKCS#12 e o PEM. Esta [página](https://www.ryadel.com/en/ssl-certificates-standards-formats-extensions-cer-crt-key-pfx-pem-p7b-p7c-pfx-p12/?msclkid=ca7bc065ae0311ec98e66e2041811628) detalha alguns dos tipos de certificados que existem.
 
 ## Enviando uma requisição
 
@@ -62,12 +68,12 @@ Você pode salvar o corpo da resposta em um arquivo, clicando no botão "Salvar 
 
 ![ExemploResposta](./imgs/response_save_as_example.jpg)
 
-## Verificação de certificado SSL / TLS
+## Verificação de certificado SSL / TLS do servidor
 
-Por padrão, o Pororoca realiza uma verificação de certificado SSL / TLS em conexões com HTTPS e, se houver uma falha na validação, a requisição não prosseguirá, como na figura abaixo.
+Por padrão, o Pororoca realiza uma verificação de certificado SSL / TLS do servidor em conexões com HTTPS e, se houver uma falha na validação, a requisição não prosseguirá, como na figura abaixo.
 
 ![ExemploFalhaValidaçãoCertificadoTLS](./imgs/tls_certificate_validation_failure_example.jpg)
 
-Para desabilitar a verificação de certificado TLS, vá ao menu superior, em "Opções", e selecione "Desabilitar verificação de TLS".
+Para desabilitar a verificação de certificado TLS do servidor, vá ao menu superior, em "Opções", e selecione "Desabilitar verificação de TLS".
 
 ![DesabilitarVerificaçãoCertificadoTLS](./imgs/disable_tls_certificate_check.jpg)

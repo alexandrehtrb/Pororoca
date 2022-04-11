@@ -16,6 +16,9 @@ public sealed class PororocaRequestAuth : ICloneable
     [JsonInclude]
     public string? BearerToken { get; private set; }
 
+    [JsonInclude]
+    public PororocaRequestAuthClientCertificate? ClientCertificate { get; private set; }
+
     #nullable disable warnings
     public PororocaRequestAuth() : this(PororocaRequestAuthMode.Basic)
     {
@@ -29,6 +32,7 @@ public sealed class PororocaRequestAuth : ICloneable
         BasicAuthLogin = null;
         BasicAuthPassword = null;
         BearerToken = null;
+        ClientCertificate = null;
     }
 
     public void SetBasicAuth(string basicAuthLogin, string basicAuthPassword)
@@ -44,11 +48,20 @@ public sealed class PororocaRequestAuth : ICloneable
         BearerToken = bearerToken;
     }
 
+    public void SetClientCertificateAuth(PororocaRequestAuthClientCertificateType type, string certFilePath, string? keyFilePath, string? filePassword)
+    {
+        Mode = PororocaRequestAuthMode.ClientCertificate;
+        string? nulledKeyFilePath = string.IsNullOrWhiteSpace(keyFilePath) ? null : keyFilePath;
+        string? nulledFilePassword = string.IsNullOrWhiteSpace(filePassword) ? null : filePassword;
+        ClientCertificate = new(type, certFilePath, nulledKeyFilePath, nulledFilePassword);
+    }
+
     public object Clone() =>
         new PororocaRequestAuth(Mode)
         {
             BasicAuthLogin = BasicAuthLogin,
             BasicAuthPassword = BasicAuthPassword,
-            BearerToken = BearerToken
+            BearerToken = BearerToken,
+            ClientCertificate = (PororocaRequestAuthClientCertificate?) ClientCertificate?.Clone()
         };
 }

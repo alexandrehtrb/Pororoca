@@ -367,13 +367,26 @@ namespace Pororoca.Desktop.ViewModels
             }
         }
 
+        private bool _isRequestAuthModeClientCertificateSelected;
+        public bool IsRequestAuthModeClientCertificateSelected
+        {
+            get => _isRequestAuthModeClientCertificateSelected;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _isRequestAuthModeClientCertificateSelected, value);
+            }
+        }
+
         private PororocaRequestAuthMode? RequestAuthMode =>
             _requestAuthModeSelectedIndex switch
             { // TODO: Improve this, do not use fixed integers to resolve mode
+                3 => PororocaRequestAuthMode.ClientCertificate,
                 2 => PororocaRequestAuthMode.Bearer,
                 1 => PororocaRequestAuthMode.Basic,
                 _ => null
             };
+
+        #region REQUEST AUTH
 
         private string? _requestBasicAuthLogin;
         public string? RequestBasicAuthLogin
@@ -395,6 +408,10 @@ namespace Pororoca.Desktop.ViewModels
             }
         }
 
+        #endregion
+
+        #region REQUEST AUTH BEARER
+
         private string? _requestBearerAuthToken;
         public string? RequestBearerAuthToken
         {
@@ -404,6 +421,124 @@ namespace Pororoca.Desktop.ViewModels
                 this.RaiseAndSetIfChanged(ref _requestBearerAuthToken, value);
             }
         }
+
+        #endregion
+
+        #region REQUEST AUTH CLIENT CERTIFICATE
+
+        private int _requestAuthClientCertificateTypeSelectedIndex;
+        public int RequestAuthClientCertificateTypeSelectedIndex
+        {
+            get => _requestAuthClientCertificateTypeSelectedIndex;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _requestAuthClientCertificateTypeSelectedIndex, value);
+            }
+        }
+
+        private bool _isRequestAuthClientCertificateTypeNoneSelected;
+        public bool IsRequestAuthClientCertificateTypeNoneSelected
+        {
+            get => _isRequestAuthClientCertificateTypeNoneSelected;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _isRequestAuthClientCertificateTypeNoneSelected, value);
+            }
+        }
+
+        private bool _isRequestAuthClientCertificateTypePkcs12Selected;
+        public bool IsRequestAuthClientCertificateTypePkcs12Selected
+        {
+            get => _isRequestAuthClientCertificateTypePkcs12Selected;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _isRequestAuthClientCertificateTypePkcs12Selected, value);
+            }
+        }
+
+        private bool _isRequestAuthClientCertificateTypePemSelected;
+        public bool IsRequestAuthClientCertificateTypePemSelected
+        {
+            get => _isRequestAuthClientCertificateTypePemSelected;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _isRequestAuthClientCertificateTypePemSelected, value);
+            }
+        }
+
+        private PororocaRequestAuthClientCertificateType? RequestAuthClientCertificateType =>
+            _requestAuthClientCertificateTypeSelectedIndex switch
+            { // TODO: Improve this, do not use fixed integers to resolve mode
+                2 => PororocaRequestAuthClientCertificateType.Pem,
+                1 => PororocaRequestAuthClientCertificateType.Pkcs12,
+                _ => null
+            };
+        
+        #region REQUEST AUTH CLIENT CERTIFICATE PKCS12
+
+        private string? _requestClientCertificateAuthPkcs12CertificateFilePath;
+        public string? RequestClientCertificateAuthPkcs12CertificateFilePath
+        {
+            get => _requestClientCertificateAuthPkcs12CertificateFilePath;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _requestClientCertificateAuthPkcs12CertificateFilePath, value);
+            }
+        }
+
+        private string? _requestClientCertificateAuthPkcs12FilePassword;
+        public string? RequestClientCertificateAuthPkcs12FilePassword
+        {
+            get => _requestClientCertificateAuthPkcs12FilePassword;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _requestClientCertificateAuthPkcs12FilePassword, value);
+            }
+        }
+
+        public ReactiveCommand<Unit, Unit> SearchClientCertificatePkcs12FileCmd { get; }
+
+        #endregion
+
+        #region REQUEST AUTH CLIENT CERTIFICATE PEM
+
+        private string? _requestClientCertificateAuthPemCertificateFilePath;
+        public string? RequestClientCertificateAuthPemCertificateFilePath
+        {
+            get => _requestClientCertificateAuthPemCertificateFilePath;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _requestClientCertificateAuthPemCertificateFilePath, value);
+            }
+        }
+
+        private string? _requestClientCertificateAuthPemPrivateKeyFilePath;
+        public string? RequestClientCertificateAuthPemPrivateKeyFilePath
+        {
+            get => _requestClientCertificateAuthPemPrivateKeyFilePath;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _requestClientCertificateAuthPemPrivateKeyFilePath, value);
+            }
+        }
+
+        private string? _requestClientCertificateAuthPemFilePassword;
+        public string? RequestClientCertificateAuthPemFilePassword
+        {
+            get => _requestClientCertificateAuthPemFilePassword;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _requestClientCertificateAuthPemFilePassword, value);
+            }
+        }
+
+        public ReactiveCommand<Unit, Unit> SearchClientCertificatePemCertFileCmd { get; }
+
+        public ReactiveCommand<Unit, Unit> SearchClientCertificatePemPrivateKeyFileCmd { get; }
+
+        #endregion
+
+        #endregion
 
         #endregion
 
@@ -452,10 +587,21 @@ namespace Pororoca.Desktop.ViewModels
 
         #endregion
 
+        #region OTHERS
+
+        private readonly bool isOperatingSystemMacOsx;
+
+        #endregion
+
         public RequestViewModel(ICollectionOrganizationItemParentViewModel parentVm,
                                 IPororocaVariableResolver variableResolver,
-                                PororocaRequest req) : base(parentVm, req.Name)
+                                PororocaRequest req,
+                                Func<bool>? isOperatingSystemMacOsx = null) : base(parentVm, req.Name)
         {
+            #region OTHERS
+            this.isOperatingSystemMacOsx = (isOperatingSystemMacOsx ?? OperatingSystem.IsMacOS)();
+            #endregion
+
             #region COLLECTION ORGANIZATION
             Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
 
@@ -551,6 +697,10 @@ namespace Pororoca.Desktop.ViewModels
                     RequestAuthModeSelectedIndex = 2;
                     IsRequestAuthModeBearerSelected = true;
                     break;
+                case PororocaRequestAuthMode.ClientCertificate:
+                    RequestAuthModeSelectedIndex = 3;
+                    IsRequestAuthModeClientCertificateSelected = true;
+                    break;
                 default:
                     RequestAuthModeSelectedIndex = 0;
                     IsRequestAuthModeNoneSelected = true;
@@ -559,7 +709,34 @@ namespace Pororoca.Desktop.ViewModels
             RequestBasicAuthLogin = req.CustomAuth?.BasicAuthLogin;
             RequestBasicAuthPassword = req.CustomAuth?.BasicAuthPassword;
             RequestBearerAuthToken = req.CustomAuth?.BearerToken;
-            #endregion    
+
+            #region REQUEST AUTH CLIENT CERTIFICATE
+            switch (req.CustomAuth?.ClientCertificate?.Type)
+            {
+                case PororocaRequestAuthClientCertificateType.Pkcs12:
+                    RequestClientCertificateAuthPkcs12CertificateFilePath = req.CustomAuth.ClientCertificate!.CertificateFilePath!;
+                    RequestClientCertificateAuthPkcs12FilePassword = req.CustomAuth.ClientCertificate!.FilePassword;
+                    RequestAuthClientCertificateTypeSelectedIndex = 1;
+                    IsRequestAuthClientCertificateTypePkcs12Selected = true;
+                    break;
+                case PororocaRequestAuthClientCertificateType.Pem:
+                    RequestClientCertificateAuthPemCertificateFilePath = req.CustomAuth.ClientCertificate!.CertificateFilePath!;
+                    RequestClientCertificateAuthPemPrivateKeyFilePath = req.CustomAuth.ClientCertificate!.PrivateKeyFilePath!;
+                    RequestClientCertificateAuthPemFilePassword = req.CustomAuth.ClientCertificate!.FilePassword;
+                    RequestAuthClientCertificateTypeSelectedIndex = 2;
+                    IsRequestAuthClientCertificateTypePemSelected = true;
+                    break;
+                default:
+                    RequestAuthClientCertificateTypeSelectedIndex = 0;
+                    IsRequestAuthClientCertificateTypeNoneSelected = true;
+                    break;
+            }
+            SearchClientCertificatePkcs12FileCmd = ReactiveCommand.CreateFromTask(SearchClientCertificatePkcs12FileAsync);
+            SearchClientCertificatePemCertFileCmd = ReactiveCommand.CreateFromTask(SearchClientCertificatePemCertFileAsync);
+            SearchClientCertificatePemPrivateKeyFileCmd = ReactiveCommand.CreateFromTask(SearchClientCertificatePemPrivateKeyFileAsync);
+            #endregion
+
+            #endregion 
 
             #region SEND OR CANCEL REQUEST
             CancelRequestCmd = ReactiveCommand.Create(CancelRequest);
@@ -702,6 +879,94 @@ namespace Pororoca.Desktop.ViewModels
 
         #endregion
 
+        #region REQUEST BODY AUTH CLIENT CERTIFICATE
+
+        private async Task SearchClientCertificatePkcs12FileAsync()
+        {
+            List<FileDialogFilter> fileSelectionfilters = new();
+            // Mac OSX file dialogs have problems with file filters... TODO: find if there is a way to solve this
+            if (!isOperatingSystemMacOsx)
+            {
+                fileSelectionfilters.Add(
+                    new()
+                    {
+                        Name = Localizer.Instance["RequestAuthClientCertificate/Pkcs12ImportCertificateFileTypesDescription"],
+                        Extensions = new List<string> { "p12", "pfx" }
+                    }
+                );
+            }
+
+            OpenFileDialog dialog = new()
+            {
+                Title = Localizer.Instance["RequestAuthClientCertificate/Pkcs12ImportCertificateFileDialogTitle"],
+                AllowMultiple = false,
+                Filters = fileSelectionfilters
+            };
+            string[]? result = await dialog.ShowAsync(MainWindow.Instance!);
+            if (result != null)
+            {
+                RequestClientCertificateAuthPkcs12CertificateFilePath = result.FirstOrDefault();
+            }
+        }
+
+        private async Task SearchClientCertificatePemCertFileAsync()
+        {
+            List<FileDialogFilter> fileSelectionfilters = new();
+            // Mac OSX file dialogs have problems with file filters... TODO: find if there is a way to solve this
+            if (!isOperatingSystemMacOsx)
+            {
+                fileSelectionfilters.Add(
+                    new()
+                    {
+                        Name = Localizer.Instance["RequestAuthClientCertificate/PemImportCertificateFileTypesDescription"],
+                        Extensions = new List<string> { "cer", "crt", "pem" }
+                    }
+                );
+            }
+
+            OpenFileDialog dialog = new()
+            {
+                Title = Localizer.Instance["RequestAuthClientCertificate/PemImportCertificateFileDialogTitle"],
+                AllowMultiple = false,
+                Filters = fileSelectionfilters
+            };
+            string[]? result = await dialog.ShowAsync(MainWindow.Instance!);
+            if (result != null)
+            {
+                RequestClientCertificateAuthPemCertificateFilePath = result.FirstOrDefault();
+            }
+        }
+
+        private async Task SearchClientCertificatePemPrivateKeyFileAsync()
+        {
+            List<FileDialogFilter> fileSelectionfilters = new();
+            // Mac OSX file dialogs have problems with file filters... TODO: find if there is a way to solve this
+            if (!isOperatingSystemMacOsx)
+            {
+                fileSelectionfilters.Add(
+                    new()
+                    {
+                        Name = Localizer.Instance["RequestAuthClientCertificate/PemImportPrivateKeyFileTypesDescription"],
+                        Extensions = new List<string> { "cer", "crt", "pem", "key" }
+                    }
+                );
+            }
+
+            OpenFileDialog dialog = new()
+            {
+                Title = Localizer.Instance["RequestAuthClientCertificate/PemImportPrivateKeyFileDialogTitle"],
+                AllowMultiple = false,
+                Filters = fileSelectionfilters
+            };
+            string[]? result = await dialog.ShowAsync(MainWindow.Instance!);
+            if (result != null)
+            {
+                RequestClientCertificateAuthPemPrivateKeyFilePath = result.FirstOrDefault();
+            }
+        }
+
+        #endregion
+
         #region CONVERT VIEW INPUTS TO REQUEST ENTITY
 
         private PororocaRequestAuth? WrapCustomAuthFromInputs()
@@ -709,6 +974,21 @@ namespace Pororoca.Desktop.ViewModels
             PororocaRequestAuth auth = new();
             switch (RequestAuthMode)
             {
+                case PororocaRequestAuthMode.ClientCertificate:
+                    PororocaRequestAuthClientCertificateType? type = RequestAuthClientCertificateType;                    
+                    if (type == PororocaRequestAuthClientCertificateType.Pem)
+                    {
+                        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, RequestClientCertificateAuthPemCertificateFilePath!, RequestClientCertificateAuthPemPrivateKeyFilePath, RequestClientCertificateAuthPemFilePassword);
+                    }
+                    else if (type == PororocaRequestAuthClientCertificateType.Pkcs12)
+                    {
+                        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, RequestClientCertificateAuthPkcs12CertificateFilePath!, null, RequestClientCertificateAuthPkcs12FilePassword);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                    break;
                 case PororocaRequestAuthMode.Bearer:
                     auth.SetBearerAuth(RequestBearerAuthToken ?? string.Empty);
                     break;
@@ -803,14 +1083,17 @@ namespace Pororoca.Desktop.ViewModels
         {
             InvalidRequestMessage = _invalidRequestMessageErrorCode switch
             {
-                TranslateRequestErrors.InvalidUrl => Localizer.Instance["Request/ValidationInvalidUrl"],
-                TranslateRequestErrors.Http3UnavailableInOSVersion => Localizer.Instance["Request/ValidationHttp3Unavailable"],
-                TranslateRequestErrors.Http2UnavailableInOSVersion => Localizer.Instance["Request/ValidationHttp2Unavailable"],
-                TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRawOrFile => Localizer.Instance["Request/ContentTypeCannotBeBlankReqBodyRawOrFile"],
-                TranslateRequestErrors.InvalidContentTypeRawOrFile => Localizer.Instance["Request/InvalidContentTypeRawOrFile"],
-                TranslateRequestErrors.InvalidContentTypeFormData => Localizer.Instance["Request/InvalidContentTypeFormData"],
-                TranslateRequestErrors.ReqBodyFileNotFound => Localizer.Instance["Request/ReqBodyFileNotFound"],
-                _ => Localizer.Instance["Request/ValidationInvalidUnknownCause"]
+                TranslateRequestErrors.ClientCertificateFileNotFound => Localizer.Instance["RequestValidation/ClientCertificateFileNotFound"],
+                TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank => Localizer.Instance["RequestValidation/ClientCertificatePkcs12PasswordCannotBeBlank"],
+                TranslateRequestErrors.ClientCertificatePrivateKeyFileNotFound => Localizer.Instance["RequestValidation/ClientCertificatePrivateKeyFileNotFound"],
+                TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRawOrFile => Localizer.Instance["RequestValidation/ContentTypeCannotBeBlankReqBodyRawOrFile"],
+                TranslateRequestErrors.Http2UnavailableInOSVersion => Localizer.Instance["RequestValidation/Http2Unavailable"],
+                TranslateRequestErrors.Http3UnavailableInOSVersion => Localizer.Instance["RequestValidation/Http3Unavailable"],
+                TranslateRequestErrors.InvalidContentTypeFormData => Localizer.Instance["RequestValidation/InvalidContentTypeFormData"],
+                TranslateRequestErrors.InvalidContentTypeRawOrFile => Localizer.Instance["RequestValidation/InvalidContentTypeRawOrFile"],
+                TranslateRequestErrors.InvalidUrl => Localizer.Instance["RequestValidation/InvalidUrl"],
+                TranslateRequestErrors.ReqBodyFileNotFound => Localizer.Instance["RequestValidation/ReqBodyFileNotFound"],
+                _ => Localizer.Instance["RequestValidation/InvalidUnknownCause"]
             };
             IsInvalidRequestMessageVisible = true;
         }

@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Net;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Requester;
 using Pororoca.Domain.Features.TranslateRequest;
@@ -9,36 +8,10 @@ namespace Pororoca.Infrastructure.Features.Requester;
 
 public sealed class PororocaRequester : IPororocaRequester
 {
-    private static readonly HttpClient _httpClientWithoutSslVerification;
-    private static readonly HttpClient _httpClientWithSslVerification;
-
     public static readonly PororocaRequester Singleton;
 
     static PororocaRequester()
     {
-        TimeSpan timeout = TimeSpan.FromMinutes(5);
-
-        HttpClientHandler handlerNoSslVerification = new()
-        {
-            AutomaticDecompression = DecompressionMethods.All,
-            ServerCertificateCustomValidationCallback = (message, cert, chain, sslErrors) => true
-        };
-
-        HttpClientHandler handlerWithSslVerification = new()
-        {
-            AutomaticDecompression = DecompressionMethods.All
-        };
-
-        _httpClientWithoutSslVerification = new(handlerNoSslVerification)
-        {
-            Timeout = timeout
-        };
-
-        _httpClientWithSslVerification = new(handlerWithSslVerification)
-        {
-            Timeout = timeout
-        };
-
         Singleton = new();
     }
 
@@ -49,6 +22,7 @@ public sealed class PororocaRequester : IPororocaRequester
     public async Task<PororocaResponse> RequestAsync(IPororocaVariableResolver variableResolver, PororocaRequest req, bool disableSslVerification, CancellationToken cancellationToken = default)
     {
         HttpRequestMessage? reqMsg = null;
+        HttpResponseMessage resMsg;
         Stopwatch sw = new();
         sw.Start();
         try
@@ -61,15 +35,9 @@ public sealed class PororocaRequester : IPororocaRequester
             }
             else
             {
-                HttpResponseMessage resMsg;                
-                if (disableSslVerification)
-                {
-                    resMsg = await _httpClientWithoutSslVerification.SendAsync(reqMsg!, cancellationToken);
-                }
-                else
-                {
-                    resMsg = await _httpClientWithSslVerification.SendAsync(reqMsg!, cancellationToken);
-                }
+                HttpClient httpClient = PororocaHttpClientProvider.Provide(disableSslVerification, reqMsg!);
+
+                resMsg = await httpClient.SendAsync(reqMsg!, cancellationToken);
                 reqMsg?.Dispose();
                 sw.Stop();
                 return await PororocaResponse.SuccessfulAsync(sw.Elapsed, resMsg);

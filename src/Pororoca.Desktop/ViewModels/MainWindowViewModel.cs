@@ -136,6 +136,26 @@ namespace Pororoca.Desktop.ViewModels
 
         #region LANGUAGE
 
+        private bool _isLanguagePortuguese = false;
+        public bool IsLanguagePortuguese
+        {
+            get => _isLanguagePortuguese;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _isLanguagePortuguese, value);
+            }
+        }
+
+        private bool _isLanguageEnglish = false;
+        public bool IsLanguageEnglish
+        {
+            get => _isLanguageEnglish;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _isLanguageEnglish, value);
+            }
+        }
+
         public ReactiveCommand<Unit, Unit> SelectLanguagePortuguesCmd { get; }
         public ReactiveCommand<Unit, Unit> SelectLanguageEnglishCmd { get; }
 
@@ -176,8 +196,8 @@ namespace Pororoca.Desktop.ViewModels
             #endregion
 
             #region LANGUAGE
-            SelectLanguagePortuguesCmd = ReactiveCommand.Create(SelectLanguagePortugues);
-            SelectLanguageEnglishCmd = ReactiveCommand.Create(SelectLanguageEnglish);
+            SelectLanguagePortuguesCmd = ReactiveCommand.Create(() => SelectLanguage(Language.PtBr));
+            SelectLanguageEnglishCmd = ReactiveCommand.Create(() => SelectLanguage(Language.EnGb));
             #endregion
 
             #region GLOBAL OPTIONS
@@ -352,13 +372,22 @@ namespace Pororoca.Desktop.ViewModels
 
         #region LANGUAGE
 
-        private void SelectLanguagePortugues() =>
-            SelectLanguage(Language.PtBr);
-
-        private void SelectLanguageEnglish() =>
-            SelectLanguage(Language.EnGb);
-        private static void SelectLanguage(Language lang) =>
+        private void SelectLanguage(Language lang)
+        {
             Localizer.Instance.LoadLanguage(lang);
+            switch (lang)
+            {
+                case Language.PtBr:
+                    IsLanguagePortuguese = true;
+                    IsLanguageEnglish = false;
+                    break;
+                default:
+                case Language.EnGb:
+                    IsLanguagePortuguese = false;
+                    IsLanguageEnglish = true;
+                    break;
+            }
+        }
 
         #endregion
 
@@ -379,11 +408,11 @@ namespace Pororoca.Desktop.ViewModels
             if (userPrefs != null)
             {
                 Language lang = LanguageExtensions.GetLanguageFromLCID(userPrefs.Lang);
-                Localizer.Instance.LoadLanguage(lang);
+                SelectLanguage(lang);
             }
             else
             {
-                Localizer.Instance.LoadLanguage(Language.EnGb);
+                SelectLanguage(Language.EnGb);
             }
             foreach (PororocaCollection col in cols)
             {
