@@ -407,7 +407,7 @@
             "mode": "clientCertificate",
             "clientCertificate": {
               "type": "pkcs12",
-              "certificateFilePath": "{{BadSslClientCertDir}}\\badssl.com-client.p12",
+              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client.p12",
               "filePassword": "{{BadSslClientCertFilePassword}}"
             }
           }
@@ -423,7 +423,7 @@
             "mode": "clientCertificate",
             "clientCertificate": {
               "type": "pem",
-              "certificateFilePath": "{{BadSslClientCertDir}}\\badssl.com-client-certificate-with-unencrypted-private-key.pem"
+              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client-certificate-with-unencrypted-private-key.pem"
             }
           }
         },
@@ -438,7 +438,7 @@
             "mode": "clientCertificate",
             "clientCertificate": {
               "type": "pem",
-              "certificateFilePath": "{{BadSslClientCertDir}}\\badssl.com-client-certificate-with-encrypted-private-key.pem",
+              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client-certificate-with-encrypted-private-key.pem",
               "filePassword": "{{BadSslClientCertFilePassword}}"
             }
           }
@@ -454,8 +454,8 @@
             "mode": "clientCertificate",
             "clientCertificate": {
               "type": "pem",
-              "certificateFilePath": "{{BadSslClientCertDir}}\\badssl.com-client-certificate-without-private-key.pem",
-              "privateKeyFilePath": "{{BadSslClientCertDir}}\\badssl.com-client-unencrypted-private-key.key"
+              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client-certificate-without-private-key.pem",
+              "privateKeyFilePath": "{{BadSslClientCertDir}}/badssl.com-client-unencrypted-private-key.key"
             }
           }
         },
@@ -470,8 +470,8 @@
             "mode": "clientCertificate",
             "clientCertificate": {
               "type": "pem",
-              "certificateFilePath": "{{BadSslClientCertDir}}\\badssl.com-client-certificate-without-private-key.pem",
-              "privateKeyFilePath": "{{BadSslClientCertDir}}\\badssl.com-client-encrypted-private-key.key",
+              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client-certificate-without-private-key.pem",
+              "privateKeyFilePath": "{{BadSslClientCertDir}}/badssl.com-client-encrypted-private-key.key",
               "filePassword": "{{BadSslClientCertFilePassword}}"
             }
           }
