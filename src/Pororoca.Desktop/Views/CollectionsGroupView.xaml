@@ -6,7 +6,13 @@
   xmlns:i18n="clr-namespace:Pororoca.Desktop.Localization" x:DataType="vm:CollectionsGroupViewModel" mc:Ignorable="d" d:DesignWidth="1350" d:DesignHeight="700" x:Class="Pororoca.Desktop.Views.CollectionsGroupView" FontSize="14" Foreground="{StaticResource SystemBaseHighColor}">
 
   <TreeView Classes="sidebar" Margin="0 40 0 20" Items="{Binding Items}" SelectedItem="{Binding CollectionGroupSelectedItem, Mode=TwoWay}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-
+    <TreeView.Styles>
+        <Style Selector="TreeViewItem">
+            <!-- Items in the ItemsSource need to have these properties for the binding to work -->
+            <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+            <!--Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" /-->
+         </Style>
+     </TreeView.Styles>
     <TreeView.DataTemplates>
 
       <TreeDataTemplate DataType="{x:Type vm:CollectionViewModel}" ItemsSource="{Binding Items}">

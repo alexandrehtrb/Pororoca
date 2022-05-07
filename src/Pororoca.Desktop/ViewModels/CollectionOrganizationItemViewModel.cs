@@ -1,4 +1,3 @@
-using Pororoca.Desktop.UserData;
 using ReactiveUI;
 
 namespace Pororoca.Desktop.ViewModels
@@ -11,7 +10,8 @@ namespace Pororoca.Desktop.ViewModels
 
     public abstract class CollectionOrganizationItemViewModel : ViewModelBase, ICollectionOrganizationItemViewModel
     {
-        public ClipboardAreaViewModel ClipboardAreaDataCtx => ClipboardAreaViewModel.Singleton; // Needs to be object variable, not static
+        // Needs to be object variable, not static
+        public ClipboardAreaViewModel ClipboardAreaDataCtx => ClipboardAreaViewModel.Singleton;
         protected ICollectionOrganizationItemParentViewModel Parent { get; }
 
         private bool _canMoveUp;

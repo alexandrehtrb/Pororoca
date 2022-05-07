@@ -80,6 +80,8 @@ namespace Pororoca.Desktop.ViewModels
         {
             EnvironmentViewModel envToAddVm = new(this, envToAdd, SetEnvironmentAsCurrent);
             Items.Add(envToAddVm);
+            ((CollectionViewModel)Parent).IsExpanded = true;
+            this.IsExpanded = true;
             RefreshSubItemsAvailableMovements();
         }
 

@@ -119,6 +119,7 @@ namespace Pororoca.Desktop.ViewModels
             {
                 Items.Add(item);
             }
+            this.IsExpanded = true;
             RefreshSubItemsAvailableMovements();
         }
 
@@ -136,6 +137,7 @@ namespace Pororoca.Desktop.ViewModels
             {
                 Items.Add(item);
             }
+            this.IsExpanded = true;
             RefreshSubItemsAvailableMovements();
         }
 
