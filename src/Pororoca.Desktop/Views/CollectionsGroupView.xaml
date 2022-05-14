@@ -5,7 +5,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:i18n="clr-namespace:Pororoca.Desktop.Localization" x:DataType="vm:CollectionsGroupViewModel" mc:Ignorable="d" d:DesignWidth="1350" d:DesignHeight="700" x:Class="Pororoca.Desktop.Views.CollectionsGroupView" FontSize="14" Foreground="{StaticResource SystemBaseHighColor}">
 
-  <TreeView Classes="sidebar" Margin="0 40 0 20" Items="{Binding Items}" SelectedItem="{Binding CollectionGroupSelectedItem, Mode=TwoWay}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+  <TreeView Classes="sidebar" Margin="0 40 0 20" Items="{Binding Items}" SelectedItem="{Binding CollectionGroupSelectedItem, Mode=TwoWay}" SelectedItems="{Binding CollectionGroupSelectedItems, Mode=TwoWay}" SelectionMode="Multiple" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
     <TreeView.Styles>
         <Style Selector="TreeViewItem">
             <!-- Items in the ItemsSource need to have these properties for the binding to work -->
@@ -19,13 +19,13 @@
         <TextBlock Text="{Binding Name}">
           <TextBlock.ContextMenu>
             <ContextMenu>
-              <MenuItem Header="{i18n:Localize NewFolder, Context=CollectionsGroupContextMenu}" Command="{Binding AddNewFolderCmd}"/>
-              <MenuItem Header="{i18n:Localize NewRequest, Context=CollectionsGroupContextMenu}" Command="{Binding AddNewRequestCmd}"/>
-              <MenuItem Header="{i18n:Localize Duplicate, Context=CollectionsGroupContextMenu}" Command="{Binding DuplicateCollectionCmd}"/>
-              <MenuItem Header="{i18n:Localize Paste, Context=CollectionsGroupContextMenu}" IsEnabled="{Binding ClipboardAreaDataCtx.CanPasteCollectionFolderOrRequest}" Command="{Binding PasteToCollectionCmd}"/>
-              <MenuItem Header="{i18n:Localize Rename, Context=CollectionsGroupContextMenu}" Command="{Binding RenameCollectionCmd}"/>
-              <MenuItem Header="{i18n:Localize MoveUp, Context=CollectionsGroupContextMenu}" IsEnabled="{Binding CanMoveUp}" Command="{Binding MoveUpCmd}"/>
-              <MenuItem Header="{i18n:Localize MoveDown, Context=CollectionsGroupContextMenu}" IsEnabled="{Binding CanMoveDown}" Command="{Binding MoveDownCmd}"/>
+              <MenuItem Header="{i18n:Localize NewFolder, Context=CollectionsGroupContextMenu}" Command="{Binding AddNewFolderCmd}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
+              <MenuItem Header="{i18n:Localize NewRequest, Context=CollectionsGroupContextMenu}" Command="{Binding AddNewRequestCmd}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
+              <MenuItem Header="{i18n:Localize Duplicate, Context=CollectionsGroupContextMenu}" Command="{Binding DuplicateCollectionCmd}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
+              <MenuItem Header="{i18n:Localize Paste, Context=CollectionsGroupContextMenu}" Command="{Binding PasteToCollectionCmd}" IsEnabled="{Binding CollectionsGroupDataCtx.CanPasteCollectionFolderOrRequest}" />
+              <MenuItem Header="{i18n:Localize Rename, Context=CollectionsGroupContextMenu}" Command="{Binding RenameCollectionCmd}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
+              <MenuItem Header="{i18n:Localize MoveUp, Context=CollectionsGroupContextMenu}" Command="{Binding MoveUpCmd}" IsEnabled="{Binding CanMoveUp}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
+              <MenuItem Header="{i18n:Localize MoveDown, Context=CollectionsGroupContextMenu}" Command="{Binding MoveDownCmd}" IsEnabled="{Binding CanMoveDown}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
               <MenuItem Header="{i18n:Localize Delete, Context=CollectionsGroupContextMenu}" Command="{Binding DeleteCollectionCmd}"/>
             </ContextMenu>
           </TextBlock.ContextMenu>
@@ -35,13 +35,13 @@
         <TextBlock Text="{Binding Name}">
           <TextBlock.ContextMenu>
             <ContextMenu>
-              <MenuItem Header="{i18n:Localize NewFolder, Context=CollectionsGroupContextMenu}" Command="{Binding AddNewFolderCmd}"/>
-              <MenuItem Header="{i18n:Localize NewRequest, Context=CollectionsGroupContextMenu}" Command="{Binding AddNewRequestCmd}"/>
+              <MenuItem Header="{i18n:Localize NewFolder, Context=CollectionsGroupContextMenu}" Command="{Binding AddNewFolderCmd}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
+              <MenuItem Header="{i18n:Localize NewRequest, Context=CollectionsGroupContextMenu}" Command="{Binding AddNewRequestCmd}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
               <MenuItem Header="{i18n:Localize Copy, Context=CollectionsGroupContextMenu}" Command="{Binding CopyFolderCmd}"/>
-              <MenuItem Header="{i18n:Localize Paste, Context=CollectionsGroupContextMenu}" IsEnabled="{Binding ClipboardAreaDataCtx.CanPasteCollectionFolderOrRequest}" Command="{Binding PasteToFolderCmd}"/>
-              <MenuItem Header="{i18n:Localize Rename, Context=CollectionsGroupContextMenu}" Command="{Binding RenameFolderCmd}"/>
-              <MenuItem Header="{i18n:Localize MoveUp, Context=CollectionsGroupContextMenu}" IsEnabled="{Binding CanMoveUp}" Command="{Binding MoveUpCmd}"/>
-              <MenuItem Header="{i18n:Localize MoveDown, Context=CollectionsGroupContextMenu}" IsEnabled="{Binding CanMoveDown}" Command="{Binding MoveDownCmd}"/>
+              <MenuItem Header="{i18n:Localize Paste, Context=CollectionsGroupContextMenu}" Command="{Binding PasteToFolderCmd}" IsEnabled="{Binding CollectionsGroupDataCtx.CanPasteCollectionFolderOrRequest}"/>
+              <MenuItem Header="{i18n:Localize Rename, Context=CollectionsGroupContextMenu}" Command="{Binding RenameFolderCmd}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
+              <MenuItem Header="{i18n:Localize MoveUp, Context=CollectionsGroupContextMenu}" Command="{Binding MoveUpCmd}" IsEnabled="{Binding CanMoveUp}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
+              <MenuItem Header="{i18n:Localize MoveDown, Context=CollectionsGroupContextMenu}" Command="{Binding MoveDownCmd}" IsEnabled="{Binding CanMoveDown}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
               <MenuItem Header="{i18n:Localize Delete, Context=CollectionsGroupContextMenu}" Command="{Binding DeleteFolderCmd}"/>
             </ContextMenu>
           </TextBlock.ContextMenu>
@@ -51,9 +51,9 @@
         <TextBlock Text="{i18n:Localize Environments, Context=CollectionsGroup}">
           <TextBlock.ContextMenu>
             <ContextMenu>
-              <MenuItem Header="{i18n:Localize NewEnvironment, Context=CollectionsGroupContextMenu}" Command="{Binding AddNewEnvironmentCmd}"/>
-              <MenuItem Header="{i18n:Localize Paste, Context=CollectionsGroupContextMenu}" IsEnabled="{Binding ClipboardAreaDataCtx.CanPasteEnvironment}" Command="{Binding PasteToEnvironmentsCmd}"/>
-              <MenuItem Header="{i18n:Localize ImportEnvironment, Context=CollectionsGroupContextMenu}" Command="{Binding ImportEnvironmentsCmd}"/>
+              <MenuItem Header="{i18n:Localize NewEnvironment, Context=CollectionsGroupContextMenu}" Command="{Binding AddNewEnvironmentCmd}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
+              <MenuItem Header="{i18n:Localize Paste, Context=CollectionsGroupContextMenu}" Command="{Binding PasteToEnvironmentsCmd}" IsEnabled="{Binding CollectionsGroupDataCtx.CanPasteEnvironment}"/>
+              <MenuItem Header="{i18n:Localize ImportEnvironment, Context=CollectionsGroupContextMenu}" Command="{Binding ImportEnvironmentsCmd}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
             </ContextMenu>
           </TextBlock.ContextMenu>
         </TextBlock>
@@ -64,9 +64,9 @@
           <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem Header="{i18n:Localize Copy, Context=CollectionsGroupContextMenu}" Command="{Binding CopyRequestCmd}"/>
-              <MenuItem Header="{i18n:Localize Rename, Context=CollectionsGroupContextMenu}" Command="{Binding RenameRequestCmd}"/>
-              <MenuItem Header="{i18n:Localize MoveUp, Context=CollectionsGroupContextMenu}" IsEnabled="{Binding CanMoveUp}" Command="{Binding MoveUpCmd}"/>
-              <MenuItem Header="{i18n:Localize MoveDown, Context=CollectionsGroupContextMenu}" IsEnabled="{Binding CanMoveDown}" Command="{Binding MoveDownCmd}"/>
+              <MenuItem Header="{i18n:Localize Rename, Context=CollectionsGroupContextMenu}" Command="{Binding RenameRequestCmd}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
+              <MenuItem Header="{i18n:Localize MoveUp, Context=CollectionsGroupContextMenu}" Command="{Binding MoveUpCmd}" IsEnabled="{Binding CanMoveUp}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
+              <MenuItem Header="{i18n:Localize MoveDown, Context=CollectionsGroupContextMenu}" Command="{Binding MoveDownCmd}" IsEnabled="{Binding CanMoveDown}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
               <MenuItem Header="{i18n:Localize Delete, Context=CollectionsGroupContextMenu}" Command="{Binding DeleteRequestCmd}"/>
             </ContextMenu>
           </TextBlock.ContextMenu>
@@ -76,11 +76,11 @@
         <StackPanel Orientation="Horizontal">
           <StackPanel.ContextMenu>
             <ContextMenu>
-              <MenuItem Header="{i18n:Localize SetAsCurrentEnvironment, Context=CollectionsGroupContextMenu}" IsEnabled="{Binding !IsCurrentEnvironment}" Command="{Binding SetAsCurrentEnvironmentCmd}"/>
+              <MenuItem Header="{i18n:Localize SetAsCurrentEnvironment, Context=CollectionsGroupContextMenu}" Command="{Binding SetAsCurrentEnvironmentCmd}" IsEnabled="{Binding !IsCurrentEnvironment}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
               <MenuItem Header="{i18n:Localize Copy, Context=CollectionsGroupContextMenu}" Command="{Binding CopyEnvironmentCmd}"/>
-              <MenuItem Header="{i18n:Localize Rename, Context=CollectionsGroupContextMenu}" Command="{Binding RenameEnvironmentCmd}"/>
-              <MenuItem Header="{i18n:Localize MoveUp, Context=CollectionsGroupContextMenu}" IsEnabled="{Binding CanMoveUp}" Command="{Binding MoveUpCmd}"/>
-              <MenuItem Header="{i18n:Localize MoveDown, Context=CollectionsGroupContextMenu}" IsEnabled="{Binding CanMoveDown}" Command="{Binding MoveDownCmd}"/>
+              <MenuItem Header="{i18n:Localize Rename, Context=CollectionsGroupContextMenu}" Command="{Binding RenameEnvironmentCmd}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
+              <MenuItem Header="{i18n:Localize MoveUp, Context=CollectionsGroupContextMenu}" Command="{Binding MoveUpCmd}" IsEnabled="{Binding CanMoveUp}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
+              <MenuItem Header="{i18n:Localize MoveDown, Context=CollectionsGroupContextMenu}" Command="{Binding MoveDownCmd}" IsEnabled="{Binding CanMoveDown}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
               <MenuItem Header="{i18n:Localize Delete, Context=CollectionsGroupContextMenu}" Command="{Binding DeleteEnvironmentCmd}"/>
             </ContextMenu>
           </StackPanel.ContextMenu>

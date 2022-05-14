@@ -44,10 +44,10 @@ namespace Pororoca.Desktop.ViewModels
             MoveDownCmd = ReactiveCommand.Create(MoveThisDown);
             AddNewFolderCmd = ReactiveCommand.Create(AddNewFolder);
             AddNewRequestCmd = ReactiveCommand.Create(AddNewRequest);
-            CopyFolderCmd = ReactiveCommand.Create(CopyThis);
+            CopyFolderCmd = ReactiveCommand.Create(Copy);
             PasteToFolderCmd= ReactiveCommand.Create(PasteToThis);
             RenameFolderCmd = ReactiveCommand.Create(RenameThis);
-            DeleteFolderCmd = ReactiveCommand.Create(DeleteThis);
+            DeleteFolderCmd = ReactiveCommand.Create(Delete);
 
             #endregion
 
@@ -82,15 +82,18 @@ namespace Pororoca.Desktop.ViewModels
         }
 
         protected override void CopyThis() =>
-            ClipboardAreaDataCtx.PushToCopy(ToCollectionFolder());
+            CollectionsGroupDataCtx.PushToCopy(ToCollectionFolder());
             
         public override void PasteToThis()
         {
-            ICloneable? itemToPaste = ClipboardAreaDataCtx.FetchCopy();
-            if (itemToPaste is PororocaCollectionFolder folderToPaste)
-                AddFolder(folderToPaste);
-            else if (itemToPaste is PororocaRequest reqToPaste)
-                AddRequest(reqToPaste);
+            var itemsToPaste = CollectionsGroupDataCtx.FetchCopiesOfFoldersAndReqs();
+            foreach (var itemToPaste in itemsToPaste)
+            {
+                if (itemToPaste is PororocaCollectionFolder folderToPaste)
+                    AddFolder(folderToPaste);
+                else if (itemToPaste is PororocaRequest reqToPaste)
+                    AddRequest(reqToPaste);
+            }
         }
 
         private void AddNewFolder()

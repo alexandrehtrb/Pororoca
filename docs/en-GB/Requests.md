@@ -31,6 +31,8 @@ To copy a request, right-click on it in the left panel and select "Copy". Then, 
 
 To delete a request, right-click on it, "Delete".
 
+You can select more than one request or folder at the same time and copy or delete them together.
+
 "Move Up" and "Move Down" change the order of requests inside a collection or folder. 
 
 ![RightClickRequest](./imgs/right_click_request.jpg)

@@ -85,7 +85,7 @@ namespace Pororoca.Desktop.ViewModels
             DuplicateCollectionCmd = ReactiveCommand.Create(() => onDuplicateCollectionSelected(this));
             PasteToCollectionCmd = ReactiveCommand.Create(PasteToThis);
             RenameCollectionCmd = ReactiveCommand.Create(RenameThis);
-            DeleteCollectionCmd = ReactiveCommand.Create(DeleteThis);
+            DeleteCollectionCmd = ReactiveCommand.Create(Delete);
             ImportEnvironmentsCmd = ReactiveCommand.CreateFromTask(ImportEnvironmentsAsync);
             ExportCollectionCmd = ReactiveCommand.CreateFromTask(ExportCollectionAsync);
             ExportAsPororocaCollectionCmd = ReactiveCommand.CreateFromTask(ExportAsPororocaCollectionAsync);
@@ -200,16 +200,17 @@ namespace Pororoca.Desktop.ViewModels
             
         public override void PasteToThis()
         {
-            ICloneable? itemToPaste = ClipboardAreaDataCtx.FetchCopy();
-            if (itemToPaste is PororocaCollectionFolder folderToPaste)
-                AddFolder(folderToPaste);
-            else if (itemToPaste is PororocaRequest reqToPaste)
-                AddRequest(reqToPaste);
-            else if (itemToPaste is PororocaEnvironment)
+            var itemsToPaste = CollectionsGroupDataCtx.FetchCopiesOfFoldersAndReqs();
+            foreach (var itemToPaste in itemsToPaste)
             {
-                EnvironmentsGroupViewModel envGpVm = (EnvironmentsGroupViewModel)Items.First(i => i is EnvironmentsGroupViewModel);
-                envGpVm.PasteToThis();
+                if (itemToPaste is PororocaCollectionFolder folderToPaste)
+                    AddFolder(folderToPaste);
+                else if (itemToPaste is PororocaRequest reqToPaste)
+                    AddRequest(reqToPaste);
             }
+
+            EnvironmentsGroupViewModel envGpVm = (EnvironmentsGroupViewModel)Items.First(i => i is EnvironmentsGroupViewModel);
+            envGpVm.PasteToThis();
         }
 
         #region EXPORT COLLECTION

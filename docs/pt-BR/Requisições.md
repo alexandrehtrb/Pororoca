@@ -31,6 +31,8 @@ Para copiar uma requisição, clique com o botão direito do mouse nela no paine
 
 Para excluir uma requisição, clique com o botão direito nela, "Excluir".
 
+Você pode selecionar mais de uma requisição ou pasta ao mesmo tempo e copiá-las ou excluí-las juntas.
+
 "Mover para cima" e "Mover para baixo" mudam a ordem das requisições dentro de uma coleção ou pasta.
 
 ![BotãoDireitoMouseRequisição](./imgs/right_click_request.jpg)

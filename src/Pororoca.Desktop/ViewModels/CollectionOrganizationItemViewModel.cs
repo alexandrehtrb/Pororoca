@@ -1,3 +1,4 @@
+using Pororoca.Desktop.Views;
 using ReactiveUI;
 
 namespace Pororoca.Desktop.ViewModels
@@ -11,8 +12,11 @@ namespace Pororoca.Desktop.ViewModels
     public abstract class CollectionOrganizationItemViewModel : ViewModelBase, ICollectionOrganizationItemViewModel
     {
         // Needs to be object variable, not static
-        public ClipboardAreaViewModel ClipboardAreaDataCtx => ClipboardAreaViewModel.Singleton;
-        protected ICollectionOrganizationItemParentViewModel Parent { get; }
+        // TODO: Should it receive this via injection?
+        public CollectionsGroupViewModel CollectionsGroupDataCtx =>
+            ((MainWindowViewModel)MainWindow.Instance!.DataContext!).CollectionsGroupViewDataCtx;
+
+        public ICollectionOrganizationItemParentViewModel Parent { get; }
 
         private bool _canMoveUp;
         public bool CanMoveUp
@@ -59,6 +63,15 @@ namespace Pororoca.Desktop.ViewModels
         protected void MoveThisDown() =>
             Parent.MoveSubItem(this, MoveableItemMovementDirection.Down);
 
+        protected void Copy()
+        {
+            bool isMultipleCopy = CollectionsGroupDataCtx.HasMultipleItemsSelected;
+            if (isMultipleCopy)
+                CollectionsGroupDataCtx.CopyMultiple();
+            else
+                CopyThis();
+        }
+
         protected abstract void CopyThis();
 
         protected void RenameThis()
@@ -70,7 +83,16 @@ namespace Pororoca.Desktop.ViewModels
         private void OnNameUpdated(string newName) =>
             Name = newName;
 
-        protected void DeleteThis() =>
+        protected void Delete()
+        {
+            bool isMultipleCopy = CollectionsGroupDataCtx.HasMultipleItemsSelected;
+            if (isMultipleCopy)
+                CollectionsGroupDataCtx.DeleteMultiple();
+            else
+                DeleteThis();
+        }
+
+        public void DeleteThis() =>
             Parent.DeleteSubItem(this);
 
         protected CollectionOrganizationItemViewModel(ICollectionOrganizationItemParentViewModel parentVm, string name)

@@ -90,9 +90,11 @@ namespace Pororoca.Desktop.ViewModels
 
         public override void PasteToThis()
         {
-            ICloneable? itemToPaste = ClipboardAreaDataCtx.FetchCopy();
-            if (itemToPaste is PororocaEnvironment envToPaste)
+            var envsToPaste = CollectionsGroupDataCtx.FetchCopiesOfEnvironments();
+            foreach (var envToPaste in envsToPaste)
+            {
                 AddEnvironment(envToPaste);
+            }
         }
 
         #endregion
