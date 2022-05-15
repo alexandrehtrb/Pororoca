@@ -1,5 +1,27 @@
 # Changelog
 
+* [1.3.0](#130-2022-05-15)
+* [1.2.0](#120-2022-04-10)
+* [1.1.0](#110-2022-03-20)
+* [1.0.0](#100-2022-03-08)
+
+## [1.3.0](https://github.com/alexandrehtrb/Pororoca/tree/1.3.0) (2022-05-15)
+
+### Features
+
+* Expands collections tree after adding an environment, folder or request
+* Now allows for copy, paste and deletion of multiple items in collections tree
+* Applies rename when pressing Enter in text input
+
+### Bug Fixes
+
+* When pasting a copy of a current environment, the copy will no longer also be a current environment.
+
+### Others
+
+* Refactored makereleases.ps1 into smaller functions
+* Generates Pororoca.Test package along in makereleases.ps1
+
 ## [1.2.0](https://github.com/alexandrehtrb/Pororoca/tree/1.2.0) (2022-04-10)
 
 ### Features
