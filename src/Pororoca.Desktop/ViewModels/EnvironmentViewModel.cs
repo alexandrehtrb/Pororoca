@@ -87,9 +87,9 @@ namespace Pororoca.Desktop.ViewModels
             
             MoveUpCmd = ReactiveCommand.Create(MoveThisUp);
             MoveDownCmd = ReactiveCommand.Create(MoveThisDown);
-            CopyEnvironmentCmd = ReactiveCommand.Create(CopyThis);
+            CopyEnvironmentCmd = ReactiveCommand.Create(Copy);
             RenameEnvironmentCmd = ReactiveCommand.Create(RenameThis);
-            DeleteEnvironmentCmd = ReactiveCommand.Create(DeleteThis);
+            DeleteEnvironmentCmd = ReactiveCommand.Create(Delete);
             ExportEnvironmentCmd = ReactiveCommand.CreateFromTask(ExportEnvironmentAsync);
             ExportAsPororocaEnvironmentCmd = ReactiveCommand.CreateFromTask(ExportAsPororocaEnvironmentAsync);
             ExportAsPostmanEnvironmentCmd = ReactiveCommand.CreateFromTask(ExportAsPostmanEnvironmentAsync);
@@ -114,7 +114,7 @@ namespace Pororoca.Desktop.ViewModels
         #region COLLECTION ORGANIZATION
 
         protected override void CopyThis() =>
-            ClipboardAreaDataCtx.PushToCopy(ToEnvironment());
+            CollectionsGroupDataCtx.PushToCopy(ToEnvironment());
 
         #region EXPORT ENVIRONMENT
 

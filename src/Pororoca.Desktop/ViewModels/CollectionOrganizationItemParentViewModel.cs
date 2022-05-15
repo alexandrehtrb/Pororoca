@@ -1,9 +1,5 @@
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reactive;
 using ReactiveUI;
-using Pororoca.Desktop.Localization;
-using Pororoca.Domain.Features.Entities.Pororoca;
 
 namespace Pororoca.Desktop.ViewModels
 {
@@ -17,6 +13,16 @@ namespace Pororoca.Desktop.ViewModels
 
     public abstract class CollectionOrganizationItemParentViewModel<T> : CollectionOrganizationItemViewModel, ICollectionOrganizationItemParentViewModel where T : ICollectionOrganizationItemViewModel
     {
+        private bool _isExpanded;
+        public bool IsExpanded
+        {
+            get => _isExpanded;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _isExpanded, value);
+            }
+        }
+        
         public abstract ObservableCollection<T> Items { get; }
         public abstract Action<CollectionOrganizationItemViewModel> OnRenameSubItemSelected { get; }
         public abstract Action OnAfterItemDeleted { get; }

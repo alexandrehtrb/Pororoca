@@ -607,9 +607,9 @@ namespace Pororoca.Desktop.ViewModels
 
             MoveUpCmd = ReactiveCommand.Create(MoveThisUp);
             MoveDownCmd = ReactiveCommand.Create(MoveThisDown);
-            CopyRequestCmd = ReactiveCommand.Create(CopyThis);
+            CopyRequestCmd = ReactiveCommand.Create(Copy);
             RenameRequestCmd = ReactiveCommand.Create(RenameThis);
-            DeleteRequestCmd = ReactiveCommand.Create(DeleteThis);
+            DeleteRequestCmd = ReactiveCommand.Create(Delete);
             #endregion
 
             #region REQUEST
@@ -751,7 +751,7 @@ namespace Pororoca.Desktop.ViewModels
         #region COLLECTION ORGANIZATION
 
         protected override void CopyThis() =>
-            ClipboardAreaDataCtx.PushToCopy(ToRequest());
+            CollectionsGroupDataCtx.PushToCopy(ToRequest());
 
         private void OnLanguageChanged()
         {

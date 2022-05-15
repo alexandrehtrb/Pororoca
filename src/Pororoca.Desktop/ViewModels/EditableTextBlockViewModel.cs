@@ -38,7 +38,7 @@ namespace Pororoca.Desktop.ViewModels
             EditOrApplyTxtChangeCmd = ReactiveCommand.Create(EditOrApplyTxtChange);
         }
 
-        private void EditOrApplyTxtChange()
+        public void EditOrApplyTxtChange()
         {
             if (IsEditing)
             {
