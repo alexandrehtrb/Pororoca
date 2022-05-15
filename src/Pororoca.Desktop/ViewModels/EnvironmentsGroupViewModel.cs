@@ -79,6 +79,10 @@ namespace Pororoca.Desktop.ViewModels
         private void AddEnvironment(PororocaEnvironment envToAdd)
         {
             EnvironmentViewModel envToAddVm = new(this, envToAdd, SetEnvironmentAsCurrent);
+            // When adding an environment, set the environment
+            // as non-current, to not have two current environments
+            // when pasting.
+            envToAddVm.IsCurrentEnvironment = false;
             Items.Add(envToAddVm);
             ((CollectionViewModel)Parent).IsExpanded = true;
             this.IsExpanded = true;
