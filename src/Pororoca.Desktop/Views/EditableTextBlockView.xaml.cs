@@ -1,5 +1,7 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
+using Pororoca.Desktop.ViewModels;
 
 namespace Pororoca.Desktop.Views
 {
@@ -12,7 +14,16 @@ namespace Pororoca.Desktop.Views
 
         private void InitializeComponent()
         {
-            AvaloniaXamlLoader.Load(this);    
+            AvaloniaXamlLoader.Load(this);
+        }
+
+        private void OnKeyDownHandler(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                var vm = (EditableTextBlockViewModel)DataContext!;
+                vm.EditOrApplyTxtChange();
+            }
         }
     }
 }

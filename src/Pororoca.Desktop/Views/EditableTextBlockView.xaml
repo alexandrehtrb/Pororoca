@@ -17,7 +17,7 @@
     <Grid Grid.Column="0" Grid.Row="0" Margin="0,0,12,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
       <TextBlock Text="{Binding Txt}" IsVisible="{Binding !IsEditing}" FontSize="32" FontWeight="Light" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
     
-      <TextBox Text="{Binding Txt}" IsVisible="{Binding IsEditing}" FontSize="18" Padding="8,4,8,4" FontWeight="Light" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+      <TextBox Text="{Binding Txt}" IsVisible="{Binding IsEditing}" FontSize="18" Padding="8,4,8,4" FontWeight="Light" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" KeyDown="OnKeyDownHandler"/>
     </Grid>
 
     <Button Grid.Column="1" Grid.Row="0" Width="40" Margin="12,0,0,0" Command="{Binding EditOrApplyTxtChangeCmd}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Stretch" Classes="Primary">
