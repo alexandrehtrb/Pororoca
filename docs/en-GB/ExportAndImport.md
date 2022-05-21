@@ -6,15 +6,19 @@ Pororoca offers full export and import compatibility with Postman.
 
 ## Export
 
-To export a collection or an environment, click on them in the left panel, then click on one of the "Export as..." buttons, depending of which file format you choose.
+To export a collection or an environment, click on them in the left panel, then click on the "Export collection..." or "Export environment...", respectively.
 
-The "Include secret variables" option, if selected, will include the values of secret variables in the exported files. If not selected, the values of secret variables will be replaced by a blank text.
+![ExportCollection](./imgs/export_collection.jpg)
+
+![ExportEnvironment](./imgs/export_environment.jpg)
+
+The "Include secret variables" option, if selected, will include the values of secret variables in the exported files. If not selected, the values of secret variables will be replaced by an empty text.
+
+The destination file format can be selected on the exportation window.
 
 When exporting a collection in the Pororoca format, the collection's environments will also be carried in the file - there is no need to export each environment individually.
 
-The exported files are JSON text files, that you can inspect and edit on a text editor of your choice.
-
-![ExportCollection](./imgs/export_collection.jpg)
+![ExportCollectionFileFormat](./imgs/export_collection_format.jpg)
 
 ## Import
 

@@ -6,15 +6,19 @@ Pororoca oferece compatibilidade total de exportação e importação com o Post
 
 ## Exportar
 
-Para exportar uma coleção ou um ambiente, clique neles no painel da esquerda, depois clique em um dos botões "Exportar como...", dependendo do tipo de formato que desejar.
+Para exportar uma coleção ou um ambiente, clique neles no painel da esquerda, depois clique no botão "Exportar coleção..." ou "Exportar ambiente...", respectivamente.
 
-A opção "Incluir variáveis secretas", se selecionada, incluirá os valores de variáveis secretas nos arquivos exportados. Se não estiver selecionada, os valores das variáveis secretas serão substituídos por um texto em branco.
+![ExportarColeção](./imgs/export_collection.jpg)
+
+![ExportarAmbiente](./imgs/export_environment.jpg)
+
+A opção "Incluir variáveis secretas", se selecionada, incluirá os valores de variáveis secretas nos arquivos exportados. Se não estiver selecionada, os valores das variáveis secretas serão substituídos por um texto vazio.
+
+O formato do arquivo de destino pode ser escolhido na janela de exportação.
 
 Ao exportar uma coleção em formato Pororoca, os ambientes da coleção também serão transportados no arquivo - não há necessidade de exportar cada ambiente individualmente.
 
-Os arquivos exportados são arquivos textos em formato JSON, que podem ser inspecionados e editados em um editor de texto de sua escolha.
-
-![ExportarColeção](./imgs/export_collection.jpg)
+![ExportarColeçãoFormatoArquivo](./imgs/export_collection_format.jpg)
 
 ## Importar
 
