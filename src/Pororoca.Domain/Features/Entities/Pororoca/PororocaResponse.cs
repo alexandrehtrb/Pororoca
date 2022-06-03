@@ -22,18 +22,18 @@ public sealed class PororocaResponse
     public IEnumerable<KeyValuePair<string, string>>? Headers { get; }
 
     private readonly byte[]? _binaryBody;
-    
+
     public bool WasCancelled =>
         Exception is TaskCanceledException;
 
     public bool HasBody =>
-        _binaryBody?.Length > 0;
+        this._binaryBody?.Length > 0;
 
     public string? ContentType
     {
         get
         {
-            KeyValuePair<string, string>? contentTypeHeaders = Headers?.FirstOrDefault(h => h.Key == "Content-Type");
+            var contentTypeHeaders = Headers?.FirstOrDefault(h => h.Key == "Content-Type");
             return contentTypeHeaders?.Value;
         }
     }
@@ -51,13 +51,13 @@ public sealed class PororocaResponse
 
     public string? GetBodyAsText()
     {
-        if (_binaryBody == null || _binaryBody.Length == 0)
+        if (this._binaryBody == null || this._binaryBody.Length == 0)
         {
             return null;
         }
         else
         {
-            string bodyStr = Encoding.UTF8.GetString(_binaryBody);
+            string bodyStr = Encoding.UTF8.GetString(this._binaryBody);
             string? contentType = ContentType;
             if (contentType == null || !MimeTypesDetector.IsJsonContent(contentType))
             {
@@ -80,17 +80,17 @@ public sealed class PororocaResponse
     }
 
     public byte[]? GetBodyAsBinary() =>
-        _binaryBody;
-    
+        this._binaryBody;
+
     public T? GetJsonBodyAs<T>() =>
         GetJsonBodyAs<T>(MinifyingOptions);
 
     public T? GetJsonBodyAs<T>(JsonSerializerOptions jsonOptions) =>
-        JsonSerializer.Deserialize<T>(_binaryBody, jsonOptions);
-    
+        JsonSerializer.Deserialize<T>(this._binaryBody, jsonOptions);
+
     public string? GetContentDispositionFileName()
     {
-        KeyValuePair<string, string>? contentDispositionHeader = Headers?.FirstOrDefault(h => h.Key == "Content-Disposition");
+        var contentDispositionHeader = Headers?.FirstOrDefault(h => h.Key == "Content-Disposition");
         string? contentDispositionValue = contentDispositionHeader?.Value;
         if (contentDispositionValue != null)
         {
@@ -123,7 +123,7 @@ public sealed class PororocaResponse
         ReceivedAt = DateTimeOffset.Now;
         Successful = true;
         StatusCode = responseMessage.StatusCode;
-        
+
         HttpHeaders nonContentHeaders = responseMessage.Headers;
         HttpHeaders contentHeaders = responseMessage.Content.Headers;
 

@@ -1,13 +1,13 @@
-using Xunit;
-using Pororoca.Domain.Features.Entities.Pororoca;
-using Moq;
-using Pororoca.Domain.Features.VariableResolution;
-using System.Collections.Generic;
-using Pororoca.Domain.Features.TranslateRequest;
 using System;
+using System.Collections.Generic;
 using System.Text;
-using static Pororoca.Domain.Features.TranslateRequest.PororocaRequestTranslator;
+using Moq;
 using Pororoca.Domain.Features.Common;
+using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.TranslateRequest;
+using Pororoca.Domain.Features.VariableResolution;
+using Xunit;
+using static Pororoca.Domain.Features.TranslateRequest.PororocaRequestTranslator;
 
 namespace Pororoca.Domain.Tests.Features.TranslateRequest;
 
@@ -21,7 +21,7 @@ public static class PororocaRequestTranslatorTests
             z = errorCode;
             return valid;
         };
-    
+
     private static Mock<IPororocaVariableResolver> MockVariableResolver(string key, string value) =>
         MockVariableResolver(new Dictionary<string, string>() { { key, value } });
 
@@ -29,10 +29,10 @@ public static class PororocaRequestTranslatorTests
     {
         Mock<IPororocaVariableResolver> mockedVariableResolver = new();
 
-        Func<string?, string> f = k => k == null ? string.Empty : kvs.ContainsKey(k) ? kvs[k] : k;
+        string f(string? k) => k == null ? string.Empty : kvs.ContainsKey(k) ? kvs[k] : k;
 
         mockedVariableResolver.Setup(x => x.ReplaceTemplates(It.IsAny<string?>()))
-                              .Returns(f);
+                              .Returns((Func<string?, string>)f);
 
         return mockedVariableResolver;
     }
@@ -41,7 +41,8 @@ public static class PororocaRequestTranslatorTests
         (string s) => exists;
 
     private static Func<string, bool> MockFileExistsVerifier(IDictionary<string, bool> fileList) =>
-        (string s) => {
+        (string s) =>
+        {
             bool exists = fileList.ContainsKey(s) && fileList[s];
             return exists;
         };
@@ -52,7 +53,7 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static void Should_detect_invalid_request_if_URL_is_invalid()
-    {  
+    {
         // GIVEN
         const string urlTemplate = "{{url}}";
         const string url = "url/api/qry?x=abc";
@@ -67,12 +68,12 @@ public static class PororocaRequestTranslatorTests
 
         // THEN
         mockedVariableResolver.Verify(x => x.ReplaceTemplates(urlTemplate), Times.Once);
-        Assert.Equal(TranslateRequestErrors.InvalidUrl, errorCode);       
+        Assert.Equal(TranslateRequestErrors.InvalidUrl, errorCode);
     }
 
     [Fact]
     public static void Should_detect_invalid_request_if_http_version_is_not_supported_in_operating_system()
-    {  
+    {
         // GIVEN
         const string urlTemplate = "{{url}}";
         const string url = "http://www.url.br";
@@ -88,12 +89,12 @@ public static class PororocaRequestTranslatorTests
 
         // THEN
         mockedVariableResolver.Verify(x => x.ReplaceTemplates(urlTemplate), Times.Once);
-        Assert.Equal(TranslateRequestErrors.Http3UnavailableInOSVersion, errorCode);       
+        Assert.Equal(TranslateRequestErrors.Http3UnavailableInOSVersion, errorCode);
     }
 
     [Fact]
     public static void Should_block_request_if_has_raw_body_but_no_content_type()
-    {  
+    {
         // GIVEN
         const string urlTemplate = "{{url}}";
         const string url = "http://www.url.br";
@@ -104,7 +105,7 @@ public static class PororocaRequestTranslatorTests
         req.UpdateUrl(urlTemplate);
         req.UpdateHttpVersion(1.1m);
         var body = new PororocaRequestBody();
-        body.SetRawContent("","");
+        body.SetRawContent("", "");
         req.UpdateBody(body);
 
         // WHEN
@@ -112,12 +113,12 @@ public static class PororocaRequestTranslatorTests
 
         // THEN
         mockedVariableResolver.Verify(x => x.ReplaceTemplates(urlTemplate), Times.Once);
-        Assert.Equal(TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRawOrFile, errorCode);       
+        Assert.Equal(TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRawOrFile, errorCode);
     }
 
     [Fact]
     public static void Should_block_request_if_has_file_body_but_no_content_type()
-    {  
+    {
         // GIVEN
         const string urlTemplate = "{{url}}";
         const string url = "http://www.url.br";
@@ -128,7 +129,7 @@ public static class PororocaRequestTranslatorTests
         req.UpdateUrl(urlTemplate);
         req.UpdateHttpVersion(1.1m);
         var body = new PororocaRequestBody();
-        body.SetFileContent("","");
+        body.SetFileContent("", "");
         req.UpdateBody(body);
 
         // WHEN
@@ -136,12 +137,12 @@ public static class PororocaRequestTranslatorTests
 
         // THEN
         mockedVariableResolver.Verify(x => x.ReplaceTemplates(urlTemplate), Times.Once);
-        Assert.Equal(TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRawOrFile, errorCode);       
+        Assert.Equal(TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRawOrFile, errorCode);
     }
 
     [Fact]
     public static void Should_block_request_if_requires_valid_but_has_invalid_content_type()
-    {  
+    {
         // GIVEN
         const string urlTemplate = "{{url}}";
         const string url = "http://www.url.br";
@@ -152,7 +153,7 @@ public static class PororocaRequestTranslatorTests
         req.UpdateUrl(urlTemplate);
         req.UpdateHttpVersion(1.1m);
         var body = new PororocaRequestBody();
-        body.SetRawContent("abc","flafubal");
+        body.SetRawContent("abc", "flafubal");
         req.UpdateBody(body);
 
         // WHEN
@@ -160,12 +161,12 @@ public static class PororocaRequestTranslatorTests
 
         // THEN
         mockedVariableResolver.Verify(x => x.ReplaceTemplates(urlTemplate), Times.Once);
-        Assert.Equal(TranslateRequestErrors.InvalidContentTypeRawOrFile, errorCode);       
+        Assert.Equal(TranslateRequestErrors.InvalidContentTypeRawOrFile, errorCode);
     }
 
     [Fact]
     public static void Should_not_verify_content_type_if_has_no_request_body()
-    {  
+    {
         // GIVEN
         const string urlTemplate = "{{url}}";
         const string url = "http://www.url.br";
@@ -181,12 +182,12 @@ public static class PororocaRequestTranslatorTests
 
         // THEN
         mockedVariableResolver.Verify(x => x.ReplaceTemplates(urlTemplate), Times.Once);
-        Assert.Null(errorCode);       
+        Assert.Null(errorCode);
     }
 
     [Fact]
     public static void Should_not_verify_content_type_if_has_form_url_encoded_body()
-    {  
+    {
         // GIVEN
         const string urlTemplate = "{{url}}";
         const string url = "http://www.url.br";
@@ -205,12 +206,12 @@ public static class PororocaRequestTranslatorTests
 
         // THEN
         mockedVariableResolver.Verify(x => x.ReplaceTemplates(urlTemplate), Times.Once);
-        Assert.Null(errorCode);       
+        Assert.Null(errorCode);
     }
 
     [Fact]
     public static void Should_reject_invalid_content_type_of_enabled_params_if_has_multipart_form_data_body()
-    {  
+    {
         // GIVEN
         const string urlTemplate = "{{url}}";
         const string url = "http://www.url.br";
@@ -222,8 +223,8 @@ public static class PororocaRequestTranslatorTests
         req.UpdateHttpVersion(1.1m);
         var body = new PororocaRequestBody();
         PororocaRequestFormDataParam p1 = new(true, "p1");
-        p1.SetTextValue("oi","text/plem");
-        body.SetFormDataContent(new [] { p1 });
+        p1.SetTextValue("oi", "text/plem");
+        body.SetFormDataContent(new[] { p1 });
         req.UpdateBody(body);
 
         // WHEN
@@ -236,7 +237,7 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static void Should_accept_invalid_content_type_of_disabled_params_if_has_multipart_form_data_body()
-    {  
+    {
         // GIVEN
         const string urlTemplate = "{{url}}";
         const string url = "http://www.url.br";
@@ -248,8 +249,8 @@ public static class PororocaRequestTranslatorTests
         req.UpdateHttpVersion(1.1m);
         var body = new PororocaRequestBody();
         PororocaRequestFormDataParam p1 = new(false, "p1");
-        p1.SetTextValue("oi","text/plem");
-        body.SetFormDataContent(new [] { p1 });
+        p1.SetTextValue("oi", "text/plem");
+        body.SetFormDataContent(new[] { p1 });
         req.UpdateBody(body);
 
         // WHEN
@@ -262,7 +263,7 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static void Should_accept_no_params_if_has_multipart_form_data_body()
-    {  
+    {
         // GIVEN
         const string urlTemplate = "{{url}}";
         const string url = "http://www.url.br";
@@ -286,7 +287,7 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static void Should_reject_file_body_if_file_not_found()
-    {  
+    {
         // GIVEN
         const string urlTemplate = "{{url}}";
         const string url = "http://www.url.br";
@@ -310,7 +311,7 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static void Should_reject_multipart_form_data_body_if_any_enabled_param_with_file_not_found()
-    {  
+    {
         // GIVEN
         const string urlTemplate = "{{url}}";
         const string url = "http://www.url.br";
@@ -323,7 +324,7 @@ public static class PororocaRequestTranslatorTests
         var body = new PororocaRequestBody();
         PororocaRequestFormDataParam p1 = new(true, "p1");
         p1.SetFileValue("Ç://Uindous/sistem31/a.txt", "text/plain");
-        body.SetFormDataContent(new [] {p1});
+        body.SetFormDataContent(new[] { p1 });
         req.UpdateBody(body);
 
         // WHEN
@@ -336,7 +337,7 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static void Should_accept_multipart_form_data_body_with_disabled_params_and_file_not_found()
-    {  
+    {
         // GIVEN
         const string urlTemplate = "{{url}}";
         const string url = "http://www.url.br";
@@ -349,7 +350,7 @@ public static class PororocaRequestTranslatorTests
         var body = new PororocaRequestBody();
         PororocaRequestFormDataParam p1 = new(false, "p1");
         p1.SetFileValue("Ç://Uindous/sistem31/a.txt", "text/plain");
-        body.SetFormDataContent(new [] {p1});
+        body.SetFormDataContent(new[] { p1 });
         req.UpdateBody(body);
 
         // WHEN
@@ -364,11 +365,11 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static void Should_reject_req_with_client_certificate_auth_if_PKCS12_cert_file_is_not_found()
-    {  
+    {
         // GIVEN
         var mockedVariableResolver = MockVariableResolver("{{CertificateFilePath}}", "./cert.p12");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
-        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string,bool>()
+        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string, bool>()
         {
             { "./cert.p12", false }
         });
@@ -389,11 +390,11 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static void Should_reject_req_with_client_certificate_auth_if_PEM_cert_file_is_not_found()
-    {  
+    {
         // GIVEN
         var mockedVariableResolver = MockVariableResolver("{{CertificateFilePath}}", "./cert.pem");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
-        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string,bool>()
+        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string, bool>()
         {
             { "./cert.pem", false },
             { "./private_key.key", true }
@@ -416,11 +417,11 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static void Should_reject_req_with_client_certificate_auth_if_PEM_private_key_file_is_specified_and_not_found()
-    {  
+    {
         // GIVEN
         var mockedVariableResolver = MockVariableResolver("{{PrivateKeyFilePath}}", "./private_key.key");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
-        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string,bool>()
+        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string, bool>()
         {
             { "./cert.pem", true },
             { "./private_key.key", false }
@@ -446,11 +447,11 @@ public static class PororocaRequestTranslatorTests
     [InlineData("")]
     [InlineData("    ")]
     public static void Should_reject_req_with_client_certificate_auth_if_PKCS12_without_password(string? filePassword)
-    {  
+    {
         // GIVEN
         var mockedVariableResolver = MockVariableResolver("{{CertificateFilePath}}", "./cert.p12");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
-        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string,bool>()
+        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string, bool>()
         {
             { "./cert.p12", true }
         });
@@ -471,7 +472,7 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static void Should_allow_req_with_client_certificate_auth_and_valid_PKCS12_params()
-    {  
+    {
         // GIVEN
         var mockedVariableResolver = MockVariableResolver(new Dictionary<string, string>()
         {
@@ -479,7 +480,7 @@ public static class PororocaRequestTranslatorTests
             {"{{PrivateKeyFilePassword}}", "prvkeypwd"}
         });
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
-        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string,bool>()
+        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string, bool>()
         {
             { "./cert.p12", true }
         });
@@ -503,7 +504,7 @@ public static class PororocaRequestTranslatorTests
     [InlineData("    ")]
     [InlineData("my_password")]
     public static void Should_allow_req_with_client_certificate_auth_and_valid_PEM_params_separate_private_key_file(string filePassword)
-    {  
+    {
         // GIVEN
         var mockedVariableResolver = MockVariableResolver(new Dictionary<string, string>()
         {
@@ -512,7 +513,7 @@ public static class PororocaRequestTranslatorTests
             {"{{PrivateKeyFilePassword}}", filePassword}
         });
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
-        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string,bool>()
+        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string, bool>()
         {
             { "./cert.pem", true },
             { "./private_key.key", true }
@@ -538,7 +539,7 @@ public static class PororocaRequestTranslatorTests
     [InlineData("    ")]
     [InlineData("my_password")]
     public static void Should_allow_req_with_client_certificate_auth_and_valid_PEM_params_conjoined_private_key_file(string filePassword)
-    {  
+    {
         // GIVEN
         var mockedVariableResolver = MockVariableResolver(new Dictionary<string, string>()
         {
@@ -546,7 +547,7 @@ public static class PororocaRequestTranslatorTests
             {"{{FilePassword}}", filePassword}
         });
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
-        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string,bool>()
+        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string, bool>()
         {
             { "./cert.pem", true }
         });
@@ -577,15 +578,15 @@ public static class PororocaRequestTranslatorTests
     [InlineData(2, 0, 2.0)]
     [InlineData(3, 0, 3.0)]
     public static void Should_make_http_version_object_correctly(int versionMajor, int versionMinor, decimal httpVersion)
-    {  
+    {
         // GIVEN
 
         // WHEN
-        Version v = ResolveHttpVersion(httpVersion);
+        var v = ResolveHttpVersion(httpVersion);
 
         // THEN
-        Assert.Equal(versionMajor, v.Major);       
-        Assert.Equal(versionMinor, v.Minor);       
+        Assert.Equal(versionMajor, v.Major);
+        Assert.Equal(versionMinor, v.Minor);
     }
 
     #endregion
@@ -612,20 +613,20 @@ public static class PororocaRequestTranslatorTests
     [InlineData("Authorization")]
     public static void Should_detect_non_content_http_headers_by_the_specification(string headerName) =>
         Assert.False(IsContentHeader(headerName));
-    
+
     [Fact]
     public static void Should_resolve_content_headers_correctly()
-    {  
+    {
         // GIVEN
         var mockedVariableResolver = MockVariableResolver(new Dictionary<string, string>()
         {
             { "{{ExpiresHeader}}", "Expires" },
             { "{{ExpiresAt}}", "2021-12-02" }
         });
-        
-        PororocaKeyValueParam[] headers = new PororocaKeyValueParam[]
+
+        var headers = new PororocaKeyValueParam[]
         {
-            new(true, "Content-Type", "application/json"), 
+            new(true, "Content-Type", "application/json"),
             new(true, "Content-Language", "pt-BR"),
             new(false, "Content-MD5", "md5"),
             new(false, "{{ExpiresHeader}}", "2020-05-01"),
@@ -654,8 +655,8 @@ public static class PororocaRequestTranslatorTests
         // Resolve headers values
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("application/json"), Times.Once);
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("pt-BR"), Times.Once);
-        mockedVariableResolver.Verify(x => x.ReplaceTemplates("md5"), Times.Never); 
-        mockedVariableResolver.Verify(x => x.ReplaceTemplates("2020-05-01"), Times.Never);        
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("md5"), Times.Never);
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("2020-05-01"), Times.Never);
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{ExpiresAt}}"), Times.Once);
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{ExpiresAt2}}"), Times.Once);
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("2021-12-01"), Times.Once);
@@ -669,15 +670,15 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static void Should_resolve_non_content_headers_no_auth_correctly()
-    {  
+    {
         // GIVEN
         var mockedVariableResolver = MockVariableResolver(new Dictionary<string, string>()
         {
             { "{{CookieHeader}}", "Cookie" },
             { "{{TestCookie2}}", "cookie2" }
         });
-        
-        PororocaKeyValueParam[] headers = new PororocaKeyValueParam[]
+
+        var headers = new PororocaKeyValueParam[]
         {
             new(true, "Content-Type", "application/json"),
             new(true, "Content-Language", "pt-BR"),
@@ -716,7 +717,7 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static void Should_resolve_non_content_headers_auth_but_not_custom_correctly()
-    {  
+    {
         // GIVEN
         var mockedVariableResolver = MockVariableResolver(new Dictionary<string, string>()
         {
@@ -725,8 +726,8 @@ public static class PororocaRequestTranslatorTests
             { "{{MyAuthHeader}}", "Authorization" },
             { "{{MyAuthToken}}", "tkn" }
         });
-        
-        PororocaKeyValueParam[] headers = new PororocaKeyValueParam[]
+
+        var headers = new PororocaKeyValueParam[]
         {
             new(true, "Content-Type", "application/json"),
             new(true, "Content-Language", "pt-BR"),
@@ -770,7 +771,7 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static void Should_resolve_non_content_headers_with_custom_basic_auth_correctly()
-    {  
+    {
         // GIVEN
         var mockedVariableResolver = MockVariableResolver(new Dictionary<string, string>()
         {
@@ -779,8 +780,8 @@ public static class PororocaRequestTranslatorTests
             { "{{Username}}", "usr" },
             { "{{Password}}", "pwd" },
         });
-        
-        PororocaKeyValueParam[] headers = new PororocaKeyValueParam[]
+
+        var headers = new PororocaKeyValueParam[]
         {
             new(true, "Content-Type", "application/json"),
             new(true, "Content-Language", "pt-BR"),
@@ -828,7 +829,7 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static void Should_resolve_non_content_headers_with_custom_bearer_auth_correctly()
-    {  
+    {
         // GIVEN
         var mockedVariableResolver = MockVariableResolver(new Dictionary<string, string>()
         {
@@ -836,8 +837,8 @@ public static class PororocaRequestTranslatorTests
             { "{{TestCookie2}}", "cookie2" },
             { "{{BearerToken}}", "tkn" }
         });
-        
-        PororocaKeyValueParam[] headers = new PororocaKeyValueParam[]
+
+        var headers = new PororocaKeyValueParam[]
         {
             new(true, "Content-Type", "application/json"),
             new(true, "Content-Language", "pt-BR"),
@@ -888,7 +889,7 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static void Should_resolve_PKCS12_client_certificate_params_correctly()
-    {  
+    {
         // GIVEN
         var mockedHttpVersionVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedVariableResolver = MockVariableResolver(new Dictionary<string, string>()
@@ -896,7 +897,7 @@ public static class PororocaRequestTranslatorTests
             { "{{CertificateFilePath}}", "./cert.p12" },
             { "{{PrivateKeyFilePassword}}", "my_pwd" }
         });
-        
+
         PororocaRequestAuth reqAuth = new();
         reqAuth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "{{PrivateKeyFilePassword}}");
 
@@ -908,7 +909,7 @@ public static class PororocaRequestTranslatorTests
         Assert.True(TryTranslateRequest(mockedHttpVersionVerifier,
                                         mockedVariableResolver.Object,
                                         req,
-                                        out HttpRequestMessage? reqMsg,
+                                        out var reqMsg,
                                         out string? errorCode));
 
         // THEN
@@ -917,11 +918,11 @@ public static class PororocaRequestTranslatorTests
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{PrivateKeyFilePassword}}"), Times.Once);
 
         var clientCertParamsKv = reqMsg?.Options.FirstOrDefault(o => o.Key == ClientCertificateOptionsKey);
-        var clientCertParamsObj = clientCertParamsKv != null ? clientCertParamsKv.Value.Value : (object?)null;
+        object? clientCertParamsObj = clientCertParamsKv != null ? clientCertParamsKv.Value.Value : (object?)null;
 
         Assert.NotNull(clientCertParamsObj);
         Assert.True(clientCertParamsObj is PororocaRequestAuthClientCertificate);
-        PororocaRequestAuthClientCertificate clientCertParams = (PororocaRequestAuthClientCertificate)clientCertParamsObj!;
+        var clientCertParams = (PororocaRequestAuthClientCertificate)clientCertParamsObj!;
         Assert.Equal(PororocaRequestAuthClientCertificateType.Pkcs12, clientCertParams.Type);
         Assert.Equal("./cert.p12", clientCertParams.CertificateFilePath);
         Assert.Null(clientCertParams.PrivateKeyFilePath);
@@ -930,7 +931,7 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static void Should_resolve_PEM_client_certificate_params_correctly_separate_private_key()
-    {  
+    {
         // GIVEN
         var mockedHttpVersionVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedVariableResolver = MockVariableResolver(new Dictionary<string, string>()
@@ -939,7 +940,7 @@ public static class PororocaRequestTranslatorTests
             { "{{PrivateKeyFilePath}}", "./private_key.key" },
             { "{{PrivateKeyFilePassword}}", "my_pwd" }
         });
-        
+
         PororocaRequestAuth reqAuth = new();
         reqAuth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", "{{PrivateKeyFilePath}}", "{{PrivateKeyFilePassword}}");
 
@@ -951,7 +952,7 @@ public static class PororocaRequestTranslatorTests
         Assert.True(TryTranslateRequest(mockedHttpVersionVerifier,
                                         mockedVariableResolver.Object,
                                         req,
-                                        out HttpRequestMessage? reqMsg,
+                                        out var reqMsg,
                                         out string? errorCode));
 
         // THEN
@@ -961,11 +962,11 @@ public static class PororocaRequestTranslatorTests
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{PrivateKeyFilePassword}}"), Times.Once);
 
         var clientCertParamsKv = reqMsg?.Options.FirstOrDefault(o => o.Key == ClientCertificateOptionsKey);
-        var clientCertParamsObj = clientCertParamsKv != null ? clientCertParamsKv.Value.Value : (object?)null;
+        object? clientCertParamsObj = clientCertParamsKv != null ? clientCertParamsKv.Value.Value : (object?)null;
 
         Assert.NotNull(clientCertParamsObj);
         Assert.True(clientCertParamsObj is PororocaRequestAuthClientCertificate);
-        PororocaRequestAuthClientCertificate clientCertParams = (PororocaRequestAuthClientCertificate)clientCertParamsObj!;
+        var clientCertParams = (PororocaRequestAuthClientCertificate)clientCertParamsObj!;
         Assert.Equal(PororocaRequestAuthClientCertificateType.Pem, clientCertParams.Type);
         Assert.Equal("./cert.pem", clientCertParams.CertificateFilePath);
         Assert.Equal("./private_key.key", clientCertParams.PrivateKeyFilePath);
@@ -974,7 +975,7 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static void Should_resolve_PEM_client_certificate_params_correctly_conjoined_private_key()
-    {  
+    {
         // GIVEN
         var mockedHttpVersionVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedVariableResolver = MockVariableResolver(new Dictionary<string, string>()
@@ -982,7 +983,7 @@ public static class PororocaRequestTranslatorTests
             { "{{CertificateFilePath}}", "./cert.pem" },
             { "{{FilePassword}}", "my_pwd" }
         });
-        
+
         PororocaRequestAuth reqAuth = new();
         reqAuth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", null, "{{FilePassword}}");
 
@@ -994,7 +995,7 @@ public static class PororocaRequestTranslatorTests
         Assert.True(TryTranslateRequest(mockedHttpVersionVerifier,
                                         mockedVariableResolver.Object,
                                         req,
-                                        out HttpRequestMessage? reqMsg,
+                                        out var reqMsg,
                                         out string? errorCode));
 
         // THEN
@@ -1003,11 +1004,11 @@ public static class PororocaRequestTranslatorTests
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{FilePassword}}"), Times.Once);
 
         var clientCertParamsKv = reqMsg?.Options.FirstOrDefault(o => o.Key == ClientCertificateOptionsKey);
-        var clientCertParamsObj = clientCertParamsKv != null ? clientCertParamsKv.Value.Value : (object?)null;
+        object? clientCertParamsObj = clientCertParamsKv != null ? clientCertParamsKv.Value.Value : (object?)null;
 
         Assert.NotNull(clientCertParamsObj);
         Assert.True(clientCertParamsObj is PororocaRequestAuthClientCertificate);
-        PororocaRequestAuthClientCertificate clientCertParams = (PororocaRequestAuthClientCertificate)clientCertParamsObj!;
+        var clientCertParams = (PororocaRequestAuthClientCertificate)clientCertParamsObj!;
         Assert.Equal(PororocaRequestAuthClientCertificateType.Pem, clientCertParams.Type);
         Assert.Equal("./cert.pem", clientCertParams.CertificateFilePath);
         Assert.Null(clientCertParams.PrivateKeyFilePath);
@@ -1020,7 +1021,7 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static void Should_resolve_form_url_encoded_key_values_correctly()
-    {  
+    {
         // GIVEN
         var mockedVariableResolver = MockVariableResolver(new Dictionary<string, string>()
         {
@@ -1028,11 +1029,11 @@ public static class PororocaRequestTranslatorTests
             { "{{keyXvalue}}", "value3" }
         });
 
-        PororocaKeyValueParam[] formUrlEncodedParams = new PororocaKeyValueParam[]
+        var formUrlEncodedParams = new PororocaKeyValueParam[]
         {
             new(true, "key1", "abc"),
-            new(true, "key1", "def"), 
-            new(false, "key2", "ghi"), 
+            new(true, "key1", "def"),
+            new(false, "key2", "ghi"),
             new(true, "{{keyX}}", "{{keyXvalue}}")
         };
 
@@ -1064,7 +1065,7 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static void Should_resolve_no_content_correctly()
-    {  
+    {
         // GIVEN
         var mockedVariableResolver = MockVariableResolver("{{myID}}", "3162");
         Dictionary<string, string> resolvedContentHeaders = new(0);
@@ -1080,7 +1081,7 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static async Task Should_resolve_raw_content_correctly()
-    {  
+    {
         // GIVEN
         var mockedVariableResolver = MockVariableResolver("{\"id\":{{myID}}}", "{\"id\":3162}");
         Dictionary<string, string> resolvedContentHeaders = new(1)
@@ -1112,7 +1113,7 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static async Task Should_resolve_file_content_correctly()
-    {  
+    {
         // GIVEN
         string testFilePath = GetTestFilePath("testfilecontent1.json");
         var mockedVariableResolver = MockVariableResolver("{{MyFilePath}}", testFilePath);
@@ -1144,7 +1145,7 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static async Task Should_resolve_graphql_content_correctly()
-    {  
+    {
         // GIVEN
         const string qry = "myGraphQlQuery";
         const string variables = "{\"id\":{{CocoId}}}";
@@ -1178,7 +1179,7 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static async Task Should_resolve_form_url_encoded_content_correctly()
-    {  
+    {
         // GIVEN
         var mockedVariableResolver = MockVariableResolver(new Dictionary<string, string>()
         {
@@ -1190,11 +1191,11 @@ public static class PororocaRequestTranslatorTests
             { "Content-Language", "pt-BR" }
         };
 
-        PororocaKeyValueParam[] formUrlEncodedParams = new PororocaKeyValueParam[]
+        var formUrlEncodedParams = new PororocaKeyValueParam[]
         {
             new(true, "key1", "abc"),
-            new(true, "key1", "def"), 
-            new(false, "key2", "ghi"), 
+            new(true, "key1", "def"),
+            new(false, "key2", "ghi"),
             new(true, "{{keyX}}", "{{keyXvalue}}")
         };
 
@@ -1229,7 +1230,7 @@ public static class PororocaRequestTranslatorTests
 
     [Fact]
     public static async Task Should_resolve_form_data_content_correctly()
-    {  
+    {
         // GIVEN
         var mockedVariableResolver = MockVariableResolver(new Dictionary<string, string>()
         {
@@ -1253,7 +1254,7 @@ public static class PororocaRequestTranslatorTests
         PororocaRequestFormDataParam p5 = new(true, "key4");
         p5.SetFileValue(testFilePath, "application/json");
 
-        PororocaRequestFormDataParam[] formDataParams = new [] { p1, p2, p3, p4, p5 };
+        var formDataParams = new[] { p1, p2, p3, p4, p5 };
 
         PororocaRequest req = new();
         PororocaRequestBody body = new();
@@ -1280,10 +1281,10 @@ public static class PororocaRequestTranslatorTests
         Assert.Contains("pt-BR", resolvedReqContent!.Headers.ContentLanguage);
 
         Assert.True(resolvedReqContent is MultipartFormDataContent);
-        MultipartFormDataContent castedContent = (MultipartFormDataContent)resolvedReqContent;
+        var castedContent = (MultipartFormDataContent)resolvedReqContent;
         Assert.Equal(4, castedContent.Count());
 
-        StringContent p1Content = (StringContent) castedContent.ElementAt(0);
+        var p1Content = (StringContent)castedContent.ElementAt(0);
         string? p1ContentText = await p1Content.ReadAsStringAsync();
         Assert.Equal("oi", p1ContentText);
         Assert.NotNull(p1Content.Headers.ContentDisposition);
@@ -1293,7 +1294,7 @@ public static class PororocaRequestTranslatorTests
         Assert.Equal("text/plain", p1Content.Headers.ContentType!.MediaType);
         Assert.Equal("utf-8", p1Content.Headers.ContentType!.CharSet);
 
-        StringContent p2Content = (StringContent) castedContent.ElementAt(1);
+        var p2Content = (StringContent)castedContent.ElementAt(1);
         string? p2ContentText = await p2Content.ReadAsStringAsync();
         Assert.Equal("oi2", p2ContentText);
         Assert.NotNull(p2Content.Headers.ContentDisposition);
@@ -1303,7 +1304,7 @@ public static class PororocaRequestTranslatorTests
         Assert.Equal("text/plain", p2Content.Headers.ContentType!.MediaType);
         Assert.Equal("utf-8", p2Content.Headers.ContentType!.CharSet);
 
-        StringContent p3Content = (StringContent) castedContent.ElementAt(2);
+        var p3Content = (StringContent)castedContent.ElementAt(2);
         string? p3ContentText = await p3Content.ReadAsStringAsync();
         Assert.Equal("value3", p3ContentText);
         Assert.NotNull(p3Content.Headers.ContentDisposition);
@@ -1313,7 +1314,7 @@ public static class PororocaRequestTranslatorTests
         Assert.Equal("application/json", p3Content.Headers.ContentType!.MediaType);
         Assert.Equal("utf-8", p3Content.Headers.ContentType!.CharSet);
 
-        StreamContent p4Content = (StreamContent) castedContent.ElementAt(3);
+        var p4Content = (StreamContent)castedContent.ElementAt(3);
         string? p4ContentText = await p4Content.ReadAsStringAsync();
         Assert.Equal("{\"id\":2}", p4ContentText);
         Assert.NotNull(p4Content.Headers.ContentDisposition);
@@ -1327,7 +1328,7 @@ public static class PororocaRequestTranslatorTests
 
     private static string GetTestFilePath(string fileName)
     {
-        DirectoryInfo testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
+        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
         return Path.Combine(testDataDirInfo.FullName, "TestData", fileName);
     }
 }

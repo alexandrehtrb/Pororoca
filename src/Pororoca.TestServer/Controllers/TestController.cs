@@ -12,10 +12,7 @@ public class TestController : ControllerBase
 {
     private readonly ILogger<TestController> _logger;
 
-    public TestController(ILogger<TestController> logger)
-    {
-        _logger = logger;
-    }
+    public TestController(ILogger<TestController> logger) => this._logger = logger;
 
     #region GET
 
@@ -96,7 +93,7 @@ public class TestController : ControllerBase
 
         string boundary = MultipartRequestHelper.GetBoundary(MediaTypeHeaderValue.Parse(Request.ContentType), 10000);
         var reader = new MultipartReader(boundary, HttpContext.Request.Body);
-        MultipartSection? section = await reader.ReadNextSectionAsync();
+        var section = await reader.ReadNextSectionAsync();
 
         while (section != null)
         {

@@ -1,6 +1,6 @@
-using Xunit;
 using System.Text;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Xunit;
 using static Pororoca.Domain.Features.ImportCollection.PororocaCollectionImporter;
 
 namespace Pororoca.Domain.Tests.Features.ImportCollection;
@@ -15,7 +15,7 @@ public static class PororocaCollectionImporterTests
         string json = GetTestFileJson("EmptyCollection.pororoca_collection.json");
 
         // WHEN AND THEN
-        Assert.True(TryImportPororocaCollection(json, out PororocaCollection? col));
+        Assert.True(TryImportPororocaCollection(json, out var col));
 
         // THEN
         Assert.NotNull(col);
@@ -36,7 +36,7 @@ public static class PororocaCollectionImporterTests
 
     private static string GetTestFileJson(string fileName)
     {
-        DirectoryInfo testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
+        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
         string jsonFileInfoPath = Path.Combine(testDataDirInfo.FullName, "TestData", fileName);
         return File.ReadAllText(jsonFileInfoPath, Encoding.UTF8);
     }

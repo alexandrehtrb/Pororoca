@@ -13,6 +13,6 @@ public interface IPororocaVariableResolver
     // The variable resolution depends on collection and environment variables.
     // Environment variables have precedence over collection variables.
     // If the variable key is not declared or the variable is not enabled, then the raw key should be used as is.
-        
+
     string ReplaceTemplates(string? strToReplaceTemplatedVariables);
 }

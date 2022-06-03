@@ -19,12 +19,12 @@ public sealed class PororocaRequestAuth : ICloneable
     [JsonInclude]
     public PororocaRequestAuthClientCertificate? ClientCertificate { get; private set; }
 
-    #nullable disable warnings
+#nullable disable warnings
     public PororocaRequestAuth() : this(PororocaRequestAuthMode.Basic)
     {
         // Parameterless constructor for JSON deserialization
     }
-    #nullable restore warnings
+#nullable restore warnings
 
     public PororocaRequestAuth(PororocaRequestAuthMode authMode)
     {
@@ -62,6 +62,6 @@ public sealed class PororocaRequestAuth : ICloneable
             BasicAuthLogin = BasicAuthLogin,
             BasicAuthPassword = BasicAuthPassword,
             BearerToken = BearerToken,
-            ClientCertificate = (PororocaRequestAuthClientCertificate?) ClientCertificate?.Clone()
+            ClientCertificate = (PororocaRequestAuthClientCertificate?)ClientCertificate?.Clone()
         };
 }

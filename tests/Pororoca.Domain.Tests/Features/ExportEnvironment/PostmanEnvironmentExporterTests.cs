@@ -1,10 +1,10 @@
-using Xunit;
 using System;
-using Pororoca.Domain.Features.Entities.Postman;
-using Pororoca.Domain.Features.Entities.Pororoca;
-using Pororoca.Domain.Features.Common;
-using static Pororoca.Domain.Features.ExportEnvironment.PostmanEnvironmentExporter;
 using System.Reflection;
+using Pororoca.Domain.Features.Common;
+using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Entities.Postman;
+using Xunit;
+using static Pororoca.Domain.Features.ExportEnvironment.PostmanEnvironmentExporter;
 
 namespace Pororoca.Domain.Tests.Features.ExportEnvironment;
 
@@ -15,17 +15,17 @@ public static class PostmanEnvironmentExporterTests
 
     [Fact]
     public static void Should_convert_pororoca_environment_without_secrets_correctly()
-    {  
-        PororocaEnvironment pororocaEnvironment = CreateTestPororocaEnvironment();
-        PostmanEnvironment env = ConvertToPostmanEnvironment(pororocaEnvironment, true);
+    {
+        var pororocaEnvironment = CreateTestPororocaEnvironment();
+        var env = ConvertToPostmanEnvironment(pororocaEnvironment, true);
         AssertConvertedEnvironment(env, true);
     }
 
     [Fact]
     public static void Should_convert_pororoca_environment_with_secrets_correctly()
-    {  
-        PororocaEnvironment pororocaEnvironment = CreateTestPororocaEnvironment();
-        PostmanEnvironment env = ConvertToPostmanEnvironment(pororocaEnvironment, false);
+    {
+        var pororocaEnvironment = CreateTestPororocaEnvironment();
+        var env = ConvertToPostmanEnvironment(pororocaEnvironment, false);
         AssertConvertedEnvironment(env, false);
     }
 
@@ -39,12 +39,12 @@ public static class PostmanEnvironmentExporterTests
         Assert.Equal("Postman/9.15.2", env.ExportedUsing);
         Assert.Equal(2, env.Values.Length);
 
-        PostmanEnvironmentVariable var1 = env.Values[0];
+        var var1 = env.Values[0];
         Assert.True(var1.Enabled);
         Assert.Equal("Key1", var1.Key);
         Assert.Equal("Value1", var1.Value);
 
-        PostmanEnvironmentVariable var2 = env.Values[1];
+        var var2 = env.Values[1];
         Assert.False(var2.Enabled);
         Assert.Equal("Key2", var2.Key);
         if (hideSecrets)

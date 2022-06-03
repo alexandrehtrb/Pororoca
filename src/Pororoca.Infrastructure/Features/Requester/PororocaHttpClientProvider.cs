@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.TranslateRequest;
@@ -18,14 +18,14 @@ internal static class PororocaHttpClientProvider
         var resolvedClientCert = GetResolvedClientCertificate(reqMsg);
         PororocaHttpClientHolder holder = new(disableSslVerification, resolvedClientCert);
         var cachedHolder = cachedHolders.FirstOrDefault(h => h.Equals(holder));
-        
+
         if (cachedHolder != null)
         {
             return cachedHolder.Client!;
         }
         else
         {
-            HttpClient newClient = MakeHttpClient(disableSslVerification, resolvedClientCert);
+            var newClient = MakeHttpClient(disableSslVerification, resolvedClientCert);
             holder.KeepClient(newClient);
             holder.SetName($"client{cachedHolders.Count + 1}");
             cachedHolders.Add(holder);
@@ -82,7 +82,7 @@ internal static class PororocaHttpClientProvider
     {
         if (resolvedCert != null)
         {
-            X509Certificate2 cert = PororocaClientCertificatesProvider.Provide(resolvedCert);
+            var cert = PororocaClientCertificatesProvider.Provide(resolvedCert);
             httpHandler.SslOptions.ClientCertificates ??= new();
             httpHandler.SslOptions.ClientCertificates.Add(cert);
             //httpHandler.SslOptions.LocalCertificateSelectionCallback =

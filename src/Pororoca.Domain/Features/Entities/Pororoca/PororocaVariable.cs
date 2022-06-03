@@ -3,19 +3,19 @@ namespace Pororoca.Domain.Features.Entities.Pororoca;
 public sealed class PororocaVariable : ICloneable
 {
     public bool Enabled { get; set; }
-    
+
     public string Key { get; set; }
 
     public string? Value { get; set; }
 
     public bool IsSecret { get; set; }
 
-    #nullable disable warnings
+#nullable disable warnings
     public PororocaVariable() : this(true, string.Empty, null, false)
     {
         // Parameterless constructor for JSON deserialization
     }
-    #nullable restore warnings
+#nullable restore warnings
 
     public PororocaVariable(bool enabled, string key, string? value, bool isSecret)
     {

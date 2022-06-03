@@ -19,11 +19,11 @@ static void SetupSerilogLogger(IConfiguration configuration) =>
 
 try
 {
-    IConfigurationRoot configuration = BuildConfiguration();
+    var configuration = BuildConfiguration();
     SetupSerilogLogger(configuration);
     Log.Information("Starting web host");
 
-    WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+    var builder = WebApplication.CreateBuilder(args);
     builder.Host.UseSerilog();
     builder.WebHost.ConfigureKestrel((context, options) =>
     {
@@ -46,7 +46,7 @@ try
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
-    WebApplication app = builder.Build();
+    var app = builder.Build();
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())

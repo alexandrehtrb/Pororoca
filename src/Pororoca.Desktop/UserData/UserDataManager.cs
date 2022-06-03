@@ -1,11 +1,11 @@
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.ExportCollection;
-using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
 using Pororoca.Domain.Features.ImportCollection;
-using System.Text.Json.Serialization;
-using System.Text.Encodings.Web;
+using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
 
 namespace Pororoca.Desktop.UserData;
 
@@ -37,7 +37,7 @@ public sealed class UserDataManager
         {
             try
             {
-                FileStream fs = File.Open(userPreferencesFilePath, FileMode.Open, FileAccess.Read);
+                var fs = File.Open(userPreferencesFilePath, FileMode.Open, FileAccess.Read);
                 return JsonSerializer.Deserialize<UserPreferences>(fs, options: UserPreferencesJsonOptions);
             }
             catch
@@ -65,7 +65,7 @@ public sealed class UserDataManager
                     try
                     {
                         string json = File.ReadAllText(f.FullName, Encoding.UTF8);
-                        if (PororocaCollectionImporter.TryImportPororocaCollection(json, out PororocaCollection? col))
+                        if (PororocaCollectionImporter.TryImportPororocaCollection(json, out var col))
                         {
                             return col;
                         }
@@ -106,7 +106,7 @@ public sealed class UserDataManager
     private static Task SaveUserCollections(IEnumerable<PororocaCollection> collections)
     {
         List<Task> savingTasks = new();
-        foreach (PororocaCollection col in collections)
+        foreach (var col in collections)
         {
             string path = GetUserDataFilePath($"{col.Id}.{PororocaCollectionExtension}");
             string json = PororocaCollectionExporter.ExportAsPororocaCollection(col, false);
@@ -129,7 +129,7 @@ public sealed class UserDataManager
     {
         string folderPath = GetUserDataFilePath(string.Empty);
         DirectoryInfo di = new(folderPath);
-        foreach (FileInfo fi in di.GetFiles())
+        foreach (var fi in di.GetFiles())
         {
             fi.Delete();
         }
@@ -147,9 +147,9 @@ public sealed class UserDataManager
         // Then, user data directory will be:    C:\Users\you\Desktop\Pororoca\PororocaUserData\
 
         DirectoryInfo currentDir = new(Path.GetDirectoryName(Environment.ProcessPath)!);
-        DirectoryInfo rootDir = OperatingSystem.IsMacOS() ?
-                                currentDir.Parent!.Parent!.Parent! :
-                                currentDir;
+        var rootDir = OperatingSystem.IsMacOS() ?
+                      currentDir.Parent!.Parent!.Parent! :
+                      currentDir;
         string rootPath = rootDir.FullName;
         return Path.Combine(rootPath, UserDataFolderName, fileName);
     }

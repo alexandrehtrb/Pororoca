@@ -1,7 +1,7 @@
+using System;
+using Pororoca.Domain.Features.Entities.Pororoca;
 using Xunit;
 using static Pororoca.Domain.Features.ExportCollection.PororocaCollectionExporter;
-using Pororoca.Domain.Features.Entities.Pororoca;
-using System;
 
 namespace Pororoca.Domain.Tests.Features.ExportCollection;
 
@@ -12,12 +12,12 @@ public static class PororocaCollectionExporterTests
 
     [Fact]
     public static void Should_hide_pororoca_collection_and_environment_secrets()
-    {  
+    {
         // GIVEN
-        PororocaCollection col = CreateTestCollection();
+        var col = CreateTestCollection();
 
         // WHEN
-        PororocaCollection colWithHiddenSecrets = GenerateCollectionToExport(col, true);
+        var colWithHiddenSecrets = GenerateCollectionToExport(col, true);
 
         // THEN
         AssertCollection(colWithHiddenSecrets, true);
@@ -25,12 +25,12 @@ public static class PororocaCollectionExporterTests
 
     [Fact]
     public static void Should_not_hide_pororoca_collection_and_environment_secrets()
-    {  
+    {
         // GIVEN
-        PororocaCollection col = CreateTestCollection();
+        var col = CreateTestCollection();
 
         // WHEN
-        PororocaCollection colWithHiddenSecrets = GenerateCollectionToExport(col, false);
+        var colWithHiddenSecrets = GenerateCollectionToExport(col, false);
 
         // THEN
         AssertCollection(colWithHiddenSecrets, false);
@@ -73,30 +73,30 @@ public static class PororocaCollectionExporterTests
         Assert.Equal(1, col.Environments.Count);
         Assert.Equal(2, col.Variables.Count);
 
-        PororocaRequest req1 = col.Requests[0];
+        var req1 = col.Requests[0];
         Assert.Equal("Req1", req1.Name);
         Assert.Equal("GET", req1.HttpMethod);
         Assert.Equal("http://www.abc.com.br", req1.Url);
 
-        PororocaCollectionFolder folder1 = col.Folders[0];
+        var folder1 = col.Folders[0];
         Assert.Equal("Folder1", folder1.Name);
         Assert.Empty(folder1.Folders);
         Assert.Single(folder1.Requests);
 
-        PororocaRequest req2 = folder1.Requests[0];
+        var req2 = folder1.Requests[0];
         Assert.Equal("Req2", req2.Name);
         Assert.Equal("GET", req2.HttpMethod);
         Assert.Equal("https://www.ghi.com.br", req2.Url);
 
         Assert.Equal(2, col.Variables.Count);
 
-        PororocaVariable var1 = col.Variables[0];
+        var var1 = col.Variables[0];
         Assert.True(var1.Enabled);
         Assert.Equal("Key1", var1.Key);
         Assert.Equal("Value1", var1.Value);
         Assert.False(var1.IsSecret);
 
-        PororocaVariable var2 = col.Variables[1];
+        var var2 = col.Variables[1];
         Assert.False(var2.Enabled);
         Assert.Equal("Key2", var2.Key);
         Assert.True(var2.IsSecret);
@@ -109,10 +109,10 @@ public static class PororocaCollectionExporterTests
             Assert.Equal("Value2", var2.Value);
         }
 
-        PororocaEnvironment env1 = col.Environments[0];
+        var env1 = col.Environments[0];
         Assert.True(env1.IsCurrent); // Should preserve environment.IsCurrent when exporting it inside of a collection
 
-        PororocaVariable var3 = env1.Variables[0];
+        var var3 = env1.Variables[0];
         Assert.True(var3.Enabled);
         Assert.Equal("Key3", var3.Key);
         Assert.True(var3.IsSecret);
@@ -125,7 +125,7 @@ public static class PororocaCollectionExporterTests
             Assert.Equal("Value3", var3.Value);
         }
 
-        PororocaVariable var4 = env1.Variables[1];
+        var var4 = env1.Variables[1];
         Assert.True(var4.Enabled);
         Assert.Equal("Key4", var4.Key);
         Assert.Equal("Value4", var4.Value);

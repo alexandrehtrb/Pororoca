@@ -1,4 +1,4 @@
-﻿#nullable disable warnings
+#nullable disable warnings
 
 using System.Collections.Immutable;
 

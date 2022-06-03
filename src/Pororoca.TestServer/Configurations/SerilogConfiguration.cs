@@ -1,8 +1,7 @@
-namespace Pororoca.TestServer.Configurations
+namespace Pororoca.TestServer.Configurations;
+
+public static class SerilogConfiguration
 {
-    public static class SerilogConfiguration
-    {
-        public static IServiceCollection AddSerilogLogger(this IServiceCollection services) =>
-            services.AddSingleton(Serilog.Log.Logger);
-    }
+    public static IServiceCollection AddSerilogLogger(this IServiceCollection services) =>
+        services.AddSingleton(Serilog.Log.Logger);
 }

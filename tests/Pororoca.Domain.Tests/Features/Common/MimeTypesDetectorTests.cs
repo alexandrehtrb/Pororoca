@@ -1,5 +1,5 @@
-using Xunit;
 using Pororoca.Domain.Features.Common;
+using Xunit;
 
 namespace Pororoca.Domain.Tests.Features.Common;
 

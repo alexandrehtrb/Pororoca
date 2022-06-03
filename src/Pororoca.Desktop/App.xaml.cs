@@ -4,26 +4,23 @@ using Avalonia.Markup.Xaml;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.Views;
 
-namespace Pororoca.Desktop
+namespace Pororoca.Desktop;
+
+public class App : Application
 {
-    public class App : Application
+    public override void Initialize() =>
+        AvaloniaXamlLoader.Load(this);
+
+    public override void OnFrameworkInitializationCompleted()
     {
-        public override void Initialize()
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            AvaloniaXamlLoader.Load(this);
-        }
-
-        public override void OnFrameworkInitializationCompleted()
-        {
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            desktop.MainWindow = new MainWindow
             {
-                desktop.MainWindow = new MainWindow
-                {
-                    DataContext = new MainWindowViewModel(),
-                };
-            }
-
-            base.OnFrameworkInitializationCompleted();
+                DataContext = new MainWindowViewModel(),
+            };
         }
+
+        base.OnFrameworkInitializationCompleted();
     }
 }

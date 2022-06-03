@@ -1,10 +1,10 @@
-using Xunit;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Text;
+using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.VariableResolution;
-using System.Net;
-using System.Text;
-using System.Net.Http.Headers;
-using Pororoca.Domain.Features.Common;
+using Xunit;
 
 namespace Pororoca.Domain.Tests.Features.Entities.Pororoca;
 
@@ -19,7 +19,7 @@ public static class PororocaCollectionTests
     public static void If_str_to_replace_templates_null_or_whitespace_then_return_empty_str(string? strToReplaceTemplates)
     {
         // GIVEN
-        PororocaCollection col = CreateTestCollection();
+        var col = CreateTestCollection();
 
         // WHEN
         string resolvedStr = col.ReplaceTemplates(strToReplaceTemplates);
@@ -41,7 +41,7 @@ public static class PororocaCollectionTests
     public static void Should_use_collection_vars_to_resolve_template_if_no_env(string expectedResult, string? strToReplaceTemplates)
     {
         // GIVEN
-        PororocaCollection col = CreateTestCollection();
+        var col = CreateTestCollection();
         col.UpdateEnvironments(Array.Empty<PororocaEnvironment>());
 
         // WHEN
@@ -57,8 +57,8 @@ public static class PororocaCollectionTests
     public static void Should_use_collection_vars_to_resolve_template_if_no_selected_env(string expectedResult, string? strToReplaceTemplates)
     {
         // GIVEN
-        PororocaCollection col = CreateTestCollection();
-        foreach (PororocaEnvironment env in col.Environments)
+        var col = CreateTestCollection();
+        foreach (var env in col.Environments)
         {
             env.IsCurrent = false;
         }
@@ -78,7 +78,7 @@ public static class PororocaCollectionTests
     public static void Should_use_selected_env_vars_with_collection_vars_to_resolve_template(string expectedResult, string? strToReplaceTemplates)
     {
         // GIVEN
-        PororocaCollection col = CreateTestCollection();
+        var col = CreateTestCollection();
         col.Environments.First(e => e.Name == "MyEnvironment1").IsCurrent = true;
         col.Environments.First(e => e.Name == "MyEnvironment2").IsCurrent = false;
 
@@ -99,20 +99,20 @@ public static class PororocaCollectionTests
         PororocaVariable v0 = new(true, "k0", "v0", false);
         PororocaVariable v1 = new(true, "k1", "v1", false);
         PororocaVariable v2 = new(false, "k2", "v2", false);
-        PororocaVariable[] colVars = new PororocaVariable[] { v0, v1, v2 };
+        var colVars = new PororocaVariable[] { v0, v1, v2 };
 
         PororocaVariable v1env1 = new(true, "k1", "v1env1", false);
         PororocaVariable v3env1 = new(true, "k3", "v3env1", false);
         PororocaVariable v4env1 = new(false, "k4", "v4env1", false);
-        PororocaVariable[] env1Vars = new PororocaVariable[] { v1env1, v3env1, v4env1 };
+        var env1Vars = new PororocaVariable[] { v1env1, v3env1, v4env1 };
 
         PororocaVariable v1env2 = new(true, "k1", "v1env2", false);
         PororocaVariable v3env2 = new(true, "k3", "v3env2", false);
         PororocaVariable v4env2 = new(false, "k4", "v4env2", false);
-        PororocaVariable[] env2Vars = new PororocaVariable[] { v1env2, v3env2, v4env2 };
+        var env2Vars = new PororocaVariable[] { v1env2, v3env2, v4env2 };
 
         col.UpdateVariables(colVars);
-        
+
         PororocaEnvironment env1 = new("MyEnvironment1");
         env1.IsCurrent = false;
         env1.UpdateVariables(env1Vars);

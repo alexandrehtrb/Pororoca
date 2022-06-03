@@ -1,5 +1,5 @@
-using Xunit;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Xunit;
 using static Pororoca.Domain.Features.ExportEnvironment.PororocaEnvironmentExporter;
 
 namespace Pororoca.Domain.Tests.Features.ExportEnvironment;
@@ -19,10 +19,10 @@ public static class PororocaEnvironmentExporterTests
     public static void Should_hide_pororoca_environment_secrets_correctly(bool shouldHideSecrets, bool preserveIsCurrentEnvironment)
     {
         // GIVEN
-        PororocaEnvironment pororocaEnvironment = CreateTestPororocaEnvironment();
+        var pororocaEnvironment = CreateTestPororocaEnvironment();
 
         // WHEN
-        PororocaEnvironment env = GenerateEnvironmentToExport(pororocaEnvironment, shouldHideSecrets, preserveIsCurrentEnvironment);
+        var env = GenerateEnvironmentToExport(pororocaEnvironment, shouldHideSecrets, preserveIsCurrentEnvironment);
 
         // THEN
         AssertEnvironment(env, shouldHideSecrets, preserveIsCurrentEnvironment);
@@ -48,13 +48,13 @@ public static class PororocaEnvironmentExporterTests
         Assert.NotNull(env.Variables);
         Assert.Equal(2, env.Variables.Count);
 
-        PororocaVariable var1 = env.Variables[0];
+        var var1 = env.Variables[0];
         Assert.True(var1.Enabled);
         Assert.Equal("Key1", var1.Key);
         Assert.Equal("Value1", var1.Value);
         Assert.False(var1.IsSecret);
 
-        PororocaVariable var2 = env.Variables[1];
+        var var2 = env.Variables[1];
         Assert.False(var2.Enabled);
         Assert.Equal("Key2", var2.Key);
         Assert.True(var2.IsSecret);

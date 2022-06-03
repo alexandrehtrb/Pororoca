@@ -134,7 +134,7 @@ public sealed class PororocaCollection : IPororocaVariableResolver, ICloneable
             IEnumerable<PororocaVariable>? currentEnvironmentVariables = Environments.FirstOrDefault(e => e.IsCurrent)?.Variables;
             IEnumerable<PororocaVariable> effectiveVariables = PororocaVariablesMerger.MergeVariables(Variables, currentEnvironmentVariables);
             string resolvedStr = strToReplaceTemplatedVariables!;
-            foreach (PororocaVariable v in effectiveVariables)
+            foreach (var v in effectiveVariables)
             {
                 string variableTemplate = VariableTemplateBeginToken + v.Key + VariableTemplateEndToken;
                 resolvedStr = resolvedStr.Replace(variableTemplate, v.Value ?? variableTemplate);
