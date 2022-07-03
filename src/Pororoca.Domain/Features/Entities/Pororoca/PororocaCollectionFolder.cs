@@ -16,17 +16,17 @@ public sealed class PororocaCollectionFolder : PororocaCollectionItem, ICloneabl
     [JsonInclude]
     public IReadOnlyList<PororocaRequest> Requests { get; private set; }
 
-    #nullable disable warnings
+#nullable disable warnings
     public PororocaCollectionFolder() : this(string.Empty)
     {
         // Parameterless constructor for JSON deserialization
     }
-    #nullable restore warnings
+#nullable restore warnings
 
     public PororocaCollectionFolder(string name) : this(Guid.NewGuid(), name)
     {
     }
-    
+
     public PororocaCollectionFolder(Guid id, string name)
     {
         Id = id;

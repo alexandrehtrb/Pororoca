@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca;
 
@@ -6,10 +6,10 @@ public sealed class PororocaRequestAuthClientCertificate : ICloneable
 {
     [JsonInclude]
     public PororocaRequestAuthClientCertificateType Type { get; private set; }
-    
+
     [JsonInclude]
     public string CertificateFilePath { get; private set; }
-    
+
     [JsonInclude]
     public string? PrivateKeyFilePath { get; private set; }
 
@@ -34,9 +34,9 @@ public sealed class PororocaRequestAuthClientCertificate : ICloneable
     public object Clone() =>
         new PororocaRequestAuthClientCertificate()
         {
-            Type = this.Type,
-            CertificateFilePath = this.CertificateFilePath,
-            PrivateKeyFilePath = this.PrivateKeyFilePath,
-            FilePassword = this.FilePassword
+            Type = Type,
+            CertificateFilePath = CertificateFilePath,
+            PrivateKeyFilePath = PrivateKeyFilePath,
+            FilePassword = FilePassword
         };
 }

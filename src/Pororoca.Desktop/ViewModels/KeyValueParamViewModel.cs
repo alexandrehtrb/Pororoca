@@ -1,52 +1,42 @@
-﻿using ReactiveUI;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using ReactiveUI;
 
-namespace Pororoca.Desktop.ViewModels
+namespace Pororoca.Desktop.ViewModels;
+
+public class KeyValueParamViewModel : ViewModelBase
 {
-    public class KeyValueParamViewModel : ViewModelBase
+    private bool enabledField;
+    public bool Enabled
     {
-        private bool _enabled;
-        public bool Enabled
-        {
-            get => _enabled;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _enabled, value);
-            }
-        }
-
-        private string _key;
-        public string Key
-        {
-            get => _key;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _key, value);
-            }
-        }
-
-        private string _value;
-        public string Value
-        {
-            get => _value;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _value, value);
-            }
-        }
-
-        public KeyValueParamViewModel(PororocaKeyValueParam p) : this(p.Enabled, p.Key, p.Value ?? string.Empty)
-        {
-        }
-
-        public KeyValueParamViewModel(bool enabled, string key, string value)
-        {
-            _enabled = enabled;
-            _key = key;
-            _value = value;
-        }
-
-        public PororocaKeyValueParam ToKeyValueParam() =>
-            new(_enabled, _key, _value);
+        get => this.enabledField;
+        set => this.RaiseAndSetIfChanged(ref this.enabledField, value);
     }
+
+    private string keyField;
+    public string Key
+    {
+        get => this.keyField;
+        set => this.RaiseAndSetIfChanged(ref this.keyField, value);
+    }
+
+    private string valueField;
+    public string Value
+    {
+        get => this.valueField;
+        set => this.RaiseAndSetIfChanged(ref this.valueField, value);
+    }
+
+    public KeyValueParamViewModel(PororocaKeyValueParam p) : this(p.Enabled, p.Key, p.Value ?? string.Empty)
+    {
+    }
+
+    public KeyValueParamViewModel(bool enabled, string key, string value)
+    {
+        this.enabledField = enabled;
+        this.keyField = key;
+        this.valueField = value;
+    }
+
+    public PororocaKeyValueParam ToKeyValueParam() =>
+        new(this.enabledField, this.keyField, this.valueField);
 }

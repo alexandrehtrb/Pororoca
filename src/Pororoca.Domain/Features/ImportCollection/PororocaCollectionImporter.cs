@@ -11,7 +11,7 @@ public static class PororocaCollectionImporter
         try
         {
             pororocaCollection = JsonSerializer.Deserialize<PororocaCollection>(pororocaCollectionFileContent, options: ExporterImporterJsonOptions);
-            
+
             // Always generating new id, in case user imports the same collection twice
             // This is to avoid overwriting when saving user collections
             if (pororocaCollection != null)

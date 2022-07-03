@@ -151,6 +151,7 @@
   "Response/BodyContentTypeWatermark": "(response content-type here)",
   "Response/BodyContentWatermark": "(response body here)",
   "Response/BodySaveToFile": "Save as…",
+  "Response/DisableTlsVerification": "Disable TLS verification",
   "Response/ElapsedTimeMillisecondsFormat": "{0}ms",
   "Response/ElapsedTimeMinutesFormat": "{0}min {1}s",
   "Response/ElapsedTimeSecondsFormat": "{0:0.00}s",

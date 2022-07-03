@@ -1,6 +1,6 @@
 using System.Text.Json;
-using Pororoca.Domain.Features.Entities.Postman;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Entities.Postman;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
 
 namespace Pororoca.Domain.Features.ImportEnvironment;
@@ -11,7 +11,7 @@ public static class PostmanEnvironmentImporter
     {
         try
         {
-            PostmanEnvironment? postmanEnvironment = JsonSerializer.Deserialize<PostmanEnvironment>(postmanEnvironmentFileContent, options: ExporterImporterJsonOptions);
+            var postmanEnvironment = JsonSerializer.Deserialize<PostmanEnvironment>(postmanEnvironmentFileContent, options: ExporterImporterJsonOptions);
             if (postmanEnvironment == null
              || postmanEnvironment.Name == null)
             {
@@ -36,7 +36,7 @@ public static class PostmanEnvironmentImporter
             PororocaEnvironment myEnv = new(Guid.NewGuid(), postmanEnvironment.Name, DateTimeOffset.Now);
             if (postmanEnvironment.Values != null)
             {
-                foreach (PostmanEnvironmentVariable envVar in postmanEnvironment.Values)
+                foreach (var envVar in postmanEnvironment.Values)
                 {
                     myEnv.AddVariable(ConvertPostmanEnvironmentVariable(envVar));
                 }

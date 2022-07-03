@@ -24,7 +24,7 @@ public sealed class PororocaRequestBody : ICloneable
 
     [JsonInclude]
     public PororocaRequestBodyGraphQl? GraphQlValues { get; private set; }
-    
+
     public PororocaRequestBody()
     {
         Mode = PororocaRequestBodyMode.Raw;

@@ -15,12 +15,12 @@ public static class LanguageExtensions
             Language.EnGb => "en-GB",
             _ => "en-GB"
         };
-    
+
     internal static Language GetLanguageFromLCID(string? lcid) =>
         lcid switch
         {
-             "pt-BR" => Language.PtBr,
-             "en-GB" => Language.EnGb,
+            "pt-BR" => Language.PtBr,
+            "en-GB" => Language.EnGb,
             _ => Language.EnGb
         };
 }

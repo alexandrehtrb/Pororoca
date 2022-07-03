@@ -40,7 +40,7 @@ public sealed class PororocaRequest : PororocaCollectionItem, ICloneable
     public PororocaRequest(string name) : this(Guid.NewGuid(), name)
     {
     }
-    
+
     public PororocaRequest(Guid id, string name)
     {
         Id = id;

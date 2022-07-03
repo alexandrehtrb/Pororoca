@@ -1,6 +1,6 @@
-using Pororoca.Domain.Features.Entities.Postman;
-using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Common;
+using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Entities.Postman;
 using Xunit;
 using static Pororoca.Domain.Features.ImportCollection.PostmanCollectionV21Importer;
 
@@ -15,10 +15,10 @@ public static class PostmanCollectionV21ImporterTests
 
     [Fact]
     public static void Should_not_convert_invalid_postman_collection()
-    {  
+    {
         string json = "{\"id\": \"8b34e2c4-3384-4ebd-996e-24c0e63ee256\"}";
-        
-        Assert.False(TryImportPostmanCollection(json, out PororocaCollection? col));
+
+        Assert.False(TryImportPostmanCollection(json, out var col));
         Assert.Null(col);
     }
 
@@ -34,18 +34,18 @@ public static class PostmanCollectionV21ImporterTests
         PostmanVariable p2 = new() { Disabled = true, Key = "Key2", Value = "Value2" };
 
         // WHEN
-        List<PororocaKeyValueParam> hdrs = ConvertToPororocaHeaders(new[] { p1, p2 });
+        var hdrs = ConvertToPororocaHeaders(new[] { p1, p2 });
 
         // THEN
         Assert.NotNull(hdrs);
         Assert.Equal(2, hdrs.Count);
 
-        PororocaKeyValueParam h1 = hdrs[0];
+        var h1 = hdrs[0];
         Assert.True(h1.Enabled);
         Assert.Equal("Key1", h1.Key);
         Assert.Equal("Value1", h1.Value);
 
-        PororocaKeyValueParam h2 = hdrs[1];
+        var h2 = hdrs[1];
         Assert.False(h2.Enabled);
         Assert.Equal("Key2", h2.Key);
         Assert.Equal("Value2", h2.Value);
@@ -62,7 +62,7 @@ public static class PostmanCollectionV21ImporterTests
         PostmanRequestBody? postmanBody = null;
 
         // WHEN
-        PororocaRequestBody? reqBody = ConvertToPororocaRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaRequestBody(postmanBody);
 
         // THEN
         Assert.Null(reqBody);
@@ -80,7 +80,7 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        PororocaRequestBody? reqBody = ConvertToPororocaRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaRequestBody(postmanBody);
 
         // THEN
         Assert.NotNull(reqBody);
@@ -101,7 +101,7 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        PororocaRequestBody? reqBody = ConvertToPororocaRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaRequestBody(postmanBody);
 
         // THEN
         Assert.NotNull(reqBody);
@@ -122,7 +122,7 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        PororocaRequestBody? reqBody = ConvertToPororocaRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaRequestBody(postmanBody);
 
         // THEN
         Assert.NotNull(reqBody);
@@ -144,7 +144,7 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        PororocaRequestBody? reqBody = ConvertToPororocaRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaRequestBody(postmanBody);
 
         // THEN
         Assert.NotNull(reqBody);
@@ -152,12 +152,12 @@ public static class PostmanCollectionV21ImporterTests
 
         Assert.Equal(2, reqBody.UrlEncodedValues!.Count);
 
-        PororocaKeyValueParam h1 = reqBody.UrlEncodedValues[0];
+        var h1 = reqBody.UrlEncodedValues[0];
         Assert.True(h1.Enabled);
         Assert.Equal("Key1", h1.Key);
         Assert.Equal("Value1", h1.Value);
 
-        PororocaKeyValueParam h2 = reqBody.UrlEncodedValues[1];
+        var h2 = reqBody.UrlEncodedValues[1];
         Assert.False(h2.Enabled);
         Assert.Equal("Key2", h2.Key);
         Assert.Equal("Value2", h2.Value);
@@ -174,7 +174,7 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        PororocaRequestBody? reqBody = ConvertToPororocaRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaRequestBody(postmanBody);
 
         // THEN
         Assert.NotNull(reqBody);
@@ -225,7 +225,7 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        PororocaRequestBody? reqBody = ConvertToPororocaRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaRequestBody(postmanBody);
 
         // THEN
         Assert.NotNull(reqBody);
@@ -233,28 +233,28 @@ public static class PostmanCollectionV21ImporterTests
 
         Assert.Equal(4, reqBody.FormDataValues!.Count);
 
-        PororocaRequestFormDataParam f1t = reqBody.FormDataValues[0];
+        var f1t = reqBody.FormDataValues[0];
         Assert.True(f1t.Enabled);
         Assert.Equal(PororocaRequestFormDataParamType.Text, f1t.Type);
         Assert.Equal("Key1Text", f1t.Key);
         Assert.Equal("Value1Text", f1t.TextValue);
         Assert.Equal("text/plain", f1t.ContentType);
 
-        PororocaRequestFormDataParam f2t = reqBody.FormDataValues[1];
+        var f2t = reqBody.FormDataValues[1];
         Assert.False(f2t.Enabled);
         Assert.Equal(PororocaRequestFormDataParamType.Text, f2t.Type);
         Assert.Equal("Key2Text", f2t.Key);
         Assert.Equal("Value2Text", f2t.TextValue);
         Assert.Equal("application/json; charset=utf-8", f2t.ContentType);
 
-        PororocaRequestFormDataParam f1f = reqBody.FormDataValues[2];
+        var f1f = reqBody.FormDataValues[2];
         Assert.True(f1f.Enabled);
         Assert.Equal(PororocaRequestFormDataParamType.File, f1f.Type);
         Assert.Equal("Key1File", f1f.Key);
         Assert.Equal(@"C:\Pasta1\arq.txt", f1f.FileSrcPath);
         Assert.Equal("text/plain", f1f.ContentType);
 
-        PororocaRequestFormDataParam f2f = reqBody.FormDataValues[3];
+        var f2f = reqBody.FormDataValues[3];
         Assert.False(f2f.Enabled);
         Assert.Equal(PororocaRequestFormDataParamType.File, f2f.Type);
         Assert.Equal("Key2File", f2f.Key);
@@ -275,7 +275,7 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        PororocaRequestBody? reqBody = ConvertToPororocaRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaRequestBody(postmanBody);
 
         // THEN
         Assert.NotNull(reqBody);
@@ -296,7 +296,7 @@ public static class PostmanCollectionV21ImporterTests
         PostmanAuth? postmanAuth = null;
 
         // WHEN
-        PororocaRequestAuth? reqAuth = ConvertToPororocaAuth(postmanAuth);
+        var reqAuth = ConvertToPororocaAuth(postmanAuth);
 
         // THEN
         Assert.Null(reqAuth);
@@ -317,7 +317,7 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        PororocaRequestAuth? reqAuth = ConvertToPororocaAuth(postmanAuth);
+        var reqAuth = ConvertToPororocaAuth(postmanAuth);
 
         // THEN
         Assert.NotNull(reqAuth);
@@ -341,7 +341,7 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        PororocaRequestAuth? reqAuth = ConvertToPororocaAuth(postmanAuth);
+        var reqAuth = ConvertToPororocaAuth(postmanAuth);
 
         // THEN
         Assert.NotNull(reqAuth);
@@ -388,10 +388,10 @@ public static class PostmanCollectionV21ImporterTests
         // GIVEN
         PororocaRequestAuth? collectionScopedAuth = null;
         string reqName = "MyRequest";
-        PostmanRequest postmanRequest = CreateTestRequestWithAuth();
+        var postmanRequest = CreateTestRequestWithAuth();
 
         // WHEN
-        PororocaRequest req = ConvertToPororocaRequest(reqName, postmanRequest, collectionScopedAuth);
+        var req = ConvertToPororocaRequest(reqName, postmanRequest, collectionScopedAuth);
 
         // THEN
         Assert.NotNull(req);
@@ -405,11 +405,11 @@ public static class PostmanCollectionV21ImporterTests
         Assert.Equal("pwd", req.CustomAuth.BasicAuthPassword);
 
         Assert.Equal(2, req.Headers!.Count);
-        PororocaKeyValueParam hdr1 = req.Headers[0];
+        var hdr1 = req.Headers[0];
         Assert.True(hdr1.Enabled);
         Assert.Equal("Key1", hdr1.Key);
         Assert.Equal("Value1", hdr1.Value);
-        PororocaKeyValueParam hdr2 = req.Headers[1];
+        var hdr2 = req.Headers[1];
         Assert.False(hdr2.Enabled);
         Assert.Equal("Key2", hdr2.Key);
         Assert.Equal("Value2", hdr2.Value);
@@ -426,11 +426,11 @@ public static class PostmanCollectionV21ImporterTests
         PororocaRequestAuth collectionScopedAuth = new(PororocaRequestAuthMode.Bearer);
         collectionScopedAuth.SetBearerAuth("tkn");
         string reqName = "MyRequest";
-        PostmanRequest postmanRequest = CreateTestRequestWithAuth();
+        var postmanRequest = CreateTestRequestWithAuth();
         postmanRequest.Auth = null;
 
         // WHEN
-        PororocaRequest req = ConvertToPororocaRequest(reqName, postmanRequest, collectionScopedAuth);
+        var req = ConvertToPororocaRequest(reqName, postmanRequest, collectionScopedAuth);
 
         // THEN
         Assert.NotNull(req);
@@ -443,11 +443,11 @@ public static class PostmanCollectionV21ImporterTests
         Assert.Equal("tkn", req.CustomAuth.BearerToken);
 
         Assert.Equal(2, req.Headers!.Count);
-        PororocaKeyValueParam hdr1 = req.Headers[0];
+        var hdr1 = req.Headers[0];
         Assert.True(hdr1.Enabled);
         Assert.Equal("Key1", hdr1.Key);
         Assert.Equal("Value1", hdr1.Value);
-        PororocaKeyValueParam hdr2 = req.Headers[1];
+        var hdr2 = req.Headers[1];
         Assert.False(hdr2.Enabled);
         Assert.Equal("Key2", hdr2.Key);
         Assert.Equal("Value2", hdr2.Value);
@@ -465,10 +465,10 @@ public static class PostmanCollectionV21ImporterTests
     public static void Should_convert_postman_collection_to_pororoca_collection_correctly()
     {
         // GIVEN
-        PostmanCollectionV21 postmanCollection = CreateTestCollection();
+        var postmanCollection = CreateTestCollection();
 
         // WHEN
-        Assert.True(TryConvertToPororocaCollection(postmanCollection, out PororocaCollection? pororocaCollection));
+        Assert.True(TryConvertToPororocaCollection(postmanCollection, out var pororocaCollection));
 
         // THEN
         AssertConvertedCollection(pororocaCollection);
@@ -536,19 +536,19 @@ public static class PostmanCollectionV21ImporterTests
         Assert.Single(pororocaCollection.Folders);
         Assert.Single(pororocaCollection.Requests);
 
-        PororocaCollectionFolder folder1 = pororocaCollection.Folders[0];
+        var folder1 = pororocaCollection.Folders[0];
         Assert.Equal("Folder1", folder1.Name);
         Assert.Empty(folder1.Folders);
         Assert.Single(folder1.Requests);
 
-        PororocaRequest req1 = folder1.Requests[0];
+        var req1 = folder1.Requests[0];
         Assert.Equal("Req1", req1.Name);
         Assert.Equal("GET", req1.HttpMethod);
         Assert.Equal("http://www.abc.com.br", req1.Url);
         Assert.Equal(PororocaRequestAuthMode.Bearer, req1.CustomAuth!.Mode);
         Assert.Equal("tkn", req1.CustomAuth.BearerToken);
 
-        PororocaRequest req2 = pororocaCollection.Requests[0];
+        var req2 = pororocaCollection.Requests[0];
         Assert.Equal("Req2", req2.Name);
         Assert.Equal("GET", req2.HttpMethod);
         Assert.Equal("http://www.def.com.br", req2.Url);
@@ -556,11 +556,11 @@ public static class PostmanCollectionV21ImporterTests
         Assert.Equal("tkn", req2.CustomAuth.BearerToken);
 
         Assert.Equal(2, pororocaCollection.Variables.Count);
-        PororocaVariable var1 = pororocaCollection.Variables[0];
+        var var1 = pororocaCollection.Variables[0];
         Assert.True(var1.Enabled);
         Assert.Equal("Key1", var1.Key);
         Assert.Equal("Value1", var1.Value);
-        PororocaVariable var2 = pororocaCollection.Variables[1];
+        var var2 = pororocaCollection.Variables[1];
         Assert.False(var2.Enabled);
         Assert.Equal("Key2", var2.Key);
         Assert.Equal("Value2", var2.Value);

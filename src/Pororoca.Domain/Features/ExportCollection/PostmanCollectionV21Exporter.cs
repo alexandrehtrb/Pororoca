@@ -1,8 +1,8 @@
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using Pororoca.Domain.Features.Entities.Postman;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Entities.Postman;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
 
 namespace Pororoca.Domain.Features.ExportCollection;
@@ -11,7 +11,7 @@ public static class PostmanCollectionV21Exporter
 {
     public static string ExportAsPostmanCollectionV21(PororocaCollection col, bool shouldHideSecrets)
     {
-        PostmanCollectionV21 postmanCollection = ConvertToPostmanCollectionV21(col, shouldHideSecrets);
+        var postmanCollection = ConvertToPostmanCollectionV21(col, shouldHideSecrets);
         return JsonSerializer.Serialize(postmanCollection!, options: ExporterImporterJsonOptions);
     }
 
@@ -104,7 +104,7 @@ public static class PostmanCollectionV21Exporter
 
     internal static PostmanRequestUrl ConvertToPostmanRequestUrl(string rawUrl)
     {
-        if (Uri.TryCreate(rawUrl, UriKind.Absolute, out Uri? absoluteUri))
+        if (Uri.TryCreate(rawUrl, UriKind.Absolute, out var absoluteUri))
         {
             return new PostmanRequestUrl()
             {
@@ -146,14 +146,14 @@ public static class PostmanCollectionV21Exporter
 
             for (int i = 0; i < regexes.Length; i++)
             {
-                MatchCollection? mc = new Regex(regexes[i]).Matches(rawUrl);
+                var mc = new Regex(regexes[i]).Matches(rawUrl);
                 if (mc.Count == 0)
                 {
                     continue;
                 }
                 else
                 {
-                    IEnumerable<Group> matchGroups = mc.First().Groups.Values;
+                    var matchGroups = mc.First().Groups.Values;
                     return new PostmanRequestUrl()
                     {
                         Raw = rawUrl,
@@ -182,7 +182,7 @@ public static class PostmanCollectionV21Exporter
     }
 
     internal static PostmanVariable[] ConvertToPostmanHeaders(IEnumerable<PororocaKeyValueParam>? hdrs) =>
-        hdrs == null ? 
+        hdrs == null ?
         Array.Empty<PostmanVariable>() :
         hdrs.Select(v => new PostmanVariable() { Key = v.Key, Value = v.Value, Type = "text", Disabled = (v.Enabled == false ? true : null) })
             .ToArray();

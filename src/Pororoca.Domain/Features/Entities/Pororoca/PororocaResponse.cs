@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Headers;
+using System.Security.Authentication;
 using System.Text;
 using System.Text.Json;
 using Pororoca.Domain.Features.Common;
@@ -21,19 +22,25 @@ public sealed class PororocaResponse
 
     public IEnumerable<KeyValuePair<string, string>>? Headers { get; }
 
-    private readonly byte[]? _binaryBody;
-    
+    public IEnumerable<KeyValuePair<string, string>>? Trailers { get; }
+
+    private readonly byte[]? binaryBody;
+
     public bool WasCancelled =>
         Exception is TaskCanceledException;
+    
+    public bool FailedDueToTlsVerification =>
+        Exception?.InnerException is AuthenticationException aex
+        && aex.Message.Contains("remote certificate is invalid", StringComparison.InvariantCultureIgnoreCase);
 
     public bool HasBody =>
-        _binaryBody?.Length > 0;
+        this.binaryBody?.Length > 0;
 
     public string? ContentType
     {
         get
         {
-            KeyValuePair<string, string>? contentTypeHeaders = Headers?.FirstOrDefault(h => h.Key == "Content-Type");
+            var contentTypeHeaders = Headers?.FirstOrDefault(h => h.Key == "Content-Type");
             return contentTypeHeaders?.Value;
         }
     }
@@ -51,13 +58,13 @@ public sealed class PororocaResponse
 
     public string? GetBodyAsText()
     {
-        if (_binaryBody == null || _binaryBody.Length == 0)
+        if (this.binaryBody == null || this.binaryBody.Length == 0)
         {
             return null;
         }
         else
         {
-            string bodyStr = Encoding.UTF8.GetString(_binaryBody);
+            string bodyStr = Encoding.UTF8.GetString(this.binaryBody);
             string? contentType = ContentType;
             if (contentType == null || !MimeTypesDetector.IsJsonContent(contentType))
             {
@@ -80,17 +87,17 @@ public sealed class PororocaResponse
     }
 
     public byte[]? GetBodyAsBinary() =>
-        _binaryBody;
-    
+        this.binaryBody;
+
     public T? GetJsonBodyAs<T>() =>
         GetJsonBodyAs<T>(MinifyingOptions);
 
     public T? GetJsonBodyAs<T>(JsonSerializerOptions jsonOptions) =>
-        JsonSerializer.Deserialize<T>(_binaryBody, jsonOptions);
-    
+        JsonSerializer.Deserialize<T>(this.binaryBody, jsonOptions);
+
     public string? GetContentDispositionFileName()
     {
-        KeyValuePair<string, string>? contentDispositionHeader = Headers?.FirstOrDefault(h => h.Key == "Content-Disposition");
+        var contentDispositionHeader = Headers?.FirstOrDefault(h => h.Key == "Content-Disposition");
         string? contentDispositionValue = contentDispositionHeader?.Value;
         if (contentDispositionValue != null)
         {
@@ -119,17 +126,22 @@ public sealed class PororocaResponse
 
     private PororocaResponse(TimeSpan elapsedTime, HttpResponseMessage responseMessage, byte[] binaryBody)
     {
+        static KeyValuePair<string, string> ConvertHeaderToKeyValuePair(KeyValuePair<string, IEnumerable<string>> header) =>
+            new(header.Key, string.Join(';', header.Value));
+
         ElapsedTime = elapsedTime;
         ReceivedAt = DateTimeOffset.Now;
         Successful = true;
         StatusCode = responseMessage.StatusCode;
-        
+
         HttpHeaders nonContentHeaders = responseMessage.Headers;
         HttpHeaders contentHeaders = responseMessage.Content.Headers;
+        HttpHeaders trailingHeaders = responseMessage.TrailingHeaders;
 
-        Headers = nonContentHeaders.Concat(contentHeaders).Select(h => new KeyValuePair<string, string>(h.Key, string.Join(';', h.Value)));
+        Headers = nonContentHeaders.Concat(contentHeaders).Select(ConvertHeaderToKeyValuePair);
+        Trailers = trailingHeaders.Select(ConvertHeaderToKeyValuePair);
 
-        this._binaryBody = binaryBody;
+        this.binaryBody = binaryBody;
     }
 
     private PororocaResponse(TimeSpan elapsedTime, Exception exception)

@@ -1,4 +1,4 @@
-﻿namespace Pororoca.Domain.Features.Entities.Pororoca;
+namespace Pororoca.Domain.Features.Entities.Pororoca;
 
 public enum PororocaRequestAuthClientCertificateType
 {

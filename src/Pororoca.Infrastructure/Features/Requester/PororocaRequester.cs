@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Requester;
 using Pororoca.Domain.Features.TranslateRequest;
@@ -10,10 +10,7 @@ public sealed class PororocaRequester : IPororocaRequester
 {
     public static readonly PororocaRequester Singleton;
 
-    static PororocaRequester()
-    {
-        Singleton = new();
-    }
+    static PororocaRequester() => Singleton = new();
 
     private PororocaRequester()
     {
@@ -35,7 +32,7 @@ public sealed class PororocaRequester : IPororocaRequester
             }
             else
             {
-                HttpClient httpClient = PororocaHttpClientProvider.Provide(disableSslVerification, reqMsg!);
+                var httpClient = PororocaHttpClientProvider.Provide(disableSslVerification, reqMsg!);
 
                 resMsg = await httpClient.SendAsync(reqMsg!, cancellationToken);
                 reqMsg?.Dispose();

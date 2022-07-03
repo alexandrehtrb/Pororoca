@@ -33,7 +33,7 @@ Após isso, no projeto de testes criado, o arquivo .csproj precisa ser editado p
   </ItemGroup>
   <ItemGroup>
     <!-- A linha abaixo adiciona o pacote Pororoca.Test ao projeto -->
-    <PackageReference Include="Pororoca.Test" Version="1.3.0" />
+    <PackageReference Include="Pororoca.Test" Version="1.4.0" />
     ...
   </ItemGroup>
 

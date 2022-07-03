@@ -1,8 +1,7 @@
-﻿namespace Pororoca.Desktop.ViewModels
+namespace Pororoca.Desktop.ViewModels;
+
+public enum MoveableItemMovementDirection
 {
-    public enum MoveableItemMovementDirection
-    {
-        Up,
-        Down
-    }
+    Up,
+    Down
 }

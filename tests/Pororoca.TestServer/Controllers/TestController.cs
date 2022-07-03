@@ -12,10 +12,7 @@ public class TestController : ControllerBase
 {
     private readonly ILogger<TestController> _logger;
 
-    public TestController(ILogger<TestController> logger)
-    {
-        _logger = logger;
-    }
+    public TestController(ILogger<TestController> logger) => this._logger = logger;
 
     #region GET
 
@@ -46,6 +43,21 @@ public class TestController : ControllerBase
     [HttpGet]
     public IActionResult TestGetHeaders() =>
         Ok(Request.Headers.ToDictionary(hdr => hdr.Key, hdr => hdr.Value));
+    
+    [Route("get/trailers")]
+    [HttpGet]
+    public async Task TestGetTrailers()
+    {
+        HttpContext.Response.SupportsTrailers();
+        HttpContext.Response.DeclareTrailer("MyTrailer");
+        HttpContext.Response.StatusCode = (int)HttpStatusCode.OK;
+        HttpContext.Response.Headers.ContentType = new("application/json; charset=utf-8");
+        await HttpContext.Response.StartAsync();
+        byte[] bytes = Encoding.UTF8.GetBytes("{\"id\":1}");
+        await HttpContext.Response.BodyWriter.WriteAsync(bytes);
+        HttpContext.Response.AppendTrailer("MyTrailer", new("MyTrailerValue"));
+        await HttpContext.Response.CompleteAsync();
+    }
 
     #endregion
 
@@ -96,7 +108,7 @@ public class TestController : ControllerBase
 
         string boundary = MultipartRequestHelper.GetBoundary(MediaTypeHeaderValue.Parse(Request.ContentType), 10000);
         var reader = new MultipartReader(boundary, HttpContext.Request.Body);
-        MultipartSection? section = await reader.ReadNextSectionAsync();
+        var section = await reader.ReadNextSectionAsync();
 
         while (section != null)
         {

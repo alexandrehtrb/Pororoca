@@ -1,6 +1,6 @@
-using Xunit;
 using System.Text;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Xunit;
 using static Pororoca.Domain.Features.ImportEnvironment.PororocaEnvironmentImporter;
 
 namespace Pororoca.Domain.Tests.Features.ImportEnvironment;
@@ -15,7 +15,7 @@ public static class PororocaEnvironmentImporterTests
         string json = GetTestFileJson("EmptyEnvironment.pororoca_environment.json");
 
         // WHEN AND THEN
-        Assert.True(TryImportPororocaEnvironment(json, out PororocaEnvironment? env));
+        Assert.True(TryImportPororocaEnvironment(json, out var env));
 
         // THEN
         Assert.NotNull(env);
@@ -29,7 +29,7 @@ public static class PororocaEnvironmentImporterTests
 
     private static string GetTestFileJson(string fileName)
     {
-        DirectoryInfo testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
+        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
         string jsonFileInfoPath = Path.Combine(testDataDirInfo.FullName, "TestData", fileName);
         return File.ReadAllText(jsonFileInfoPath, Encoding.UTF8);
     }

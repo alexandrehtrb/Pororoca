@@ -1,5 +1,5 @@
-using Xunit;
 using Pororoca.Domain.Features.Common;
+using Xunit;
 
 namespace Pororoca.Domain.Tests.Features.Common;
 
@@ -13,7 +13,7 @@ public static class FileNameUtilsTests
     public static void Should_return_file_extension_without_dot_from_file_path(string expectedFileExtensionWithoutDot, string fileNameOrPath) =>
         Assert.Equal(expectedFileExtensionWithoutDot, FileNameUtils.GetFileExtensionWithoutDot(fileNameOrPath));
 
-    
+
     [Theory]
     [InlineData("C:\\Folder1\arq1")]
     [InlineData("/usr/bin/arq1")]

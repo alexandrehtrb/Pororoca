@@ -1,105 +1,92 @@
 using Pororoca.Desktop.Views;
 using ReactiveUI;
 
-namespace Pororoca.Desktop.ViewModels
+namespace Pororoca.Desktop.ViewModels;
+
+public interface ICollectionOrganizationItemViewModel
 {
-    public interface ICollectionOrganizationItemViewModel
+    bool CanMoveUp { get; }
+    bool CanMoveDown { get; }
+}
+
+public abstract class CollectionOrganizationItemViewModel : ViewModelBase, ICollectionOrganizationItemViewModel
+{
+    // Needs to be object variable, not static
+    // TODO: Should it receive this via injection?
+    public CollectionsGroupViewModel CollectionsGroupDataCtx =>
+        ((MainWindowViewModel)MainWindow.Instance!.DataContext!).CollectionsGroupViewDataCtx;
+
+    public ICollectionOrganizationItemParentViewModel Parent { get; }
+
+    private bool canMoveUpField;
+    public bool CanMoveUp
     {
-        bool CanMoveUp { get; }
-        bool CanMoveDown { get; }
+        get => this.canMoveUpField;
+        set => this.RaiseAndSetIfChanged(ref this.canMoveUpField, value);
     }
 
-    public abstract class CollectionOrganizationItemViewModel : ViewModelBase, ICollectionOrganizationItemViewModel
+    private bool canMoveDownField;
+    public bool CanMoveDown
     {
-        // Needs to be object variable, not static
-        // TODO: Should it receive this via injection?
-        public CollectionsGroupViewModel CollectionsGroupDataCtx =>
-            ((MainWindowViewModel)MainWindow.Instance!.DataContext!).CollectionsGroupViewDataCtx;
+        get => this.canMoveDownField;
+        set => this.RaiseAndSetIfChanged(ref this.canMoveDownField, value);
+    }
 
-        public ICollectionOrganizationItemParentViewModel Parent { get; }
+    private EditableTextBlockViewModel nameEditableTextBlockViewDataCtxField;
+    public EditableTextBlockViewModel NameEditableTextBlockViewDataCtx
+    {
+        get => this.nameEditableTextBlockViewDataCtxField;
+        set => this.RaiseAndSetIfChanged(ref this.nameEditableTextBlockViewDataCtxField, value);
+    }
 
-        private bool _canMoveUp;
-        public bool CanMoveUp
-        {
-            get => _canMoveUp;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _canMoveUp, value);
-            }
-        }
+    private string nameField;
+    public string Name
+    {
+        get => this.nameField;
+        set => this.RaiseAndSetIfChanged(ref this.nameField, value);
+    }
+    protected void MoveThisUp() =>
+        Parent.MoveSubItem(this, MoveableItemMovementDirection.Up);
 
-        private bool _canMoveDown;
-        public bool CanMoveDown
-        {
-            get => _canMoveDown;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _canMoveDown, value);
-            }
-        }
+    protected void MoveThisDown() =>
+        Parent.MoveSubItem(this, MoveableItemMovementDirection.Down);
 
-        private EditableTextBlockViewModel _nameEditableTextBlockViewDataCtx;
-        public EditableTextBlockViewModel NameEditableTextBlockViewDataCtx
-        {
-            get => _nameEditableTextBlockViewDataCtx;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _nameEditableTextBlockViewDataCtx, value);
-            }
-        }
+    protected void Copy()
+    {
+        bool isMultipleCopy = CollectionsGroupDataCtx.HasMultipleItemsSelected;
+        if (isMultipleCopy)
+            CollectionsGroupDataCtx.CopyMultiple();
+        else
+            CopyThis();
+    }
 
-        private string _name;
-        public string Name
-        {
-            get => _name;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _name, value);
-            }
-        }
-        protected void MoveThisUp() =>
-            Parent.MoveSubItem(this, MoveableItemMovementDirection.Up);
+    protected abstract void CopyThis();
 
-        protected void MoveThisDown() =>
-            Parent.MoveSubItem(this, MoveableItemMovementDirection.Down);
+    protected void RenameThis()
+    {
+        NameEditableTextBlockViewDataCtx.IsEditing = true;
+        Parent.OnRenameSubItemSelected(this);
+    }
 
-        protected void Copy()
-        {
-            bool isMultipleCopy = CollectionsGroupDataCtx.HasMultipleItemsSelected;
-            if (isMultipleCopy)
-                CollectionsGroupDataCtx.CopyMultiple();
-            else
-                CopyThis();
-        }
+    private void OnNameUpdated(string newName) =>
+        Name = newName;
 
-        protected abstract void CopyThis();
+    protected void Delete()
+    {
+        bool isMultipleCopy = CollectionsGroupDataCtx.HasMultipleItemsSelected;
+        if (isMultipleCopy)
+            CollectionsGroupDataCtx.DeleteMultiple();
+        else
+            DeleteThis();
+    }
 
-        protected void RenameThis()
-        {
-            NameEditableTextBlockViewDataCtx.IsEditing = true;
-            Parent.OnRenameSubItemSelected(this);
-        }
+    public void DeleteThis() =>
+        Parent.DeleteSubItem(this);
 
-        private void OnNameUpdated(string newName) =>
-            Name = newName;
-
-        protected void Delete()
-        {
-            bool isMultipleCopy = CollectionsGroupDataCtx.HasMultipleItemsSelected;
-            if (isMultipleCopy)
-                CollectionsGroupDataCtx.DeleteMultiple();
-            else
-                DeleteThis();
-        }
-
-        public void DeleteThis() =>
-            Parent.DeleteSubItem(this);
-
-        protected CollectionOrganizationItemViewModel(ICollectionOrganizationItemParentViewModel parentVm, string name)
-        {
-            Parent = parentVm;
-            _nameEditableTextBlockViewDataCtx = new(name, OnNameUpdated);
-            _name = name;
-        }
+    protected CollectionOrganizationItemViewModel(ICollectionOrganizationItemParentViewModel parentVm, string name)
+    {
+        Parent = parentVm;
+        this.nameEditableTextBlockViewDataCtxField = new(name, OnNameUpdated);
+        this.nameField = name;
     }
 }

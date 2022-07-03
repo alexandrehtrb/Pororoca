@@ -1,22 +1,15 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Pororoca.Desktop.Views
+namespace Pororoca.Desktop.Views;
+
+public class CollectionVariablesView : UserControl
 {
-    public class CollectionVariablesView : UserControl
-    {
-        public CollectionVariablesView()
-        {
-            InitializeComponent();
-        }
+    public CollectionVariablesView() => InitializeComponent();
 
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);    
-        }
+    private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
-        
-    }
+
 }

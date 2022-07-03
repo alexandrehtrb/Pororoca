@@ -1,7 +1,7 @@
 using System.Text.Json;
 using Pororoca.Domain.Features.Common;
-using Pororoca.Domain.Features.Entities.Postman;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Entities.Postman;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
 using static Pororoca.Domain.Features.Common.MimeTypesDetector;
 
@@ -13,7 +13,7 @@ public static class PostmanCollectionV21Importer
     {
         try
         {
-            PostmanCollectionV21? postmanCollection = JsonSerializer.Deserialize<PostmanCollectionV21>(postmanCollectionFileContent, options: ExporterImporterJsonOptions);
+            var postmanCollection = JsonSerializer.Deserialize<PostmanCollectionV21>(postmanCollectionFileContent, options: ExporterImporterJsonOptions);
             if (postmanCollection == null
              || postmanCollection.Info?.Name == null)
             {
@@ -37,10 +37,10 @@ public static class PostmanCollectionV21Importer
             // Always generating new id, in case user imports the same collection twice
             // This is to avoid overwriting when saving user collections
             PororocaCollection myCol = new(Guid.NewGuid(), postmanCollection.Info.Name, DateTimeOffset.Now);
-            PororocaRequestAuth? collectionScopedAuth = ConvertToPororocaAuth(postmanCollection.Auth);
-            foreach (PostmanCollectionItem item in postmanCollection.Items)
+            var collectionScopedAuth = ConvertToPororocaAuth(postmanCollection.Auth);
+            foreach (var item in postmanCollection.Items)
             {
-                PororocaCollectionItem convertedItem = ConvertToPororocaCollectionItem(item, collectionScopedAuth);
+                var convertedItem = ConvertToPororocaCollectionItem(item, collectionScopedAuth);
                 if (convertedItem is PororocaCollectionFolder folder)
                     myCol.AddFolder(folder);
                 else if (convertedItem is PororocaRequest request)
@@ -48,7 +48,7 @@ public static class PostmanCollectionV21Importer
             }
             if (postmanCollection.Variable != null)
             {
-                foreach (PostmanVariable v in postmanCollection.Variable)
+                foreach (var v in postmanCollection.Variable)
                 {
                     myCol.AddVariable(ConvertToPororocaVariable(v));
                 }
@@ -99,9 +99,9 @@ public static class PostmanCollectionV21Importer
             PororocaCollectionFolder folder = new(item.Name);
             if (item.Items != null)
             {
-                foreach (PostmanCollectionItem subItem in item.Items)
+                foreach (var subItem in item.Items)
                 {
-                    PororocaCollectionItem convertedSubItem = ConvertToPororocaCollectionItem(subItem, collectionScopedAuth);
+                    var convertedSubItem = ConvertToPororocaCollectionItem(subItem, collectionScopedAuth);
                     if (convertedSubItem is PororocaCollectionFolder subFolder)
                         folder.AddFolder(subFolder);
                     else if (convertedSubItem is PororocaRequest subRequest)
@@ -122,7 +122,7 @@ public static class PostmanCollectionV21Importer
             httpMethod: request.Method,
             url: request.Url.Raw,
             // When Postman req auth is null, the request uses collection scoped auth
-            customAuth: request.Auth != null ? ConvertToPororocaAuth(request.Auth) : (PororocaRequestAuth?) collectionScopedAuth?.Clone(),
+            customAuth: request.Auth != null ? ConvertToPororocaAuth(request.Auth) : (PororocaRequestAuth?)collectionScopedAuth?.Clone(),
             headers: ConvertToPororocaHeaders(request.Header),
             body: ConvertToPororocaRequestBody(request.Body));
         return myReq;
@@ -178,7 +178,7 @@ public static class PostmanCollectionV21Importer
             "text" => DefaultMimeTypeForText,
             _ => DefaultMimeTypeForText
         };
-    
+
     private static List<PororocaKeyValueParam> ConvertToPororocaKeyValueParams(PostmanVariable[]? variables) =>
         (variables ?? Array.Empty<PostmanVariable>())
             .Select(v => new PororocaKeyValueParam(IsEnabledInPostman(v.Disabled), v.Key, v.Value))

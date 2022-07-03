@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using ReactiveUI;
 
-namespace Pororoca.Desktop.ViewModels
+namespace Pororoca.Desktop.ViewModels;
+
+public abstract class ViewModelBase : ReactiveObject
 {
-    public abstract class ViewModelBase : ReactiveObject
-    {
-    }
 }

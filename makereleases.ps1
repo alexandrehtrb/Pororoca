@@ -34,9 +34,9 @@ function Get-RuntimesToPublishFor
 		,'osx-arm64' `
 	)
 	$windowsRuntimes = @(`
-		'win7-x64' ` 
-		,'win7-x86' `
-		,'win-x64' `
+		#'win7-x64' ` 
+		#,'win7-x86' `
+		'win-x64' `
 		,'win-x86' `
 		,'win-arm' `
 		,'win-arm64' `
@@ -113,7 +113,18 @@ function Run-UnitTests
 
 	Write-Host "Running unit tests..." -ForegroundColor DarkYellow
 	$stopwatch.Restart()
+	$IsWindows7 = $IsWindows -and ((Get-ComputerInfo).OsName  -like "*Windows 7*")
+	if ($IsWindows7)
+	{
+		Remove-Item ./global.json -Force -ErrorAction Ignore
+		New-Item ./global.json
+		Set-Content ./global.json '{"sdk":{"version":"6.0.102"}}'
+	}
 	dotnet test --configuration Release --nologo --verbosity quiet
+	if ($IsWindows7)
+	{
+		Remove-Item ./global.json -Force -ErrorAction Ignore
+	}
 	$stopwatch.Stop()
 	Write-Host "Solution tests run ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
 }
@@ -192,7 +203,8 @@ function Publish-PororocaDesktop
 
 	if ($runtime -like "*win7*")
 	{
-		$publishSingleFile = $False
+		# .NET SDK 6.0.3xx and greater allows for single file publishing for Windows 7
+		$publishSingleFile = $True #$False
 	}
 	else
 	{

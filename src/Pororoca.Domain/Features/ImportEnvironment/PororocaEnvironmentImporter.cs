@@ -11,7 +11,7 @@ public static class PororocaEnvironmentImporter
         try
         {
             pororocaEnvironment = JsonSerializer.Deserialize<PororocaEnvironment>(pororocaEnvironmentFileContent, options: ExporterImporterJsonOptions);
-            
+
             // Always generating new id, in case user imports the same environment twice
             // And always set as not current environment
             if (pororocaEnvironment != null)
@@ -19,7 +19,7 @@ public static class PororocaEnvironmentImporter
                 pororocaEnvironment.Id = Guid.NewGuid();
                 pororocaEnvironment.IsCurrent = false;
             }
-            
+
             return pororocaEnvironment != null
                 && pororocaEnvironment.Variables != null;
         }

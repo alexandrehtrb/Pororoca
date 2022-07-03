@@ -1,4 +1,4 @@
-﻿#nullable disable warnings
+#nullable disable warnings
 
 namespace Pororoca.Domain.Features.Entities.Postman;
 

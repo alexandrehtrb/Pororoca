@@ -15,12 +15,12 @@ public static class PororocaEnvironmentExporter
         // Always export as non current environment,
         // unless if exporting environment inside of a collection
         shallowClonedEnv.IsCurrent = env.IsCurrent && preserveIsCurrentEnvironment;
-        
+
         shallowClonedEnv.UpdateVariables(
             shouldHideSecrets ?
             env.Variables.Select(HideSecretVariableInNewVariable) :
             env.Variables);
-                
+
         return shallowClonedEnv;
     }
 

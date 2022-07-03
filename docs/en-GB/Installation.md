@@ -2,9 +2,7 @@
 
 ## Windows
 
-[Download](https://github.com/alexandrehtrb/Pororoca/releases) the .zip file for your Windows system (`win` or `win7`), then extract this file to a folder, and run the Pororoca.exe file. If you wish, right-click on the file, "Send to", "Desktop (create shortcut)".
-
-*If you are using Windows 7*, download the release that has "win7" in the name, instead of the generic "win" release.
+[Download](https://github.com/alexandrehtrb/Pororoca/releases) the .zip file for your Windows system (`win`), then extract this file to a folder, and run the Pororoca.exe file. If you wish, right-click on the file, "Send to", "Desktop (create shortcut)".
 
 ## Mac OSX
 

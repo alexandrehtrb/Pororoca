@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.ImportCollection;
 using Pororoca.Domain.Features.Requester;
@@ -21,11 +21,11 @@ public sealed class PororocaTest
     public static PororocaTest LoadCollectionFromFile(string filePath)
     {
         const string loadCollectionFailedMsg = "Error: Pororoca collection file loading failed. Please, check the file.";
-        
+
         try
         {
             string json = File.ReadAllText(filePath, Encoding.UTF8);
-            if (PororocaCollectionImporter.TryImportPororocaCollection(json, out PororocaCollection? col))
+            if (PororocaCollectionImporter.TryImportPororocaCollection(json, out var col))
             {
                 return new(col!);
             }
@@ -42,13 +42,13 @@ public sealed class PororocaTest
 
     public PororocaTest AndUseTheEnvironment(string environmentName)
     {
-        PororocaEnvironment? selectedEnv = Collection.Environments.FirstOrDefault(e => e.Name == environmentName);
+        var selectedEnv = Collection.Environments.FirstOrDefault(e => e.Name == environmentName);
         if (selectedEnv == null)
         {
             throw new Exception($"Error: Environment with the name '{environmentName}' was not found.");
         }
 
-        foreach (PororocaEnvironment env in Collection.Environments)
+        foreach (var env in Collection.Environments)
         {
             env.IsCurrent = env.Name == environmentName;
         }
@@ -63,7 +63,7 @@ public sealed class PororocaTest
 
     public void SetCollectionVariable(string key, string? value)
     {
-        PororocaVariable? variable = Collection.Variables.FirstOrDefault(v => v.Key == key);
+        var variable = Collection.Variables.FirstOrDefault(v => v.Key == key);
         if (variable != null)
         {
             variable.Value = value;
@@ -76,13 +76,13 @@ public sealed class PororocaTest
 
     public void SetEnvironmentVariable(string environmentName, string key, string? value)
     {
-        PororocaEnvironment? env = Collection.Environments.FirstOrDefault(e => e.Name == environmentName);
+        var env = Collection.Environments.FirstOrDefault(e => e.Name == environmentName);
         if (env is null)
         {
             throw new Exception($"Error: Environment with the name '{environmentName}' was not found.");
         }
 
-        PororocaVariable? variable = env.Variables.FirstOrDefault(v => v.Key == key);
+        var variable = env.Variables.FirstOrDefault(v => v.Key == key);
         if (variable != null)
         {
             variable.Value = value;
@@ -97,16 +97,16 @@ public sealed class PororocaTest
     {
         static PororocaRequest? FindRequestInFolder(PororocaCollectionFolder folder, Func<PororocaRequest, bool> criteria)
         {
-            PororocaRequest? reqInFolder = folder.Requests.FirstOrDefault(criteria);
+            var reqInFolder = folder.Requests.FirstOrDefault(criteria);
             if (reqInFolder != null)
             {
                 return reqInFolder;
             }
             else
             {
-                foreach (PororocaCollectionFolder subFolder in folder.Folders)
+                foreach (var subFolder in folder.Folders)
                 {
-                    PororocaRequest? reqInSubfolder = FindRequestInFolder(subFolder, criteria);
+                    var reqInSubfolder = FindRequestInFolder(subFolder, criteria);
                     if (reqInSubfolder != null)
                     {
                         return reqInSubfolder;
@@ -116,16 +116,16 @@ public sealed class PororocaTest
             }
         }
 
-        PororocaRequest? reqInCol = Collection.Requests.FirstOrDefault(criteria);
+        var reqInCol = Collection.Requests.FirstOrDefault(criteria);
         if (reqInCol != null)
         {
             return reqInCol;
         }
         else
         {
-            foreach (PororocaCollectionFolder folder in Collection.Folders)
+            foreach (var folder in Collection.Folders)
             {
-                PororocaRequest? reqInFolder = FindRequestInFolder(folder, criteria);
+                var reqInFolder = FindRequestInFolder(folder, criteria);
                 if (reqInFolder != null)
                 {
                     return reqInFolder;

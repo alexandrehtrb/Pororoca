@@ -19,12 +19,12 @@ public sealed class PororocaEnvironment : ICloneable
     [JsonInclude]
     public IReadOnlyList<PororocaVariable> Variables { get; private set; }
 
-    #nullable disable warnings
+#nullable disable warnings
     public PororocaEnvironment()
     {
         // Parameterless constructor for JSON deserialization
     }
-    #nullable restore warnings
+#nullable restore warnings
 
     public PororocaEnvironment(string name) : this(Guid.NewGuid(), name, DateTimeOffset.Now)
     {

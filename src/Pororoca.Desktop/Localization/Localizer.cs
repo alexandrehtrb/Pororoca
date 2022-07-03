@@ -1,11 +1,11 @@
-﻿using Avalonia;
-using Avalonia.Platform;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using Avalonia;
+using Avalonia.Platform;
 
 namespace Pororoca.Desktop.Localization;
 
@@ -24,7 +24,7 @@ public class Localizer : INotifyPropertyChanged
     {
         get
         {
-            if (_mappings != null && _mappings.TryGetValue(key, out string? res))
+            if (this._mappings != null && this._mappings.TryGetValue(key, out string? res))
                 return res.Replace("\\n", "\n");
             else
                 return $"{Language}:{key}";
@@ -35,13 +35,13 @@ public class Localizer : INotifyPropertyChanged
     public bool LoadLanguage(Language language)
     {
         Language = language;
-        IAssetLoader? assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
+        var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
 
-        Uri uri = new Uri($"avares://Pororoca.Desktop/Assets/i18n/{language.GetLanguageLCID()}.json");
+        Uri uri = new($"avares://Pororoca.Desktop/Assets/i18n/{language.GetLanguageLCID()}.json");
         if (assets != null && assets.Exists(uri))
         {
-            using Stream stringsFileUtf8Stream = assets.Open(uri);
-            _mappings = JsonSerializer.Deserialize<Dictionary<string, string>>(stringsFileUtf8Stream);
+            using var stringsFileUtf8Stream = assets.Open(uri);
+            this._mappings = JsonSerializer.Deserialize<Dictionary<string, string>>(stringsFileUtf8Stream);
             Invalidate();
 
             return true;
@@ -53,9 +53,9 @@ public class Localizer : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(IndexerName));
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(IndexerArrayName));
-        _languageChangedSubscriptions.ForEach(sub => sub.Invoke());
+        this._languageChangedSubscriptions.ForEach(sub => sub.Invoke());
     }
 
     public void SubscribeToLanguageChange(Action onLanguageChanged) =>
-        _languageChangedSubscriptions.Add(onLanguageChanged);
+        this._languageChangedSubscriptions.Add(onLanguageChanged);
 }

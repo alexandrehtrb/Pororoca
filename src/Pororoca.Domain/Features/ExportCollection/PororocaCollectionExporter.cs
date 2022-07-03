@@ -12,7 +12,7 @@ public static class PororocaCollectionExporter
 
     internal static PororocaCollection GenerateCollectionToExport(PororocaCollection col, bool shouldHideSecrets)
     {
-        PororocaCollection shallowClonedCol = (PororocaCollection) col.Clone();
+        var shallowClonedCol = (PororocaCollection)col.Clone();
         shallowClonedCol.Id = col.Id;
 
         shallowClonedCol.UpdateVariables(

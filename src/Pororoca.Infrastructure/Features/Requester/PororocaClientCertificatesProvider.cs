@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
+using System.Security.Cryptography.X509Certificates;
 using Pororoca.Domain.Features.Entities.Pororoca;
 
 namespace Pororoca.Infrastructure.Features.Requester;
@@ -29,10 +29,10 @@ internal static class PororocaClientCertificatesProvider
     {
         bool hasPassword = !string.IsNullOrWhiteSpace(cc.FilePassword);
 
-        X509Certificate2 pemCert = hasPassword ?
+        var pemCert = hasPassword ?
             X509Certificate2.CreateFromEncryptedPemFile(cc.CertificateFilePath, cc.FilePassword, cc.PrivateKeyFilePath) :
             X509Certificate2.CreateFromPemFile(cc.CertificateFilePath, cc.PrivateKeyFilePath);
-        
+
         // IMPORTANT: Most Windows versions cannot use PEM certificates:
         // https://github.com/dotnet/runtime/issues/23749#issuecomment-747407051
         // We need to convert PEM certificate to PKCS#12 certificate before using it on Windows    

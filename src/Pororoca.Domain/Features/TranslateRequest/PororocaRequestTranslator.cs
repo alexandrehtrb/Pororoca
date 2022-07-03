@@ -1,8 +1,8 @@
+using System.Text;
+using System.Text.Json;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.VariableResolution;
-using System.Text;
-using System.Text.Json;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
 
 namespace Pororoca.Domain.Features.TranslateRequest;
@@ -17,7 +17,7 @@ public static class PororocaRequestTranslator
 
     public static bool IsValidRequest(IPororocaVariableResolver variableResolver, PororocaRequest req, out string? errorCode) =>
         IsValidRequest(AvailablePororocaRequestSelectionOptions.IsHttpVersionAvailableInOS, File.Exists, variableResolver, req, out errorCode);
-    
+
     internal static bool IsValidRequest(HttpVersionAvailableInOSVerifier httpVersionOSVerifier, Func<string, bool> fileExistsVerifier, IPororocaVariableResolver variableResolver, PororocaRequest req, out string? errorCode) =>
         TryResolveRequestUri(variableResolver, req.Url, out _, out errorCode)
         && httpVersionOSVerifier(req.HttpVersion, out errorCode)
@@ -27,13 +27,13 @@ public static class PororocaRequestTranslator
 
     internal static bool HasValidContentTypeForReqBody(PororocaRequest req, out string? errorCode)
     {
-        PororocaRequestBodyMode? bodyMode = req.Body?.Mode;
-        
+        var bodyMode = req.Body?.Mode;
+
         if (bodyMode == PororocaRequestBodyMode.File || bodyMode == PororocaRequestBodyMode.Raw)
         {
             bool isBlank = string.IsNullOrWhiteSpace(req.Body?.ContentType);
             bool isInvalid = !IsValidContentType(req.Body!.ContentType);
-            errorCode = isBlank ? TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRawOrFile : 
+            errorCode = isBlank ? TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRawOrFile :
                         isInvalid ? TranslateRequestErrors.InvalidContentTypeRawOrFile :
                         null;
             return errorCode == null;
@@ -56,8 +56,8 @@ public static class PororocaRequestTranslator
 
     private static bool CheckReqBodyFileExists(PororocaRequest req, Func<string, bool> fileExistsVerifier, out string? errorCode)
     {
-        PororocaRequestBodyMode? bodyMode = req.Body?.Mode;
-        
+        var bodyMode = req.Body?.Mode;
+
         if (bodyMode == PororocaRequestBodyMode.File)
         {
             bool fileFound = fileExistsVerifier.Invoke(req.Body!.FileSrcPath!);
@@ -119,7 +119,7 @@ public static class PororocaRequestTranslator
                 return true;
             }
         }
-        
+
     }
 
     #endregion
@@ -131,7 +131,7 @@ public static class PororocaRequestTranslator
 
     internal static bool TryTranslateRequest(HttpVersionAvailableInOSVerifier httpVersionOSVerifier, IPororocaVariableResolver variableResolver, PororocaRequest req, out HttpRequestMessage? reqMsg, out string? errorCode)
     {
-        if (!TryResolveRequestUri(variableResolver, req.Url, out Uri? uri, out errorCode)
+        if (!TryResolveRequestUri(variableResolver, req.Url, out var uri, out errorCode)
          || !httpVersionOSVerifier(req.HttpVersion, out errorCode))
         {
             reqMsg = null;
@@ -142,7 +142,7 @@ public static class PororocaRequestTranslator
             try
             {
                 HttpMethod method = new(req.HttpMethod);
-                IDictionary<string, string> resolvedContentHeaders = ResolveContentHeaders(variableResolver, req);
+                var resolvedContentHeaders = ResolveContentHeaders(variableResolver, req);
                 reqMsg = new(method, uri)
                 {
                     Version = ResolveHttpVersion(req.HttpVersion),
@@ -150,8 +150,8 @@ public static class PororocaRequestTranslator
                     Content = ResolveRequestContent(variableResolver, req.Body, resolvedContentHeaders)
                 };
 
-                IDictionary<string, string> resolvedNonContentHeaders = ResolveNonContentHeaders(variableResolver, req);
-                foreach (KeyValuePair<string, string> header in resolvedNonContentHeaders)
+                var resolvedNonContentHeaders = ResolveNonContentHeaders(variableResolver, req);
+                foreach (var header in resolvedNonContentHeaders)
                 {
                     reqMsg.Headers.TryAddWithoutValidation(header.Key, header.Value);
                 }
@@ -186,7 +186,7 @@ public static class PororocaRequestTranslator
     #region HTTP VERSION
 
     internal static Version ResolveHttpVersion(decimal httpVersion) =>
-        new((int) httpVersion, (int) (httpVersion * 10) % 10);
+        new((int)httpVersion, (int)(httpVersion * 10) % 10);
 
     #endregion
 
@@ -207,11 +207,11 @@ public static class PororocaRequestTranslator
 
     internal static IDictionary<string, string> ResolveContentHeaders(IPororocaVariableResolver variableResolver, PororocaRequest req) =>
         ResolveHeaders(variableResolver, req, IsContentHeader);
-    
+
     internal static IDictionary<string, string> ResolveNonContentHeaders(IPororocaVariableResolver variableResolver, PororocaRequest req)
     {
-        IDictionary<string, string> nonContentHeaders = ResolveHeaders(variableResolver, req, headerName => !IsContentHeader(headerName));
-        
+        var nonContentHeaders = ResolveHeaders(variableResolver, req, headerName => !IsContentHeader(headerName));
+
         string? customAuthHeaderValue = ResolveCustomAuthHeaderValue(variableResolver, req.CustomAuth);
         if (customAuthHeaderValue != null)
         {
@@ -244,7 +244,7 @@ public static class PororocaRequestTranslator
             string basicAuthTkn = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{resolvedLogin}:{resolvedPassword}"));
             return basicAuthTkn;
         }
-        
+
         string? MakeBearerAuthToken()
         {
             string? resolvedBearerToken = variableResolver.ReplaceTemplates(customAuth.BearerToken!);
@@ -266,7 +266,7 @@ public static class PororocaRequestTranslator
         {
             var clientCert = req.CustomAuth?.ClientCertificate!;
 
-            string resolvedPrivateKeyFilePath = variableResolver.ReplaceTemplates(clientCert.PrivateKeyFilePath);            
+            string resolvedPrivateKeyFilePath = variableResolver.ReplaceTemplates(clientCert.PrivateKeyFilePath);
             string resolvedFilePassword = variableResolver.ReplaceTemplates(clientCert.FilePassword);
 
             string? nulledPrivateKeyFilePath = string.IsNullOrWhiteSpace(resolvedPrivateKeyFilePath) ?
@@ -288,7 +288,7 @@ public static class PororocaRequestTranslator
     #endregion
 
     #region HTTP BODY
-    
+
     internal static IDictionary<string, string> ResolveFormUrlEncodedKeyValues(IPororocaVariableResolver variableResolver, PororocaRequestBody reqBody) =>
         reqBody.UrlEncodedValues!
                .Where(x => x.Enabled)
@@ -309,7 +309,7 @@ public static class PororocaRequestTranslator
 
         FormUrlEncodedContent MakeFormUrlEncodedContent()
         {
-            IDictionary<string, string> resolvedFormValues = ResolveFormUrlEncodedKeyValues(variableResolver, reqBody);
+            var resolvedFormValues = ResolveFormUrlEncodedKeyValues(variableResolver, reqBody);
             return new(resolvedFormValues);
         }
 
@@ -325,7 +325,7 @@ public static class PororocaRequestTranslator
         {
             MultipartFormDataContent formDataContent = new();
             var resolvedFormDataParams = reqBody!.FormDataValues!.Where(x => x.Enabled);
-            foreach (PororocaRequestFormDataParam param in resolvedFormDataParams)
+            foreach (var param in resolvedFormDataParams)
             {
                 string resolvedKey = variableResolver.ReplaceTemplates(param.Key);
                 if (param.Type == PororocaRequestFormDataParamType.Text)
@@ -359,7 +359,7 @@ public static class PororocaRequestTranslator
                     variablesJsonObj = JsonSerializer.Deserialize<dynamic?>(variables, ExporterImporterJsonOptions);
                 }
                 catch
-                {                    
+                {
                 }
             }
             dynamic reqObj = new
@@ -384,7 +384,7 @@ public static class PororocaRequestTranslator
 
         if (content != null)
         {
-            foreach (KeyValuePair<string, string> header in resolvedContentHeaders)
+            foreach (var header in resolvedContentHeaders)
             {
                 content.Headers.TryAddWithoutValidation(header.Key, header.Value);
             }

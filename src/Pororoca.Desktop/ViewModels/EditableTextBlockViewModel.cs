@@ -1,54 +1,47 @@
-﻿using System;
+using System;
 using System.Reactive;
 using ReactiveUI;
 
-namespace Pororoca.Desktop.ViewModels
+namespace Pororoca.Desktop.ViewModels;
+
+public sealed class EditableTextBlockViewModel : ViewModelBase
 {
-    public sealed class EditableTextBlockViewModel : ViewModelBase
+    private readonly Action<string> onNameUpdated;
+
+    private string txtField;
+    public string Txt
     {
-        private readonly Action<string> _onNameUpdated;
+        get => this.txtField;
+        set => this.RaiseAndSetIfChanged(ref this.txtField, value);
+    }
 
-        private string _txt;
-        public string Txt
+    private bool isEditingField;
+    public bool IsEditing
+    {
+        get => this.isEditingField;
+        set => this.RaiseAndSetIfChanged(ref this.isEditingField, value);
+    }
+
+    public ReactiveCommand<Unit, Unit> EditOrApplyTxtChangeCmd { get; }
+
+    public EditableTextBlockViewModel(string name, Action<string> onNameUpdated)
+    {
+        this.onNameUpdated = onNameUpdated;
+        this.txtField = name;
+        this.isEditingField = false;
+        EditOrApplyTxtChangeCmd = ReactiveCommand.Create(EditOrApplyTxtChange);
+    }
+
+    public void EditOrApplyTxtChange()
+    {
+        if (IsEditing)
         {
-            get => _txt;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _txt, value);
-            }
+            this.onNameUpdated(Txt);
+            IsEditing = false;
         }
-
-        private bool _isEditing;
-        public bool IsEditing
+        else
         {
-            get => _isEditing;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _isEditing, value);
-            }
-        }
-
-        public ReactiveCommand<Unit, Unit> EditOrApplyTxtChangeCmd { get; }
-
-        public EditableTextBlockViewModel(string name, Action<string> onNameUpdated)
-        {
-            _onNameUpdated = onNameUpdated;
-            _txt = name;
-            _isEditing = false;
-            EditOrApplyTxtChangeCmd = ReactiveCommand.Create(EditOrApplyTxtChange);
-        }
-
-        public void EditOrApplyTxtChange()
-        {
-            if (IsEditing)
-            {
-                _onNameUpdated(Txt);
-                IsEditing = false;
-            }
-            else
-            {
-                IsEditing = true;
-            }
+            IsEditing = true;
         }
     }
 }

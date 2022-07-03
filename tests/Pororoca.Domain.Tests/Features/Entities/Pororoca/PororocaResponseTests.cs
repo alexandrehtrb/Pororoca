@@ -1,10 +1,10 @@
-using Xunit;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Text;
+using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.VariableResolution;
-using System.Net;
-using System.Text;
-using System.Net.Http.Headers;
-using Pororoca.Domain.Features.Common;
+using Xunit;
 
 namespace Pororoca.Domain.Tests.Features.Entities.Pororoca;
 
@@ -16,10 +16,10 @@ public static class PororocaResponseTests
     public static async Task Should_return_success_true_and_the_status_code_if_successful()
     {
         // GIVEN
-        HttpResponseMessage resMsg = CreateTestHttpResponseMessage("oi", "text/plain", "inline");
+        var resMsg = CreateTestHttpResponseMessage("oi", "text/plain", "inline");
 
         // WHEN
-        PororocaResponse res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.True(res.Successful);
@@ -33,7 +33,7 @@ public static class PororocaResponseTests
         Exception testException = new();
 
         // WHEN
-        PororocaResponse res = PororocaResponse.Failed(testElapsedTime, testException);
+        var res = PororocaResponse.Failed(testElapsedTime, testException);
 
         // THEN
         Assert.False(res.Successful);
@@ -44,10 +44,10 @@ public static class PororocaResponseTests
     public static async Task Should_return_all_headers_found()
     {
         // GIVEN
-        HttpResponseMessage resMsg = CreateTestHttpResponseMessage("oi", "text/plain", "inline");
+        var resMsg = CreateTestHttpResponseMessage("oi", "text/plain", "inline");
 
         // WHEN
-        PororocaResponse res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.NotNull(res.Headers);
@@ -64,7 +64,7 @@ public static class PororocaResponseTests
         // GIVEN
 
         // WHEN
-        PororocaResponse res = PororocaResponse.Failed(testElapsedTime, new Exception());
+        var res = PororocaResponse.Failed(testElapsedTime, new Exception());
 
         // THEN
         Assert.False(res.WasCancelled);
@@ -76,7 +76,7 @@ public static class PororocaResponseTests
         // GIVEN
 
         // WHEN
-        PororocaResponse res = PororocaResponse.Failed(testElapsedTime, new TaskCanceledException());
+        var res = PororocaResponse.Failed(testElapsedTime, new TaskCanceledException());
 
         // THEN
         Assert.True(res.WasCancelled);
@@ -86,10 +86,10 @@ public static class PororocaResponseTests
     public static async Task If_no_body_then_has_body_should_be_false()
     {
         // GIVEN
-        HttpResponseMessage resMsg = CreateTestHttpResponseMessage(null, null, null);
+        var resMsg = CreateTestHttpResponseMessage(null, null, null);
 
         // WHEN
-        PororocaResponse res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.False(res.HasBody);
@@ -99,10 +99,10 @@ public static class PororocaResponseTests
     public static async Task If_there_is_body_then_has_body_should_be_true()
     {
         // GIVEN
-        HttpResponseMessage resMsg = CreateTestHttpResponseMessage("oi", null, null);
+        var resMsg = CreateTestHttpResponseMessage("oi", null, null);
 
         // WHEN
-        PororocaResponse res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.True(res.HasBody);
@@ -115,10 +115,10 @@ public static class PororocaResponseTests
     public static async Task Should_get_the_correct_content_type(string? contentType)
     {
         // GIVEN
-        HttpResponseMessage resMsg = CreateTestHttpResponseMessage("{\"id\":1}", contentType, null);
+        var resMsg = CreateTestHttpResponseMessage("{\"id\":1}", contentType, null);
 
         // WHEN
-        PororocaResponse res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.Equal(contentType, res.ContentType);
@@ -131,10 +131,10 @@ public static class PororocaResponseTests
     public static async Task Can_display_text_body_should_be_true_when_text_content_type_or_null(string? contentType)
     {
         // GIVEN
-        HttpResponseMessage resMsg = CreateTestHttpResponseMessage("{\"id\":1}", contentType, null);
+        var resMsg = CreateTestHttpResponseMessage("{\"id\":1}", contentType, null);
 
         // WHEN
-        PororocaResponse res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.True(res.CanDisplayTextBody);
@@ -146,10 +146,10 @@ public static class PororocaResponseTests
     public static async Task Can_display_text_body_should_be_false_when_not_text_content_type(string? contentType)
     {
         // GIVEN
-        HttpResponseMessage resMsg = CreateTestHttpResponseMessage("{\"id\":1}", contentType, null);
+        var resMsg = CreateTestHttpResponseMessage("{\"id\":1}", contentType, null);
 
         // WHEN
-        PororocaResponse res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.False(res.CanDisplayTextBody);
@@ -159,10 +159,10 @@ public static class PororocaResponseTests
     public static async Task If_no_body_then_body_as_text_should_be_null()
     {
         // GIVEN
-        HttpResponseMessage resMsg = CreateTestHttpResponseMessage(null, null, null);
+        var resMsg = CreateTestHttpResponseMessage(null, null, null);
 
         // WHEN
-        PororocaResponse res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.Null(res.GetBodyAsText());
@@ -172,10 +172,10 @@ public static class PororocaResponseTests
     public static async Task If_non_json_text_body_then_body_as_text_should_be_as_is()
     {
         // GIVEN
-        HttpResponseMessage resMsg = CreateTestHttpResponseMessage("oi", "text/plain", null);
+        var resMsg = CreateTestHttpResponseMessage("oi", "text/plain", null);
 
         // WHEN
-        PororocaResponse res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.Equal("oi", res.GetBodyAsText());
@@ -185,10 +185,10 @@ public static class PororocaResponseTests
     public static async Task If_json_text_body_then_body_as_text_should_be_pretty_printed()
     {
         // GIVEN
-        HttpResponseMessage resMsg = CreateTestHttpResponseMessage("{\"id\":1}", "application/json", null);
+        var resMsg = CreateTestHttpResponseMessage("{\"id\":1}", "application/json", null);
 
         // WHEN
-        PororocaResponse res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.Equal("{" + Environment.NewLine + "  \"id\": 1" + Environment.NewLine + "}", res.GetBodyAsText());
@@ -200,10 +200,10 @@ public static class PororocaResponseTests
     public static async Task Get_body_as_binary_should_return_content_as_bytes_or_null(string? content)
     {
         // GIVEN
-        HttpResponseMessage resMsg = CreateTestHttpResponseMessage(content, null, null);
+        var resMsg = CreateTestHttpResponseMessage(content, null, null);
 
         // WHEN
-        PororocaResponse res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         if (content == null)
@@ -222,10 +222,10 @@ public static class PororocaResponseTests
     public static async Task Should_parse_content_disposition_filename_correctly_when_available(string expectedFileName, string? contentDisposition)
     {
         // GIVEN
-        HttpResponseMessage resMsg = CreateTestHttpResponseMessage("oi", "text/plain", contentDisposition);
+        var resMsg = CreateTestHttpResponseMessage("oi", "text/plain", contentDisposition);
 
         // WHEN
-        PororocaResponse res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.Equal(expectedFileName, res.GetContentDispositionFileName());
@@ -239,10 +239,10 @@ public static class PororocaResponseTests
     public static async Task If_content_disposition_filename_not_available_then_return_null(string? contentDisposition)
     {
         // GIVEN
-        HttpResponseMessage resMsg = CreateTestHttpResponseMessage("oi", "text/plain", contentDisposition);
+        var resMsg = CreateTestHttpResponseMessage("oi", "text/plain", contentDisposition);
 
         // WHEN
-        PororocaResponse res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.Null(res.GetContentDispositionFileName());
