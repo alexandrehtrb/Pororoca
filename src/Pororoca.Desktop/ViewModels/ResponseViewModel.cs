@@ -139,6 +139,8 @@ public sealed class ResponseViewModel : ViewModelBase
         else if (res != null && !res.WasCancelled) // Not success, but also not cancelled. If cancelled, do nothing.
         {
             this.res = res;
+            // TODO: Improve this, do not use fixed values to resolve index
+            ResponseTabsSelectedIndex = 1; // Show exception message
             ResponseStatusCodeElapsedTimeTitle = FormatFailedResponseTitle(res.ElapsedTime);
             UpdateHeadersAndTrailers(res.Headers, res.Trailers);
             ResponseRawContent = res.Exception!.ToString();
