@@ -34,9 +34,9 @@ function Get-RuntimesToPublishFor
 		,'osx-arm64' `
 	)
 	$windowsRuntimes = @(`
-		'win7-x64' ` 
-		,'win7-x86' `
-		,'win-x64' `
+		#'win7-x64' ` 
+		#,'win7-x86' `
+		'win-x64' `
 		,'win-x86' `
 		,'win-arm' `
 		,'win-arm64' `
@@ -203,7 +203,8 @@ function Publish-PororocaDesktop
 
 	if ($runtime -like "*win7*")
 	{
-		$publishSingleFile = $False
+		# .NET SDK 6.0.3xx and greater allows for single file publishing for Windows 7
+		$publishSingleFile = $True #$False
 	}
 	else
 	{

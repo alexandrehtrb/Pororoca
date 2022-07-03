@@ -2,9 +2,7 @@
 
 ## Windows
 
-[Baixe](https://github.com/alexandrehtrb/Pororoca/releases) o arquivo .zip para o seu sistema (`win` ou `win7`), extraia esse arquivo em uma pasta e execute o arquivo `Pororoca.exe`. Se desejar, clique com o botão direito do mouse no arquivo, "Enviar para", "Área de Trabalho (criar atalho)".
-
-*Se seu sistema operacional for Windows 7*, baixe o pacote que tem "win7" no nome, ao invés do pacote genérico "win".
+[Baixe](https://github.com/alexandrehtrb/Pororoca/releases) o arquivo .zip para o seu sistema (`win`), extraia esse arquivo em uma pasta e execute o arquivo `Pororoca.exe`. Se desejar, clique com o botão direito do mouse no arquivo, "Enviar para", "Área de Trabalho (criar atalho)".
 
 ## Mac OSX
 
