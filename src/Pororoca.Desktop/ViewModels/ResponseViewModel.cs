@@ -36,7 +36,7 @@ public sealed class ResponseViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref this.responseTabsSelectedIndexField, value);
     }
 
-    public ObservableCollection<KeyValueParamViewModel> ResponseHeaders { get; }
+    public ObservableCollection<KeyValueParamViewModel> ResponseHeadersAndTrailers { get; }
 
     private string? responseRawContentField;
     public string? ResponseRawContent
@@ -56,7 +56,7 @@ public sealed class ResponseViewModel : ViewModelBase
 
     public ResponseViewModel()
     {
-        ResponseHeaders = new();
+        ResponseHeadersAndTrailers = new();
         SaveResponseBodyToFileCmd = ReactiveCommand.CreateFromTask(SaveResponseBodyToFileAsync);
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
 
@@ -115,7 +115,7 @@ public sealed class ResponseViewModel : ViewModelBase
         {
             this.res = res;
             ResponseStatusCodeElapsedTimeTitle = FormatSuccessfulResponseTitle(res.ElapsedTime, (HttpStatusCode)res.StatusCode!);
-            UpdateHeaders(res.Headers);
+            UpdateHeadersAndTrailers(res.Headers, res.Trailers);
             ResponseRawContent = res.CanDisplayTextBody ? res.GetBodyAsText() : string.Format(Localizer.Instance["Response/BodyContentBinaryNotShown"], res.GetBodyAsBinary()!.Length);
             IsSaveResponseBodyToFileVisible = res.HasBody;
         }
@@ -123,7 +123,7 @@ public sealed class ResponseViewModel : ViewModelBase
         {
             this.res = res;
             ResponseStatusCodeElapsedTimeTitle = FormatFailedResponseTitle(res.ElapsedTime);
-            UpdateHeaders(res.Headers);
+            UpdateHeadersAndTrailers(res.Headers, res.Trailers);
             ResponseRawContent = res.Exception!.ToString();
             IsSaveResponseBodyToFileVisible = false;
         }
@@ -135,15 +135,21 @@ public sealed class ResponseViewModel : ViewModelBase
         }
     }
 
-    private void UpdateHeaders(IEnumerable<KeyValuePair<string, string>>? resHeaders)
+    private void UpdateHeadersAndTrailers(IEnumerable<KeyValuePair<string, string>>? resHeaders, IEnumerable<KeyValuePair<string, string>>? resTrailers)
     {
-        ResponseHeaders.Clear();
+        ResponseHeadersAndTrailers.Clear();
         if (resHeaders != null)
         {
             foreach (var kvp in resHeaders)
             {
-                PororocaKeyValueParam pkvp = new(true, kvp.Key, kvp.Value);
-                ResponseHeaders.Add(new KeyValueParamViewModel(pkvp));
+                ResponseHeadersAndTrailers.Add(new(true, kvp.Key, kvp.Value));
+            }
+        }
+        if (resTrailers != null)
+        {
+            foreach (var kvp in resTrailers)
+            {
+                ResponseHeadersAndTrailers.Add(new(true, kvp.Key, kvp.Value));
             }
         }
     }

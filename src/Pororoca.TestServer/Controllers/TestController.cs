@@ -43,6 +43,21 @@ public class TestController : ControllerBase
     [HttpGet]
     public IActionResult TestGetHeaders() =>
         Ok(Request.Headers.ToDictionary(hdr => hdr.Key, hdr => hdr.Value));
+    
+    [Route("get/trailers")]
+    [HttpGet]
+    public async Task TestGetTrailers()
+    {
+        HttpContext.Response.SupportsTrailers();
+        HttpContext.Response.DeclareTrailer("MyTrailer");
+        HttpContext.Response.StatusCode = (int)HttpStatusCode.OK;
+        HttpContext.Response.Headers.ContentType = new("application/json; charset=utf-8");
+        await HttpContext.Response.StartAsync();
+        byte[] bytes = Encoding.UTF8.GetBytes("{\"id\":1}");
+        await HttpContext.Response.BodyWriter.WriteAsync(bytes);
+        HttpContext.Response.AppendTrailer("MyTrailer", new("MyTrailerValue"));
+        await HttpContext.Response.CompleteAsync();
+    }
 
     #endregion
 

@@ -72,6 +72,14 @@
               "httpVersion": 2.0,
               "httpMethod": "GET",
               "url": "{{BaseUrlHttps}}/test/get/json"
+            },
+            {
+              "requestType": "http",
+              "id": "1ae944a7-c4e5-4173-87da-8b23e1a36d23",
+              "name": "Get trailers HTTP/2",
+              "httpVersion": 2.0,
+              "httpMethod": "GET",
+              "url": "{{BaseUrlHttps}}/test/get/trailers"
             }
           ]
         }
@@ -114,6 +122,14 @@
               "httpVersion": 3.0,
               "httpMethod": "GET",
               "url": "{{BaseUrlHttps}}/test/get/json"
+            },
+            {
+              "requestType": "http",
+              "id": "1af944a7-c4e5-4173-87da-8b23e1a36d23",
+              "name": "Get trailers HTTP/3",
+              "httpVersion": 3.0,
+              "httpMethod": "GET",
+              "url": "{{BaseUrlHttps}}/test/get/trailers"
             }
           ]
         }

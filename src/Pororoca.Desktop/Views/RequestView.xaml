@@ -350,12 +350,12 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="0" Grid.Row="0" Margin="12,28,12,0" FontSize="20" FontWeight="Light" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding ResponseDataCtx.ResponseStatusCodeElapsedTimeTitle}"/>
         <TabControl Grid.Column="0" Grid.Row="1" Margin="12,24,12,12" TabStripPlacement="Top" VerticalAlignment="Stretch" SelectedIndex="{Binding ResponseDataCtx.ResponseTabsSelectedIndex}">
-          <!-- RESPONSE HEADERS -->
+          <!-- RESPONSE HEADERS AND TRAILERS -->
           <TabItem>
             <TabItem.Header>
               <TextBlock Classes="TabItemHeader" Text="{i18n:Localize Headers, Context=Response}"/>
             </TabItem.Header>
-            <DataGrid Margin="-12,12,-12,12" VerticalAlignment="Stretch" AutoGenerateColumns="False" Items="{Binding ResponseDataCtx.ResponseHeaders}" CanUserResizeColumns="True">
+            <DataGrid Margin="-12,12,-12,12" VerticalAlignment="Stretch" AutoGenerateColumns="False" Items="{Binding ResponseDataCtx.ResponseHeadersAndTrailers}" CanUserResizeColumns="True">
                 <DataGrid.Columns>
                   <DataGridTextColumn Width="*" Binding="{Binding Key}">
                     <DataGridTextColumn.Header>
