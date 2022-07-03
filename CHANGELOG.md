@@ -1,9 +1,28 @@
 # Changelog
 
+* [1.4.0](#140-2022-07-03)
 * [1.3.0](#130-2022-05-15)
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [1.4.0](https://github.com/alexandrehtrb/Pororoca/tree/1.4.0) (2022-07-03)
+
+### Features
+
+* Supports HTTP response trailers (only available for HTTP/2 and HTTP/3)
+* Shows button in response area to disable TLS verification
+* Switches selected response tab to "Body" when exception occurs
+
+### Others
+
+* Improved .editorconfig and reformatted the entire code
+* Moved TestServer to tests folder
+* Renamed docs home pages to README.md
+* Detailed on documentation how to select exportation file format
+* Dynamically adds global.json for unit tests on Windows 7
+* Raised .NET SDK used for compilation to version 6.0.301
+* Unified Pororoca Desktop releases for Windows (requires .NET SDK 6.0.3xx or greater)
 
 ## [1.3.0](https://github.com/alexandrehtrb/Pororoca/tree/1.3.0) (2022-05-15)
 
