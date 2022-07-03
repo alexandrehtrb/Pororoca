@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pororoca.Domain.Tests", "te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pororoca.Desktop", "src\Pororoca.Desktop\Pororoca.Desktop.csproj", "{7C6F40A9-8559-4DA2-B4E6-986CC90AC1E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pororoca.TestServer", "src\Pororoca.TestServer\Pororoca.TestServer.csproj", "{390FD9D8-0747-4B39-B192-ECCE4F05DBC5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pororoca.TestServer", "tests\Pororoca.TestServer\Pororoca.TestServer.csproj", "{390FD9D8-0747-4B39-B192-ECCE4F05DBC5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pororoca.Test", "src\Pororoca.Test\Pororoca.Test.csproj", "{4CEA2473-DF87-40FF-81D0-4748A1718E18}"
 EndProject
