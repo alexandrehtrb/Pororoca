@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Headers;
+using System.Security.Authentication;
 using System.Text;
 using System.Text.Json;
 using Pororoca.Domain.Features.Common;
@@ -27,6 +28,10 @@ public sealed class PororocaResponse
 
     public bool WasCancelled =>
         Exception is TaskCanceledException;
+    
+    public bool FailedDueToTlsVerification =>
+        Exception?.InnerException is AuthenticationException aex
+        && aex.Message.Contains("remote certificate is invalid", StringComparison.InvariantCultureIgnoreCase);
 
     public bool HasBody =>
         this.binaryBody?.Length > 0;

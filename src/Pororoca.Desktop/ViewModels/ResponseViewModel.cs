@@ -54,10 +54,20 @@ public sealed class ResponseViewModel : ViewModelBase
 
     public ReactiveCommand<Unit, Unit> SaveResponseBodyToFileCmd { get; }
 
+    private bool isDisableTlsVerificationVisibleField;
+    public bool IsDisableTlsVerificationVisible
+    {
+        get => this.isDisableTlsVerificationVisibleField;
+        set => this.RaiseAndSetIfChanged(ref this.isDisableTlsVerificationVisibleField, value);
+    }
+
+    public ReactiveCommand<Unit, Unit> DisableTlsVerificationCmd { get; }
+
     public ResponseViewModel()
     {
         ResponseHeadersAndTrailers = new();
         SaveResponseBodyToFileCmd = ReactiveCommand.CreateFromTask(SaveResponseBodyToFileAsync);
+        DisableTlsVerificationCmd = ReactiveCommand.Create(DisableTlsVerification);
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
 
         UpdateWithResponse(this.res);
@@ -109,6 +119,12 @@ public sealed class ResponseViewModel : ViewModelBase
         }
     }
 
+    private void DisableTlsVerification()
+    {
+        ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled = true;
+        IsDisableTlsVerificationVisible = false;
+    }
+
     public void UpdateWithResponse(PororocaResponse? res)
     {
         if (res != null && res.Successful)
@@ -118,6 +134,7 @@ public sealed class ResponseViewModel : ViewModelBase
             UpdateHeadersAndTrailers(res.Headers, res.Trailers);
             ResponseRawContent = res.CanDisplayTextBody ? res.GetBodyAsText() : string.Format(Localizer.Instance["Response/BodyContentBinaryNotShown"], res.GetBodyAsBinary()!.Length);
             IsSaveResponseBodyToFileVisible = res.HasBody;
+            IsDisableTlsVerificationVisible = false;
         }
         else if (res != null && !res.WasCancelled) // Not success, but also not cancelled. If cancelled, do nothing.
         {
@@ -126,11 +143,14 @@ public sealed class ResponseViewModel : ViewModelBase
             UpdateHeadersAndTrailers(res.Headers, res.Trailers);
             ResponseRawContent = res.Exception!.ToString();
             IsSaveResponseBodyToFileVisible = false;
+
+            bool isSslVerificationDisabled = ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled;
+            IsDisableTlsVerificationVisible = !isSslVerificationDisabled && res.FailedDueToTlsVerification;
         }
         else if (this.res == null) // No response obtained yet.
         {
             ResponseStatusCodeElapsedTimeTitle = Localizer.Instance["Response/SectionTitle"];
-
+            IsDisableTlsVerificationVisible = false;
             ResponseRawContent = string.Empty;
         }
     }
