@@ -18,6 +18,6 @@ It is also necessary that your Mac OS authorizes programs from unidentified deve
 
 [Download](https://github.com/alexandrehtrb/Pororoca/releases) the .zip file for your Linux system (`linux`), then extract this file to a folder. After that, you can execute the Pororoca program by clicking on it twice or opening it from your Terminal.
 
-If you want to make HTTP/3 requests, the [libmsquic](https://github.com/microsoft/msquic) package must be installed on your machine. There are installation instructions [here](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel/http3?view=aspnetcore-6.0#linux) that apply for the most common Linux distros.
+If you want to make HTTP/3 requests, the [msquic](https://github.com/microsoft/msquic) package must be installed on your machine. There are installation instructions [here](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel/http3?view=aspnetcore-6.0#linux) that apply for the most common Linux distros.
 
-In case your Linux distro does not have the libmsquic package available, you can also build and install it. You will need the [lttng-tools](https://github.com/giraldeau/lttng-tools) package installed and there is a tutorial [here](https://github.com/microsoft/msquic/discussions/2318#discussioncomment-2015375).
+In case your Linux distro does not have the msquic package available, you can also build and install it. You will need the [lttng-tools](https://github.com/giraldeau/lttng-tools) package installed and there is a tutorial [here](https://github.com/microsoft/msquic/discussions/2318#discussioncomment-2015375).
