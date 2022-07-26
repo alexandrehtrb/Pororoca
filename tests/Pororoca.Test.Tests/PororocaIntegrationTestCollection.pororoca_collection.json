@@ -460,7 +460,13 @@
           "key": "BadSslClientCertDir",
           "value": "C:\\Projetos\\Pororoca\\tests\\Pororoca.Test.Tests\\BadSslClientCertificates",
           "isSecret": false
-        }
+        },
+        {
+          "enabled": false,
+          "key": "BadSslClientCertDir",
+          "value": "/home/alexandre/Projetos/Pororoca/tests/Pororoca.Test.Tests/BadSslClientCertificates",
+          "isSecret": false
+        }        
       ]
     }
   ]

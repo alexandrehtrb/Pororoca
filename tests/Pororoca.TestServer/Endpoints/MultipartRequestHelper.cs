@@ -1,6 +1,6 @@
 using Microsoft.Net.Http.Headers;
 
-namespace Pororoca.TestServer.Controllers;
+namespace Pororoca.TestServer.Endpoints;
 
 public static class MultipartRequestHelper
 {
