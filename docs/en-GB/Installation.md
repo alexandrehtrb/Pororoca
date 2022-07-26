@@ -20,4 +20,6 @@ It is also necessary that your Mac OS authorizes programs from unidentified deve
 
 If you want to make HTTP/3 requests, the [msquic](https://github.com/microsoft/msquic) package must be installed on your machine. There are installation instructions [here](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel/http3?view=aspnetcore-6.0#linux) that apply for the most common Linux distros.
 
-In case your Linux distro does not have the msquic package available, you can also build and install it. You will need the [lttng-tools](https://github.com/giraldeau/lttng-tools) package installed and there is a tutorial [here](https://github.com/microsoft/msquic/discussions/2318#discussioncomment-2015375).
+### **Attention**: Pororoca requires msquic version 1.9.0, and using versions higher than that will cause HTTP/3 requests to not run successfully.
+
+In case your Linux distro does not have the msquic package available, you can also build and install it. You will need the [lttng-tools](https://github.com/giraldeau/lttng-tools) package installed and there is a tutorial [here](https://github.com/microsoft/msquic/discussions/2318#discussioncomment-2015375). *Be aware on using the correct version of msquic repo:* `git checkout v1.9.0`.
