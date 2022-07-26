@@ -22,7 +22,7 @@
 * Detailed on documentation how to select exportation file format
 * Dynamically adds global.json for unit tests on Windows 7
 * Raised .NET SDK used for compilation to version 6.0.301
-* Unified Pororoca Desktop releases for Windows (requires .NET SDK 6.0.3xx or greater)
+* Unified Pororoca Desktop releases for Windows 7 and newer Windows versions
 
 ## [1.3.0](https://github.com/alexandrehtrb/Pororoca/tree/1.3.0) (2022-05-15)
 
