@@ -74,5 +74,11 @@ public static class Program
     private static IApplicationBuilder ConfigureApp(this WebApplication app) =>
         app.MapTestEndpoints()
            .UseSwagger()
-           .UseSwaggerUI();
+           .UseSwaggerUI()
+           .UseDefaultFiles()
+           .UseStaticFiles()
+           .UseWebSockets(new()
+           {
+                KeepAliveInterval = TimeSpan.FromMinutes(2)
+           });
 }
