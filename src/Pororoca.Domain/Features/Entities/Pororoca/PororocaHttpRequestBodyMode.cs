@@ -1,6 +1,6 @@
 namespace Pororoca.Domain.Features.Entities.Pororoca;
 
-public enum PororocaRequestBodyMode
+public enum PororocaHttpRequestBodyMode
 {
     Raw,
     File,

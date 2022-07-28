@@ -7,7 +7,7 @@ using static Pororoca.Domain.Features.Common.JsonConfiguration;
 
 namespace Pororoca.Domain.Features.TranslateRequest;
 
-public static class PororocaRequestTranslator
+public static class PororocaHttpRequestTranslator
 {
     public const string ClientCertificateOptionsKey = nameof(ClientCertificateOptionsKey);
 
@@ -15,21 +15,21 @@ public static class PororocaRequestTranslator
 
     #region IS VALID REQUEST
 
-    public static bool IsValidRequest(IPororocaVariableResolver variableResolver, PororocaRequest req, out string? errorCode) =>
+    public static bool IsValidRequest(IPororocaVariableResolver variableResolver, PororocaHttpRequest req, out string? errorCode) =>
         IsValidRequest(AvailablePororocaRequestSelectionOptions.IsHttpVersionAvailableInOS, File.Exists, variableResolver, req, out errorCode);
 
-    internal static bool IsValidRequest(HttpVersionAvailableInOSVerifier httpVersionOSVerifier, Func<string, bool> fileExistsVerifier, IPororocaVariableResolver variableResolver, PororocaRequest req, out string? errorCode) =>
+    internal static bool IsValidRequest(HttpVersionAvailableInOSVerifier httpVersionOSVerifier, Func<string, bool> fileExistsVerifier, IPororocaVariableResolver variableResolver, PororocaHttpRequest req, out string? errorCode) =>
         TryResolveRequestUri(variableResolver, req.Url, out _, out errorCode)
         && httpVersionOSVerifier(req.HttpVersion, out errorCode)
         && HasValidContentTypeForReqBody(req, out errorCode)
         && CheckReqBodyFileExists(req, fileExistsVerifier, out errorCode)
         && CheckClientCertificateFilesExist(variableResolver, fileExistsVerifier, req, out errorCode);
 
-    internal static bool HasValidContentTypeForReqBody(PororocaRequest req, out string? errorCode)
+    internal static bool HasValidContentTypeForReqBody(PororocaHttpRequest req, out string? errorCode)
     {
         var bodyMode = req.Body?.Mode;
 
-        if (bodyMode == PororocaRequestBodyMode.File || bodyMode == PororocaRequestBodyMode.Raw)
+        if (bodyMode == PororocaHttpRequestBodyMode.File || bodyMode == PororocaHttpRequestBodyMode.Raw)
         {
             bool isBlank = string.IsNullOrWhiteSpace(req.Body?.ContentType);
             bool isInvalid = !IsValidContentType(req.Body!.ContentType);
@@ -38,7 +38,7 @@ public static class PororocaRequestTranslator
                         null;
             return errorCode == null;
         }
-        else if (bodyMode == PororocaRequestBodyMode.FormData)
+        else if (bodyMode == PororocaHttpRequestBodyMode.FormData)
         {
             bool anyInvalid = req.Body!.FormDataValues!.Any(fd => fd.Enabled && !IsValidContentType(fd.ContentType));
             errorCode = anyInvalid ? TranslateRequestErrors.InvalidContentTypeFormData : null;
@@ -54,17 +54,17 @@ public static class PororocaRequestTranslator
     private static bool IsValidContentType(string? contentType) =>
         !string.IsNullOrWhiteSpace(contentType) && MimeTypesDetector.AllMimeTypes.Contains(contentType);
 
-    private static bool CheckReqBodyFileExists(PororocaRequest req, Func<string, bool> fileExistsVerifier, out string? errorCode)
+    private static bool CheckReqBodyFileExists(PororocaHttpRequest req, Func<string, bool> fileExistsVerifier, out string? errorCode)
     {
         var bodyMode = req.Body?.Mode;
 
-        if (bodyMode == PororocaRequestBodyMode.File)
+        if (bodyMode == PororocaHttpRequestBodyMode.File)
         {
             bool fileFound = fileExistsVerifier.Invoke(req.Body!.FileSrcPath!);
             errorCode = fileFound ? null : TranslateRequestErrors.ReqBodyFileNotFound;
             return errorCode == null;
         }
-        else if (bodyMode == PororocaRequestBodyMode.FormData)
+        else if (bodyMode == PororocaHttpRequestBodyMode.FormData)
         {
             bool anyNotFound = req.Body!.FormDataValues!
                                          .Any(fd => fd.Enabled
@@ -80,7 +80,7 @@ public static class PororocaRequestTranslator
         }
     }
 
-    private static bool CheckClientCertificateFilesExist(IPororocaVariableResolver variableResolver, Func<string, bool> fileExistsVerifier, PororocaRequest req, out string? errorCode)
+    private static bool CheckClientCertificateFilesExist(IPororocaVariableResolver variableResolver, Func<string, bool> fileExistsVerifier, PororocaHttpRequest req, out string? errorCode)
     {
         if (req.CustomAuth?.Mode != PororocaRequestAuthMode.ClientCertificate || req.CustomAuth?.ClientCertificate == null)
         {
@@ -126,10 +126,10 @@ public static class PororocaRequestTranslator
 
     #region TRANSLATE REQUEST
 
-    public static bool TryTranslateRequest(IPororocaVariableResolver variableResolver, PororocaRequest req, out HttpRequestMessage? reqMsg, out string? errorCode) =>
+    public static bool TryTranslateRequest(IPororocaVariableResolver variableResolver, PororocaHttpRequest req, out HttpRequestMessage? reqMsg, out string? errorCode) =>
         TryTranslateRequest(AvailablePororocaRequestSelectionOptions.IsHttpVersionAvailableInOS, variableResolver, req, out reqMsg, out errorCode);
 
-    internal static bool TryTranslateRequest(HttpVersionAvailableInOSVerifier httpVersionOSVerifier, IPororocaVariableResolver variableResolver, PororocaRequest req, out HttpRequestMessage? reqMsg, out string? errorCode)
+    internal static bool TryTranslateRequest(HttpVersionAvailableInOSVerifier httpVersionOSVerifier, IPororocaVariableResolver variableResolver, PororocaHttpRequest req, out HttpRequestMessage? reqMsg, out string? errorCode)
     {
         if (!TryResolveRequestUri(variableResolver, req.Url, out var uri, out errorCode)
          || !httpVersionOSVerifier(req.HttpVersion, out errorCode))
@@ -205,10 +205,10 @@ public static class PororocaRequestTranslator
      || headerName == "Expires"
      || headerName == "Last-Modified";
 
-    internal static IDictionary<string, string> ResolveContentHeaders(IPororocaVariableResolver variableResolver, PororocaRequest req) =>
+    internal static IDictionary<string, string> ResolveContentHeaders(IPororocaVariableResolver variableResolver, PororocaHttpRequest req) =>
         ResolveHeaders(variableResolver, req, IsContentHeader);
 
-    internal static IDictionary<string, string> ResolveNonContentHeaders(IPororocaVariableResolver variableResolver, PororocaRequest req)
+    internal static IDictionary<string, string> ResolveNonContentHeaders(IPororocaVariableResolver variableResolver, PororocaHttpRequest req)
     {
         var nonContentHeaders = ResolveHeaders(variableResolver, req, headerName => !IsContentHeader(headerName));
 
@@ -222,7 +222,7 @@ public static class PororocaRequestTranslator
         return nonContentHeaders;
     }
 
-    private static IDictionary<string, string> ResolveHeaders(IPororocaVariableResolver variableResolver, PororocaRequest req, Func<string, bool> headerNameCriteria) =>
+    private static IDictionary<string, string> ResolveHeaders(IPororocaVariableResolver variableResolver, PororocaHttpRequest req, Func<string, bool> headerNameCriteria) =>
         req.Headers == null ?
         new() :
         req.Headers
@@ -259,7 +259,7 @@ public static class PororocaRequestTranslator
         };
     }
 
-    private static void IncludeClientCertificateIfSet(IPororocaVariableResolver variableResolver, PororocaRequest req, HttpRequestMessage reqMsg)
+    private static void IncludeClientCertificateIfSet(IPororocaVariableResolver variableResolver, PororocaHttpRequest req, HttpRequestMessage reqMsg)
     {
         if (req.CustomAuth?.Mode == PororocaRequestAuthMode.ClientCertificate
          && req.CustomAuth?.ClientCertificate != null)
@@ -289,7 +289,7 @@ public static class PororocaRequestTranslator
 
     #region HTTP BODY
 
-    internal static IDictionary<string, string> ResolveFormUrlEncodedKeyValues(IPororocaVariableResolver variableResolver, PororocaRequestBody reqBody) =>
+    internal static IDictionary<string, string> ResolveFormUrlEncodedKeyValues(IPororocaVariableResolver variableResolver, PororocaHttpRequestBody reqBody) =>
         reqBody.UrlEncodedValues!
                .Where(x => x.Enabled)
                .Select(x => new KeyValuePair<string, string>(
@@ -298,7 +298,7 @@ public static class PororocaRequestTranslator
                .DistinctBy(x => x.Key)
                .ToDictionary(x => x.Key, x => x.Value);
 
-    internal static HttpContent? ResolveRequestContent(IPororocaVariableResolver variableResolver, PororocaRequestBody? reqBody, IDictionary<string, string> resolvedContentHeaders)
+    internal static HttpContent? ResolveRequestContent(IPororocaVariableResolver variableResolver, PororocaHttpRequestBody? reqBody, IDictionary<string, string> resolvedContentHeaders)
     {
         StringContent MakeRawContent()
         {
@@ -374,11 +374,11 @@ public static class PororocaRequestTranslator
 
         HttpContent? content = reqBody?.Mode switch
         {
-            PororocaRequestBodyMode.Raw => MakeRawContent(),
-            PororocaRequestBodyMode.File => MakeFileContent(reqBody.FileSrcPath!, reqBody.ContentType),
-            PororocaRequestBodyMode.UrlEncoded => MakeFormUrlEncodedContent(),
-            PororocaRequestBodyMode.FormData => MakeFormDataContent(),
-            PororocaRequestBodyMode.GraphQl => MakeGraphQlContent(),
+            PororocaHttpRequestBodyMode.Raw => MakeRawContent(),
+            PororocaHttpRequestBodyMode.File => MakeFileContent(reqBody.FileSrcPath!, reqBody.ContentType),
+            PororocaHttpRequestBodyMode.UrlEncoded => MakeFormUrlEncodedContent(),
+            PororocaHttpRequestBodyMode.FormData => MakeFormDataContent(),
+            PororocaHttpRequestBodyMode.GraphQl => MakeGraphQlContent(),
             _ => null
         };
 

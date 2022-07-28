@@ -5,16 +5,17 @@ namespace Pororoca.Domain.Features.Entities.Pororoca;
 public sealed class PororocaCollectionFolder : PororocaCollectionItem, ICloneable
 {
     [JsonInclude]
-    public Guid Id { get; init; }
-
-    [JsonInclude]
-    public string Name { get; private set; }
-
-    [JsonInclude]
     public IReadOnlyList<PororocaCollectionFolder> Folders { get; private set; }
 
     [JsonInclude]
     public IReadOnlyList<PororocaRequest> Requests { get; private set; }
+
+    [JsonIgnore] // JSON IGNORE
+    public IReadOnlyList<PororocaHttpRequest> HttpRequests =>
+        Requests.Where(r => r is PororocaHttpRequest)
+                .Cast<PororocaHttpRequest>()
+                .ToList()
+                .AsReadOnly();
 
 #nullable disable warnings
     public PororocaCollectionFolder() : this(string.Empty)
@@ -27,16 +28,11 @@ public sealed class PororocaCollectionFolder : PororocaCollectionItem, ICloneabl
     {
     }
 
-    public PororocaCollectionFolder(Guid id, string name)
+    public PororocaCollectionFolder(Guid id, string name) : base(id, name)
     {
-        Id = id;
-        Name = name;
         Folders = new List<PororocaCollectionFolder>().AsReadOnly();
         Requests = new List<PororocaRequest>().AsReadOnly();
     }
-
-    public void UpdateName(string name) =>
-        Name = name;
 
     public void AddFolder(PororocaCollectionFolder folder)
     {
@@ -66,7 +62,7 @@ public sealed class PororocaCollectionFolder : PororocaCollectionItem, ICloneabl
         Requests = newList.AsReadOnly();
     }
 
-    public object Clone() =>
+    public override object Clone() =>
         new PororocaCollectionFolder(Name)
         {
             Folders = Folders.Select(f => (PororocaCollectionFolder)f.Clone()).ToList(),

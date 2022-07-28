@@ -16,11 +16,11 @@ using static Pororoca.Domain.Features.Common.MimeTypesDetector;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class ResponseViewModel : ViewModelBase
+public sealed class HttpResponseViewModel : ViewModelBase
 {
     private static readonly TimeSpan oneSecond = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan oneMinute = TimeSpan.FromMinutes(1);
-    private PororocaResponse? res;
+    private PororocaHttpResponse? res;
 
     private string? responseStatusCodeElapsedTimeTitleField;
     public string? ResponseStatusCodeElapsedTimeTitle
@@ -63,7 +63,7 @@ public sealed class ResponseViewModel : ViewModelBase
 
     public ReactiveCommand<Unit, Unit> DisableTlsVerificationCmd { get; }
 
-    public ResponseViewModel()
+    public HttpResponseViewModel()
     {
         ResponseHeadersAndTrailers = new();
         SaveResponseBodyToFileCmd = ReactiveCommand.CreateFromTask(SaveResponseBodyToFileAsync);
@@ -125,14 +125,14 @@ public sealed class ResponseViewModel : ViewModelBase
         IsDisableTlsVerificationVisible = false;
     }
 
-    public void UpdateWithResponse(PororocaResponse? res)
+    public void UpdateWithResponse(PororocaHttpResponse? res)
     {
         if (res != null && res.Successful)
         {
             this.res = res;
             ResponseStatusCodeElapsedTimeTitle = FormatSuccessfulResponseTitle(res.ElapsedTime, (HttpStatusCode)res.StatusCode!);
             UpdateHeadersAndTrailers(res.Headers, res.Trailers);
-            ResponseRawContent = res.CanDisplayTextBody ? res.GetBodyAsText() : string.Format(Localizer.Instance["Response/BodyContentBinaryNotShown"], res.GetBodyAsBinary()!.Length);
+            ResponseRawContent = res.CanDisplayTextBody ? res.GetBodyAsText() : string.Format(Localizer.Instance["HttpResponse/BodyContentBinaryNotShown"], res.GetBodyAsBinary()!.Length);
             IsSaveResponseBodyToFileVisible = res.HasBody;
             IsDisableTlsVerificationVisible = false;
         }
@@ -151,7 +151,7 @@ public sealed class ResponseViewModel : ViewModelBase
         }
         else if (this.res == null) // No response obtained yet.
         {
-            ResponseStatusCodeElapsedTimeTitle = Localizer.Instance["Response/SectionTitle"];
+            ResponseStatusCodeElapsedTimeTitle = Localizer.Instance["HttpResponse/SectionTitle"];
             IsDisableTlsVerificationVisible = false;
             ResponseRawContent = string.Empty;
         }
@@ -177,12 +177,12 @@ public sealed class ResponseViewModel : ViewModelBase
     }
 
     private static string FormatSuccessfulResponseTitle(TimeSpan elapsedTime, HttpStatusCode statusCode) =>
-        string.Format(Localizer.Instance["Response/SectionTitleSuccessfulFormat"],
+        string.Format(Localizer.Instance["HttpResponse/SectionTitleSuccessfulFormat"],
                       FormatHttpStatusCode(statusCode),
                       FormatElapsedTime(elapsedTime));
 
     private static string FormatFailedResponseTitle(TimeSpan elapsedTime) =>
-        string.Format(Localizer.Instance["Response/SectionTitleFailedFormat"],
+        string.Format(Localizer.Instance["HttpResponse/SectionTitleFailedFormat"],
                       FormatElapsedTime(elapsedTime));
 
     private static string FormatHttpStatusCode(HttpStatusCode statusCode) =>
@@ -190,9 +190,9 @@ public sealed class ResponseViewModel : ViewModelBase
 
     private static string FormatElapsedTime(TimeSpan elapsedTime) =>
         elapsedTime < oneSecond ?
-        string.Format(Localizer.Instance["Response/ElapsedTimeMillisecondsFormat"], (int)elapsedTime.TotalMilliseconds) :
+        string.Format(Localizer.Instance["HttpResponse/ElapsedTimeMillisecondsFormat"], (int)elapsedTime.TotalMilliseconds) :
         elapsedTime < oneMinute ? // More or equal than one second, but less than one minute
-        string.Format(Localizer.Instance["Response/ElapsedTimeSecondsFormat"], elapsedTime.TotalSeconds) : // TODO: Format digit separator according to language
-        string.Format(Localizer.Instance["Response/ElapsedTimeMinutesFormat"], elapsedTime.Minutes, elapsedTime.Seconds);
+        string.Format(Localizer.Instance["HttpResponse/ElapsedTimeSecondsFormat"], elapsedTime.TotalSeconds) : // TODO: Format digit separator according to language
+        string.Format(Localizer.Instance["HttpResponse/ElapsedTimeMinutesFormat"], elapsedTime.Minutes, elapsedTime.Seconds);
 
 }

@@ -92,7 +92,7 @@ public sealed class CollectionsGroupViewModel : CollectionOrganizationItemParent
 
     private bool HasAnyParentFolderAlsoSelected(CollectionOrganizationItemViewModel itemVm)
     {
-        if (itemVm is not RequestViewModel && itemVm is not CollectionFolderViewModel)
+        if (itemVm is not HttpRequestViewModel && itemVm is not CollectionFolderViewModel)
             return false;
 
         var parent = itemVm.Parent;
@@ -126,9 +126,9 @@ public sealed class CollectionsGroupViewModel : CollectionOrganizationItemParent
 
     public IList<PororocaCollectionItem> FetchCopiesOfFoldersAndReqs() =>
         this.copiedDomainObjs.Where(o => o is PororocaCollectionFolder || o is PororocaRequest)
-                        .Select(o => o.Clone())
-                        .Cast<PororocaCollectionItem>()
-                        .ToList();
+                             .Select(o => o.Clone())
+                             .Cast<PororocaCollectionItem>()
+                             .ToList();
 
     public IList<PororocaEnvironment> FetchCopiesOfEnvironments() =>
         this.copiedDomainObjs.Where(o => o is PororocaEnvironment)
@@ -139,8 +139,8 @@ public sealed class CollectionsGroupViewModel : CollectionOrganizationItemParent
     public void CopyMultiple()
     {
         var reqsToCopy = CollectionGroupSelectedItems
-                         .Where(i => i is RequestViewModel reqVm && !HasAnyParentFolderAlsoSelected(reqVm))
-                         .Select(r => (ICloneable)((RequestViewModel)r).ToRequest());
+                         .Where(i => i is HttpRequestViewModel reqVm && !HasAnyParentFolderAlsoSelected(reqVm))
+                         .Select(r => (ICloneable)((HttpRequestViewModel)r).ToHttpRequest());
         var foldersToCopy = CollectionGroupSelectedItems
                             .Where(i => i is CollectionFolderViewModel folderVm && !HasAnyParentFolderAlsoSelected(folderVm))
                             .Select(f => (ICloneable)((CollectionFolderViewModel)f).ToCollectionFolder());
@@ -162,7 +162,7 @@ public sealed class CollectionsGroupViewModel : CollectionOrganizationItemParent
         .Where(i => i is CollectionViewModel
                  || i is CollectionFolderViewModel
                  || i is EnvironmentViewModel
-                 || i is RequestViewModel)
+                 || i is HttpRequestViewModel)
         .Cast<CollectionOrganizationItemViewModel>()
         .ToList()
         .ForEach(i => i.DeleteThis());

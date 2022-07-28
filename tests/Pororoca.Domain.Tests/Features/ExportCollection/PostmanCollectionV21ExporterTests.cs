@@ -46,7 +46,7 @@ public static class PostmanCollectionV21ExporterTests
     public static void Should_convert_pororoca_req_none_body_to_postman_req_body_correctly()
     {
         // GIVEN
-        PororocaRequestBody? reqBody = null;
+        PororocaHttpRequestBody? reqBody = null;
 
         // WHEN
         var postmanBody = ConvertToPostmanRequestBody(reqBody);
@@ -59,7 +59,7 @@ public static class PostmanCollectionV21ExporterTests
     public static void Should_convert_pororoca_req_raw_json_body_to_postman_req_body_correctly()
     {
         // GIVEN
-        PororocaRequestBody reqBody = new();
+        PororocaHttpRequestBody reqBody = new();
         reqBody.SetRawContent("[]", "application/json");
 
         // WHEN
@@ -80,7 +80,7 @@ public static class PostmanCollectionV21ExporterTests
     public static void Should_convert_pororoca_req_raw_text_body_to_postman_req_body_correctly()
     {
         // GIVEN
-        PororocaRequestBody reqBody = new();
+        PororocaHttpRequestBody reqBody = new();
         reqBody.SetRawContent("aeiou", "text/plain");
 
         // WHEN
@@ -101,7 +101,7 @@ public static class PostmanCollectionV21ExporterTests
     public static void Should_convert_pororoca_req_raw_xml_body_to_postman_req_body_correctly()
     {
         // GIVEN
-        PororocaRequestBody reqBody = new();
+        PororocaHttpRequestBody reqBody = new();
         reqBody.SetRawContent("<a k=\"1\"/>", "text/xml");
 
         // WHEN
@@ -122,7 +122,7 @@ public static class PostmanCollectionV21ExporterTests
     public static void Should_convert_pororoca_req_url_encoded_body_to_postman_req_body_correctly()
     {
         // GIVEN
-        PororocaRequestBody reqBody = new();
+        PororocaHttpRequestBody reqBody = new();
         PororocaKeyValueParam p1 = new(true, "Key1", "Value1");
         PororocaKeyValueParam p2 = new(false, "Key2", "Value2");
         reqBody.SetUrlEncodedContent(new[] { p1, p2 });
@@ -156,7 +156,7 @@ public static class PostmanCollectionV21ExporterTests
     public static void Should_convert_pororoca_req_file_body_to_postman_req_body_correctly()
     {
         // GIVEN
-        PororocaRequestBody reqBody = new();
+        PororocaHttpRequestBody reqBody = new();
         reqBody.SetFileContent(@"C:\Pasta1\arq.txt", "text/plain");
 
         // WHEN
@@ -178,7 +178,7 @@ public static class PostmanCollectionV21ExporterTests
     public static void Should_convert_pororoca_req_form_data_body_to_postman_req_body_correctly()
     {
         // GIVEN
-        PororocaRequestBody reqBody = new();
+        PororocaHttpRequestBody reqBody = new();
         PororocaRequestFormDataParam p1t = new(true, "Key1Text");
         p1t.SetTextValue("Value1Text", "text/plain");
         PororocaRequestFormDataParam p2t = new(false, "Key2Text");
@@ -242,7 +242,7 @@ public static class PostmanCollectionV21ExporterTests
         // GIVEN
         const string qry = "query allFruits { fruits { fruit_name } }";
         const string variables = "{\"id\":{{CocoId}}}";
-        PororocaRequestBody reqBody = new();
+        PororocaHttpRequestBody reqBody = new();
         reqBody.SetGraphQlContent(qry, variables);
 
         // WHEN
@@ -345,7 +345,7 @@ public static class PostmanCollectionV21ExporterTests
     public static void Should_convert_pororoca_req_to_postman_req_correctly()
     {
         // GIVEN
-        PororocaRequest req = new("Req1");
+        PororocaHttpRequest req = new("Req1");
         PororocaKeyValueParam h1 = new(true, "Key1", "Value1");
         PororocaKeyValueParam h2 = new(false, "Key2", "Value2");
         req.UpdateHeaders(new[] { h1, h2 });
@@ -354,7 +354,7 @@ public static class PostmanCollectionV21ExporterTests
         req.UpdateCustomAuth(auth);
         req.UpdateMethod("POST");
         req.UpdateUrl("http://www.abc.com.br");
-        PororocaRequestBody body = new();
+        PororocaHttpRequestBody body = new();
         body.SetRawContent("[]", "application/json");
         req.UpdateBody(body);
 
@@ -442,9 +442,9 @@ public static class PostmanCollectionV21ExporterTests
     private static PororocaCollection CreateTestCollection()
     {
         PororocaCollection col = new(testGuid, testName, DateTimeOffset.Now);
-        PororocaRequest req1 = new("Req1");
+        PororocaHttpRequest req1 = new("Req1");
         req1.UpdateUrl("http://www.abc.com.br");
-        PororocaRequest req2 = new("Req2");
+        PororocaHttpRequest req2 = new("Req2");
         req2.UpdateUrl("https://www.ghi.com.br");
         PororocaCollectionFolder folder1 = new("Folder1");
         folder1.AddRequest(req2);

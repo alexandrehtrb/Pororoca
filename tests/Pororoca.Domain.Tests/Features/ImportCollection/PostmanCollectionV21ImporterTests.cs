@@ -62,7 +62,7 @@ public static class PostmanCollectionV21ImporterTests
         PostmanRequestBody? postmanBody = null;
 
         // WHEN
-        var reqBody = ConvertToPororocaRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody);
 
         // THEN
         Assert.Null(reqBody);
@@ -80,11 +80,11 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        var reqBody = ConvertToPororocaRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody);
 
         // THEN
         Assert.NotNull(reqBody);
-        Assert.Equal(PororocaRequestBodyMode.Raw, reqBody!.Mode);
+        Assert.Equal(PororocaHttpRequestBodyMode.Raw, reqBody!.Mode);
         Assert.Equal("[]", reqBody.RawContent);
         Assert.Equal(MimeTypesDetector.DefaultMimeTypeForJson, reqBody.ContentType);
     }
@@ -101,11 +101,11 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        var reqBody = ConvertToPororocaRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody);
 
         // THEN
         Assert.NotNull(reqBody);
-        Assert.Equal(PororocaRequestBodyMode.Raw, reqBody!.Mode);
+        Assert.Equal(PororocaHttpRequestBodyMode.Raw, reqBody!.Mode);
         Assert.Equal("aeiou", reqBody.RawContent);
         Assert.Equal(MimeTypesDetector.DefaultMimeTypeForText, reqBody.ContentType);
     }
@@ -122,11 +122,11 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        var reqBody = ConvertToPororocaRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody);
 
         // THEN
         Assert.NotNull(reqBody);
-        Assert.Equal(PororocaRequestBodyMode.Raw, reqBody!.Mode);
+        Assert.Equal(PororocaHttpRequestBodyMode.Raw, reqBody!.Mode);
         Assert.Equal("<a k=\"1\"/>", reqBody.RawContent);
         Assert.Equal(MimeTypesDetector.DefaultMimeTypeForXml, reqBody.ContentType);
     }
@@ -144,11 +144,11 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        var reqBody = ConvertToPororocaRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody);
 
         // THEN
         Assert.NotNull(reqBody);
-        Assert.Equal(PororocaRequestBodyMode.UrlEncoded, reqBody!.Mode);
+        Assert.Equal(PororocaHttpRequestBodyMode.UrlEncoded, reqBody!.Mode);
 
         Assert.Equal(2, reqBody.UrlEncodedValues!.Count);
 
@@ -174,11 +174,11 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        var reqBody = ConvertToPororocaRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody);
 
         // THEN
         Assert.NotNull(reqBody);
-        Assert.Equal(PororocaRequestBodyMode.File, reqBody!.Mode);
+        Assert.Equal(PororocaHttpRequestBodyMode.File, reqBody!.Mode);
         Assert.Equal("image/png", reqBody.ContentType);
         Assert.Equal(@"/C:/MyFolder/image.png", reqBody.FileSrcPath);
     }
@@ -225,11 +225,11 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        var reqBody = ConvertToPororocaRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody);
 
         // THEN
         Assert.NotNull(reqBody);
-        Assert.Equal(PororocaRequestBodyMode.FormData, reqBody!.Mode);
+        Assert.Equal(PororocaHttpRequestBodyMode.FormData, reqBody!.Mode);
 
         Assert.Equal(4, reqBody.FormDataValues!.Count);
 
@@ -275,11 +275,11 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        var reqBody = ConvertToPororocaRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody);
 
         // THEN
         Assert.NotNull(reqBody);
-        Assert.Equal(PororocaRequestBodyMode.GraphQl, reqBody!.Mode);
+        Assert.Equal(PororocaHttpRequestBodyMode.GraphQl, reqBody!.Mode);
         Assert.NotNull(reqBody.GraphQlValues);
         Assert.Equal(qry, reqBody.GraphQlValues!.Query);
         Assert.Equal(variables, reqBody.GraphQlValues!.Variables);
@@ -391,7 +391,7 @@ public static class PostmanCollectionV21ImporterTests
         var postmanRequest = CreateTestRequestWithAuth();
 
         // WHEN
-        var req = ConvertToPororocaRequest(reqName, postmanRequest, collectionScopedAuth);
+        var req = ConvertToPororocaHttpRequest(reqName, postmanRequest, collectionScopedAuth);
 
         // THEN
         Assert.NotNull(req);
@@ -414,7 +414,7 @@ public static class PostmanCollectionV21ImporterTests
         Assert.Equal("Key2", hdr2.Key);
         Assert.Equal("Value2", hdr2.Value);
 
-        Assert.Equal(PororocaRequestBodyMode.Raw, req.Body!.Mode);
+        Assert.Equal(PororocaHttpRequestBodyMode.Raw, req.Body!.Mode);
         Assert.Equal("[]", req.Body.RawContent);
         Assert.Equal(MimeTypesDetector.DefaultMimeTypeForJson, req.Body.ContentType);
     }
@@ -430,7 +430,7 @@ public static class PostmanCollectionV21ImporterTests
         postmanRequest.Auth = null;
 
         // WHEN
-        var req = ConvertToPororocaRequest(reqName, postmanRequest, collectionScopedAuth);
+        var req = ConvertToPororocaHttpRequest(reqName, postmanRequest, collectionScopedAuth);
 
         // THEN
         Assert.NotNull(req);
@@ -452,7 +452,7 @@ public static class PostmanCollectionV21ImporterTests
         Assert.Equal("Key2", hdr2.Key);
         Assert.Equal("Value2", hdr2.Value);
 
-        Assert.Equal(PororocaRequestBodyMode.Raw, req.Body!.Mode);
+        Assert.Equal(PororocaHttpRequestBodyMode.Raw, req.Body!.Mode);
         Assert.Equal("[]", req.Body.RawContent);
         Assert.Equal(MimeTypesDetector.DefaultMimeTypeForJson, req.Body.ContentType);
     }
@@ -535,20 +535,21 @@ public static class PostmanCollectionV21ImporterTests
         Assert.Equal(testName, pororocaCollection.Name);
         Assert.Single(pororocaCollection.Folders);
         Assert.Single(pororocaCollection.Requests);
+        Assert.Single(pororocaCollection.HttpRequests);
 
         var folder1 = pororocaCollection.Folders[0];
         Assert.Equal("Folder1", folder1.Name);
         Assert.Empty(folder1.Folders);
         Assert.Single(folder1.Requests);
 
-        var req1 = folder1.Requests[0];
+        var req1 = folder1.HttpRequests[0];
         Assert.Equal("Req1", req1.Name);
         Assert.Equal("GET", req1.HttpMethod);
         Assert.Equal("http://www.abc.com.br", req1.Url);
         Assert.Equal(PororocaRequestAuthMode.Bearer, req1.CustomAuth!.Mode);
         Assert.Equal("tkn", req1.CustomAuth.BearerToken);
 
-        var req2 = pororocaCollection.Requests[0];
+        var req2 = pororocaCollection.HttpRequests[0];
         Assert.Equal("Req2", req2.Name);
         Assert.Equal("GET", req2.HttpMethod);
         Assert.Equal("http://www.def.com.br", req2.Url);

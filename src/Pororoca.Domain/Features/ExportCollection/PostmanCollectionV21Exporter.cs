@@ -24,7 +24,7 @@ public static class PostmanCollectionV21Exporter
                 Name = col.Name,
                 Schema = PostmanCollectionV21.SchemaUrl
             },
-            Items = ConvertToPostmanItems(col.Folders, col.Requests),
+            Items = ConvertToPostmanItems(col.Folders, col.HttpRequests),
             Variable = col.Variables
                           .Select(v => new PostmanVariable()
                           {
@@ -63,7 +63,7 @@ public static class PostmanCollectionV21Exporter
         return postmanAuth;
     }
 
-    private static PostmanCollectionItem[] ConvertToPostmanItems(IReadOnlyList<PororocaCollectionFolder> folders, IReadOnlyList<PororocaRequest> requests)
+    private static PostmanCollectionItem[] ConvertToPostmanItems(IReadOnlyList<PororocaCollectionFolder> folders, IReadOnlyList<PororocaHttpRequest> requests)
     {
         List<PostmanCollectionItem> postmanItems = new();
         postmanItems.AddRange(requests.Select(ConvertToPostmanItem));
@@ -76,7 +76,7 @@ public static class PostmanCollectionV21Exporter
     {
         List<PostmanCollectionItem> folderItems = new();
         folderItems.AddRange(colFolder.Folders.Select(ConvertToPostmanItem));
-        folderItems.AddRange(colFolder.Requests.Select(ConvertToPostmanItem));
+        folderItems.AddRange(colFolder.HttpRequests.Select(ConvertToPostmanItem));
 
         return new()
         {
@@ -86,7 +86,7 @@ public static class PostmanCollectionV21Exporter
         };
     }
 
-    internal static PostmanCollectionItem ConvertToPostmanItem(PororocaRequest req) =>
+    internal static PostmanCollectionItem ConvertToPostmanItem(PororocaHttpRequest req) =>
         new()
         {
             Name = req.Name,
@@ -187,30 +187,30 @@ public static class PostmanCollectionV21Exporter
         hdrs.Select(v => new PostmanVariable() { Key = v.Key, Value = v.Value, Type = "text", Disabled = (v.Enabled == false ? true : null) })
             .ToArray();
 
-    internal static PostmanRequestBody? ConvertToPostmanRequestBody(PororocaRequestBody? reqBody)
+    internal static PostmanRequestBody? ConvertToPostmanRequestBody(PororocaHttpRequestBody? reqBody)
     {
         PostmanRequestBody body = new();
 
         switch (reqBody?.Mode)
         {
-            case PororocaRequestBodyMode.Raw:
+            case PororocaHttpRequestBodyMode.Raw:
                 body.Mode = PostmanRequestBodyMode.Raw;
                 body.Raw = reqBody.RawContent;
                 body.Options = FindPostmanBodyOptionsForContentType(reqBody.ContentType);
                 break;
-            case PororocaRequestBodyMode.UrlEncoded:
+            case PororocaHttpRequestBodyMode.UrlEncoded:
                 body.Mode = PostmanRequestBodyMode.Urlencoded;
                 body.Urlencoded = ConvertToPostmanUrlEncodedValues(reqBody.UrlEncodedValues);
                 break;
-            case PororocaRequestBodyMode.File:
+            case PororocaHttpRequestBodyMode.File:
                 body.Mode = PostmanRequestBodyMode.File;
                 body.File = new() { Src = reqBody.FileSrcPath };
                 break;
-            case PororocaRequestBodyMode.FormData:
+            case PororocaHttpRequestBodyMode.FormData:
                 body.Mode = PostmanRequestBodyMode.Formdata;
                 body.Formdata = ConvertToPostmanFormDataParams(reqBody.FormDataValues);
                 break;
-            case PororocaRequestBodyMode.GraphQl:
+            case PororocaHttpRequestBodyMode.GraphQl:
                 body.Mode = PostmanRequestBodyMode.Graphql;
                 body.Graphql = new()
                 {

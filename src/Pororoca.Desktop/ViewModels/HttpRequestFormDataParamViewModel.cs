@@ -4,7 +4,7 @@ using ReactiveUI;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class RequestFormDataParamViewModel : ViewModelBase
+public sealed class HttpRequestFormDataParamViewModel : ViewModelBase
 {
     public PororocaRequestFormDataParamType ParamType { get; init; }
 
@@ -43,7 +43,7 @@ public sealed class RequestFormDataParamViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref this.contentTypeField, value);
     }
 
-    public RequestFormDataParamViewModel(PororocaRequestFormDataParam p)
+    public HttpRequestFormDataParamViewModel(PororocaRequestFormDataParam p)
     {
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
 
@@ -77,7 +77,7 @@ public sealed class RequestFormDataParamViewModel : ViewModelBase
     private string ResolveParamTypeText() =>
         ParamType switch
         {
-            PororocaRequestFormDataParamType.File => Localizer.Instance["Request/BodyFormDataParamTypeFile"],
-            _ => Localizer.Instance["Request/BodyFormDataParamTypeText"]
+            PororocaRequestFormDataParamType.File => Localizer.Instance["HttpRequest/BodyFormDataParamTypeFile"],
+            _ => Localizer.Instance["HttpRequest/BodyFormDataParamTypeText"]
         };
 }

@@ -93,11 +93,11 @@ public sealed class PororocaTest
         }
     }
 
-    public PororocaRequest? FindRequestInCollection(Func<PororocaRequest, bool> criteria)
+    public PororocaHttpRequest? FindHttpRequestInCollection(Func<PororocaHttpRequest, bool> criteria)
     {
-        static PororocaRequest? FindRequestInFolder(PororocaCollectionFolder folder, Func<PororocaRequest, bool> criteria)
+        static PororocaHttpRequest? FindHttpRequestInFolder(PororocaCollectionFolder folder, Func<PororocaHttpRequest, bool> criteria)
         {
-            var reqInFolder = folder.Requests.FirstOrDefault(criteria);
+            var reqInFolder = folder.HttpRequests.FirstOrDefault(criteria);
             if (reqInFolder != null)
             {
                 return reqInFolder;
@@ -106,7 +106,7 @@ public sealed class PororocaTest
             {
                 foreach (var subFolder in folder.Folders)
                 {
-                    var reqInSubfolder = FindRequestInFolder(subFolder, criteria);
+                    var reqInSubfolder = FindHttpRequestInFolder(subFolder, criteria);
                     if (reqInSubfolder != null)
                     {
                         return reqInSubfolder;
@@ -116,7 +116,7 @@ public sealed class PororocaTest
             }
         }
 
-        var reqInCol = Collection.Requests.FirstOrDefault(criteria);
+        var reqInCol = Collection.HttpRequests.FirstOrDefault(criteria);
         if (reqInCol != null)
         {
             return reqInCol;
@@ -125,7 +125,7 @@ public sealed class PororocaTest
         {
             foreach (var folder in Collection.Folders)
             {
-                var reqInFolder = FindRequestInFolder(folder, criteria);
+                var reqInFolder = FindHttpRequestInFolder(folder, criteria);
                 if (reqInFolder != null)
                 {
                     return reqInFolder;
@@ -135,9 +135,9 @@ public sealed class PororocaTest
         }
     }
 
-    public Task<PororocaResponse> SendRequestAsync(string requestName, CancellationToken cancellationToken = default)
+    public Task<PororocaHttpResponse> SendRequestAsync(string requestName, CancellationToken cancellationToken = default)
     {
-        var req = FindRequestInCollection(r => r.Name == requestName);
+        var req = FindHttpRequestInCollection(r => r.Name == requestName);
         if (req != null)
         {
             return SendRequestAsync(req, cancellationToken);
@@ -148,9 +148,9 @@ public sealed class PororocaTest
         }
     }
 
-    public Task<PororocaResponse> SendRequestAsync(Guid requestId, CancellationToken cancellationToken = default)
+    public Task<PororocaHttpResponse> SendRequestAsync(Guid requestId, CancellationToken cancellationToken = default)
     {
-        var req = FindRequestInCollection(r => r.Id == requestId);
+        var req = FindHttpRequestInCollection(r => r.Id == requestId);
         if (req != null)
         {
             return SendRequestAsync(req, cancellationToken);
@@ -161,11 +161,11 @@ public sealed class PororocaTest
         }
     }
 
-    public Task<PororocaResponse> SendRequestAsync(PororocaRequest req, CancellationToken cancellationToken = default)
+    public Task<PororocaHttpResponse> SendRequestAsync(PororocaHttpRequest req, CancellationToken cancellationToken = default)
     {
-        if (!PororocaRequestTranslator.IsValidRequest(Collection,
-                                                      req,
-                                                      out string? errorCode))
+        if (!PororocaHttpRequestTranslator.IsValidRequest(Collection,
+                                                          req,
+                                                          out string? errorCode))
         {
             throw new Exception($"Error: PororocaRequest could not be sent. Cause: '{errorCode}'.");
         }

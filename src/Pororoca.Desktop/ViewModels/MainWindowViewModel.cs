@@ -86,17 +86,17 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         set => this.RaiseAndSetIfChanged(ref this.collectionFolderViewDataCtxField, value);
     }
 
-    private bool isRequestViewVisibleField = false;
-    public bool IsRequestViewVisible
+    private bool isHttpRequestViewVisibleField = false;
+    public bool IsHttpRequestViewVisible
     {
-        get => this.isRequestViewVisibleField;
-        set => this.RaiseAndSetIfChanged(ref this.isRequestViewVisibleField, value);
+        get => this.isHttpRequestViewVisibleField;
+        set => this.RaiseAndSetIfChanged(ref this.isHttpRequestViewVisibleField, value);
     }
-    private RequestViewModel? requestViewDataCtxField = null;
-    public RequestViewModel? RequestViewDataCtx
+    private HttpRequestViewModel? httpRequestViewDataCtxField = null;
+    public HttpRequestViewModel? HttpRequestViewDataCtx
     {
-        get => this.requestViewDataCtxField;
-        set => this.RaiseAndSetIfChanged(ref this.requestViewDataCtxField, value);
+        get => this.httpRequestViewDataCtxField;
+        set => this.RaiseAndSetIfChanged(ref this.httpRequestViewDataCtxField, value);
     }
 
     #endregion
@@ -180,7 +180,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
                 IsCollectionVariablesViewVisible = false;
                 IsEnvironmentViewVisible = false;
                 IsCollectionFolderViewVisible = false;
-                IsRequestViewVisible = false;
+                IsHttpRequestViewVisible = false;
             }
         }
         else if (selectedItem is CollectionVariablesViewModel colVarsVm)
@@ -192,7 +192,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
                 IsCollectionVariablesViewVisible = true;
                 IsEnvironmentViewVisible = false;
                 IsCollectionFolderViewVisible = false;
-                IsRequestViewVisible = false;
+                IsHttpRequestViewVisible = false;
             }
         }
         else if (selectedItem is EnvironmentViewModel envVm)
@@ -204,7 +204,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
                 IsCollectionVariablesViewVisible = false;
                 IsEnvironmentViewVisible = true;
                 IsCollectionFolderViewVisible = false;
-                IsRequestViewVisible = false;
+                IsHttpRequestViewVisible = false;
             }
         }
         else if (selectedItem is CollectionFolderViewModel folderVm)
@@ -216,19 +216,19 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
                 IsCollectionVariablesViewVisible = false;
                 IsEnvironmentViewVisible = false;
                 IsCollectionFolderViewVisible = true;
-                IsRequestViewVisible = false;
+                IsHttpRequestViewVisible = false;
             }
         }
-        else if (selectedItem is RequestViewModel reqVm)
+        else if (selectedItem is HttpRequestViewModel reqVm)
         {
-            RequestViewDataCtx = reqVm;
-            if (!IsRequestViewVisible)
+            HttpRequestViewDataCtx = reqVm;
+            if (!IsHttpRequestViewVisible)
             {
                 IsCollectionViewVisible = false;
                 IsCollectionVariablesViewVisible = false;
                 IsEnvironmentViewVisible = false;
                 IsCollectionFolderViewVisible = false;
-                IsRequestViewVisible = true;
+                IsHttpRequestViewVisible = true;
             }
         }
     }
@@ -275,7 +275,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         IsCollectionVariablesViewVisible = false;
         IsEnvironmentViewVisible = false;
         IsCollectionFolderViewVisible = false;
-        IsRequestViewVisible = false;
+        IsHttpRequestViewVisible = false;
     }
 
     private async Task ImportCollectionsAsync()

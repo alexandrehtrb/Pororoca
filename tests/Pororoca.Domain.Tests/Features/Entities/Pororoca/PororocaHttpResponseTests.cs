@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Pororoca.Domain.Tests.Features.Entities.Pororoca;
 
-public static class PororocaResponseTests
+public static class PororocaHttpResponseTests
 {
     private static readonly TimeSpan testElapsedTime = TimeSpan.FromSeconds(4);
 
@@ -19,7 +19,7 @@ public static class PororocaResponseTests
         var resMsg = CreateTestHttpResponseMessage("oi", "text/plain", "inline");
 
         // WHEN
-        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.True(res.Successful);
@@ -33,7 +33,7 @@ public static class PororocaResponseTests
         Exception testException = new();
 
         // WHEN
-        var res = PororocaResponse.Failed(testElapsedTime, testException);
+        var res = PororocaHttpResponse.Failed(testElapsedTime, testException);
 
         // THEN
         Assert.False(res.Successful);
@@ -47,7 +47,7 @@ public static class PororocaResponseTests
         var resMsg = CreateTestHttpResponseMessage("oi", "text/plain", "inline");
 
         // WHEN
-        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.NotNull(res.Headers);
@@ -64,7 +64,7 @@ public static class PororocaResponseTests
         // GIVEN
 
         // WHEN
-        var res = PororocaResponse.Failed(testElapsedTime, new Exception());
+        var res = PororocaHttpResponse.Failed(testElapsedTime, new Exception());
 
         // THEN
         Assert.False(res.WasCancelled);
@@ -76,7 +76,7 @@ public static class PororocaResponseTests
         // GIVEN
 
         // WHEN
-        var res = PororocaResponse.Failed(testElapsedTime, new TaskCanceledException());
+        var res = PororocaHttpResponse.Failed(testElapsedTime, new TaskCanceledException());
 
         // THEN
         Assert.True(res.WasCancelled);
@@ -89,7 +89,7 @@ public static class PororocaResponseTests
         var resMsg = CreateTestHttpResponseMessage(null, null, null);
 
         // WHEN
-        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.False(res.HasBody);
@@ -102,7 +102,7 @@ public static class PororocaResponseTests
         var resMsg = CreateTestHttpResponseMessage("oi", null, null);
 
         // WHEN
-        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.True(res.HasBody);
@@ -118,7 +118,7 @@ public static class PororocaResponseTests
         var resMsg = CreateTestHttpResponseMessage("{\"id\":1}", contentType, null);
 
         // WHEN
-        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.Equal(contentType, res.ContentType);
@@ -134,7 +134,7 @@ public static class PororocaResponseTests
         var resMsg = CreateTestHttpResponseMessage("{\"id\":1}", contentType, null);
 
         // WHEN
-        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.True(res.CanDisplayTextBody);
@@ -149,7 +149,7 @@ public static class PororocaResponseTests
         var resMsg = CreateTestHttpResponseMessage("{\"id\":1}", contentType, null);
 
         // WHEN
-        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.False(res.CanDisplayTextBody);
@@ -162,7 +162,7 @@ public static class PororocaResponseTests
         var resMsg = CreateTestHttpResponseMessage(null, null, null);
 
         // WHEN
-        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.Null(res.GetBodyAsText());
@@ -175,7 +175,7 @@ public static class PororocaResponseTests
         var resMsg = CreateTestHttpResponseMessage("oi", "text/plain", null);
 
         // WHEN
-        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.Equal("oi", res.GetBodyAsText());
@@ -188,7 +188,7 @@ public static class PororocaResponseTests
         var resMsg = CreateTestHttpResponseMessage("{\"id\":1}", "application/json", null);
 
         // WHEN
-        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.Equal("{" + Environment.NewLine + "  \"id\": 1" + Environment.NewLine + "}", res.GetBodyAsText());
@@ -203,7 +203,7 @@ public static class PororocaResponseTests
         var resMsg = CreateTestHttpResponseMessage(content, null, null);
 
         // WHEN
-        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         if (content == null)
@@ -225,7 +225,7 @@ public static class PororocaResponseTests
         var resMsg = CreateTestHttpResponseMessage("oi", "text/plain", contentDisposition);
 
         // WHEN
-        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.Equal(expectedFileName, res.GetContentDispositionFileName());
@@ -242,7 +242,7 @@ public static class PororocaResponseTests
         var resMsg = CreateTestHttpResponseMessage("oi", "text/plain", contentDisposition);
 
         // WHEN
-        var res = await PororocaResponse.SuccessfulAsync(testElapsedTime, resMsg);
+        var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
         Assert.Null(res.GetContentDispositionFileName());

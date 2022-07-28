@@ -19,16 +19,23 @@ public sealed class PororocaCollection : IPororocaVariableResolver, ICloneable
     public DateTimeOffset CreatedAt { get; init; }
 
     [JsonInclude]
+    public IReadOnlyList<PororocaVariable> Variables { get; private set; }
+
+    [JsonInclude]
+    public IReadOnlyList<PororocaEnvironment> Environments { get; private set; }
+
+    [JsonInclude]
     public IReadOnlyList<PororocaCollectionFolder> Folders { get; private set; }
 
     [JsonInclude]
     public IReadOnlyList<PororocaRequest> Requests { get; private set; }
 
-    [JsonInclude]
-    public IReadOnlyList<PororocaVariable> Variables { get; private set; }
-
-    [JsonInclude]
-    public IReadOnlyList<PororocaEnvironment> Environments { get; private set; }
+    [JsonIgnore] // JSON IGNORE
+    public IReadOnlyList<PororocaHttpRequest> HttpRequests =>
+        Requests.Where(r => r is PororocaHttpRequest)
+                .Cast<PororocaHttpRequest>()
+                .ToList()
+                .AsReadOnly();
 
 #nullable disable warnings
     public PororocaCollection()

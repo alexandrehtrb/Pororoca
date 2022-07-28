@@ -24,7 +24,7 @@ using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOp
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class RequestViewModel : CollectionOrganizationItemViewModel
+public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 {
     #region COLLECTION ORGANIZATION
 
@@ -138,20 +138,20 @@ public sealed class RequestViewModel : CollectionOrganizationItemViewModel
         set => this.RaiseAndSetIfChanged(ref this.isRequestBodyModeNoneSelectedField, value);
     }
 
-    private PororocaRequestBodyMode? RequestBodyMode
+    private PororocaHttpRequestBodyMode? RequestBodyMode
     {
         get
         {
             if (IsRequestBodyModeFormDataSelected)
-                return PororocaRequestBodyMode.FormData;
+                return PororocaHttpRequestBodyMode.FormData;
             if (IsRequestBodyModeUrlEncodedSelected)
-                return PororocaRequestBodyMode.UrlEncoded;
+                return PororocaHttpRequestBodyMode.UrlEncoded;
             if (IsRequestBodyModeFileSelected)
-                return PororocaRequestBodyMode.File;
+                return PororocaHttpRequestBodyMode.File;
             if (IsRequestBodyModeRawSelected)
-                return PororocaRequestBodyMode.Raw;
+                return PororocaHttpRequestBodyMode.Raw;
             if (IsRequestBodyModeGraphQlSelected)
-                return PororocaRequestBodyMode.GraphQl;
+                return PororocaHttpRequestBodyMode.GraphQl;
             else
                 return null;
         }
@@ -235,8 +235,8 @@ public sealed class RequestViewModel : CollectionOrganizationItemViewModel
         set => this.RaiseAndSetIfChanged(ref this.isRequestBodyModeFormDataSelectedField, value);
     }
 
-    public ObservableCollection<RequestFormDataParamViewModel> FormDataParams { get; }
-    public RequestFormDataParamViewModel? SelectedFormDataParam { get; set; }
+    public ObservableCollection<HttpRequestFormDataParamViewModel> FormDataParams { get; }
+    public HttpRequestFormDataParamViewModel? SelectedFormDataParam { get; set; }
     public ReactiveCommand<Unit, Unit> AddNewFormDataTextParamCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewFormDataFileParamCmd { get; }
     public ReactiveCommand<Unit, Unit> RemoveSelectedFormDataParamCmd { get; }
@@ -463,8 +463,8 @@ public sealed class RequestViewModel : CollectionOrganizationItemViewModel
 
     #region RESPONSE
 
-    private ResponseViewModel responseDataCtxField;
-    public ResponseViewModel ResponseDataCtx
+    private HttpResponseViewModel responseDataCtxField;
+    public HttpResponseViewModel ResponseDataCtx
     {
         get => this.responseDataCtxField;
         set => this.RaiseAndSetIfChanged(ref this.responseDataCtxField, value);
@@ -478,10 +478,10 @@ public sealed class RequestViewModel : CollectionOrganizationItemViewModel
 
     #endregion
 
-    public RequestViewModel(ICollectionOrganizationItemParentViewModel parentVm,
-                            IPororocaVariableResolver variableResolver,
-                            PororocaRequest req,
-                            Func<bool>? isOperatingSystemMacOsx = null) : base(parentVm, req.Name)
+    public HttpRequestViewModel(ICollectionOrganizationItemParentViewModel parentVm,
+                                IPororocaVariableResolver variableResolver,
+                                PororocaHttpRequest req,
+                                Func<bool>? isOperatingSystemMacOsx = null) : base(parentVm, req.Name)
     {
         #region OTHERS
         this.isOperatingSystemMacOsx = (isOperatingSystemMacOsx ?? OperatingSystem.IsMacOS)();
@@ -524,23 +524,23 @@ public sealed class RequestViewModel : CollectionOrganizationItemViewModel
         // TODO: Improve this, do not use fixed values to resolve index
         switch (req.Body?.Mode)
         {
-            case PororocaRequestBodyMode.GraphQl:
+            case PororocaHttpRequestBodyMode.GraphQl:
                 RequestBodyModeSelectedIndex = 5;
                 IsRequestBodyModeGraphQlSelected = true;
                 break;
-            case PororocaRequestBodyMode.FormData:
+            case PororocaHttpRequestBodyMode.FormData:
                 RequestBodyModeSelectedIndex = 4;
                 IsRequestBodyModeFormDataSelected = true;
                 break;
-            case PororocaRequestBodyMode.UrlEncoded:
+            case PororocaHttpRequestBodyMode.UrlEncoded:
                 RequestBodyModeSelectedIndex = 3;
                 IsRequestBodyModeUrlEncodedSelected = true;
                 break;
-            case PororocaRequestBodyMode.File:
+            case PororocaHttpRequestBodyMode.File:
                 RequestBodyModeSelectedIndex = 2;
                 IsRequestBodyModeFileSelected = true;
                 break;
-            case PororocaRequestBodyMode.Raw:
+            case PororocaHttpRequestBodyMode.Raw:
                 RequestBodyModeSelectedIndex = 1;
                 IsRequestBodyModeRawSelected = true;
                 break;
@@ -561,7 +561,7 @@ public sealed class RequestViewModel : CollectionOrganizationItemViewModel
         AddNewUrlEncodedParamCmd = ReactiveCommand.Create(AddNewUrlEncodedParam);
         RemoveSelectedUrlEncodedParamCmd = ReactiveCommand.Create(RemoveSelectedUrlEncodedParam);
         // FORM DATA
-        FormDataParams = new(req.Body?.FormDataValues?.Select(p => new RequestFormDataParamViewModel(p)) ?? Array.Empty<RequestFormDataParamViewModel>());
+        FormDataParams = new(req.Body?.FormDataValues?.Select(p => new HttpRequestFormDataParamViewModel(p)) ?? Array.Empty<HttpRequestFormDataParamViewModel>());
         AddNewFormDataTextParamCmd = ReactiveCommand.Create(AddNewFormDataTextParam);
         AddNewFormDataFileParamCmd = ReactiveCommand.CreateFromTask(AddNewFormDataFileParam);
         RemoveSelectedFormDataParamCmd = ReactiveCommand.Create(RemoveSelectedFormDataParam);
@@ -636,7 +636,7 @@ public sealed class RequestViewModel : CollectionOrganizationItemViewModel
     #region COLLECTION ORGANIZATION
 
     protected override void CopyThis() =>
-        CollectionsGroupDataCtx.PushToCopy(ToRequest());
+        CollectionsGroupDataCtx.PushToCopy(ToHttpRequest());
 
     private void OnLanguageChanged()
     {
@@ -886,24 +886,24 @@ public sealed class RequestViewModel : CollectionOrganizationItemViewModel
         return auth;
     }
 
-    private PororocaRequestBody? WrapRequestBodyFromInputs()
+    private PororocaHttpRequestBody? WrapRequestBodyFromInputs()
     {
-        PororocaRequestBody body = new();
+        PororocaHttpRequestBody body = new();
         switch (RequestBodyMode)
         {
-            case PororocaRequestBodyMode.GraphQl:
+            case PororocaHttpRequestBodyMode.GraphQl:
                 body.SetGraphQlContent(RequestBodyGraphQlQuery, RequestBodyGraphQlVariables);
                 break;
-            case PororocaRequestBodyMode.FormData:
+            case PororocaHttpRequestBodyMode.FormData:
                 body.SetFormDataContent(FormDataParams.Select(p => p.ToFormDataParam()));
                 break;
-            case PororocaRequestBodyMode.UrlEncoded:
+            case PororocaHttpRequestBodyMode.UrlEncoded:
                 body.SetUrlEncodedContent(UrlEncodedParams.Select(p => p.ToKeyValueParam()));
                 break;
-            case PororocaRequestBodyMode.File:
+            case PororocaHttpRequestBodyMode.File:
                 body.SetFileContent(RequestBodyFileSrcPath ?? string.Empty, RequestFileContentType ?? string.Empty);
                 break;
-            case PororocaRequestBodyMode.Raw:
+            case PororocaHttpRequestBodyMode.Raw:
                 body.SetRawContent(RequestRawContent ?? string.Empty, RequestRawContentType ?? string.Empty);
                 break;
             default:
@@ -912,14 +912,14 @@ public sealed class RequestViewModel : CollectionOrganizationItemViewModel
         return body;
     }
 
-    public PororocaRequest ToRequest()
+    public PororocaHttpRequest ToHttpRequest()
     {
-        PororocaRequest newReq = new(this.reqId, Name);
+        PororocaHttpRequest newReq = new(this.reqId, Name);
         UpdateRequestWithInputs(newReq);
         return newReq;
     }
 
-    private void UpdateRequestWithInputs(PororocaRequest request) =>
+    private void UpdateRequestWithInputs(PororocaHttpRequest request) =>
         request.Update(
             name: Name,
             httpVersion: RequestHttpVersion,
@@ -941,7 +941,7 @@ public sealed class RequestViewModel : CollectionOrganizationItemViewModel
     private async Task SendRequestAsync()
     {
         ClearInvalidRequestMessage();
-        var generatedReq = ToRequest();
+        var generatedReq = ToHttpRequest();
         if (!this.requester.IsValidRequest(this.variableResolver, generatedReq, out string? errorCode))
         {
             this.invalidRequestMessageErrorCode = errorCode;
@@ -993,7 +993,7 @@ public sealed class RequestViewModel : CollectionOrganizationItemViewModel
         IsSendRequestProgressBarVisible = false;
     }
 
-    private Task<PororocaResponse> SendRequestAsync(PororocaRequest generatedReq)
+    private Task<PororocaHttpResponse> SendRequestAsync(PororocaHttpRequest generatedReq)
     {
         bool disableSslVerification = ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled;
         this.sendRequestCancellationTokenSourceField = new();

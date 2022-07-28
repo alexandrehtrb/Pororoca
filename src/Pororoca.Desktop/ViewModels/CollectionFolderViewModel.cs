@@ -18,7 +18,7 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
     public ReactiveCommand<Unit, Unit> MoveUpCmd { get; }
     public ReactiveCommand<Unit, Unit> MoveDownCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewFolderCmd { get; }
-    public ReactiveCommand<Unit, Unit> AddNewRequestCmd { get; }
+    public ReactiveCommand<Unit, Unit> AddNewHttpRequestCmd { get; }
     public ReactiveCommand<Unit, Unit> CopyFolderCmd { get; }
     public ReactiveCommand<Unit, Unit> PasteToFolderCmd { get; }
     public ReactiveCommand<Unit, Unit> RenameFolderCmd { get; }
@@ -43,7 +43,7 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
         MoveUpCmd = ReactiveCommand.Create(MoveThisUp);
         MoveDownCmd = ReactiveCommand.Create(MoveThisDown);
         AddNewFolderCmd = ReactiveCommand.Create(AddNewFolder);
-        AddNewRequestCmd = ReactiveCommand.Create(AddNewRequest);
+        AddNewHttpRequestCmd = ReactiveCommand.Create(AddNewHttpRequest);
         CopyFolderCmd = ReactiveCommand.Create(Copy);
         PasteToFolderCmd = ReactiveCommand.Create(PasteToThis);
         RenameFolderCmd = ReactiveCommand.Create(RenameThis);
@@ -59,8 +59,8 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
         Items = new();
         foreach (var subFolder in folder.Folders)
             Items.Add(new CollectionFolderViewModel(this, variableResolver, subFolder));
-        foreach (var req in folder.Requests)
-            Items.Add(new RequestViewModel(this, variableResolver, req));
+        foreach (var req in folder.HttpRequests)
+            Items.Add(new HttpRequestViewModel(this, variableResolver, req));
 
         RefreshSubItemsAvailableMovements();
 
@@ -91,8 +91,8 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
         {
             if (itemToPaste is PororocaCollectionFolder folderToPaste)
                 AddFolder(folderToPaste);
-            else if (itemToPaste is PororocaRequest reqToPaste)
-                AddRequest(reqToPaste);
+            else if (itemToPaste is PororocaHttpRequest httpReqToPaste)
+                AddHttpRequest(httpReqToPaste);
         }
     }
 
@@ -102,16 +102,16 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
         AddFolder(newFolder);
     }
 
-    private void AddNewRequest()
+    private void AddNewHttpRequest()
     {
-        PororocaRequest newReq = new(Localizer.Instance["Request/NewRequest"]);
-        AddRequest(newReq);
+        PororocaHttpRequest newReq = new(Localizer.Instance["HttpRequest/NewRequest"]);
+        AddHttpRequest(newReq);
     }
 
     public void AddFolder(PororocaCollectionFolder folderToAdd)
     {
         var existingFolders = Items.Where(i => i is CollectionFolderViewModel);
-        var existingRequests = Items.Where(i => i is RequestViewModel);
+        var existingRequests = Items.Where(i => i is HttpRequestViewModel);
         CollectionFolderViewModel folderToAddVm = new(this, this.variableResolver, folderToAdd);
 
         var rearrangedItems = existingFolders.Append(folderToAddVm)
@@ -126,11 +126,11 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
         RefreshSubItemsAvailableMovements();
     }
 
-    public void AddRequest(PororocaRequest reqToAdd)
+    public void AddHttpRequest(PororocaHttpRequest reqToAdd)
     {
         var existingFolders = Items.Where(i => i is CollectionFolderViewModel).ToArray();
-        var existingRequests = Items.Where(i => i is RequestViewModel).ToArray();
-        RequestViewModel reqToAddVm = new(this, this.variableResolver, reqToAdd);
+        var existingRequests = Items.Where(i => i is HttpRequestViewModel).ToArray();
+        HttpRequestViewModel reqToAddVm = new(this, this.variableResolver, reqToAdd);
 
         var rearrangedItems = existingFolders.Concat(existingRequests)
                                              .Append(reqToAddVm)
@@ -155,8 +155,8 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
         {
             if (colItemVm is CollectionFolderViewModel colFolderVm)
                 newFolder.AddFolder(colFolderVm.ToCollectionFolder());
-            else if (colItemVm is RequestViewModel reqVm)
-                newFolder.AddRequest(reqVm.ToRequest());
+            else if (colItemVm is HttpRequestViewModel reqVm)
+                newFolder.AddRequest(reqVm.ToHttpRequest());
         }
         return newFolder;
     }

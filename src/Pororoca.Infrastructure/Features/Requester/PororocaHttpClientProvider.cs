@@ -36,7 +36,7 @@ internal static class PororocaHttpClientProvider
 
     private static PororocaRequestAuthClientCertificate? GetResolvedClientCertificate(HttpRequestMessage reqMsg)
     {
-        object? clientCertificateObj = reqMsg.Options.FirstOrDefault(o => o.Key == PororocaRequestTranslator.ClientCertificateOptionsKey).Value;
+        object? clientCertificateObj = reqMsg.Options.FirstOrDefault(o => o.Key == PororocaHttpRequestTranslator.ClientCertificateOptionsKey).Value;
         if (clientCertificateObj is PororocaRequestAuthClientCertificate resolvedCert)
         {
             return resolvedCert;

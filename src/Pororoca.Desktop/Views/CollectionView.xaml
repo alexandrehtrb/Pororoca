@@ -18,7 +18,7 @@
 
       <controls:IconButton Icon="/Assets/Images/icon_white_add_folder.png" Text="{i18n:Localize AddFolder, Context=Collection}" Command="{Binding AddNewFolderCmd}"/>
 
-      <controls:IconButton Icon="/Assets/Images/icon_white_add.png" Text="{i18n:Localize AddRequest, Context=Collection}" Command="{Binding AddNewRequestCmd}"/>
+      <controls:IconButton Icon="/Assets/Images/icon_white_add.png" Text="{i18n:Localize AddHttpRequest, Context=Collection}" Command="{Binding AddNewHttpRequestCmd}"/>
       
       <controls:IconButton Icon="/Assets/Images/icon_white_leaf.png" Text="{i18n:Localize AddEnvironment, Context=Collection}" Command="{Binding AddNewEnvironmentCmd}"/>
       

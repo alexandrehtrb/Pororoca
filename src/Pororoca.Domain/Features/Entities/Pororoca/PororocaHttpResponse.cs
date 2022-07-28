@@ -8,7 +8,7 @@ using static Pororoca.Domain.Features.Common.JsonConfiguration;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca;
 
-public sealed class PororocaResponse
+public sealed class PororocaHttpResponse
 {
     public TimeSpan ElapsedTime { get; }
 
@@ -115,16 +115,16 @@ public sealed class PororocaResponse
         return null;
     }
 
-    public static async Task<PororocaResponse> SuccessfulAsync(TimeSpan elapsedTime, HttpResponseMessage responseMessage)
+    public static async Task<PororocaHttpResponse> SuccessfulAsync(TimeSpan elapsedTime, HttpResponseMessage responseMessage)
     {
         byte[] binaryBody = await responseMessage.Content.ReadAsByteArrayAsync();
         return new(elapsedTime, responseMessage, binaryBody);
     }
 
-    public static PororocaResponse Failed(TimeSpan elapsedTime, Exception ex) =>
+    public static PororocaHttpResponse Failed(TimeSpan elapsedTime, Exception ex) =>
         new(elapsedTime, ex);
 
-    private PororocaResponse(TimeSpan elapsedTime, HttpResponseMessage responseMessage, byte[] binaryBody)
+    private PororocaHttpResponse(TimeSpan elapsedTime, HttpResponseMessage responseMessage, byte[] binaryBody)
     {
         static KeyValuePair<string, string> ConvertHeaderToKeyValuePair(KeyValuePair<string, IEnumerable<string>> header) =>
             new(header.Key, string.Join(';', header.Value));
@@ -144,7 +144,7 @@ public sealed class PororocaResponse
         this.binaryBody = binaryBody;
     }
 
-    private PororocaResponse(TimeSpan elapsedTime, Exception exception)
+    private PororocaHttpResponse(TimeSpan elapsedTime, Exception exception)
     {
         ElapsedTime = elapsedTime;
         Successful = false;

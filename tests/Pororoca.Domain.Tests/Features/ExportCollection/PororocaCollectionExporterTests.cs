@@ -39,9 +39,9 @@ public static class PororocaCollectionExporterTests
     private static PororocaCollection CreateTestCollection()
     {
         PororocaCollection col = new(testGuid, testName, DateTimeOffset.Now);
-        PororocaRequest req1 = new("Req1");
+        PororocaHttpRequest req1 = new("Req1");
         req1.UpdateUrl("http://www.abc.com.br");
-        PororocaRequest req2 = new("Req2");
+        PororocaHttpRequest req2 = new("Req2");
         req2.UpdateUrl("https://www.ghi.com.br");
         PororocaCollectionFolder folder1 = new("Folder1");
         folder1.AddRequest(req2);
@@ -68,12 +68,13 @@ public static class PororocaCollectionExporterTests
         Assert.NotNull(col);
         Assert.Equal(testGuid, col.Id);
         Assert.Equal(testName, col.Name);
+        Assert.Equal(2, col.Variables.Count);
+        Assert.Equal(1, col.Environments.Count);
         Assert.Equal(1, col.Folders.Count);
         Assert.Equal(1, col.Requests.Count);
-        Assert.Equal(1, col.Environments.Count);
-        Assert.Equal(2, col.Variables.Count);
+        Assert.Equal(1, col.HttpRequests.Count);
 
-        var req1 = col.Requests[0];
+        var req1 = col.HttpRequests[0];
         Assert.Equal("Req1", req1.Name);
         Assert.Equal("GET", req1.HttpMethod);
         Assert.Equal("http://www.abc.com.br", req1.Url);
@@ -83,7 +84,7 @@ public static class PororocaCollectionExporterTests
         Assert.Empty(folder1.Folders);
         Assert.Single(folder1.Requests);
 
-        var req2 = folder1.Requests[0];
+        var req2 = folder1.HttpRequests[0];
         Assert.Equal("Req2", req2.Name);
         Assert.Equal("GET", req2.HttpMethod);
         Assert.Equal("https://www.ghi.com.br", req2.Url);

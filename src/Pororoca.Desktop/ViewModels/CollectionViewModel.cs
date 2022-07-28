@@ -22,7 +22,7 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
     public ReactiveCommand<Unit, Unit> MoveUpCmd { get; }
     public ReactiveCommand<Unit, Unit> MoveDownCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewFolderCmd { get; }
-    public ReactiveCommand<Unit, Unit> AddNewRequestCmd { get; }
+    public ReactiveCommand<Unit, Unit> AddNewHttpRequestCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewEnvironmentCmd { get; }
     public ReactiveCommand<Unit, Unit> DuplicateCollectionCmd { get; }
     public ReactiveCommand<Unit, Unit> PasteToCollectionCmd { get; }
@@ -74,7 +74,7 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
         MoveUpCmd = ReactiveCommand.Create(MoveThisUp);
         MoveDownCmd = ReactiveCommand.Create(MoveThisDown);
         AddNewFolderCmd = ReactiveCommand.Create(AddNewFolder);
-        AddNewRequestCmd = ReactiveCommand.Create(AddNewRequest);
+        AddNewHttpRequestCmd = ReactiveCommand.Create(AddNewHttpRequest);
         AddNewEnvironmentCmd = ReactiveCommand.Create(AddNewEnvironment);
         DuplicateCollectionCmd = ReactiveCommand.Create(() => onDuplicateCollectionSelected(this));
         PasteToCollectionCmd = ReactiveCommand.Create(PasteToThis);
@@ -98,8 +98,8 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
         };
         foreach (var folder in col.Folders)
             Items.Add(new CollectionFolderViewModel(this, this, folder));
-        foreach (var req in col.Requests)
-            Items.Add(new RequestViewModel(this, this, req));
+        foreach (var req in col.HttpRequests)
+            Items.Add(new HttpRequestViewModel(this, this, req));
 
         RefreshSubItemsAvailableMovements();
 
@@ -126,10 +126,10 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
         AddFolder(newFolder);
     }
 
-    private void AddNewRequest()
+    private void AddNewHttpRequest()
     {
-        PororocaRequest newReq = new(Localizer.Instance["Request/NewRequest"]);
-        AddRequest(newReq);
+        PororocaHttpRequest newReq = new(Localizer.Instance["HttpRequest/NewRequest"]);
+        AddHttpRequest(newReq);
     }
 
     private void AddNewEnvironment()
@@ -149,7 +149,7 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
         var variablesGroup = Items.First(i => i is CollectionVariablesViewModel);
         var environmentsGroup = Items.First(i => i is EnvironmentsGroupViewModel);
         var existingFolders = Items.Where(i => i is CollectionFolderViewModel);
-        var existingRequests = Items.Where(i => i is RequestViewModel);
+        var existingRequests = Items.Where(i => i is HttpRequestViewModel);
         CollectionFolderViewModel folderToAddVm = new(this, this, folderToAdd);
 
         var rearrangedItems = new[] { variablesGroup, environmentsGroup }
@@ -166,13 +166,13 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
         RefreshSubItemsAvailableMovements();
     }
 
-    public void AddRequest(PororocaRequest reqToAdd)
+    public void AddHttpRequest(PororocaHttpRequest reqToAdd)
     {
         var variablesGroup = Items.First(i => i is CollectionVariablesViewModel);
         var environmentsGroup = Items.First(i => i is EnvironmentsGroupViewModel);
         var existingFolders = Items.Where(i => i is CollectionFolderViewModel);
-        var existingRequests = Items.Where(i => i is RequestViewModel);
-        RequestViewModel reqToAddVm = new(this, this, reqToAdd);
+        var existingRequests = Items.Where(i => i is HttpRequestViewModel);
+        HttpRequestViewModel reqToAddVm = new(this, this, reqToAdd);
 
         var rearrangedItems = new[] { variablesGroup, environmentsGroup }
                                                                 .Concat(existingFolders)
@@ -199,8 +199,8 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
         {
             if (itemToPaste is PororocaCollectionFolder folderToPaste)
                 AddFolder(folderToPaste);
-            else if (itemToPaste is PororocaRequest reqToPaste)
-                AddRequest(reqToPaste);
+            else if (itemToPaste is PororocaHttpRequest httpReqToPaste)
+                AddHttpRequest(httpReqToPaste);
         }
 
         var envGpVm = (EnvironmentsGroupViewModel)Items.First(i => i is EnvironmentsGroupViewModel);
@@ -287,8 +287,8 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
                 newCol.UpdateEnvironments(colEnvsVm.ToEnvironments());
             else if (colItemVm is CollectionFolderViewModel colFolderVm)
                 newCol.AddFolder(colFolderVm.ToCollectionFolder());
-            else if (colItemVm is RequestViewModel reqVm)
-                newCol.AddRequest(reqVm.ToRequest());
+            else if (colItemVm is HttpRequestViewModel reqVm)
+                newCol.AddRequest(reqVm.ToHttpRequest());
         }
         return newCol;
     }

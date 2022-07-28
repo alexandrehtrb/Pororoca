@@ -2,10 +2,10 @@ using System.Text.Json.Serialization;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca;
 
-public sealed class PororocaRequestBody : ICloneable
+public sealed class PororocaHttpRequestBody : ICloneable
 {
     [JsonInclude]
-    public PororocaRequestBodyMode Mode { get; private set; }
+    public PororocaHttpRequestBodyMode Mode { get; private set; }
 
     [JsonInclude]
     public string? ContentType { get; private set; }
@@ -23,11 +23,11 @@ public sealed class PororocaRequestBody : ICloneable
     public IReadOnlyList<PororocaRequestFormDataParam>? FormDataValues { get; private set; }
 
     [JsonInclude]
-    public PororocaRequestBodyGraphQl? GraphQlValues { get; private set; }
+    public PororocaHttpRequestBodyGraphQl? GraphQlValues { get; private set; }
 
-    public PororocaRequestBody()
+    public PororocaHttpRequestBody()
     {
-        Mode = PororocaRequestBodyMode.Raw;
+        Mode = PororocaHttpRequestBodyMode.Raw;
         ContentType = null;
         RawContent = null;
         FileSrcPath = null;
@@ -38,38 +38,38 @@ public sealed class PororocaRequestBody : ICloneable
 
     public void SetRawContent(string rawContent, string contentType)
     {
-        Mode = PororocaRequestBodyMode.Raw;
+        Mode = PororocaHttpRequestBodyMode.Raw;
         ContentType = contentType;
         RawContent = rawContent;
     }
 
     public void SetFileContent(string filePath, string contentType)
     {
-        Mode = PororocaRequestBodyMode.File;
+        Mode = PororocaHttpRequestBodyMode.File;
         ContentType = contentType;
         FileSrcPath = filePath;
     }
 
     public void SetUrlEncodedContent(IEnumerable<PororocaKeyValueParam> urlEncodedValues)
     {
-        Mode = PororocaRequestBodyMode.UrlEncoded;
+        Mode = PororocaHttpRequestBodyMode.UrlEncoded;
         UrlEncodedValues = urlEncodedValues.ToList().AsReadOnly();
     }
 
     public void SetFormDataContent(IEnumerable<PororocaRequestFormDataParam> formDataValues)
     {
-        Mode = PororocaRequestBodyMode.FormData;
+        Mode = PororocaHttpRequestBodyMode.FormData;
         FormDataValues = formDataValues.ToList().AsReadOnly();
     }
 
     public void SetGraphQlContent(string? query, string? variables)
     {
-        Mode = PororocaRequestBodyMode.GraphQl;
+        Mode = PororocaHttpRequestBodyMode.GraphQl;
         GraphQlValues = new(query, variables);
     }
 
     public object Clone() =>
-        new PororocaRequestBody()
+        new PororocaHttpRequestBody()
         {
             Mode = Mode,
             ContentType = ContentType,
@@ -77,6 +77,6 @@ public sealed class PororocaRequestBody : ICloneable
             FileSrcPath = FileSrcPath,
             UrlEncodedValues = UrlEncodedValues?.Select(u => (PororocaKeyValueParam)u.Clone())?.ToList()?.AsReadOnly(),
             FormDataValues = FormDataValues?.Select(f => (PororocaRequestFormDataParam)f.Clone())?.ToList()?.AsReadOnly(),
-            GraphQlValues = (PororocaRequestBodyGraphQl?)GraphQlValues?.Clone()
+            GraphQlValues = (PororocaHttpRequestBodyGraphQl?)GraphQlValues?.Clone()
         };
 }

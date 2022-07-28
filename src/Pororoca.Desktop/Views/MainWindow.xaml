@@ -70,8 +70,8 @@
           <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsVisible="{Binding IsCollectionFolderViewVisible}">
             <v:CollectionFolderView DataContext="{Binding CollectionFolderViewDataCtx}"/>
           </Grid>
-          <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsVisible="{Binding IsRequestViewVisible}">
-            <v:RequestView DataContext="{Binding RequestViewDataCtx}"/>
+          <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsVisible="{Binding IsHttpRequestViewVisible}">
+            <v:HttpRequestView DataContext="{Binding HttpRequestViewDataCtx}"/>
           </Grid>
         </Grid>
       </Panel>
