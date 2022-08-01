@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Pororoca.Domain.Features.Entities.Pororoca;
+namespace Pororoca.Domain.Features.Entities.Pororoca.Http;
 
 public sealed class PororocaHttpRequest : PororocaRequest
 {

@@ -1,12 +1,13 @@
 using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using ReactiveUI;
 
 namespace Pororoca.Desktop.ViewModels;
 
 public sealed class HttpRequestFormDataParamViewModel : ViewModelBase
 {
-    public PororocaRequestFormDataParamType ParamType { get; init; }
+    public PororocaHttpRequestFormDataParamType ParamType { get; init; }
 
     private bool enabledField;
     public bool Enabled
@@ -43,7 +44,7 @@ public sealed class HttpRequestFormDataParamViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref this.contentTypeField, value);
     }
 
-    public HttpRequestFormDataParamViewModel(PororocaRequestFormDataParam p)
+    public HttpRequestFormDataParamViewModel(PororocaHttpRequestFormDataParam p)
     {
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
 
@@ -55,17 +56,17 @@ public sealed class HttpRequestFormDataParamViewModel : ViewModelBase
         this.contentTypeField = p.ContentType;
     }
 
-    public PororocaRequestFormDataParam ToFormDataParam()
+    public PororocaHttpRequestFormDataParam ToFormDataParam()
     {
-        if (ParamType == PororocaRequestFormDataParamType.File)
+        if (ParamType == PororocaHttpRequestFormDataParamType.File)
         {
-            PororocaRequestFormDataParam p = new(Enabled, Key);
+            PororocaHttpRequestFormDataParam p = new(Enabled, Key);
             p.SetFileValue(Value, ContentType);
             return p;
         }
         else
         {
-            PororocaRequestFormDataParam p = new(Enabled, Key);
+            PororocaHttpRequestFormDataParam p = new(Enabled, Key);
             p.SetTextValue(Value, ContentType);
             return p;
         }
@@ -77,7 +78,7 @@ public sealed class HttpRequestFormDataParamViewModel : ViewModelBase
     private string ResolveParamTypeText() =>
         ParamType switch
         {
-            PororocaRequestFormDataParamType.File => Localizer.Instance["HttpRequest/BodyFormDataParamTypeFile"],
+            PororocaHttpRequestFormDataParamType.File => Localizer.Instance["HttpRequest/BodyFormDataParamTypeFile"],
             _ => Localizer.Instance["HttpRequest/BodyFormDataParamTypeText"]
         };
 }

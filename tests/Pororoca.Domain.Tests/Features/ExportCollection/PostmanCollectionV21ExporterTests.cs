@@ -1,5 +1,6 @@
 using System;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Postman;
 using Xunit;
 using static Pororoca.Domain.Features.ExportCollection.PostmanCollectionV21Exporter;
@@ -179,13 +180,13 @@ public static class PostmanCollectionV21ExporterTests
     {
         // GIVEN
         PororocaHttpRequestBody reqBody = new();
-        PororocaRequestFormDataParam p1t = new(true, "Key1Text");
+        PororocaHttpRequestFormDataParam p1t = new(true, "Key1Text");
         p1t.SetTextValue("Value1Text", "text/plain");
-        PororocaRequestFormDataParam p2t = new(false, "Key2Text");
+        PororocaHttpRequestFormDataParam p2t = new(false, "Key2Text");
         p2t.SetTextValue("Value2Text", "application/json; charset=utf-8");
-        PororocaRequestFormDataParam p1f = new(true, "Key1File");
+        PororocaHttpRequestFormDataParam p1f = new(true, "Key1File");
         p1f.SetFileValue(@"C:\Pasta1\arq.txt", "text/plain");
-        PororocaRequestFormDataParam p2f = new(false, "Key2File");
+        PororocaHttpRequestFormDataParam p2f = new(false, "Key2File");
         p2f.SetFileValue(@"C:\Pasta1\arq2.jpg", "image/jpeg");
         reqBody.SetFormDataContent(new[] { p1t, p2t, p1f, p2f });
 

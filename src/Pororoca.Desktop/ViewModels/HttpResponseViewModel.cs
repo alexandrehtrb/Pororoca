@@ -12,6 +12,7 @@ using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
+using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using static Pororoca.Domain.Features.Common.MimeTypesDetector;
 
 namespace Pororoca.Desktop.ViewModels;

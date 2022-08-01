@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Postman;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
 
@@ -241,13 +242,13 @@ public static class PostmanCollectionV21Exporter
         urlEncoded?.Select(v => new PostmanVariable() { Key = v.Key, Value = v.Value, Type = "text", Disabled = (v.Enabled == false ? true : null) })
                   ?.ToArray();
 
-    private static PostmanRequestBodyFormDataParam[]? ConvertToPostmanFormDataParams(IEnumerable<PororocaRequestFormDataParam>? formDataValues) =>
+    private static PostmanRequestBodyFormDataParam[]? ConvertToPostmanFormDataParams(IEnumerable<PororocaHttpRequestFormDataParam>? formDataValues) =>
         formDataValues
         ?.Select(p => new PostmanRequestBodyFormDataParam()
         {
             Type = p.Type switch
             {
-                PororocaRequestFormDataParamType.File => PostmanRequestBodyFormDataParamType.File,
+                PororocaHttpRequestFormDataParamType.File => PostmanRequestBodyFormDataParamType.File,
                 _ => PostmanRequestBodyFormDataParamType.Text
             },
             Key = p.Key,

@@ -1,5 +1,6 @@
 using System;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Xunit;
 using static Pororoca.Domain.Features.ExportCollection.PororocaCollectionExporter;
 

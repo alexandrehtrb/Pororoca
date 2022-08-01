@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Pororoca.Domain.Features.Entities.Pororoca;
+namespace Pororoca.Domain.Features.Entities.Pororoca.Http;
 
 public sealed class PororocaHttpRequestBody : ICloneable
 {
@@ -20,7 +20,7 @@ public sealed class PororocaHttpRequestBody : ICloneable
     public IReadOnlyList<PororocaKeyValueParam>? UrlEncodedValues { get; private set; }
 
     [JsonInclude]
-    public IReadOnlyList<PororocaRequestFormDataParam>? FormDataValues { get; private set; }
+    public IReadOnlyList<PororocaHttpRequestFormDataParam>? FormDataValues { get; private set; }
 
     [JsonInclude]
     public PororocaHttpRequestBodyGraphQl? GraphQlValues { get; private set; }
@@ -56,7 +56,7 @@ public sealed class PororocaHttpRequestBody : ICloneable
         UrlEncodedValues = urlEncodedValues.ToList().AsReadOnly();
     }
 
-    public void SetFormDataContent(IEnumerable<PororocaRequestFormDataParam> formDataValues)
+    public void SetFormDataContent(IEnumerable<PororocaHttpRequestFormDataParam> formDataValues)
     {
         Mode = PororocaHttpRequestBodyMode.FormData;
         FormDataValues = formDataValues.ToList().AsReadOnly();
@@ -76,7 +76,7 @@ public sealed class PororocaHttpRequestBody : ICloneable
             RawContent = RawContent,
             FileSrcPath = FileSrcPath,
             UrlEncodedValues = UrlEncodedValues?.Select(u => (PororocaKeyValueParam)u.Clone())?.ToList()?.AsReadOnly(),
-            FormDataValues = FormDataValues?.Select(f => (PororocaRequestFormDataParam)f.Clone())?.ToList()?.AsReadOnly(),
+            FormDataValues = FormDataValues?.Select(f => (PororocaHttpRequestFormDataParam)f.Clone())?.ToList()?.AsReadOnly(),
             GraphQlValues = (PororocaHttpRequestBodyGraphQl?)GraphQlValues?.Clone()
         };
 }

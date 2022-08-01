@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.VariableResolution;
 using static Pororoca.Domain.Features.VariableResolution.IPororocaVariableResolver;
 

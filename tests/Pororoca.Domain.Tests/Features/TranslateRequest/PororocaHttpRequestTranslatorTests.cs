@@ -4,6 +4,7 @@ using System.Text;
 using Moq;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.TranslateRequest;
 using Pororoca.Domain.Features.VariableResolution;
 using Xunit;
@@ -222,7 +223,7 @@ public static class PororocaHttpRequestTranslatorTests
         req.UpdateUrl(urlTemplate);
         req.UpdateHttpVersion(1.1m);
         var body = new PororocaHttpRequestBody();
-        PororocaRequestFormDataParam p1 = new(true, "p1");
+        PororocaHttpRequestFormDataParam p1 = new(true, "p1");
         p1.SetTextValue("oi", "text/plem");
         body.SetFormDataContent(new[] { p1 });
         req.UpdateBody(body);
@@ -248,7 +249,7 @@ public static class PororocaHttpRequestTranslatorTests
         req.UpdateUrl(urlTemplate);
         req.UpdateHttpVersion(1.1m);
         var body = new PororocaHttpRequestBody();
-        PororocaRequestFormDataParam p1 = new(false, "p1");
+        PororocaHttpRequestFormDataParam p1 = new(false, "p1");
         p1.SetTextValue("oi", "text/plem");
         body.SetFormDataContent(new[] { p1 });
         req.UpdateBody(body);
@@ -274,7 +275,7 @@ public static class PororocaHttpRequestTranslatorTests
         req.UpdateUrl(urlTemplate);
         req.UpdateHttpVersion(1.1m);
         var body = new PororocaHttpRequestBody();
-        body.SetFormDataContent(Array.Empty<PororocaRequestFormDataParam>());
+        body.SetFormDataContent(Array.Empty<PororocaHttpRequestFormDataParam>());
         req.UpdateBody(body);
 
         // WHEN
@@ -322,7 +323,7 @@ public static class PororocaHttpRequestTranslatorTests
         req.UpdateUrl(urlTemplate);
         req.UpdateHttpVersion(1.1m);
         var body = new PororocaHttpRequestBody();
-        PororocaRequestFormDataParam p1 = new(true, "p1");
+        PororocaHttpRequestFormDataParam p1 = new(true, "p1");
         p1.SetFileValue("Ç://Uindous/sistem31/a.txt", "text/plain");
         body.SetFormDataContent(new[] { p1 });
         req.UpdateBody(body);
@@ -348,7 +349,7 @@ public static class PororocaHttpRequestTranslatorTests
         req.UpdateUrl(urlTemplate);
         req.UpdateHttpVersion(1.1m);
         var body = new PororocaHttpRequestBody();
-        PororocaRequestFormDataParam p1 = new(false, "p1");
+        PororocaHttpRequestFormDataParam p1 = new(false, "p1");
         p1.SetFileValue("Ç://Uindous/sistem31/a.txt", "text/plain");
         body.SetFormDataContent(new[] { p1 });
         req.UpdateBody(body);
@@ -1242,16 +1243,16 @@ public static class PororocaHttpRequestTranslatorTests
             { "Content-Language", "pt-BR" }
         };
 
-        PororocaRequestFormDataParam p1 = new(true, "key1");
+        PororocaHttpRequestFormDataParam p1 = new(true, "key1");
         p1.SetTextValue("oi", "text/plain");
-        PororocaRequestFormDataParam p2 = new(true, "key1");
+        PororocaHttpRequestFormDataParam p2 = new(true, "key1");
         p2.SetTextValue("oi2", "text/plain");
-        PororocaRequestFormDataParam p3 = new(false, "key2");
+        PororocaHttpRequestFormDataParam p3 = new(false, "key2");
         p3.SetTextValue("oi2", "text/plain");
-        PororocaRequestFormDataParam p4 = new(true, "{{keyX}}");
+        PororocaHttpRequestFormDataParam p4 = new(true, "{{keyX}}");
         p4.SetTextValue("{{keyXvalue}}", "application/json");
         string testFilePath = GetTestFilePath("testfilecontent2.json");
-        PororocaRequestFormDataParam p5 = new(true, "key4");
+        PororocaHttpRequestFormDataParam p5 = new(true, "key4");
         p5.SetFileValue(testFilePath, "application/json");
 
         var formDataParams = new[] { p1, p2, p3, p4, p5 };

@@ -1,4 +1,4 @@
-using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.VariableResolution;
 
 namespace Pororoca.Domain.Features.Requester;

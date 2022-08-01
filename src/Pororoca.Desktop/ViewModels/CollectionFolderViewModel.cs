@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive;
 using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.VariableResolution;
 using ReactiveUI;
 

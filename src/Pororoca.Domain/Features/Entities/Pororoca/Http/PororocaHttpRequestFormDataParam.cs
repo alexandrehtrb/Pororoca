@@ -1,19 +1,19 @@
 using System.Text.Json.Serialization;
 
-namespace Pororoca.Domain.Features.Entities.Pororoca;
+namespace Pororoca.Domain.Features.Entities.Pororoca.Http;
 
-public enum PororocaRequestFormDataParamType
+public enum PororocaHttpRequestFormDataParamType
 {
     Text,
     File
 }
 
-public sealed class PororocaRequestFormDataParam : ICloneable
+public sealed class PororocaHttpRequestFormDataParam : ICloneable
 {
     public bool Enabled { get; set; }
 
     [JsonInclude]
-    public PororocaRequestFormDataParamType Type { get; private set; }
+    public PororocaHttpRequestFormDataParamType Type { get; private set; }
 
     [JsonInclude]
     public string Key { get; init; }
@@ -28,16 +28,16 @@ public sealed class PororocaRequestFormDataParam : ICloneable
     public string? FileSrcPath { get; private set; }
 
 #nullable disable warnings
-    public PororocaRequestFormDataParam() : this(true, string.Empty)
+    public PororocaHttpRequestFormDataParam() : this(true, string.Empty)
     {
         // Parameterless constructor for JSON deserialization
     }
 #nullable restore warnings
 
-    public PororocaRequestFormDataParam(bool enabled, string key)
+    public PororocaHttpRequestFormDataParam(bool enabled, string key)
     {
         Enabled = enabled;
-        Type = PororocaRequestFormDataParamType.Text;
+        Type = PororocaHttpRequestFormDataParamType.Text;
         Key = key;
         TextValue = null;
         ContentType = string.Empty;
@@ -45,20 +45,20 @@ public sealed class PororocaRequestFormDataParam : ICloneable
 
     public void SetTextValue(string textValue, string contentType)
     {
-        Type = PororocaRequestFormDataParamType.Text;
+        Type = PororocaHttpRequestFormDataParamType.Text;
         TextValue = textValue;
         ContentType = contentType;
     }
 
     public void SetFileValue(string fileSrcPath, string contentType)
     {
-        Type = PororocaRequestFormDataParamType.File;
+        Type = PororocaHttpRequestFormDataParamType.File;
         FileSrcPath = fileSrcPath;
         ContentType = contentType;
     }
 
     public object Clone() =>
-        new PororocaRequestFormDataParam()
+        new PororocaHttpRequestFormDataParam()
         {
             Enabled = Enabled,
             Type = Type,

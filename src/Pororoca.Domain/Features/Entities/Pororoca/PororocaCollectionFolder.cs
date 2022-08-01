@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Pororoca.Domain.Features.Entities.Pororoca.Http;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca;
 

@@ -15,6 +15,7 @@ using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Requester;
 using Pororoca.Domain.Features.TranslateRequest;
 using Pororoca.Domain.Features.VariableResolution;
@@ -730,7 +731,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     private void AddNewFormDataTextParam()
     {
-        PororocaRequestFormDataParam p = new(true, string.Empty);
+        PororocaHttpRequestFormDataParam p = new(true, string.Empty);
         p.SetTextValue(string.Empty, MimeTypesDetector.DefaultMimeTypeForText);
         FormDataParams.Add(new(p));
     }
@@ -743,7 +744,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
             MimeTypesDetector.TryFindMimeTypeForFile(fileSrcPath, out string? mimeType);
             mimeType ??= MimeTypesDetector.DefaultMimeTypeForBinary;
 
-            PororocaRequestFormDataParam p = new(true, string.Empty);
+            PororocaHttpRequestFormDataParam p = new(true, string.Empty);
             p.SetFileValue(fileSrcPath, mimeType);
             FormDataParams.Add(new(p));
         }

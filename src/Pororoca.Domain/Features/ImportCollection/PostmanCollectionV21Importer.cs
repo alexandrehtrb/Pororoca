@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Postman;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
 using static Pororoca.Domain.Features.Common.MimeTypesDetector;
@@ -184,13 +185,13 @@ public static class PostmanCollectionV21Importer
             .Select(v => new PororocaKeyValueParam(IsEnabledInPostman(v.Disabled), v.Key, v.Value))
             .ToList();
 
-    private static List<PororocaRequestFormDataParam> ConvertToPororocaHttpFormDataValues(PostmanRequestBodyFormDataParam[]? formDatas) =>
+    private static List<PororocaHttpRequestFormDataParam> ConvertToPororocaHttpFormDataValues(PostmanRequestBodyFormDataParam[]? formDatas) =>
         (formDatas ?? Array.Empty<PostmanRequestBodyFormDataParam>())
             .Select(ConvertToPororocaHttpFormDataParam).ToList();
 
-    private static PororocaRequestFormDataParam ConvertToPororocaHttpFormDataParam(PostmanRequestBodyFormDataParam f)
+    private static PororocaHttpRequestFormDataParam ConvertToPororocaHttpFormDataParam(PostmanRequestBodyFormDataParam f)
     {
-        PororocaRequestFormDataParam p = new(IsEnabledInPostman(f.Disabled), f.Key);
+        PororocaHttpRequestFormDataParam p = new(IsEnabledInPostman(f.Disabled), f.Key);
         if (f.Type == PostmanRequestBodyFormDataParamType.File)
         {
             string? fileSrcPath = null;

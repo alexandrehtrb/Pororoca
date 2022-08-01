@@ -6,7 +6,7 @@ using System.Text.Json;
 using Pororoca.Domain.Features.Common;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
 
-namespace Pororoca.Domain.Features.Entities.Pororoca;
+namespace Pororoca.Domain.Features.Entities.Pororoca.Http;
 
 public sealed class PororocaHttpResponse
 {

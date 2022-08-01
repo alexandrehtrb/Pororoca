@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.VariableResolution;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
 
@@ -68,7 +69,7 @@ public static class PororocaHttpRequestTranslator
         {
             bool anyNotFound = req.Body!.FormDataValues!
                                          .Any(fd => fd.Enabled
-                                                 && fd.Type == PororocaRequestFormDataParamType.File
+                                                 && fd.Type == PororocaHttpRequestFormDataParamType.File
                                                  && !fileExistsVerifier.Invoke(fd.FileSrcPath!));
             errorCode = anyNotFound ? TranslateRequestErrors.ReqBodyFileNotFound : null;
             return errorCode == null;
@@ -328,13 +329,13 @@ public static class PororocaHttpRequestTranslator
             foreach (var param in resolvedFormDataParams)
             {
                 string resolvedKey = variableResolver.ReplaceTemplates(param.Key);
-                if (param.Type == PororocaRequestFormDataParamType.Text)
+                if (param.Type == PororocaHttpRequestFormDataParamType.Text)
                 {
                     string resolvedTextValue = variableResolver.ReplaceTemplates(param.TextValue!);
                     formDataContent.Add(content: new StringContent(resolvedTextValue, Encoding.UTF8, param.ContentType ?? MimeTypesDetector.DefaultMimeTypeForText),
                                         name: resolvedKey);
                 }
-                else if (param.Type == PororocaRequestFormDataParamType.File)
+                else if (param.Type == PororocaHttpRequestFormDataParamType.File)
                 {
                     string resolvedFileSrcPath = variableResolver.ReplaceTemplates(param.FileSrcPath!);
                     string fileName = new FileInfo(param.FileSrcPath!).Name;
