@@ -63,7 +63,6 @@ internal static class PororocaRequestCommonTranslator
         variableResolver
            .ResolveKeyValueParams(unresolvedHeaders)
            .Where(h => h.Key != "Content-Type" && headerNameCriteria(h.Key)) // Content-Type header is set by the content, later
-           .DistinctBy(h => h.Key) // Avoid duplicated headers
            .ToDictionary(h => h.Key, h => h.Value);
 
     private static string? ResolveCustomAuthHeaderValue(IPororocaVariableResolver variableResolver, PororocaRequestAuth? customAuth)

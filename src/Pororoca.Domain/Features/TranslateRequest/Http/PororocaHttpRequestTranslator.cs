@@ -76,10 +76,7 @@ public static class PororocaHttpRequestTranslator
     #region HTTP BODY
 
     internal static IDictionary<string, string> ResolveFormUrlEncodedKeyValues(IPororocaVariableResolver variableResolver, PororocaHttpRequestBody reqBody) =>
-        variableResolver
-            .ResolveKeyValueParams(reqBody.UrlEncodedValues!)
-            .DistinctBy(x => x.Key)
-            .ToDictionary(x => x.Key, x => x.Value);
+        variableResolver.ResolveKeyValueParams(reqBody.UrlEncodedValues!);
 
     internal static HttpContent? ResolveRequestContent(IPororocaVariableResolver variableResolver, PororocaHttpRequestBody? reqBody, IDictionary<string, string> resolvedContentHeaders)
     {

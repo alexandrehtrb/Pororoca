@@ -18,12 +18,14 @@ public interface IPororocaVariableResolver
 
     string ReplaceTemplates(string? strToReplaceTemplatedVariables);
 
-    public IEnumerable<KeyValuePair<string, string>> ResolveKeyValueParams(IEnumerable<PororocaKeyValueParam>? kvParams) =>
+    public IDictionary<string, string> ResolveKeyValueParams(IEnumerable<PororocaKeyValueParam>? kvParams) =>
         kvParams == null ?
-        Array.Empty<KeyValuePair<string, string>>() :
+        new() :
         kvParams.Where(h => h.Enabled)
                 .Select(h => new KeyValuePair<string, string>(
                     ReplaceTemplates(h.Key),
                     ReplaceTemplates(h.Value)
-                ));
+                ))
+                .DistinctBy(h => h.Key) // Avoid duplicated pairs by key
+                .ToDictionary(h => h.Key, h => h.Value);
 }

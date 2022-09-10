@@ -40,6 +40,29 @@ public static class IPororocaVariableResolverTests
     }
 
     [Fact]
+    public static void Should_resolve_enabled_kv_params_removing_duplicated_keys()
+    {
+        // GIVEN
+        PororocaCollection col = new(string.Empty);
+        IPororocaVariableResolver varResolver = col;
+        col.AddVariable(new(true, "k1", "v1", false));
+
+        List<PororocaKeyValueParam> kvps = new();
+        kvps.Add(new(true, "{{k1}}", "ValueK1"));
+        kvps.Add(new(true, "v1", "ValueK1"));
+        kvps.Add(new(true, "K1", "ValueK1"));
+
+        // WHEN
+        var resolvedKvps = varResolver.ResolveKeyValueParams(kvps).ToArray();
+
+        // THEN
+        Assert.NotNull(resolvedKvps);
+        Assert.Equal(2, resolvedKvps.Length);
+        Assert.Equal(new KeyValuePair<string, string>("v1", "ValueK1"), resolvedKvps[0]);
+        Assert.Equal(new KeyValuePair<string, string>("K1", "ValueK1"), resolvedKvps[1]);
+    }
+
+    [Fact]
     public static void Should_return_empty_collection_if_no_kv_params()
     {
         // GIVEN
