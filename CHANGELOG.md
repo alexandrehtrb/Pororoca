@@ -1,10 +1,17 @@
 # Changelog
 
+* [1.5.0](#150-2022-09-20)
 * [1.4.0](#140-2022-07-03)
 * [1.3.0](#130-2022-05-15)
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [1.5.0](https://github.com/alexandrehtrb/Pororoca/tree/1.5.0) (2022-09-20)
+
+### Features
+
+* Adds support for HTTP/2 on MacOSX
 
 ## [1.4.0](https://github.com/alexandrehtrb/Pororoca/tree/1.4.0) (2022-07-03)
 

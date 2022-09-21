@@ -22,7 +22,7 @@
   "RequestValidation/ClientCertificatePkcs12PasswordCannotBeBlank": "PKCS#12 client certificates need a password.",
   "RequestValidation/ClientCertificatePrivateKeyFileNotFound": "Client certificate private key file not found.",
   "RequestValidation/ContentTypeCannotBeBlankReqBodyRawOrFile": "The request body requires a Content-Type.",
-  "RequestValidation/Http2Unavailable": "HTTP/2 is only available for Linux or Windows 10 and greater.",
+  "RequestValidation/Http2Unavailable": "On Windows, support for HTTP/2 requires Windows 10 or greater.",
   "RequestValidation/Http3Unavailable": "HTTP/3 is only available for Linux or Windows 11 and greater.",
   "RequestValidation/InvalidContentTypeFormData": "One of the Form Data parameters has an invalid Content-Type.",
   "RequestValidation/InvalidContentTypeRawOrFile": "Use one of the available Content-Types for the request body.",
