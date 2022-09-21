@@ -24,7 +24,7 @@
   "RequestValidation/ClientCertificatePkcs12PasswordCannotBeBlank": "Certificado de cliente PKCS#12 precisa de senha.",
   "RequestValidation/ClientCertificatePrivateKeyFileNotFound": "Arquivo de chave privada de certificado de cliente não encontrado.",
   "RequestValidation/ContentTypeCannotBeBlankReqBodyRawOrFile": "O corpo de requisição requer um Content-Type.",
-  "RequestValidation/Http2Unavailable": "HTTP/2 só está disponível para Linux ou Windows 10 e superior.",
+  "RequestValidation/Http2Unavailable": "No Windows, suporte ao HTTP/2 requer Windows 10 ou superior.",
   "RequestValidation/Http3Unavailable": "HTTP/3 só está disponível para Linux ou Windows 11 e superior.",
   "RequestValidation/InvalidContentTypeFormData": "Um dos parâmetros Form Data tem Content-Type inválido.",
   "RequestValidation/InvalidContentTypeRawOrFile": "Use um dos Content-Types disponíveis para o corpo da requisição.",

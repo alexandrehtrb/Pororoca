@@ -38,10 +38,12 @@ public static class AvailablePororocaRequestSelectionOptions
             errorCode = TranslateRequestErrors.Http3UnavailableInOSVersion;
             return false;
         }
-        else if (httpVersion == 2.0m && !(OperatingSystem.IsLinux() || OperatingSystem.IsWindowsVersionAtLeast(10)))
+        else if (httpVersion == 2.0m && !(OperatingSystem.IsLinux() || OperatingSystem.IsWindowsVersionAtLeast(10) || OperatingSystem.IsMacOS()))
         {
             // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel/http2
             // .NET support for HTTP/2 in Windows 8 is limited, may not always work.
+            // In MacOS, HTTP/2 is supported, but only for client-side, which is our case here
+            // https://github.com/dotnet/runtime/discussions/75096
             errorCode = TranslateRequestErrors.Http2UnavailableInOSVersion;
             return false;
         }
