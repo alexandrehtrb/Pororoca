@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -146,10 +147,19 @@ public sealed class UserDataManager
         // Example Windows executable directory: C:\Users\you\Desktop\Pororoca\
         // Then, user data directory will be:    C:\Users\you\Desktop\Pororoca\PororocaUserData\
 
-        DirectoryInfo currentDir = new(Path.GetDirectoryName(Environment.ProcessPath)!);
+        // If debugging from VS Code, do not use Environment.ProcessPath, because it returns "C:\Program Files\dotnet"
+
+#if DEBUG
+        string currentDirPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location!)!;
+        DirectoryInfo currentDir = new(currentDirPath);
+        var rootDir = currentDir.Parent!.Parent!.Parent!; // Pororoca.Desktop\bin\Debug\net6.0
+#else
+        string currentDirPath = Path.GetDirectoryName(Environment.ProcessPath)!;
+        DirectoryInfo currentDir = new(currentDirPath);
         var rootDir = OperatingSystem.IsMacOS() ?
                       currentDir.Parent!.Parent!.Parent! :
                       currentDir;
+#endif
         string rootPath = rootDir.FullName;
         return Path.Combine(rootPath, UserDataFolderName, fileName);
     }
