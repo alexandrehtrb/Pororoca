@@ -71,5 +71,13 @@
             <Setter Property="BorderThickness" Value="2" />
             <Setter Property="BorderBrush" Value = "#E3A068" />
         </Style>
+
+        <Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#595959" />
+        </Style>
+
+        <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#404040" />
+        </Style>
     </Application.Styles>
 </Application>

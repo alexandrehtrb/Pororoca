@@ -4,11 +4,11 @@ using Pororoca.Domain.Features.VariableResolution;
 
 namespace Pororoca.Domain.Features.TranslateRequest.Common;
 
-internal static class PororocaRequestCommonTranslator
+public static class PororocaRequestCommonTranslator
 {
     #region REQUEST URL
 
-    internal static bool TryResolveRequestUri(IPororocaVariableResolver variableResolver, string rawUrl, out Uri? uri, out string? errorCode)
+    public static bool TryResolveRequestUri(IPororocaVariableResolver variableResolver, string rawUrl, out Uri? uri, out string? errorCode)
     {
         string? resolvedRawUri = variableResolver.ReplaceTemplates(rawUrl);
         bool success = Uri.TryCreate(resolvedRawUri, UriKind.Absolute, out uri);

@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
 
 namespace Pororoca.Domain.Features.Common;
@@ -17,15 +18,15 @@ public sealed class PororocaRequestJsonConverter : JsonConverter<PororocaRequest
     {
         // Check for null values
         if (reader.TokenType == JsonTokenType.Null)
-            return null!; // ugly hehehe
-        
+            throw new JsonException("A request cannot be null.");
+
         // Copy the current state from reader (it's a struct)
         var readerAtStart = reader;
 
         using var jsonDocument = JsonDocument.ParseValue(ref reader);
         var jsonObject = jsonDocument.RootElement;
         bool requestTypeJsonElementFound = jsonObject.TryGetProperty("requestType", out var requestTypeJsonElement);
-        
+
         if (!requestTypeJsonElementFound)
         {
             throw new JsonException("\"requestType\" not found in request object!");
@@ -42,12 +43,19 @@ public sealed class PororocaRequestJsonConverter : JsonConverter<PororocaRequest
         // and a StackOverflowExcpetion will arise
         return requestType switch
         {
+            PororocaRequestType.Websocket => JsonSerializer.Deserialize<PororocaWebSocketConnection>(ref readerAtStart, ExporterImporterWithoutCustomConvertersJsonOptions)!,
+            PororocaRequestType.Http => JsonSerializer.Deserialize<PororocaHttpRequest>(ref readerAtStart, ExporterImporterWithoutCustomConvertersJsonOptions)!,
             _ => JsonSerializer.Deserialize<PororocaHttpRequest>(ref readerAtStart, ExporterImporterWithoutCustomConvertersJsonOptions)!
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, PororocaRequest req, JsonSerializerOptions options) =>
+    public override void Write(Utf8JsonWriter writer, PororocaRequest req, JsonSerializerOptions options)
+    {
         // No need for this one in our use case, but to just dump the object into JSON
         // (without having the requestType property!), we can do this:
-        JsonSerializer.Serialize(writer, req, req.GetType(), ExporterImporterWithoutCustomConvertersJsonOptions);
+        if (req is PororocaHttpRequest httpReq)
+            JsonSerializer.Serialize(writer, httpReq, ExporterImporterWithoutCustomConvertersJsonOptions);
+        else if (req is PororocaWebSocketConnection wsConn)
+            JsonSerializer.Serialize(writer, wsConn, ExporterImporterWithoutCustomConvertersJsonOptions);
+    }
 }

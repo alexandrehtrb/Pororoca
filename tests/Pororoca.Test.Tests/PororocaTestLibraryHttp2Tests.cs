@@ -19,7 +19,7 @@ public class PororocaTestLibraryHttp2Tests
     [FactOnlyIfOSSupportsHttp2]
     public async Task Should_get_json_with_http_2_successfully()
     {
-        var res = await this.pororocaTest.SendRequestAsync("Get JSON HTTP/2");
+        var res = await this.pororocaTest.SendHttpRequestAsync("Get JSON HTTP/2");
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
@@ -33,7 +33,7 @@ public class PororocaTestLibraryHttp2Tests
     [FactOnlyIfOSSupportsHttp2]
     public async Task Should_post_json_with_http_2_successfully()
     {
-        var res = await this.pororocaTest.SendRequestAsync("Post JSON HTTP/2");
+        var res = await this.pororocaTest.SendHttpRequestAsync("Post JSON HTTP/2");
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
@@ -47,7 +47,7 @@ public class PororocaTestLibraryHttp2Tests
     [FactOnlyIfOSSupportsHttp2]
     public async Task Should_get_trailers_with_http_2_successfully()
     {
-        var res = await this.pororocaTest.SendRequestAsync("Get trailers HTTP/2");
+        var res = await this.pororocaTest.SendHttpRequestAsync("Get trailers HTTP/2");
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);

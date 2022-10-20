@@ -30,16 +30,7 @@
         <v:EditableTextBlockView DataContext="{Binding NameEditableTextBlockViewDataCtx}"/>
       </Grid>
 
-      <Grid ShowGridLines="False" Margin="12,40,16,0">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="140"></ColumnDefinition>
-          <ColumnDefinition Width="*"></ColumnDefinition>
-          <ColumnDefinition Width="140"></ColumnDefinition>
-          <ColumnDefinition Width="120"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-          <RowDefinition Height="40"></RowDefinition>
-        </Grid.RowDefinitions>
+      <Grid ShowGridLines="False" Margin="24,40,24,0" Height="40" ColumnDefinitions="Auto, *, Auto, Auto">
 
         <ComboBox Grid.Column="0" Grid.Row="0" Width="120" Height="40" Margin="0,0,6,0" FontSize="14" VerticalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Stretch" SelectedIndex="{Binding RequestMethodSelectedIndex, Mode=TwoWay}" Items="{Binding RequestMethodSelectionOptions}"/>
 
@@ -53,11 +44,11 @@
 
         <ComboBox Grid.Column="2" Grid.Row="0" Width="120" Height="40" Margin="6,0,12,0" FontSize="14" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Stretch" SelectedIndex="{Binding RequestHttpVersionSelectedIndex, Mode=TwoWay}" Items="{Binding RequestHttpVersionSelectionOptions}"/>
 
-        <Grid Grid.Column="3" Grid.Row="0" Width="100" Margin="12,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Stretch">
+        <Grid Grid.Column="3" Grid.Row="0" Width="104" Margin="12,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Stretch">
 
-          <Button Height="40" Width="100" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsVisible="{Binding !IsRequesting}" Command="{Binding SendRequestCmd}" Content="{i18n:Localize SendRequest, Context=HttpRequest}" Classes="Primary"/>
+          <Button Height="40" Width="104" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsVisible="{Binding !IsRequesting}" Command="{Binding SendRequestCmd}" Content="{i18n:Localize SendRequest, Context=HttpRequest}" Classes="Primary"/>
 
-          <Button Height="40" Width="100" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsVisible="{Binding IsRequesting}" Command="{Binding CancelRequestCmd}" Content="{i18n:Localize CancelRequest, Context=HttpRequest}" Classes="PrimaryInverted"/>
+          <Button Height="40" Width="104" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsVisible="{Binding IsRequesting}" Command="{Binding CancelRequestCmd}" Content="{i18n:Localize CancelRequest, Context=HttpRequest}" Classes="PrimaryInverted"/>
 
         </Grid>
 
@@ -269,71 +260,7 @@
             <TabItem.Header>
               <TextBlock Classes="TabItemHeader" Text="{i18n:Localize CustomAuth, Context=HttpRequest}"/>
             </TabItem.Header>
-
-            <Grid Margin="0,12,0,0">
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-              </Grid.ColumnDefinitions>
-              <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-              </Grid.RowDefinitions>
-
-              <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Spacing="12">
-                <ComboBox Height="36" Width="190" FontSize="14" FontWeight="Light" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Stretch" SelectedIndex="{Binding RequestAuthModeSelectedIndex}">
-                  <ComboBoxItem IsSelected="{Binding IsRequestAuthModeNoneSelected}" Content="{i18n:Localize AuthModeNone, Context=HttpRequest}"/>
-                  <ComboBoxItem x:Name="reqScrRequestCustomAuthBasic" IsSelected="{Binding IsRequestAuthModeBasicSelected}" Content="{i18n:Localize AuthModeBasic, Context=HttpRequest}"/>
-                  <ComboBoxItem x:Name="reqScrRequestCustomAuthBearer" IsSelected="{Binding IsRequestAuthModeBearerSelected}" Content="{i18n:Localize AuthModeBearer, Context=HttpRequest}"/>
-                  <!-- Mode=TwoWay in IsSelected below is required, otherwise, layout will disappear when changing between different requests -->
-                  <ComboBoxItem x:Name="reqScrRequestCustomAuthClientCertificate" IsSelected="{Binding IsRequestAuthModeClientCertificateSelected, Mode=TwoWay}" Content="{i18n:Localize AuthModeClientCertificate, Context=HttpRequest}"/>
-                </ComboBox>
-
-                <ComboBox Height="36" Width="110" FontSize="14" FontWeight="Light" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Stretch" SelectedIndex="{Binding RequestAuthClientCertificateTypeSelectedIndex}" IsVisible="{Binding IsSelected, ElementName=reqScrRequestCustomAuthClientCertificate}">
-                  <ComboBoxItem IsSelected="{Binding IsRequestAuthClientCertificateTypeNoneSelected, Mode=TwoWay}" Content="{i18n:Localize ClientCertificateTypeNone, Context=RequestAuthClientCertificate}"/>
-                  <ComboBoxItem x:Name="reqScrRequestClientCertificateAuthPkcs12" IsSelected="{Binding IsRequestAuthClientCertificateTypePkcs12Selected, Mode=TwoWay}" Content="{i18n:Localize ClientCertificateTypePkcs12, Context=RequestAuthClientCertificate}"/>
-                  <ComboBoxItem x:Name="reqScrRequestClientCertificateAuthPem" IsSelected="{Binding IsRequestAuthClientCertificateTypePemSelected, Mode=TwoWay}" Content="{i18n:Localize ClientCertificateTypePem, Context=RequestAuthClientCertificate}"/>
-                </ComboBox>
-              </StackPanel>
-
-              
-              <!-- REQUEST AUTH BASIC -->
-              <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,12,0,0" IsVisible="{Binding IsSelected, ElementName=reqScrRequestCustomAuthBasic}">
-                <TextBox Height="36" Width="200" FontSize="14" HorizontalAlignment="Left" VerticalContentAlignment="Center" Watermark="{i18n:Localize AuthModeBasicLoginWatermark, Context=HttpRequest}" Text="{Binding RequestBasicAuthLogin}"/>
-                <TextBox Height="36" Width="200" Margin="0,12,0,0" FontSize="14" HorizontalAlignment="Left" VerticalContentAlignment="Center" Watermark="{i18n:Localize AuthModeBasicPasswordWatermark, Context=HttpRequest}" Text="{Binding RequestBasicAuthPassword}"/>
-              </StackPanel>
-              <!-- REQUEST AUTH BEARER -->
-              <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,12,0,0" IsVisible="{Binding IsSelected, ElementName=reqScrRequestCustomAuthBearer}">
-                <TextBox Height="36" Width="200" FontSize="14" HorizontalAlignment="Left" VerticalContentAlignment="Center" Watermark="{i18n:Localize AuthModeBearerTokenWatermark, Context=HttpRequest}" Text="{Binding RequestBearerAuthToken}"/>
-              </StackPanel>
-              <!-- REQUEST AUTH CLIENT CERTIFICATE -->
-              <Grid Grid.Column="0" Grid.Row="1" Margin="0,12,0,0" IsVisible="{Binding IsSelected, ElementName=reqScrRequestCustomAuthClientCertificate}">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                
-                <!-- REQUEST AUTH CLIENT CERTIFICATE PKCS#12 -->
-                <StackPanel Grid.Column="0" Grid.Row="0" IsVisible="{Binding IsSelected, ElementName=reqScrRequestClientCertificateAuthPkcs12}">
-                  <TextBox Height="36" Width="240" FontSize="14" Watermark="{i18n:Localize CertificateFilePathWatermark, Context=RequestAuthClientCertificate}" HorizontalAlignment="Left" VerticalContentAlignment="Center" Text="{Binding RequestClientCertificateAuthPkcs12CertificateFilePath}"/>
-                  <TextBox Height="36" Width="240" Margin="0,12,0,0" FontSize="14" Watermark="{i18n:Localize FilePasswordWatermark, Context=RequestAuthClientCertificate}" HorizontalAlignment="Left" VerticalContentAlignment="Center" Text="{Binding RequestClientCertificateAuthPkcs12FilePassword}"/>
-                  <Button Margin="0,12,0,0" Content="{i18n:Localize Pkcs12SearchFile, Context=RequestAuthClientCertificate}" Command="{Binding SearchClientCertificatePkcs12FileCmd}" Classes="Primary"/>
-                </StackPanel>
-                <!-- REQUEST AUTH CLIENT CERTIFICATE PEM -->
-                <StackPanel Grid.Column="0" Grid.Row="0" IsVisible="{Binding IsSelected, ElementName=reqScrRequestClientCertificateAuthPem}">
-                  <TextBox Height="36" Width="240" FontSize="14" Watermark="{i18n:Localize CertificateFilePathWatermark, Context=RequestAuthClientCertificate}" HorizontalAlignment="Left" VerticalContentAlignment="Center" Text="{Binding RequestClientCertificateAuthPemCertificateFilePath}"/>
-                  <TextBox Height="36" Width="240" Margin="0,12,0,0" FontSize="14" Watermark="{i18n:Localize PrivateKeyFilePathWatermark, Context=RequestAuthClientCertificate}" HorizontalAlignment="Left" VerticalContentAlignment="Center" Text="{Binding RequestClientCertificateAuthPemPrivateKeyFilePath}"/>
-                  <TextBox Height="36" Width="240" Margin="0,12,0,0" FontSize="14" Watermark="{i18n:Localize FilePasswordWatermark, Context=RequestAuthClientCertificate}" HorizontalAlignment="Left" VerticalContentAlignment="Center" Text="{Binding RequestClientCertificateAuthPemFilePassword}"/>
-                  <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
-                    <Button Content="{i18n:Localize PemSearchCertFile, Context=RequestAuthClientCertificate}" Margin="0,0,6,0" Command="{Binding SearchClientCertificatePemCertFileCmd}" Classes="Primary"/>
-                    <Button Content="{i18n:Localize PemSearchPrivateKeyFile, Context=RequestAuthClientCertificate}" Margin="6,0,0,0" Command="{Binding SearchClientCertificatePemPrivateKeyFileCmd}" Classes="Primary"/>
-                  </StackPanel>
-                  <TextBlock TextWrapping="Wrap" FontSize="12" HorizontalAlignment="Stretch" Margin="0,24,0,24" Text="{i18n:Localize PemClientCertificatesTip, Context=RequestAuthClientCertificate}"/>
-                </StackPanel>
-              </Grid>             
-
-            </Grid>
+            <v:RequestAuthView DataContext="{Binding RequestAuthDataCtx}"/>
           </TabItem>
         </TabControl>
       </Grid>

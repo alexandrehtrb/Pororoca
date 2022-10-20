@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Requester;
-using Pororoca.Domain.Features.TranslateRequest;
+using Pororoca.Domain.Features.TranslateRequest.Http;
 using Pororoca.Domain.Features.VariableResolution;
 
 namespace Pororoca.Infrastructure.Features.Requester;
@@ -49,5 +49,5 @@ public sealed class PororocaRequester : IPororocaRequester
     }
 
     public bool IsValidRequest(IPororocaVariableResolver variableResolver, PororocaHttpRequest req, out string? errorCode) =>
-        PororocaHttpRequestTranslator.IsValidRequest(variableResolver, req, out errorCode);
+        PororocaHttpRequestValidator.IsValidRequest(variableResolver, req, out errorCode);
 }

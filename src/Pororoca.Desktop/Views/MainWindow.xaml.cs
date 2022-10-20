@@ -21,6 +21,6 @@ public partial class MainWindow : Window
 
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
-    private void OnCloseMainWindow(object sender, RoutedEventArgs e) =>
+    public void OnCloseMainWindow(object sender, RoutedEventArgs e) =>
         Close();
 }

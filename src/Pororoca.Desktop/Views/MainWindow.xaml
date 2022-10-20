@@ -37,7 +37,7 @@
               </MenuItem.Icon>
             </MenuItem>
           </MenuItem>
-          <MenuItem Header="{i18n:Localize DisableTlsVerification, Context=TopMenuOptions}" Command="{Binding ToggleSslVerification}">
+          <MenuItem Header="{i18n:Localize DisableTlsVerification, Context=TopMenuOptions}" Command="{Binding ToggleSSLVerificationCmd}">
             <MenuItem.Icon>
               <Image Source="/Assets/Images/icon_white_check.png" IsVisible="{Binding IsSslVerificationDisabled}" Width="12" Height="12" Margin="4,0,4,0" VerticalAlignment="Center" HorizontalAlignment="Center" />
             </MenuItem.Icon>
@@ -72,6 +72,12 @@
           </Grid>
           <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsVisible="{Binding IsHttpRequestViewVisible}">
             <v:HttpRequestView DataContext="{Binding HttpRequestViewDataCtx}"/>
+          </Grid>
+          <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsVisible="{Binding IsWebSocketConnectionViewVisible}">
+            <v:WebSocketConnectionView DataContext="{Binding WebSocketConnectionViewDataCtx}"/>
+          </Grid>
+          <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsVisible="{Binding IsWebSocketClientMessageViewVisible}">
+            <v:WebSocketClientMessageView DataContext="{Binding WebSocketClientMessageViewDataCtx}"/>
           </Grid>
         </Grid>
       </Panel>

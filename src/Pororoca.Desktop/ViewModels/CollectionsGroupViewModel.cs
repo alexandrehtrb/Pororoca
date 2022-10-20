@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Text;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using ReactiveUI;
 
 namespace Pororoca.Desktop.ViewModels;
@@ -62,6 +63,13 @@ public sealed class CollectionsGroupViewModel : CollectionOrganizationItemParent
         private set => this.RaiseAndSetIfChanged(ref this.canPasteCollectionFolderOrRequestField, value);
     }
 
+    private bool canPasteWebSocketClientMessageField;
+    public bool CanPasteWebSocketClientMessage
+    {
+        get => this.canPasteWebSocketClientMessageField;
+        private set => this.RaiseAndSetIfChanged(ref this.canPasteWebSocketClientMessageField, value);
+    }
+
     #endregion
 
     public CollectionsGroupViewModel(ICollectionOrganizationItemParentViewModel parentVm,
@@ -90,9 +98,12 @@ public sealed class CollectionsGroupViewModel : CollectionOrganizationItemParent
     private void OnCollectionGroupSelectedItemsChanged(object? sender, NotifyCollectionChangedEventArgs e) =>
         HasMultipleItemsSelected = CollectionGroupSelectedItems.Count > 1;
 
-    private bool HasAnyParentFolderAlsoSelected(CollectionOrganizationItemViewModel itemVm)
+    private bool HasAnyParentAlsoSelected(CollectionOrganizationItemViewModel itemVm)
     {
-        if (itemVm is not HttpRequestViewModel && itemVm is not CollectionFolderViewModel)
+        if (itemVm is not HttpRequestViewModel
+         && itemVm is not WebSocketConnectionViewModel
+         && itemVm is not WebSocketClientMessageViewModel
+         && itemVm is not CollectionFolderViewModel)
             return false;
 
         var parent = itemVm.Parent;
@@ -122,6 +133,7 @@ public sealed class CollectionsGroupViewModel : CollectionOrganizationItemParent
         this.copiedDomainObjs.AddRange(domainObjsToCopy);
         CanPasteEnvironment = this.copiedDomainObjs.Any(o => o is PororocaEnvironment);
         CanPasteCollectionFolderOrRequest = this.copiedDomainObjs.Any(o => o is PororocaCollectionFolder || o is PororocaRequest);
+        CanPasteWebSocketClientMessage = this.copiedDomainObjs.Any(o => o is PororocaWebSocketClientMessage);
     }
 
     public IList<PororocaCollectionItem> FetchCopiesOfFoldersAndReqs() =>
@@ -135,20 +147,29 @@ public sealed class CollectionsGroupViewModel : CollectionOrganizationItemParent
                         .Select(o => o.Clone())
                         .Cast<PororocaEnvironment>()
                         .ToList();
+    
+    public IList<PororocaWebSocketClientMessage> FetchCopiesOfWebSocketClientMessages() =>
+        this.copiedDomainObjs.Where(o => o is PororocaWebSocketClientMessage)
+                        .Select(o => o.Clone())
+                        .Cast<PororocaWebSocketClientMessage>()
+                        .ToList();
 
     public void CopyMultiple()
     {
         var reqsToCopy = CollectionGroupSelectedItems
-                         .Where(i => i is HttpRequestViewModel reqVm && !HasAnyParentFolderAlsoSelected(reqVm))
+                         .Where(i => i is HttpRequestViewModel reqVm && !HasAnyParentAlsoSelected(reqVm))
                          .Select(r => (ICloneable)((HttpRequestViewModel)r).ToHttpRequest());
+        var wssToCopy = CollectionGroupSelectedItems
+                         .Where(i => i is WebSocketConnectionViewModel wsVm && !HasAnyParentAlsoSelected(wsVm))
+                         .Select(wsVm => (ICloneable)((WebSocketConnectionViewModel)wsVm).ToWebSocketConnection());
         var foldersToCopy = CollectionGroupSelectedItems
-                            .Where(i => i is CollectionFolderViewModel folderVm && !HasAnyParentFolderAlsoSelected(folderVm))
+                            .Where(i => i is CollectionFolderViewModel folderVm && !HasAnyParentAlsoSelected(folderVm))
                             .Select(f => (ICloneable)((CollectionFolderViewModel)f).ToCollectionFolder());
         var envsToCopy = CollectionGroupSelectedItems
                          .Where(i => i is EnvironmentViewModel)
                          .Select(e => (ICloneable)((EnvironmentViewModel)e).ToEnvironment());
 
-        var itemsToCopy = reqsToCopy.Concat(foldersToCopy).Concat(envsToCopy).ToArray();
+        var itemsToCopy = reqsToCopy.Concat(wssToCopy).Concat(foldersToCopy).Concat(envsToCopy).ToArray();
 
         PushToCopy(itemsToCopy);
     }
@@ -162,7 +183,9 @@ public sealed class CollectionsGroupViewModel : CollectionOrganizationItemParent
         .Where(i => i is CollectionViewModel
                  || i is CollectionFolderViewModel
                  || i is EnvironmentViewModel
-                 || i is HttpRequestViewModel)
+                 || i is HttpRequestViewModel
+                 || i is WebSocketConnectionViewModel
+                 || i is WebSocketClientMessageViewModel)
         .Cast<CollectionOrganizationItemViewModel>()
         .ToList()
         .ForEach(i => i.DeleteThis());

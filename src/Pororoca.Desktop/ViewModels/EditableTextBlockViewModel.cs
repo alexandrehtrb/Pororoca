@@ -8,6 +8,27 @@ public sealed class EditableTextBlockViewModel : ViewModelBase
 {
     private readonly Action<string> onNameUpdated;
 
+    private bool isHttpRequestField;
+    public bool IsHttpRequest
+    {
+        get => this.isHttpRequestField;
+        set => this.RaiseAndSetIfChanged(ref this.isHttpRequestField, value);
+    }
+
+    private bool isDisconnectedWebSocketField;
+    public bool IsDisconnectedWebSocket
+    {
+        get => this.isDisconnectedWebSocketField;
+        set => this.RaiseAndSetIfChanged(ref this.isDisconnectedWebSocketField, value);
+    }
+
+    private bool isConnectedWebSocketField;
+    public bool IsConnectedWebSocket
+    {
+        get => this.isConnectedWebSocketField;
+        set => this.RaiseAndSetIfChanged(ref this.isConnectedWebSocketField, value);
+    }
+
     private string txtField;
     public string Txt
     {

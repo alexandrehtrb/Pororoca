@@ -6,6 +6,7 @@ using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.ExportCollection;
 using Pororoca.Domain.Features.VariableResolution;
 using ReactiveUI;
@@ -24,6 +25,7 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
     public ReactiveCommand<Unit, Unit> MoveDownCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewFolderCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewHttpRequestCmd { get; }
+    public ReactiveCommand<Unit, Unit> AddNewWebSocketConnectionCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewEnvironmentCmd { get; }
     public ReactiveCommand<Unit, Unit> DuplicateCollectionCmd { get; }
     public ReactiveCommand<Unit, Unit> PasteToCollectionCmd { get; }
@@ -76,6 +78,7 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
         MoveDownCmd = ReactiveCommand.Create(MoveThisDown);
         AddNewFolderCmd = ReactiveCommand.Create(AddNewFolder);
         AddNewHttpRequestCmd = ReactiveCommand.Create(AddNewHttpRequest);
+        AddNewWebSocketConnectionCmd = ReactiveCommand.Create(AddNewWebSocketConnection);
         AddNewEnvironmentCmd = ReactiveCommand.Create(AddNewEnvironment);
         DuplicateCollectionCmd = ReactiveCommand.Create(() => onDuplicateCollectionSelected(this));
         PasteToCollectionCmd = ReactiveCommand.Create(PasteToThis);
@@ -101,6 +104,8 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
             Items.Add(new CollectionFolderViewModel(this, this, folder));
         foreach (var req in col.HttpRequests)
             Items.Add(new HttpRequestViewModel(this, this, req));
+        foreach (var ws in col.WebSocketConnections)
+            Items.Add(new WebSocketConnectionViewModel(this, this, ws));
 
         RefreshSubItemsAvailableMovements();
 
@@ -133,6 +138,12 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
         AddHttpRequest(newReq);
     }
 
+    private void AddNewWebSocketConnection()
+    {
+        PororocaWebSocketConnection newWs = new(Localizer.Instance["WebSocketConnection/NewConnection"]);
+        AddWebSocketConnection(newWs);
+    }
+
     private void AddNewEnvironment()
     {
         var environmentsGroup = (EnvironmentsGroupViewModel)Items.First(i => i is EnvironmentsGroupViewModel);
@@ -150,7 +161,7 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
         var variablesGroup = Items.First(i => i is CollectionVariablesViewModel);
         var environmentsGroup = Items.First(i => i is EnvironmentsGroupViewModel);
         var existingFolders = Items.Where(i => i is CollectionFolderViewModel);
-        var existingRequests = Items.Where(i => i is HttpRequestViewModel);
+        var existingRequests = Items.Where(i => i is HttpRequestViewModel || i is WebSocketConnectionViewModel);
         CollectionFolderViewModel folderToAddVm = new(this, this, folderToAdd);
 
         var rearrangedItems = new[] { variablesGroup, environmentsGroup }
@@ -172,14 +183,37 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
         var variablesGroup = Items.First(i => i is CollectionVariablesViewModel);
         var environmentsGroup = Items.First(i => i is EnvironmentsGroupViewModel);
         var existingFolders = Items.Where(i => i is CollectionFolderViewModel);
-        var existingRequests = Items.Where(i => i is HttpRequestViewModel);
+        var existingRequests = Items.Where(i => i is HttpRequestViewModel || i is WebSocketConnectionViewModel);
         HttpRequestViewModel reqToAddVm = new(this, this, reqToAdd);
 
         var rearrangedItems = new[] { variablesGroup, environmentsGroup }
-                                                                .Concat(existingFolders)
-                                                                .Concat(existingRequests)
-                                                                .Append(reqToAddVm)
-                                                                .ToArray();
+                               .Concat(existingFolders)
+                               .Concat(existingRequests)
+                               .Append(reqToAddVm)
+                               .ToArray();
+
+        Items.Clear();
+        foreach (var item in rearrangedItems)
+        {
+            Items.Add(item);
+        }
+        IsExpanded = true;
+        RefreshSubItemsAvailableMovements();
+    }
+
+    public void AddWebSocketConnection(PororocaWebSocketConnection wsToAdd)
+    {
+        var variablesGroup = Items.First(i => i is CollectionVariablesViewModel);
+        var environmentsGroup = Items.First(i => i is EnvironmentsGroupViewModel);
+        var existingFolders = Items.Where(i => i is CollectionFolderViewModel);
+        var existingRequests = Items.Where(i => i is HttpRequestViewModel || i is WebSocketConnectionViewModel);
+        WebSocketConnectionViewModel wsToAddVm = new(this, this, wsToAdd);
+
+        var rearrangedItems = new[] { variablesGroup, environmentsGroup }
+                               .Concat(existingFolders)
+                               .Concat(existingRequests)
+                               .Append(wsToAddVm)
+                               .ToArray();
 
         Items.Clear();
         foreach (var item in rearrangedItems)
@@ -202,6 +236,8 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
                 AddFolder(folderToPaste);
             else if (itemToPaste is PororocaHttpRequest httpReqToPaste)
                 AddHttpRequest(httpReqToPaste);
+            else if (itemToPaste is PororocaWebSocketConnection wsToPaste)
+                AddWebSocketConnection(wsToPaste);
         }
 
         var envGpVm = (EnvironmentsGroupViewModel)Items.First(i => i is EnvironmentsGroupViewModel);
@@ -273,6 +309,7 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
 
     #endregion
 
+
     #endregion
 
     #region COLLECTION
@@ -288,8 +325,10 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
                 newCol.UpdateEnvironments(colEnvsVm.ToEnvironments());
             else if (colItemVm is CollectionFolderViewModel colFolderVm)
                 newCol.AddFolder(colFolderVm.ToCollectionFolder());
-            else if (colItemVm is HttpRequestViewModel reqVm)
-                newCol.AddRequest(reqVm.ToHttpRequest());
+            else if (colItemVm is HttpRequestViewModel httpReqVm)
+                newCol.AddRequest(httpReqVm.ToHttpRequest());
+            else if (colItemVm is WebSocketConnectionViewModel wsVm)
+                newCol.AddRequest(wsVm.ToWebSocketConnection());
         }
         return newCol;
     }

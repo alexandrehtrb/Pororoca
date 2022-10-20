@@ -18,7 +18,7 @@ public class PororocaTestLibraryHttp1Tests
     [Fact]
     public async Task Should_get_json_with_http_1_1_successfully()
     {
-        var res = await this.pororocaTest.SendRequestAsync("Get JSON");
+        var res = await this.pororocaTest.SendHttpRequestAsync("Get JSON");
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
@@ -32,7 +32,7 @@ public class PororocaTestLibraryHttp1Tests
     [Fact]
     public async Task Should_get_image_with_http_1_1_successfully()
     {
-        var res = await this.pororocaTest.SendRequestAsync("Get image");
+        var res = await this.pororocaTest.SendHttpRequestAsync("Get image");
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
@@ -43,7 +43,7 @@ public class PororocaTestLibraryHttp1Tests
     [Fact]
     public async Task Should_get_text_with_http_1_1_successfully()
     {
-        var res = await this.pororocaTest.SendRequestAsync("Get text");
+        var res = await this.pororocaTest.SendHttpRequestAsync("Get text");
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
@@ -55,7 +55,7 @@ public class PororocaTestLibraryHttp1Tests
     [Fact]
     public async Task Should_get_headers_with_http_1_1_successfully()
     {
-        var res = await this.pororocaTest.SendRequestAsync("Get headers");
+        var res = await this.pororocaTest.SendHttpRequestAsync("Get headers");
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
@@ -71,7 +71,7 @@ public class PororocaTestLibraryHttp1Tests
     [Fact]
     public async Task Should_post_none_with_http_1_1_successfully()
     {
-        var res = await this.pororocaTest.SendRequestAsync("Post none");
+        var res = await this.pororocaTest.SendHttpRequestAsync("Post none");
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.NoContent, res.StatusCode);
@@ -81,7 +81,7 @@ public class PororocaTestLibraryHttp1Tests
     [Fact]
     public async Task Should_post_json_with_http_1_1_successfully()
     {
-        var res = await this.pororocaTest.SendRequestAsync("Post JSON");
+        var res = await this.pororocaTest.SendHttpRequestAsync("Post JSON");
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
@@ -95,7 +95,7 @@ public class PororocaTestLibraryHttp1Tests
     [Fact]
     public async Task Should_post_form_url_encoded_with_http_1_1_successfully()
     {
-        var res = await this.pororocaTest.SendRequestAsync("Post form URL encoded");
+        var res = await this.pororocaTest.SendHttpRequestAsync("Post form URL encoded");
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
@@ -109,7 +109,7 @@ public class PororocaTestLibraryHttp1Tests
         this.pororocaTest.SetCollectionVariable("MyIdSecret", "999");
 
         // sending request with new {{MyIdSecret}} value
-        res = await this.pororocaTest.SendRequestAsync("Post form URL encoded");
+        res = await this.pororocaTest.SendHttpRequestAsync("Post form URL encoded");
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
@@ -123,7 +123,7 @@ public class PororocaTestLibraryHttp1Tests
     [Fact]
     public async Task Should_post_multipart_form_data_with_http_1_1_successfully()
     {
-        var res = await this.pororocaTest.SendRequestAsync("Post multipart form data");
+        var res = await this.pororocaTest.SendHttpRequestAsync("Post multipart form data");
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
@@ -141,7 +141,7 @@ public class PororocaTestLibraryHttp1Tests
     [Fact]
     public async Task Should_send_basic_auth_header_with_http_1_1_successfully()
     {
-        var res = await this.pororocaTest.SendRequestAsync("BASIC");
+        var res = await this.pororocaTest.SendHttpRequestAsync("BASIC");
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
@@ -154,7 +154,7 @@ public class PororocaTestLibraryHttp1Tests
     [Fact]
     public async Task Should_send_bearer_auth_header_with_http_1_1_successfully()
     {
-        var res = await this.pororocaTest.SendRequestAsync(Guid.Parse("3882d786-afde-49ca-b7f5-eebffab23e5a"));
+        var res = await this.pororocaTest.SendHttpRequestAsync(Guid.Parse("3882d786-afde-49ca-b7f5-eebffab23e5a"));
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
@@ -171,7 +171,7 @@ public class PororocaTestLibraryHttp1Tests
         // https://xunit.net/docs/running-tests-in-parallel
 
         // sending request with new {{BearerAuthToken}} value
-        res = await this.pororocaTest.SendRequestAsync(Guid.Parse("3882d786-afde-49ca-b7f5-eebffab23e5a"));
+        res = await this.pororocaTest.SendHttpRequestAsync(Guid.Parse("3882d786-afde-49ca-b7f5-eebffab23e5a"));
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);

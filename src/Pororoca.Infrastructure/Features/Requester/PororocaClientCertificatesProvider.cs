@@ -1,12 +1,18 @@
 using System.Security.Cryptography.X509Certificates;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Requester;
 
 namespace Pororoca.Infrastructure.Features.Requester;
 
-internal static class PororocaClientCertificatesProvider
+public sealed class PororocaClientCertificatesProvider : IPororocaClientCertificatesProvider
 {
+    public static readonly PororocaClientCertificatesProvider Singleton = new();
 
-    internal static X509Certificate2 Provide(PororocaRequestAuthClientCertificate resolvedClientCert) =>
+    private PororocaClientCertificatesProvider()
+    {
+    }
+
+    public X509Certificate2 Provide(PororocaRequestAuthClientCertificate resolvedClientCert) =>
         resolvedClientCert.Type switch
         {
             PororocaRequestAuthClientCertificateType.Pkcs12 => LoadPkcs12CertificateFromFile(resolvedClientCert),

@@ -20,11 +20,14 @@ public static class AvailablePororocaRequestSelectionOptions
         HttpMethod.Options,
         HttpMethod.Trace);
 
-    public static readonly IImmutableList<decimal> AvailableHttpVersions = ImmutableList.Create(
+    public static readonly IImmutableList<decimal> AvailableHttpVersionsForHttp = ImmutableList.Create(
         1.0m,
         1.1m,
         2.0m,
         3.0m);
+    
+    public static readonly IImmutableList<decimal> AvailableHttpVersionsForWebSockets = ImmutableList.Create(
+        1.1m);
 
     public static bool IsHttpVersionAvailableInOS(decimal httpVersion, out string? errorCode)
     {
@@ -45,6 +48,22 @@ public static class AvailablePororocaRequestSelectionOptions
             // In MacOS, HTTP/2 is supported, but only for client-side, which is our case here
             // https://github.com/dotnet/runtime/discussions/75096
             errorCode = TranslateRequestErrors.Http2UnavailableInOSVersion;
+            return false;
+        }
+        else
+        {
+            errorCode = null;
+            return true;
+        }
+    }
+
+    public static bool IsWebSocketHttpVersionAvailableInOS(decimal httpVersion, out string? errorCode)
+    {
+        if (httpVersion != 1.1m)
+        {
+            // Currently, in .NET 6, only WebSockets over HTTP/1.1 are available
+            // .NET 7 will support WebSocket over HTTP/2
+            errorCode = TranslateRequestErrors.WebSocketHttpVersionUnavailable;
             return false;
         }
         else

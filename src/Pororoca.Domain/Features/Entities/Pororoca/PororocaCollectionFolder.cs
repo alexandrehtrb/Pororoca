@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca;
 
@@ -15,6 +16,13 @@ public sealed class PororocaCollectionFolder : PororocaCollectionItem, ICloneabl
     public IReadOnlyList<PororocaHttpRequest> HttpRequests =>
         Requests.Where(r => r is PororocaHttpRequest)
                 .Cast<PororocaHttpRequest>()
+                .ToList()
+                .AsReadOnly();
+    
+    [JsonIgnore] // JSON IGNORE
+    public IReadOnlyList<PororocaWebSocketConnection> WebSocketConnections =>
+        Requests.Where(r => r is PororocaWebSocketConnection)
+                .Cast<PororocaWebSocketConnection>()
                 .ToList()
                 .AsReadOnly();
 

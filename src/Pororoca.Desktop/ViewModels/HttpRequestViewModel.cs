@@ -91,7 +91,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         set => this.RaiseAndSetIfChanged(ref this.requestHttpVersionSelectedIndexField, value);
     }
     private decimal RequestHttpVersion =>
-        AvailableHttpVersions[this.requestHttpVersionSelectedIndexField];
+        AvailableHttpVersionsForHttp[this.requestHttpVersionSelectedIndexField];
 
     #endregion
 
@@ -273,167 +273,12 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST AUTH
 
-    private int requestAuthModeSelectedIndexField;
-    public int RequestAuthModeSelectedIndex
+    private RequestAuthViewModel requestAuthDataCtxField;
+    public RequestAuthViewModel RequestAuthDataCtx
     {
-        get => this.requestAuthModeSelectedIndexField;
-        set => this.RaiseAndSetIfChanged(ref this.requestAuthModeSelectedIndexField, value);
+        get => this.requestAuthDataCtxField;
+        set => this.RaiseAndSetIfChanged(ref this.requestAuthDataCtxField, value);
     }
-
-    private bool isRequestAuthModeNoneSelectedField;
-    public bool IsRequestAuthModeNoneSelected
-    {
-        get => this.isRequestAuthModeNoneSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isRequestAuthModeNoneSelectedField, value);
-    }
-
-    private bool isRequestAuthModeBasicSelectedField;
-    public bool IsRequestAuthModeBasicSelected
-    {
-        get => this.isRequestAuthModeBasicSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isRequestAuthModeBasicSelectedField, value);
-    }
-
-    private bool isRequestAuthModeBearerSelectedField;
-    public bool IsRequestAuthModeBearerSelected
-    {
-        get => this.isRequestAuthModeBearerSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isRequestAuthModeBearerSelectedField, value);
-    }
-
-    private bool isRequestAuthModeClientCertificateSelectedField;
-    public bool IsRequestAuthModeClientCertificateSelected
-    {
-        get => this.isRequestAuthModeClientCertificateSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isRequestAuthModeClientCertificateSelectedField, value);
-    }
-
-    private PororocaRequestAuthMode? RequestAuthMode =>
-        this.requestAuthModeSelectedIndexField switch
-        { // TODO: Improve this, do not use fixed integers to resolve mode
-            3 => PororocaRequestAuthMode.ClientCertificate,
-            2 => PororocaRequestAuthMode.Bearer,
-            1 => PororocaRequestAuthMode.Basic,
-            _ => null
-        };
-
-    #region REQUEST AUTH
-
-    private string? requestBasicAuthLoginField;
-    public string? RequestBasicAuthLogin
-    {
-        get => this.requestBasicAuthLoginField;
-        set => this.RaiseAndSetIfChanged(ref this.requestBasicAuthLoginField, value);
-    }
-
-    private string? requestBasicAuthPasswordField;
-    public string? RequestBasicAuthPassword
-    {
-        get => this.requestBasicAuthPasswordField;
-        set => this.RaiseAndSetIfChanged(ref this.requestBasicAuthPasswordField, value);
-    }
-
-    #endregion
-
-    #region REQUEST AUTH BEARER
-
-    private string? requestBearerAuthTokenField;
-    public string? RequestBearerAuthToken
-    {
-        get => this.requestBearerAuthTokenField;
-        set => this.RaiseAndSetIfChanged(ref this.requestBearerAuthTokenField, value);
-    }
-
-    #endregion
-
-    #region REQUEST AUTH CLIENT CERTIFICATE
-
-    private int requestAuthClientCertificateTypeSelectedIndexField;
-    public int RequestAuthClientCertificateTypeSelectedIndex
-    {
-        get => this.requestAuthClientCertificateTypeSelectedIndexField;
-        set => this.RaiseAndSetIfChanged(ref this.requestAuthClientCertificateTypeSelectedIndexField, value);
-    }
-
-    private bool isRequestAuthClientCertificateTypeNoneSelectedField;
-    public bool IsRequestAuthClientCertificateTypeNoneSelected
-    {
-        get => this.isRequestAuthClientCertificateTypeNoneSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isRequestAuthClientCertificateTypeNoneSelectedField, value);
-    }
-
-    private bool isRequestAuthClientCertificateTypePkcs12SelectedField;
-    public bool IsRequestAuthClientCertificateTypePkcs12Selected
-    {
-        get => this.isRequestAuthClientCertificateTypePkcs12SelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isRequestAuthClientCertificateTypePkcs12SelectedField, value);
-    }
-
-    private bool isRequestAuthClientCertificateTypePemSelectedField;
-    public bool IsRequestAuthClientCertificateTypePemSelected
-    {
-        get => this.isRequestAuthClientCertificateTypePemSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isRequestAuthClientCertificateTypePemSelectedField, value);
-    }
-
-    private PororocaRequestAuthClientCertificateType? RequestAuthClientCertificateType =>
-        this.requestAuthClientCertificateTypeSelectedIndexField switch
-        { // TODO: Improve this, do not use fixed integers to resolve mode
-            2 => PororocaRequestAuthClientCertificateType.Pem,
-            1 => PororocaRequestAuthClientCertificateType.Pkcs12,
-            _ => null
-        };
-
-    #region REQUEST AUTH CLIENT CERTIFICATE PKCS12
-
-    private string? requestClientCertificateAuthPkcs12CertificateFilePathField;
-    public string? RequestClientCertificateAuthPkcs12CertificateFilePath
-    {
-        get => this.requestClientCertificateAuthPkcs12CertificateFilePathField;
-        set => this.RaiseAndSetIfChanged(ref this.requestClientCertificateAuthPkcs12CertificateFilePathField, value);
-    }
-
-    private string? requestClientCertificateAuthPkcs12FilePasswordField;
-    public string? RequestClientCertificateAuthPkcs12FilePassword
-    {
-        get => this.requestClientCertificateAuthPkcs12FilePasswordField;
-        set => this.RaiseAndSetIfChanged(ref this.requestClientCertificateAuthPkcs12FilePasswordField, value);
-    }
-
-    public ReactiveCommand<Unit, Unit> SearchClientCertificatePkcs12FileCmd { get; }
-
-    #endregion
-
-    #region REQUEST AUTH CLIENT CERTIFICATE PEM
-
-    private string? requestClientCertificateAuthPemCertificateFilePathField;
-    public string? RequestClientCertificateAuthPemCertificateFilePath
-    {
-        get => this.requestClientCertificateAuthPemCertificateFilePathField;
-        set => this.RaiseAndSetIfChanged(ref this.requestClientCertificateAuthPemCertificateFilePathField, value);
-    }
-
-    private string? requestClientCertificateAuthPemPrivateKeyFilePathField;
-    public string? RequestClientCertificateAuthPemPrivateKeyFilePath
-    {
-        get => this.requestClientCertificateAuthPemPrivateKeyFilePathField;
-        set => this.RaiseAndSetIfChanged(ref this.requestClientCertificateAuthPemPrivateKeyFilePathField, value);
-    }
-
-    private string? requestClientCertificateAuthPemFilePasswordField;
-    public string? RequestClientCertificateAuthPemFilePassword
-    {
-        get => this.requestClientCertificateAuthPemFilePasswordField;
-        set => this.RaiseAndSetIfChanged(ref this.requestClientCertificateAuthPemFilePasswordField, value);
-    }
-
-    public ReactiveCommand<Unit, Unit> SearchClientCertificatePemCertFileCmd { get; }
-
-    public ReactiveCommand<Unit, Unit> SearchClientCertificatePemPrivateKeyFileCmd { get; }
-
-    #endregion
-
-    #endregion
 
     #endregion
 
@@ -473,24 +318,14 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #endregion
 
-    #region OTHERS
-
-    private readonly bool isOperatingSystemMacOsx;
-
-    #endregion
-
     public HttpRequestViewModel(ICollectionOrganizationItemParentViewModel parentVm,
                                 IPororocaVariableResolver variableResolver,
-                                PororocaHttpRequest req,
-                                Func<bool>? isOperatingSystemMacOsx = null) : base(parentVm, req.Name)
+                                PororocaHttpRequest req) : base(parentVm, req.Name)
     {
-        #region OTHERS
-        this.isOperatingSystemMacOsx = (isOperatingSystemMacOsx ?? OperatingSystem.IsMacOS)();
-        #endregion
-
         #region COLLECTION ORGANIZATION
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
 
+        NameEditableTextBlockViewDataCtx.IsHttpRequest = true;
         MoveUpCmd = ReactiveCommand.Create(MoveThisUp);
         MoveDownCmd = ReactiveCommand.Create(MoveThisDown);
         CopyRequestCmd = ReactiveCommand.Create(Copy);
@@ -512,7 +347,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
         this.resolvedRequestUrlToolTipField = this.requestUrlField = req.Url;
 
-        RequestHttpVersionSelectionOptions = new(AvailableHttpVersions.Select(FormatHttpVersionString));
+        RequestHttpVersionSelectionOptions = new(AvailableHttpVersionsForHttp.Select(FormatHttpVersionString));
         int reqHttpVersionSelectionIndex = RequestHttpVersionSelectionOptions.IndexOf(FormatHttpVersionString(req.HttpVersion));
         RequestHttpVersionSelectedIndex = reqHttpVersionSelectionIndex >= 0 ? reqHttpVersionSelectionIndex : 0;
 
@@ -572,56 +407,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         #endregion
 
         #region REQUEST AUTH
-        // TODO: Improve this, do not use fixed values to resolve index
-        switch (req.CustomAuth?.Mode)
-        {
-            case PororocaRequestAuthMode.Basic:
-                RequestAuthModeSelectedIndex = 1;
-                IsRequestAuthModeBasicSelected = true;
-                break;
-            case PororocaRequestAuthMode.Bearer:
-                RequestAuthModeSelectedIndex = 2;
-                IsRequestAuthModeBearerSelected = true;
-                break;
-            case PororocaRequestAuthMode.ClientCertificate:
-                RequestAuthModeSelectedIndex = 3;
-                IsRequestAuthModeClientCertificateSelected = true;
-                break;
-            default:
-                RequestAuthModeSelectedIndex = 0;
-                IsRequestAuthModeNoneSelected = true;
-                break;
-        }
-        RequestBasicAuthLogin = req.CustomAuth?.BasicAuthLogin;
-        RequestBasicAuthPassword = req.CustomAuth?.BasicAuthPassword;
-        RequestBearerAuthToken = req.CustomAuth?.BearerToken;
-
-        #region REQUEST AUTH CLIENT CERTIFICATE
-        switch (req.CustomAuth?.ClientCertificate?.Type)
-        {
-            case PororocaRequestAuthClientCertificateType.Pkcs12:
-                RequestClientCertificateAuthPkcs12CertificateFilePath = req.CustomAuth.ClientCertificate!.CertificateFilePath!;
-                RequestClientCertificateAuthPkcs12FilePassword = req.CustomAuth.ClientCertificate!.FilePassword;
-                RequestAuthClientCertificateTypeSelectedIndex = 1;
-                IsRequestAuthClientCertificateTypePkcs12Selected = true;
-                break;
-            case PororocaRequestAuthClientCertificateType.Pem:
-                RequestClientCertificateAuthPemCertificateFilePath = req.CustomAuth.ClientCertificate!.CertificateFilePath!;
-                RequestClientCertificateAuthPemPrivateKeyFilePath = req.CustomAuth.ClientCertificate!.PrivateKeyFilePath!;
-                RequestClientCertificateAuthPemFilePassword = req.CustomAuth.ClientCertificate!.FilePassword;
-                RequestAuthClientCertificateTypeSelectedIndex = 2;
-                IsRequestAuthClientCertificateTypePemSelected = true;
-                break;
-            default:
-                RequestAuthClientCertificateTypeSelectedIndex = 0;
-                IsRequestAuthClientCertificateTypeNoneSelected = true;
-                break;
-        }
-        SearchClientCertificatePkcs12FileCmd = ReactiveCommand.CreateFromTask(SearchClientCertificatePkcs12FileAsync);
-        SearchClientCertificatePemCertFileCmd = ReactiveCommand.CreateFromTask(SearchClientCertificatePemCertFileAsync);
-        SearchClientCertificatePemPrivateKeyFileCmd = ReactiveCommand.CreateFromTask(SearchClientCertificatePemPrivateKeyFileAsync);
-        #endregion
-
+        this.requestAuthDataCtxField = new(req.CustomAuth);
         #endregion
 
         #region SEND OR CANCEL REQUEST
@@ -765,127 +551,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #endregion
 
-    #region REQUEST BODY AUTH CLIENT CERTIFICATE
-
-    private async Task SearchClientCertificatePkcs12FileAsync()
-    {
-        List<FileDialogFilter> fileSelectionfilters = new();
-        // Mac OSX file dialogs have problems with file filters... TODO: find if there is a way to solve this
-        if (!this.isOperatingSystemMacOsx)
-        {
-            fileSelectionfilters.Add(
-                new()
-                {
-                    Name = Localizer.Instance["RequestAuthClientCertificate/Pkcs12ImportCertificateFileTypesDescription"],
-                    Extensions = new List<string> { "p12", "pfx" }
-                }
-            );
-        }
-
-        OpenFileDialog dialog = new()
-        {
-            Title = Localizer.Instance["RequestAuthClientCertificate/Pkcs12ImportCertificateFileDialogTitle"],
-            AllowMultiple = false,
-            Filters = fileSelectionfilters
-        };
-        string[]? result = await dialog.ShowAsync(MainWindow.Instance!);
-        if (result != null)
-        {
-            RequestClientCertificateAuthPkcs12CertificateFilePath = result.FirstOrDefault();
-        }
-    }
-
-    private async Task SearchClientCertificatePemCertFileAsync()
-    {
-        List<FileDialogFilter> fileSelectionfilters = new();
-        // Mac OSX file dialogs have problems with file filters... TODO: find if there is a way to solve this
-        if (!this.isOperatingSystemMacOsx)
-        {
-            fileSelectionfilters.Add(
-                new()
-                {
-                    Name = Localizer.Instance["RequestAuthClientCertificate/PemImportCertificateFileTypesDescription"],
-                    Extensions = new List<string> { "cer", "crt", "pem" }
-                }
-            );
-        }
-
-        OpenFileDialog dialog = new()
-        {
-            Title = Localizer.Instance["RequestAuthClientCertificate/PemImportCertificateFileDialogTitle"],
-            AllowMultiple = false,
-            Filters = fileSelectionfilters
-        };
-        string[]? result = await dialog.ShowAsync(MainWindow.Instance!);
-        if (result != null)
-        {
-            RequestClientCertificateAuthPemCertificateFilePath = result.FirstOrDefault();
-        }
-    }
-
-    private async Task SearchClientCertificatePemPrivateKeyFileAsync()
-    {
-        List<FileDialogFilter> fileSelectionfilters = new();
-        // Mac OSX file dialogs have problems with file filters... TODO: find if there is a way to solve this
-        if (!this.isOperatingSystemMacOsx)
-        {
-            fileSelectionfilters.Add(
-                new()
-                {
-                    Name = Localizer.Instance["RequestAuthClientCertificate/PemImportPrivateKeyFileTypesDescription"],
-                    Extensions = new List<string> { "cer", "crt", "pem", "key" }
-                }
-            );
-        }
-
-        OpenFileDialog dialog = new()
-        {
-            Title = Localizer.Instance["RequestAuthClientCertificate/PemImportPrivateKeyFileDialogTitle"],
-            AllowMultiple = false,
-            Filters = fileSelectionfilters
-        };
-        string[]? result = await dialog.ShowAsync(MainWindow.Instance!);
-        if (result != null)
-        {
-            RequestClientCertificateAuthPemPrivateKeyFilePath = result.FirstOrDefault();
-        }
-    }
-
-    #endregion
-
     #region CONVERT VIEW INPUTS TO REQUEST ENTITY
-
-    private PororocaRequestAuth? WrapCustomAuthFromInputs()
-    {
-        PororocaRequestAuth auth = new();
-        switch (RequestAuthMode)
-        {
-            case PororocaRequestAuthMode.ClientCertificate:
-                var type = RequestAuthClientCertificateType;
-                if (type == PororocaRequestAuthClientCertificateType.Pem)
-                {
-                    auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, RequestClientCertificateAuthPemCertificateFilePath!, RequestClientCertificateAuthPemPrivateKeyFilePath, RequestClientCertificateAuthPemFilePassword);
-                }
-                else if (type == PororocaRequestAuthClientCertificateType.Pkcs12)
-                {
-                    auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, RequestClientCertificateAuthPkcs12CertificateFilePath!, null, RequestClientCertificateAuthPkcs12FilePassword);
-                }
-                else
-                {
-                    return null;
-                }
-                break;
-            case PororocaRequestAuthMode.Bearer:
-                auth.SetBearerAuth(RequestBearerAuthToken ?? string.Empty);
-                break;
-            case PororocaRequestAuthMode.Basic:
-                auth.SetBasicAuth(RequestBasicAuthLogin ?? string.Empty, RequestBasicAuthPassword ?? string.Empty);
-                break;
-            default:
-                return null;
-        }
-        return auth;
-    }
 
     private PororocaHttpRequestBody? WrapRequestBodyFromInputs()
     {
@@ -926,7 +592,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
             httpVersion: RequestHttpVersion,
             httpMethod: RequestMethod.ToString(),
             url: RequestUrl,
-            customAuth: WrapCustomAuthFromInputs(),
+            customAuth: this.requestAuthDataCtxField.ToCustomAuth(),
             headers: RequestHeaders.Count == 0 ? null : RequestHeaders.Select(h => h.ToKeyValueParam()),
             body: WrapRequestBodyFromInputs());
 

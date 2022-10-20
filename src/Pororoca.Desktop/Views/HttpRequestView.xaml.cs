@@ -11,7 +11,7 @@ public class HttpRequestView : UserControl
 
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
-    private void OnRequestUrlPointerEnter(object sender, PointerEventArgs e)
+    public void OnRequestUrlPointerEnter(object sender, PointerEventArgs e)
     {
         var vm = (HttpRequestViewModel)DataContext!;
         vm.UpdateResolvedRequestUrlToolTip();

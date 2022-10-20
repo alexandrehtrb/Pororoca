@@ -95,6 +95,7 @@ public static class PororocaHttpRequestTranslator
 
         StreamContent MakeFileContent(string fileSrcPath, string? contentType)
         {
+            // TODO: Use FileStream constructor specifiying useAsync: true
             string resolvedFileSrcPath = variableResolver.ReplaceTemplates(fileSrcPath);
             StreamContent content = new(File.OpenRead(resolvedFileSrcPath));
             content.Headers.ContentType = new(contentType ?? MimeTypesDetector.DefaultMimeTypeForBinary);

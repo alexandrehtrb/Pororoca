@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.VariableResolution;
 using static Pororoca.Domain.Features.VariableResolution.IPororocaVariableResolver;
 
@@ -35,6 +36,13 @@ public sealed class PororocaCollection : IPororocaVariableResolver, ICloneable
     public IReadOnlyList<PororocaHttpRequest> HttpRequests =>
         Requests.Where(r => r is PororocaHttpRequest)
                 .Cast<PororocaHttpRequest>()
+                .ToList()
+                .AsReadOnly();
+
+    [JsonIgnore] // JSON IGNORE
+    public IReadOnlyList<PororocaWebSocketConnection> WebSocketConnections =>
+        Requests.Where(r => r is PororocaWebSocketConnection)
+                .Cast<PororocaWebSocketConnection>()
                 .ToList()
                 .AsReadOnly();
 

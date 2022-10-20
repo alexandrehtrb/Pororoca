@@ -99,6 +99,32 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         set => this.RaiseAndSetIfChanged(ref this.httpRequestViewDataCtxField, value);
     }
 
+    private bool isWebSocketConnectionViewVisibleField = false;
+    public bool IsWebSocketConnectionViewVisible
+    {
+        get => this.isWebSocketConnectionViewVisibleField;
+        set => this.RaiseAndSetIfChanged(ref this.isWebSocketConnectionViewVisibleField, value);
+    }
+    private WebSocketConnectionViewModel? webSocketConnectionViewDataCtxField = null;
+    public WebSocketConnectionViewModel? WebSocketConnectionViewDataCtx
+    {
+        get => this.webSocketConnectionViewDataCtxField;
+        set => this.RaiseAndSetIfChanged(ref this.webSocketConnectionViewDataCtxField, value);
+    }
+
+    private bool isWebSocketClientMessageViewVisibleField = false;
+    public bool IsWebSocketClientMessageViewVisible
+    {
+        get => this.isWebSocketClientMessageViewVisibleField;
+        set => this.RaiseAndSetIfChanged(ref this.isWebSocketClientMessageViewVisibleField, value);
+    }
+    private WebSocketClientMessageViewModel? webSocketRequestMessageViewDataCtxField = null;
+    public WebSocketClientMessageViewModel? WebSocketClientMessageViewDataCtx
+    {
+        get => this.webSocketRequestMessageViewDataCtxField;
+        set => this.RaiseAndSetIfChanged(ref this.webSocketRequestMessageViewDataCtxField, value);
+    }
+
     #endregion
 
     #region LANGUAGE
@@ -176,11 +202,14 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
             CollectionViewDataCtx = colVm;
             if (!IsCollectionViewVisible)
             {
+                // TODO: Use a tuple with (enum, ref bool variable) instead of many bools
                 IsCollectionViewVisible = true;
                 IsCollectionVariablesViewVisible = false;
                 IsEnvironmentViewVisible = false;
                 IsCollectionFolderViewVisible = false;
                 IsHttpRequestViewVisible = false;
+                IsWebSocketConnectionViewVisible = false;
+                IsWebSocketClientMessageViewVisible = false;
             }
         }
         else if (selectedItem is CollectionVariablesViewModel colVarsVm)
@@ -193,6 +222,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
                 IsEnvironmentViewVisible = false;
                 IsCollectionFolderViewVisible = false;
                 IsHttpRequestViewVisible = false;
+                IsWebSocketConnectionViewVisible = false;
+                IsWebSocketClientMessageViewVisible = false;
             }
         }
         else if (selectedItem is EnvironmentViewModel envVm)
@@ -205,6 +236,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
                 IsEnvironmentViewVisible = true;
                 IsCollectionFolderViewVisible = false;
                 IsHttpRequestViewVisible = false;
+                IsWebSocketConnectionViewVisible = false;
+                IsWebSocketClientMessageViewVisible = false;
             }
         }
         else if (selectedItem is CollectionFolderViewModel folderVm)
@@ -217,6 +250,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
                 IsEnvironmentViewVisible = false;
                 IsCollectionFolderViewVisible = true;
                 IsHttpRequestViewVisible = false;
+                IsWebSocketConnectionViewVisible = false;
+                IsWebSocketClientMessageViewVisible = false;
             }
         }
         else if (selectedItem is HttpRequestViewModel reqVm)
@@ -229,6 +264,36 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
                 IsEnvironmentViewVisible = false;
                 IsCollectionFolderViewVisible = false;
                 IsHttpRequestViewVisible = true;
+                IsWebSocketConnectionViewVisible = false;
+                IsWebSocketClientMessageViewVisible = false;
+            }
+        }
+        else if (selectedItem is WebSocketConnectionViewModel wsVm)
+        {
+            WebSocketConnectionViewDataCtx = wsVm;
+            if (!IsWebSocketConnectionViewVisible)
+            {
+                IsCollectionViewVisible = false;
+                IsCollectionVariablesViewVisible = false;
+                IsEnvironmentViewVisible = false;
+                IsCollectionFolderViewVisible = false;
+                IsHttpRequestViewVisible = false;
+                IsWebSocketConnectionViewVisible = true;
+                IsWebSocketClientMessageViewVisible = false;
+            }
+        }
+        else if (selectedItem is WebSocketClientMessageViewModel wsReqVm)
+        {
+            WebSocketClientMessageViewDataCtx = wsReqVm;
+            if (!IsWebSocketClientMessageViewVisible)
+            {
+                IsCollectionViewVisible = false;
+                IsCollectionVariablesViewVisible = false;
+                IsEnvironmentViewVisible = false;
+                IsCollectionFolderViewVisible = false;
+                IsHttpRequestViewVisible = false;
+                IsWebSocketConnectionViewVisible = false;
+                IsWebSocketClientMessageViewVisible = true;
             }
         }
     }
@@ -276,6 +341,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         IsEnvironmentViewVisible = false;
         IsCollectionFolderViewVisible = false;
         IsHttpRequestViewVisible = false;
+        IsWebSocketConnectionViewVisible = false;
+        IsWebSocketClientMessageViewVisible = false;
     }
 
     private async Task ImportCollectionsAsync()

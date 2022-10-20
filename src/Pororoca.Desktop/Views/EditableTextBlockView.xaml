@@ -15,9 +15,26 @@
     </Grid.RowDefinitions>
 
     <Grid Grid.Column="0" Grid.Row="0" Margin="0,0,12,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-      <TextBlock Text="{Binding Txt}" IsVisible="{Binding !IsEditing}" FontSize="32" FontWeight="Light" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+      <Grid.Styles>
+        <Style Selector="TextBlock.IsConnectedWebSocket">
+          <Setter
+              Property="Foreground"
+              Value="#00FF00" />
+        </Style>
+        <Style Selector="TextBox.IsConnectedWebSocket">
+          <Setter
+              Property="Foreground"
+              Value="#00FF00" />
+        </Style>
+      </Grid.Styles>
+      <StackPanel Orientation="Horizontal" IsVisible="{Binding !IsEditing}">
+        <Image Source="/Assets/Images/icon_white_http.png" Margin="0,0,12,0" IsVisible="{Binding IsHttpRequest}" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        <Image Source="/Assets/Images/icon_white_websocket.png" Margin="0,0,12,0" IsVisible="{Binding IsDisconnectedWebSocket}" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        <Image Source="/Assets/Images/icon_green_websocket.png" Margin="0,0,12,0" IsVisible="{Binding IsConnectedWebSocket}" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        <TextBlock Classes.IsConnectedWebSocket="{Binding IsConnectedWebSocket}" Text="{Binding Txt}" FontSize="32" FontWeight="Light" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+      </StackPanel>
     
-      <TextBox Text="{Binding Txt}" IsVisible="{Binding IsEditing}" FontSize="18" Padding="8,4,8,4" FontWeight="Light" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" KeyDown="OnKeyDownHandler"/>
+      <TextBox Classes.IsConnectedWebSocket="{Binding IsConnectedWebSocket}" Text="{Binding Txt}" IsVisible="{Binding IsEditing}" FontSize="18" Padding="8,4,8,4" FontWeight="Light" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" KeyDown="OnKeyDownHandler"/>
     </Grid>
 
     <Button Grid.Column="1" Grid.Row="0" Width="40" Margin="12,0,0,0" Command="{Binding EditOrApplyTxtChangeCmd}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Stretch" Classes="Primary">
