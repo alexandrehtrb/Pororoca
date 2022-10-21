@@ -209,7 +209,8 @@ public static class PororocaHttpResponseTests
         // THEN
         if (content == null)
         {
-            Assert.Empty(res.GetBodyAsBinary());
+            Assert.NotNull(res.GetBodyAsBinary());
+            Assert.Empty(res.GetBodyAsBinary()!);
         }
         else
         {

@@ -236,6 +236,7 @@ public static class PostmanUrlExporterTests
         Assert.Null(postmanUrl.Protocol);
         Assert.Equal(new[] { "{{HOST}}" }, postmanUrl.Host);
         Assert.Null(postmanUrl.Port);
+        Assert.NotNull(postmanUrl.Path!);
         Assert.Empty(postmanUrl.Path);
 
         Assert.NotNull(postmanUrl.Query);
@@ -262,6 +263,7 @@ public static class PostmanUrlExporterTests
         Assert.Null(postmanUrl.Protocol);
         Assert.Equal(new[] { "{{HOST}}" }, postmanUrl.Host);
         Assert.Null(postmanUrl.Port);
+        Assert.NotNull(postmanUrl.Path!);
         Assert.Empty(postmanUrl.Path);
 
         Assert.Null(postmanUrl.Query);

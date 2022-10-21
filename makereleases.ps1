@@ -113,18 +113,7 @@ function Run-UnitTests
 
 	Write-Host "Running unit tests..." -ForegroundColor DarkYellow
 	$stopwatch.Restart()
-	$IsWindows7 = $IsWindows -and ((Get-ComputerInfo).OsName  -like "*Windows 7*")
-	if ($IsWindows7)
-	{
-		Remove-Item ./global.json -Force -ErrorAction Ignore
-		New-Item ./global.json
-		Set-Content ./global.json '{"sdk":{"version":"6.0.102"}}'
-	}
 	dotnet test --configuration Release --nologo --verbosity quiet
-	if ($IsWindows7)
-	{
-		Remove-Item ./global.json -Force -ErrorAction Ignore
-	}
 	$stopwatch.Stop()
 	Write-Host "Solution tests run ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
 }
