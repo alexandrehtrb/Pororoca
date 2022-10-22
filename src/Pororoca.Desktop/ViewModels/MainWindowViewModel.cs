@@ -308,14 +308,18 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     private void AddNewCollection()
     {
         PororocaCollection newCol = new(Localizer.Instance["Collection/NewCollection"]);
-        AddCollection(newCol);
+        AddCollection(newCol, showItemInScreen: true);
     }
 
-    private void AddCollection(PororocaCollection col)
+    private void AddCollection(PororocaCollection col, bool showItemInScreen = false)
     {
         CollectionViewModel colVm = new(this, col, DuplicateCollection);
         CollectionsGroupViewDataCtx.Items.Add(colVm);
         CollectionsGroupViewDataCtx.RefreshSubItemsAvailableMovements();
+        if (showItemInScreen)
+        {
+            CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = colVm;
+        }
     }
 
     private void DuplicateCollection(CollectionViewModel colVm)

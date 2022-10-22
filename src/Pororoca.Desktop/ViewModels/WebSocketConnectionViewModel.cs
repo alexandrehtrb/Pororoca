@@ -521,17 +521,17 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
                                                        string.Empty,
                                                        null,
                                                        false);
-        AddWebSocketClientMessage(wsReqMsg);
+        AddWebSocketClientMessage(wsReqMsg, showItemInScreen: true);
     }
 
-    public void AddWebSocketClientMessage(PororocaWebSocketClientMessage wsReqMsgToAdd)
+    public void AddWebSocketClientMessage(PororocaWebSocketClientMessage wsReqMsgToAdd, bool showItemInScreen = false)
     {
         WebSocketClientMessageViewModel wsReqMsgToAddVm = new(this, wsReqMsgToAdd);
 
         Items.Add(wsReqMsgToAddVm);
         IsExpanded = true;
         RefreshSubItemsAvailableMovements();
-        // TODO: Switch to new screen after adding an item into collections group tree view
+        SetAsItemInFocus(wsReqMsgToAddVm, showItemInScreen);
     }
 
     private void OnLanguageChanged()

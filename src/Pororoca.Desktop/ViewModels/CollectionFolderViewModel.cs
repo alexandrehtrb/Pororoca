@@ -107,22 +107,22 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
     private void AddNewFolder()
     {
         PororocaCollectionFolder newFolder = new(Localizer.Instance["Folder/NewFolder"]);
-        AddFolder(newFolder);
+        AddFolder(newFolder, showItemInScreen: true);
     }
 
     private void AddNewHttpRequest()
     {
         PororocaHttpRequest newReq = new(Localizer.Instance["HttpRequest/NewRequest"]);
-        AddHttpRequest(newReq);
+        AddHttpRequest(newReq, showItemInScreen: true);
     }
 
     private void AddNewWebSocketConnection()
     {
         PororocaWebSocketConnection newWs = new(Localizer.Instance["WebSocketConnection/NewConnection"]);
-        AddWebSocketConnection(newWs);
+        AddWebSocketConnection(newWs, showItemInScreen: true);
     }
 
-    public void AddFolder(PororocaCollectionFolder folderToAdd)
+    public void AddFolder(PororocaCollectionFolder folderToAdd, bool showItemInScreen = false)
     {
         var existingFolders = Items.Where(i => i is CollectionFolderViewModel);
         var existingRequests = Items.Where(i => i is HttpRequestViewModel || i is WebSocketConnectionViewModel);
@@ -138,9 +138,10 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
         }
         IsExpanded = true;
         RefreshSubItemsAvailableMovements();
+        SetAsItemInFocus(folderToAddVm, showItemInScreen);
     }
 
-    public void AddHttpRequest(PororocaHttpRequest reqToAdd)
+    public void AddHttpRequest(PororocaHttpRequest reqToAdd, bool showItemInScreen = false)
     {
         var existingFolders = Items.Where(i => i is CollectionFolderViewModel).ToArray();
         var existingRequests = Items.Where(i => i is HttpRequestViewModel || i is WebSocketConnectionViewModel).ToArray();
@@ -156,9 +157,10 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
         }
         IsExpanded = true;
         RefreshSubItemsAvailableMovements();
+        SetAsItemInFocus(reqToAddVm, showItemInScreen);
     }
 
-    public void AddWebSocketConnection(PororocaWebSocketConnection wsToAdd)
+    public void AddWebSocketConnection(PororocaWebSocketConnection wsToAdd, bool showItemInScreen = false)
     {
         var existingFolders = Items.Where(i => i is CollectionFolderViewModel).ToArray();
         var existingRequests = Items.Where(i => i is HttpRequestViewModel || i is WebSocketConnectionViewModel).ToArray();
@@ -174,6 +176,7 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
         }
         IsExpanded = true;
         RefreshSubItemsAvailableMovements();
+        SetAsItemInFocus(wsToAddVm, showItemInScreen);
     }
 
     #endregion

@@ -82,6 +82,12 @@ public abstract class CollectionOrganizationItemViewModel : ViewModelBase, IColl
 
     public void DeleteThis() =>
         Parent.DeleteSubItem(this);
+    
+    public void SetAsItemInFocus(ViewModelBase vm, bool show)
+    {
+        if (show)
+            CollectionsGroupDataCtx.CollectionGroupSelectedItem = vm;
+    }
 
     protected CollectionOrganizationItemViewModel(ICollectionOrganizationItemParentViewModel parentVm, string name)
     {
