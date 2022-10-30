@@ -9,6 +9,8 @@
                 "build",
                 "${workspaceFolder}/src/Pororoca.Desktop/Pororoca.Desktop.csproj",
                 "/property:GenerateFullPaths=true",
+                // uncomment line below to debug windows installed version
+                //"/property:PublishForInstallOnWindows=true",
                 "/consoleloggerparameters:NoSummary"
             ],
             "problemMatcher": "$msCompile"

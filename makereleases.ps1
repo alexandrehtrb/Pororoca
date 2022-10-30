@@ -36,10 +36,15 @@ function Get-RuntimesToPublishFor
 	$windowsRuntimes = @(`
 		#'win7-x64' ` 
 		#,'win7-x86' `
-		'win-x64' `
-		,'win-x86' `
-		,'win-arm' `
-		,'win-arm64' `
+		'win-x64_portable' `
+		,'win-x86_portable' `
+		,'win-arm_portable' `
+		,'win-arm64_portable' `
+
+		,'win-x64_installer' `
+		,'win-x86_installer' `
+		,'win-arm_installer' `
+		,'win-arm64_installer' `
 	)
 
 	# Windows releases should be built on a Windows machine, because of dotnet
@@ -164,30 +169,41 @@ function Generate-PororocaDesktopRelease {
 	$fullAppReleaseName = "Pororoca_${versionName}_${runtime}"
 	$outputFolder = "./out/${fullAppReleaseName}"
 	$zipName = "${fullAppReleaseName}.zip"
+	$isInstallOnWindowsRelease = ($runtime -like "*_installer")
+	$dotnetPublishRuntime = $runtime.Replace("_installer","").Replace("_portable","")
 	
 	Write-Host "Publishing Pororoca.Desktop for ${runtime}..." -ForegroundColor DarkYellow
 
 	$stopwatch.Restart()
 	
-	Publish-PororocaDesktop -Runtime $runtime -OutputFolder $outputFolder
+	Publish-PororocaDesktop -Runtime $dotnetPublishRuntime -IsInstallOnWindowsRelease $isInstallOnWindowsRelease -OutputFolder $outputFolder
 	Rename-Executable -Runtime $runtime -OutputFolder $outputFolder
 	Set-ExecutableAttributesIfUnix -Runtime $runtime -OutputFolder $outputFolder
 	Make-AppFolderIfMacOS -Runtime $runtime -OutputFolder $outputFolder
 	Copy-LogoIfLinux -Runtime $runtime -OutputFolder $outputFolder
 	Copy-Licence -OutputFolder $outputFolder
-	Compress-Package -OutputFolder $outputFolder -ZipName $zipName
-
-	$stopwatch.Stop()
-	Write-Host "Package created on ./out/${zipName} ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
-
-	Write-Host "SHA256 hash for package ${runtime}: $((Get-FileHash ./out/${zipName} -Algorithm SHA256).Hash)" -ForegroundColor DarkGreen
+	if ($isInstallOnWindowsRelease)
+	{
+		$stopwatch.Stop()
+		# TODO: call makensis script here
+		Write-Host "Files for windows installer created on ${outputFolder} ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
+	}
+	else
+	{
+		Compress-Package -OutputFolder $outputFolder -ZipName $zipName
+		$stopwatch.Stop()
+		Write-Host "Package created on ./out/${zipName} ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
+		Write-Host "SHA256 hash for package ${runtime}: $((Get-FileHash ./out/${zipName} -Algorithm SHA256).Hash)" -ForegroundColor DarkGreen
+	}
+	
 }
 
 function Publish-PororocaDesktop
 {
 	param (
 		[string]$runtime,
-		[string]$outputFolder
+		[string]$outputFolder,
+		[bool]$isInstallOnWindowsRelease = $false
     )
 
 	if ($runtime -like "*win7*")
@@ -201,12 +217,14 @@ function Publish-PororocaDesktop
 	}
 
 	$publishSingleFileArg = $(${publishSingleFile}.ToString().ToLower())
+	$isInstallOnWindowsReleaseArg = $(${isInstallOnWindowsRelease}.ToString().ToLower())
 	
 	dotnet publish ./src/Pororoca.Desktop/Pororoca.Desktop.csproj `
 		--verbosity quiet `
 		--nologo `
 		--configuration Release `
 		-p:PublishSingleFile=${publishSingleFileArg} `
+		-p:PublishForInstallOnWindows=${isInstallOnWindowsReleaseArg} `
 		--self-contained true `
 		--runtime $runtime `
 		--output $outputFolder

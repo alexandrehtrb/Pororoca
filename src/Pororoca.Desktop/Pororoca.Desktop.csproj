@@ -6,6 +6,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <DebugType>embedded</DebugType>
+    <!--
+      line below will include INSTALLED_ON_WINDOWS preprocessor directive
+      when "-p:PublishForInstallOnWindows" is specified in dotnet build, run or publish
+    -->
+    <DefineConstants Condition=" '$(PublishForInstallOnWindows)' == 'true' ">$(DefineConstants);INSTALLED_ON_WINDOWS</DefineConstants>
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
     <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
     <PublishReadyToRun>True</PublishReadyToRun>
