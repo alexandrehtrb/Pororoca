@@ -49,8 +49,8 @@ function Get-RuntimesToPublishFor
 
 	# Windows releases should be built on a Windows machine, because of dotnet
 	# Linux and Mac OS releases should be built on one of those OSs, because of chmod and zip
-	return $IsWindows ? $windowsRuntimes : $unixRuntimes
-	#return @("win7-x64")
+	#return $IsWindows ? $windowsRuntimes : $unixRuntimes
+	return @("win7-x64_installer")
 }
 
 #################### Pre-release build and tests ####################
@@ -184,9 +184,11 @@ function Generate-PororocaDesktopRelease {
 	Copy-Licence -OutputFolder $outputFolder
 	if ($isInstallOnWindowsRelease)
 	{
+		Copy-IconIfInstalledOnWindows -Runtime $runtime -OutputFolder $outputFolder
+		Write-Host "Generating Windows installer for ${runtime}..." -ForegroundColor DarkYellow
+		Pack-ReleaseInWindowsInstaller -GeneralOutFolder ".\out" -InstallerFilesFolder $outputFolder -InstallerFileName "${fullAppReleaseName}.exe" -VersionName $versionName
 		$stopwatch.Stop()
-		# TODO: call makensis script here
-		Write-Host "Files for windows installer created on ${outputFolder} ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
+		Write-Host "Windows installer for ${dotnetPublishRuntime} created: ./out/${fullAppReleaseName}.exe ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
 	}
 	else
 	{
@@ -310,6 +312,21 @@ function Copy-LogoIfLinux
 	}
 }
 
+function Copy-IconIfInstalledOnWindows
+{
+	param (
+		[string]$runtime,
+		[string]$outputFolder
+    )
+
+	if (($runtime -like "*win*") -and ($runtime -like "*_installer*"))
+	{
+		# Copy icon for windows installer
+		Copy-Item -Path "./src/Pororoca.Desktop/Assets/pororoca_icon.ico" `
+			  -Destination $outputFolder
+	}
+}
+
 function Copy-Licence
 {
 	param (
@@ -342,6 +359,29 @@ function Compress-Package
 	}
 
 	Remove-Item $outputFolder -Force -Recurse -ErrorAction Ignore
+}
+
+function Pack-ReleaseInWindowsInstaller
+{
+	param (
+		[string]$generalOutFolder, # the "./out/" folder
+		[string]$installerFilesFolder, # the "./out/Pororoca_x.y.z_win-x64_installer" folder
+		[string]$installerFileName,
+		[string]$versionName
+    )
+
+	$installerOutFileAbsolutePath = $((Resolve-Path $generalOutFolder).ToString()) + "\" + $installerFileName
+	$installerFilesDirAbsolutePath = $((Resolve-Path $installerFilesFolder).ToString())
+
+	# makensis must be added to PATH
+	# -WX ` # treat warnings as errors
+	# -V2 ` # verbosity no info
+	makensis -WX -V2 "/XOutFile ${installerOutFileAbsolutePath}" `
+		"/DSHORT_VERSION=${versionName}" `
+		"/DINPUT_FILES_DIR=${installerFilesDirAbsolutePath}" `
+		.\src\Pororoca.WindowsInstaller\Installer.nsi
+
+	Remove-Item $installerFilesFolder -Force -Recurse -ErrorAction Ignore
 }
 
 ########################## Execute #############################
