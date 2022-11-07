@@ -154,6 +154,7 @@ function Generate-PororocaTestRelease {
 
 	dotnet pack ./src/Pororoca.Test/Pororoca.Test.csproj `
 		--nologo `
+		--verbosity quiet `
 		--configuration Release
 
 	Write-Host "Package created! ($($stopwatch.Elapsed.Seconds)s)." -ForegroundColor DarkGreen
