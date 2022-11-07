@@ -95,7 +95,7 @@ public static class BackgroundWebSocketsProcessor
             }
             else if (firstOperation == beganPinging && CanSendMessages())
             {
-                await PingClientAsync(ws, "ping to client", disconnectToken);
+                await PingClientAsync(ws, "{\"ping\": \"hey client\"}", disconnectToken);
             }
             else if (firstOperation == beganReceiving)
             {

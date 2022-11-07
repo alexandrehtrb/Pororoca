@@ -9,6 +9,7 @@
         <FluentTheme Mode="Dark"/>
         <StyleInclude Source="/Styles/Styles.xaml" />
         <StyleInclude Source="/Styles/SideBar.xaml" />
+        <StyleInclude Source="avares://AvaloniaEdit/AvaloniaEdit.xaml" />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
 
         <Style Selector="TreeView TextBlock">

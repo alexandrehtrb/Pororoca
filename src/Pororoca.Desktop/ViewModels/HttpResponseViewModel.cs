@@ -19,6 +19,9 @@ namespace Pororoca.Desktop.ViewModels;
 
 public sealed class HttpResponseViewModel : ViewModelBase
 {
+    public delegate void OnHttpResponseBodyChanged(string updatedResponseContent, string? updatedResponseContentType);
+    public event OnHttpResponseBodyChanged? HttpResponseBodyChanged;
+
     private static readonly TimeSpan oneSecond = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan oneMinute = TimeSpan.FromMinutes(1);
     private PororocaHttpResponse? res;
@@ -44,6 +47,13 @@ public sealed class HttpResponseViewModel : ViewModelBase
     {
         get => this.responseRawContentField;
         set => this.RaiseAndSetIfChanged(ref this.responseRawContentField, value);
+    }
+
+    private string? responseRawContentTypeField;
+    public string? ResponseRawContentType
+    {
+        get => this.responseRawContentTypeField;
+        set => this.RaiseAndSetIfChanged(ref this.responseRawContentTypeField, value);
     }
 
     private bool isSaveResponseBodyToFileVisibleField;
@@ -134,6 +144,8 @@ public sealed class HttpResponseViewModel : ViewModelBase
             ResponseStatusCodeElapsedTimeTitle = FormatSuccessfulResponseTitle(res.ElapsedTime, (HttpStatusCode)res.StatusCode!);
             UpdateHeadersAndTrailers(res.Headers, res.Trailers);
             ResponseRawContent = res.CanDisplayTextBody ? res.GetBodyAsText() : string.Format(Localizer.Instance["HttpResponse/BodyContentBinaryNotShown"], res.GetBodyAsBinary()!.Length);
+            ResponseRawContentType = res.ContentType;
+            HttpResponseBodyChanged?.Invoke(ResponseRawContent!, ResponseRawContentType);
             IsSaveResponseBodyToFileVisible = res.HasBody;
             IsDisableTlsVerificationVisible = false;
         }
@@ -145,6 +157,8 @@ public sealed class HttpResponseViewModel : ViewModelBase
             ResponseStatusCodeElapsedTimeTitle = FormatFailedResponseTitle(res.ElapsedTime);
             UpdateHeadersAndTrailers(res.Headers, res.Trailers);
             ResponseRawContent = res.Exception!.ToString();
+            ResponseRawContentType = null;
+            HttpResponseBodyChanged?.Invoke(ResponseRawContent!, ResponseRawContentType);
             IsSaveResponseBodyToFileVisible = false;
 
             bool isSslVerificationDisabled = ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled;

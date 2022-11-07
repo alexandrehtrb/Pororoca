@@ -110,11 +110,40 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
         }
     }
 
-    private string? contentRawField;
-    public string? ContentRaw
+    public string? RawContent { get; set; }
+
+    private int rawContentSyntaxSelectedIndexField;
+    public int RawContentSyntaxSelectedIndex
     {
-        get => this.contentRawField;
-        set => this.RaiseAndSetIfChanged(ref this.contentRawField, value);
+        get => this.rawContentSyntaxSelectedIndexField;
+        set => this.RaiseAndSetIfChanged(ref this.rawContentSyntaxSelectedIndexField, value);
+    }
+
+    private bool isRawContentJsonSyntaxSelectedField;
+    public bool IsRawContentJsonSyntaxSelected
+    {
+        get => this.isRawContentJsonSyntaxSelectedField;
+        set => this.RaiseAndSetIfChanged(ref this.isRawContentJsonSyntaxSelectedField, value);
+    }
+
+    private bool isRawContentOtherSyntaxSelectedField;
+    public bool IsRawContentOtherSyntaxSelected
+    {
+        get => this.isRawContentOtherSyntaxSelectedField;
+        set => this.RaiseAndSetIfChanged(ref this.isRawContentOtherSyntaxSelectedField, value);
+    }
+
+    private PororocaWebSocketMessageRawContentSyntax? RawContentSyntax
+    {
+        get
+        {
+            if (IsRawContentJsonSyntaxSelected)
+                return PororocaWebSocketMessageRawContentSyntax.Json;
+            if (IsRawContentOtherSyntaxSelected)
+                return PororocaWebSocketMessageRawContentSyntax.Other;
+            else
+                return null;
+        }
     }
 
     private string? contentFileSrcPathField;
@@ -177,7 +206,22 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
                 break;
         }
 
-        ContentRaw = msg.RawContent;
+        RawContent = msg.RawContent;
+
+        switch (msg.RawContentSyntax)
+        {
+            // TODO: Improve this, do not use fixed values to resolve index
+            default:
+            case PororocaWebSocketMessageRawContentSyntax.Json:
+                RawContentSyntaxSelectedIndex = 0;
+                IsRawContentJsonSyntaxSelected = true;
+                break;
+            case PororocaWebSocketMessageRawContentSyntax.Other:
+                RawContentSyntaxSelectedIndex = 1;
+                IsRawContentOtherSyntaxSelected = true;
+                break;
+        }
+
         ContentFileSrcPath = msg.FileSrcPath;
         SearchContentFileCmd = ReactiveCommand.CreateFromTask(SearchContentFileAsync);
 
@@ -193,7 +237,8 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
         new(msgType: MessageType,
             name: Name,
             contentMode: ContentMode,
-            rawContent: ContentRaw,
+            rawContent: RawContent,
+            rawContentSyntax: RawContentSyntax,
             fileSrcPath: ContentFileSrcPath,
             disableCompressionForThis: DisableCompressionForThisMessage);
 

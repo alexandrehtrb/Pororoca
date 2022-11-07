@@ -27,6 +27,7 @@ public sealed class PororocaWebSocketClientMessageToSend : PororocaWebSocketClie
              name: templateWsCliMsg.Name,
              contentMode: templateWsCliMsg.ContentMode,
              rawContent: templateWsCliMsg.RawContent,
+             rawContentSyntax: templateWsCliMsg.RawContentSyntax,
              fileSrcPath: templateWsCliMsg.FileSrcPath,
              disableCompressionForThis: templateWsCliMsg.DisableCompressionForThis)
     {

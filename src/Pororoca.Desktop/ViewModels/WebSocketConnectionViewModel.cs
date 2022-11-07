@@ -19,11 +19,15 @@ using static Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage.
 using System.Buffers;
 using System.Collections.Specialized;
 using System.Security.Authentication;
+using System.Text.Json;
 
 namespace Pororoca.Desktop.ViewModels;
 
 public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemParentViewModel<WebSocketClientMessageViewModel>
 {
+    public delegate void OnSelectedExchangedMessageChanged(string content, bool isJson);
+    public event OnSelectedExchangedMessageChanged? SelectedExchangedMessageChanged;
+
     #region COLLECTION ORGANIZATION
 
     public override Action OnAfterItemDeleted => Parent.OnAfterItemDeleted;
@@ -360,12 +364,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         set => this.RaiseAndSetIfChanged(ref this.selectedExchangedMessageTypeField, value);
     }
 
-    private string? selectedExchangedMessageContentField;
-    public string? SelectedExchangedMessageContent
-    {
-        get => this.selectedExchangedMessageContentField;
-        set => this.RaiseAndSetIfChanged(ref this.selectedExchangedMessageContentField, value);
-    }
+    public string? SelectedExchangedMessageContent { get; set; }
+    public bool IsSelectedExchangedMessageContentJson { get; set; }
 
     private bool isSaveSelectedExchangedMessageToFileVisibleField;
     public bool IsSaveSelectedExchangedMessageToFileVisible
@@ -519,6 +519,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
                                                        Localizer.Instance["WebSocketClientMessage/NewMessage"],
                                                        PororocaWebSocketClientMessageContentMode.Raw,
                                                        string.Empty,
+                                                       PororocaWebSocketMessageRawContentSyntax.Json,
                                                        null,
                                                        false);
         AddWebSocketClientMessage(wsReqMsg, showItemInScreen: true);
@@ -759,6 +760,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         this.selectedExchangedMessage = vm;
         SelectedExchangedMessageType = vm.TypeDescription;
         SelectedExchangedMessageContent = vm.TextContent;
+        IsSelectedExchangedMessageContentJson = IsJsonString(SelectedExchangedMessageContent);
+        SelectedExchangedMessageChanged?.Invoke(SelectedExchangedMessageContent ?? string.Empty, IsJsonString(SelectedExchangedMessageContent));
         IsSaveSelectedExchangedMessageToFileVisible = vm.CanBeSavedToFile;
     }
 
@@ -787,6 +790,26 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
                 using FileStream fs = new(saveFileOutputPath, FileMode.Create, FileAccess.Write, FileShare.None, fileStreamBufferSize, useAsync: true);
                 await fs.WriteAsync((Memory<byte>) this.selectedExchangedMessage.Bytes!);
             }
+        }
+    }
+
+    private static bool IsJsonString(string? str)
+    {
+        if (!string.IsNullOrWhiteSpace(str))
+        {
+            try
+            {
+                JsonSerializer.Deserialize<dynamic>(str);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
         }
     }
 

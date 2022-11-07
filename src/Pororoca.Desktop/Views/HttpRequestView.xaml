@@ -4,6 +4,7 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:v="using:Pororoca.Desktop.Views"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:AvalonEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
   xmlns:i18n="clr-namespace:Pororoca.Desktop.Localization" x:DataType="vm:HttpRequestViewModel" mc:Ignorable="d" d:DesignWidth="1350" d:DesignHeight="700"
   xmlns:pages="clr-namespace:Pororoca.Desktop.Pages;assembly=Pororoca.Desktop" x:Class="Pororoca.Desktop.Views.HttpRequestView" FontSize="14" Foreground="{StaticResource SystemBaseHighColor}">
 
@@ -122,7 +123,7 @@
             <TabItem.Header>
               <TextBlock Classes="TabItemHeader" Text="{i18n:Localize Body, Context=HttpRequest}"/>
             </TabItem.Header>
-            <Grid Margin="0,12,0,12">
+            <Grid Margin="-12,12,-12,12">
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
               </Grid.ColumnDefinitions>
@@ -131,7 +132,7 @@
                 <RowDefinition Height="*"/>
               </Grid.RowDefinitions>
 
-              <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Spacing="12">
+              <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Margin="12,0,12,0" Spacing="12">
 
                 <ComboBox Height="36" Width="130" FontSize="14" FontWeight="Light" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Stretch" SelectedIndex="{Binding RequestBodyModeSelectedIndex}">
                   <ComboBoxItem IsSelected="{Binding IsRequestBodyModeNoneSelected, Mode=TwoWay}" Content="{i18n:Localize BodyModeNone, Context=HttpRequest}"/>
@@ -142,12 +143,28 @@
                   <ComboBoxItem x:Name="reqScrRequestBodyModeSelectionGraphQl" IsSelected="{Binding IsRequestBodyModeGraphQlSelected, Mode=TwoWay}" Content="{i18n:Localize BodyModeGraphQl, Context=HttpRequest}"/>
                 </ComboBox>
 
-                <AutoCompleteBox Height="36" Width="200" FontSize="14" HorizontalAlignment="Left" Watermark="{i18n:Localize BodyRawContentTypeWatermark, Context=HttpRequest}" Text="{Binding RequestRawContentType}" Items="{Binding AllMimeTypes}" FilterMode="Contains" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}" />
+                <AutoCompleteBox Name="RequestBodyRawContentTypeSelector" Height="36" Width="200" FontSize="14" HorizontalAlignment="Left" Watermark="{i18n:Localize BodyRawContentTypeWatermark, Context=HttpRequest}" Items="{Binding AllMimeTypes}" FilterMode="Contains" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}" />
               </StackPanel>
               <!-- REQUEST BODY RAW -->
-              <TextBox Grid.Column="0" Grid.Row="1" Margin="0,12,0,0" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}" VerticalAlignment="Stretch" FontFamily="/Assets/Fonts/SourceCodePro-Regular.ttf#Source Code Pro" FontSize="12" Watermark="{i18n:Localize BodyRawContentWatermark, Context=HttpRequest}" AcceptsReturn="True" AcceptsTab="True" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Text="{Binding RequestRawContent, Mode=TwoWay}"/>
+              <AvalonEdit:TextEditor
+                  Name="RequestBodyRawContentEditor"
+                  Grid.Column="0"
+                  Grid.Row="1"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  Margin="0,12,0,0"
+                  IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}"
+                  Foreground="#D4D4D4"
+                  Background="#1E1E1E"
+                  HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Visible"
+                  IsReadOnly="False"
+                  ShowLineNumbers="True"
+                  FontFamily="Cascadia Code,Consolas,Menlo,Monospace"
+                  FontWeight="Light"
+                  FontSize="14" />
               <!-- REQUEST BODY FILE -->
-              <Grid Grid.Column="0" Grid.Row="1" Margin="0,12,0,0" VerticalAlignment="Stretch" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionFile}">
+              <Grid Grid.Column="0" Grid.Row="1" Margin="12,12,12,0" VerticalAlignment="Stretch" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionFile}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
@@ -161,7 +178,7 @@
                 <Button Grid.Column="0" Grid.Row="2" Content="{i18n:Localize BodyFileSearchFile, Context=HttpRequest}" Margin="0,12,0,0" Command="{Binding SearchRequestBodyRawFileCmd}" Classes="Primary"/>
               </Grid>
               <!-- REQUEST BODY URL ENCODED -->
-              <Grid Grid.Column="0" Grid.Row="1" Margin="0,12,0,0" VerticalAlignment="Stretch" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionUrlEncoded}">
+              <Grid Grid.Column="0" Grid.Row="1" Margin="12,12,12,0" VerticalAlignment="Stretch" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionUrlEncoded}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
@@ -194,7 +211,7 @@
                 </StackPanel>
               </Grid>
               <!-- REQUEST BODY MULTIPART FORM DATA -->
-              <Grid Grid.Column="0" Grid.Row="1" Margin="0,12,0,0" VerticalAlignment="Stretch" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionFormData}">
+              <Grid Grid.Column="0" Grid.Row="1" Margin="12,12,12,0" VerticalAlignment="Stretch" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionFormData}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
@@ -240,7 +257,7 @@
 
               </Grid>
               <!-- REQUEST BODY GRAPH QL -->
-              <Grid Grid.Column="0" Grid.Row="1" Margin="0,12,0,0" VerticalAlignment="Stretch" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionGraphQl}">
+              <Grid Grid.Column="0" Grid.Row="1" Margin="12,12,12,0" VerticalAlignment="Stretch" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionGraphQl}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="0.5*" MinWidth="40" />
                   <ColumnDefinition Width="Auto" />
@@ -302,7 +319,7 @@
             <TabItem.Header>
               <TextBlock Classes="TabItemHeader" Text="{i18n:Localize Body, Context=HttpResponse}"/>
             </TabItem.Header>
-            <Grid Margin="0,12,-12,12" VerticalAlignment="Stretch">
+            <Grid Margin="-12,12,-12,0" VerticalAlignment="Stretch">
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
               </Grid.ColumnDefinitions>
@@ -312,11 +329,25 @@
               </Grid.RowDefinitions>
 
               <!-- AcceptsReturn="True" allows for horizontal scrollbar -->
-              <TextBox Grid.Column="0" Grid.Row="0" Margin="0,0,12,0" FontFamily="/Assets/Fonts/SourceCodePro-Regular.ttf#Source Code Pro" FontSize="12" Watermark="{i18n:Localize BodyContentWatermark, Context=HttpResponse}" TextWrapping="NoWrap" IsReadOnly="True" AcceptsReturn="True" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Text="{Binding ResponseDataCtx.ResponseRawContent}"/>
-
+              <AvalonEdit:TextEditor
+                  Name="ResponseBodyRawContentEditor"
+                  Grid.Column="0"
+                  Grid.Row="0"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  Margin="0,0,0,0"
+                  Foreground="#D4D4D4"
+                  Background="#1E1E1E"
+                  HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Visible"
+                  IsReadOnly="True"
+                  ShowLineNumbers="True"
+                  FontFamily="Cascadia Code,Consolas,Menlo,Monospace"
+                  FontWeight="Light"
+                  FontSize="14" />
               <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Margin="0,12,0,0">
-                <Button Content="{i18n:Localize BodySaveToFile, Context=HttpResponse}" Margin="0,0,6,0" IsVisible="{Binding ResponseDataCtx.IsSaveResponseBodyToFileVisible}" Command="{Binding ResponseDataCtx.SaveResponseBodyToFileCmd}" Classes="Primary"/>
-                <Button Content="{i18n:Localize DisableTlsVerification, Context=HttpResponse}" Margin="6,0,0,0" IsVisible="{Binding ResponseDataCtx.IsDisableTlsVerificationVisible}" Command="{Binding ResponseDataCtx.DisableTlsVerificationCmd}" Classes="Primary"/>
+                <Button Content="{i18n:Localize BodySaveToFile, Context=HttpResponse}" Margin="0,0,6,12" IsVisible="{Binding ResponseDataCtx.IsSaveResponseBodyToFileVisible}" Command="{Binding ResponseDataCtx.SaveResponseBodyToFileCmd}" Classes="Primary"/>
+                <Button Content="{i18n:Localize DisableTlsVerification, Context=HttpResponse}" Margin="6,0,0,12" IsVisible="{Binding ResponseDataCtx.IsDisableTlsVerificationVisible}" Command="{Binding ResponseDataCtx.DisableTlsVerificationCmd}" Classes="Primary"/>
               </StackPanel>
 
             </Grid>

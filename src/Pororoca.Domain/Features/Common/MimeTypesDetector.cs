@@ -557,6 +557,8 @@ public static class MimeTypesDetector
             new("mcf", "text/mcf"),
             new("mcp", "application/netmc"),
             new("mcurl", "text/vnd.curl.mcurl"), // Curl - Manifest File
+            new("md", "text/markdown"), // Markdown
+            new("md", "text/x-markdown"),
             new("mdb", "application/x-msaccess"), // Microsoft Access
             new("mdi", "image/vnd.ms-modi"), // Microsoft Document Imaging Format
             new("me", "application/x-troff-me"),

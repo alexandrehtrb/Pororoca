@@ -7,6 +7,7 @@
     xmlns:i18n="clr-namespace:Pororoca.Desktop.Localization"
     xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
     xmlns:controls="clr-namespace:Pororoca.Desktop.Controls;assembly=Pororoca.Desktop"
+    xmlns:AvalonEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
     x:DataType="vm:WebSocketConnectionViewModel"
     x:Class="Pororoca.Desktop.Views.WebSocketConnectionView"
     mc:Ignorable="d"
@@ -681,20 +682,23 @@
             VerticalContentAlignment="Center" />
 
         <!-- AcceptsReturn="True" allows for horizontal scrollbar -->
-        <TextBox
+        <AvalonEdit:TextEditor
+            Name="SelectedExchangedMessageContentEditor"
             Grid.Column="0"
             Grid.Row="2"
-            Margin="12,6,12,24"
-            FontFamily="/Assets/Fonts/SourceCodePro-Regular.ttf#Source Code Pro"
-            FontSize="12"
-            Watermark="{i18n:Localize ContentWatermark, Context=WebSocketExchangedMessageDetail}"
-            TextWrapping="NoWrap"
-            IsReadOnly="True"
-            AcceptsReturn="True"
             HorizontalAlignment="Stretch"
-            HorizontalContentAlignment="Left"
-            VerticalContentAlignment="Top"
-            Text="{Binding SelectedExchangedMessageContent}" />
+            VerticalAlignment="Stretch"
+            Margin="12,6,12,24"
+            IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}"
+            Foreground="#D4D4D4"
+            Background="#1E1E1E"
+            HorizontalScrollBarVisibility="Auto"
+            VerticalScrollBarVisibility="Visible"
+            IsReadOnly="True"
+            ShowLineNumbers="True"
+            FontFamily="Cascadia Code,Consolas,Menlo,Monospace"
+            FontWeight="Light"
+            FontSize="14" />
 
         <Button
             Grid.Column="0"

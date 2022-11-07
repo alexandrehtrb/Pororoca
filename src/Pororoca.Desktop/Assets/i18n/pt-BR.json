@@ -183,6 +183,9 @@
   "TopMenuLanguage/Português": "Português",
   "TopMenuOptions/DisableTlsVerification": "Desabilitar verificação de TLS",
   "TopMenuOptions/Language": "Idioma",
+  "TextEditor/Copy": "Copiar",
+  "TextEditor/Paste": "Colar",
+  "TextEditor/Cut": "Recortar",
 
 
   "WebSocketConnection/NewConnection": "Nova conexão WebSocket",
@@ -237,5 +240,7 @@
   "WebSocketClientMessage/ContentModeFile": "Arquivo",
   "WebSocketClientMessage/ContentRawWatermark": "(digite o conteúdo aqui)",
   "WebSocketClientMessage/ContentFileSrcPathWatermark": "(caminho do arquivo aqui)",
-  "WebSocketClientMessage/ContentFileSearchFile": "Procurar arquivo…"
+  "WebSocketClientMessage/ContentFileSearchFile": "Procurar arquivo…",
+  "WebSocketClientMessage/RawContentJsonSyntax": "JSON",
+  "WebSocketClientMessage/RawContentOtherSyntax": "Outra"
 }

@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Pororoca.Desktop.TextEditorConfig;
 
 namespace Pororoca.Desktop.Views;
 
@@ -20,6 +21,12 @@ public partial class MainWindow : Window
     }
 
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
+
+    protected override void OnClosed(EventArgs e)
+    {
+        base.OnClosed(e);
+        TextEditorConfiguration.TextMateInstallations.ForEach(i => i.Dispose());
+    }
 
     public void OnCloseMainWindow(object sender, RoutedEventArgs e) =>
         Close();

@@ -23,6 +23,9 @@ public class PororocaWebSocketClientMessage : PororocaWebSocketMessage, ICloneab
     public string? RawContent { get; set; }
 
     [JsonInclude]
+    public PororocaWebSocketMessageRawContentSyntax? RawContentSyntax { get; set; }
+
+    [JsonInclude]
     public string? FileSrcPath { get; set; }
 
     [JsonInclude]
@@ -32,6 +35,7 @@ public class PororocaWebSocketClientMessage : PororocaWebSocketMessage, ICloneab
                                           string name,
                                           PororocaWebSocketClientMessageContentMode contentMode,
                                           string? rawContent,
+                                          PororocaWebSocketMessageRawContentSyntax? rawContentSyntax,
                                           string? fileSrcPath,
                                           bool disableCompressionForThis) :
         base(PororocaWebSocketMessageDirection.FromClient, msgType)
@@ -40,6 +44,7 @@ public class PororocaWebSocketClientMessage : PororocaWebSocketMessage, ICloneab
         Name = name;
         ContentMode = contentMode;
         RawContent = rawContent;
+        RawContentSyntax = rawContentSyntax;
         FileSrcPath = fileSrcPath;
         DisableCompressionForThis = disableCompressionForThis;
     }
@@ -52,5 +57,5 @@ public class PororocaWebSocketClientMessage : PororocaWebSocketMessage, ICloneab
 #nullable restore warnings
 
     public object Clone() =>
-        new PororocaWebSocketClientMessage(MessageType, Name, ContentMode, RawContent, FileSrcPath, DisableCompressionForThis);
+        new PororocaWebSocketClientMessage(MessageType, Name, ContentMode, RawContent, RawContentSyntax, FileSrcPath, DisableCompressionForThis);
 }

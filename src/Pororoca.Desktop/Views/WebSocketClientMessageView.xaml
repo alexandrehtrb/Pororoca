@@ -6,6 +6,8 @@
     xmlns:v="using:Pororoca.Desktop.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:i18n="clr-namespace:Pororoca.Desktop.Localization"
+    xmlns:AvalonEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+    xmlns:controls="clr-namespace:Pororoca.Desktop.Controls;assembly=Pororoca.Desktop"
     x:DataType="vm:WebSocketClientMessageViewModel"
     mc:Ignorable="d"
     d:DesignWidth="1350"
@@ -89,42 +91,77 @@
             Content="{i18n:Localize MessageTypeClose, Context=WebSocketClientMessage}" />
       </ComboBox>
 
-      <ComboBox
+      <StackPanel
           Grid.Column="0"
           Grid.Row="2"
-          Height="36"
-          Width="120"
           Margin="0,12,0,0"
-          VerticalAlignment="Stretch"
-          FontSize="14"
-          FontWeight="Light"
-          VerticalContentAlignment="Center"
-          SelectedIndex="{Binding ContentModeSelectedIndex, Mode=TwoWay}">
-        <ComboBoxItem
-            x:Name="wsScrReqMsgContentModeSelectionRaw"
-            IsSelected="{Binding IsContentModeRawSelected, Mode=TwoWay}"
-            Content="{i18n:Localize ContentModeRaw, Context=WebSocketClientMessage}" />
-        <ComboBoxItem
-            x:Name="wsScrReqMsgContentModeSelectionFile"
-            IsSelected="{Binding IsContentModeFileSelected, Mode=TwoWay}"
-            Content="{i18n:Localize ContentModeFile, Context=WebSocketClientMessage}" />
-      </ComboBox>
+          Orientation="Horizontal">
 
-      <TextBox
+        <ComboBox
+            Height="36"
+            Width="120"
+            FontSize="14"
+            FontWeight="Light"
+            VerticalContentAlignment="Center"
+            SelectedIndex="{Binding ContentModeSelectedIndex, Mode=TwoWay}">
+          <ComboBoxItem
+              x:Name="wsScrReqMsgContentModeSelectionRaw"
+              IsSelected="{Binding IsContentModeRawSelected, Mode=TwoWay}"
+              Content="{i18n:Localize ContentModeRaw, Context=WebSocketClientMessage}" />
+          <ComboBoxItem
+              x:Name="wsScrReqMsgContentModeSelectionFile"
+              IsSelected="{Binding IsContentModeFileSelected, Mode=TwoWay}"
+              Content="{i18n:Localize ContentModeFile, Context=WebSocketClientMessage}" />
+        </ComboBox>
+
+        <ComboBox
+            Name="RawContentSyntaxSelector"
+            IsVisible="{Binding IsSelected, ElementName=wsScrReqMsgContentModeSelectionRaw}"
+            Height="36"
+            Width="120"
+            Margin="12,0,0,0"
+            FontSize="14"
+            FontWeight="Light"
+            VerticalContentAlignment="Center"
+            SelectedIndex="{Binding RawContentSyntaxSelectedIndex, Mode=TwoWay}">
+          <ComboBoxItem
+              IsSelected="{Binding IsRawContentJsonSyntaxSelected, Mode=TwoWay}"
+              Content="{i18n:Localize RawContentJsonSyntax, Context=WebSocketClientMessage}" />
+          <ComboBoxItem
+              IsSelected="{Binding IsRawContentOtherSyntaxSelected, Mode=TwoWay}"
+              Content="{i18n:Localize RawContentOtherSyntax, Context=WebSocketClientMessage}" />
+        </ComboBox>
+
+        <!--ComboBox
+            Name="RawContentThemeSelector"
+            IsVisible="{Binding IsSelected, ElementName=wsScrReqMsgContentModeSelectionRaw}"
+            Height="36"
+            Width="120"
+            Margin="12,0,0,0"
+            FontSize="14"
+            FontWeight="Light"
+            VerticalContentAlignment="Center" /-->
+
+      </StackPanel>
+
+
+      <AvalonEdit:TextEditor
+          Name="RawContentEditor"
           Grid.Column="0"
           Grid.Row="3"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
           Margin="0,12,0,0"
           IsVisible="{Binding IsSelected, ElementName=wsScrReqMsgContentModeSelectionRaw}"
-          HorizontalContentAlignment="Left"
-          VerticalContentAlignment="Top"
-          FontFamily="/Assets/Fonts/SourceCodePro-Regular.ttf#Source Code Pro"
-          FontSize="12"
-          Watermark="{i18n:Localize ContentRawWatermark, Context=WebSocketClientMessage}"
-          AcceptsReturn="True"
-          AcceptsTab="True"
-          Text="{Binding ContentRaw, Mode=TwoWay}" />
+          Foreground="#D4D4D4"
+          Background="#1E1E1E"
+          HorizontalScrollBarVisibility="Auto"
+          VerticalScrollBarVisibility="Visible"
+          IsReadOnly="False"
+          ShowLineNumbers="True"
+          FontFamily="Cascadia Code,Consolas,Menlo,Monospace"
+          FontWeight="Light"
+          FontSize="14" />
 
       <StackPanel
           Grid.Column="0"
