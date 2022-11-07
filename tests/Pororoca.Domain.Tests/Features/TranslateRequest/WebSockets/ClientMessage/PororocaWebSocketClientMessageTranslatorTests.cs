@@ -42,7 +42,7 @@ public static class PororocaWebSocketClientMessageTranslatorTests
         {
             { "Hello {{Name}}", "Hello brother" }
         });
-        PororocaWebSocketClientMessage msg = new(msgType, string.Empty, PororocaWebSocketClientMessageContentMode.Raw, "Hello {{Name}}", null, disableCompressionForMsg);
+        PororocaWebSocketClientMessage msg = new(msgType, string.Empty, PororocaWebSocketClientMessageContentMode.Raw, "Hello {{Name}}", null, null, disableCompressionForMsg);
 
         // WHEN
         bool valid = TryTranslateClientMessage(mockedVariableResolver.Object, msg, out var resolvedMsg, out string? errorCode);
@@ -76,7 +76,7 @@ public static class PororocaWebSocketClientMessageTranslatorTests
         {
             { "{{FilePath}}", GetTestFilePath("testfilecontent1.json") }
         });
-        PororocaWebSocketClientMessage msg = new(msgType, string.Empty, PororocaWebSocketClientMessageContentMode.File, null, "{{FilePath}}", disableCompressionForMsg);
+        PororocaWebSocketClientMessage msg = new(msgType, string.Empty, PororocaWebSocketClientMessageContentMode.File, null, null, "{{FilePath}}", disableCompressionForMsg);
 
         // WHEN
         bool valid = TryTranslateClientMessage(mockedVariableResolver.Object, msg, out var resolvedMsg, out string? errorCode);
@@ -112,7 +112,7 @@ public static class PororocaWebSocketClientMessageTranslatorTests
         {
             { "{{FilePath}}", GetTestFilePath("invalid_file.aaa") } // file that does not exist
         });
-        PororocaWebSocketClientMessage msg = new(msgType, string.Empty, PororocaWebSocketClientMessageContentMode.File, null, "{{FilePath}}", disableCompressionForMsg);
+        PororocaWebSocketClientMessage msg = new(msgType, string.Empty, PororocaWebSocketClientMessageContentMode.File, null, null, "{{FilePath}}", disableCompressionForMsg);
 
         // WHEN
         bool valid = TryTranslateClientMessage(mockedVariableResolver.Object, msg, out var resolvedMsg, out string? errorCode);

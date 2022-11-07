@@ -44,7 +44,7 @@ public static class PororocaWebSocketClientMessageValidatorTests
         // GIVEN
         var mockedVariableResolver = MockVariableResolver(new());
         var fileExistsVerifier = MockFileExistsVerifier(false);
-        PororocaWebSocketClientMessage msg = new(PororocaWebSocketMessageType.Text, string.Empty, PororocaWebSocketClientMessageContentMode.Raw, "msg content", null, false);
+        PororocaWebSocketClientMessage msg = new(PororocaWebSocketMessageType.Text, string.Empty, PororocaWebSocketClientMessageContentMode.Raw, "msg content", null, null, false);
 
         // WHEN
         bool valid = IsValidClientMessage(mockedVariableResolver.Object, msg, fileExistsVerifier, out string? errorCode);
@@ -67,7 +67,7 @@ public static class PororocaWebSocketClientMessageValidatorTests
         {
             { "./file.txt", false }
         });
-        PororocaWebSocketClientMessage msg = new(PororocaWebSocketMessageType.Text, string.Empty, PororocaWebSocketClientMessageContentMode.File, null, "{{FilePath}}", false);
+        PororocaWebSocketClientMessage msg = new(PororocaWebSocketMessageType.Text, string.Empty, PororocaWebSocketClientMessageContentMode.File, null, null, "{{FilePath}}", false);
 
         // WHEN
         bool valid = IsValidClientMessage(mockedVariableResolver.Object, msg, fileExistsVerifier, out string? errorCode);
@@ -90,7 +90,7 @@ public static class PororocaWebSocketClientMessageValidatorTests
         {
             { "./file.txt", true }
         });
-        PororocaWebSocketClientMessage msg = new(PororocaWebSocketMessageType.Text, string.Empty, PororocaWebSocketClientMessageContentMode.File, null, "{{FilePath}}", false);
+        PororocaWebSocketClientMessage msg = new(PororocaWebSocketMessageType.Text, string.Empty, PororocaWebSocketClientMessageContentMode.File, null, null, "{{FilePath}}", false);
 
         // WHEN
         bool valid = IsValidClientMessage(mockedVariableResolver.Object, msg, fileExistsVerifier, out string? errorCode);
