@@ -6,13 +6,9 @@ Uma coleção do Pororoca armazena as suas variáveis de coleção, seus ambient
 
 Para criar uma nova coleção, vá ao menu superior, selecione "Arquivo", depois "Nova coleção". A nova coleção vai aparecer no painel esquerdo. Você pode criar quantas coleções quiser.
 
-![NovaColeção](./imgs/new_collection.jpg)
-
 ## Renomeando
 
-Para renomear sua coleção, clique na coleção no painel esquerdo, depois, na tela principal, clique no botão com um lápis, no canto superior direito. Isso habilitará para edição o nome da coleção. Depois de mudar, clique no ícone de check para aplicar o novo nome.
-
-![RenomearColeção](./imgs/rename_collection.jpg)
+Para renomear sua coleção, clique no botão com um lápis, no canto superior direito. Isso habilitará para edição o nome da coleção.
 
 ## Importar e exportar
 
@@ -20,4 +16,6 @@ Coleções também podem ser exportadas e importadas para / de arquivos. Confira
 
 ## Local de armazenamento
 
-As coleções criadas ficam salvas na pasta `PororocaUserData`, junto ao programa executável. Ao encerrar o programa, todas as coleções são salvas.
+As coleções criadas ficam salvas na pasta `PororocaUserData`. Ao encerrar o programa, todas as coleções são salvas.
+
+Se você estiver rodando a versão de instalação no Windows, a pasta `PororocaUserData` fica em `C:\Users\você\AppData\Roaming\Pororoca\`. Para outras plataformas e para a versão portátil, a pasta fica junto ao executável.

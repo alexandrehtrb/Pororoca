@@ -81,7 +81,34 @@ Há métodos na classe PororocaTest para setar valores de variáveis durante a e
 pororocaTest.SetCollectionVariable("MeuTokenAutenticacao", "token_auth");
 ```
 
-O projeto de testes [Pororoca.Test.Tests](https://github.com/alexandrehtrb/Pororoca/tree/master/tests/Pororoca.Test.Tests) neste repositório pode guiar e servir de base - ele mostra como usar o pacote `Pororoca.Test`, como carregar o arquivo de coleção e como setar variáveis em testes.
+O projeto de testes [Pororoca.Test.Tests](https://github.com/alexandrehtrb/Pororoca/tree/master/tests/Pororoca.Test.Tests) pode guiar e servir de base - ele mostra como usar o pacote `Pororoca.Test`, como carregar o arquivo de coleção e como setar variáveis em testes.
+
+## Testes de WebSocket
+
+Você também pode testar WebSockets com o Pororoca. O código abaixo mostra um exemplo de teste:
+
+```cs
+[Fact]
+public async Task Deve_conectar_e_desconectar_com_sucesso()
+{
+    // CONECTANDO
+    var ws = await this.pororocaTest.ConnectWebSocketAsync("WebSocket HTTP1");
+    Assert.Equal(PororocaWebSocketConnectorState.Connected, ws.State);
+
+    // ENVIANDO MENSAGEM DE FECHAMENTO
+    var esperarPorEnvio = Task.Delay(TimeSpan.FromSeconds(1));
+    var envio = ws.SendMessageAsync("Bye").AsTask();
+    await Task.WhenAll(esperarPorEnvio, envio);
+    
+    // ASSERÇÕES
+    Assert.Null(ws.ConnectionException);
+    Assert.Equal(PororocaWebSocketConnectorState.Disconnected, ws.State);
+
+    var msg = Assert.IsType<PororocaWebSocketClientMessageToSend>(ws.ExchangedMessages[0]);
+    Assert.Equal(PororocaWebSocketMessageType.Close, msg.MessageType);
+    Assert.Equal("Adiós", msg.Text);
+}
+```
 
 ## Rodando os testes
 

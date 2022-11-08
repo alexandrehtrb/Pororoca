@@ -6,13 +6,9 @@ A Pororoca collection holds your collection variables, environments and HTTP req
 
 To create a new collection, go to the top menu, select "File", then "New collection". Your new collection will be visible on the left panel. You can create as many collections as you want.
 
-![NewCollection](./imgs/new_collection.jpg)
-
 ## Renaming
 
-To rename your collection, click on the collection in the left panel, then, on the main screen, click on the pencil icon, at the top right. This will enable the collection name for edition. After changing, click on the check icon to apply the new name.
-
-![RenameCollection](./imgs/rename_collection.jpg)
+To rename your collection, click on the pencil icon, at the top right. This will enable the collection name for edition.
 
 ## Import and export
 
@@ -20,4 +16,6 @@ Collections can also be imported and exported from files. Check the [Export and 
 
 ## Saved location
 
-The collections that you create are saved in the `PororocaUserData` folder, located along the executable. When you close the application, all collections are saved.
+The collections that you create are saved in the `PororocaUserData` folder. When you close the application, all collections are saved.
+
+If you are running an installed on Windows version, the `PororocaUserData` folder is located in `C:\Users\you\AppData\Roaming\Pororoca\`. For other platforms and for the portable version, the folder is located alongside the executable.
