@@ -241,5 +241,10 @@
   "WebSocketClientMessage/ContentFileSrcPathWatermark": "(file path here)",
   "WebSocketClientMessage/ContentFileSearchFile": "Search file…",
   "WebSocketClientMessage/RawContentJsonSyntax": "JSON",
-  "WebSocketClientMessage/RawContentOtherSyntax": "Other"
+  "WebSocketClientMessage/RawContentOtherSyntax": "Other",
+
+  "UpdateReminder/DialogTitle": "Pororoca",
+  "UpdateReminder/DialogMessage": "Remember to periodically check for updates!",
+  "UpdateReminder/DialogGoToSite": "Go to site",
+  "UpdateReminder/DialogCancel": "I'll check later"
 }

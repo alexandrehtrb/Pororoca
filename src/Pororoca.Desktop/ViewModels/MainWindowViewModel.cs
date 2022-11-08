@@ -1,6 +1,14 @@
+using System.Diagnostics;
 using System.Reactive;
 using System.Text;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
+using Avalonia.Threading;
+using MessageBox.Avalonia;
+using MessageBox.Avalonia.DTO;
+using MessageBox.Avalonia.Models;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.UserData;
 using Pororoca.Desktop.Views;
@@ -164,6 +172,12 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     #region OTHERS
 
     private readonly bool isOperatingSystemMacOsx;
+
+    #endregion
+
+    #region USER PREFERENCES
+
+    private UserPreferences? UserPrefs { get; set; }
 
     #endregion
 
@@ -429,20 +443,25 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #region USER DATA
 
+    private static UserPreferences GetDefaultUserPrefs() =>
+        new(Language.EnGb, DateTime.Now);
+
     private void LoadUserData()
     {
-        var userPrefs = UserDataManager.LoadUserPreferences();
+        UserPrefs = UserDataManager.LoadUserPreferences() ?? GetDefaultUserPrefs();
         var cols = UserDataManager.LoadUserCollections();
 
-        if (userPrefs != null)
+        SelectLanguage(UserPrefs.GetLanguage());
+        if (UserPrefs.NeedsToShowUpdateReminder())
         {
-            var lang = LanguageExtensions.GetLanguageFromLCID(userPrefs.Lang);
-            SelectLanguage(lang);
+            ShowUpdateReminder();
+            UserPrefs.SetUpdateReminderLastShownDateAsToday();
         }
-        else
+        else if (UserPrefs.HasUpdateReminderLastShownDate() == false)
         {
-            SelectLanguage(Language.EnGb);
+            UserPrefs.SetUpdateReminderLastShownDateAsToday();
         }
+
         foreach (var col in cols)
         {
             AddCollection(col);
@@ -451,14 +470,62 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     public void SaveUserData()
     {
-        UserPreferences userPrefs = new() { Lang = Localizer.Instance.Language.GetLanguageLCID() };
+        UserPrefs!.SetLanguage(Localizer.Instance.Language);
+
         var cols = CollectionsGroupViewDataCtx
                                     .Items
                                     .Select(cvm => cvm.ToCollection())
                                     .DistinctBy(c => c.Id)
                                     .ToArray();
 
-        UserDataManager.SaveUserData(userPrefs, cols).GetAwaiter().GetResult();
+        UserDataManager.SaveUserData(UserPrefs, cols).GetAwaiter().GetResult();
+    }
+
+    private void ShowUpdateReminder()
+    {
+        var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
+        Bitmap bitmap = new(assets!.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
+
+        var msgbox = MessageBoxManager.GetMessageBoxCustomWindow(
+            new MessageBoxCustomParamsWithImage()
+            {
+                ContentTitle = Localizer.Instance["UpdateReminder/DialogTitle"],
+                ContentMessage = Localizer.Instance["UpdateReminder/DialogMessage"],
+                Icon = bitmap,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                WindowIcon = new(bitmap),
+                ButtonDefinitions = new[]
+                {
+                    new ButtonDefinition { Name = Localizer.Instance["UpdateReminder/DialogGoToSite"], IsDefault = true },
+                    new ButtonDefinition { Name = Localizer.Instance["UpdateReminder/DialogCancel"], IsCancel = true }
+                }
+            });
+        Dispatcher.UIThread.Post(async () =>
+        {
+            string goToSiteButtonStr = Localizer.Instance["UpdateReminder/DialogGoToSite"];
+            string buttonResult = await msgbox.ShowDialog(MainWindow.Instance!);
+            if (buttonResult == goToSiteButtonStr)
+            {
+                OpenPororocaSiteInWebBrowser();
+            }
+        });        
+    }
+
+    private static void OpenPororocaSiteInWebBrowser()
+    {
+        try
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://github.com/alexandrehtrb/Pororoca",
+                UseShellExecute = true
+            });
+        }
+        catch (Exception)
+        {
+            // Process.Start can throw several errors (not all of them documented),
+            // just ignore all of them.
+        }
     }
 
     #endregion

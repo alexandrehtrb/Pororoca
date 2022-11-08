@@ -242,5 +242,10 @@
   "WebSocketClientMessage/ContentFileSrcPathWatermark": "(caminho do arquivo aqui)",
   "WebSocketClientMessage/ContentFileSearchFile": "Procurar arquivo…",
   "WebSocketClientMessage/RawContentJsonSyntax": "JSON",
-  "WebSocketClientMessage/RawContentOtherSyntax": "Outra"
+  "WebSocketClientMessage/RawContentOtherSyntax": "Outra",
+
+  "UpdateReminder/DialogTitle": "Pororoca",
+  "UpdateReminder/DialogMessage": "Lembre-se de verificar periodicamente por novas atualizações!",
+  "UpdateReminder/DialogGoToSite": "Ir ao site",
+  "UpdateReminder/DialogCancel": "Verifico depois"
 }
