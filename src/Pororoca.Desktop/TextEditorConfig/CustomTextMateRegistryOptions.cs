@@ -1,8 +1,5 @@
-using System.Text.RegularExpressions;
-using Avalonia.Media;
+using Avalonia;
 using Avalonia.Platform;
-using AvaloniaEdit.Document;
-using AvaloniaEdit.Rendering;
 using TextMateSharp.Grammars;
 using TextMateSharp.Internal.Grammars.Reader;
 using TextMateSharp.Internal.Types;
@@ -13,21 +10,20 @@ namespace Pororoca.Desktop.TextEditorConfig;
 
 internal class CustomTextMateRegistryOptions : IRegistryOptions
 {
+    private const string pororocaJsonGrammarName = "source.json.pororoca";
+
+    private static readonly Lazy<IRawGrammar> cachedPororocaJsonGrammar = new(LoadPororocaJsonGrammar);
+
     private readonly RegistryOptions defaultOptions;
 
-    private readonly IAssetLoader assets;
-
-    public CustomTextMateRegistryOptions(IAssetLoader assets, ThemeName defaultTheme)
-    {
-        this.assets = assets;
+    public CustomTextMateRegistryOptions(ThemeName defaultTheme) =>
         this.defaultOptions = new(defaultTheme);
-    }
 
     public IRawTheme GetDefaultTheme() => this.defaultOptions.GetDefaultTheme();
 
     public IRawGrammar GetGrammar(string scopeName) =>
-        scopeName == "source.json.pororoca" ?
-        GrammarReader.ReadGrammarSync(new StreamReader(this.assets!.Open(new Uri($"avares://Pororoca.Desktop/Assets/TextMateGrammars/JSONC_pororoca.tmLanguage.json")))) :
+        scopeName == pororocaJsonGrammarName ?
+        cachedPororocaJsonGrammar.Value :
         this.defaultOptions.GetGrammar(scopeName);
 
     public ICollection<string> GetInjections(string scopeName) => this.defaultOptions.GetInjections(scopeName);
@@ -36,7 +32,7 @@ internal class CustomTextMateRegistryOptions : IRegistryOptions
 
     public string GetScopeByLanguageId(string langId) =>
         langId == "json" || langId == "jsonc" ?
-        "source.json.pororoca" :
+        pororocaJsonGrammarName :
         this.defaultOptions.GetScopeByLanguageId(langId);
 
     public IRawTheme LoadTheme(ThemeName themeName) =>
@@ -47,4 +43,16 @@ internal class CustomTextMateRegistryOptions : IRegistryOptions
 
     public List<Language> GetAvailableLanguages() =>
         this.defaultOptions.GetAvailableLanguages();
+
+    public void PreLoadPororocaJsonGrammar() =>
+        _ = cachedPororocaJsonGrammar.Value;
+
+    private static IRawGrammar LoadPororocaJsonGrammar()
+    {
+        var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
+        Uri tmLangUri = new($"avares://Pororoca.Desktop/Assets/TextMateGrammars/JSONC_pororoca.tmLanguage.json");
+        using var stream = assets!.Open(tmLangUri);
+        using StreamReader sr = new(stream);
+        return GrammarReader.ReadGrammarSync(sr);
+    }
 }

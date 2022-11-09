@@ -3,6 +3,7 @@ using Avalonia.Markup.Xaml;
 using AvaloniaEdit;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.TextEditorConfig;
+using Pororoca.Domain.Features.Common;
 
 namespace Pororoca.Desktop.Views;
 
@@ -10,6 +11,7 @@ public class WebSocketClientMessageView : UserControl
 {
     private readonly TextEditor rawContentTextEditor;
     private readonly AvaloniaEdit.TextMate.TextMate.Installation rawContentEditorTextMateInstallation;
+    private string? currentRawContentSyntaxLangId;
     private readonly ComboBox syntaxModeCombo;
     //private readonly ComboBox syntaxThemeCombo;
 
@@ -84,27 +86,15 @@ public class WebSocketClientMessageView : UserControl
         var vm = (WebSocketClientMessageViewModel?)DataContext;
         if (vm is not null)
         {
-            this.rawContentTextEditor.Document.Text = vm.RawContent;
+            this.rawContentTextEditor.SetEditorRawContent(vm.RawContent ?? string.Empty);
         }
     }
 
     private void ApplySelectedRawContentSyntaxFromVm()
     {
         var vm = (WebSocketClientMessageViewModel?)DataContext;
-        if (vm is not null)
-        {
-            string? languageId = vm.IsRawContentJsonSyntaxSelected ? "jsonc" : null;
-
-            if (languageId is null)
-            {
-                this.rawContentEditorTextMateInstallation.SetGrammar(null);
-            }
-            else
-            {
-                string scopeName = TextEditorConfiguration.DefaultRegistryOptions!.GetScopeByLanguageId(languageId);            
-                this.rawContentEditorTextMateInstallation.SetGrammar(scopeName);
-            }
-        }
+        string? contentType = vm is not null && vm.IsRawContentJsonSyntaxSelected ? MimeTypesDetector.DefaultMimeTypeForJson : null;
+        this.rawContentEditorTextMateInstallation.SetEditorSyntax(ref this.currentRawContentSyntaxLangId, contentType);
     }
 
     #endregion

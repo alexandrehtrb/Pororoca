@@ -5,32 +5,17 @@ using AvaloniaEdit;
 using AvaloniaEdit.TextMate;
 using TextMateSharp.Grammars;
 using Pororoca.Desktop.Localization;
-using Avalonia;
-using Avalonia.Platform;
 
 namespace Pororoca.Desktop.TextEditorConfig;
 
 internal static class TextEditorConfiguration
 {
-    public static CustomTextMateRegistryOptions? DefaultRegistryOptions;
-    private static readonly object regOptionsLock = new();
+    public static readonly CustomTextMateRegistryOptions DefaultRegistryOptions = new(ThemeName.DarkPlus);
     public static readonly List<TextMate.Installation> TextMateInstallations = new();
-
-    private static void PrepareRegistryOptions()
-    {
-        if (DefaultRegistryOptions is not null)
-            return;
-
-        lock (regOptionsLock)
-        {
-            var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
-            DefaultRegistryOptions = new(assets!, ThemeName.DarkPlus);
-        }
-    }
 
     public static TextMate.Installation Setup(TextEditor editor, bool applyPororocaVariableHighlighting)
     {
-        PrepareRegistryOptions();
+        DefaultRegistryOptions.PreLoadPororocaJsonGrammar();
 
         editor.ContextMenu = new ContextMenu
         {
@@ -55,13 +40,7 @@ internal static class TextEditorConfiguration
             editor.TextArea.TextView.LineTransformers.Add(new PororocaVariableColorizingTransformer());
         }
 
-        var jsonLanguage = DefaultRegistryOptions!.GetLanguageByExtension(".json");
-
-        string scopeName = DefaultRegistryOptions!.GetScopeByLanguageId(jsonLanguage.Id);
-
         editor.Document = new(string.Empty);
-
-        textMateInstallation.SetGrammar(DefaultRegistryOptions!.GetScopeByLanguageId(jsonLanguage.Id));
 
         editor.AddHandler(InputElement.PointerWheelChangedEvent, (o, i) =>
         {
