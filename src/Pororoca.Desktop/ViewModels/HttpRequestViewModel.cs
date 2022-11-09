@@ -654,7 +654,11 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     {
         bool disableSslVerification = ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled;
         this.sendRequestCancellationTokenSourceField = new();
-        return this.requester.RequestAsync(this.variableResolver, generatedReq, disableSslVerification, this.sendRequestCancellationTokenSourceField.Token);
+        // This needs to be done in a different thread.
+        // Awaiting the request.RequestAsync() here, or simply returning its Task,
+        // causes the UI to freeze for a few seconds, especially when performing the first request to a server.
+        // That is why we are invoking the code to run in a new thread, like below.
+        return Task.Run(async () => await this.requester.RequestAsync(this.variableResolver, generatedReq, disableSslVerification, this.sendRequestCancellationTokenSourceField.Token));
     }
 
     #endregion

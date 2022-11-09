@@ -679,7 +679,11 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         {
             InvalidConnectionErrorCode = null;
             this.cancelConnectionAttemptTokenSource = new();
-            await this.connector.ConnectAsync(resolvedClient!, resolvedUri!, this.cancelConnectionAttemptTokenSource.Token);
+            // This needs to be done in a different thread.
+            // Awaiting the request.RequestAsync() here, or simply returning its Task,
+            // causes the UI to freeze for a few seconds, especially when performing the first request to a server.
+            // That is why we are invoking the code to run in a new thread, like below.
+            await Task.Run(() => this.connector.ConnectAsync(resolvedClient!, resolvedUri!, this.cancelConnectionAttemptTokenSource.Token));
         }
     }
 
@@ -689,7 +693,11 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     private Task DisconnectAsync()
     {
         this.cancelDisconnectionAttemptTokenSource = new();
-        return this.connector.DisconnectAsync(this.cancelDisconnectionAttemptTokenSource.Token);        
+        // This needs to be done in a different thread.
+        // Awaiting the request.RequestAsync() here, or simply returning its Task,
+        // causes the UI to freeze for a few seconds, especially when performing the first request to a server.
+        // That is why we are invoking the code to run in a new thread, like below.
+        return Task.Run(() => this.connector.DisconnectAsync(this.cancelDisconnectionAttemptTokenSource.Token));
     }
 
     private void CancelDisconnect() =>
