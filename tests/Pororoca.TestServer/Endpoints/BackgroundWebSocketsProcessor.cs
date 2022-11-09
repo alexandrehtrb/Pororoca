@@ -86,7 +86,7 @@ public static class BackgroundWebSocketsProcessor
             if (disconnectToken.IsCancellationRequested)
             {
                 await CloseStartingByServerAsync(ws, "maximum lifetime, bye", CancellationToken.None);
-                break;
+                return;
             }
             else if (firstOperation == beganSending && CanSendMessages())
             {
@@ -104,7 +104,7 @@ public static class BackgroundWebSocketsProcessor
                 {
                     // closure message already received
                     await FinishClosingStartedByClientAsync(ws, "ok, bye");
-                    break; // exits the reception thread
+                    return; // exits the reception thread
                 }
                 else if (CanReceiveMessages())
                 {
@@ -112,7 +112,7 @@ public static class BackgroundWebSocketsProcessor
                     if (receivedMsgType == WebSocketMessageType.Close)
                     {
                         await FinishClosingStartedByClientAsync(ws, "ok, bye");
-                        break; // exits the reception thread
+                        return; // exits the reception thread
                     }
                     else
                     {
@@ -120,6 +120,12 @@ public static class BackgroundWebSocketsProcessor
                     }
                 }
             }
+        }
+
+        if (!CanSendMessages() || !CanReceiveMessages())
+        {
+            await FinishClosingStartedByClientAsync(ws, "ok, bye");
+            return; // exits the reception thread
         }
     }
 
