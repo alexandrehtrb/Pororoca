@@ -15,53 +15,31 @@ public class HttpRequestView : UserControl
     private readonly TextEditor httpResRawBodyEditor;
     private readonly AvaloniaEdit.TextMate.TextMate.Installation httpResRawBodyEditorTextMateInstallation;
     private readonly AutoCompleteBox httpReqRawContentTypeSelector;
+    private HttpRequestViewModel? PreviousDataContext { get; set; }
 
     public HttpRequestView()
     {
         InitializeComponent();
 
-        DataContextChanged += WhenDataContextChanged;
-
         this.httpReqRawBodyEditor = this.FindControl<TextEditor>("RequestBodyRawContentEditor");
         this.httpReqRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(this.httpReqRawBodyEditor, true);
-
-        this.httpResRawBodyEditor = this.FindControl<TextEditor>("ResponseBodyRawContentEditor");
-        this.httpResRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(this.httpResRawBodyEditor, false);
+        this.httpReqRawBodyEditor.Document.TextChanged += OnRequestBodyRawContentChanged;
 
         this.httpReqRawContentTypeSelector = this.FindControl<AutoCompleteBox>("RequestBodyRawContentTypeSelector");
         this.httpReqRawContentTypeSelector.SelectionChanged += OnRequestBodyRawContentTypeChanged;
+
+        this.httpResRawBodyEditor = this.FindControl<TextEditor>("ResponseBodyRawContentEditor");
+        this.httpResRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(this.httpResRawBodyEditor, false);
     }
 
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
+
+    #region VIEW COMPONENTS EVENTS
 
     public void OnRequestUrlPointerEnter(object sender, PointerEventArgs e)
     {
         var vm = (HttpRequestViewModel)DataContext!;
         vm.UpdateResolvedRequestUrlToolTip();
-    }
-
-    private void WhenDataContextChanged(object? sender, EventArgs e)
-    {
-        // I have not found a way to work with TextEditor binding with Text,
-        // hence I am using its events here
-        var vm = (HttpRequestViewModel?)DataContext;
-        if (vm is not null)
-        {
-            this.httpReqRawBodyEditor.Document.TextChanged -= OnRequestBodyRawContentChanged;
-            this.httpReqRawBodyEditor.Document.TextChanged += OnRequestBodyRawContentChanged;
-
-            vm.ResponseDataCtx.HttpResponseBodyChanged -= OnResponseBodyChanged;
-            vm.ResponseDataCtx.HttpResponseBodyChanged += OnResponseBodyChanged;
-
-            if (vm.IsRequestBodyModeRawSelected && vm.RequestRawContent is not null)
-            {
-                OnRequestBodyChanged(vm.RequestRawContent, vm.RequestRawContentType);
-            }
-            if (vm.ResponseDataCtx.ResponseRawContent is not null)
-            {
-                OnResponseBodyChanged(vm.ResponseDataCtx.ResponseRawContent, vm.ResponseDataCtx.ResponseRawContentType);
-            }
-        }
     }
 
     private void OnRequestBodyRawContentChanged(object? sender, EventArgs e)
@@ -75,22 +53,72 @@ public class HttpRequestView : UserControl
 
     private void OnRequestBodyRawContentTypeChanged(object? sender, SelectionChangedEventArgs e)
     {
-        string? selectedContentType = (string?) this.httpReqRawContentTypeSelector.SelectedItem;
+        string? selectedContentType = (string?)this.httpReqRawContentTypeSelector.SelectedItem;
         SetEditorSyntax(this.httpReqRawBodyEditorTextMateInstallation, selectedContentType);
     }
 
-    private void OnRequestBodyChanged(string updatedRequestContent, string? updatedRequestContentType)
+    #endregion
+
+    #region ON DATA CONTEXT CHANGED
+
+    protected override void OnDataContextChanged(EventArgs e)
     {
-        this.httpReqRawContentTypeSelector.Text = updatedRequestContentType;
-        SetEditorSyntax(this.httpReqRawBodyEditorTextMateInstallation, updatedRequestContentType);
-        SetEditorRawContent(this.httpReqRawBodyEditor, updatedRequestContent);
+        StopListeningForResponsesOfPreviousVm();
+        StartListeningForResponsesOfCurrentVm();
+        LoadRequestRawBodyFromVmIfSelected();
+        LoadResponseBodyFromVm();
+        SetCurrentVmAsPrevious();
+        base.OnDataContextChanged(e);
+    }    
+
+    private void StopListeningForResponsesOfPreviousVm()
+    {
+        var previousVm = PreviousDataContext;
+        if (previousVm is not null)
+            previousVm.ResponseDataCtx.HttpResponseBodyChanged -= OnResponseBodyChanged;        
+    }
+
+    private void StartListeningForResponsesOfCurrentVm()
+    {
+        var vm = (HttpRequestViewModel?)DataContext;
+        if (vm is not null)
+            vm.ResponseDataCtx.HttpResponseBodyChanged += OnResponseBodyChanged;        
+    }
+
+    private void LoadRequestRawBodyFromVmIfSelected()
+    {
+        var vm = (HttpRequestViewModel?)DataContext;
+        if (vm is not null && vm.IsRequestBodyModeRawSelected)
+        {
+            this.httpReqRawContentTypeSelector.Text = vm.RequestRawContentType;
+            SetEditorSyntax(this.httpReqRawBodyEditorTextMateInstallation, vm.RequestRawContentType);
+            SetEditorRawContent(this.httpReqRawBodyEditor, vm.RequestRawContent ?? string.Empty);
+        }
+    }
+
+    private void LoadResponseBodyFromVm()
+    {
+        var vm = (HttpRequestViewModel?)DataContext;
+        if (vm is not null)
+            OnResponseBodyChanged(vm.ResponseDataCtx.ResponseRawContent ?? string.Empty, vm.ResponseDataCtx.ResponseRawContentType);
+    }
+
+    private void SetCurrentVmAsPrevious()
+    {
+        var vm = (HttpRequestViewModel?)DataContext;
+        if (vm is not null)
+            PreviousDataContext = vm;
     }
 
     private void OnResponseBodyChanged(string updatedResponseContent, string? updatedResponseContentType)
     {
         SetEditorSyntax(this.httpResRawBodyEditorTextMateInstallation, updatedResponseContentType);
-        SetEditorRawContent(this.httpResRawBodyEditor, updatedResponseContent);
+        SetEditorRawContent(this.httpResRawBodyEditor, updatedResponseContent ?? string.Empty);
     }
+
+    #endregion
+
+    #region HELPERS
 
     private static void SetEditorRawContent(TextEditor editor, string updatedResponseContent)
     {
@@ -139,4 +167,6 @@ public class HttpRequestView : UserControl
         else
             return null;
     }
+
+    #endregion
 }

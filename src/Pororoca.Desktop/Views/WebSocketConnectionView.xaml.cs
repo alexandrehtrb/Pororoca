@@ -4,8 +4,6 @@ using Avalonia.Markup.Xaml;
 using AvaloniaEdit;
 using Pororoca.Desktop.TextEditorConfig;
 using Pororoca.Desktop.ViewModels;
-using System.Linq;
-using System.Text.Json;
 
 namespace Pororoca.Desktop.Views;
 
@@ -18,13 +16,13 @@ public class WebSocketConnectionView : UserControl
     {
         InitializeComponent();
 
-        DataContextChanged += WhenDataContextChanged;
-
         this.selectedExchangedMessageEditor = this.FindControl<TextEditor>("SelectedExchangedMessageContentEditor");
         this.selectedExchangedMessageEditorTextMateInstallation = TextEditorConfiguration.Setup(this.selectedExchangedMessageEditor, false);
     }
 
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
+
+    #region VIEW COMPONENTS EVENTS
 
     public void OnUrlPointerEnter(object sender, PointerEventArgs e)
     {
@@ -39,47 +37,62 @@ public class WebSocketConnectionView : UserControl
             var connVm = (WebSocketConnectionViewModel)DataContext!;
             var emVm = (WebSocketExchangedMessageViewModel) e.AddedItems[0]!;
             connVm.UpdateSelectedExchangedMessage(emVm);
+            LoadSelectedMsgFromVm();
         }
     }
 
-    private void WhenDataContextChanged(object? sender, EventArgs e)
+    #endregion
+
+    #region ON DATA CONTEXT CHANGED
+
+    protected override void OnDataContextChanged(EventArgs e)
     {
-        // I have not found a way to work with TextEditor binding with Text,
-        // hence I am using its events here
+        LoadSelectedMsgFromVm();
+        base.OnDataContextChanged(e);
+    }
+
+    private void LoadSelectedMsgFromVm()
+    {
         var vm = (WebSocketConnectionViewModel?)DataContext;
         if (vm is not null)
         {
-            vm.SelectedExchangedMessageChanged -= OnSelectedExchangedMessageChanged;
-            vm.SelectedExchangedMessageChanged += OnSelectedExchangedMessageChanged;
+            SetSelectedMsgContentFromVm();
+            ApplySelectedMsgContentSyntaxFromVm();
+        }
+    }
 
-            if (vm.SelectedExchangedMessageContent is not null)
+    #endregion
+
+    #region HELPERS
+
+    private void SetSelectedMsgContentFromVm()
+    {
+        var vm = (WebSocketConnectionViewModel?)DataContext;
+        if (vm is not null)
+        {
+            this.selectedExchangedMessageEditor.Document.Text = vm.SelectedExchangedMessageContent ?? string.Empty;
+        }
+    }
+
+    private void ApplySelectedMsgContentSyntaxFromVm()
+    {
+        var vm = (WebSocketConnectionViewModel?)DataContext;
+        if (vm is not null)
+        {
+            string? languageId = vm.IsSelectedExchangedMessageContentJson ? "jsonc" : null;
+
+            if (languageId is null)
             {
-                OnSelectedExchangedMessageChanged(this.selectedExchangedMessageEditor.Document.Text,
-                                                  vm.IsSelectedExchangedMessageContentJson);
+                this.selectedExchangedMessageEditorTextMateInstallation.SetGrammar(null);
+            }
+            else
+            {
+                string scopeName = TextEditorConfiguration.DefaultRegistryOptions!.GetScopeByLanguageId(languageId);            
+                this.selectedExchangedMessageEditorTextMateInstallation.SetGrammar(scopeName);
             }
         }
     }
 
-    private void OnSelectedExchangedMessageChanged(string content, bool isJson)
-    {
-        this.selectedExchangedMessageEditor.Document.Text = content;
-        SetSelectedExchangedMessageSyntax(isJson);
-    }
-
-    private void SetSelectedExchangedMessageSyntax(bool isJson)
-    {
-        string? languageId = isJson ? "jsonc" : null;
-
-        if (languageId is null)
-        {
-            this.selectedExchangedMessageEditorTextMateInstallation.SetGrammar(null);
-        }
-        else
-        {
-            string scopeName = TextEditorConfiguration.DefaultRegistryOptions!.GetScopeByLanguageId(languageId);            
-            this.selectedExchangedMessageEditorTextMateInstallation.SetGrammar(scopeName);
-        }
-    }
-
+    #endregion
     
 }

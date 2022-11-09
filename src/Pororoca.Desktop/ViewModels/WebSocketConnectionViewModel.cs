@@ -25,9 +25,6 @@ namespace Pororoca.Desktop.ViewModels;
 
 public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemParentViewModel<WebSocketClientMessageViewModel>
 {
-    public delegate void OnSelectedExchangedMessageChanged(string content, bool isJson);
-    public event OnSelectedExchangedMessageChanged? SelectedExchangedMessageChanged;
-
     #region COLLECTION ORGANIZATION
 
     public override Action OnAfterItemDeleted => Parent.OnAfterItemDeleted;
@@ -761,7 +758,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         SelectedExchangedMessageType = vm.TypeDescription;
         SelectedExchangedMessageContent = vm.TextContent;
         IsSelectedExchangedMessageContentJson = IsJsonString(SelectedExchangedMessageContent);
-        SelectedExchangedMessageChanged?.Invoke(SelectedExchangedMessageContent ?? string.Empty, IsJsonString(SelectedExchangedMessageContent));
         IsSaveSelectedExchangedMessageToFileVisible = vm.CanBeSavedToFile;
     }
 

@@ -16,14 +16,13 @@ public class WebSocketClientMessageView : UserControl
     public WebSocketClientMessageView()
     {
         InitializeComponent();
-
-        DataContextChanged += WhenDataContextChanged;
         
         this.rawContentTextEditor = this.FindControl<TextEditor>("RawContentEditor");
         this.rawContentEditorTextMateInstallation = TextEditorConfiguration.Setup(this.rawContentTextEditor, true);
+        this.rawContentTextEditor.Document.TextChanged += OnRawContentChanged;
         
         this.syntaxModeCombo = this.FindControl<ComboBox>("RawContentSyntaxSelector");
-        this.syntaxModeCombo.SelectionChanged += SyntaxModeCombo_SelectionChanged;
+        this.syntaxModeCombo.SelectionChanged += OnSelectedRawSyntaxChanged;
 
         /*this.syntaxThemeCombo = this.FindControl<ComboBox>("RawContentThemeSelector");
         this.syntaxThemeCombo.Items = Enum.GetNames(typeof(ThemeName));
@@ -31,21 +30,9 @@ public class WebSocketClientMessageView : UserControl
         this.syntaxThemeCombo.SelectionChanged += SyntaxThemeCombo_SelectionChanged;*/
     }
 
-    private void WhenDataContextChanged(object? sender, EventArgs e)
-    {
-        // I have not found a way to work with TextEditor binding with Text,
-        // hence I am using its events here
-        var vm = (WebSocketClientMessageViewModel?)DataContext;
-        if (vm is not null)
-        {
-            this.rawContentTextEditor.Document.TextChanged -= OnRawContentChanged;
-            this.rawContentTextEditor.Document.TextChanged += OnRawContentChanged;
-            if (vm.RawContent is not null)
-            {
-                this.rawContentTextEditor.Document.Text = vm.RawContent;
-            }
-        }
-    }
+    private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
+
+    #region VIEW COMPONENTS EVENTS
 
     private void OnRawContentChanged(object? sender, EventArgs e)
     {
@@ -56,17 +43,52 @@ public class WebSocketClientMessageView : UserControl
         }
     }
 
+    private void OnSelectedRawSyntaxChanged(object? sender, SelectionChangedEventArgs e) =>
+        ApplySelectedRawContentSyntaxFromVm();
 
-    private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
-
-    /*protected override void OnClosed(EventArgs e)
+    /*private void SyntaxThemeCombo_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        base.OnClosed(e);
+        string themeNameStr = (string)this.syntaxThemeCombo.SelectedItem!;
 
-        _textMateInstallation.Dispose();
+        var theme = Enum.Parse<ThemeName>(themeNameStr);
+
+        this.rawContentEditorTextMateInstallation.SetTheme(TextEditorConfiguration.DefaultRegistryOptions!.LoadTheme(theme));
     }*/
 
-    private void SyntaxModeCombo_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    #endregion
+
+    #region ON DATA CONTEXT CHANGED
+
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        LoadRawContentFromVmIfSelected();
+        base.OnDataContextChanged(e);
+    }
+
+    private void LoadRawContentFromVmIfSelected()
+    {
+        var vm = (WebSocketClientMessageViewModel?)DataContext;
+        if (vm is not null && vm.IsContentModeRawSelected)
+        {
+            SetRawContentFromVm();
+            ApplySelectedRawContentSyntaxFromVm();
+        }
+    }
+
+    #endregion
+
+    #region HELPERS
+
+    private void SetRawContentFromVm()
+    {
+        var vm = (WebSocketClientMessageViewModel?)DataContext;
+        if (vm is not null)
+        {
+            this.rawContentTextEditor.Document.Text = vm.RawContent;
+        }
+    }
+
+    private void ApplySelectedRawContentSyntaxFromVm()
     {
         var vm = (WebSocketClientMessageViewModel?)DataContext;
         if (vm is not null)
@@ -85,12 +107,5 @@ public class WebSocketClientMessageView : UserControl
         }
     }
 
-    /*private void SyntaxThemeCombo_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        string themeNameStr = (string)this.syntaxThemeCombo.SelectedItem!;
-
-        var theme = Enum.Parse<ThemeName>(themeNameStr);
-
-        this.rawContentEditorTextMateInstallation.SetTheme(TextEditorConfiguration.DefaultRegistryOptions!.LoadTheme(theme));
-    }*/
+    #endregion
 }
