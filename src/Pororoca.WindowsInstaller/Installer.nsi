@@ -280,6 +280,7 @@ Section !$(SectionProgramFiles) SectionCoreFiles
 	File "${INPUT_FILES_DIR}\${PROGEXE}"
 	File "${INPUT_FILES_DIR}\libHarfBuzzSharp.dll"
 	File "${INPUT_FILES_DIR}\libSkiaSharp.dll"
+	File "${INPUT_FILES_DIR}\onigwrap.dll"
 	File "${INPUT_FILES_DIR}\${LICENSE_FILE}"
 	
 SectionEnd
