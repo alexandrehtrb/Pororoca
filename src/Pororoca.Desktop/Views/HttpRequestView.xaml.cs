@@ -9,33 +9,48 @@ namespace Pororoca.Desktop.Views;
 
 public class HttpRequestView : UserControl
 {
-    private readonly TextEditor httpReqRawBodyEditor;
     private readonly AvaloniaEdit.TextMate.TextMate.Installation httpReqRawBodyEditorTextMateInstallation;
     private string? currentHttpReqRawBodySyntaxLangId;
 
-    private readonly TextEditor httpResRawBodyEditor;
     private readonly AvaloniaEdit.TextMate.TextMate.Installation httpResRawBodyEditorTextMateInstallation;
     private string? currentHttpResRawBodySyntaxLangId;
-
-    private readonly AutoCompleteBox httpReqRawContentTypeSelector;
-    private HttpRequestViewModel? PreviousDataContext { get; set; }
 
     public HttpRequestView()
     {
         InitializeComponent();
 
-        this.httpReqRawBodyEditor = this.FindControl<TextEditor>("RequestBodyRawContentEditor");
-        this.httpReqRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(this.httpReqRawBodyEditor, true);
-        this.httpReqRawBodyEditor.TextChanged += OnRequestBodyRawContentChanged;
+        var httpReqRawBodyEditor = this.FindControl<TextEditor>("RequestBodyRawContentEditor");
+        this.httpReqRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(httpReqRawBodyEditor!, true);
 
-        this.httpReqRawContentTypeSelector = this.FindControl<AutoCompleteBox>("RequestBodyRawContentTypeSelector");
-        this.httpReqRawContentTypeSelector.SelectionChanged += OnRequestBodyRawContentTypeChanged;
+        var httpReqRawContentTypeSelector = this.FindControl<AutoCompleteBox>("RequestBodyRawContentTypeSelector");
+        httpReqRawContentTypeSelector.SelectionChanged += OnRequestBodyRawContentTypeChanged;
 
-        this.httpResRawBodyEditor = this.FindControl<TextEditor>("ResponseBodyRawContentEditor");
-        this.httpResRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(this.httpResRawBodyEditor, false);
+        var httpResRawBodyEditor = this.FindControl<TextEditor>("ResponseBodyRawContentEditor");
+        this.httpResRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(httpResRawBodyEditor!, false);
+        httpResRawBodyEditor.DocumentChanged += OnResponseRawBodyEditorDocumentChanged;
     }
 
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
+
+    #region ON DATA CONTEXT CHANGED
+
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        LoadRequestRawContentSyntaxFromVmIfSelected();
+        base.OnDataContextChanged(e);
+    }
+
+    private void LoadRequestRawContentSyntaxFromVmIfSelected()
+    {
+        var vm = (HttpRequestViewModel?)DataContext;
+        if (vm is not null && vm.IsRequestBodyModeRawSelected)
+        {
+            ApplySelectedRequestRawContentSyntax(vm.RequestRawContentType);
+        }
+    }
+
+
+    #endregion
 
     #region VIEW COMPONENTS EVENTS
 
@@ -45,86 +60,29 @@ public class HttpRequestView : UserControl
         vm.UpdateResolvedRequestUrlToolTip();
     }
 
-    private void OnRequestBodyRawContentChanged(object? sender, EventArgs e)
-    {
-        var vm = (HttpRequestViewModel?)DataContext;
-        if (vm is not null)
-        {
-            vm.RequestRawContent = this.httpReqRawBodyEditor.Document.Text;
-        }
-    }
-
     private void OnRequestBodyRawContentTypeChanged(object? sender, SelectionChangedEventArgs e)
     {
-        string? selectedContentType = (string?)this.httpReqRawContentTypeSelector.SelectedItem;
-        this.httpReqRawBodyEditorTextMateInstallation.SetEditorSyntax(ref this.currentHttpReqRawBodySyntaxLangId, selectedContentType);
-    }
-
-    #endregion
-
-    #region ON DATA CONTEXT CHANGED
-
-    protected override void OnDataContextChanged(EventArgs e)
-    {
-        StopListeningForResponsesOfPreviousVm();
-        StartListeningForResponsesOfCurrentVm();
-        LoadRequestRawBodyFromVmIfSelected();
-        LoadResponseBodyFromVm();
-        SetCurrentVmAsPrevious();
-        base.OnDataContextChanged(e);
-    }    
-
-    private void StopListeningForResponsesOfPreviousVm()
-    {
-        var previousVm = PreviousDataContext;
-        if (previousVm is not null)
-            previousVm.ResponseDataCtx.HttpResponseBodyChanged -= OnResponseBodyChanged;        
-    }
-
-    private void StartListeningForResponsesOfCurrentVm()
-    {
-        var vm = (HttpRequestViewModel?)DataContext;
-        if (vm is not null)
-            vm.ResponseDataCtx.HttpResponseBodyChanged += OnResponseBodyChanged;        
-    }
-
-    private void LoadRequestRawBodyFromVmIfSelected()
-    {
-        var vm = (HttpRequestViewModel?)DataContext;
-        if (vm is not null && vm.IsRequestBodyModeRawSelected)
+        if (e.AddedItems is not null
+         && e.AddedItems.Count > 0
+         && e.AddedItems[0] is string selectedContentType)
         {
-            SetSelectedContentType(vm.RequestRawContentType ?? string.Empty);
-            this.httpReqRawBodyEditor.SetEditorRawContent(vm.RequestRawContent ?? string.Empty);
-            this.httpReqRawBodyEditorTextMateInstallation.SetEditorSyntax(ref this.currentHttpReqRawBodySyntaxLangId, vm.RequestRawContentType);
+            ApplySelectedRequestRawContentSyntax(selectedContentType);
         }
     }
 
-    private void LoadResponseBodyFromVm()
+    private void OnResponseRawBodyEditorDocumentChanged(object? sender, EventArgs e)
     {
-        var vm = (HttpRequestViewModel?)DataContext;
-        if (vm is not null)
-            OnResponseBodyChanged(vm.ResponseDataCtx.ResponseRawContent ?? string.Empty, vm.ResponseDataCtx.ResponseRawContentType);
-    }
-
-    private void SetCurrentVmAsPrevious()
-    {
-        var vm = (HttpRequestViewModel?)DataContext;
-        if (vm is not null)
-            PreviousDataContext = vm;
-    }
-
-    private void OnResponseBodyChanged(string updatedResponseContent, string? updatedResponseContentType)
-    {
-        this.httpResRawBodyEditor.SetEditorRawContent(updatedResponseContent ?? string.Empty);
-        this.httpResRawBodyEditorTextMateInstallation.SetEditorSyntax(ref this.currentHttpResRawBodySyntaxLangId, updatedResponseContentType);
+        var vm = (HttpRequestViewModel)DataContext!;
+        var resVm = vm.ResponseDataCtx;
+        this.httpResRawBodyEditorTextMateInstallation.SetEditorSyntax(ref this.currentHttpResRawBodySyntaxLangId, resVm.ResponseRawContentType);
     }
 
     #endregion
 
     #region HELPERS
 
-    private void SetSelectedContentType(string httpReqContentType) =>
-        this.httpReqRawContentTypeSelector.Text = httpReqContentType;
+    private void ApplySelectedRequestRawContentSyntax(string? requestRawContentType) =>
+        this.httpReqRawBodyEditorTextMateInstallation.SetEditorSyntax(ref this.currentHttpReqRawBodySyntaxLangId, requestRawContentType);
 
     #endregion
 }

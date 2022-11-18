@@ -9,7 +9,6 @@ namespace Pororoca.Desktop.Views;
 
 public class WebSocketClientMessageView : UserControl
 {
-    private readonly TextEditor rawContentTextEditor;
     private readonly AvaloniaEdit.TextMate.TextMate.Installation rawContentEditorTextMateInstallation;
     private string? currentRawContentSyntaxLangId;
     private readonly ComboBox syntaxModeCombo;
@@ -19,13 +18,13 @@ public class WebSocketClientMessageView : UserControl
     {
         InitializeComponent();
         
-        this.rawContentTextEditor = this.FindControl<TextEditor>("RawContentEditor");
-        this.rawContentEditorTextMateInstallation = TextEditorConfiguration.Setup(this.rawContentTextEditor, true);
-        this.rawContentTextEditor.Document.TextChanged += OnRawContentChanged;
+        var rawContentTextEditor = this.FindControl<TextEditor>("RawContentEditor");
+        this.rawContentEditorTextMateInstallation = TextEditorConfiguration.Setup(rawContentTextEditor!, true);
         
         this.syntaxModeCombo = this.FindControl<ComboBox>("RawContentSyntaxSelector");
         this.syntaxModeCombo.SelectionChanged += OnSelectedRawSyntaxChanged;
 
+        // This is for testing syntax colour themes
         /*this.syntaxThemeCombo = this.FindControl<ComboBox>("RawContentThemeSelector");
         this.syntaxThemeCombo.Items = Enum.GetNames(typeof(ThemeName));
         this.syntaxThemeCombo.SelectedItem = ThemeName.DarkPlus;
@@ -35,15 +34,6 @@ public class WebSocketClientMessageView : UserControl
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
     #region VIEW COMPONENTS EVENTS
-
-    private void OnRawContentChanged(object? sender, EventArgs e)
-    {
-        var vm = (WebSocketClientMessageViewModel?)DataContext;
-        if (vm is not null)
-        {
-            vm.RawContent = this.rawContentTextEditor.Document.Text;
-        }
-    }
 
     private void OnSelectedRawSyntaxChanged(object? sender, SelectionChangedEventArgs e) =>
         ApplySelectedRawContentSyntaxFromVm();
@@ -72,7 +62,6 @@ public class WebSocketClientMessageView : UserControl
         var vm = (WebSocketClientMessageViewModel?)DataContext;
         if (vm is not null && vm.IsContentModeRawSelected)
         {
-            SetRawContentFromVm();
             ApplySelectedRawContentSyntaxFromVm();
         }
     }
@@ -80,15 +69,6 @@ public class WebSocketClientMessageView : UserControl
     #endregion
 
     #region HELPERS
-
-    private void SetRawContentFromVm()
-    {
-        var vm = (WebSocketClientMessageViewModel?)DataContext;
-        if (vm is not null)
-        {
-            this.rawContentTextEditor.SetEditorRawContent(vm.RawContent ?? string.Empty);
-        }
-    }
 
     private void ApplySelectedRawContentSyntaxFromVm()
     {

@@ -132,6 +132,7 @@
               Content="{i18n:Localize RawContentOtherSyntax, Context=WebSocketClientMessage}" />
         </ComboBox>
 
+        <!-- This is for testing syntax colour themes -->
         <!--ComboBox
             Name="RawContentThemeSelector"
             IsVisible="{Binding IsSelected, ElementName=wsScrReqMsgContentModeSelectionRaw}"
@@ -161,7 +162,8 @@
           ShowLineNumbers="True"
           FontFamily="Cascadia Code,Consolas,Menlo,Monospace"
           FontWeight="Light"
-          FontSize="14" />
+          FontSize="14"
+          Document="{Binding RawContentTextDocument}" />
 
       <StackPanel
           Grid.Column="0"

@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using AvaloniaEdit.Document;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Common;
@@ -169,9 +170,25 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         set => this.RaiseAndSetIfChanged(ref this.isRequestBodyModeRawSelectedField, value);
     }
 
-    public string? RequestRawContentType { get; set; }
+    private string? requestRawContentTypeField;
+    public string? RequestRawContentType
+    {
+        get => this.requestRawContentTypeField;
+        set => this.RaiseAndSetIfChanged(ref this.requestRawContentTypeField, value);
+    }
 
-    public string? RequestRawContent { get; set; }
+    private TextDocument? requestRawContentTextDocumentField;
+    public TextDocument? RequestRawContentTextDocument
+    {
+        get => this.requestRawContentTextDocumentField;
+        set => this.RaiseAndSetIfChanged(ref this.requestRawContentTextDocumentField, value);
+    }
+
+    public string? RequestRawContent
+    {
+        get => RequestRawContentTextDocument?.Text;
+        set => RequestRawContentTextDocument = new(value ?? string.Empty);
+    }
 
     #endregion
 

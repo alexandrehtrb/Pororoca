@@ -1,5 +1,6 @@
 using System.Reactive;
 using Avalonia.Controls;
+using AvaloniaEdit.Document;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using ReactiveUI;
@@ -110,7 +111,18 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
         }
     }
 
-    public string? RawContent { get; set; }
+    private TextDocument? rawContentTextDocumentField;
+    public TextDocument? RawContentTextDocument
+    {
+        get => this.rawContentTextDocumentField;
+        set => this.RaiseAndSetIfChanged(ref this.rawContentTextDocumentField, value);
+    }
+
+    public string? RawContent
+    {
+        get => RawContentTextDocument?.Text;
+        set => RawContentTextDocument = new(value ?? string.Empty);
+    }
 
     private int rawContentSyntaxSelectedIndexField;
     public int RawContentSyntaxSelectedIndex
@@ -206,6 +218,8 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
                 break;
         }
 
+        // we need to always set RawContent with a value, even if it is null,
+        // to initialize with a TextDocument object
         RawContent = msg.RawContent;
 
         switch (msg.RawContentSyntax)

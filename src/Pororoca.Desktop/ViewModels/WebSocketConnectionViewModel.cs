@@ -4,7 +4,6 @@ using System.Reactive;
 using Avalonia.Controls;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.Views;
-using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.Requester;
 using Pororoca.Domain.Features.TranslateRequest;
@@ -16,10 +15,9 @@ using static Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection.Por
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection.PororocaWebSocketConnectionTranslator;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage.PororocaWebSocketClientMessageTranslator;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage.PororocaWebSocketClientMessageValidator;
-using System.Buffers;
 using System.Collections.Specialized;
 using System.Security.Authentication;
-using System.Text.Json;
+using AvaloniaEdit.Document;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -352,8 +350,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region MESSAGE DETAIL
 
-    private WebSocketExchangedMessageViewModel? selectedExchangedMessage;
-
     private string? selectedExchangedMessageTypeField;
     public string? SelectedExchangedMessageType
     {
@@ -361,7 +357,34 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         set => this.RaiseAndSetIfChanged(ref this.selectedExchangedMessageTypeField, value);
     }
 
-    public string? SelectedExchangedMessageContent { get; set; }
+    private TextDocument? selectedExchangedMessageContentTextDocumentField;
+    public TextDocument? SelectedExchangedMessageContentTextDocument
+    {
+        get => this.selectedExchangedMessageContentTextDocumentField;
+        set => this.RaiseAndSetIfChanged(ref this.selectedExchangedMessageContentTextDocumentField, value);
+    }
+
+    public string? SelectedExchangedMessageContent
+    {
+        get => SelectedExchangedMessageContentTextDocument?.Text;
+        set => SelectedExchangedMessageContentTextDocument = new(value ?? string.Empty);
+    }
+
+    private WebSocketExchangedMessageViewModel? selectedExchangedMessageField;
+    public WebSocketExchangedMessageViewModel? SelectedExchangedMessage
+    {
+        get => this.selectedExchangedMessageField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.selectedExchangedMessageField, value);
+
+            if (value is not null)
+            {
+                OnSelectedExchangedMessageChanged(value);
+            }
+        }
+    }
+
     public bool IsSelectedExchangedMessageContentJson { get; set; }
 
     private bool isSaveSelectedExchangedMessageToFileVisibleField;
@@ -480,6 +503,9 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         #endregion
 
         #region MESSAGE DETAIL
+        // we need to always set SelectedExchangedMessageContent with a value, even if it is null,
+        // to initialize with a TextDocument object
+        SelectedExchangedMessageContent = null;
         SaveSelectedExchangedMessageToFileCmd = ReactiveCommand.CreateFromTask(SaveSelectedExchangedMessageToFileAsync);
         #endregion
     }
@@ -760,12 +786,10 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region MESSAGE DETAIL
 
-    public void UpdateSelectedExchangedMessage(WebSocketExchangedMessageViewModel vm)
+    private void OnSelectedExchangedMessageChanged(WebSocketExchangedMessageViewModel vm)
     {
-        this.selectedExchangedMessage = vm;
         SelectedExchangedMessageType = vm.TypeDescription;
         SelectedExchangedMessageContent = vm.TextContent;
-        IsSelectedExchangedMessageContentJson = IsJsonString(SelectedExchangedMessageContent);
         IsSaveSelectedExchangedMessageToFileVisible = vm.CanBeSavedToFile;
     }
 
@@ -780,11 +804,11 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             return $"websocket-msg-{vm.ShortInstantDescription}.{fileExtensionWithoutDot}";
         }
 
-        if (this.selectedExchangedMessage is not null && this.selectedExchangedMessage.CanBeSavedToFile)
+        if (SelectedExchangedMessage is not null && SelectedExchangedMessage.CanBeSavedToFile)
         {
             SaveFileDialog saveFileDialog = new()
             {
-                InitialFileName = GenerateDefaultInitialFileName(this.selectedExchangedMessage)
+                InitialFileName = GenerateDefaultInitialFileName(SelectedExchangedMessage)
             };
 
             string? saveFileOutputPath = await saveFileDialog.ShowAsync(MainWindow.Instance!);
@@ -792,28 +816,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             {
                 const int fileStreamBufferSize = 4096;
                 using FileStream fs = new(saveFileOutputPath, FileMode.Create, FileAccess.Write, FileShare.None, fileStreamBufferSize, useAsync: true);
-                await fs.WriteAsync((Memory<byte>) this.selectedExchangedMessage.Bytes!);
+                await fs.WriteAsync((Memory<byte>) SelectedExchangedMessage.Bytes!);
             }
-        }
-    }
-
-    private static bool IsJsonString(string? str)
-    {
-        if (!string.IsNullOrWhiteSpace(str))
-        {
-            try
-            {
-                JsonSerializer.Deserialize<dynamic>(str);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return false;
         }
     }
 

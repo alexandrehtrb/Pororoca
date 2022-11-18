@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage;
@@ -61,6 +62,13 @@ public sealed class WebSocketExchangedMessageViewModel : ViewModelBase
     {
         get => this.textContentField;
         set => this.RaiseAndSetIfChanged(ref this.textContentField, value);
+    }
+
+    private bool isJsonTextContentField;
+    public bool IsJsonTextContent
+    {
+        get => this.isJsonTextContentField;
+        set => this.RaiseAndSetIfChanged(ref this.isJsonTextContentField, value);
     }
 
     public PororocaWebSocketMessageType Type =>
@@ -155,5 +163,30 @@ public sealed class WebSocketExchangedMessageViewModel : ViewModelBase
         this.messageSizeDescriptionField = string.Format(format, lengthInBytes);
 
         this.textContentField = txtContent ?? this.messageSizeDescriptionField;
+
+        if (txtContent is not null)
+        {
+            this.isJsonTextContentField = IsJsonString(this.textContentField);
+        }
+    }
+
+    private static bool IsJsonString(string? str)
+    {
+        if (!string.IsNullOrWhiteSpace(str))
+        {
+            try
+            {
+                JsonSerializer.Deserialize<dynamic>(str);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
     }
 }

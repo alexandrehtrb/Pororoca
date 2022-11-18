@@ -10,7 +10,6 @@ namespace Pororoca.Desktop.Views;
 
 public class WebSocketConnectionView : UserControl
 {
-    private readonly TextEditor selectedExchangedMessageEditor;
     private readonly AvaloniaEdit.TextMate.TextMate.Installation selectedExchangedMessageEditorTextMateInstallation;
     private string? currentSelectedMsgSyntaxLangId;
 
@@ -18,8 +17,11 @@ public class WebSocketConnectionView : UserControl
     {
         InitializeComponent();
 
-        this.selectedExchangedMessageEditor = this.FindControl<TextEditor>("SelectedExchangedMessageContentEditor");
-        this.selectedExchangedMessageEditorTextMateInstallation = TextEditorConfiguration.Setup(this.selectedExchangedMessageEditor, false);
+        var selectedExchangedMessageEditor = this.FindControl<TextEditor>("SelectedExchangedMessageContentEditor");
+        this.selectedExchangedMessageEditorTextMateInstallation = TextEditorConfiguration.Setup(selectedExchangedMessageEditor!, false);
+
+        var exchangedMessagesList = this.FindControl<ListBox>("ExchangedMessagesList");
+        exchangedMessagesList.SelectionChanged += OnSelectedExchangedMessageChanged;
     }
 
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
@@ -32,34 +34,13 @@ public class WebSocketConnectionView : UserControl
         vm.UpdateResolvedUrlToolTip();
     }
 
-    public void OnSelectedExchangedMessageChanged(object sender, SelectionChangedEventArgs e)
+    private void OnSelectedExchangedMessageChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if (e.AddedItems.Count > 0)
+        if (e.AddedItems is not null
+         && e.AddedItems.Count > 0
+         && e.AddedItems[0] is WebSocketExchangedMessageViewModel emVm)
         {
-            var connVm = (WebSocketConnectionViewModel)DataContext!;
-            var emVm = (WebSocketExchangedMessageViewModel) e.AddedItems[0]!;
-            connVm.UpdateSelectedExchangedMessage(emVm);
-            LoadSelectedMsgFromVm();
-        }
-    }
-
-    #endregion
-
-    #region ON DATA CONTEXT CHANGED
-
-    protected override void OnDataContextChanged(EventArgs e)
-    {
-        LoadSelectedMsgFromVm();
-        base.OnDataContextChanged(e);
-    }
-
-    private void LoadSelectedMsgFromVm()
-    {
-        var vm = (WebSocketConnectionViewModel?)DataContext;
-        if (vm is not null)
-        {
-            SetSelectedMsgContentFromVm();
-            ApplySelectedMsgContentSyntaxFromVm();
+            ApplySelectedMsgContentSyntax(emVm.IsJsonTextContent);
         }
     }
 
@@ -67,19 +48,9 @@ public class WebSocketConnectionView : UserControl
 
     #region HELPERS
 
-    private void SetSelectedMsgContentFromVm()
+    private void ApplySelectedMsgContentSyntax(bool isJson)
     {
-        var vm = (WebSocketConnectionViewModel?)DataContext;
-        if (vm is not null)
-        {
-            this.selectedExchangedMessageEditor.SetEditorRawContent(vm.SelectedExchangedMessageContent ?? string.Empty);
-        }
-    }
-
-    private void ApplySelectedMsgContentSyntaxFromVm()
-    {
-        var vm = (WebSocketConnectionViewModel?)DataContext;
-        string? contentType = vm is not null && vm.IsSelectedExchangedMessageContentJson ? MimeTypesDetector.DefaultMimeTypeForJson : null;
+        string? contentType = isJson ? MimeTypesDetector.DefaultMimeTypeForJson : null;
         this.selectedExchangedMessageEditorTextMateInstallation.SetEditorSyntax(ref this.currentSelectedMsgSyntaxLangId, contentType);
     }
 

@@ -501,6 +501,7 @@
             Text="{i18n:Localize SectionTitle, Context=WebSocketExchangedMessages}" />
 
         <ListBox
+            Name="ExchangedMessagesList"
             Grid.Column="0"
             Grid.Row="1"
             Margin="12,24,12,8"
@@ -508,7 +509,7 @@
             VerticalAlignment="Stretch"
             Items="{Binding ExchangedMessages, Mode=TwoWay}"
             Background="#0A1929"
-            SelectionChanged="OnSelectedExchangedMessageChanged">
+            SelectedItem="{Binding SelectedExchangedMessage, Mode=TwoWay}">
           <ListBox.Styles>
             <Style Selector="TextBlock.WebSocketMessageFromClientPrimary">
               <Setter
@@ -698,7 +699,8 @@
             ShowLineNumbers="True"
             FontFamily="Cascadia Code,Consolas,Menlo,Monospace"
             FontWeight="Light"
-            FontSize="14" />
+            FontSize="14"
+            Document="{Binding SelectedExchangedMessageContentTextDocument}" />
 
         <Button
             Grid.Column="0"

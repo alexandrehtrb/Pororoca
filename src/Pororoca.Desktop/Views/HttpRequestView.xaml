@@ -143,7 +143,7 @@
                   <ComboBoxItem x:Name="reqScrRequestBodyModeSelectionGraphQl" IsSelected="{Binding IsRequestBodyModeGraphQlSelected, Mode=TwoWay}" Content="{i18n:Localize BodyModeGraphQl, Context=HttpRequest}"/>
                 </ComboBox>
 
-                <AutoCompleteBox Name="RequestBodyRawContentTypeSelector" Height="36" Width="200" FontSize="14" HorizontalAlignment="Left" Watermark="{i18n:Localize BodyRawContentTypeWatermark, Context=HttpRequest}" Items="{Binding AllMimeTypes}" FilterMode="Contains" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}" />
+                <AutoCompleteBox Name="RequestBodyRawContentTypeSelector" Height="36" Width="200" FontSize="14" HorizontalAlignment="Left" Watermark="{i18n:Localize BodyRawContentTypeWatermark, Context=HttpRequest}" Items="{Binding AllMimeTypes}" SelectedItem="{Binding RequestRawContentType, Mode=TwoWay}" FilterMode="Contains" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}" />
               </StackPanel>
               <!-- REQUEST BODY RAW -->
               <AvalonEdit:TextEditor
@@ -162,7 +162,8 @@
                   ShowLineNumbers="True"
                   FontFamily="Cascadia Code,Consolas,Menlo,Monospace"
                   FontWeight="Light"
-                  FontSize="14" />
+                  FontSize="14"
+                  Document="{Binding RequestRawContentTextDocument, Mode=TwoWay}" />
               <!-- REQUEST BODY FILE -->
               <Grid Grid.Column="0" Grid.Row="1" Margin="12,12,12,0" VerticalAlignment="Stretch" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionFile}">
                 <Grid.ColumnDefinitions>
@@ -344,7 +345,8 @@
                   ShowLineNumbers="True"
                   FontFamily="Cascadia Code,Consolas,Menlo,Monospace"
                   FontWeight="Light"
-                  FontSize="14" />
+                  FontSize="14"
+                  Document="{Binding ResponseDataCtx.ResponseRawContentTextDocument, Mode=TwoWay}" />
               <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Margin="0,12,0,0">
                 <Button Content="{i18n:Localize BodySaveToFile, Context=HttpResponse}" Margin="0,0,6,12" IsVisible="{Binding ResponseDataCtx.IsSaveResponseBodyToFileVisible}" Command="{Binding ResponseDataCtx.SaveResponseBodyToFileCmd}" Classes="Primary"/>
                 <Button Content="{i18n:Localize DisableTlsVerification, Context=HttpResponse}" Margin="6,0,0,12" IsVisible="{Binding ResponseDataCtx.IsDisableTlsVerificationVisible}" Command="{Binding ResponseDataCtx.DisableTlsVerificationCmd}" Classes="Primary"/>

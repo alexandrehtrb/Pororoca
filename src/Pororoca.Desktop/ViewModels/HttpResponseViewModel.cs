@@ -14,14 +14,12 @@ using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using static Pororoca.Domain.Features.Common.MimeTypesDetector;
+using AvaloniaEdit.Document;
 
 namespace Pororoca.Desktop.ViewModels;
 
 public sealed class HttpResponseViewModel : ViewModelBase
 {
-    public delegate void OnHttpResponseBodyChanged(string updatedResponseContent, string? updatedResponseContentType);
-    public event OnHttpResponseBodyChanged? HttpResponseBodyChanged;
-
     private static readonly TimeSpan oneSecond = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan oneMinute = TimeSpan.FromMinutes(1);
     private PororocaHttpResponse? res;
@@ -42,11 +40,17 @@ public sealed class HttpResponseViewModel : ViewModelBase
 
     public ObservableCollection<KeyValueParamViewModel> ResponseHeadersAndTrailers { get; }
 
-    private string? responseRawContentField;
+    private TextDocument? responseRawContentTextDocumentField;
+    public TextDocument? ResponseRawContentTextDocument
+    {
+        get => this.responseRawContentTextDocumentField;
+        set => this.RaiseAndSetIfChanged(ref this.responseRawContentTextDocumentField, value);
+    }
+
     public string? ResponseRawContent
     {
-        get => this.responseRawContentField;
-        set => this.RaiseAndSetIfChanged(ref this.responseRawContentField, value);
+        get => ResponseRawContentTextDocument?.Text;
+        set => ResponseRawContentTextDocument = new(value ?? string.Empty);
     }
 
     private string? responseRawContentTypeField;
@@ -143,9 +147,11 @@ public sealed class HttpResponseViewModel : ViewModelBase
             this.res = res;
             ResponseStatusCodeElapsedTimeTitle = FormatSuccessfulResponseTitle(res.ElapsedTime, (HttpStatusCode)res.StatusCode!);
             UpdateHeadersAndTrailers(res.Headers, res.Trailers);
-            ResponseRawContent = res.CanDisplayTextBody ? res.GetBodyAsText() : string.Format(Localizer.Instance["HttpResponse/BodyContentBinaryNotShown"], res.GetBodyAsBinary()!.Length);
+            // response content type needs to be always set first, because when the content is updated,
+            // it triggers the syntax update, that checks the content type
+            // if content type is set after, the syntax will not change after content is updated
             ResponseRawContentType = res.ContentType;
-            HttpResponseBodyChanged?.Invoke(ResponseRawContent!, ResponseRawContentType);
+            ResponseRawContent = res.CanDisplayTextBody ? res.GetBodyAsText() : string.Format(Localizer.Instance["HttpResponse/BodyContentBinaryNotShown"], res.GetBodyAsBinary()!.Length);
             IsSaveResponseBodyToFileVisible = res.HasBody;
             IsDisableTlsVerificationVisible = false;
         }
@@ -156,9 +162,8 @@ public sealed class HttpResponseViewModel : ViewModelBase
             ResponseTabsSelectedIndex = 1; // Show exception message
             ResponseStatusCodeElapsedTimeTitle = FormatFailedResponseTitle(res.ElapsedTime);
             UpdateHeadersAndTrailers(res.Headers, res.Trailers);
-            ResponseRawContent = res.Exception!.ToString();
             ResponseRawContentType = null;
-            HttpResponseBodyChanged?.Invoke(ResponseRawContent!, ResponseRawContentType);
+            ResponseRawContent = res.Exception!.ToString();
             IsSaveResponseBodyToFileVisible = false;
 
             bool isSslVerificationDisabled = ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled;
@@ -168,6 +173,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
         {
             ResponseStatusCodeElapsedTimeTitle = Localizer.Instance["HttpResponse/SectionTitle"];
             IsDisableTlsVerificationVisible = false;
+            ResponseRawContentType = null;
             ResponseRawContent = string.Empty;
         }
     }
