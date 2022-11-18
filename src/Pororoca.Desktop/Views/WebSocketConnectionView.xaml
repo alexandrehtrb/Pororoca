@@ -507,28 +507,28 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Items="{Binding ExchangedMessages, Mode=TwoWay}"
-            Background="Black"
+            Background="#0A1929"
             SelectionChanged="OnSelectedExchangedMessageChanged">
           <ListBox.Styles>
             <Style Selector="TextBlock.WebSocketMessageFromClientPrimary">
               <Setter
                   Property="Foreground"
-                  Value="#FF80FF" />
+                  Value="#D77728" />
             </Style>
             <Style Selector="TextBlock.WebSocketMessageFromClientSecondary">
               <Setter
                   Property="Foreground"
-                  Value="#FFE6FF" />
+                  Value="White" />
             </Style>
             <Style Selector="TextBlock.WebSocketMessageFromServerPrimary">
               <Setter
                   Property="Foreground"
-                  Value="#CCFF33" />
+                  Value="#88DDCE" />
             </Style>
             <Style Selector="TextBlock.WebSocketMessageFromServerSecondary">
               <Setter
                   Property="Foreground"
-                  Value="#F2FFCC" />
+                  Value="White" />
             </Style>
           </ListBox.Styles>
 

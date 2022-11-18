@@ -74,11 +74,11 @@
         </Style>
 
         <Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="#595959" />
+            <Setter Property="Background" Value="#183e67" />
         </Style>
 
         <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="#404040" />
+            <Setter Property="Background" Value="#225791" />
         </Style>
     </Application.Styles>
 </Application>
