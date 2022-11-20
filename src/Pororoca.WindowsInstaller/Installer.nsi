@@ -19,9 +19,9 @@
 
 ; ---------------------------------------- INSTALLER DEFINES
 ; uncomment the 3 lines below to test this script using NSIS GUI
-; !define INPUT_FILES_DIR "C:\Projetos\Pororoca\out\Pororoca_1.5.0_win-x64_installer" ; TODO: receive this parameter from command-line execution
-; !define SHORT_VERSION "1.6.0" ; TODO: receive this parameter from command-line execution
-; OutFile "C:\Projetos\Pororoca\out\Pororoca_1.5.0_win-x64_installer\Pororoca_1.5.0_win-x64_installer.exe"
+; !define INPUT_FILES_DIR "C:\Projetos\Pororoca\out\Pororoca_x.y.z_win-x64_installer" ; TODO: receive this parameter from command-line execution
+; !define SHORT_VERSION "x.y.z" ; TODO: receive this parameter from command-line execution
+; OutFile "C:\Projetos\Pororoca\out\Pororoca_x.y.z_win-x64_installer\Pororoca_x.y.z_win-x64_installer.exe"
 ; parameters above shall be received via command-line execution
 !define PRODUCT_NAME "Pororoca" ; name of the application as displayed to the user
 !define PRODUCT_VERSION "${SHORT_VERSION}.0" ; main version of the application (may be 0.1, alpha, beta, etc.)

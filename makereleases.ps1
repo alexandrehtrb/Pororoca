@@ -27,30 +27,34 @@ function Run-Pipeline
 
 function Get-RuntimesToPublishFor
 {
+	# Dropping support for arm releases, starting at version 1.6.0
+	# This is because we are using AvaloniaEdit.TextMate and TextMateSharp,
+	# which rely on native C dlls;
+	# No current support for arm yet (2022-11-20)
 	$unixRuntimes = @(`
 		'linux-x64' ` 
-		,'linux-arm64' `
+		#,'linux-arm64' `
 		,'osx-x64' `
-		,'osx-arm64' `
+		#,'osx-arm64' `
 	)
 	$windowsRuntimes = @(`
 		#'win7-x64' ` 
 		#,'win7-x86' `
 		'win-x64_portable' `
 		,'win-x86_portable' `
-		,'win-arm_portable' `
-		,'win-arm64_portable' `
+		#,'win-arm_portable' `
+		#,'win-arm64_portable' `
 
 		,'win-x64_installer' `
 		,'win-x86_installer' `
-		,'win-arm_installer' `
-		,'win-arm64_installer' `
+		#,'win-arm_installer' `
+		#,'win-arm64_installer' `
 	)
 
 	# Windows releases should be built on a Windows machine, because of dotnet
 	# Linux and Mac OS releases should be built on one of those OSs, because of chmod and zip
-	#return $IsWindows ? $windowsRuntimes : $unixRuntimes
-	return @("win7-x64_installer")
+	return $IsWindows ? $windowsRuntimes : $unixRuntimes
+	#return @("win-x64_installer")
 }
 
 #################### Pre-release build and tests ####################

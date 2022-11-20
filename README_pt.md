@@ -20,7 +20,7 @@ Leia as [instruções](./docs/pt-BR/Instalação.md) e baixe o programa [aqui](h
 * Variáveis secretas.
 * Coleções e ambientes podem ser exportados juntos em um mesmo arquivo.
 * Compatibilidade total com o Postman ao importar ou exportar.
-* Consumo muito menor de memória - cerca de seis vezes menos do que o Postman.
+* Consumo muito menor de memória - cerca de cinco vezes menos do que o Postman.
 * Testes automatizados.
 * Inicialização rápida.
 * Gratuito e código-aberto.

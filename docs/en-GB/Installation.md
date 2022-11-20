@@ -2,6 +2,8 @@
 
 The installation packages are available on GitHub [Releases](https://github.com/alexandrehtrb/Pororoca/releases) page. This page is the only official source for downloading this program.
 
+Currently, there is support only for `x86` and `x64` architectures. The last version that supports `arm` and `arm64` architectures is 1.5.0. You can run x86 and x64 releases on an ARM machine if its operating system supports emulation.
+
 ## Windows (`win`)
 
 *Important*: The .exe programs are not signed, therefore, there may be messages from Windows SmartScreen saying that it "prevented an unrecognized app from starting". Just click on "More info" and then on "Run anyway" to continue.

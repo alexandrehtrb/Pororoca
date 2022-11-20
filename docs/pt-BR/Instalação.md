@@ -2,6 +2,8 @@
 
 Os pacotes de instalação estão disponíveis na página de [Releases](https://github.com/alexandrehtrb/Pororoca/releases) no GitHub. Essa página é a única fonte oficial para baixar o programa.
 
+Atualmente, há suporte apenas para arquiteturas `x86` e `x64`. A última versão que suporta arquiteturas `arm` e `arm64` é a 1.5.0. Você pode rodar os executáveis x86 e x64 em uma máquina ARM se o sistema operacional desta suportar emulação.
+
 ## Windows (`win`)
 
 *Importante*: Os programas .exe não são assinados, por isso, podem surgir mensagens do Windows SmartScreen dizendo que o programa não é confiável. Basta clicar em "Mais informações", depois em "Executar mesmo assim" para continuar.

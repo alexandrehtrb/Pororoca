@@ -360,7 +360,7 @@
               "name": "SpiderMan",
               "contentMode": "file",
               "rawContent": "",
-              "fileSrcPath": "{{TestFilesDir}}\\homem_aranha.jpg",
+              "fileSrcPath": "{{TestFilesDir}}/homem_aranha.jpg",
               "disableCompressionForThis": false,
               "direction": "fromClient",
               "messageType": "binary"
