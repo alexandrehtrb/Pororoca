@@ -121,7 +121,7 @@ public static class BackgroundWebSocketsProcessor
                 await PingClientAsync(ws, "{\"ping\": \"hey client\"}", serverDisconnectToken);
                 //ws.Abort();
                 //await ws.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, null, serverDisconnectToken);
-                return;
+                //return;
             }
             else if (firstOperation == beganReceiving)
             {
