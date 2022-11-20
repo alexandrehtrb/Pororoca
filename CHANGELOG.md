@@ -12,17 +12,17 @@
 
 ### Breaking Changes
 
-* Currently dropping support for arm and arm64 releases of Pororoca Desktop. The version 1.5.0 will remain available for download and it supports arm architectures. The `Pororoca.Test` package does not have such restraint and can run on arm and arm64 machines.
+* Currently dropping support for `arm` and `arm64` releases of Pororoca Desktop. The version 1.5.0 will remain available for download and it supports `arm` architectures. The `Pororoca.Test` package does not have such restraint and can run on these machines.
 
 ### Features
 
 * Adds support for WebSockets (only HTTP/1.1 for now!)
 * Adds syntax highlighting for text editors!
   * Thanks for the [Avalonia](https://github.com/AvaloniaUI) team for the [Avalonia.Edit](https://github.com/AvaloniaUI/AvaloniaEdit) project!
-  * This adds support for `Ctrl+F` search in text editors! Issue #10
+  * This adds support for `Ctrl+F` search in text editors! Issue [#10](https://github.com/alexandrehtrb/Pororoca/issues/10#issue-1369086969)
   * This allows for zooming the text editor with the mouse scroll wheel!
 * Generates Windows installer releases for Pororoca!
-  * Thanks for @Drizin for the [NsisMultiUser](https://github.com/Drizin/NsisMultiUser) project!
+  * Thanks for [@Drizin](https://github.com/Drizin) for the [NsisMultiUser](https://github.com/Drizin/NsisMultiUser) project!
   * Pororoca installed on Windows will save collections and user preferences on `AppData\Roaming\Pororoca` folder.
 * Files for HTTP request bodies are now loaded using async operating system APIs
 * Shows check for updates reminder dialog, once every two months.
