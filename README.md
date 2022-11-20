@@ -6,7 +6,7 @@ Pororoca is a HTTP testing tool, inspired by Postman, but with many improvements
 
 It is available for Windows, Mac OSX and Linux.
 
-![ExampleScreen](./docs/en-GB/imgs/example_screen.jpg)
+![ExampleScreen](./docs/en-GB/imgs/example_screen.png)
 
 ## Installation
 
@@ -20,7 +20,7 @@ Read the [instructions](./docs/en-GB/Installation.md) and download the program [
 * Secret variables.
 * Collections and environments can be exported together in a single file.
 * Full export and import compatibility with Postman.
-* Much lower memory usage - around six times less than Postman.
+* Much lower memory usage - around five times less than Postman.
 * Automated testing.
 * Fast startup time.
 * Free and open-source.

@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -11,9 +12,10 @@ namespace Pororoca.Desktop.UserData;
 
 public sealed class UserDataManager
 {
-    private const string UserDataFolderName = "PororocaUserData";
-    private const string UserPreferencesFileName = "userPreferences.json";
-    private static readonly JsonSerializerOptions UserPreferencesJsonOptions = SetupUserPreferencesJsonOptions();
+    private const string appDataProgramFolderName = "Pororoca";
+    private const string userDataFolderName = "PororocaUserData";
+    private const string userPreferencesFileName = "userPreferences.json";
+    private static readonly JsonSerializerOptions userPreferencesJsonOptions = SetupUserPreferencesJsonOptions();
 
     private static JsonSerializerOptions SetupUserPreferencesJsonOptions()
     {
@@ -28,7 +30,7 @@ public sealed class UserDataManager
 
     public static UserPreferences? LoadUserPreferences()
     {
-        string userPreferencesFilePath = GetUserDataFilePath(UserPreferencesFileName);
+        string userPreferencesFilePath = GetUserDataFilePath(userPreferencesFileName);
         if (!File.Exists(userPreferencesFilePath))
         {
             return null;
@@ -38,7 +40,7 @@ public sealed class UserDataManager
             try
             {
                 var fs = File.Open(userPreferencesFilePath, FileMode.Open, FileAccess.Read);
-                return JsonSerializer.Deserialize<UserPreferences>(fs, options: UserPreferencesJsonOptions);
+                return JsonSerializer.Deserialize<UserPreferences>(fs, options: userPreferencesJsonOptions);
             }
             catch
             {
@@ -98,8 +100,8 @@ public sealed class UserDataManager
 
     private static Task SaveUserPreferences(UserPreferences userPrefs)
     {
-        string path = GetUserDataFilePath(UserPreferencesFileName);
-        string json = JsonSerializer.Serialize(userPrefs, options: UserPreferencesJsonOptions);
+        string path = GetUserDataFilePath(userPreferencesFileName);
+        string json = JsonSerializer.Serialize(userPrefs, options: userPreferencesJsonOptions);
         return File.WriteAllTextAsync(path, json, Encoding.UTF8);
     }
 
@@ -137,20 +139,75 @@ public sealed class UserDataManager
 
     public static string GetUserDataFilePath(string fileName)
     {
-        // Example Mac OSX executable directory: /Applications/Pororoca.app/Contents/MacOS/
-        // Then, user data directory will be:    /Applications/PororocaUserData/
-        // This is because that if the user updates the app, the entire Pororoca.app is replaced
-        // and since it is not intuitive to retrieve content from inside the .app folder,
-        // the user data folder needs to be outside of the .app.        
-
-        // Example Windows executable directory: C:\Users\you\Desktop\Pororoca\
-        // Then, user data directory will be:    C:\Users\you\Desktop\Pororoca\PororocaUserData\
-
-        DirectoryInfo currentDir = new(Path.GetDirectoryName(Environment.ProcessPath)!);
-        var rootDir = OperatingSystem.IsMacOS() ?
-                      currentDir.Parent!.Parent!.Parent! :
-                      currentDir;
+        var rootDir = GetUserDataFolder();
         string rootPath = rootDir.FullName;
-        return Path.Combine(rootPath, UserDataFolderName, fileName);
+        return Path.Combine(rootPath, userDataFolderName, fileName);
+    }
+
+    private static DirectoryInfo GetUserDataFolder() =>
+        /*
+            For debugging, the PororocaUserData folder should be located inside the Pororoca.Desktop directory:
+                "Pororoca.Desktop\bin\Debug\net6.0"
+            
+            For a release executable, the PororocaUserData folder location depends on the OS:
+
+            -For Linux, it should be on the same level as the executable.
+            Example Linux executable directory: /home/myuser/Programs/MyPororocaDir/
+            Then, user data directory will be:  /home/myuser/Programs/MyPororocaDir/PororocaUserData/
+
+            -For MacOS, it should be on the same level as the .app executable (not the same as above)
+            Example Mac OSX executable directory: /Applications/Pororoca.app/Contents/MacOS/
+            Then, user data directory will be:    /Applications/PororocaUserData/
+            This is because that if the user updates the app, the entire Pororoca.app is replaced
+            and since it is not intuitive to retrieve content from inside the .app folder,
+            the user data folder needs to be outside of the .app.
+
+            -For Windows:
+                - If it is a portable executable, it should be on the same level as the executable, just like on Linux.
+                - If it is an installed executable, it should be inside the %APPDATA%/Pororoca/ folder. (Roaming folder, not Local or LocalLow)
+        */
+#if INSTALLED_ON_WINDOWS
+        GetUserDataFolderForInstalledOnWindows(); // installed on windows
+#elif DEBUG
+        GetUserDataFolderForDebug(); // debug, for any OS
+#else
+        OperatingSystem.IsMacOS() ?
+            GetUserDataFolderForMacOSX() : // mac osx
+            GetUserDataFolderForPortableExecutable(); // linux and windows portable
+#endif
+
+
+#if DEBUG
+    private static DirectoryInfo GetUserDataFolderForDebug()
+    {
+        // for debug, do not use Environment.ProcessPath, because it returns "C:\Program Files\dotnet";
+        // Assembly.Location returns an empty string for single-file apps
+        // do not use single-file app on debug
+        string currentDirPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location!)!;
+        DirectoryInfo currentDir = new(currentDirPath);
+        return currentDir.Parent!.Parent!.Parent!;
+    }
+#endif
+
+    private static DirectoryInfo GetUserDataFolderForMacOSX()
+    {
+        string currentDirPath = Path.GetDirectoryName(Environment.ProcessPath)!;
+        DirectoryInfo currentDir = new(currentDirPath);
+        return currentDir.Parent!.Parent!.Parent!;
+    }
+
+    private static DirectoryInfo GetUserDataFolderForPortableExecutable()
+    {
+        string currentDirPath = Path.GetDirectoryName(Environment.ProcessPath)!;
+        return new(currentDirPath);
+    }
+
+    private static DirectoryInfo GetUserDataFolderForInstalledOnWindows()
+    {
+        // we are using "AppData\Roaming" path here, to preserve user data
+        // when user logs in on another machine of the same corporate network
+        string appDataRoamingPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        string currentDirPath = Path.Combine(appDataRoamingPath, appDataProgramFolderName)!;
+        return new(currentDirPath);
     }
 }

@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Postman;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
 using static Pororoca.Domain.Features.Common.MimeTypesDetector;
@@ -43,7 +44,7 @@ public static class PostmanCollectionV21Importer
                 var convertedItem = ConvertToPororocaCollectionItem(item, collectionScopedAuth);
                 if (convertedItem is PororocaCollectionFolder folder)
                     myCol.AddFolder(folder);
-                else if (convertedItem is PororocaRequest request)
+                else if (convertedItem is PororocaHttpRequest request)
                     myCol.AddRequest(request);
             }
             if (postmanCollection.Variable != null)
@@ -92,7 +93,7 @@ public static class PostmanCollectionV21Importer
     {
         if (item.Request != null)
         {
-            return ConvertToPororocaRequest(item.Name, item.Request, collectionScopedAuth);
+            return ConvertToPororocaHttpRequest(item.Name, item.Request, collectionScopedAuth);
         }
         else
         {
@@ -104,7 +105,7 @@ public static class PostmanCollectionV21Importer
                     var convertedSubItem = ConvertToPororocaCollectionItem(subItem, collectionScopedAuth);
                     if (convertedSubItem is PororocaCollectionFolder subFolder)
                         folder.AddFolder(subFolder);
-                    else if (convertedSubItem is PororocaRequest subRequest)
+                    else if (convertedSubItem is PororocaHttpRequest subRequest)
                         folder.AddRequest(subRequest);
                 }
             }
@@ -112,10 +113,10 @@ public static class PostmanCollectionV21Importer
         }
     }
 
-    internal static PororocaRequest ConvertToPororocaRequest(string name, PostmanRequest request, PororocaRequestAuth? collectionScopedAuth)
+    internal static PororocaHttpRequest ConvertToPororocaHttpRequest(string name, PostmanRequest request, PororocaRequestAuth? collectionScopedAuth)
     {
         const decimal defaultHttpVersion = 1.1m;
-        PororocaRequest myReq = new();
+        PororocaHttpRequest myReq = new();
         myReq.Update(
             name: name,
             httpVersion: defaultHttpVersion,
@@ -124,14 +125,14 @@ public static class PostmanCollectionV21Importer
             // When Postman req auth is null, the request uses collection scoped auth
             customAuth: request.Auth != null ? ConvertToPororocaAuth(request.Auth) : (PororocaRequestAuth?)collectionScopedAuth?.Clone(),
             headers: ConvertToPororocaHeaders(request.Header),
-            body: ConvertToPororocaRequestBody(request.Body));
+            body: ConvertToPororocaHttpRequestBody(request.Body));
         return myReq;
     }
 
     internal static List<PororocaKeyValueParam> ConvertToPororocaHeaders(PostmanVariable[]? headersParams) =>
         ConvertToPororocaKeyValueParams(headersParams);
 
-    internal static PororocaRequestBody? ConvertToPororocaRequestBody(PostmanRequestBody? body)
+    internal static PororocaHttpRequestBody? ConvertToPororocaHttpRequestBody(PostmanRequestBody? body)
     {
         static string FindFileBodyMimeType(PostmanRequestBody? body)
         {
@@ -140,7 +141,7 @@ public static class PostmanCollectionV21Importer
             return mimeType ?? DefaultMimeTypeForBinary;
         }
 
-        PororocaRequestBody myBody = new();
+        PororocaHttpRequestBody myBody = new();
         switch (body?.Mode)
         {
             case PostmanRequestBodyMode.Raw:
@@ -155,7 +156,7 @@ public static class PostmanCollectionV21Importer
                 myBody.SetUrlEncodedContent(ConvertToPororocaKeyValueParams(body.Urlencoded));
                 break;
             case PostmanRequestBodyMode.Formdata:
-                myBody.SetFormDataContent(ConvertToPororocaFormDataValues(body.Formdata));
+                myBody.SetFormDataContent(ConvertToPororocaHttpFormDataValues(body.Formdata));
                 break;
             case PostmanRequestBodyMode.Graphql:
                 string? query = string.IsNullOrWhiteSpace(body.Graphql?.Query) ? null : body.Graphql.Query;
@@ -184,13 +185,13 @@ public static class PostmanCollectionV21Importer
             .Select(v => new PororocaKeyValueParam(IsEnabledInPostman(v.Disabled), v.Key, v.Value))
             .ToList();
 
-    private static List<PororocaRequestFormDataParam> ConvertToPororocaFormDataValues(PostmanRequestBodyFormDataParam[]? formDatas) =>
+    private static List<PororocaHttpRequestFormDataParam> ConvertToPororocaHttpFormDataValues(PostmanRequestBodyFormDataParam[]? formDatas) =>
         (formDatas ?? Array.Empty<PostmanRequestBodyFormDataParam>())
-            .Select(ConvertToPororocaFormDataParam).ToList();
+            .Select(ConvertToPororocaHttpFormDataParam).ToList();
 
-    private static PororocaRequestFormDataParam ConvertToPororocaFormDataParam(PostmanRequestBodyFormDataParam f)
+    private static PororocaHttpRequestFormDataParam ConvertToPororocaHttpFormDataParam(PostmanRequestBodyFormDataParam f)
     {
-        PororocaRequestFormDataParam p = new(IsEnabledInPostman(f.Disabled), f.Key);
+        PororocaHttpRequestFormDataParam p = new(IsEnabledInPostman(f.Disabled), f.Key);
         if (f.Type == PostmanRequestBodyFormDataParamType.File)
         {
             string? fileSrcPath = null;

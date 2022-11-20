@@ -4,11 +4,11 @@ Uma variável é um valor que pode ser aplicado em certos parâmetros de uma req
 
 Há duas classes de variáveis: variáveis de coleção e variáveis de ambiente.
 
-![VariáveisDeColeção](./imgs/collection_variables.jpg)
-
 ## Variáveis de coleção
 
 Variáveis de coleção ficam disponíveis para todas as requisições de uma coleção. Para ver as variáveis de uma coleção, clique na seção "Variáveis" de uma coleção, no painel esquerdo.
+
+![VariáveisDeColeção](./imgs/collection_variables.png)
 
 ## Variáveis de ambiente
 
@@ -23,8 +23,6 @@ Para remover uma variável, clique nela na matriz de variáveis, depois clique n
 Uma variável pode estar habilitada ou desabilitada. Apenas variáveis habilitadas serão consideradas para uma resolução de valor.
 
 Variáveis marcadas como secretas permitem uma melhor controle de dados sensíveis ao exportar sua coleção ou ambiente. Leia mais na página [Exportar e Importar](ExportarEImportar.md).
-
-![EditandoVariáveis](./imgs/edit_variables.jpg)
 
 ## Como usar uma variável
 
@@ -45,17 +43,17 @@ Por exemplo: se a URL de uma requisição for `{{BaseUrl}}/index.html` e houver 
 
 Para URLs de requisições, você pode passar o mouse em cima da caixa de texto da URL para prever a URL resolvida.
 
-![PreverURLResolvida](./imgs/preview_resolved_url.jpg)
+![PreverURLResolvida](./imgs/preview_resolved_url.png)
 
-A imagem abaixo mostra como usar uma variável em um corpo-texto.
+A imagem abaixo mostra como usar uma variável em um corpo-texto. Nele, o `{{NomeDaVariável}}` aparecerá destacado em amarelo.
 
-![VariávelCorpoTexto](./imgs/variable_raw_body_content.jpg)
+![VariávelCorpoTexto](./imgs/variable_raw_body_content.png)
 
 ## Lógica de resolução de variáveis
 
 A lógica de resolução é:
 
-* Variáveis de coleção serão juntadas com as variáveis do ambiente atual. Se não houver ambiente atual, apenas variáveis de coleção serão consideradas.
-* Além disso, apenas variáveis habilitadas serão consideradas.
-* Variáveis de ambiente têm predominância sobre variáveis de coleção. Se houver duas variáveis declaradas com o mesmo nome na coleção e no ambiente, a variável do ambiente será a escolhida.
-* Todo campo de requisição que permite uso de variáveis será analisado para verificar se ele tem um molde (template) de variável, como por exemplo, `{{NOME_DA_VARIÁVEL}}`. Se um molde for encontrado e houver uma variável habilitada para ele, o molde será trocado pelo valor da variável. Caso contrário, o texto do molde continuará no lugar.
+1) Variáveis de coleção serão juntadas com as variáveis do ambiente atual. Se não houver ambiente atual, apenas variáveis de coleção serão consideradas.
+2) Além disso, apenas variáveis habilitadas serão consideradas.
+3) Variáveis de ambiente têm predominância sobre variáveis de coleção. Se houver duas variáveis declaradas com o mesmo nome na coleção e no ambiente, a variável do ambiente será a escolhida.
+4) Todo campo de requisição que permite uso de variáveis será analisado para verificar se ele tem um molde (template) de variável, como por exemplo, `{{NOME_DA_VARIÁVEL}}`. Se um molde for encontrado e houver uma variável habilitada para ele, o molde será trocado pelo valor da variável. Caso contrário, o texto do molde continuará no lugar.

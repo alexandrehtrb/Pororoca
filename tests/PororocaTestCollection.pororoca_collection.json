@@ -1,485 +1,8 @@
 ﻿{
   "schema": "Pororoca/1",
-  "id": "b03b54bb-707d-44b5-8cad-34d748a4550c",
+  "id": "dcf73a4e-de6b-4c27-9399-bcb45a6644a5",
   "name": "PororocaTestCollection",
-  "createdAt": "2022-03-06T20:23:18.9787734-03:00",
-  "folders": [
-    {
-      "id": "b4e2e70f-5684-464e-84d2-00f2bfa7d2e3",
-      "name": "GET",
-      "folders": [],
-      "requests": [
-        {
-          "requestType": "http",
-          "id": "fa00908e-cb28-4d40-84d2-033f07953e1a",
-          "name": "JSON",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "{{HttpBinUrl}}/json"
-        },
-        {
-          "requestType": "http",
-          "id": "4271a3f9-8ff9-4eaa-81b6-8b00668d08bb",
-          "name": "HEADERS",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "{{HttpBinUrl}}/headers",
-          "headers": [
-            {
-              "enabled": true,
-              "key": "MyIdSecret",
-              "value": "{{MyIdSecret}}"
-            },
-            {
-              "enabled": true,
-              "key": "Header1",
-              "value": "oi"
-            }
-          ]
-        },
-        {
-          "requestType": "http",
-          "id": "15867839-a7e4-4596-9d6e-74470ec45ef2",
-          "name": "GZIP",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "{{HttpBinUrl}}/gzip"
-        }
-      ]
-    },
-    {
-      "id": "27581e73-e70e-47fa-a7c4-34399d33c123",
-      "name": "POST",
-      "folders": [],
-      "requests": [
-        {
-          "requestType": "http",
-          "id": "113061c7-244c-47ce-8814-53f12332c4a9",
-          "name": "EMPTY",
-          "httpVersion": 1.1,
-          "httpMethod": "POST",
-          "url": "{{HttpBinUrl}}/anything"
-        },
-        {
-          "requestType": "http",
-          "id": "220c3635-2723-461e-ac79-70119d6f61c9",
-          "name": "RAW JSON",
-          "httpVersion": 1.1,
-          "httpMethod": "POST",
-          "url": "{{HttpBinUrl}}/anything",
-          "body": {
-            "mode": "raw",
-            "contentType": "application/json",
-            "rawContent": "{\r\n\t\"id\": 1,\r\n\t\"name\": \"Alexandre\"\r\n}"
-          }
-        },
-        {
-          "requestType": "http",
-          "id": "99a6a21c-749c-4d86-88d0-3ab26a7b8491",
-          "name": "FILE",
-          "httpVersion": 1.1,
-          "httpMethod": "POST",
-          "url": "{{HttpBinUrl}}/anything",
-          "body": {
-            "mode": "file",
-            "contentType": "text/plain",
-            "fileSrcPath": "C:\\Users\\Alexandre\\Desktop\\aaa.txt"
-          }
-        },
-        {
-          "requestType": "http",
-          "id": "44762cbd-83c3-41e9-9c84-3a70abf60754",
-          "name": "FORM URL ENCODED",
-          "httpVersion": 1.1,
-          "httpMethod": "POST",
-          "url": "{{HttpBinUrl}}/anything",
-          "body": {
-            "mode": "urlEncoded",
-            "urlEncodedValues": [
-              {
-                "enabled": true,
-                "key": "a",
-                "value": "xyz"
-              },
-              {
-                "enabled": true,
-                "key": "b",
-                "value": "123"
-              },
-              {
-                "enabled": false,
-                "key": "c",
-                "value": "false"
-              },
-              {
-                "enabled": true,
-                "key": "c",
-                "value": "true"
-              },
-              {
-                "enabled": true,
-                "key": "myIdSecret",
-                "value": "{{MyIdSecret}}"
-              }
-            ]
-          }
-        },
-        {
-          "requestType": "http",
-          "id": "bd4b913a-f19d-453d-a735-d8384815679a",
-          "name": "MULTIPART FORM DATA",
-          "httpVersion": 1.1,
-          "httpMethod": "POST",
-          "url": "{{HttpBinUrl}}/anything",
-          "body": {
-            "mode": "formData",
-            "formDataValues": [
-              {
-                "enabled": true,
-                "type": "text",
-                "key": "a",
-                "textValue": "xyz",
-                "contentType": "text/plain"
-              },
-              {
-                "enabled": true,
-                "type": "text",
-                "key": "b",
-                "textValue": "{\"id\":2}",
-                "contentType": "application/json"
-              },
-              {
-                "enabled": true,
-                "type": "text",
-                "key": "myIdSecret",
-                "textValue": "{{MyIdSecret}}",
-                "contentType": "text/plain"
-              },
-              {
-                "enabled": true,
-                "type": "file",
-                "key": "arq",
-                "contentType": "text/plain",
-                "fileSrcPath": "C:\\Users\\Alexandre\\Desktop\\aaa.txt"
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "id": "1202a555-f79d-428b-98be-392048c44f22",
-      "name": "AUTH",
-      "folders": [],
-      "requests": [
-        {
-          "requestType": "http",
-          "id": "d08c5793-1aa5-43aa-9b66-00447fff6415",
-          "name": "BASIC",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "{{HttpBinUrl}}/headers",
-          "customAuth": {
-            "mode": "basic",
-            "basicAuthLogin": "{{BasicAuthLogin}}",
-            "basicAuthPassword": "{{BasicAuthPassword}}"
-          }
-        },
-        {
-          "requestType": "http",
-          "id": "169e7bbf-750d-4dfa-8804-705b993e994e",
-          "name": "BEARER",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "{{HttpBinUrl}}/headers",
-          "customAuth": {
-            "mode": "bearer",
-            "bearerToken": "{{BearerAuthToken}}"
-          }
-        }
-      ]
-    },
-    {
-      "id": "4689466a-2fba-429d-8351-ece111a5a330",
-      "name": "BAD SSL",
-      "folders": [],
-      "requests": [
-        {
-          "requestType": "http",
-          "id": "24b39e57-c759-4c61-9127-a09cc621e9b2",
-          "name": "SELF-SIGNED",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "https://self-signed.badssl.com/"
-        }
-      ]
-    },
-    {
-      "id": "25204863-d585-4093-b362-cf3f45e36066",
-      "name": "HTTP/2",
-      "folders": [],
-      "requests": [
-        {
-          "requestType": "http",
-          "id": "47af1649-6830-47df-8db0-508eb2148275",
-          "name": "GET TEXT",
-          "httpVersion": 2.0,
-          "httpMethod": "GET",
-          "url": "{{BaseUrlHttps}}/test/get/txt"
-        },
-        {
-          "requestType": "http",
-          "id": "75fbea63-5f1b-4caf-9d9e-e8c8ffc8d3d6",
-          "name": "POST JSON",
-          "httpVersion": 2.0,
-          "httpMethod": "POST",
-          "url": "{{BaseUrlHttps}}/test/post/json",
-          "body": {
-            "mode": "raw",
-            "contentType": "application/json",
-            "rawContent": "{\"name\":\"Alexandre\",\"id\":{{MyId}}}"
-          }
-        },
-        {
-          "requestType": "http",
-          "id": "beb16747-7da4-41ea-8a66-151021de8c95",
-          "name": "AKAMAI",
-          "httpVersion": 2.0,
-          "httpMethod": "GET",
-          "url": "https://http2.akamai.com/"
-        }
-      ]
-    },
-    {
-      "id": "c7080f09-970e-4088-907d-0c87400a6b27",
-      "name": "HTTP/3",
-      "folders": [],
-      "requests": [
-        {
-          "requestType": "http",
-          "id": "55e05e66-6c5c-4138-a224-1d830113619c",
-          "name": "GET TEXT",
-          "httpVersion": 3.0,
-          "httpMethod": "GET",
-          "url": "{{BaseUrlHttps}}/test/get/txt"
-        },
-        {
-          "requestType": "http",
-          "id": "b2df40b8-1dc1-4e38-8920-83c2b07810de",
-          "name": "POST JSON",
-          "httpVersion": 3.0,
-          "httpMethod": "POST",
-          "url": "{{BaseUrlHttps}}/test/post/json",
-          "body": {
-            "mode": "raw",
-            "contentType": "application/json",
-            "rawContent": "{\"name\":\"Alexandre\",\"id\":{{MyId}}}"
-          }
-        },
-        {
-          "requestType": "http",
-          "id": "665e1be1-297c-4c5a-830b-d418e42445d2",
-          "name": "AIOQUIC HTTP/3 TEST PAGE",
-          "httpVersion": 3.0,
-          "httpMethod": "GET",
-          "url": "https://quic.aiortc.org/"
-        }
-      ]
-    },
-    {
-      "id": "e47a8eda-518b-4759-a516-64d4339bbf94",
-      "name": "FILES",
-      "folders": [],
-      "requests": [
-        {
-          "requestType": "http",
-          "id": "eee7e6e4-d83a-4079-a964-c7656132a161",
-          "name": "TXT",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "https://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-test.txt"
-        },
-        {
-          "requestType": "http",
-          "id": "85a6c90c-e853-411e-a5a6-1a9af39893d6",
-          "name": "HTML",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "http://www.pudim.com.br/index.html"
-        },
-        {
-          "requestType": "http",
-          "id": "65cd89de-017e-49e5-b445-2bd9bff339a9",
-          "name": "JPG",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "http://www.pudim.com.br/pudim.jpg"
-        }
-      ]
-    },
-    {
-      "id": "9580437f-7b2c-482d-b281-672bbca0970f",
-      "name": "GRAPHQL",
-      "folders": [],
-      "requests": [
-        {
-          "requestType": "http",
-          "id": "26960f79-9e10-4e4f-b65d-424104378685",
-          "name": "Get all fruits",
-          "httpVersion": 1.1,
-          "httpMethod": "POST",
-          "url": "https://fruits-api.netlify.app/graphql",
-          "body": {
-            "mode": "graphQl",
-            "graphQlValues": {
-              "query": "query allFruits\r\n{\r\n  fruits\r\n  {\r\n    id\r\n    scientific_name\r\n    tree_name\r\n    fruit_name\r\n    family\r\n    origin\r\n    description\r\n    bloom\r\n    maturation_fruit\r\n    life_cycle\r\n    climatic_zone\r\n\tproducing_countries\r\n\t{\r\n\t\tcountry\t\r\n\t}\r\n  }\r\n}"
-            }
-          }
-        },
-        {
-          "requestType": "http",
-          "id": "3bbe90e2-d8d4-4552-a331-76777ad1021d",
-          "name": "Get fruit Goiaba",
-          "httpVersion": 1.1,
-          "httpMethod": "POST",
-          "url": "https://fruits-api.netlify.app/graphql",
-          "body": {
-            "mode": "graphQl",
-            "graphQlValues": {
-              "query": "query getFruit($id: ID!)\r\n{\r\n  fruit(id: $id)\r\n  {\r\n    id\r\n    fruit_name\r\n    origin\r\n    producing_countries\r\n    {\r\n      country\r\n    }\r\n  }\r\n}",
-              "variables": "{\r\n    \"id\": 17\r\n}"
-            }
-          }
-        },
-        {
-          "requestType": "http",
-          "id": "4bbbc966-782e-4156-95a6-8c9812dc1d01",
-          "name": "Add fruit Acerola",
-          "httpVersion": 1.1,
-          "httpMethod": "POST",
-          "url": "https://fruits-api.netlify.app/graphql",
-          "body": {
-            "mode": "graphQl",
-            "graphQlValues": {
-              "query": "mutation addFruit($acerolaId: ID!) {\r\n addFruit(\r\n    id: $acerolaId\r\n    scientific_name: \"Malpighia emarginata\"\r\n    tree_name: \"Aceroleira\"\r\n    fruit_name: \"Acerola\"\r\n    family: \"Malpighiaceae\"\r\n    origin: \"América Central, Antilhas, norte da América do Sul\"\r\n    description: \"Sua superfície é lisa ou dividida em três gomos. Possui três sementes no seu interior. O sabor do fruto é levemente ácido e o perfume é semelhante ao da uva.\"\r\n    bloom: \"Todo o ano\"\r\n    maturation_fruit: \"Todo o ano\"\r\n    life_cycle: \"-\"\r\n    climatic_zone: \"Tropical\"\r\n ) {\r\n    id\r\n    scientific_name\r\n    tree_name\r\n    fruit_name\r\n    family\r\n    origin\r\n    description\r\n    bloom\r\n    maturation_fruit\r\n    life_cycle\r\n    climatic_zone\r\n   }\r\n}",
-              "variables": "{\r\n    \"acerolaId\": {{AcerolaId}}\r\n}"
-            }
-          }
-        },
-        {
-          "requestType": "http",
-          "id": "5a9528ad-ecc9-4c2a-918b-cc50db88ac46",
-          "name": "Get fruit Coco",
-          "httpVersion": 1.1,
-          "httpMethod": "POST",
-          "url": "https://fruits-api.netlify.app/graphql",
-          "body": {
-            "mode": "graphQl",
-            "graphQlValues": {
-              "query": "query getFruit($id: ID!)\r\n{\r\n  fruit(id: $id)\r\n  {\r\n    id\r\n    fruit_name\r\n    origin\r\n    producing_countries\r\n    {\r\n      country\r\n    }\r\n  }\r\n}",
-              "variables": "{\r\n    \"id\": {{CocoId}}\r\n}"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "id": "f82f6705-9a7b-4265-b8ce-eb0f13ec6efd",
-      "name": "Client certificates",
-      "folders": [],
-      "requests": [
-        {
-          "requestType": "http",
-          "id": "831b245a-3aba-4019-b7ed-410758057543",
-          "name": "No cert provided",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "{{BadSslClientCertTestUrl}}"
-        },
-        {
-          "requestType": "http",
-          "id": "a87f3d43-4556-4047-bff2-0b97e668859a",
-          "name": "PKCS#12 cert",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "{{BadSslClientCertTestUrl}}",
-          "customAuth": {
-            "mode": "clientCertificate",
-            "clientCertificate": {
-              "type": "pkcs12",
-              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client.p12",
-              "filePassword": "{{BadSslClientCertFilePassword}}"
-            }
-          }
-        },
-        {
-          "requestType": "http",
-          "id": "5b5cbf93-eb7f-47bb-a940-e0c94348b56d",
-          "name": "PEM cert with conjoined unencrypted private key",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "{{BadSslClientCertTestUrl}}",
-          "customAuth": {
-            "mode": "clientCertificate",
-            "clientCertificate": {
-              "type": "pem",
-              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client-certificate-with-unencrypted-private-key.pem"
-            }
-          }
-        },
-        {
-          "requestType": "http",
-          "id": "04f9f867-4711-4935-aacc-75c402c777c3",
-          "name": "PEM cert with conjoined encrypted private key",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "{{BadSslClientCertTestUrl}}",
-          "customAuth": {
-            "mode": "clientCertificate",
-            "clientCertificate": {
-              "type": "pem",
-              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client-certificate-with-encrypted-private-key.pem",
-              "filePassword": "{{BadSslClientCertFilePassword}}"
-            }
-          }
-        },
-        {
-          "requestType": "http",
-          "id": "c7402969-5177-40b8-9631-57ecedb50e82",
-          "name": "PEM cert with separate unencrypted private key",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "{{BadSslClientCertTestUrl}}",
-          "customAuth": {
-            "mode": "clientCertificate",
-            "clientCertificate": {
-              "type": "pem",
-              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client-certificate-without-private-key.pem",
-              "privateKeyFilePath": "{{BadSslClientCertDir}}/badssl.com-client-unencrypted-private-key.key"
-            }
-          }
-        },
-        {
-          "requestType": "http",
-          "id": "30878e3b-e97e-4def-8f5c-e5b6cc72436a",
-          "name": "PEM cert with separate encrypted private key",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "{{BadSslClientCertTestUrl}}",
-          "customAuth": {
-            "mode": "clientCertificate",
-            "clientCertificate": {
-              "type": "pem",
-              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client-certificate-without-private-key.pem",
-              "privateKeyFilePath": "{{BadSslClientCertDir}}/badssl.com-client-encrypted-private-key.key",
-              "filePassword": "{{BadSslClientCertFilePassword}}"
-            }
-          }
-        }
-      ]
-    }
-  ],
-  "requests": [],
+  "createdAt": "2022-11-20T11:42:17.0475178-03:00",
   "variables": [
     {
       "enabled": true,
@@ -630,6 +153,578 @@
           "key": "HttpBinUrl",
           "value": "https://httpbin.org",
           "isSecret": false
+        }
+      ]
+    }
+  ],
+  "folders": [
+    {
+      "id": "88b47b16-f4cc-44f4-b567-963ed52a88b4",
+      "name": "GET",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "id": "49f53a76-53e6-4d77-a299-714c2afa67bc",
+          "name": "JSON",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{HttpBinUrl}}/json"
+        },
+        {
+          "requestType": "http",
+          "id": "5d089f9f-e20e-45fe-b6b5-a04619dd1a7a",
+          "name": "HEADERS",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{HttpBinUrl}}/headers",
+          "headers": [
+            {
+              "enabled": true,
+              "key": "MyIdSecret",
+              "value": "{{MyIdSecret}}"
+            },
+            {
+              "enabled": true,
+              "key": "Header1",
+              "value": "oi"
+            }
+          ]
+        },
+        {
+          "requestType": "http",
+          "id": "e3ecd8ab-7f96-4723-a926-cbbe0d785f7b",
+          "name": "GZIP",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{HttpBinUrl}}/gzip"
+        }
+      ]
+    },
+    {
+      "id": "b6eaeca4-5382-4c25-97aa-9284deeb92ba",
+      "name": "POST",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "id": "8a44804a-63ec-4701-83ed-f71d54c70a64",
+          "name": "EMPTY",
+          "httpVersion": 1.1,
+          "httpMethod": "POST",
+          "url": "{{HttpBinUrl}}/anything"
+        },
+        {
+          "requestType": "http",
+          "id": "17716cab-5d7c-40f8-aa52-5afc2fb418c8",
+          "name": "RAW JSON",
+          "httpVersion": 1.1,
+          "httpMethod": "POST",
+          "url": "{{HttpBinUrl}}/anything",
+          "body": {
+            "mode": "raw",
+            "contentType": "application/json",
+            "rawContent": "{\r\n\t\"id\": {{MyIdSecret}},\r\n\t\"nome\": \"Alexandre\"\r\n}"
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "cd626aba-77b0-4ce0-b173-0ddaf3391675",
+          "name": "RAW JSON 2",
+          "httpVersion": 1.1,
+          "httpMethod": "POST",
+          "url": "{{HttpBinUrl}}/anything",
+          "body": {
+            "mode": "raw",
+            "contentType": "application/json",
+            "rawContent": "{\r\n\t\"id\": {{Secret4}},\r\n\t\"nome\": \"Alexandre\"\r\n}"
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "299f6113-1591-44ff-a020-e96886fe5be7",
+          "name": "RAW XML",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "http://crystallography.net/xml/examples/relational-database-xhtml/test-database-schema-xhtml.xml"
+        },
+        {
+          "requestType": "http",
+          "id": "dc04f420-e8cd-4104-812f-c2f06142297b",
+          "name": "FILE",
+          "httpVersion": 1.1,
+          "httpMethod": "POST",
+          "url": "{{HttpBinUrl}}/anything",
+          "body": {
+            "mode": "file",
+            "contentType": "text/plain",
+            "fileSrcPath": "C:\\Users\\Alexandre\\Desktop\\Message.txt"
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "d18d2296-9d02-45bf-9de7-071dea1b93b8",
+          "name": "FORM URL ENCODED",
+          "httpVersion": 1.1,
+          "httpMethod": "POST",
+          "url": "{{HttpBinUrl}}/anything",
+          "body": {
+            "mode": "urlEncoded",
+            "urlEncodedValues": [
+              {
+                "enabled": true,
+                "key": "a",
+                "value": "xyz"
+              },
+              {
+                "enabled": true,
+                "key": "b",
+                "value": "123"
+              },
+              {
+                "enabled": false,
+                "key": "c",
+                "value": "false"
+              },
+              {
+                "enabled": true,
+                "key": "c",
+                "value": "true"
+              },
+              {
+                "enabled": true,
+                "key": "myIdSecret",
+                "value": "{{MyIdSecret}}"
+              }
+            ]
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "b4e2e709-05e5-4ec4-be29-5f0230a34f1d",
+          "name": "MULTIPART FORM DATA",
+          "httpVersion": 1.1,
+          "httpMethod": "POST",
+          "url": "{{HttpBinUrl}}/anything",
+          "body": {
+            "mode": "formData",
+            "formDataValues": [
+              {
+                "enabled": true,
+                "type": "text",
+                "key": "a",
+                "textValue": "xyz",
+                "contentType": "text/plain"
+              },
+              {
+                "enabled": true,
+                "type": "text",
+                "key": "b",
+                "textValue": "{\"id\":2}",
+                "contentType": "application/json"
+              },
+              {
+                "enabled": true,
+                "type": "text",
+                "key": "myIdSecret",
+                "textValue": "{{MyIdSecret}}",
+                "contentType": "text/plain"
+              },
+              {
+                "enabled": true,
+                "type": "file",
+                "key": "arq",
+                "contentType": "text/plain",
+                "fileSrcPath": "C:\\Users\\Alexandre\\Desktop\\aaa.txt"
+              }
+            ]
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "6497b3c9-bb8e-41d3-afd2-dadae86b0720",
+          "name": "EMPTY",
+          "httpVersion": 1.1,
+          "httpMethod": "POST",
+          "url": "{{HttpBinUrl}}/anything",
+          "body": {
+            "mode": "raw",
+            "contentType": "text/xml",
+            "rawContent": "<Project Sdk=\"Microsoft.NET.Sdk\">\r\n  <PropertyGroup>\r\n    <TargetFramework>net6.0</TargetFramework>\r\n    <ImplicitUsings>enable</ImplicitUsings>\r\n    <Nullable>enable</Nullable>\r\n  </PropertyGroup>\r\n</Project>"
+          }
+        }
+      ]
+    },
+    {
+      "id": "417ae182-3830-4b05-8817-099be124d110",
+      "name": "AUTH",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "id": "980811ba-570e-442c-aa0b-abc34104acb9",
+          "name": "BASIC",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{HttpBinUrl}}/headers",
+          "customAuth": {
+            "mode": "basic",
+            "basicAuthLogin": "{{BasicAuthLogin}}",
+            "basicAuthPassword": "{{BasicAuthPassword}}"
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "90572e8f-c1f2-4335-84c2-d89a6458d7ed",
+          "name": "BEARER",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{HttpBinUrl}}/headers",
+          "customAuth": {
+            "mode": "bearer",
+            "bearerToken": "{{BearerAuthToken}}"
+          }
+        }
+      ]
+    },
+    {
+      "id": "92f4dbf7-1a70-4330-99b8-26cfb2d025cb",
+      "name": "BAD SSL",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "id": "3efe7b07-6560-4d48-96b1-f74cf3470657",
+          "name": "SELF-SIGNED",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "https://self-signed.badssl.com/"
+        }
+      ]
+    },
+    {
+      "id": "f08dd9b9-cb67-4fd0-b57b-c95f7ec40f89",
+      "name": "HTTP/2",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "id": "9c719b13-9beb-4355-911d-7992a4e74d18",
+          "name": "GET TEXT",
+          "httpVersion": 2.0,
+          "httpMethod": "GET",
+          "url": "{{BaseUrlHttps}}/test/get/txt"
+        },
+        {
+          "requestType": "http",
+          "id": "37c6b7ff-5bec-4e66-aadb-1ef815576076",
+          "name": "POST JSON",
+          "httpVersion": 2.0,
+          "httpMethod": "POST",
+          "url": "{{BaseUrlHttps}}/test/post/json",
+          "body": {
+            "mode": "raw",
+            "contentType": "application/json",
+            "rawContent": "{\"name\":\"Alexandre\",\"id\":{{MyId}}}"
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "1d2a4612-997d-47ac-a990-5d871672ef02",
+          "name": "AKAMAI",
+          "httpVersion": 2.0,
+          "httpMethod": "GET",
+          "url": "https://http2.akamai.com/"
+        }
+      ]
+    },
+    {
+      "id": "15105454-cc12-4c9e-8d1e-5aa0ee9bbf2c",
+      "name": "HTTP/3",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "id": "65816d9e-d4a4-4b24-92cd-153875f3cbfa",
+          "name": "GET TEXT",
+          "httpVersion": 3.0,
+          "httpMethod": "GET",
+          "url": "{{BaseUrlHttps}}/test/get/txt"
+        },
+        {
+          "requestType": "http",
+          "id": "399b3912-3b13-4f5d-a36c-c7b7f3c48b7e",
+          "name": "POST JSON",
+          "httpVersion": 3.0,
+          "httpMethod": "POST",
+          "url": "{{BaseUrlHttps}}/test/post/json",
+          "body": {
+            "mode": "raw",
+            "contentType": "application/json",
+            "rawContent": "{\"name\":\"Alexandre\",\"id\":{{MyId}}}"
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "316f4e35-507a-42ff-aa58-d66371dee9fd",
+          "name": "AIOQUIC HTTP/3 TEST PAGE",
+          "httpVersion": 3.0,
+          "httpMethod": "GET",
+          "url": "https://quic.aiortc.org/"
+        }
+      ]
+    },
+    {
+      "id": "af754dfa-673d-45f0-bdf0-e6d9b66e8d9b",
+      "name": "FILES",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "id": "624170b7-9e78-4cc0-a39f-a8c80ad2f866",
+          "name": "TXT",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "https://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-test.txt"
+        },
+        {
+          "requestType": "http",
+          "id": "795a63fd-4eff-444e-9840-558f9b90de5a",
+          "name": "HTML",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "http://www.pudim.com.br/index.html"
+        },
+        {
+          "requestType": "http",
+          "id": "9eb96bc2-833c-4536-9764-b0fecd3c479a",
+          "name": "JPG",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "http://www.pudim.com.br/pudim.jpg"
+        }
+      ]
+    },
+    {
+      "id": "7d6f39f6-367a-497b-9420-96327826f586",
+      "name": "GRAPHQL",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "id": "3cf8a72b-d17e-4a40-9b40-98d4f0223408",
+          "name": "Get all fruits",
+          "httpVersion": 1.1,
+          "httpMethod": "POST",
+          "url": "https://fruits-api.netlify.app/graphql",
+          "body": {
+            "mode": "graphQl",
+            "graphQlValues": {
+              "query": "query allFruits\r\n{\r\n  fruits\r\n  {\r\n    id\r\n    scientific_name\r\n    tree_name\r\n    fruit_name\r\n    family\r\n    origin\r\n    description\r\n    bloom\r\n    maturation_fruit\r\n    life_cycle\r\n    climatic_zone\r\n\tproducing_countries\r\n\t{\r\n\t\tcountry\t\r\n\t}\r\n  }\r\n}"
+            }
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "01b4064f-917b-452c-8710-538e0d489726",
+          "name": "Get fruit Goiaba",
+          "httpVersion": 1.1,
+          "httpMethod": "POST",
+          "url": "https://fruits-api.netlify.app/graphql",
+          "body": {
+            "mode": "graphQl",
+            "graphQlValues": {
+              "query": "query getFruit($id: ID!)\r\n{\r\n  fruit(id: $id)\r\n  {\r\n    id\r\n    fruit_name\r\n    origin\r\n    producing_countries\r\n    {\r\n      country\r\n    }\r\n  }\r\n}",
+              "variables": "{\r\n    \"id\": 17\r\n}"
+            }
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "9725b0d1-0a1a-47ee-aecb-e15214cb8936",
+          "name": "Add fruit Acerola",
+          "httpVersion": 1.1,
+          "httpMethod": "POST",
+          "url": "https://fruits-api.netlify.app/graphql",
+          "body": {
+            "mode": "graphQl",
+            "graphQlValues": {
+              "query": "mutation addFruit($acerolaId: ID!) {\r\n addFruit(\r\n    id: $acerolaId\r\n    scientific_name: \"Malpighia emarginata\"\r\n    tree_name: \"Aceroleira\"\r\n    fruit_name: \"Acerola\"\r\n    family: \"Malpighiaceae\"\r\n    origin: \"América Central, Antilhas, norte da América do Sul\"\r\n    description: \"Sua superfície é lisa ou dividida em três gomos. Possui três sementes no seu interior. O sabor do fruto é levemente ácido e o perfume é semelhante ao da uva.\"\r\n    bloom: \"Todo o ano\"\r\n    maturation_fruit: \"Todo o ano\"\r\n    life_cycle: \"-\"\r\n    climatic_zone: \"Tropical\"\r\n ) {\r\n    id\r\n    scientific_name\r\n    tree_name\r\n    fruit_name\r\n    family\r\n    origin\r\n    description\r\n    bloom\r\n    maturation_fruit\r\n    life_cycle\r\n    climatic_zone\r\n   }\r\n}",
+              "variables": "{\r\n    \"acerolaId\": {{AcerolaId}}\r\n}"
+            }
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "248c6d33-d0a9-40e1-a89f-b30a0a1c5c18",
+          "name": "Get fruit Coco",
+          "httpVersion": 1.1,
+          "httpMethod": "POST",
+          "url": "https://fruits-api.netlify.app/graphql",
+          "body": {
+            "mode": "graphQl",
+            "graphQlValues": {
+              "query": "query getFruit($id: ID!)\r\n{\r\n  fruit(id: $id)\r\n  {\r\n    id\r\n    fruit_name\r\n    origin\r\n    producing_countries\r\n    {\r\n      country\r\n    }\r\n  }\r\n}",
+              "variables": "{\r\n    \"id\": {{CocoId}}\r\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "a69dc6c9-0f7f-44c8-ba24-e018b7399ec8",
+      "name": "Client certificates",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "id": "4aba765c-39c4-43dd-8b43-d9a3e5b085f2",
+          "name": "No cert provided",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BadSslClientCertTestUrl}}"
+        },
+        {
+          "requestType": "http",
+          "id": "50d83605-dce4-4843-9c4b-e39f7c0918c6",
+          "name": "PKCS#12 cert",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BadSslClientCertTestUrl}}",
+          "customAuth": {
+            "mode": "clientCertificate",
+            "clientCertificate": {
+              "type": "pkcs12",
+              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client.p12",
+              "filePassword": "{{BadSslClientCertFilePassword}}"
+            }
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "362336f8-8390-41fd-bd10-865105b34d18",
+          "name": "PEM cert with conjoined unencrypted private key",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BadSslClientCertTestUrl}}",
+          "customAuth": {
+            "mode": "clientCertificate",
+            "clientCertificate": {
+              "type": "pem",
+              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client-certificate-with-unencrypted-private-key.pem"
+            }
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "80ea9140-f75e-47b4-b4a0-3286956f03f0",
+          "name": "PEM cert with conjoined encrypted private key",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BadSslClientCertTestUrl}}",
+          "customAuth": {
+            "mode": "clientCertificate",
+            "clientCertificate": {
+              "type": "pem",
+              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client-certificate-with-encrypted-private-key.pem",
+              "filePassword": "{{BadSslClientCertFilePassword}}"
+            }
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "bfb5164e-b235-492d-a730-35662241a9b9",
+          "name": "PEM cert with separate unencrypted private key",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BadSslClientCertTestUrl}}",
+          "customAuth": {
+            "mode": "clientCertificate",
+            "clientCertificate": {
+              "type": "pem",
+              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client-certificate-without-private-key.pem",
+              "privateKeyFilePath": "{{BadSslClientCertDir}}/badssl.com-client-unencrypted-private-key.key"
+            }
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "0586ee0e-9819-4ca0-8a2b-6ee2a336115d",
+          "name": "PEM cert with separate encrypted private key",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BadSslClientCertTestUrl}}",
+          "customAuth": {
+            "mode": "clientCertificate",
+            "clientCertificate": {
+              "type": "pem",
+              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client-certificate-without-private-key.pem",
+              "privateKeyFilePath": "{{BadSslClientCertDir}}/badssl.com-client-encrypted-private-key.key",
+              "filePassword": "{{BadSslClientCertFilePassword}}"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "requestType": "websocket",
+      "id": "36acf2ca-44ec-4b44-b29b-867b3c493357",
+      "name": "WEBSOCKETS HTTP1",
+      "httpVersion": 1.1,
+      "url": "wss://localhost:5001/test/http1websocket",
+      "clientMessages": [
+        {
+          "id": "228b9fa2-ac66-413f-83d0-aff79b118ce5",
+          "name": "Oi",
+          "contentMode": "raw",
+          "rawContent": "oi",
+          "rawContentSyntax": "other",
+          "disableCompressionForThis": false,
+          "direction": "fromClient",
+          "messageType": "text"
+        },
+        {
+          "id": "62b9bc82-189f-4832-ae8a-b8b1e437ebfb",
+          "name": "Coco",
+          "contentMode": "raw",
+          "rawContent": "{\r\n\t\"fruitId\": {{CocoId}},\r\n\t\"msgType\": \"random\",\r\n\t\"msg\": \"coco\"\r\n}",
+          "rawContentSyntax": "json",
+          "disableCompressionForThis": true,
+          "direction": "fromClient",
+          "messageType": "text"
+        },
+        {
+          "id": "a6b48bd0-30cd-44a5-b645-44c0ee09c5e0",
+          "name": "Acerola",
+          "contentMode": "raw",
+          "rawContent": "{\r\n\t\"fruitId\": {{AcerolaId}},\r\n\t\"msgType\": \"random\",\r\n\t\"msg\": \"acerola\"\r\n}",
+          "rawContentSyntax": "json",
+          "disableCompressionForThis": false,
+          "direction": "fromClient",
+          "messageType": "text"
+        },
+        {
+          "id": "836fd0eb-c5da-4bcd-a18b-de64cae5982d",
+          "name": "Spiderman",
+          "contentMode": "file",
+          "rawContent": "",
+          "rawContentSyntax": "json",
+          "fileSrcPath": "C:\\Projetos\\Pororoca\\tests\\Pororoca.Test.Tests\\TestFiles\\homem_aranha.jpg",
+          "disableCompressionForThis": false,
+          "direction": "fromClient",
+          "messageType": "binary"
+        },
+        {
+          "id": "762941e6-7d0b-4a2d-b854-4d8e43161950",
+          "name": "Bye",
+          "contentMode": "raw",
+          "rawContent": "Adiós",
+          "rawContentSyntax": "other",
+          "disableCompressionForThis": false,
+          "direction": "fromClient",
+          "messageType": "close"
         }
       ]
     }

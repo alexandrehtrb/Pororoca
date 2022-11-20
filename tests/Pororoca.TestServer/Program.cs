@@ -1,76 +1,84 @@
-using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Pororoca.TestServer.Configurations;
 using Serilog;
+using Pororoca.TestServer.Configurations;
+using Microsoft.AspNetCore.HttpLogging;
+using System.Text;
+using Pororoca.TestServer.Endpoints;
 
-static IConfigurationRoot BuildConfiguration() =>
-    new ConfigurationBuilder()
-        .SetBasePath(Directory.GetCurrentDirectory())
-        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-        .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true)
-        .AddEnvironmentVariables()
-        .Build();
+namespace Pororoca.TestServer;
 
-static void SetupSerilogLogger(IConfiguration configuration) =>
-    Serilog.Log.Logger = new LoggerConfiguration()
-        .ReadFrom.Configuration(configuration)
-        .Enrich.FromLogContext()
-        .WriteTo.Console()
-        .CreateBootstrapLogger();
-
-try
+public static class Program
 {
-    var configuration = BuildConfiguration();
-    SetupSerilogLogger(configuration);
-    Log.Information("Starting web host");
-
-    var builder = WebApplication.CreateBuilder(args);
-    builder.Host.UseSerilog();
-    builder.WebHost.ConfigureKestrel((context, options) =>
+    public static int Main(string[] args)
     {
-        options.ListenAnyIP(5000, listenOptions =>
+        var configuration = LoadConfigs();
+        SetupSerilog(configuration);
+
+        try
         {
-            listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
-        });
-        options.ListenAnyIP(5001, listenOptions =>
+            Log.Information("Starting web host");
+            BuildApp(args).Run();
+            return 0;
+        }
+        catch (Exception ex)
         {
-            listenOptions.Protocols = HttpProtocols.Http1AndHttp2AndHttp3;
-            listenOptions.UseHttps();
-        });
-    });
-
-    // Add services to the container.
-    builder.Services.AddSerilogLogger();
-    builder.Services.AddCustomControllers()
-                    .AddDefaultJsonOptions();
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
-
-    var app = builder.Build();
-
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
+            Log.Fatal(ex, "Host terminated unexpectedly");
+            return 1;
+        }
+        finally
+        {
+            Log.CloseAndFlush();
+        }
     }
 
-    //app.UseHttpsRedirection();
+    private static IConfiguration LoadConfigs() =>
+        new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables()
+            .Build();
 
-    app.UseAuthorization();
+    private static void SetupSerilog(IConfiguration configuration) =>
+        Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(configuration)
+            .Enrich.FromLogContext()
+            .Enrich.WithProperty("ApplicationName", typeof(Program).Assembly.GetName().Name)
+            .WriteTo.Console()
+            .CreateLogger();
 
-    app.MapControllers();
+    private static WebApplication BuildApp(string[] args)
+    {
+        var webAppBuilder = WebApplication.CreateBuilder(args);
 
-    app.Run();
+        webAppBuilder.Host.ConfigureHost();
+        webAppBuilder.Services.ConfigureServices();
 
-    return 0;
-}
-catch (Exception ex)
-{
-    Log.Fatal(ex, "Host terminated unexpectedly");
-    return 1;
-}
-finally
-{
-    Log.CloseAndFlush();
+        var webApp = webAppBuilder.Build();
+        webApp.ConfigureApp();
+
+        return webApp;
+    }
+
+    private static void ConfigureServices(this IServiceCollection services)
+    {
+        services.ConfigureJsonOptions();
+        services.AddSerilogLogger();
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
+    }
+
+    private static void ConfigureHost(this ConfigureHostBuilder builder) =>
+        builder.UseSerilog();
+
+    private static IApplicationBuilder ConfigureApp(this WebApplication app) =>
+        app.MapTestEndpoints()
+           .UseSwagger()
+           .UseSwaggerUI()
+           .UseDefaultFiles()
+           .UseStaticFiles()
+           .UseWebSockets(new()
+           {
+                KeepAliveInterval = TimeSpan.FromMinutes(2)
+           });
 }

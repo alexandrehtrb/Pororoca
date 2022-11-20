@@ -11,7 +11,7 @@ public class EditableTextBlockView : UserControl
 
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
-    private void OnKeyDownHandler(object sender, KeyEventArgs e)
+    public void OnKeyDownHandler(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Return)
         {

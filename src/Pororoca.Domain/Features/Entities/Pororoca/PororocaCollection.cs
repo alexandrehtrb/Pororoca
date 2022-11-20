@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.VariableResolution;
 using static Pororoca.Domain.Features.VariableResolution.IPororocaVariableResolver;
 
@@ -19,16 +21,30 @@ public sealed class PororocaCollection : IPororocaVariableResolver, ICloneable
     public DateTimeOffset CreatedAt { get; init; }
 
     [JsonInclude]
+    public IReadOnlyList<PororocaVariable> Variables { get; private set; }
+
+    [JsonInclude]
+    public IReadOnlyList<PororocaEnvironment> Environments { get; private set; }
+
+    [JsonInclude]
     public IReadOnlyList<PororocaCollectionFolder> Folders { get; private set; }
 
     [JsonInclude]
     public IReadOnlyList<PororocaRequest> Requests { get; private set; }
 
-    [JsonInclude]
-    public IReadOnlyList<PororocaVariable> Variables { get; private set; }
+    [JsonIgnore] // JSON IGNORE
+    public IReadOnlyList<PororocaHttpRequest> HttpRequests =>
+        Requests.Where(r => r is PororocaHttpRequest)
+                .Cast<PororocaHttpRequest>()
+                .ToList()
+                .AsReadOnly();
 
-    [JsonInclude]
-    public IReadOnlyList<PororocaEnvironment> Environments { get; private set; }
+    [JsonIgnore] // JSON IGNORE
+    public IReadOnlyList<PororocaWebSocketConnection> WebSocketConnections =>
+        Requests.Where(r => r is PororocaWebSocketConnection)
+                .Cast<PororocaWebSocketConnection>()
+                .ToList()
+                .AsReadOnly();
 
 #nullable disable warnings
     public PororocaCollection()

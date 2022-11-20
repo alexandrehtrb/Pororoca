@@ -12,3 +12,15 @@ Leaf icon:
     Source: https://fontawesome.com/
     Licence: CC BY 4.0 License (https://fontawesome.com/license/free)
     Changes: Icons changed from blue to white.
+Mail/message icon:
+    Source: https://freesvg.org/mail-icon-white-on-grey
+    Licence: Public domain.
+    Changes: Removed grey background.
+HTTP icon:
+    Source: https://thenounproject.com/icon/http-4112424/
+    Licence: Creative commons
+    Changes: Colour changed to white.
+WebSocket icon:
+    Source: https://freebiesupply.com/logos/websocket-logo/
+    Licence: Unknown, but free
+    Changes: Colour changed to white.

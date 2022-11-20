@@ -1,3 +1,5 @@
+using Pororoca.Domain.Features.Entities.Pororoca;
+
 namespace Pororoca.Domain.Features.VariableResolution;
 
 public interface IPororocaVariableResolver
@@ -15,4 +17,15 @@ public interface IPororocaVariableResolver
     // If the variable key is not declared or the variable is not enabled, then the raw key should be used as is.
 
     string ReplaceTemplates(string? strToReplaceTemplatedVariables);
+
+    public IDictionary<string, string> ResolveKeyValueParams(IEnumerable<PororocaKeyValueParam>? kvParams) =>
+        kvParams == null ?
+        new() :
+        kvParams.Where(h => h.Enabled)
+                .Select(h => new KeyValuePair<string, string>(
+                    ReplaceTemplates(h.Key),
+                    ReplaceTemplates(h.Value)
+                ))
+                .DistinctBy(h => h.Key) // Avoid duplicated pairs by key
+                .ToDictionary(h => h.Key, h => h.Value);
 }

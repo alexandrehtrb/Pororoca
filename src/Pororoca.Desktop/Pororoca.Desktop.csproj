@@ -6,13 +6,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <DebugType>embedded</DebugType>
+    <!--
+      line below will include INSTALLED_ON_WINDOWS preprocessor directive
+      when "-p:PublishForInstallOnWindows" is specified in dotnet build, run or publish
+    -->
+    <DefineConstants Condition=" '$(PublishForInstallOnWindows)' == 'true' ">$(DefineConstants);INSTALLED_ON_WINDOWS</DefineConstants>
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
     <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
     <PublishReadyToRun>True</PublishReadyToRun>
     <ApplicationIcon>Assets/pororoca_icon.ico</ApplicationIcon>
-    <Version>1.5.0</Version>
-    <FileVersion>1.5.0</FileVersion>
-    <AssemblyVersion>1.5.0</AssemblyVersion>
+    <Version>1.6.0</Version>
+    <FileVersion>$(Version)</FileVersion>
+    <AssemblyVersion>$(Version)</AssemblyVersion>
     <Copyright>AlexandreHTRB</Copyright>
     <!-- Licence also available at https://github.com/alexandrehtrb/Pororoca/LICENCE.md -->
   </PropertyGroup>
@@ -33,12 +38,18 @@
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.13" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.13" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.13" />
+    <PackageReference Include="Avalonia" Version="0.10.18" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.18" />
     <!-- Without the package below, the app does not compile in Release configuration -->
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.13" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.18" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.13" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.18" />
+
+    <PackageReference Include="Avalonia.AvaloniaEdit" Version="0.10.12.2" />
+    <PackageReference Include="AvaloniaEdit.TextMate" Version="0.10.12.2" />
+    <PackageReference Include="TextMateSharp.Grammars" Version="1.0.49" />
+
+    <PackageReference Include="MessageBox.Avalonia" Version="2.1.0" />
   </ItemGroup>
 </Project>

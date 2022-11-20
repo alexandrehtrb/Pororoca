@@ -9,6 +9,7 @@
         <FluentTheme Mode="Dark"/>
         <StyleInclude Source="/Styles/Styles.xaml" />
         <StyleInclude Source="/Styles/SideBar.xaml" />
+        <StyleInclude Source="avares://AvaloniaEdit/AvaloniaEdit.xaml" />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
 
         <Style Selector="TreeView TextBlock">
@@ -70,6 +71,14 @@
             <Setter Property="Button.Foreground" Value="#E3A068"/>
             <Setter Property="BorderThickness" Value="2" />
             <Setter Property="BorderBrush" Value = "#E3A068" />
+        </Style>
+
+        <Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#183e67" />
+        </Style>
+
+        <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#0F263F" />
         </Style>
     </Application.Styles>
 </Application>

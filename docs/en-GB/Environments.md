@@ -8,17 +8,17 @@ This example of a set of environments is quite common in major systems and allow
 
 Environments are not obligatory to make requests. However, they can be very helpful for management and for testing.
 
+![EnvironmentScreen](./imgs/environment.png)
+
 ## Creating
 
-To create an environment, expand the collection in the left panel, then right-click on the "Environments" and select "New environment". Your new environment will be inside the "Environments" item. You can create as many environments as you want.
+To create an environment, expand the collection in the left panel, then right-click on the "Environments" and select "New environment". You can also do that in the collection screen.
 
-![NewEnvironment](./imgs/new_environment.jpg)
+Your new environment will be inside the "Environments" item. You can create as many environments as you want.
 
 ## Renaming
 
-To rename your environment, click on the environment in the left panel, then, on the main screen, click on the pencil icon, at the top right. This will enable the environment name for edition. After changing, click on the check icon to apply the new name.
-
-![RenameEnvironment](./imgs/rename_environment.jpg)
+To rename your environment, click on the pencil icon, at the top right. This will enable the environment name for edition.
 
 ## Import and export
 
@@ -27,8 +27,6 @@ Environments can be imported and exported from / to files. Check on the [Export 
 ## Enabling the environment
 
 Only one environment can be active in a collection, and only when an environment is active, its variables will be available to be applied. To set an environment as active, right-click on the environment in the left panel and select "Set as current environment".
-
-![SetAsCurrentEnvironment](./imgs/set_as_current_environment.jpg)
 
 ## Comparison with Postman environments
 

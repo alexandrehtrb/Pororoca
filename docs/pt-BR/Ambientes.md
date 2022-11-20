@@ -8,17 +8,17 @@ Esse exemplo de conjunto de ambientes é comum em sistemas importantes e permite
 
 Ambientes não são obrigatórios para fazer requisições. Porém, podem ajudar muito no gerenciamento e em testes.
 
+![TelaDeAmbiente](./imgs/environment.png)
+
 ## Criando
 
-Para criar um ambiente, expanda a coleção no painel esquerdo e clique com o botão direito do mouse em "Ambientes", depois em "Novo ambiente". Seu novo ambiente estará dentro de "Ambientes". Você pode criar quantos ambientes quiser.
+Para criar um ambiente, expanda a coleção no painel esquerdo e clique com o botão direito do mouse em "Ambientes", depois em "Novo ambiente". Você também pode fazer isso na tela de coleção.
 
-![NovoAmbiente](./imgs/new_environment.jpg)
+Seu novo ambiente estará dentro de "Ambientes". Você pode criar quantos ambientes quiser.
 
 ## Renomeando
 
-Para renomear seu ambiente, clique no ambiente no painel esquerdo, depois, na tela principal, clique no botão com um lápis, no canto superior direito. Isso habilitará para edição o nome do ambiente. Depois de mudar, clique no ícone de check para aplicar o novo nome.
-
-![RenomearAmbiente](./imgs/rename_environment.jpg)
+Para renomear seu ambiente, clique no botão com um lápis, no canto superior direito. Isso habilitará para edição o nome do ambiente.
 
 ## Importar e exportar
 
@@ -27,8 +27,6 @@ Ambientes podem ser exportados e importados para / de arquivos. Confira na pági
 ## Escolhendo um ambiente
 
 Apenas um ambiente pode estar ativo em uma coleção e apenas quando o ambiente estiver ativo suas variáveis estarão disponíveis para serem aplicadas. Para escolher um ambiente, clique com o botão direito do mouse nele no painel esquerdo e selecione "Definir como ambiente atual".
-
-![DefinirAmbienteAtual](./imgs/set_as_current_environment.jpg)
 
 ## Comparação com ambientes do Postman
 

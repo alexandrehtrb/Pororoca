@@ -73,10 +73,10 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
     public void AddNewEnvironment()
     {
         PororocaEnvironment newEnv = new(Localizer.Instance["Environment/NewEnvironment"]);
-        AddEnvironment(newEnv);
+        AddEnvironment(newEnv, showItemInScreen: true);
     }
 
-    private void AddEnvironment(PororocaEnvironment envToAdd)
+    private void AddEnvironment(PororocaEnvironment envToAdd, bool showItemInScreen = false)
     {
         EnvironmentViewModel envToAddVm = new(this, envToAdd, SetEnvironmentAsCurrent);
         // When adding an environment, set the environment
@@ -87,6 +87,7 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
         ((CollectionViewModel)Parent).IsExpanded = true;
         IsExpanded = true;
         RefreshSubItemsAvailableMovements();
+        SetAsItemInFocus(envToAddVm, showItemInScreen);
     }
 
     protected override void CopyThis() =>

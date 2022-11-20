@@ -1,8 +1,12 @@
 using System.Text;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.ImportCollection;
 using Pororoca.Domain.Features.Requester;
 using Pororoca.Domain.Features.TranslateRequest;
+using Pororoca.Domain.Features.TranslateRequest.Http;
+using Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection;
 using Pororoca.Infrastructure.Features.Requester;
 
 namespace Pororoca.Test;
@@ -93,11 +97,11 @@ public sealed class PororocaTest
         }
     }
 
-    public PororocaRequest? FindRequestInCollection(Func<PororocaRequest, bool> criteria)
+    public PororocaHttpRequest? FindHttpRequestInCollection(Func<PororocaHttpRequest, bool> criteria)
     {
-        static PororocaRequest? FindRequestInFolder(PororocaCollectionFolder folder, Func<PororocaRequest, bool> criteria)
+        static PororocaHttpRequest? FindHttpRequestInFolder(PororocaCollectionFolder folder, Func<PororocaHttpRequest, bool> criteria)
         {
-            var reqInFolder = folder.Requests.FirstOrDefault(criteria);
+            var reqInFolder = folder.HttpRequests.FirstOrDefault(criteria);
             if (reqInFolder != null)
             {
                 return reqInFolder;
@@ -106,7 +110,7 @@ public sealed class PororocaTest
             {
                 foreach (var subFolder in folder.Folders)
                 {
-                    var reqInSubfolder = FindRequestInFolder(subFolder, criteria);
+                    var reqInSubfolder = FindHttpRequestInFolder(subFolder, criteria);
                     if (reqInSubfolder != null)
                     {
                         return reqInSubfolder;
@@ -116,7 +120,7 @@ public sealed class PororocaTest
             }
         }
 
-        var reqInCol = Collection.Requests.FirstOrDefault(criteria);
+        var reqInCol = Collection.HttpRequests.FirstOrDefault(criteria);
         if (reqInCol != null)
         {
             return reqInCol;
@@ -125,7 +129,7 @@ public sealed class PororocaTest
         {
             foreach (var folder in Collection.Folders)
             {
-                var reqInFolder = FindRequestInFolder(folder, criteria);
+                var reqInFolder = FindHttpRequestInFolder(folder, criteria);
                 if (reqInFolder != null)
                 {
                     return reqInFolder;
@@ -135,12 +139,54 @@ public sealed class PororocaTest
         }
     }
 
-    public Task<PororocaResponse> SendRequestAsync(string requestName, CancellationToken cancellationToken = default)
+    public PororocaWebSocketConnection? FindWebSocketInCollection(Func<PororocaWebSocketConnection, bool> criteria)
     {
-        var req = FindRequestInCollection(r => r.Name == requestName);
+        static PororocaWebSocketConnection? FindWebSocketInFolder(PororocaCollectionFolder folder, Func<PororocaWebSocketConnection, bool> criteria)
+        {
+            var wsInFolder = folder.WebSocketConnections.FirstOrDefault(criteria);
+            if (wsInFolder != null)
+            {
+                return wsInFolder;
+            }
+            else
+            {
+                foreach (var subFolder in folder.Folders)
+                {
+                    var wsInSubfolder = FindWebSocketInFolder(subFolder, criteria);
+                    if (wsInSubfolder != null)
+                    {
+                        return wsInSubfolder;
+                    }
+                }
+                return null;
+            }
+        }
+
+        var wsInCol = Collection.WebSocketConnections.FirstOrDefault(criteria);
+        if (wsInCol != null)
+        {
+            return wsInCol;
+        }
+        else
+        {
+            foreach (var folder in Collection.Folders)
+            {
+                var wsInFolder = FindWebSocketInFolder(folder, criteria);
+                if (wsInFolder != null)
+                {
+                    return wsInFolder;
+                }
+            }
+            return null;
+        }
+    }
+
+    public Task<PororocaHttpResponse> SendHttpRequestAsync(string requestName, CancellationToken cancellationToken = default)
+    {
+        var req = FindHttpRequestInCollection(r => r.Name == requestName);
         if (req != null)
         {
-            return SendRequestAsync(req, cancellationToken);
+            return SendHttpRequestAsync(req, cancellationToken);
         }
         else
         {
@@ -148,12 +194,12 @@ public sealed class PororocaTest
         }
     }
 
-    public Task<PororocaResponse> SendRequestAsync(Guid requestId, CancellationToken cancellationToken = default)
+    public Task<PororocaHttpResponse> SendHttpRequestAsync(Guid requestId, CancellationToken cancellationToken = default)
     {
-        var req = FindRequestInCollection(r => r.Id == requestId);
+        var req = FindHttpRequestInCollection(r => r.Id == requestId);
         if (req != null)
         {
-            return SendRequestAsync(req, cancellationToken);
+            return SendHttpRequestAsync(req, cancellationToken);
         }
         else
         {
@@ -161,11 +207,11 @@ public sealed class PororocaTest
         }
     }
 
-    public Task<PororocaResponse> SendRequestAsync(PororocaRequest req, CancellationToken cancellationToken = default)
+    public Task<PororocaHttpResponse> SendHttpRequestAsync(PororocaHttpRequest req, CancellationToken cancellationToken = default)
     {
-        if (!PororocaRequestTranslator.IsValidRequest(Collection,
-                                                      req,
-                                                      out string? errorCode))
+        if (!PororocaHttpRequestValidator.IsValidRequest(Collection,
+                                                         req,
+                                                         out string? errorCode))
         {
             throw new Exception($"Error: PororocaRequest could not be sent. Cause: '{errorCode}'.");
         }
@@ -175,4 +221,66 @@ public sealed class PororocaTest
             return requester.RequestAsync(Collection, req, !ShouldCheckTlsCertificate, cancellationToken);
         }
     }
+
+    public Task<PororocaTestWebSocketConnector> ConnectWebSocketAsync(string wsName,
+                                                                      OnWebSocketConnectionChanged? onConnectionChanged = null,
+                                                                      OnWebSocketMessageSending? onMessageSending = null,
+                                                                      CancellationToken cancellationToken = default)
+    {
+        var ws = FindWebSocketInCollection(x => x.Name == wsName);
+        if (ws != null)
+        {
+            return ConnectWebSocketAsync(ws, onConnectionChanged, onMessageSending, cancellationToken);
+        }
+        else
+        {
+            throw new Exception($"Error: WebSocket with the name '{wsName}' was not found.");
+        }
+    }
+
+    public Task<PororocaTestWebSocketConnector> ConnectWebSocketAsync(Guid wsId,
+                                                                      OnWebSocketConnectionChanged? onConnectionChanged = null,
+                                                                      OnWebSocketMessageSending? onMessageSending = null,
+                                                                      CancellationToken cancellationToken = default)
+    {
+        var ws = FindWebSocketInCollection(x => x.Id == wsId);
+        if (ws != null)
+        {
+            return ConnectWebSocketAsync(ws, onConnectionChanged, onMessageSending, cancellationToken);
+        }
+        else
+        {
+            throw new Exception($"Error: WebSocket with the ID '{wsId}' was not found.");
+        }
+    }
+
+    public async Task<PororocaTestWebSocketConnector> ConnectWebSocketAsync(PororocaWebSocketConnection ws,
+                                                                            OnWebSocketConnectionChanged? onConnectionChanged = null,
+                                                                            OnWebSocketMessageSending? onMessageSending = null,
+                                                                            CancellationToken cancellationToken = default)
+    {
+        if (!PororocaWebSocketConnectionValidator.IsValidConnection(Collection, ws, out var resolvedUri, out string? validationErrorCode))
+        {
+            throw new Exception($"Error: Could not connect to WebSocket. Cause: '{validationErrorCode}'.");
+        }
+        else if (!PororocaWebSocketConnectionTranslator.TryTranslateConnection(Collection, PororocaClientCertificatesProvider.Singleton, ws, !ShouldCheckTlsCertificate, out var wsCli, out string? translationErrorCode))
+        {
+            throw new Exception($"Error: Could not connect to WebSocket. Cause: '{translationErrorCode}'.");
+        }
+        else
+        {
+            PororocaTestWebSocketConnector connector = new(Collection, ws, onConnectionChanged, onMessageSending);
+            await connector.ConnectAsync(wsCli!, resolvedUri!, cancellationToken);
+            if (connector.ConnectionException is not null)
+            {
+                throw connector.ConnectionException;
+            }
+            else
+            {
+                return connector;
+            }
+        }
+    }
+
+
 }

@@ -1,11 +1,46 @@
 # Changelog
 
+* [1.6.0](#160-2022-11-20)
 * [1.5.0](#150-2022-09-20)
 * [1.4.0](#140-2022-07-03)
 * [1.3.0](#130-2022-05-15)
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [1.6.0](https://github.com/alexandrehtrb/Pororoca/tree/1.6.0) (2022-11-20)
+
+### Breaking Changes
+
+* Currently dropping support for `arm` and `arm64` releases of Pororoca Desktop. The version 1.5.0 will remain available for download and it supports `arm` architectures. The `Pororoca.Test` package does not have such restraint and can run on these machines.
+
+### Features
+
+* Adds support for WebSockets (only HTTP/1.1 for now!)
+* Adds syntax highlighting for text editors!
+  * Thanks for the [Avalonia](https://github.com/AvaloniaUI) team for the [Avalonia.Edit](https://github.com/AvaloniaUI/AvaloniaEdit) project!
+  * This adds support for `Ctrl+F` search in text editors! Issue [#10](https://github.com/alexandrehtrb/Pororoca/issues/10#issue-1369086969)
+  * This allows for zooming the text editor with the mouse scroll wheel!
+* Generates Windows installer releases for Pororoca!
+  * Thanks for [@Drizin](https://github.com/Drizin) for the [NsisMultiUser](https://github.com/Drizin/NsisMultiUser) project!
+  * Pororoca installed on Windows will save collections and user preferences on `AppData\Roaming\Pororoca` folder.
+* Files for HTTP request bodies are now loaded using async operating system APIs
+* Shows check for updates reminder dialog, once every two months.
+
+### Bug Fixes
+
+* When a request, folder, environment is created, the main screen now is switched to it.
+* The HTTP request screen splitter resizing is no longer bugged (thanks to the new text editor!)
+* When clicking the `Send` button in HTTP request, the screen does not freeze anymore.
+
+### Others
+
+* Adds VS Code tasks for debugging Pororoca Desktop and TestServer.
+* Sets PororocaUserData folder at project root when debugging, avoiding crash.
+* Raised .NET SDK version to 6.0.403.
+  * `global.json` file is no longer necessary for running tests on Windows 7.
+* Raised Avalonia version to 0.10.18.
+* Simplified docs and replaced .jpg images for .png.
 
 ## [1.5.0](https://github.com/alexandrehtrb/Pororoca/tree/1.5.0) (2022-09-20)
 

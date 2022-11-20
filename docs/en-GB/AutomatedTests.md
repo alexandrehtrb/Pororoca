@@ -32,7 +32,7 @@ After that, in the created test project, the .csproj file must be edited to incl
   </ItemGroup>
   <ItemGroup>
     <!-- The line below adds Pororoca.Test package to the project -->
-    <PackageReference Include="Pororoca.Test" Version="1.5.0" />
+    <PackageReference Include="Pororoca.Test" Version="1.6.0" />
     ...
   </ItemGroup>
 
@@ -80,7 +80,34 @@ There are methods in the PororocaTest class to set values of variables during th
 pororocaTest.SetCollectionVariable("MyAuthenticationToken", "token_auth");
 ```
 
-The test project [Pororoca.Test.Tests](https://github.com/alexandrehtrb/Pororoca/tree/master/tests/Pororoca.Test.Tests) in this project can guide you - it shows how to use the `Pororoca.Test` project, how to load the collection file and how to set variables.
+The test project [Pororoca.Test.Tests](https://github.com/alexandrehtrb/Pororoca/tree/master/tests/Pororoca.Test.Tests) can guide you - it shows how to use the `Pororoca.Test` package, how to load the collection file and how to set variables.
+
+## WebSocket tests
+
+You can also make Pororoca tests for WebSockets. The code below shows an example:
+
+```cs
+[Fact]
+public async Task Should_connect_and_disconnect_with_client_closing_message_successfully()
+{
+    // GIVEN AND WHEN
+    var ws = await this.pororocaTest.ConnectWebSocketAsync("WebSocket HTTP1");
+    // THEN
+    Assert.Equal(PororocaWebSocketConnectorState.Connected, ws.State);
+
+    // WHEN
+    var waitForSend = Task.Delay(TimeSpan.FromSeconds(1));
+    var sending = ws.SendMessageAsync("Bye").AsTask();
+    await Task.WhenAll(waitForSend, sending);  
+    // THEN
+    Assert.Null(ws.ConnectionException);
+    Assert.Equal(PororocaWebSocketConnectorState.Disconnected, ws.State);
+
+    var msg = Assert.IsType<PororocaWebSocketClientMessageToSend>(ws.ExchangedMessages[0]);
+    Assert.Equal(PororocaWebSocketMessageType.Close, msg.MessageType);
+    Assert.Equal("Adiós", msg.Text);
+}
+```
 
 ## Running the tests
 

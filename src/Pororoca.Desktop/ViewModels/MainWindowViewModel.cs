@@ -1,6 +1,14 @@
+using System.Diagnostics;
 using System.Reactive;
 using System.Text;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
+using Avalonia.Threading;
+using MessageBox.Avalonia;
+using MessageBox.Avalonia.DTO;
+using MessageBox.Avalonia.Models;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.UserData;
 using Pororoca.Desktop.Views;
@@ -86,17 +94,43 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         set => this.RaiseAndSetIfChanged(ref this.collectionFolderViewDataCtxField, value);
     }
 
-    private bool isRequestViewVisibleField = false;
-    public bool IsRequestViewVisible
+    private bool isHttpRequestViewVisibleField = false;
+    public bool IsHttpRequestViewVisible
     {
-        get => this.isRequestViewVisibleField;
-        set => this.RaiseAndSetIfChanged(ref this.isRequestViewVisibleField, value);
+        get => this.isHttpRequestViewVisibleField;
+        set => this.RaiseAndSetIfChanged(ref this.isHttpRequestViewVisibleField, value);
     }
-    private RequestViewModel? requestViewDataCtxField = null;
-    public RequestViewModel? RequestViewDataCtx
+    private HttpRequestViewModel? httpRequestViewDataCtxField = null;
+    public HttpRequestViewModel? HttpRequestViewDataCtx
     {
-        get => this.requestViewDataCtxField;
-        set => this.RaiseAndSetIfChanged(ref this.requestViewDataCtxField, value);
+        get => this.httpRequestViewDataCtxField;
+        set => this.RaiseAndSetIfChanged(ref this.httpRequestViewDataCtxField, value);
+    }
+
+    private bool isWebSocketConnectionViewVisibleField = false;
+    public bool IsWebSocketConnectionViewVisible
+    {
+        get => this.isWebSocketConnectionViewVisibleField;
+        set => this.RaiseAndSetIfChanged(ref this.isWebSocketConnectionViewVisibleField, value);
+    }
+    private WebSocketConnectionViewModel? webSocketConnectionViewDataCtxField = null;
+    public WebSocketConnectionViewModel? WebSocketConnectionViewDataCtx
+    {
+        get => this.webSocketConnectionViewDataCtxField;
+        set => this.RaiseAndSetIfChanged(ref this.webSocketConnectionViewDataCtxField, value);
+    }
+
+    private bool isWebSocketClientMessageViewVisibleField = false;
+    public bool IsWebSocketClientMessageViewVisible
+    {
+        get => this.isWebSocketClientMessageViewVisibleField;
+        set => this.RaiseAndSetIfChanged(ref this.isWebSocketClientMessageViewVisibleField, value);
+    }
+    private WebSocketClientMessageViewModel? webSocketRequestMessageViewDataCtxField = null;
+    public WebSocketClientMessageViewModel? WebSocketClientMessageViewDataCtx
+    {
+        get => this.webSocketRequestMessageViewDataCtxField;
+        set => this.RaiseAndSetIfChanged(ref this.webSocketRequestMessageViewDataCtxField, value);
     }
 
     #endregion
@@ -141,6 +175,12 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #endregion
 
+    #region USER PREFERENCES
+
+    private UserPreferences? UserPrefs { get; set; }
+
+    #endregion
+
     public MainWindowViewModel(Func<bool>? isOperatingSystemMacOsx = null)
     {
         #region OTHERS
@@ -176,11 +216,14 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
             CollectionViewDataCtx = colVm;
             if (!IsCollectionViewVisible)
             {
+                // TODO: Use a tuple with (enum, ref bool variable) instead of many bools
                 IsCollectionViewVisible = true;
                 IsCollectionVariablesViewVisible = false;
                 IsEnvironmentViewVisible = false;
                 IsCollectionFolderViewVisible = false;
-                IsRequestViewVisible = false;
+                IsHttpRequestViewVisible = false;
+                IsWebSocketConnectionViewVisible = false;
+                IsWebSocketClientMessageViewVisible = false;
             }
         }
         else if (selectedItem is CollectionVariablesViewModel colVarsVm)
@@ -192,7 +235,9 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
                 IsCollectionVariablesViewVisible = true;
                 IsEnvironmentViewVisible = false;
                 IsCollectionFolderViewVisible = false;
-                IsRequestViewVisible = false;
+                IsHttpRequestViewVisible = false;
+                IsWebSocketConnectionViewVisible = false;
+                IsWebSocketClientMessageViewVisible = false;
             }
         }
         else if (selectedItem is EnvironmentViewModel envVm)
@@ -204,7 +249,9 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
                 IsCollectionVariablesViewVisible = false;
                 IsEnvironmentViewVisible = true;
                 IsCollectionFolderViewVisible = false;
-                IsRequestViewVisible = false;
+                IsHttpRequestViewVisible = false;
+                IsWebSocketConnectionViewVisible = false;
+                IsWebSocketClientMessageViewVisible = false;
             }
         }
         else if (selectedItem is CollectionFolderViewModel folderVm)
@@ -216,19 +263,51 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
                 IsCollectionVariablesViewVisible = false;
                 IsEnvironmentViewVisible = false;
                 IsCollectionFolderViewVisible = true;
-                IsRequestViewVisible = false;
+                IsHttpRequestViewVisible = false;
+                IsWebSocketConnectionViewVisible = false;
+                IsWebSocketClientMessageViewVisible = false;
             }
         }
-        else if (selectedItem is RequestViewModel reqVm)
+        else if (selectedItem is HttpRequestViewModel reqVm)
         {
-            RequestViewDataCtx = reqVm;
-            if (!IsRequestViewVisible)
+            HttpRequestViewDataCtx = reqVm;
+            if (!IsHttpRequestViewVisible)
             {
                 IsCollectionViewVisible = false;
                 IsCollectionVariablesViewVisible = false;
                 IsEnvironmentViewVisible = false;
                 IsCollectionFolderViewVisible = false;
-                IsRequestViewVisible = true;
+                IsHttpRequestViewVisible = true;
+                IsWebSocketConnectionViewVisible = false;
+                IsWebSocketClientMessageViewVisible = false;
+            }
+        }
+        else if (selectedItem is WebSocketConnectionViewModel wsVm)
+        {
+            WebSocketConnectionViewDataCtx = wsVm;
+            if (!IsWebSocketConnectionViewVisible)
+            {
+                IsCollectionViewVisible = false;
+                IsCollectionVariablesViewVisible = false;
+                IsEnvironmentViewVisible = false;
+                IsCollectionFolderViewVisible = false;
+                IsHttpRequestViewVisible = false;
+                IsWebSocketConnectionViewVisible = true;
+                IsWebSocketClientMessageViewVisible = false;
+            }
+        }
+        else if (selectedItem is WebSocketClientMessageViewModel wsReqVm)
+        {
+            WebSocketClientMessageViewDataCtx = wsReqVm;
+            if (!IsWebSocketClientMessageViewVisible)
+            {
+                IsCollectionViewVisible = false;
+                IsCollectionVariablesViewVisible = false;
+                IsEnvironmentViewVisible = false;
+                IsCollectionFolderViewVisible = false;
+                IsHttpRequestViewVisible = false;
+                IsWebSocketConnectionViewVisible = false;
+                IsWebSocketClientMessageViewVisible = true;
             }
         }
     }
@@ -243,14 +322,18 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     private void AddNewCollection()
     {
         PororocaCollection newCol = new(Localizer.Instance["Collection/NewCollection"]);
-        AddCollection(newCol);
+        AddCollection(newCol, showItemInScreen: true);
     }
 
-    private void AddCollection(PororocaCollection col)
+    private void AddCollection(PororocaCollection col, bool showItemInScreen = false)
     {
         CollectionViewModel colVm = new(this, col, DuplicateCollection);
         CollectionsGroupViewDataCtx.Items.Add(colVm);
         CollectionsGroupViewDataCtx.RefreshSubItemsAvailableMovements();
+        if (showItemInScreen)
+        {
+            CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = colVm;
+        }
     }
 
     private void DuplicateCollection(CollectionViewModel colVm)
@@ -275,7 +358,9 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         IsCollectionVariablesViewVisible = false;
         IsEnvironmentViewVisible = false;
         IsCollectionFolderViewVisible = false;
-        IsRequestViewVisible = false;
+        IsHttpRequestViewVisible = false;
+        IsWebSocketConnectionViewVisible = false;
+        IsWebSocketClientMessageViewVisible = false;
     }
 
     private async Task ImportCollectionsAsync()
@@ -358,20 +443,25 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #region USER DATA
 
+    private static UserPreferences GetDefaultUserPrefs() =>
+        new(Language.EnGb, DateTime.Now);
+
     private void LoadUserData()
     {
-        var userPrefs = UserDataManager.LoadUserPreferences();
+        UserPrefs = UserDataManager.LoadUserPreferences() ?? GetDefaultUserPrefs();
         var cols = UserDataManager.LoadUserCollections();
 
-        if (userPrefs != null)
+        SelectLanguage(UserPrefs.GetLanguage());
+        if (UserPrefs.NeedsToShowUpdateReminder())
         {
-            var lang = LanguageExtensions.GetLanguageFromLCID(userPrefs.Lang);
-            SelectLanguage(lang);
+            ShowUpdateReminder();
+            UserPrefs.SetUpdateReminderLastShownDateAsToday();
         }
-        else
+        else if (UserPrefs.HasUpdateReminderLastShownDate() == false)
         {
-            SelectLanguage(Language.EnGb);
+            UserPrefs.SetUpdateReminderLastShownDateAsToday();
         }
+
         foreach (var col in cols)
         {
             AddCollection(col);
@@ -380,14 +470,62 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     public void SaveUserData()
     {
-        UserPreferences userPrefs = new() { Lang = Localizer.Instance.Language.GetLanguageLCID() };
+        UserPrefs!.SetLanguage(Localizer.Instance.Language);
+
         var cols = CollectionsGroupViewDataCtx
                                     .Items
                                     .Select(cvm => cvm.ToCollection())
                                     .DistinctBy(c => c.Id)
                                     .ToArray();
 
-        UserDataManager.SaveUserData(userPrefs, cols).GetAwaiter().GetResult();
+        UserDataManager.SaveUserData(UserPrefs, cols).GetAwaiter().GetResult();
+    }
+
+    private void ShowUpdateReminder()
+    {
+        var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
+        Bitmap bitmap = new(assets!.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
+
+        var msgbox = MessageBoxManager.GetMessageBoxCustomWindow(
+            new MessageBoxCustomParamsWithImage()
+            {
+                ContentTitle = Localizer.Instance["UpdateReminder/DialogTitle"],
+                ContentMessage = Localizer.Instance["UpdateReminder/DialogMessage"],
+                Icon = bitmap,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                WindowIcon = new(bitmap),
+                ButtonDefinitions = new[]
+                {
+                    new ButtonDefinition { Name = Localizer.Instance["UpdateReminder/DialogGoToSite"], IsDefault = true },
+                    new ButtonDefinition { Name = Localizer.Instance["UpdateReminder/DialogCancel"], IsCancel = true }
+                }
+            });
+        Dispatcher.UIThread.Post(async () =>
+        {
+            string goToSiteButtonStr = Localizer.Instance["UpdateReminder/DialogGoToSite"];
+            string buttonResult = await msgbox.ShowDialog(MainWindow.Instance!);
+            if (buttonResult == goToSiteButtonStr)
+            {
+                OpenPororocaSiteInWebBrowser();
+            }
+        });        
+    }
+
+    private static void OpenPororocaSiteInWebBrowser()
+    {
+        try
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://github.com/alexandrehtrb/Pororoca",
+                UseShellExecute = true
+            });
+        }
+        catch (Exception)
+        {
+            // Process.Start can throw several errors (not all of them documented),
+            // just ignore all of them.
+        }
     }
 
     #endregion

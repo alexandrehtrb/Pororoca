@@ -1,396 +1,8 @@
 ﻿{
   "schema": "Pororoca/1",
-  "id": "384c9af4-7f97-4404-8608-1549e9400c8f",
+  "id": "4e5f6194-6c15-45e8-a31b-2bf229ebb9ec",
   "name": "PororocaIntegrationTestCollection",
-  "createdAt": "2022-04-10T17:55:25.2217535-03:00",
-  "folders": [
-    {
-      "id": "88b5d7bf-d2d8-41d1-97fa-93c23aaa16ac",
-      "name": "AUTH",
-      "folders": [],
-      "requests": [
-        {
-          "requestType": "http",
-          "id": "5170c435-9c67-4d77-8f9a-07bf0f1b84a7",
-          "name": "BASIC",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "{{BaseUrl}}/test/auth",
-          "customAuth": {
-            "mode": "basic",
-            "basicAuthLogin": "{{BasicAuthLogin}}",
-            "basicAuthPassword": "{{BasicAuthPassword}}"
-          }
-        },
-        {
-          "requestType": "http",
-          "id": "3882d786-afde-49ca-b7f5-eebffab23e5a",
-          "name": "BEARER",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "{{BaseUrl}}/test/auth",
-          "customAuth": {
-            "mode": "bearer",
-            "bearerToken": "{{BearerAuthToken}}"
-          }
-        }
-      ]
-    },
-    {
-      "id": "843f4288-5ebf-452b-9116-3bdac692f2c4",
-      "name": "HTTP/2",
-      "folders": [
-        {
-          "id": "3256bf8d-0a8b-4c3c-bfc2-2753a1fbfd6b",
-          "name": "POST",
-          "folders": [],
-          "requests": [
-            {
-              "requestType": "http",
-              "id": "cf5a323d-1ac4-4f9e-9b0d-6d9c1fc536ce",
-              "name": "Post JSON HTTP/2",
-              "httpVersion": 2.0,
-              "httpMethod": "POST",
-              "url": "{{BaseUrlHttps}}/test/post/json",
-              "body": {
-                "mode": "raw",
-                "contentType": "application/json",
-                "rawContent": "{\"id\":1}"
-              }
-            }
-          ]
-        },
-        {
-          "id": "9d20d487-371d-4901-bb1f-6ada65f1931d",
-          "name": "GET",
-          "folders": [],
-          "requests": [
-            {
-              "requestType": "http",
-              "id": "248581b3-2ce1-4aed-97e9-47cbb3e866f9",
-              "name": "Get JSON HTTP/2",
-              "httpVersion": 2.0,
-              "httpMethod": "GET",
-              "url": "{{BaseUrlHttps}}/test/get/json"
-            },
-            {
-              "requestType": "http",
-              "id": "1ae944a7-c4e5-4173-87da-8b23e1a36d23",
-              "name": "Get trailers HTTP/2",
-              "httpVersion": 2.0,
-              "httpMethod": "GET",
-              "url": "{{BaseUrlHttps}}/test/get/trailers"
-            }
-          ]
-        }
-      ],
-      "requests": []
-    },
-    {
-      "id": "e7a78338-6102-4ec4-b723-304e22581006",
-      "name": "HTTP/3",
-      "folders": [
-        {
-          "id": "71d2a6b2-ff5c-4233-941c-3b36f38c25fd",
-          "name": "POST",
-          "folders": [],
-          "requests": [
-            {
-              "requestType": "http",
-              "id": "7066fb01-8ccd-415b-97fe-5965389c269c",
-              "name": "Post JSON HTTP/3",
-              "httpVersion": 3.0,
-              "httpMethod": "POST",
-              "url": "{{BaseUrlHttps}}/test/post/json",
-              "body": {
-                "mode": "raw",
-                "contentType": "application/json",
-                "rawContent": "{\"id\":1}"
-              }
-            }
-          ]
-        },
-        {
-          "id": "009df0c8-f31b-415d-9b4b-6d02bb65c35c",
-          "name": "GET",
-          "folders": [],
-          "requests": [
-            {
-              "requestType": "http",
-              "id": "bb511218-c3d6-4735-95c9-67b6284f040d",
-              "name": "Get JSON HTTP/3",
-              "httpVersion": 3.0,
-              "httpMethod": "GET",
-              "url": "{{BaseUrlHttps}}/test/get/json"
-            },
-            {
-              "requestType": "http",
-              "id": "1af944a7-c4e5-4173-87da-8b23e1a36d23",
-              "name": "Get trailers HTTP/3",
-              "httpVersion": 3.0,
-              "httpMethod": "GET",
-              "url": "{{BaseUrlHttps}}/test/get/trailers"
-            }
-          ]
-        }
-      ],
-      "requests": []
-    },
-    {
-      "id": "f82f6705-9a7b-4265-b8ce-eb0f13ec6efd",
-      "name": "Client certificates",
-      "folders": [],
-      "requests": [
-        {
-          "requestType": "http",
-          "id": "831b245a-3aba-4019-b7ed-410758057543",
-          "name": "No cert provided",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "{{BadSslClientCertTestUrl}}"
-        },
-        {
-          "requestType": "http",
-          "id": "a87f3d43-4556-4047-bff2-0b97e668859a",
-          "name": "PKCS#12 cert",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "{{BadSslClientCertTestUrl}}",
-          "customAuth": {
-            "mode": "clientCertificate",
-            "clientCertificate": {
-              "type": "pkcs12",
-              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client.p12",
-              "filePassword": "{{BadSslClientCertFilePassword}}"
-            }
-          }
-        },
-        {
-          "requestType": "http",
-          "id": "5b5cbf93-eb7f-47bb-a940-e0c94348b56d",
-          "name": "PEM cert with conjoined unencrypted private key",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "{{BadSslClientCertTestUrl}}",
-          "customAuth": {
-            "mode": "clientCertificate",
-            "clientCertificate": {
-              "type": "pem",
-              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client-certificate-with-unencrypted-private-key.pem"
-            }
-          }
-        },
-        {
-          "requestType": "http",
-          "id": "04f9f867-4711-4935-aacc-75c402c777c3",
-          "name": "PEM cert with conjoined encrypted private key",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "{{BadSslClientCertTestUrl}}",
-          "customAuth": {
-            "mode": "clientCertificate",
-            "clientCertificate": {
-              "type": "pem",
-              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client-certificate-with-encrypted-private-key.pem",
-              "filePassword": "{{BadSslClientCertFilePassword}}"
-            }
-          }
-        },
-        {
-          "requestType": "http",
-          "id": "c7402969-5177-40b8-9631-57ecedb50e82",
-          "name": "PEM cert with separate unencrypted private key",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "{{BadSslClientCertTestUrl}}",
-          "customAuth": {
-            "mode": "clientCertificate",
-            "clientCertificate": {
-              "type": "pem",
-              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client-certificate-without-private-key.pem",
-              "privateKeyFilePath": "{{BadSslClientCertDir}}/badssl.com-client-unencrypted-private-key.key"
-            }
-          }
-        },
-        {
-          "requestType": "http",
-          "id": "30878e3b-e97e-4def-8f5c-e5b6cc72436a",
-          "name": "PEM cert with separate encrypted private key",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "{{BadSslClientCertTestUrl}}",
-          "customAuth": {
-            "mode": "clientCertificate",
-            "clientCertificate": {
-              "type": "pem",
-              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client-certificate-without-private-key.pem",
-              "privateKeyFilePath": "{{BadSslClientCertDir}}/badssl.com-client-encrypted-private-key.key",
-              "filePassword": "{{BadSslClientCertFilePassword}}"
-            }
-          }
-        }
-      ]
-    }
-  ],
-  "requests": [
-    {
-      "requestType": "http",
-      "id": "8e48561b-a85e-4af2-a71b-e5e0603b5eb7",
-      "name": "Get JSON",
-      "httpVersion": 1.1,
-      "httpMethod": "GET",
-      "url": "{{BaseUrl}}/test/get/json"
-    },
-    {
-      "requestType": "http",
-      "id": "9e73f69b-3287-4684-aad5-942e0af2e491",
-      "name": "Get image",
-      "httpVersion": 1.1,
-      "httpMethod": "GET",
-      "url": "{{BaseUrl}}/test/get/img"
-    },
-    {
-      "requestType": "http",
-      "id": "659821ff-eeaa-41a0-bbcc-3cdf71697053",
-      "name": "Get text",
-      "httpVersion": 1.1,
-      "httpMethod": "GET",
-      "url": "{{BaseUrl}}/test/get/txt"
-    },
-    {
-      "requestType": "http",
-      "id": "8dd944a7-c4e5-4173-87da-8b23e1a36d23",
-      "name": "Get headers",
-      "httpVersion": 1.1,
-      "httpMethod": "GET",
-      "url": "{{BaseUrl}}/test/get/headers",
-      "headers": [
-        {
-          "enabled": true,
-          "key": "Header1",
-          "value": "oi"
-        },
-        {
-          "enabled": true,
-          "key": "Header2",
-          "value": "{{Header2Value}}"
-        }
-      ]
-    },
-    {
-      "requestType": "http",
-      "id": "6d10367a-cc6c-4078-bf5f-d71c472150b8",
-      "name": "Post none",
-      "httpVersion": 1.1,
-      "httpMethod": "POST",
-      "url": "{{BaseUrl}}/test/post/none"
-    },
-    {
-      "requestType": "http",
-      "id": "cc051d82-d695-491c-9e8f-57843cd35285",
-      "name": "Post JSON",
-      "httpVersion": 1.1,
-      "httpMethod": "POST",
-      "url": "{{BaseUrl}}/test/post/json",
-      "body": {
-        "mode": "raw",
-        "contentType": "application/json",
-        "rawContent": "{\"id\":1}"
-      }
-    },
-    {
-      "requestType": "http",
-      "id": "21aada11-0554-464a-9911-696641e48636",
-      "name": "Post file",
-      "httpVersion": 1.1,
-      "httpMethod": "POST",
-      "url": "{{BaseUrl}}/test/post/file",
-      "body": {
-        "mode": "file",
-        "contentType": "text/plain",
-        "fileSrcPath": "C:\\Users\\Alexandre\\Desktop\\aaa.txt"
-      }
-    },
-    {
-      "requestType": "http",
-      "id": "b48ab30f-420b-43fd-b5ba-9c6d274bdd97",
-      "name": "Post form URL encoded",
-      "httpVersion": 1.1,
-      "httpMethod": "POST",
-      "url": "{{BaseUrl}}/test/post/urlencoded",
-      "body": {
-        "mode": "urlEncoded",
-        "urlEncodedValues": [
-          {
-            "enabled": true,
-            "key": "a",
-            "value": "xyz"
-          },
-          {
-            "enabled": true,
-            "key": "b",
-            "value": "123"
-          },
-          {
-            "enabled": false,
-            "key": "c",
-            "value": "false"
-          },
-          {
-            "enabled": true,
-            "key": "c",
-            "value": "true"
-          },
-          {
-            "enabled": true,
-            "key": "myIdSecret",
-            "value": "{{MyIdSecret}}"
-          }
-        ]
-      }
-    },
-    {
-      "requestType": "http",
-      "id": "d569c13c-907b-4e31-b863-ecee9221d8eb",
-      "name": "Post multipart form data",
-      "httpVersion": 1.1,
-      "httpMethod": "POST",
-      "url": "{{BaseUrl}}/test/post/multipartformdata",
-      "body": {
-        "mode": "formData",
-        "formDataValues": [
-          {
-            "enabled": true,
-            "type": "text",
-            "key": "a",
-            "textValue": "xyz",
-            "contentType": "text/plain"
-          },
-          {
-            "enabled": true,
-            "type": "text",
-            "key": "b",
-            "textValue": "{\"id\":2}",
-            "contentType": "application/json"
-          },
-          {
-            "enabled": true,
-            "type": "text",
-            "key": "myIdSecret",
-            "textValue": "{{MyIdSecret}}",
-            "contentType": "text/plain"
-          },
-          {
-            "enabled": false,
-            "type": "file",
-            "key": "arq",
-            "contentType": "text/plain",
-            "fileSrcPath": "C:\\Users\\Alexandre\\Desktop\\aaa.txt"
-          }
-        ]
-      }
-    }
-  ],
+  "createdAt": "2022-10-19T22:10:05.3839027-03:00",
   "variables": [
     {
       "enabled": true,
@@ -402,6 +14,12 @@
       "enabled": true,
       "key": "Header2Value",
       "value": "ciao",
+      "isSecret": false
+    },
+    {
+      "enabled": true,
+      "key": "WebSocketBye",
+      "value": "Adiós",
       "isSecret": false
     }
   ],
@@ -460,8 +78,464 @@
           "key": "BadSslClientCertDir",
           "value": "C:\\Projetos\\Pororoca\\tests\\Pororoca.Test.Tests\\BadSslClientCertificates",
           "isSecret": false
+        },
+        {
+          "enabled": false,
+          "key": "BadSslClientCertDir",
+          "value": "/home/alexandre/Projetos/Pororoca/tests/Pororoca.Test.Tests/BadSslClientCertificates",
+          "isSecret": false
+        },
+        {
+          "enabled": true,
+          "key": "BaseUrlWs",
+          "value": "ws://localhost:5000",
+          "isSecret": false
+        },
+        {
+          "enabled": true,
+          "key": "BaseUrlWss",
+          "value": "wss://localhost:5001",
+          "isSecret": false
+        },
+        {
+          "enabled": true,
+          "key": "TestFilesDir",
+          "value": "C:\\Projetos\\Pororoca\\tests\\Pororoca.Test.Tests\\TestFiles",
+          "isSecret": false
         }
       ]
+    }
+  ],
+  "folders": [
+    {
+      "id": "bcc9d6d4-06e5-4728-9c07-161a7c5a928b",
+      "name": "AUTH",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "id": "985b869c-0fc8-4514-a237-da035760a972",
+          "name": "BASIC",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BaseUrl}}/test/auth",
+          "customAuth": {
+            "mode": "basic",
+            "basicAuthLogin": "{{BasicAuthLogin}}",
+            "basicAuthPassword": "{{BasicAuthPassword}}"
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "3882d786-afde-49ca-b7f5-eebffab23e5a",
+          "name": "BEARER",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BaseUrl}}/test/auth",
+          "customAuth": {
+            "mode": "bearer",
+            "bearerToken": "{{BearerAuthToken}}"
+          }
+        }
+      ]
+    },
+    {
+      "id": "dff8939d-ef47-4037-9e92-522607222bf3",
+      "name": "HTTP/2",
+      "folders": [
+        {
+          "id": "40e21bed-0ea8-4636-83dc-6f719027e143",
+          "name": "POST",
+          "folders": [],
+          "requests": [
+            {
+              "requestType": "http",
+              "id": "94c814a2-cc72-4fba-b9cd-f00ecb929155",
+              "name": "Post JSON HTTP/2",
+              "httpVersion": 2.0,
+              "httpMethod": "POST",
+              "url": "{{BaseUrlHttps}}/test/post/json",
+              "body": {
+                "mode": "raw",
+                "contentType": "application/json",
+                "rawContent": "{\"id\":1}"
+              }
+            }
+          ]
+        },
+        {
+          "id": "f21d09d4-f62e-47bc-89cb-ed0b556e06f6",
+          "name": "GET",
+          "folders": [],
+          "requests": [
+            {
+              "requestType": "http",
+              "id": "494b5f9f-8c33-442f-9c3e-8342c792e257",
+              "name": "Get JSON HTTP/2",
+              "httpVersion": 2.0,
+              "httpMethod": "GET",
+              "url": "{{BaseUrlHttps}}/test/get/json"
+            },
+            {
+              "requestType": "http",
+              "id": "90992162-ed9e-47aa-adef-a5e258e71cce",
+              "name": "Get trailers HTTP/2",
+              "httpVersion": 2.0,
+              "httpMethod": "GET",
+              "url": "{{BaseUrlHttps}}/test/get/trailers"
+            }
+          ]
+        }
+      ],
+      "requests": []
+    },
+    {
+      "id": "62baeda4-4f10-488c-82c7-f190d3bea354",
+      "name": "HTTP/3",
+      "folders": [
+        {
+          "id": "d5553081-b390-4b8c-a87f-6d97c116f317",
+          "name": "POST",
+          "folders": [],
+          "requests": [
+            {
+              "requestType": "http",
+              "id": "31214277-75cc-4053-8f65-82f77e1a4559",
+              "name": "Post JSON HTTP/3",
+              "httpVersion": 3.0,
+              "httpMethod": "POST",
+              "url": "{{BaseUrlHttps}}/test/post/json",
+              "body": {
+                "mode": "raw",
+                "contentType": "application/json",
+                "rawContent": "{\"id\":1}"
+              }
+            }
+          ]
+        },
+        {
+          "id": "c6598f6a-fd95-4f77-afad-6798f32d505e",
+          "name": "GET",
+          "folders": [],
+          "requests": [
+            {
+              "requestType": "http",
+              "id": "13a106ae-e31c-473e-a17f-4c5f9ed89ce5",
+              "name": "Get JSON HTTP/3",
+              "httpVersion": 3.0,
+              "httpMethod": "GET",
+              "url": "{{BaseUrlHttps}}/test/get/json"
+            },
+            {
+              "requestType": "http",
+              "id": "d72363d2-5931-474e-ac46-6b68b71d0c09",
+              "name": "Get trailers HTTP/3",
+              "httpVersion": 3.0,
+              "httpMethod": "GET",
+              "url": "{{BaseUrlHttps}}/test/get/trailers"
+            }
+          ]
+        }
+      ],
+      "requests": []
+    },
+    {
+      "id": "face7b6d-5c30-4d9f-98a6-59da6659fd12",
+      "name": "Client certificates",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "id": "52f440b5-4c4a-4f3c-b097-ce4ac5aa1601",
+          "name": "No cert provided",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BadSslClientCertTestUrl}}"
+        },
+        {
+          "requestType": "http",
+          "id": "432b5d89-acf0-4089-a98c-35120e1abaa8",
+          "name": "PKCS#12 cert",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BadSslClientCertTestUrl}}",
+          "customAuth": {
+            "mode": "clientCertificate",
+            "clientCertificate": {
+              "type": "pkcs12",
+              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client.p12",
+              "filePassword": "{{BadSslClientCertFilePassword}}"
+            }
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "b143e755-5016-4f7f-a959-c2e8bc667bbf",
+          "name": "PEM cert with conjoined unencrypted private key",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BadSslClientCertTestUrl}}",
+          "customAuth": {
+            "mode": "clientCertificate",
+            "clientCertificate": {
+              "type": "pem",
+              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client-certificate-with-unencrypted-private-key.pem"
+            }
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "9dbdb9bf-16f5-4c7d-8d85-cb649d8e9a33",
+          "name": "PEM cert with conjoined encrypted private key",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BadSslClientCertTestUrl}}",
+          "customAuth": {
+            "mode": "clientCertificate",
+            "clientCertificate": {
+              "type": "pem",
+              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client-certificate-with-encrypted-private-key.pem",
+              "filePassword": "{{BadSslClientCertFilePassword}}"
+            }
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "d1deb530-8725-4c99-8463-ee7bbf85bca3",
+          "name": "PEM cert with separate unencrypted private key",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BadSslClientCertTestUrl}}",
+          "customAuth": {
+            "mode": "clientCertificate",
+            "clientCertificate": {
+              "type": "pem",
+              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client-certificate-without-private-key.pem",
+              "privateKeyFilePath": "{{BadSslClientCertDir}}/badssl.com-client-unencrypted-private-key.key"
+            }
+          }
+        },
+        {
+          "requestType": "http",
+          "id": "b626e938-e6b7-4dbf-a2c6-b4ac8d343314",
+          "name": "PEM cert with separate encrypted private key",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BadSslClientCertTestUrl}}",
+          "customAuth": {
+            "mode": "clientCertificate",
+            "clientCertificate": {
+              "type": "pem",
+              "certificateFilePath": "{{BadSslClientCertDir}}/badssl.com-client-certificate-without-private-key.pem",
+              "privateKeyFilePath": "{{BadSslClientCertDir}}/badssl.com-client-encrypted-private-key.key",
+              "filePassword": "{{BadSslClientCertFilePassword}}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "eb6ae9bc-56ee-44bb-b461-369e716779ec",
+      "name": "WEBSOCKETS",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "websocket",
+          "id": "1ab952ec-cd69-4759-aec9-9bf8ec5a52ba",
+          "name": "WebSocket HTTP1",
+          "httpVersion": 1.1,
+          "url": "{{BaseUrlWss}}/test/http1websocket",
+          "clientMessages": [
+            {
+              "id": "082e47f9-4fbf-4c3b-b7d1-10a003f9fe87",
+              "name": "Hello",
+              "contentMode": "raw",
+              "rawContent": "Hello",
+              "disableCompressionForThis": false,
+              "direction": "fromClient",
+              "messageType": "text"
+            },
+            {
+              "id": "7f367e73-5dc9-4cc6-898a-f082ac3eee82",
+              "name": "SpiderMan",
+              "contentMode": "file",
+              "rawContent": "",
+              "fileSrcPath": "{{TestFilesDir}}/homem_aranha.jpg",
+              "disableCompressionForThis": false,
+              "direction": "fromClient",
+              "messageType": "binary"
+            },
+            {
+              "id": "2bd9793e-364d-4ae3-92de-57412603eb01",
+              "name": "Bye",
+              "contentMode": "raw",
+              "rawContent": "{{WebSocketBye}}",
+              "disableCompressionForThis": false,
+              "direction": "fromClient",
+              "messageType": "close"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "requestType": "http",
+      "id": "aaeb50dd-5050-474d-9079-1eda5f6b4ec3",
+      "name": "Get JSON",
+      "httpVersion": 1.1,
+      "httpMethod": "GET",
+      "url": "{{BaseUrl}}/test/get/json"
+    },
+    {
+      "requestType": "http",
+      "id": "9c6b11f9-a07c-49fa-b1da-b7335e5ac02e",
+      "name": "Get image",
+      "httpVersion": 1.1,
+      "httpMethod": "GET",
+      "url": "{{BaseUrl}}/test/get/img"
+    },
+    {
+      "requestType": "http",
+      "id": "972e6d97-9c1a-4927-8dfe-c8d4c052269d",
+      "name": "Get text",
+      "httpVersion": 1.1,
+      "httpMethod": "GET",
+      "url": "{{BaseUrl}}/test/get/txt"
+    },
+    {
+      "requestType": "http",
+      "id": "2c4b4798-5696-4bd3-b4b3-36fca72df9e4",
+      "name": "Get headers",
+      "httpVersion": 1.1,
+      "httpMethod": "GET",
+      "url": "{{BaseUrl}}/test/get/headers",
+      "headers": [
+        {
+          "enabled": true,
+          "key": "Header1",
+          "value": "oi"
+        },
+        {
+          "enabled": true,
+          "key": "Header2",
+          "value": "{{Header2Value}}"
+        }
+      ]
+    },
+    {
+      "requestType": "http",
+      "id": "3a8b0f63-3f37-4bb3-85a3-f313481c048e",
+      "name": "Post none",
+      "httpVersion": 1.1,
+      "httpMethod": "POST",
+      "url": "{{BaseUrl}}/test/post/none"
+    },
+    {
+      "requestType": "http",
+      "id": "2a028f07-8c33-4a88-adfc-46350c4c47d6",
+      "name": "Post JSON",
+      "httpVersion": 1.1,
+      "httpMethod": "POST",
+      "url": "{{BaseUrl}}/test/post/json",
+      "body": {
+        "mode": "raw",
+        "contentType": "application/json",
+        "rawContent": "{\"id\":1}"
+      }
+    },
+    {
+      "requestType": "http",
+      "id": "0da2b3e5-a40c-4b23-9f36-c018e0b70a4b",
+      "name": "Post file",
+      "httpVersion": 1.1,
+      "httpMethod": "POST",
+      "url": "{{BaseUrl}}/test/post/file",
+      "body": {
+        "mode": "file",
+        "contentType": "text/plain",
+        "fileSrcPath": "C:\\Users\\Alexandre\\Desktop\\aaa.txt"
+      }
+    },
+    {
+      "requestType": "http",
+      "id": "acd0658b-3fcd-4c78-be59-ec13a5c0dd07",
+      "name": "Post form URL encoded",
+      "httpVersion": 1.1,
+      "httpMethod": "POST",
+      "url": "{{BaseUrl}}/test/post/urlencoded",
+      "body": {
+        "mode": "urlEncoded",
+        "urlEncodedValues": [
+          {
+            "enabled": true,
+            "key": "a",
+            "value": "xyz"
+          },
+          {
+            "enabled": true,
+            "key": "b",
+            "value": "123"
+          },
+          {
+            "enabled": false,
+            "key": "c",
+            "value": "false"
+          },
+          {
+            "enabled": true,
+            "key": "c",
+            "value": "true"
+          },
+          {
+            "enabled": true,
+            "key": "myIdSecret",
+            "value": "{{MyIdSecret}}"
+          }
+        ]
+      }
+    },
+    {
+      "requestType": "http",
+      "id": "8abb75c0-981a-4da2-ba59-3956cfbe7698",
+      "name": "Post multipart form data",
+      "httpVersion": 1.1,
+      "httpMethod": "POST",
+      "url": "{{BaseUrl}}/test/post/multipartformdata",
+      "body": {
+        "mode": "formData",
+        "formDataValues": [
+          {
+            "enabled": true,
+            "type": "text",
+            "key": "a",
+            "textValue": "xyz",
+            "contentType": "text/plain"
+          },
+          {
+            "enabled": true,
+            "type": "text",
+            "key": "b",
+            "textValue": "{\"id\":2}",
+            "contentType": "application/json"
+          },
+          {
+            "enabled": true,
+            "type": "text",
+            "key": "myIdSecret",
+            "textValue": "{{MyIdSecret}}",
+            "contentType": "text/plain"
+          },
+          {
+            "enabled": false,
+            "type": "file",
+            "key": "arq",
+            "contentType": "text/plain",
+            "fileSrcPath": "C:\\Users\\Alexandre\\Desktop\\aaa.txt"
+          }
+        ]
+      }
     }
   ]
 }

@@ -11,15 +11,15 @@ public class PororocaTestLibraryClientCertificatesTests
     public PororocaTestLibraryClientCertificatesTests()
     {
         string filePath = GetTestCollectionFilePath();
-        pororocaTest = PororocaTest.LoadCollectionFromFile(filePath)
+        this.pororocaTest = PororocaTest.LoadCollectionFromFile(filePath)
                                    .AndUseTheEnvironment("Local");
-        pororocaTest.SetEnvironmentVariable("Local", "BadSslClientCertDir", GetTestClientCertificatesDir());
+        this.pororocaTest.SetEnvironmentVariable("Local", "BadSslClientCertDir", GetTestClientCertificatesDir());
     }
 
     [Fact]
     public async Task Should_receive_error_when_client_certificate_is_not_provided()
     {
-        var res = await pororocaTest.SendRequestAsync("No cert provided");
+        var res = await this.pororocaTest.SendHttpRequestAsync("No cert provided");
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.BadRequest, res.StatusCode);
@@ -35,7 +35,7 @@ public class PororocaTestLibraryClientCertificatesTests
     [InlineData("PEM cert with separate encrypted private key")]
     public async Task Should_be_successful_when_client_certificate_is_provided(string reqName)
     {
-        var res = await pororocaTest.SendRequestAsync(reqName);
+        var res = await this.pororocaTest.SendHttpRequestAsync(reqName);
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
@@ -45,12 +45,12 @@ public class PororocaTestLibraryClientCertificatesTests
 
     private static string GetTestCollectionFilePath()
     {
-        DirectoryInfo testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
+        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
         return Path.Combine(testDataDirInfo.FullName, "PororocaIntegrationTestCollection.pororoca_collection.json");
     }
     private static string GetTestClientCertificatesDir()
     {
-        DirectoryInfo testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
+        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
         return Path.Combine(testDataDirInfo.FullName, "BadSslClientCertificates");
     }
 }

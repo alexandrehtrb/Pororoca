@@ -6,7 +6,11 @@ namespace Pororoca.Domain.Features.Common;
 
 internal static class JsonConfiguration
 {
-    internal static readonly JsonSerializerOptions ExporterImporterJsonOptions = SetupExporterImporterJsonOptions(new JsonSerializerOptions());
+    internal static readonly JsonSerializerOptions ExporterImporterJsonOptions =
+        SetupCustomConvertersInJsonOptions(SetupExporterImporterJsonOptions(new JsonSerializerOptions()));
+
+    internal static readonly JsonSerializerOptions ExporterImporterWithoutCustomConvertersJsonOptions =
+        SetupExporterImporterJsonOptions(new JsonSerializerOptions());
 
     internal static readonly JsonSerializerOptions ViewJsonResponseOptions = SetupViewJsonResponseOptions();
 
@@ -19,6 +23,12 @@ internal static class JsonConfiguration
         options.WriteIndented = true;
         options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        return options;
+    }
+
+    private static JsonSerializerOptions SetupCustomConvertersInJsonOptions(JsonSerializerOptions options)
+    {
+        options.Converters.Add(new PororocaRequestJsonConverter());
         return options;
     }
 

@@ -4,11 +4,11 @@ A variable is a value that can be applied on certain parameters of a request. In
 
 There are two classes of variables: collection variables and environment variables.
 
-![CollectionVariables](./imgs/collection_variables.jpg)
-
 ## Collection variables
 
 Collection variables are available to be used in every request of the collection. To view the collection variables, click on the collection "Variables" in the left panel.
+
+![CollectionVariables](./imgs/collection_variables.png)
 
 ## Environment variables
 
@@ -23,8 +23,6 @@ To remove a variable, click on it in the variables grid, then click on the "Remo
 A variable can be enabled or disabled. Only enabled variables will be considered for value resolution.
 
 Variables marked as secret allow for better control of sensitive data when exporting your collection or environment. Read more on the [Export and Import](ExportAndImport.md) page.
-
-![EditVariables](./imgs/edit_variables.jpg)
 
 ## How to use a variable
 
@@ -45,16 +43,16 @@ For example: if a request URL is `{{BaseUrl}}/index.html` and there is a variabl
 
 For request URLs, you can hover over the URL text box and preview the resolved URL.
 
-![PreviewResolvedURL](./imgs/preview_resolved_url.jpg)
+![PreviewResolvedURL](./imgs/preview_resolved_url.png)
 
-The image below shows how to use a variable in a raw body's content.
+The image below shows how to use a variable in a raw body's content. In it, `{{VariableName}}` will appear highlighted in yellow.
 
-![VariableRawBodyContent](./imgs/variable_raw_body_content.jpg)
+![VariableRawBodyContent](./imgs/variable_raw_body_content.png)
 
 ## Variable resolution logic
 
 The resolution logic is as follows:
-* Collection variables will be merged with the current environment variables. If no environment is active, then only collection variables will be considered.
-* Also, only enabled variables are considered.
-* Environment variables have higher importance than collection variables. If there are two variables declared with the same name both in the collection and in the environment, the environment variable will be the chosen one.
-* Every request field that allows the usage of variables will be checked for whether it has a variable template, for example, `{{VARIABLE_NAME}}`. If the template is found and there is an enabled variable for it, the variable's value will be applied. Otherwise, the template will remain in the text field.
+1) Collection variables will be merged with the current environment variables. If no environment is active, then only collection variables will be considered.
+2) Also, only enabled variables are considered.
+3) Environment variables have higher importance than collection variables. If there are two variables declared with the same name both in the collection and in the environment, the environment variable will be the chosen one.
+4) Every request field that allows the usage of variables will be checked for whether it has a variable template, for example, `{{VARIABLE_NAME}}`. If the template is found and there is an enabled variable for it, the variable's value will be applied. Otherwise, the template will remain in the text field.
