@@ -156,7 +156,7 @@ public class PororocaWebSocketConnector
         Task.Factory.StartNew(() => ProcessMessagesExchangesAsync(disconnectToken),
                               TaskCreationOptions.LongRunning);
 
-    private async Task ProcessMessagesExchangesAsync(CancellationToken disconnectToken)
+    private async Task ProcessMessagesExchangesAsync(CancellationToken clientDisconnectToken)
     {
         // We are using a channel as a queue here because two different messages
         // should not be sent at the same time through a WebSocket,
@@ -165,7 +165,7 @@ public class PororocaWebSocketConnector
         {
             try
             {
-                return MessagesToSendChannel!.Reader.WaitToReadAsync(disconnectToken).AsTask();
+                return MessagesToSendChannel!.Reader.WaitToReadAsync(clientDisconnectToken).AsTask();
             }
             catch (OperationCanceledException)
             {
@@ -177,7 +177,7 @@ public class PororocaWebSocketConnector
         {
             try
             {
-                return this.client!.ReceiveAsync(Memory<byte>.Empty, disconnectToken).AsTask();
+                return this.client!.ReceiveAsync(Memory<byte>.Empty, clientDisconnectToken).AsTask();
             }
             catch (OperationCanceledException)
             {
@@ -186,13 +186,16 @@ public class PororocaWebSocketConnector
         }
 
         bool CanSendMessages() =>
-            !disconnectToken.IsCancellationRequested
+            !clientDisconnectToken.IsCancellationRequested
          && (this.client?.State == WebSocketState.Open || this.client?.State == WebSocketState.Connecting || this.client?.State == WebSocketState.CloseReceived)
          && MessagesToSendChannel is not null;
 
         bool CanReceiveMessages() =>
-            !disconnectToken.IsCancellationRequested
+            !clientDisconnectToken.IsCancellationRequested
          && (this.client?.State == WebSocketState.Open || this.client?.State == WebSocketState.Connecting || this.client?.State == WebSocketState.CloseSent);
+
+        bool ServerAbortedConnection() =>
+            this.client?.State == WebSocketState.Aborted;
 
         ValueTask<PororocaWebSocketClientMessageToSend> DequeueMessageToSendAsync() =>
             MessagesToSendChannel!.Reader.ReadAsync(CancellationToken.None);
@@ -204,14 +207,19 @@ public class PororocaWebSocketConnector
 
             var firstOperation = await Task.WhenAny(beganSending, beganReceiving);
 
-            if (disconnectToken.IsCancellationRequested)
+            if (clientDisconnectToken.IsCancellationRequested)
             {
+                break;
+            }
+            else if (ServerAbortedConnection())
+            {
+                await CloseStartingByClientAsync(null, clientDisconnectToken);
                 break;
             }
             else if (firstOperation == beganSending && CanSendMessages())
             {
                 var msgToSend = await DequeueMessageToSendAsync();
-                await SendMessageAsync(msgToSend!, disconnectToken);
+                await SendMessageAsync(msgToSend!, clientDisconnectToken);
             }
             else if (firstOperation == beganReceiving)
             {
@@ -226,7 +234,7 @@ public class PororocaWebSocketConnector
                 }
                 else if (CanReceiveMessages())
                 {
-                    var receivedMsg = await ReceiveMessageAsync(disconnectToken);
+                    var receivedMsg = await ReceiveMessageAsync(clientDisconnectToken);
                     if (receivedMsg?.MessageType == PororocaWebSocketMessageType.Close)
                     {
                         await FinishClosureStartedByServerAsync();

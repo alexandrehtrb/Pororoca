@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.HttpLogging;
 using System.Text;
 using Pororoca.TestServer.Endpoints;
 
-namespace ExemploProxyReverso.Api;
+namespace Pororoca.TestServer;
 
 public static class Program
 {

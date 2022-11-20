@@ -10,6 +10,7 @@ public static class BackgroundWebSocketsProcessor
     private const int bufferSize = 1440; // because Ethernet's MTU is around 1500 bytes
     private static readonly TimeSpan maximumLifetimePeriod = TimeSpan.FromMinutes(1);
     private static readonly TimeSpan waitForClientPeriod = TimeSpan.FromSeconds(12);
+    private static readonly TimeSpan checkClientDisconnectSamplingPeriod = TimeSpan.FromMilliseconds(250);
     private static readonly Channel<string> messagesToSendChannel = BuildMessagesToSendChannel();
 
     public static async Task RegisterAndProcessAsync(WebSocket ws, TaskCompletionSource<object> socketFinishedTcs)
@@ -19,13 +20,13 @@ public static class BackgroundWebSocketsProcessor
         socketFinishedTcs.SetResult(true);
     }
 
-    private static async Task ProcessMessagesExchangesAsync(WebSocket ws, CancellationToken disconnectToken = default)
+    private static async Task ProcessMessagesExchangesAsync(WebSocket ws, CancellationToken serverDisconnectToken = default)
     {
         async Task<bool> HasPingToSendAsync()
         {
             try
             {
-                await Task.Delay(waitForClientPeriod, disconnectToken);
+                await Task.Delay(waitForClientPeriod, serverDisconnectToken);
                 return true;
             }
             catch (OperationCanceledException)
@@ -43,7 +44,7 @@ public static class BackgroundWebSocketsProcessor
             {
                 // we are using only ping here,
                 // this is for a hypothetical case
-                return messagesToSendChannel!.Reader.WaitToReadAsync(disconnectToken).AsTask();
+                return messagesToSendChannel!.Reader.WaitToReadAsync(serverDisconnectToken).AsTask();
             }
             catch (OperationCanceledException)
             {
@@ -55,7 +56,7 @@ public static class BackgroundWebSocketsProcessor
         {
             try
             {
-                return ws.ReceiveAsync(Memory<byte>.Empty, disconnectToken).AsTask();
+                return ws.ReceiveAsync(Memory<byte>.Empty, serverDisconnectToken).AsTask();
             }
             catch (OperationCanceledException)
             {
@@ -63,16 +64,32 @@ public static class BackgroundWebSocketsProcessor
             }
         }
 
+        async Task<bool> HasClientTryingToDisconnectAsync()
+        {
+            try
+            {
+                while (ws.State != WebSocketState.CloseReceived && ws.State != WebSocketState.Aborted)
+                {
+                    await Task.Delay(checkClientDisconnectSamplingPeriod, serverDisconnectToken);
+                };
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         ValueTask<string> DequeueMessageToSendAsync() =>
             messagesToSendChannel.Reader.ReadAsync(CancellationToken.None);
 
         bool CanSendMessages() =>
-            !disconnectToken.IsCancellationRequested
+            !serverDisconnectToken.IsCancellationRequested
          && (ws.State == WebSocketState.Open || ws.State == WebSocketState.Connecting || ws.State == WebSocketState.CloseReceived)
          && messagesToSendChannel is not null;
 
         bool CanReceiveMessages() =>
-            !disconnectToken.IsCancellationRequested
+            !serverDisconnectToken.IsCancellationRequested
          && (ws.State == WebSocketState.Open || ws.State == WebSocketState.Connecting || ws.State == WebSocketState.CloseSent);
 
         while (CanSendMessages() && CanReceiveMessages())
@@ -80,22 +97,31 @@ public static class BackgroundWebSocketsProcessor
             var beganSending = HasMessageToSendAsync();
             var beganReceiving = HasMessageToReceiveAsync();
             var beganPinging = HasPingToSendAsync();
+            var beganClientDisconnecting = HasClientTryingToDisconnectAsync();
 
-            var firstOperation = await Task.WhenAny(beganSending, beganReceiving, beganPinging);
+            var firstOperation = await Task.WhenAny(beganSending, beganReceiving, beganPinging, beganClientDisconnecting);
 
-            if (disconnectToken.IsCancellationRequested)
+            if (serverDisconnectToken.IsCancellationRequested)
             {
                 await CloseStartingByServerAsync(ws, "maximum lifetime, bye", CancellationToken.None);
                 return;
             }
+            else if (firstOperation == beganClientDisconnecting && CanSendMessages())
+            {
+                await FinishClosingStartedByClientAsync(ws, "ok, bye");
+                return; // exits the reception thread
+            }
             else if (firstOperation == beganSending && CanSendMessages())
             {
                 string msgToSend = await DequeueMessageToSendAsync();
-                await SendTextMessageAsync(ws, msgToSend, disconnectToken);
+                await SendTextMessageAsync(ws, msgToSend, serverDisconnectToken);
             }
             else if (firstOperation == beganPinging && CanSendMessages())
             {
-                await PingClientAsync(ws, "{\"ping\": \"hey client\"}", disconnectToken);
+                await PingClientAsync(ws, "{\"ping\": \"hey client\"}", serverDisconnectToken);
+                //ws.Abort();
+                //await ws.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, null, serverDisconnectToken);
+                return;
             }
             else if (firstOperation == beganReceiving)
             {
@@ -108,7 +134,7 @@ public static class BackgroundWebSocketsProcessor
                 }
                 else if (CanReceiveMessages())
                 {
-                    var (receivedMsgType, receivedBytes) = await ReceiveMessageAsync(ws, disconnectToken);
+                    var (receivedMsgType, receivedBytes) = await ReceiveMessageAsync(ws, serverDisconnectToken);
                     if (receivedMsgType == WebSocketMessageType.Close)
                     {
                         await FinishClosingStartedByClientAsync(ws, "ok, bye");
@@ -116,16 +142,10 @@ public static class BackgroundWebSocketsProcessor
                     }
                     else
                     {
-                        await ReplyToClientAsync(ws, receivedMsgType, receivedBytes, disconnectToken);
+                        await ReplyToClientAsync(ws, receivedMsgType, receivedBytes, serverDisconnectToken);
                     }
                 }
             }
-        }
-
-        if (!CanSendMessages() || !CanReceiveMessages())
-        {
-            await FinishClosingStartedByClientAsync(ws, "ok, bye");
-            return; // exits the reception thread
         }
     }
 
