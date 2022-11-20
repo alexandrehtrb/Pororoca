@@ -9,6 +9,8 @@
     * [Autenticação Bearer](#autenticação-bearer)
     * [Autenticação por certificado de cliente](#autenticação-por-certificado-de-cliente)
 * [Enviando uma requisição](#enviando-uma-requisição)
+    * [Pesquisando e ampliando texto](#pesquisando-e-ampliando-texto)
+    * [Salvando uma resposta](#salvando-uma-resposta)
 * [Verificação de certificado SSL / TLS do servidor](#verificação-de-certificado-ssl--tls-do-servidor)
 
 ## Aspectos gerais
@@ -67,6 +69,16 @@ Os dois tipos aceitos de certificados de cliente são o PKCS#12 e o PEM. Esta [p
 ## Enviando uma requisição
 
 Para enviar uma requisição, clique no botão "Enviar", no canto superior direito da tela. Você pode abortar a requisição clicando no botão "Cancelar". O tempo de timeout é de 5 minutos.
+
+### Pesquisando e ampliando texto
+
+Nos editores de texto, você pode pesquisar palavras ao apertar `Ctrl+F`.
+
+Ao girar a roda do mouse para cima ou para baixo, você pode ampliar ou reduzir a fonte.
+
+![EditorTextoZoomPesquisarPalavras](./imgs/text_editor_zoom_and_search.png)
+
+### Salvando uma resposta
 
 Você pode salvar o corpo da resposta em um arquivo, clicando no botão "Salvar como...".
 

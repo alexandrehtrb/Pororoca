@@ -9,6 +9,8 @@
     * [Bearer auth](#bearer-authentication)
     * [Client certificate auth](#client-certificate-authentication)
 * [Sending a request](#sending-a-request)
+    * [Searching and zooming text](#searching-and-zooming-text)
+    * [Saving a response](#saving-a-response)
 * [TLS / SSL server certificate verification](#tls--ssl-server-certificate-verification)
 
 ## General aspects
@@ -67,6 +69,16 @@ The two accepted client certificate types are PKCS#12 and PEM. This [page](https
 ## Sending a request
 
 To send a request, click on the button "Send", at the top right of the screen. You can abort the request by clicking on the "Cancel" button. The timeout period is 5 minutes.
+
+### Searching and zooming text
+
+In the text editors, you can search words by pressing `Ctrl+F`.
+
+By scrolling the mouse wheel up and down, you can increase or decrease the font size.
+
+![TextEditorZoomAndSearchWords](./imgs/text_editor_zoom_and_search.png)
+
+### Saving a response
 
 You can save the response body to a file, by clicking on the "Save as..." button.
 
