@@ -1,10 +1,7 @@
 using Xunit;
-using System.Net;
 using Pororoca.Infrastructure.Features.Requester;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage;
-using System.Text;
-using static Pororoca.Test.Tests.AssertExtensions;
 
 namespace Pororoca.Test.Tests;
 
@@ -39,7 +36,7 @@ public class PororocaTestLibraryWebSocketsHttp1Tests
         // The server should reply with a closing message
         Assert.Single(ws.ExchangedMessages);
 
-        AssertTypeAndCast<PororocaWebSocketServerMessage>(ws.ExchangedMessages[0], out var srvMsg);
+        var srvMsg = Assert.IsType<PororocaWebSocketServerMessage>(ws.ExchangedMessages[0]);
         Assert.Equal(PororocaWebSocketMessageType.Close, srvMsg.MessageType);
         Assert.Equal("ok, bye", srvMsg.Text);
         Assert.Equal(DateTime.Now, srvMsg.ReceivedAtUtc.GetValueOrDefault().DateTime, TimeSpan.FromSeconds(3));
@@ -66,7 +63,7 @@ public class PororocaTestLibraryWebSocketsHttp1Tests
         // The server should not reply
         Assert.Single(ws.ExchangedMessages);
 
-        AssertTypeAndCast<PororocaWebSocketClientMessageToSend>(ws.ExchangedMessages[0], out var msg);
+        var msg = Assert.IsType<PororocaWebSocketClientMessageToSend>(ws.ExchangedMessages[0]);
         Assert.Equal(PororocaWebSocketMessageType.Close, msg.MessageType);
         Assert.Equal("Adiós", msg.Text);
         Assert.Equal(DateTime.Now, msg.SentAtUtc.GetValueOrDefault().DateTime, TimeSpan.FromSeconds(2));
@@ -86,13 +83,12 @@ public class PororocaTestLibraryWebSocketsHttp1Tests
         // The server should reply with a text message
         Assert.Equal(2, ws.ExchangedMessages.Count);
 
-        AssertTypeAndCast<PororocaWebSocketClientMessageToSend>(ws.ExchangedMessages[0], out var sentMsg);
+        var sentMsg = Assert.IsType<PororocaWebSocketClientMessageToSend>(ws.ExchangedMessages[0]);
         Assert.Equal(PororocaWebSocketMessageType.Text, sentMsg.MessageType);
         Assert.Equal("Hello", sentMsg.Text);
         Assert.Equal(DateTime.Now, sentMsg.SentAtUtc.GetValueOrDefault().DateTime, TimeSpan.FromSeconds(3));
 
-
-        AssertTypeAndCast<PororocaWebSocketServerMessage>(ws.ExchangedMessages[1], out var replyMsg);
+        var replyMsg = Assert.IsType<PororocaWebSocketServerMessage>(ws.ExchangedMessages[1]);
         Assert.Equal(PororocaWebSocketMessageType.Text, replyMsg.MessageType);
         Assert.Equal("received text (5 bytes): Hello", replyMsg.Text);
         Assert.Equal(DateTime.Now, replyMsg.ReceivedAtUtc.GetValueOrDefault().DateTime, TimeSpan.FromSeconds(3));
@@ -116,13 +112,12 @@ public class PororocaTestLibraryWebSocketsHttp1Tests
         // The server should reply with a text message
         Assert.Equal(2, ws.ExchangedMessages.Count);
 
-        AssertTypeAndCast<PororocaWebSocketClientMessageToSend>(ws.ExchangedMessages[0], out var sentMsg);
+        var sentMsg = Assert.IsType<PororocaWebSocketClientMessageToSend>(ws.ExchangedMessages[0]);
         Assert.Equal(PororocaWebSocketMessageType.Binary, sentMsg.MessageType);
         Assert.Equal(Path.Combine(GetTestFilesFolderPath(), "homem_aranha.jpg"), ((FileStream)sentMsg.BytesStream).Name);
         Assert.Equal(DateTime.Now, sentMsg.SentAtUtc.GetValueOrDefault().DateTime, TimeSpan.FromSeconds(3));
 
-
-        AssertTypeAndCast<PororocaWebSocketServerMessage>(ws.ExchangedMessages[1], out var replyMsg);
+        var replyMsg = Assert.IsType<PororocaWebSocketServerMessage>(ws.ExchangedMessages[1]);
         Assert.Equal(PororocaWebSocketMessageType.Text, replyMsg.MessageType);
         Assert.Equal("received binary 9784 bytes", replyMsg.Text);
         Assert.Equal(DateTime.Now, replyMsg.ReceivedAtUtc.GetValueOrDefault().DateTime, TimeSpan.FromSeconds(3));

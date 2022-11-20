@@ -75,7 +75,8 @@ public class PororocaTestLibraryHttp1Tests
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.NoContent, res.StatusCode);
-        Assert.Empty(res.GetBodyAsBinary());
+        Assert.NotNull(res.GetBodyAsBinary());
+        Assert.Empty(res.GetBodyAsBinary()!);
     }
 
     [Fact]
