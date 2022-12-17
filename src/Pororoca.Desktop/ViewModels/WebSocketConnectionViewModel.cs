@@ -18,6 +18,7 @@ using static Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage.
 using System.Collections.Specialized;
 using System.Security.Authentication;
 using AvaloniaEdit.Document;
+using Pororoca.Desktop.ExportImport;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -806,12 +807,9 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
         if (SelectedExchangedMessage is not null && SelectedExchangedMessage.CanBeSavedToFile)
         {
-            SaveFileDialog saveFileDialog = new()
-            {
-                InitialFileName = GenerateDefaultInitialFileName(SelectedExchangedMessage)
-            };
-
-            string? saveFileOutputPath = await saveFileDialog.ShowAsync(MainWindow.Instance!);
+            string initialFileName = GenerateDefaultInitialFileName(SelectedExchangedMessage);
+            
+            string? saveFileOutputPath = await FileExporterImporter.SelectPathForFileToBeSavedAsync(initialFileName);
             if (saveFileOutputPath != null)
             {
                 const int fileStreamBufferSize = 4096;

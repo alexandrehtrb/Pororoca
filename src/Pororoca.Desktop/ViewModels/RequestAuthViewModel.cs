@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reactive;
 using System.Text;
 using Avalonia.Controls;
+using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
@@ -244,85 +245,28 @@ public sealed class RequestAuthViewModel : ViewModelBase
 
     private async Task SearchClientCertificatePkcs12FileAsync()
     {
-        List<FileDialogFilter> fileSelectionfilters = new();
-        // Mac OSX file dialogs have problems with file filters... TODO: find if there is a way to solve this
-        if (!this.isOperatingSystemMacOsx)
-        {
-            fileSelectionfilters.Add(
-                new()
-                {
-                    Name = Localizer.Instance["RequestAuth/Pkcs12ImportCertificateFileTypesDescription"],
-                    Extensions = new List<string> { "p12", "pfx" }
-                }
-            );
-        }
-
-        OpenFileDialog dialog = new()
-        {
-            Title = Localizer.Instance["RequestAuth/Pkcs12ImportCertificateFileDialogTitle"],
-            AllowMultiple = false,
-            Filters = fileSelectionfilters
-        };
-        string[]? result = await dialog.ShowAsync(MainWindow.Instance!);
+        string? result = await FileExporterImporter.SearchClientCertificatePkcs12FileAsync();
         if (result != null)
         {
-            ClientCertificateAuthPkcs12CertificateFilePath = result.FirstOrDefault();
+            ClientCertificateAuthPkcs12CertificateFilePath = result;
         }
     }
 
     private async Task SearchClientCertificatePemCertFileAsync()
     {
-        List<FileDialogFilter> fileSelectionfilters = new();
-        // Mac OSX file dialogs have problems with file filters... TODO: find if there is a way to solve this
-        if (!this.isOperatingSystemMacOsx)
-        {
-            fileSelectionfilters.Add(
-                new()
-                {
-                    Name = Localizer.Instance["RequestAuth/PemImportCertificateFileTypesDescription"],
-                    Extensions = new List<string> { "cer", "crt", "pem" }
-                }
-            );
-        }
-
-        OpenFileDialog dialog = new()
-        {
-            Title = Localizer.Instance["RequestAuth/PemImportCertificateFileDialogTitle"],
-            AllowMultiple = false,
-            Filters = fileSelectionfilters
-        };
-        string[]? result = await dialog.ShowAsync(MainWindow.Instance!);
+        string? result = await FileExporterImporter.SearchClientCertificatePemCertFileAsync();
         if (result != null)
         {
-            ClientCertificateAuthPemCertificateFilePath = result.FirstOrDefault();
-        }
+            ClientCertificateAuthPemCertificateFilePath = result;
+        }        
     }
 
     private async Task SearchClientCertificatePemPrivateKeyFileAsync()
     {
-        List<FileDialogFilter> fileSelectionfilters = new();
-        // Mac OSX file dialogs have problems with file filters... TODO: find if there is a way to solve this
-        if (!this.isOperatingSystemMacOsx)
-        {
-            fileSelectionfilters.Add(
-                new()
-                {
-                    Name = Localizer.Instance["RequestAuth/PemImportPrivateKeyFileTypesDescription"],
-                    Extensions = new List<string> { "cer", "crt", "pem", "key" }
-                }
-            );
-        }
-
-        OpenFileDialog dialog = new()
-        {
-            Title = Localizer.Instance["RequestAuth/PemImportPrivateKeyFileDialogTitle"],
-            AllowMultiple = false,
-            Filters = fileSelectionfilters
-        };
-        string[]? result = await dialog.ShowAsync(MainWindow.Instance!);
+        string? result = await FileExporterImporter.SearchClientCertificatePemPrivateKeyFileAsync();
         if (result != null)
         {
-            ClientCertificateAuthPemPrivateKeyFilePath = result.FirstOrDefault();
+            ClientCertificateAuthPemPrivateKeyFilePath = result;
         }
     }
 

@@ -84,7 +84,7 @@ public static class PororocaHttpRequestTranslator
         {
             // TODO: Fix bug that charset cannot be passed in contentType below
             string resolvedRawContent = variableResolver.ReplaceTemplates(reqBody.RawContent!);
-            return new(resolvedRawContent, Encoding.UTF8, reqBody.ContentType);
+            return new(resolvedRawContent, Encoding.UTF8, reqBody.ContentType!);
         }
 
         FormUrlEncodedContent MakeFormUrlEncodedContent()

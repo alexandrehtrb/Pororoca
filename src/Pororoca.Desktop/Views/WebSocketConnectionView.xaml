@@ -75,7 +75,7 @@
               VerticalContentAlignment="Center"
               ToolTip.Placement="Bottom"
               ToolTip.Tip="{Binding ResolvedUrlToolTip}"
-              PointerEnter="OnUrlPointerEnter" />
+              PointerEntered="OnUrlPointerEnter" />
 
           <TextBlock
               Margin="12,6,12,0"

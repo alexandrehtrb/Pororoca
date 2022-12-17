@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.ExportCollection;
 using Pororoca.Domain.Features.ImportCollection;
-using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
+using static Pororoca.Desktop.ExportImport.FileExporterImporter;
 
 namespace Pororoca.Desktop.UserData;
 

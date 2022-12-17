@@ -5,22 +5,44 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Pororoca Desktop",
+            "name": "Launch Pororoca Desktop Linux x64",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "buildDesktop",
-            "program": "${workspaceFolder}/src/Pororoca.Desktop/bin/Debug/net6.0/Pororoca.Desktop.dll",
+            "program": "${workspaceFolder}/src/Pororoca.Desktop/bin/Debug/net7.0/linux-x64/Pororoca.Desktop.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/Pororoca.Desktop",
             "console": "internalConsole",
             "stopAtEntry": false
         },
         {
-            "name": "Launch Pororoca TestServer",
+            "name": "Launch Pororoca Desktop Windows x64",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "buildDesktop",
+            "program": "${workspaceFolder}/src/Pororoca.Desktop/bin/Debug/net7.0/win-x64/Pororoca.Desktop.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/Pororoca.Desktop",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Launch Pororoca TestServer Linux x64",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "buildTestServer",
-            "program": "${workspaceFolder}/tests/Pororoca.TestServer/bin/Debug/net6.0/PororocaTestServer.dll",
+            "program": "${workspaceFolder}/tests/Pororoca.TestServer/bin/Debug/net7.0/linux-x64/PororocaTestServer.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/tests/Pororoca.TestServer",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Launch Pororoca TestServer Windows x64",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "buildTestServer",
+            "program": "${workspaceFolder}/tests/Pororoca.TestServer/bin/Debug/net7.0/win-x64/PororocaTestServer.dll",
             "args": [],
             "cwd": "${workspaceFolder}/tests/Pororoca.TestServer",
             "console": "internalConsole",

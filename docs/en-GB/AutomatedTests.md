@@ -22,12 +22,12 @@ After that, in the created test project, the .csproj file must be edited to incl
 
   <PropertyGroup>
     <!-- TargetFramework needs to be .net6.0 or higher -->
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     ...
     <!-- EnablePreviewFeatures and RuntimeHostConfigurationOption enable HTTP/3 in the project -->
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
   </PropertyGroup>
-  <ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
     <RuntimeHostConfigurationOption Include="System.Net.SocketsHttpHandler.Http3Support" Value="true" />
   </ItemGroup>
   <ItemGroup>

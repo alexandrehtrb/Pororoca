@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Text;
 using Avalonia.Controls;
+using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
@@ -109,63 +110,14 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
 
     #region EXPORT ENVIRONMENT
 
-    private Task ExportEnvironmentAsync()
-    {
-        SaveFileDialog saveFileDialog = new()
-        {
-            Title = Localizer.Instance["Environment/ExportEnvironmentDialogTitle"],
-            Filters = new()
-            {
-                new()
-                {
-                    Name = Localizer.Instance["Environment/PororocaEnvironmentFormat"],
-                    Extensions = new List<string> { PororocaEnvironmentExtension }
-                },
-                new()
-                {
-                    Name = Localizer.Instance["Environment/PostmanEnvironmentFormat"],
-                    Extensions = new List<string> { PostmanEnvironmentExtension }
-                }
-            }
-        };
+    private Task ExportEnvironmentAsync() =>
+        FileExporterImporter.ExportEnvironmentAsync(this);
 
-        return ShowExportEnvironmentDialogAsync(saveFileDialog);
-    }
+    private Task ExportAsPororocaEnvironmentAsync() =>
+        FileExporterImporter.ExportAsPororocaEnvironmentAsync(this);
 
-    private Task ExportAsPororocaEnvironmentAsync()
-    {
-        SaveFileDialog saveFileDialog = new()
-        {
-            Title = Localizer.Instance["Environment/ExportAsPororocaEnvironmentDialogTitle"],
-            InitialFileName = $"{Name}.{PororocaEnvironmentExtension}"
-        };
-
-        return ShowExportEnvironmentDialogAsync(saveFileDialog);
-    }
-
-    private Task ExportAsPostmanEnvironmentAsync()
-    {
-        SaveFileDialog saveFileDialog = new()
-        {
-            Title = Localizer.Instance["Environment/ExportAsPostmanEnvironmentDialogTitle"],
-            InitialFileName = $"{Name}.{PostmanEnvironmentExtension}"
-        };
-
-        return ShowExportEnvironmentDialogAsync(saveFileDialog);
-    }
-
-    private async Task ShowExportEnvironmentDialogAsync(SaveFileDialog saveFileDialog)
-    {
-        string? saveFileOutputPath = await saveFileDialog.ShowAsync(MainWindow.Instance!);
-        if (saveFileOutputPath != null)
-        {
-            var env = ToEnvironment();
-            string json = saveFileOutputPath.EndsWith(PostmanEnvironmentExtension) ?
-                PostmanEnvironmentExporter.ExportAsPostmanEnvironment(env, !IncludeSecretVariables) :
-                PororocaEnvironmentExporter.ExportAsPororocaEnvironment(env, !IncludeSecretVariables);
-            await File.WriteAllTextAsync(saveFileOutputPath, json, Encoding.UTF8);
-        }
-    }
+    private Task ExportAsPostmanEnvironmentAsync() =>
+        FileExporterImporter.ExportAsPostmanEnvironmentAsync(this);
 
     #endregion
 

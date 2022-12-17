@@ -21,7 +21,7 @@ public class WebSocketClientMessageView : UserControl
         var rawContentTextEditor = this.FindControl<TextEditor>("RawContentEditor");
         this.rawContentEditorTextMateInstallation = TextEditorConfiguration.Setup(rawContentTextEditor!, true);
         
-        this.syntaxModeCombo = this.FindControl<ComboBox>("RawContentSyntaxSelector");
+        this.syntaxModeCombo = this.FindControl<ComboBox>("RawContentSyntaxSelector")!;
         this.syntaxModeCombo.SelectionChanged += OnSelectedRawSyntaxChanged;
 
         // This is for testing syntax colour themes

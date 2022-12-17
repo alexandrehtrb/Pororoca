@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using AvaloniaEdit.Document;
+using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Common;
@@ -682,12 +683,8 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region OTHERS
 
-    private static async Task<string?> SearchFileWithDialogAsync()
-    {
-        OpenFileDialog dialog = new();
-        string[]? result = await dialog.ShowAsync(MainWindow.Instance!);
-        return result?.FirstOrDefault();
-    }
+    private static Task<string?> SearchFileWithDialogAsync() =>
+        FileExporterImporter.SelectFileFromStorageAsync();
 
     #endregion
 }

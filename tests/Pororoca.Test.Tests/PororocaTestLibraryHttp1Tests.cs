@@ -48,7 +48,7 @@ public class PororocaTestLibraryHttp1Tests
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
         Assert.Equal("text/plain", res.ContentType);
-        Assert.Equal(462, res.GetBodyAsBinary()?.Length);
+        Assert.Equal(448, res.GetBodyAsBinary()?.Length);
         Assert.Contains("Cross-Stitch Pattern", res.GetBodyAsText());
     }
 

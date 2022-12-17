@@ -15,6 +15,7 @@ using ReactiveUI;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using static Pororoca.Domain.Features.Common.MimeTypesDetector;
 using AvaloniaEdit.Document;
+using Pororoca.Desktop.ExportImport;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -121,12 +122,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
                 initialFileName = GenerateDefaultInitialFileName(fileExtensionWithoutDot);
             }
 
-            SaveFileDialog saveFileDialog = new()
-            {
-                InitialFileName = initialFileName
-            };
-
-            string? saveFileOutputPath = await saveFileDialog.ShowAsync(MainWindow.Instance!);
+            string? saveFileOutputPath = await FileExporterImporter.SelectPathForFileToBeSavedAsync(initialFileName);
             if (saveFileOutputPath != null)
             {
                 await File.WriteAllBytesAsync(saveFileOutputPath, this.res.GetBodyAsBinary()!).ConfigureAwait(false);

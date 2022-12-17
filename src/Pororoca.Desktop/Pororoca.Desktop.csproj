@@ -2,7 +2,7 @@
   <PropertyGroup>
     <AssemblyName>Pororoca.Desktop</AssemblyName>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <DebugType>embedded</DebugType>
@@ -20,10 +20,8 @@
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <Copyright>AlexandreHTRB</Copyright>
     <!-- Licence also available at https://github.com/alexandrehtrb/Pororoca/LICENCE.md -->
+    <!--TieredCompilationQuickJitForLoops>true</TieredCompilationQuickJitForLoops-->
   </PropertyGroup>
-  <ItemGroup>
-    <RuntimeHostConfigurationOption Include="System.Net.SocketsHttpHandler.Http3Support" Value="true" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Pororoca.Domain\Pororoca.Domain.csproj"/>
     <ProjectReference Include="..\Pororoca.Infrastructure\Pororoca.Infrastructure.csproj"/>
@@ -38,18 +36,19 @@
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.18" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.18" />
+    <PackageReference Include="Avalonia" Version="11.0.0-preview4" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview4" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview4" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview4" />
     <!-- Without the package below, the app does not compile in Release configuration -->
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.18" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.0-preview4" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.18" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0-preview4" />
 
-    <PackageReference Include="Avalonia.AvaloniaEdit" Version="0.10.12.2" />
-    <PackageReference Include="AvaloniaEdit.TextMate" Version="0.10.12.2" />
-    <PackageReference Include="TextMateSharp.Grammars" Version="1.0.49" />
+    <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.0.0-preview2" />
+    <PackageReference Include="AvaloniaEdit.TextMate" Version="11.0.0-preview2" />
+    <PackageReference Include="TextMateSharp.Grammars" Version="1.0.50" />
 
-    <PackageReference Include="MessageBox.Avalonia" Version="2.1.0" />
+    <PackageReference Include="MessageBox.Avalonia" Version="2.3.1-prev2" />
   </ItemGroup>
 </Project>

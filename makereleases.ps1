@@ -31,11 +31,12 @@ function Get-RuntimesToPublishFor
 	# This is because we are using AvaloniaEdit.TextMate and TextMateSharp,
 	# which rely on native C dlls;
 	# No current support for arm yet (2022-11-20)
+	# osx-arm64 is now supported
 	$unixRuntimes = @(`
 		'linux-x64' ` 
 		#,'linux-arm64' `
 		,'osx-x64' `
-		#,'osx-arm64' `
+		,'osx-arm64' `
 	)
 	$windowsRuntimes = @(`
 		#'win7-x64' ` 

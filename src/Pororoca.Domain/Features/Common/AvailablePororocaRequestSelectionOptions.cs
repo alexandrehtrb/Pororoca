@@ -5,11 +5,6 @@ namespace Pororoca.Domain.Features.Common;
 
 public static class AvailablePororocaRequestSelectionOptions
 {
-    public const string PororocaCollectionExtension = "pororoca_collection.json";
-    public const string PostmanCollectionExtension = "postman_collection.json";
-    public const string PororocaEnvironmentExtension = "pororoca_environment.json";
-    public const string PostmanEnvironmentExtension = "postman_environment.json";
-
     public static readonly IImmutableList<HttpMethod> AvailableHttpMethods = ImmutableList.Create(
         HttpMethod.Get,
         HttpMethod.Post,

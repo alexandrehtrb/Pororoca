@@ -9,6 +9,7 @@ using Avalonia.Threading;
 using MessageBox.Avalonia;
 using MessageBox.Avalonia.DTO;
 using MessageBox.Avalonia.Models;
+using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.UserData;
 using Pororoca.Desktop.Views;
@@ -325,7 +326,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         AddCollection(newCol, showItemInScreen: true);
     }
 
-    private void AddCollection(PororocaCollection col, bool showItemInScreen = false)
+    internal void AddCollection(PororocaCollection col, bool showItemInScreen = false)
     {
         CollectionViewModel colVm = new(this, col, DuplicateCollection);
         CollectionsGroupViewDataCtx.Items.Add(colVm);
@@ -363,53 +364,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         IsWebSocketClientMessageViewVisible = false;
     }
 
-    private async Task ImportCollectionsAsync()
-    {
-        List<FileDialogFilter> fileSelectionfilters = new();
-        // Mac OSX file dialogs have problems with file filters... TODO: find if there is a way to solve this
-        if (!this.isOperatingSystemMacOsx)
-        {
-            fileSelectionfilters.Add(
-                new()
-                {
-                    Name = Localizer.Instance["Collection/ImportCollectionDialogTypes"],
-                    Extensions = new List<string> { PororocaCollectionExtension, PostmanCollectionExtension }
-                }
-            );
-        }
-
-        OpenFileDialog dialog = new()
-        {
-            Title = Localizer.Instance["Collection/ImportCollectionDialogTitle"],
-            AllowMultiple = true,
-            Filters = fileSelectionfilters
-        };
-        string[]? result = await dialog.ShowAsync(MainWindow.Instance!);
-        if (result != null)
-        {
-            foreach (string collectionFilePath in result)
-            {
-                // First, tries to import as a Pororoca collection
-                if (collectionFilePath.EndsWith(PororocaCollectionExtension))
-                {
-                    string fileContent = await File.ReadAllTextAsync(collectionFilePath, Encoding.UTF8);
-                    if (TryImportPororocaCollection(fileContent, out var importedPororocaCollection))
-                    {
-                        AddCollection(importedPororocaCollection!);
-                    }
-                }
-                // If not a valid Pororoca collection, then tries to import as a Postman collection
-                else if (collectionFilePath.EndsWith(PostmanCollectionExtension))
-                {
-                    string fileContent = await File.ReadAllTextAsync(collectionFilePath, Encoding.UTF8);
-                    if (TryImportPostmanCollection(fileContent, out var importedPostmanCollection))
-                    {
-                        AddCollection(importedPostmanCollection!);
-                    }
-                }
-            }
-        }
-    }
+    private  Task ImportCollectionsAsync() =>
+        FileExporterImporter.ImportCollectionsAsync(this);
 
     #endregion
 

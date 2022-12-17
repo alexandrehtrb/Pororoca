@@ -1,14 +1,9 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
-using System.Text;
-using Avalonia.Controls;
+using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
-using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
-using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
-using static Pororoca.Domain.Features.ImportEnvironment.PororocaEnvironmentImporter;
-using static Pororoca.Domain.Features.ImportEnvironment.PostmanEnvironmentImporter;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -76,7 +71,7 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
         AddEnvironment(newEnv, showItemInScreen: true);
     }
 
-    private void AddEnvironment(PororocaEnvironment envToAdd, bool showItemInScreen = false)
+    internal void AddEnvironment(PororocaEnvironment envToAdd, bool showItemInScreen = false)
     {
         EnvironmentViewModel envToAddVm = new(this, envToAdd, SetEnvironmentAsCurrent);
         // When adding an environment, set the environment
@@ -117,54 +112,8 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
     public IEnumerable<PororocaEnvironment> ToEnvironments() =>
         Items.Select(e => e.ToEnvironment());
 
-    public async Task ImportEnvironmentsAsync()
-    {
-        List<FileDialogFilter> fileSelectionfilters = new();
-        // Mac OSX file dialogs have problems with file filters... TODO: find if there is a way to solve this
-        if (!this.isOperatingSystemMacOsx)
-        {
-            fileSelectionfilters.Add(
-                new()
-                {
-                    Name = Localizer.Instance["Collection/ImportEnvironmentDialogTypes"],
-                    Extensions = new List<string> { PororocaEnvironmentExtension, PostmanEnvironmentExtension }
-                }
-            );
-        }
-
-        OpenFileDialog dialog = new()
-        {
-            Title = Localizer.Instance["Collection/ImportEnvironmentDialogTitle"],
-            AllowMultiple = true,
-            Filters = fileSelectionfilters
-        };
-        string[]? result = await dialog.ShowAsync(MainWindow.Instance!);
-        if (result != null)
-        {
-            foreach (string envFilePath in result)
-            {
-                // First, tries to import as a Pororoca environment
-                if (envFilePath.EndsWith(PororocaEnvironmentExtension))
-                {
-                    string fileContent = await File.ReadAllTextAsync(envFilePath, Encoding.UTF8);
-                    if (TryImportPororocaEnvironment(fileContent, out var importedPororocaEnvironment))
-                    {
-                        importedPororocaEnvironment!.IsCurrent = false; // Imported environment should always be disabled
-                        AddEnvironment(importedPororocaEnvironment!);
-                    }
-                }
-                // If not a valid Pororoca collection, then tries to import as a Postman collection
-                else if (envFilePath.EndsWith(PostmanEnvironmentExtension))
-                {
-                    string fileContent = await File.ReadAllTextAsync(envFilePath, Encoding.UTF8);
-                    if (TryImportPostmanEnvironment(fileContent, out var importedPostmanEnvironment))
-                    {
-                        AddEnvironment(importedPostmanEnvironment!);
-                    }
-                }
-            }
-        }
-    }
+    public Task ImportEnvironmentsAsync() =>
+        FileExporterImporter.ImportEnvironmentsAsync(this);
 
     #endregion
 }
