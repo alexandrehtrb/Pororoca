@@ -49,6 +49,6 @@
     <PackageReference Include="AvaloniaEdit.TextMate" Version="11.0.0-preview2" />
     <PackageReference Include="TextMateSharp.Grammars" Version="1.0.50" />
 
-    <PackageReference Include="MessageBox.Avalonia" Version="2.3.1-prev2" />
+    <PackageReference Include="MessageBox.Avalonia" Version="2.2.0" />
   </ItemGroup>
 </Project>

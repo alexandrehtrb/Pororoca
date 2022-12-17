@@ -8,6 +8,7 @@ using Avalonia.Platform;
 using Avalonia.Threading;
 using MessageBox.Avalonia;
 using MessageBox.Avalonia.DTO;
+using MessageBox.Avalonia.Enums;
 using MessageBox.Avalonia.Models;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
@@ -442,25 +443,19 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
         Bitmap bitmap = new(assets!.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
 
-        var msgbox = MessageBoxManager.GetMessageBoxCustomWindow(
-            new MessageBoxCustomParamsWithImage()
+        var msgbox = MessageBoxManager.GetMessageBoxStandardWindow(
+            new MessageBoxStandardParams()
             {
                 ContentTitle = Localizer.Instance["UpdateReminder/DialogTitle"],
                 ContentMessage = Localizer.Instance["UpdateReminder/DialogMessage"],
-                Icon = bitmap,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 WindowIcon = new(bitmap),
-                ButtonDefinitions = new[]
-                {
-                    new ButtonDefinition { Name = Localizer.Instance["UpdateReminder/DialogGoToSite"], IsDefault = true },
-                    new ButtonDefinition { Name = Localizer.Instance["UpdateReminder/DialogCancel"], IsCancel = true }
-                }
+                ButtonDefinitions = ButtonEnum.OkCancel
             });
         Dispatcher.UIThread.Post(async () =>
         {
-            string goToSiteButtonStr = Localizer.Instance["UpdateReminder/DialogGoToSite"];
-            string buttonResult = await msgbox.ShowDialog(MainWindow.Instance!);
-            if (buttonResult == goToSiteButtonStr)
+            var buttonResult = await msgbox.ShowDialog(MainWindow.Instance!);
+            if (buttonResult == ButtonResult.Ok)
             {
                 OpenPororocaSiteInWebBrowser();
             }
