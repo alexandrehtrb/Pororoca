@@ -11,7 +11,6 @@
       when "-p:PublishForInstallOnWindows" is specified in dotnet build, run or publish
     -->
     <DefineConstants Condition=" '$(PublishForInstallOnWindows)' == 'true' ">$(DefineConstants);INSTALLED_ON_WINDOWS</DefineConstants>
-    <EnablePreviewFeatures>True</EnablePreviewFeatures>
     <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
     <PublishReadyToRun>True</PublishReadyToRun>
     <ApplicationIcon>Assets/pororoca_icon.ico</ApplicationIcon>

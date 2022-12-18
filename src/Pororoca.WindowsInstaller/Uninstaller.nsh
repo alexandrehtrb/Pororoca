@@ -31,6 +31,7 @@ Section "un.$(SectionProgramFiles)" SectionUninstallProgram
 	!insertmacro DeleteRetryAbort "$INSTDIR\libHarfBuzzSharp.dll"
 	!insertmacro DeleteRetryAbort "$INSTDIR\libSkiaSharp.dll"
 	!insertmacro DeleteRetryAbort "$INSTDIR\onigwrap.dll"
+	!insertmacro DeleteRetryAbort "$INSTDIR\msquic.dll"
 	
 	!ifdef LICENSE_FILE
 		!insertmacro DeleteRetryAbort "$INSTDIR\${LICENSE_FILE}"
