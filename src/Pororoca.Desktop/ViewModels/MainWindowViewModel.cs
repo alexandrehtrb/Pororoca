@@ -365,7 +365,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         IsWebSocketClientMessageViewVisible = false;
     }
 
-    private  Task ImportCollectionsAsync() =>
+    private Task ImportCollectionsAsync() =>
         FileExporterImporter.ImportCollectionsAsync(this);
 
     #endregion
@@ -459,18 +459,26 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
             {
                 OpenPororocaSiteInWebBrowser();
             }
-        });        
+        });
     }
 
     private static void OpenPororocaSiteInWebBrowser()
     {
+        const string url = "https://github.com/alexandrehtrb/Pororoca";
         try
         {
-            Process.Start(new ProcessStartInfo
+            if (OperatingSystem.IsWindows())
             {
-                FileName = "https://github.com/alexandrehtrb/Pororoca",
-                UseShellExecute = true
-            });
+                Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+            }
+            else if (OperatingSystem.IsLinux())
+            {
+                Process.Start("xdg-open", url);
+            }
+            else if (OperatingSystem.IsMacOS())
+            {
+                Process.Start("open", url);
+            }
         }
         catch (Exception)
         {
