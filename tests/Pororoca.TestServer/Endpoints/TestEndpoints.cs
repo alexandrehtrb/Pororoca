@@ -16,6 +16,7 @@ public static class TestEndpoints
         app.MapGet("test/get/trailers", TestGetTrailers);
         app.MapGet("test/auth", TestAuthHeader);
         app.MapGet("test/http1websocket", TestHttp1WebSocket);
+        app.MapConnect("test/http2websocket", TestHttp2WebSocket);
 
         // HttpContext as a parameter makes some endpoints hidden in Swagger (?)
         app.MapPost("test/post/none", TestPostNone);
@@ -136,6 +137,24 @@ public static class TestEndpoints
         if (!httpCtx.WebSockets.IsWebSocketRequest)
         {
             return Results.BadRequest("Only WebSockets requests are accepted here!");
+        }
+        else
+        {
+            using var webSocket = await httpCtx.WebSockets.AcceptWebSocketAsync();
+            TaskCompletionSource<object> socketFinishedTcs = new();
+            
+            await BackgroundWebSocketsProcessor.RegisterAndProcessAsync(webSocket, socketFinishedTcs);
+            await socketFinishedTcs.Task;
+
+            return Results.NoContent();
+        }
+    }
+
+    private static async Task<IResult> TestHttp2WebSocket(HttpContext httpCtx)
+    {
+        if (httpCtx.Request.Protocol != "HTTP/2" || !httpCtx.WebSockets.IsWebSocketRequest)
+        {
+            return Results.BadRequest("Only HTTP/2 websocket requests are accepted here!");
         }
         else
         {

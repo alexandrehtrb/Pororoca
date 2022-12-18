@@ -263,14 +263,14 @@ public sealed class PororocaTest
         {
             throw new Exception($"Error: Could not connect to WebSocket. Cause: '{validationErrorCode}'.");
         }
-        else if (!PororocaWebSocketConnectionTranslator.TryTranslateConnection(Collection, PororocaClientCertificatesProvider.Singleton, ws, !ShouldCheckTlsCertificate, out var wsCli, out string? translationErrorCode))
+        else if (!PororocaWebSocketConnectionTranslator.TryTranslateConnection(Collection, PororocaHttpClientProvider.Singleton, ws, !ShouldCheckTlsCertificate, out var wsAndHttpCli, out string? translationErrorCode))
         {
             throw new Exception($"Error: Could not connect to WebSocket. Cause: '{translationErrorCode}'.");
         }
         else
         {
             PororocaTestWebSocketConnector connector = new(Collection, ws, onConnectionChanged, onMessageSending);
-            await connector.ConnectAsync(wsCli!, resolvedUri!, cancellationToken);
+            await connector.ConnectAsync(wsAndHttpCli.wsCli!, wsAndHttpCli.httpCli!, resolvedUri!, cancellationToken);
             if (connector.ConnectionException is not null)
             {
                 throw connector.ConnectionException;

@@ -76,7 +76,7 @@ public class PororocaWebSocketConnector
     /// <summary>
     /// Do not use this method in your tests! Connect to your WebSockets using the PororocaTest class.
     /// </summary>
-    public async Task ConnectAsync(ClientWebSocket client, Uri uri, CancellationToken cancellationToken = default)
+    public async Task ConnectAsync(ClientWebSocket client, HttpClient httpClient, Uri uri, CancellationToken cancellationToken = default)
     {
         if (State == PororocaWebSocketConnectorState.Connected || State == PororocaWebSocketConnectorState.Connecting)
             return;  // Not throwing exception if user tried to connect whilst WebSocket is connected
@@ -84,7 +84,7 @@ public class PororocaWebSocketConnector
         try
         {
             SetIsConnecting();
-            await client.ConnectAsync(uri!, cancellationToken);
+            await client.ConnectAsync(uri!, httpClient, cancellationToken);
             SetupAfterConnected(client);
             SetIsConnected();
             // Starting at .NET 7, connection response status code and headers will be available for reading,

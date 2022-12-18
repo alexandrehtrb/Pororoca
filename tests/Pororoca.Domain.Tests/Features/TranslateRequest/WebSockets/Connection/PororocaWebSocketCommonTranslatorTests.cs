@@ -33,18 +33,21 @@ public static class PororocaWebSocketCommonTranslatorTests
     {
         // GIVEN
         PororocaCollection varResolver = new(string.Empty);
-        Mock<IPororocaClientCertificatesProvider> clientCertsProviderMock = new();
+        Mock<IPororocaHttpClientProvider> httpClientProviderMock = new();
+        HttpClient httpClient = new();
+        httpClientProviderMock.Setup(x => x.Provide(It.IsAny<bool>(), It.IsAny<PororocaRequestAuthClientCertificate>())).Returns(httpClient);
         bool disableTlsVerification = false;
         var httpVersionVerifier = MockHttpVersionOSVerifier(false, TranslateRequestErrors.WebSocketHttpVersionUnavailable);
         PororocaWebSocketConnection ws = new(string.Empty);
-        ws.HttpVersion = 2.0m;
+        ws.HttpVersion = 3.0m;
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, clientCertsProviderMock.Object, ws, disableTlsVerification, out var wsCli, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.False(valid);
-        Assert.Null(wsCli);
+        Assert.Null(clis.wsCli);
+        Assert.Null(clis.httpCli);
         Assert.Equal(TranslateRequestErrors.WebSocketHttpVersionUnavailable, errorCode);
     }
 
@@ -53,19 +56,24 @@ public static class PororocaWebSocketCommonTranslatorTests
     {
         // GIVEN
         PororocaCollection varResolver = new(string.Empty);
-        Mock<IPororocaClientCertificatesProvider> clientCertsProviderMock = new();
+        Mock<IPororocaHttpClientProvider> httpClientProviderMock = new();
+        HttpClient httpClient = new();
+        httpClientProviderMock.Setup(x => x.Provide(It.IsAny<bool>(), It.IsAny<PororocaRequestAuthClientCertificate>())).Returns(httpClient);
         bool disableTlsVerification = false;
         var httpVersionVerifier = MockHttpVersionOSVerifier(true, null);
         PororocaWebSocketConnection ws = new(string.Empty);
         ws.HttpVersion = 2.0m;
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, clientCertsProviderMock.Object, ws, disableTlsVerification, out var wsCli, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.True(valid);
-        Assert.NotNull(wsCli);
+        Assert.NotNull(clis.wsCli);
+        Assert.NotNull(clis.httpCli);
         Assert.Null(errorCode);
+        Assert.Equal(2, clis.wsCli.Options.HttpVersion.Major);
+        Assert.Equal(0, clis.wsCli.Options.HttpVersion.Minor);
     }
 
     #endregion
@@ -82,26 +90,28 @@ public static class PororocaWebSocketCommonTranslatorTests
         PororocaWebSocketConnection ws = new(string.Empty);
         ws.CustomAuth = new();
         ws.CustomAuth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "./cert.crt", null, null);
-        Mock<IPororocaClientCertificatesProvider> clientCertsProviderMock = new();
-#pragma warning disable SYSLIB0026
-        X509Certificate2 resolvedCert = new();
-#pragma warning restore SYSLIB0026
-        clientCertsProviderMock.Setup(x => x.Provide(It.Is<PororocaRequestAuthClientCertificate>(
+        Mock<IPororocaHttpClientProvider> httpClientProviderMock = new();
+        HttpClient httpClient = new();
+        httpClientProviderMock.Setup(x => x.Provide(It.IsAny<bool>(), It.Is<PororocaRequestAuthClientCertificate>(
             cc => cc.Type == PororocaRequestAuthClientCertificateType.Pem
                && cc.CertificateFilePath == "./cert.crt"
                && cc.PrivateKeyFilePath == null
                && cc.FilePassword == null
-        ))).Returns(resolvedCert);
+        ))).Returns(httpClient);
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, clientCertsProviderMock.Object, ws, disableTlsVerification, out var wsCli, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.True(valid);
-        Assert.NotNull(wsCli);
+        Assert.NotNull(clis.wsCli);
+        Assert.NotNull(clis.httpCli);
+        Assert.Equal(httpClient, clis.httpCli);
         Assert.Null(errorCode);
-        Assert.Single(wsCli!.Options.ClientCertificates);
-        Assert.Equal(resolvedCert, wsCli!.Options.ClientCertificates[0]);
+        // unfortunately, there is no way of asserting whether a HttpClient
+        // has ClientCertificates or not
+        // Assert.Single(clis.httpCli!.Options.ClientCertificates);
+        // Assert.Equal(httpClient, clis.httpCli!.Options.ClientCertificates[0]);
     }
 
     [Fact]
@@ -112,16 +122,23 @@ public static class PororocaWebSocketCommonTranslatorTests
         bool disableTlsVerification = false;
         var httpVersionVerifier = MockHttpVersionOSVerifier(true, null);
         PororocaWebSocketConnection ws = new(string.Empty);
-        Mock<IPororocaClientCertificatesProvider> clientCertsProviderMock = new();
+        Mock<IPororocaHttpClientProvider> httpClientProviderMock = new();
+        HttpClient httpClient = new();
+        httpClientProviderMock.Setup(x => x.Provide(It.IsAny<bool>(), It.IsAny<PororocaRequestAuthClientCertificate>())).Returns(httpClient);
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, clientCertsProviderMock.Object, ws, disableTlsVerification, out var wsCli, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.True(valid);
-        Assert.NotNull(wsCli);
+        Assert.NotNull(clis.wsCli);
+        Assert.NotNull(clis.httpCli);
+        Assert.Equal(httpClient, clis.httpCli);
         Assert.Null(errorCode);
-        Assert.Empty(wsCli!.Options.ClientCertificates);
+        // unfortunately, there is no way of asserting whether a HttpClient
+        // has ClientCertificates or not
+        // Assert.Single(clis.httpCli!.Options.ClientCertificates);
+        // Assert.Empty(clis.httpCli!.Options.ClientCertificates);
     }
 
     #endregion
@@ -136,16 +153,21 @@ public static class PororocaWebSocketCommonTranslatorTests
         bool disableTlsVerification = false;
         var httpVersionVerifier = MockHttpVersionOSVerifier(true, null);
         PororocaWebSocketConnection ws = new(string.Empty);
-        Mock<IPororocaClientCertificatesProvider> clientCertsProviderMock = new();
+        Mock<IPororocaHttpClientProvider> httpClientProviderMock = new();
+        HttpClient httpClient = new();
+        httpClientProviderMock.Setup(x => x.Provide(It.IsAny<bool>(), It.IsAny<PororocaRequestAuthClientCertificate>())).Returns(httpClient);
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, clientCertsProviderMock.Object, ws, disableTlsVerification, out var wsCli, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.True(valid);
-        Assert.NotNull(wsCli);
+        Assert.NotNull(clis.wsCli);
+        Assert.NotNull(clis.httpCli);
+        Assert.Equal(httpClient, clis.httpCli);
         Assert.Null(errorCode);
-        Assert.Null(wsCli!.Options.RemoteCertificateValidationCallback);
+        // unfortunately, there is no way of asserting 
+        // whether a HttpClient validates remote certificates or not
     }
 
     [Fact]
@@ -156,17 +178,21 @@ public static class PororocaWebSocketCommonTranslatorTests
         bool disableTlsVerification = true;
         var httpVersionVerifier = MockHttpVersionOSVerifier(true, null);
         PororocaWebSocketConnection ws = new(string.Empty);
-        Mock<IPororocaClientCertificatesProvider> clientCertsProviderMock = new();
+        Mock<IPororocaHttpClientProvider> httpClientProviderMock = new();
+        HttpClient httpClient = new();
+        httpClientProviderMock.Setup(x => x.Provide(It.IsAny<bool>(), It.IsAny<PororocaRequestAuthClientCertificate>())).Returns(httpClient);
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, clientCertsProviderMock.Object, ws, disableTlsVerification, out var wsCli, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.True(valid);
-        Assert.NotNull(wsCli);
+        Assert.NotNull(clis.wsCli);
+        Assert.NotNull(clis.httpCli);
+        Assert.Equal(httpClient, clis.httpCli);
         Assert.Null(errorCode);
-        Assert.NotNull(wsCli!.Options.RemoteCertificateValidationCallback);
-        Assert.True(wsCli!.Options.RemoteCertificateValidationCallback!.Invoke(new(), null, null, SslPolicyErrors.None));
+        // unfortunately, there is no way of asserting 
+        // whether a HttpClient validates remote certificates or not
     }
 
     #endregion
@@ -181,7 +207,9 @@ public static class PororocaWebSocketCommonTranslatorTests
         varResolver.AddVariable(new(true, "K3Value", "V3", true));
         bool disableTlsVerification = false;
         var httpVersionVerifier = MockHttpVersionOSVerifier(true, null);
-        Mock<IPororocaClientCertificatesProvider> clientCertsProviderMock = new();
+        Mock<IPororocaHttpClientProvider> httpClientProviderMock = new();
+        HttpClient httpClient = new();
+        httpClientProviderMock.Setup(x => x.Provide(It.IsAny<bool>(), It.IsAny<PororocaRequestAuthClientCertificate>())).Returns(httpClient);
         PororocaWebSocketConnection ws = new(string.Empty);
         ws.Headers = new()
         {
@@ -193,11 +221,13 @@ public static class PororocaWebSocketCommonTranslatorTests
         ws.CustomAuth.SetBasicAuth("usr", "{{K3Value}}");
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, clientCertsProviderMock.Object, ws, disableTlsVerification, out var wsCli, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.True(valid);
-        Assert.NotNull(wsCli);
+        Assert.NotNull(clis.wsCli);
+        Assert.NotNull(clis.httpCli);
+        Assert.Equal(httpClient, clis.httpCli);
         Assert.Null(errorCode);
         // Cannot validate connection request headers in ClientWebSocket class...
         // This part uses ResolveNonContentHeaders, tested in PororocaRequestCommonTranslator
@@ -215,7 +245,9 @@ public static class PororocaWebSocketCommonTranslatorTests
         varResolver.AddVariable(new(true, "K3Value", "V3", true));
         bool disableTlsVerification = false;
         var httpVersionVerifier = MockHttpVersionOSVerifier(true, null);
-        Mock<IPororocaClientCertificatesProvider> clientCertsProviderMock = new();
+        Mock<IPororocaHttpClientProvider> httpClientProviderMock = new();
+        HttpClient httpClient = new();
+        httpClientProviderMock.Setup(x => x.Provide(It.IsAny<bool>(), It.IsAny<PororocaRequestAuthClientCertificate>())).Returns(httpClient);
         PororocaWebSocketConnection ws = new(string.Empty);
         ws.Subprotocols = new()
         {
@@ -225,11 +257,13 @@ public static class PororocaWebSocketCommonTranslatorTests
         };
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, clientCertsProviderMock.Object, ws, disableTlsVerification, out var wsCli, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.True(valid);
-        Assert.NotNull(wsCli);
+        Assert.NotNull(clis.wsCli);
+        Assert.NotNull(clis.httpCli);
+        Assert.Equal(httpClient, clis.httpCli);
         Assert.Null(errorCode);
         // Cannot validate subprotocols in ClientWebSocket class...
         // Subprotocols should be resolved from variables too
@@ -247,16 +281,20 @@ public static class PororocaWebSocketCommonTranslatorTests
         bool disableTlsVerification = false;
         var httpVersionVerifier = MockHttpVersionOSVerifier(true, null);
         PororocaWebSocketConnection ws = new(string.Empty);
-        Mock<IPororocaClientCertificatesProvider> clientCertsProviderMock = new();
+        Mock<IPororocaHttpClientProvider> httpClientProviderMock = new();
+        HttpClient httpClient = new();
+        httpClientProviderMock.Setup(x => x.Provide(It.IsAny<bool>(), It.IsAny<PororocaRequestAuthClientCertificate>())).Returns(httpClient);
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, clientCertsProviderMock.Object, ws, disableTlsVerification, out var wsCli, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.True(valid);
-        Assert.NotNull(wsCli);
+        Assert.NotNull(clis.wsCli);
+        Assert.NotNull(clis.httpCli);
+        Assert.Equal(httpClient, clis.httpCli);
         Assert.Null(errorCode);
-        Assert.Null(wsCli!.Options.DangerousDeflateOptions);
+        Assert.Null(clis.wsCli!.Options.DangerousDeflateOptions);
     }
 
     [Fact]
@@ -266,22 +304,26 @@ public static class PororocaWebSocketCommonTranslatorTests
         PororocaCollection varResolver = new(string.Empty);
         bool disableTlsVerification = false;
         var httpVersionVerifier = MockHttpVersionOSVerifier(true, null);
-        Mock<IPororocaClientCertificatesProvider> clientCertsProviderMock = new();
+        Mock<IPororocaHttpClientProvider> httpClientProviderMock = new();
+        HttpClient httpClient = new();
+        httpClientProviderMock.Setup(x => x.Provide(It.IsAny<bool>(), It.IsAny<PororocaRequestAuthClientCertificate>())).Returns(httpClient);
         PororocaWebSocketConnection ws = new(string.Empty);
         ws.CompressionOptions = new(14, true, 12, false);
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, clientCertsProviderMock.Object, ws, disableTlsVerification, out var wsCli, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.True(valid);
-        Assert.NotNull(wsCli);
+        Assert.NotNull(clis.wsCli);
+        Assert.NotNull(clis.httpCli);
+        Assert.Equal(httpClient, clis.httpCli);
         Assert.Null(errorCode);
-        Assert.NotNull(wsCli!.Options.DangerousDeflateOptions);
-        Assert.Equal(14, wsCli.Options.DangerousDeflateOptions!.ClientMaxWindowBits);
-        Assert.True(wsCli.Options.DangerousDeflateOptions!.ClientContextTakeover);
-        Assert.Equal(12, wsCli.Options.DangerousDeflateOptions!.ServerMaxWindowBits);
-        Assert.False(wsCli.Options.DangerousDeflateOptions!.ServerContextTakeover);
+        Assert.NotNull(clis.wsCli!.Options.DangerousDeflateOptions);
+        Assert.Equal(14, clis.wsCli.Options.DangerousDeflateOptions!.ClientMaxWindowBits);
+        Assert.True(clis.wsCli.Options.DangerousDeflateOptions!.ClientContextTakeover);
+        Assert.Equal(12, clis.wsCli.Options.DangerousDeflateOptions!.ServerMaxWindowBits);
+        Assert.False(clis.wsCli.Options.DangerousDeflateOptions!.ServerContextTakeover);
     }
 
     #endregion
@@ -298,16 +340,17 @@ public static class PororocaWebSocketCommonTranslatorTests
         PororocaWebSocketConnection ws = new(string.Empty);
         ws.CustomAuth = new();
         ws.CustomAuth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "./cert.crt", null, null);
-        Mock<IPororocaClientCertificatesProvider> clientCertsProviderMock = new();
+        Mock<IPororocaHttpClientProvider> httpClientProviderMock = new();
         Exception ex = new("random exception");
-        clientCertsProviderMock.Setup(x => x.Provide(It.IsAny<PororocaRequestAuthClientCertificate>())).Throws(ex);
+        httpClientProviderMock.Setup(x => x.Provide(It.IsAny<bool>(), It.IsAny<PororocaRequestAuthClientCertificate>())).Throws(ex);
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, clientCertsProviderMock.Object, ws, disableTlsVerification, out var wsCli, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.False(valid);
-        Assert.Null(wsCli);
+        Assert.Null(clis.wsCli);
+        Assert.Null(clis.httpCli);
         Assert.Equal(TranslateRequestErrors.WebSocketUnknownConnectionTranslationError, errorCode);
     }
 
