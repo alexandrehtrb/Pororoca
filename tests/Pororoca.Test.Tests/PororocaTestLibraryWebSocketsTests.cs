@@ -5,11 +5,11 @@ using Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage;
 
 namespace Pororoca.Test.Tests;
 
-public class PororocaTestLibraryWebSocketsHttp1Tests
+public class PororocaTestLibraryWebSocketsTests
 {
     private readonly PororocaTest pororocaTest;
 
-    public PororocaTestLibraryWebSocketsHttp1Tests()
+    public PororocaTestLibraryWebSocketsTests()
     {
         string filePath = GetTestCollectionFilePath();
         this.pororocaTest = PororocaTest.LoadCollectionFromFile(filePath)

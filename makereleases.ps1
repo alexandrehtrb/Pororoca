@@ -30,8 +30,7 @@ function Get-RuntimesToPublishFor
 	# Dropping support for arm releases, starting at version 1.6.0
 	# This is because we are using AvaloniaEdit.TextMate and TextMateSharp,
 	# which rely on native C dlls;
-	# No current support for arm yet (2022-11-20)
-	# osx-arm64 is now supported
+	# osx-arm64 is now supported (2022-11-30), thanks to AvaloniaEdit version 11.0.0-preview2
 	$unixRuntimes = @(`
 		'linux-x64' ` 
 		#,'linux-arm64' `
@@ -54,8 +53,8 @@ function Get-RuntimesToPublishFor
 
 	# Windows releases should be built on a Windows machine, because of dotnet
 	# Linux and Mac OS releases should be built on one of those OSs, because of chmod and zip
-	#return $IsWindows ? $windowsRuntimes : $unixRuntimes
-	return @("linux-x64")
+	return $IsWindows ? $windowsRuntimes : $unixRuntimes
+	#return @("linux-x64")
 }
 
 #################### Pre-release build and tests ####################

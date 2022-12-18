@@ -15,7 +15,11 @@ dotnet new xunit
 # outras bibliotecas de teste podem ser usadas
 ```
 
-Após isso, no projeto de testes criado, o arquivo .csproj precisa ser editado para incluir o pacote NuGet [Pororoca.Test](https://www.nuget.org/packages/Pororoca.Test/) e para permitir funcionalidades experimentais, que, neste caso, o HTTP/3 é a que iremos utilizar.
+Após isso, no projeto de testes criado, o arquivo .csproj precisa ser editado para incluir o pacote NuGet [Pororoca.Test](https://www.nuget.org/packages/Pororoca.Test/).
+
+Se você estiver usando .NET 6 em seu projeto de testes, a versão do Pororoca.Test precisa ser 1.x.y. Confira a [documentação de Testes Automatizados](https://github.com/alexandrehtrb/Pororoca/blob/1.6.0/docs/pt-BR/TestesAutomatizados.md) para Pororoca.Test v1, se for seu caso.
+
+Se seus testes serão executados em uma máquina Linux e esses testes incluírem HTTP/3, a biblioteca [msquic](https://github.com/microsoft/msquic) precisa estar instalada. Use msquic v1 para .NET 6 e msquic v2 para .NET 7.
 
 
 ```xml
@@ -23,17 +27,14 @@ Após isso, no projeto de testes criado, o arquivo .csproj precisa ser editado p
 
   <PropertyGroup>
     <!-- O TargetFramework precisa ser .net6.0 ou acima -->
+    <!-- Pororoca.Test v1 usa .net6.0 -->
+    <!-- Pororoca.Test v2 usa .net7.0 -->
     <TargetFramework>net7.0</TargetFramework>
     ...
-    <!-- EnablePreviewFeatures e RuntimeHostConfigurationOption habilitam HTTP/3 no projeto -->
-    <EnablePreviewFeatures>True</EnablePreviewFeatures>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
-    <RuntimeHostConfigurationOption Include="System.Net.SocketsHttpHandler.Http3Support" Value="true" />
-  </ItemGroup>
   <ItemGroup>
     <!-- A linha abaixo adiciona o pacote Pororoca.Test ao projeto -->
-    <PackageReference Include="Pororoca.Test" Version="1.6.0" />
+    <PackageReference Include="Pororoca.Test" Version="2.0.0" />
     ...
   </ItemGroup>
 
