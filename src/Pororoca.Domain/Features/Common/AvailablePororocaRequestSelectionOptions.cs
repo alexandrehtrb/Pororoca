@@ -13,6 +13,7 @@ public static class AvailablePororocaRequestSelectionOptions
         HttpMethod.Delete,
         HttpMethod.Head,
         HttpMethod.Options,
+        HttpMethod.Connect,
         HttpMethod.Trace);
 
     public static readonly IImmutableList<decimal> AvailableHttpVersionsForHttp = ImmutableList.Create(
