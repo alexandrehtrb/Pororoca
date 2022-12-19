@@ -242,7 +242,7 @@ function Publish-PororocaDesktop
 	if ($runtime -like "*win*")
 	{
 		# let's copy the msquic.dll file next to the generated .exe
-		Copy-Item -Path "./src/Pororoca.Desktop/bin/Release/${runtime}/msquic.dll" `
+		Copy-Item -Path "./src/Pororoca.Desktop/bin/Release/net7.0/${runtime}/msquic.dll" `
 			  	  -Destination $outputFolder
 	}
 }
