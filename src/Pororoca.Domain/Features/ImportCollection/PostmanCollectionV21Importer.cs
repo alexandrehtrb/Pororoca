@@ -72,12 +72,13 @@ public static class PostmanCollectionV21Importer
         {
             case PostmanAuthType.basic:
                 myAuth = new(PororocaRequestAuthMode.Basic);
-                myAuth.SetBasicAuth(auth.Basic?.FirstOrDefault(p => p.Key == "username")?.Value ?? string.Empty,
-                                    auth.Basic?.FirstOrDefault(p => p.Key == "password")?.Value ?? string.Empty);
+                var basic = auth.ReadBasicAuthValues();
+                myAuth.SetBasicAuth(basic.basicAuthLogin, basic.basicAuthPwd);
                 break;
             case PostmanAuthType.bearer:
                 myAuth = new(PororocaRequestAuthMode.Bearer);
-                myAuth.SetBearerAuth(auth.Bearer?.FirstOrDefault(p => p.Key == "token")?.Value ?? string.Empty);
+                var bearerToken = auth.ReadBearerAuthValue();
+                myAuth.SetBearerAuth(bearerToken);
                 break;
             case PostmanAuthType.noauth:
             default:

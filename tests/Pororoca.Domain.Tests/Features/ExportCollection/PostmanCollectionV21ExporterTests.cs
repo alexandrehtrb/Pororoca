@@ -297,16 +297,16 @@ public static class PostmanCollectionV21ExporterTests
         Assert.Equal(PostmanAuthType.basic, postmanAuth.Type);
         Assert.Null(postmanAuth.Bearer);
 
-        Assert.NotNull(postmanAuth.Basic);
-        Assert.Equal(2, postmanAuth.Basic!.Length);
+        var basic = Assert.IsType<PostmanVariable[]>(postmanAuth.Basic);
+        Assert.Equal(2, basic.Length);
 
-        var a1 = postmanAuth.Basic[0];
+        var a1 = basic[0];
         Assert.Null(a1.Disabled);
         Assert.Equal("string", a1.Type);
         Assert.Equal("username", a1.Key);
         Assert.Equal("usr", a1.Value);
 
-        var a2 = postmanAuth.Basic[1];
+        var a2 = basic[1];
         Assert.Null(a2.Disabled);
         Assert.Equal("string", a2.Type);
         Assert.Equal("password", a2.Key);
@@ -328,10 +328,10 @@ public static class PostmanCollectionV21ExporterTests
         Assert.Equal(PostmanAuthType.bearer, postmanAuth.Type);
         Assert.Null(postmanAuth.Basic);
 
-        Assert.NotNull(postmanAuth.Bearer);
-        Assert.Single(postmanAuth.Bearer);
+        var bearer = Assert.IsType<PostmanVariable[]>(postmanAuth.Bearer);
+        Assert.Single(bearer);
 
-        var a1 = postmanAuth.Bearer![0];
+        var a1 = bearer[0];
         Assert.Null(a1.Disabled);
         Assert.Equal("string", a1.Type);
         Assert.Equal("token", a1.Key);
@@ -387,16 +387,16 @@ public static class PostmanCollectionV21ExporterTests
 
         var postmanAuth = postmanReq.Request?.Auth;
         Assert.NotNull(postmanAuth);
-        Assert.NotNull(postmanAuth!.Basic);
-        Assert.Equal(2, postmanAuth!.Basic!.Length);
+        var basic = Assert.IsType<PostmanVariable[]>(postmanAuth!.Basic);
+        Assert.Equal(2, basic.Length);
 
-        var a1 = postmanAuth.Basic[0];
+        var a1 = basic[0];
         Assert.Null(a1.Disabled);
         Assert.Equal("string", a1.Type);
         Assert.Equal("username", a1.Key);
         Assert.Equal("usr", a1.Value);
 
-        var a2 = postmanAuth.Basic[1];
+        var a2 = basic[1];
         Assert.Null(a2.Disabled);
         Assert.Equal("string", a2.Type);
         Assert.Equal("password", a2.Key);
