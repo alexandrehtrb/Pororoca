@@ -120,7 +120,7 @@ public static class PororocaHttpRequestTranslator
                 {
                     string resolvedFileSrcPath = variableResolver.ReplaceTemplates(param.FileSrcPath!);
                     string fileName = new FileInfo(param.FileSrcPath!).Name;
-                    formDataContent.Add(content: MakeFileContent(param.FileSrcPath!, param.ContentType),
+                    formDataContent.Add(content: MakeFileContent(resolvedFileSrcPath, param.ContentType),
                                         name: resolvedKey,
                                         fileName: fileName);
                 }

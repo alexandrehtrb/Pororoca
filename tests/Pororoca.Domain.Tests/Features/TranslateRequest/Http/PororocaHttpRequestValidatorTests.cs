@@ -308,6 +308,32 @@ public static class PororocaHttpRequestValidatorTests
     }
 
     [Fact]
+    public static void Should_accept_file_body_if_file_is_found()
+    {
+        // GIVEN
+        const string url = "http://www.url.br";
+        const string fileName = "testfilecontent1.json";
+        string testFilePath = GetTestFilePath(fileName);
+        var mockedVariableResolver = MockVariableResolver("{{MyFilePath}}", testFilePath);
+        var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
+        var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string, bool>() { { testFilePath, true } });
+        PororocaHttpRequest req = new();
+        req.UpdateUrl(url);
+        req.UpdateHttpVersion(1.1m);
+        var body = new PororocaHttpRequestBody();
+        body.SetFileContent("{{MyFilePath}}", "text/plain");
+        req.UpdateBody(body);
+
+        // WHEN
+        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, mockedVariableResolver.Object, req, out string? errorCode));
+
+        // THEN
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates(url), Times.Once);
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{MyFilePath}}"), Times.Once);
+        Assert.Null(errorCode);
+    }
+
+    [Fact]
     public static void Should_reject_multipart_form_data_body_if_any_enabled_param_with_file_not_found()
     {
         // GIVEN
@@ -551,4 +577,10 @@ public static class PororocaHttpRequestValidatorTests
     #endregion
 
     #endregion
+
+    private static string GetTestFilePath(string fileName)
+    {
+        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
+        return Path.Combine(testDataDirInfo.FullName, "TestData", fileName);
+    }
 }

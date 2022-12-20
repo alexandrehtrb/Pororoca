@@ -217,6 +217,8 @@ public static class PororocaHttpRequestTranslatorTests
         PororocaCollection col = new("VarResolver");
         col.AddVariable(new(true, "keyX", "key3", false));
         col.AddVariable(new(true, "keyXvalue", "value3", false));
+        string fileName = "testfilecontent2.json";
+        col.AddVariable(new(true, "MyFileName", fileName, false));
         Dictionary<string, string> resolvedContentHeaders = new(1)
         {
             { "Content-Language", "pt-BR" }
@@ -230,9 +232,9 @@ public static class PororocaHttpRequestTranslatorTests
         p3.SetTextValue("oi2", "text/plain");
         PororocaHttpRequestFormDataParam p4 = new(true, "{{keyX}}");
         p4.SetTextValue("{{keyXvalue}}", "application/json");
-        string testFilePath = GetTestFilePath("testfilecontent2.json");
+        string testFilePath = GetTestFilePath(fileName);
         PororocaHttpRequestFormDataParam p5 = new(true, "key4");
-        p5.SetFileValue(testFilePath, "application/json");
+        p5.SetFileValue(testFilePath.Replace("testfilecontent2.json", "{{MyFileName}}"), "application/json");
 
         var formDataParams = new[] { p1, p2, p3, p4, p5 };
 
