@@ -25,6 +25,6 @@ public static class PostmanEnvironmentExporter
                         .ToArray(),
             Scope = "environment",
             ExportedAt = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss.fff'Z'"),
-            ExportedUsing = "Postman/9.15.2" // Exporting with Postman label to avoid blocking by them
+            ExportedUsing = "Postman/10.5.2" // Exporting with Postman label to avoid blocking by them
         };
 }
