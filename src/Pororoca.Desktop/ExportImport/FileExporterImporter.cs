@@ -35,8 +35,6 @@ internal static class FileExporterImporter
         FilePickerSaveOptions opts = new()
         {
             Title = Localizer.Instance["Collection/ExportCollectionDialogTitle"],
-            SuggestedFileName = cvm.Name,
-            DefaultExtension = PororocaCollectionExtensionGlob,
             FileTypeChoices = new List<FilePickerFileType>()
             {
                 new(Localizer.Instance["Collection/PororocaCollectionFormat"])
@@ -49,6 +47,10 @@ internal static class FileExporterImporter
                 }
             }
         };
+        if (OperatingSystem.IsWindows())
+        {
+            opts.DefaultExtension = PororocaCollectionExtensionGlob;
+        }
 
         return ShowExportCollectionDialogAsync(cvm, opts);
     }
@@ -98,8 +100,6 @@ internal static class FileExporterImporter
         FilePickerSaveOptions opts = new()
         {
             Title = Localizer.Instance["Environment/ExportEnvironmentDialogTitle"],
-            SuggestedFileName = evm.Name,
-            DefaultExtension = PororocaEnvironmentExtension,
             FileTypeChoices = new List<FilePickerFileType>()
             {
                 new(Localizer.Instance["Environment/PororocaEnvironmentFormat"])
@@ -112,6 +112,10 @@ internal static class FileExporterImporter
                 }
             }
         };
+        if (OperatingSystem.IsWindows())
+        {
+            opts.DefaultExtension = PororocaEnvironmentExtensionGlob;
+        }
 
         return ShowExportEnvironmentDialogAsync(evm, opts);
     }
