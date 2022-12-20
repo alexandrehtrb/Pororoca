@@ -785,7 +785,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #endregion
 
-
     #region MESSAGE DETAIL
 
     private void OnSelectedExchangedMessageChanged(WebSocketExchangedMessageViewModel vm)
@@ -799,8 +798,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     {
         static string GenerateDefaultInitialFileName(WebSocketExchangedMessageViewModel vm)
         {
-            string fileExtensionWithoutDot = vm.Type == PororocaWebSocketMessageType.Text ?
-                                             "txt" :
+            string fileExtensionWithoutDot = vm.IsJsonTextContent ? "json" :
+                                             vm.Type == PororocaWebSocketMessageType.Text ? "txt" :
                                              string.Empty;
 
             return $"websocket-msg-{vm.ShortInstantDescription}.{fileExtensionWithoutDot}";
