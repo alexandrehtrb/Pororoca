@@ -12,7 +12,7 @@ internal class PostmanRequest
 
     public PostmanRequestBody? Body { get; set; }
 
-    public PostmanRequestUrl Url { get; set; }
+    public object? Url { get; set; }
 }
 
 #nullable enable warnings

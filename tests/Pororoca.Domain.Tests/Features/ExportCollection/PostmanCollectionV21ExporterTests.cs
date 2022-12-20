@@ -403,7 +403,7 @@ public static class PostmanCollectionV21ExporterTests
         Assert.Equal("pwd", a2.Value);
 
         Assert.Equal("POST", postmanReq.Request!.Method);
-        Assert.Equal("http://www.abc.com.br", postmanReq.Request.Url.Raw);
+        Assert.Equal("http://www.abc.com.br", postmanReq.Request.Url);
 
         Assert.Equal(PostmanRequestBodyMode.Raw, postmanReq.Request.Body!.Mode);
         Assert.Equal("[]", postmanReq.Request.Body.Raw);
@@ -471,7 +471,7 @@ public static class PostmanCollectionV21ExporterTests
         Assert.Equal("Req1", postmanReq1.Name);
         Assert.Null(postmanReq1.Items);
         Assert.Equal("GET", postmanReq1.Request!.Method);
-        Assert.Equal("http://www.abc.com.br", postmanReq1.Request!.Url.Raw);
+        Assert.Equal("http://www.abc.com.br", postmanReq1.Request!.Url);
 
         var postmanFolder1 = postmanCollection.Items[1];
         Assert.Equal("Folder1", postmanFolder1.Name);
@@ -483,7 +483,7 @@ public static class PostmanCollectionV21ExporterTests
         Assert.Equal("Req2", postmanReq2.Name);
         Assert.Null(postmanReq2.Items);
         Assert.Equal("GET", postmanReq2.Request!.Method);
-        Assert.Equal("https://www.ghi.com.br", postmanReq2.Request!.Url.Raw);
+        Assert.Equal("https://www.ghi.com.br", postmanReq2.Request!.Url);
 
         Assert.NotNull(postmanCollection.Variable);
         Assert.Equal(2, postmanCollection.Variable!.Length);

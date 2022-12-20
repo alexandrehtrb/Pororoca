@@ -96,91 +96,12 @@ public static class PostmanCollectionV21Exporter
             {
                 Auth = ConvertToPostmanAuth(req.CustomAuth),
                 Method = req.HttpMethod,
-                Url = ConvertToPostmanRequestUrl(req.Url),
+                Url = req.Url,
                 Header = ConvertToPostmanHeaders(req.Headers),
                 Body = ConvertToPostmanRequestBody(req.Body)
             },
             Response = Array.Empty<object>()
         };
-
-    internal static PostmanRequestUrl ConvertToPostmanRequestUrl(string rawUrl)
-    {
-        if (Uri.TryCreate(rawUrl, UriKind.Absolute, out var absoluteUri))
-        {
-            return new PostmanRequestUrl()
-            {
-                Raw = rawUrl,
-                Protocol = absoluteUri.Scheme,
-                Host = absoluteUri.Host.Split('.', StringSplitOptions.RemoveEmptyEntries),
-                Path = absoluteUri.Segments.Select(s => s.TrimStart('/').TrimEnd('/')).Where(s => !string.IsNullOrEmpty(s)).ToArray(),
-                Port = absoluteUri.IsDefaultPort || absoluteUri.Port <= 0 ? null : absoluteUri.Port.ToString(),
-                Query = absoluteUri.Query.TrimStart('?')
-                            .Split('&', StringSplitOptions.RemoveEmptyEntries)
-                            .Select(kvStr =>
-                            {
-                                string[] kv = kvStr.Split('=');
-                                if (kv.Length >= 2)
-                                    return new PostmanVariable() { Key = kv[0], Value = kv[1] };
-                                else
-                                    return new PostmanVariable() { Key = kv.FirstOrDefault() ?? string.Empty, Value = null };
-                            })
-                            .ToArray()
-            };
-        }
-        else
-        {
-            const string protocolRgxPart = @"(?<protocol>[_\d\w\{\}]+://)";
-            const string hostRgxPart = @"(?<host>[_\d\w\.\{\}]+)";
-            const string portRgxPart = @"(?<port>:[_\d\w\{\}]+)";
-            const string segmentsRgxPart = @"(?<segments>(/[_\d\w\{\}#\.]*)*)";
-            const string queryParamsRgxPart = @"\?(?<queryparams>.*)";
-
-            string[] regexes = new[]
-            {
-                protocolRgxPart+hostRgxPart+portRgxPart+segmentsRgxPart+queryParamsRgxPart,
-                protocolRgxPart+hostRgxPart+segmentsRgxPart+queryParamsRgxPart,
-                hostRgxPart+segmentsRgxPart+queryParamsRgxPart,
-                hostRgxPart+segmentsRgxPart,
-                hostRgxPart+queryParamsRgxPart,
-                hostRgxPart
-            };
-
-            for (int i = 0; i < regexes.Length; i++)
-            {
-                var mc = new Regex(regexes[i]).Matches(rawUrl);
-                if (mc.Count == 0)
-                {
-                    continue;
-                }
-                else
-                {
-                    var matchGroups = mc.First().Groups.Values;
-                    return new PostmanRequestUrl()
-                    {
-                        Raw = rawUrl,
-                        Protocol = matchGroups.FirstOrDefault(g => g.Name == "protocol")?.Value?.Replace("://", string.Empty),
-                        Host = matchGroups.First(g => g.Name == "host").Value.Split('.', StringSplitOptions.RemoveEmptyEntries),
-                        Path = matchGroups.FirstOrDefault(g => g.Name == "segments")?.Value?.Split('/', StringSplitOptions.RemoveEmptyEntries),
-                        Port = matchGroups.FirstOrDefault(g => g.Name == "port")?.Value?.Replace(":", string.Empty),
-                        Query = matchGroups.FirstOrDefault(g => g.Name == "queryparams")
-                                           ?.Value
-                                           ?.Split('&', StringSplitOptions.RemoveEmptyEntries)
-                                           ?.Select(kvStr =>
-                                           {
-                                               string[] kv = kvStr.Split('=');
-                                               if (kv.Length >= 2)
-                                                   return new PostmanVariable() { Key = kv[0], Value = kv[1] };
-                                               else
-                                                   return new PostmanVariable() { Key = kv.FirstOrDefault() ?? string.Empty, Value = null };
-                                           })
-                                           ?.ToArray()
-                    };
-                }
-            }
-
-            return new PostmanRequestUrl() { Raw = rawUrl };
-        }
-    }
 
     internal static PostmanVariable[] ConvertToPostmanHeaders(IEnumerable<PororocaKeyValueParam>? hdrs) =>
         hdrs == null ?
