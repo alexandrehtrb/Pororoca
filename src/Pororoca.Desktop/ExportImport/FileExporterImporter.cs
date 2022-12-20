@@ -25,6 +25,7 @@ internal static class FileExporterImporter
     private const string PostmanCollectionExtensionGlob = $"*.{PostmanCollectionExtension}";
     private const string PororocaEnvironmentExtensionGlob = $"*.{PororocaEnvironmentExtension}";
     private const string PostmanEnvironmentExtensionGlob = $"*.{PostmanEnvironmentExtension}";
+    private const string JsonExtensionGlob = $"*.json";
 
 
     #region EXPORT COLLECTION
@@ -35,6 +36,7 @@ internal static class FileExporterImporter
         {
             Title = Localizer.Instance["Collection/ExportCollectionDialogTitle"],
             SuggestedFileName = cvm.Name,
+            DefaultExtension = PororocaCollectionExtensionGlob,
             FileTypeChoices = new List<FilePickerFileType>()
             {
                 new(Localizer.Instance["Collection/PororocaCollectionFormat"])
@@ -97,6 +99,7 @@ internal static class FileExporterImporter
         {
             Title = Localizer.Instance["Environment/ExportEnvironmentDialogTitle"],
             SuggestedFileName = evm.Name,
+            DefaultExtension = PororocaEnvironmentExtension,
             FileTypeChoices = new List<FilePickerFileType>()
             {
                 new(Localizer.Instance["Environment/PororocaEnvironmentFormat"])
@@ -162,7 +165,7 @@ internal static class FileExporterImporter
             fileSelectionfilters.Add(
                 new(Localizer.Instance["Collection/ImportEnvironmentDialogTypes"])
                 {
-                    Patterns = new List<string> { PororocaEnvironmentExtensionGlob, PostmanEnvironmentExtensionGlob }
+                    Patterns = new List<string> { PororocaEnvironmentExtensionGlob, PostmanEnvironmentExtensionGlob, JsonExtensionGlob }
                 }
             );
         }
@@ -177,7 +180,7 @@ internal static class FileExporterImporter
         var filesPaths = await SelectFilesFromStorageAsync(opts);
         if (filesPaths != null)
         {
-            foreach (var filePath in filesPaths)
+            foreach (string filePath in filesPaths)
             {
                 // First, tries to import as a Pororoca environment
                 if (filePath.EndsWith(PororocaEnvironmentExtension))
@@ -189,8 +192,8 @@ internal static class FileExporterImporter
                         egvm.AddEnvironment(importedPororocaEnvironment!);
                     }
                 }
-                // If not a valid Pororoca collection, then tries to import as a Postman collection
-                else if (filePath.EndsWith(PostmanEnvironmentExtension))
+                // If not a valid Pororoca environment, then tries to import as a Postman environment
+                else
                 {
                     string fileContent = await File.ReadAllTextAsync(filePath, Encoding.UTF8);
                     if (TryImportPostmanEnvironment(fileContent, out var importedPostmanEnvironment))
@@ -215,7 +218,7 @@ internal static class FileExporterImporter
             fileSelectionfilters.Add(
                 new(Localizer.Instance["Collection/ImportCollectionDialogTypes"])
                 {
-                    Patterns = new List<string> { PororocaCollectionExtensionGlob, PostmanCollectionExtensionGlob }
+                    Patterns = new List<string> { PororocaCollectionExtensionGlob, PostmanCollectionExtensionGlob, JsonExtensionGlob }
                 }
             );
         }
@@ -229,7 +232,7 @@ internal static class FileExporterImporter
         var filesPaths = await SelectFilesFromStorageAsync(opts);
         if (filesPaths != null)
         {
-            foreach (var filePath in filesPaths)
+            foreach (string filePath in filesPaths)
             {
                 // First, tries to import as a Pororoca collection
                 if (filePath.EndsWith(PororocaCollectionExtension))
@@ -241,7 +244,7 @@ internal static class FileExporterImporter
                     }
                 }
                 // If not a valid Pororoca collection, then tries to import as a Postman collection
-                else if (filePath.EndsWith(PostmanCollectionExtension))
+                else
                 {
                     string fileContent = await File.ReadAllTextAsync(filePath, Encoding.UTF8);
                     if (TryImportPostmanCollection(fileContent, out var importedPostmanCollection))
@@ -356,9 +359,10 @@ internal static class FileExporterImporter
                     continue;
                 }
 
-                // uri.AbsolutePath returns the correct path in Linux
-                // TODO: confirm behavior for Windows and MacOSX
-                filesPaths.Add(uri.AbsolutePath);
+                // uri.LocalPath returns the correct path in Linux and Windows
+                // careful with file paths with whitespaces in them
+                // TODO: confirm behavior for MacOSX
+                filesPaths.Add(uri.LocalPath);
             }
 
             return filesPaths;
@@ -378,7 +382,10 @@ internal static class FileExporterImporter
 
         if (destFile != null && destFile.TryGetUri(out var uri))
         {
-            return uri.ToString();
+            // uri.LocalPath returns the correct path in Linux and Windows
+            // careful with file paths with whitespaces in them
+            // TODO: confirm behavior for MacOSX
+            return uri.LocalPath;
         }
         else
         {
