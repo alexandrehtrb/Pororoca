@@ -15,7 +15,7 @@ public static class PororocaHttpRequestValidator
         TryResolveRequestUri(variableResolver, req.Url, out _, out errorCode)
         && httpVersionOSVerifier(req.HttpVersion, out errorCode)
         && HasValidContentTypeForReqBody(req, out errorCode)
-        && CheckReqBodyFileExists(req, fileExistsVerifier, out errorCode)
+        && CheckReqBodyFileExists(variableResolver, req, fileExistsVerifier, out errorCode)
         && CheckClientCertificateFilesAndPassword(variableResolver, fileExistsVerifier, req.CustomAuth, out errorCode);
 
     private static bool HasValidContentTypeForReqBody(PororocaHttpRequest req, out string? errorCode)
@@ -44,24 +44,34 @@ public static class PororocaHttpRequestValidator
         }
     }
 
-    private static bool CheckReqBodyFileExists(PororocaHttpRequest req, FileExistsVerifier fileExistsVerifier, out string? errorCode)
+    private static bool CheckReqBodyFileExists(IPororocaVariableResolver varResolver, PororocaHttpRequest req, FileExistsVerifier fileExistsVerifier, out string? errorCode)
     {
         var bodyMode = req.Body?.Mode;
 
         if (bodyMode == PororocaHttpRequestBodyMode.File)
         {
-            bool fileFound = fileExistsVerifier.Invoke(req.Body!.FileSrcPath!);
+            string resolvedFilePath = varResolver.ReplaceTemplates(req.Body!.FileSrcPath!);
+            bool fileFound = fileExistsVerifier.Invoke(resolvedFilePath);
             errorCode = fileFound ? null : TranslateRequestErrors.ReqBodyFileNotFound;
             return errorCode == null;
         }
         else if (bodyMode == PororocaHttpRequestBodyMode.FormData)
         {
-            bool anyNotFound = req.Body!.FormDataValues!
-                                         .Any(fd => fd.Enabled
-                                                 && fd.Type == PororocaHttpRequestFormDataParamType.File
-                                                 && !fileExistsVerifier.Invoke(fd.FileSrcPath!));
-            errorCode = anyNotFound ? TranslateRequestErrors.ReqBodyFileNotFound : null;
-            return errorCode == null;
+            foreach (var fd in req.Body!.FormDataValues!)
+            {
+                if (fd.Enabled && fd.Type == PororocaHttpRequestFormDataParamType.File)
+                {
+                    string resolvedFilePath = varResolver.ReplaceTemplates(fd.FileSrcPath!);
+                    if (!fileExistsVerifier.Invoke(resolvedFilePath))
+                    {
+                        errorCode = TranslateRequestErrors.ReqBodyFileNotFound;
+                        return errorCode == null;
+                    }
+                }
+            }
+
+            errorCode = null;
+            return true;
         }
         else
         {
