@@ -375,6 +375,43 @@
               "messageType": "close"
             }
           ]
+        },
+        {
+          "requestType": "websocket",
+          "id": "1ab900ec-cd69-4759-aec9-9bf8ec5a52ba",
+          "name": "WebSocket HTTP2",
+          "httpVersion": 2.0,
+          "url": "{{BaseUrlWss}}/test/http2websocket",
+          "clientMessages": [
+            {
+              "id": "082e47f9-12bf-4c3b-b7d1-10a003f9fe87",
+              "name": "Hello",
+              "contentMode": "raw",
+              "rawContent": "Hello",
+              "disableCompressionForThis": false,
+              "direction": "fromClient",
+              "messageType": "text"
+            },
+            {
+              "id": "7f367e73-5dc9-4cc6-898a-f088883eee82",
+              "name": "SpiderMan",
+              "contentMode": "file",
+              "rawContent": "",
+              "fileSrcPath": "{{TestFilesDir}}/homem_aranha.jpg",
+              "disableCompressionForThis": false,
+              "direction": "fromClient",
+              "messageType": "binary"
+            },
+            {
+              "id": "2bd9793e-364d-4ae3-92de-51d12603eb01",
+              "name": "Bye",
+              "contentMode": "raw",
+              "rawContent": "{{WebSocketBye}}",
+              "disableCompressionForThis": false,
+              "direction": "fromClient",
+              "messageType": "close"
+            }
+          ]
         }
       ]
     }

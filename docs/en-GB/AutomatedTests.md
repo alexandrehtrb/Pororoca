@@ -15,24 +15,25 @@ dotnet new xunit
 # other testing libraries can be used
 ```
 
-After that, in the created test project, the .csproj file must be edited to include the [Pororoca.Test](https://www.nuget.org/packages/Pororoca.Test/) NuGet package and to enable experimental features, that, in this case, HTTP/3 will be the one we will use.
+After that, in the created test project, the .csproj file must be edited to include the [Pororoca.Test](https://www.nuget.org/packages/Pororoca.Test/) NuGet package.
+
+If you are using .NET 6 in your test project, the Pororoca.Test version needs to be 1.x.y. Check the [Automated Tests documentation](https://github.com/alexandrehtrb/Pororoca/blob/1.6.0/docs/en-GB/AutomatedTests.md) for Pororoca.Test v1, if that is your case.
+
+Be aware that if you will run your unit tests on a Linux machine and those tests include HTTP/3, [msquic](https://github.com/microsoft/msquic) needs to be installed. Use msquic v1 for .NET 6 and msquic v2 for .NET 7.
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <!-- TargetFramework needs to be .net6.0 or higher -->
-    <TargetFramework>net6.0</TargetFramework>
+    <!-- Pororoca.Test v1 uses .net6.0 -->
+    <!-- Pororoca.Test v2 uses .net7.0 -->
+    <TargetFramework>net7.0</TargetFramework>
     ...
-    <!-- EnablePreviewFeatures and RuntimeHostConfigurationOption enable HTTP/3 in the project -->
-    <EnablePreviewFeatures>True</EnablePreviewFeatures>
   </PropertyGroup>
   <ItemGroup>
-    <RuntimeHostConfigurationOption Include="System.Net.SocketsHttpHandler.Http3Support" Value="true" />
-  </ItemGroup>
-  <ItemGroup>
     <!-- The line below adds Pororoca.Test package to the project -->
-    <PackageReference Include="Pororoca.Test" Version="1.6.0" />
+    <PackageReference Include="Pororoca.Test" Version="2.0.0" />
     ...
   </ItemGroup>
 

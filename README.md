@@ -22,6 +22,7 @@ Read the [instructions](./docs/en-GB/Installation.md) and download the program [
 * Full export and import compatibility with Postman.
 * Much lower memory usage - around five times less than Postman.
 * Automated testing.
+* WebSockets.
 * Fast startup time.
 * Free and open-source.
 

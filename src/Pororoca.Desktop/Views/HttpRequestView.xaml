@@ -37,7 +37,7 @@
 
         <StackPanel Grid.Column="1" Grid.Row="0" Margin="6,0,6,0" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
-          <TextBox Height="40" FontSize="14" Text="{Binding RequestUrl}" Watermark="{i18n:Localize UrlWatermark, Context=HttpRequest}" VerticalContentAlignment="Center" ToolTip.Placement="Bottom" ToolTip.Tip="{Binding ResolvedRequestUrlToolTip}" PointerEnter="OnRequestUrlPointerEnter" />
+          <TextBox Height="40" FontSize="14" Text="{Binding RequestUrl}" Watermark="{i18n:Localize UrlWatermark, Context=HttpRequest}" VerticalContentAlignment="Center" ToolTip.Placement="Bottom" ToolTip.Tip="{Binding ResolvedRequestUrlToolTip}" PointerEntered="OnRequestUrlPointerEnter" />
 
           <TextBlock Margin="12,6,12,0" FontSize="14" Foreground="#FF4D4D" Text="{Binding InvalidRequestMessage}" IsVisible="{Binding IsInvalidRequestMessageVisible}"/>
 

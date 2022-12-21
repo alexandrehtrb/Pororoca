@@ -22,6 +22,7 @@ Leia as [instruções](./docs/pt-BR/Instalação.md) e baixe o programa [aqui](h
 * Compatibilidade total com o Postman ao importar ou exportar.
 * Consumo muito menor de memória - cerca de cinco vezes menos do que o Postman.
 * Testes automatizados.
+* WebSockets.
 * Inicialização rápida.
 * Gratuito e código-aberto.
 

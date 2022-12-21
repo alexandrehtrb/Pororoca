@@ -1,5 +1,6 @@
 # Changelog
 
+* [2.0.0](#200-2022-12-20)
 * [1.6.0](#160-2022-11-20)
 * [1.5.0](#150-2022-09-20)
 * [1.4.0](#140-2022-07-03)
@@ -7,6 +8,31 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [2.0.0](https://github.com/alexandrehtrb/Pororoca/tree/2.0.0) (2022-12-20)
+
+### Breaking Changes
+
+* If you are using Linux and want to make HTTP/3 requests, the [msquic](https://github.com/microsoft/msquic) version 2.x.y needs to be installed. This is because .NET 7 uses msquic v2.
+
+### Features
+
+* Adds support for WebSockets over HTTP/2
+* `osx-arm64` release is back
+* Adds CONNECT to list of HTTP methods
+* Any file with the .json extension can now be accepted in import collection / environment dialogs
+* WebSocket JSON messages are now exported to files with .json extension by default
+
+### Bug Fixes
+
+* Fixed problem that HTTP/3 requests could not be completed (issue [#13](https://github.com/alexandrehtrb/Pororoca/issues/13))
+* Many improvements for better compatibility with Postman collections and environments.
+* When using a variable in a request body file path, the file path is now verified and correctly resolved. Before, it was always rejected, for both Form Data and File bodies.
+
+### Others
+
+* Raised .NET SDK to 7.0.101
+* Raised Avalonia version to 11.0.0-preview4
 
 ## [1.6.0](https://github.com/alexandrehtrb/Pororoca/tree/1.6.0) (2022-11-20)
 

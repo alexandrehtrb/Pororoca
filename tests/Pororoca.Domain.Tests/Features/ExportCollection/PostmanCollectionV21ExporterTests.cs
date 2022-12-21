@@ -297,16 +297,16 @@ public static class PostmanCollectionV21ExporterTests
         Assert.Equal(PostmanAuthType.basic, postmanAuth.Type);
         Assert.Null(postmanAuth.Bearer);
 
-        Assert.NotNull(postmanAuth.Basic);
-        Assert.Equal(2, postmanAuth.Basic!.Length);
+        var basic = Assert.IsType<PostmanVariable[]>(postmanAuth.Basic);
+        Assert.Equal(2, basic.Length);
 
-        var a1 = postmanAuth.Basic[0];
+        var a1 = basic[0];
         Assert.Null(a1.Disabled);
         Assert.Equal("string", a1.Type);
         Assert.Equal("username", a1.Key);
         Assert.Equal("usr", a1.Value);
 
-        var a2 = postmanAuth.Basic[1];
+        var a2 = basic[1];
         Assert.Null(a2.Disabled);
         Assert.Equal("string", a2.Type);
         Assert.Equal("password", a2.Key);
@@ -328,10 +328,10 @@ public static class PostmanCollectionV21ExporterTests
         Assert.Equal(PostmanAuthType.bearer, postmanAuth.Type);
         Assert.Null(postmanAuth.Basic);
 
-        Assert.NotNull(postmanAuth.Bearer);
-        Assert.Single(postmanAuth.Bearer);
+        var bearer = Assert.IsType<PostmanVariable[]>(postmanAuth.Bearer);
+        Assert.Single(bearer);
 
-        var a1 = postmanAuth.Bearer![0];
+        var a1 = bearer[0];
         Assert.Null(a1.Disabled);
         Assert.Equal("string", a1.Type);
         Assert.Equal("token", a1.Key);
@@ -387,23 +387,23 @@ public static class PostmanCollectionV21ExporterTests
 
         var postmanAuth = postmanReq.Request?.Auth;
         Assert.NotNull(postmanAuth);
-        Assert.NotNull(postmanAuth!.Basic);
-        Assert.Equal(2, postmanAuth!.Basic!.Length);
+        var basic = Assert.IsType<PostmanVariable[]>(postmanAuth!.Basic);
+        Assert.Equal(2, basic.Length);
 
-        var a1 = postmanAuth.Basic[0];
+        var a1 = basic[0];
         Assert.Null(a1.Disabled);
         Assert.Equal("string", a1.Type);
         Assert.Equal("username", a1.Key);
         Assert.Equal("usr", a1.Value);
 
-        var a2 = postmanAuth.Basic[1];
+        var a2 = basic[1];
         Assert.Null(a2.Disabled);
         Assert.Equal("string", a2.Type);
         Assert.Equal("password", a2.Key);
         Assert.Equal("pwd", a2.Value);
 
         Assert.Equal("POST", postmanReq.Request!.Method);
-        Assert.Equal("http://www.abc.com.br", postmanReq.Request.Url.Raw);
+        Assert.Equal("http://www.abc.com.br", postmanReq.Request.Url);
 
         Assert.Equal(PostmanRequestBodyMode.Raw, postmanReq.Request.Body!.Mode);
         Assert.Equal("[]", postmanReq.Request.Body.Raw);
@@ -471,7 +471,7 @@ public static class PostmanCollectionV21ExporterTests
         Assert.Equal("Req1", postmanReq1.Name);
         Assert.Null(postmanReq1.Items);
         Assert.Equal("GET", postmanReq1.Request!.Method);
-        Assert.Equal("http://www.abc.com.br", postmanReq1.Request!.Url.Raw);
+        Assert.Equal("http://www.abc.com.br", postmanReq1.Request!.Url);
 
         var postmanFolder1 = postmanCollection.Items[1];
         Assert.Equal("Folder1", postmanFolder1.Name);
@@ -483,7 +483,7 @@ public static class PostmanCollectionV21ExporterTests
         Assert.Equal("Req2", postmanReq2.Name);
         Assert.Null(postmanReq2.Items);
         Assert.Equal("GET", postmanReq2.Request!.Method);
-        Assert.Equal("https://www.ghi.com.br", postmanReq2.Request!.Url.Raw);
+        Assert.Equal("https://www.ghi.com.br", postmanReq2.Request!.Url);
 
         Assert.NotNull(postmanCollection.Variable);
         Assert.Equal(2, postmanCollection.Variable!.Length);

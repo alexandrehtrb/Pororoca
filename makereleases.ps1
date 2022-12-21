@@ -30,12 +30,12 @@ function Get-RuntimesToPublishFor
 	# Dropping support for arm releases, starting at version 1.6.0
 	# This is because we are using AvaloniaEdit.TextMate and TextMateSharp,
 	# which rely on native C dlls;
-	# No current support for arm yet (2022-11-20)
+	# osx-arm64 is now supported (2022-11-30), thanks to AvaloniaEdit version 11.0.0-preview2
 	$unixRuntimes = @(`
 		'linux-x64' ` 
 		#,'linux-arm64' `
 		,'osx-x64' `
-		#,'osx-arm64' `
+		,'osx-arm64' `
 	)
 	$windowsRuntimes = @(`
 		#'win7-x64' ` 
@@ -54,7 +54,7 @@ function Get-RuntimesToPublishFor
 	# Windows releases should be built on a Windows machine, because of dotnet
 	# Linux and Mac OS releases should be built on one of those OSs, because of chmod and zip
 	return $IsWindows ? $windowsRuntimes : $unixRuntimes
-	#return @("win-x64_installer")
+	#return @("linux-x64")
 }
 
 #################### Pre-release build and tests ####################
@@ -213,14 +213,17 @@ function Publish-PororocaDesktop
 		[bool]$isInstallOnWindowsRelease = $false
     )
 
-	if ($runtime -like "*win7*")
+	if ($runtime -like "*win*")
 	{
 		# .NET SDK 6.0.3xx and greater allows for single file publishing for Windows 7
+		# for HTTP/3 to work, we cannot ship as single-file application,
+		# unless, and only for Windows, if we include msquic.dll next to the generated .exe file
+		# https://github.com/dotnet/runtime/issues/79727
 		$publishSingleFile = $True #$False
 	}
 	else
 	{
-		$publishSingleFile = $True
+		$publishSingleFile = $False
 	}
 
 	$publishSingleFileArg = $(${publishSingleFile}.ToString().ToLower())
@@ -235,6 +238,13 @@ function Publish-PororocaDesktop
 		--self-contained true `
 		--runtime $runtime `
 		--output $outputFolder
+	
+	if ($runtime -like "*win*")
+	{
+		# let's copy the msquic.dll file next to the generated .exe
+		Copy-Item -Path "./src/Pororoca.Desktop/bin/Release/net7.0/${runtime}/msquic.dll" `
+			  	  -Destination $outputFolder
+	}
 }
 
 function Rename-Executable

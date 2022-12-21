@@ -63,10 +63,31 @@ public static class PostmanCollectionV21ImporterTests
         PostmanRequestBody? postmanBody = null;
 
         // WHEN
-        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody, null);
 
         // THEN
         Assert.Null(reqBody);
+    }
+
+    [Fact]
+    public static void Should_convert_postman_req_raw_json_body_to_pororoca_req_body_correctly_taking_content_type_from_header()
+    {
+        // GIVEN
+        string contentTypeFromHeader = "application/json; charset=utf-8";
+        PostmanRequestBody? postmanBody = new()
+        {
+            Mode = PostmanRequestBodyMode.Raw,
+            Raw = "[]"
+        };
+
+        // WHEN
+        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody, contentTypeFromHeader);
+
+        // THEN
+        Assert.NotNull(reqBody);
+        Assert.Equal(PororocaHttpRequestBodyMode.Raw, reqBody!.Mode);
+        Assert.Equal("[]", reqBody.RawContent);
+        Assert.Equal(MimeTypesDetector.DefaultMimeTypeForJson, reqBody.ContentType);
     }
 
     [Fact]
@@ -81,7 +102,7 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody, null);
 
         // THEN
         Assert.NotNull(reqBody);
@@ -102,7 +123,7 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody, null);
 
         // THEN
         Assert.NotNull(reqBody);
@@ -123,7 +144,7 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody, null);
 
         // THEN
         Assert.NotNull(reqBody);
@@ -145,7 +166,7 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody, null);
 
         // THEN
         Assert.NotNull(reqBody);
@@ -175,7 +196,7 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody, null);
 
         // THEN
         Assert.NotNull(reqBody);
@@ -226,7 +247,7 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody, null);
 
         // THEN
         Assert.NotNull(reqBody);
@@ -276,7 +297,7 @@ public static class PostmanCollectionV21ImporterTests
         };
 
         // WHEN
-        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody);
+        var reqBody = ConvertToPororocaHttpRequestBody(postmanBody, null);
 
         // THEN
         Assert.NotNull(reqBody);
@@ -380,7 +401,7 @@ public static class PostmanCollectionV21ImporterTests
                 Options = new() { Raw = new() { Language = "json" } },
                 Raw = "[]"
             },
-            Url = new() { Raw = "http://www.abc.com.br" }
+            Url = new PostmanRequestUrl() { Raw = "http://www.abc.com.br" }
         };
 
     [Fact]
@@ -511,7 +532,7 @@ public static class PostmanCollectionV21ImporterTests
                             {
                                 Method = "GET",
                                 Header = Array.Empty<PostmanVariable>(),
-                                Url = new() { Raw = "http://www.abc.com.br" }
+                                Url = new PostmanRequestUrl() { Raw = "http://www.abc.com.br" }
                             }
                         }
                     }
@@ -523,7 +544,7 @@ public static class PostmanCollectionV21ImporterTests
                     {
                         Method = "GET",
                         Header = Array.Empty<PostmanVariable>(),
-                        Url = new() { Raw = "http://www.def.com.br" }
+                        Url = new PostmanRequestUrl() { Raw = "http://www.def.com.br" }
                     }
                 }
             }

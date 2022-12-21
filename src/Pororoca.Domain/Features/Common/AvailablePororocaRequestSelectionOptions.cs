@@ -5,11 +5,6 @@ namespace Pororoca.Domain.Features.Common;
 
 public static class AvailablePororocaRequestSelectionOptions
 {
-    public const string PororocaCollectionExtension = "pororoca_collection.json";
-    public const string PostmanCollectionExtension = "postman_collection.json";
-    public const string PororocaEnvironmentExtension = "pororoca_environment.json";
-    public const string PostmanEnvironmentExtension = "postman_environment.json";
-
     public static readonly IImmutableList<HttpMethod> AvailableHttpMethods = ImmutableList.Create(
         HttpMethod.Get,
         HttpMethod.Post,
@@ -18,6 +13,7 @@ public static class AvailablePororocaRequestSelectionOptions
         HttpMethod.Delete,
         HttpMethod.Head,
         HttpMethod.Options,
+        HttpMethod.Connect,
         HttpMethod.Trace);
 
     public static readonly IImmutableList<decimal> AvailableHttpVersionsForHttp = ImmutableList.Create(
@@ -27,7 +23,8 @@ public static class AvailablePororocaRequestSelectionOptions
         3.0m);
     
     public static readonly IImmutableList<decimal> AvailableHttpVersionsForWebSockets = ImmutableList.Create(
-        1.1m);
+        1.1m,
+        2.0m);
 
     public static bool IsHttpVersionAvailableInOS(decimal httpVersion, out string? errorCode)
     {
@@ -59,11 +56,20 @@ public static class AvailablePororocaRequestSelectionOptions
 
     public static bool IsWebSocketHttpVersionAvailableInOS(decimal httpVersion, out string? errorCode)
     {
-        if (httpVersion != 1.1m)
+        if (httpVersion == 3.0m)
         {
-            // Currently, in .NET 6, only WebSockets over HTTP/1.1 are available
-            // .NET 7 will support WebSocket over HTTP/2
+            // .NET 7 supports WebSockets over HTTP/1.1 and HTTP/2
+            // https://devblogs.microsoft.com/dotnet/dotnet-7-networking-improvements/#websockets-over-http-2
             errorCode = TranslateRequestErrors.WebSocketHttpVersionUnavailable;
+            return false;
+        }
+        else if (httpVersion == 2.0m && !(OperatingSystem.IsLinux() || OperatingSystem.IsWindowsVersionAtLeast(10) || OperatingSystem.IsMacOS()))
+        {
+            // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel/http2
+            // .NET support for HTTP/2 in Windows 8 is limited, may not always work.
+            // In MacOS, HTTP/2 is supported, but only for client-side, which is our case here
+            // https://github.com/dotnet/runtime/discussions/75096
+            errorCode = TranslateRequestErrors.Http2UnavailableInOSVersion;
             return false;
         }
         else

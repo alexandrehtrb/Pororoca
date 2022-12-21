@@ -72,12 +72,13 @@ public static class PostmanCollectionV21Importer
         {
             case PostmanAuthType.basic:
                 myAuth = new(PororocaRequestAuthMode.Basic);
-                myAuth.SetBasicAuth(auth.Basic?.FirstOrDefault(p => p.Key == "username")?.Value ?? string.Empty,
-                                    auth.Basic?.FirstOrDefault(p => p.Key == "password")?.Value ?? string.Empty);
+                var basic = auth.ReadBasicAuthValues();
+                myAuth.SetBasicAuth(basic.basicAuthLogin, basic.basicAuthPwd);
                 break;
             case PostmanAuthType.bearer:
                 myAuth = new(PororocaRequestAuthMode.Bearer);
-                myAuth.SetBearerAuth(auth.Bearer?.FirstOrDefault(p => p.Key == "token")?.Value ?? string.Empty);
+                var bearerToken = auth.ReadBearerAuthValue();
+                myAuth.SetBearerAuth(bearerToken);
                 break;
             case PostmanAuthType.noauth:
             default:
@@ -117,22 +118,49 @@ public static class PostmanCollectionV21Importer
     {
         const decimal defaultHttpVersion = 1.1m;
         PororocaHttpRequest myReq = new();
+        var headers = ConvertToPororocaHeaders(request.Header);
+        string? contentTypeHeaderValue = headers.FirstOrDefault(h => h.Key == "Content-Type")?.Value;
+
         myReq.Update(
             name: name,
             httpVersion: defaultHttpVersion,
             httpMethod: request.Method,
-            url: request.Url.Raw,
+            url: ReadPostmanRequestUrl(request.Url),
             // When Postman req auth is null, the request uses collection scoped auth
             customAuth: request.Auth != null ? ConvertToPororocaAuth(request.Auth) : (PororocaRequestAuth?)collectionScopedAuth?.Clone(),
-            headers: ConvertToPororocaHeaders(request.Header),
-            body: ConvertToPororocaHttpRequestBody(request.Body));
+            headers: headers,
+            body: ConvertToPororocaHttpRequestBody(request.Body, contentTypeHeaderValue));
         return myReq;
+    }
+
+    private static string ReadPostmanRequestUrl(object? postmanRequestUrl)
+    {
+        // TODO: Use custom JSON converter instead of handling JSON here
+        if (postmanRequestUrl is JsonElement je)
+        {
+            if (je.ValueKind == JsonValueKind.Object)
+            {
+                return je.Deserialize<PostmanRequestUrl>(options: ExporterImporterJsonOptions)?.Raw ?? string.Empty;
+            }
+            else
+            {
+                return je.Deserialize<string>() ?? string.Empty;
+            }
+        }
+        else if (postmanRequestUrl is PostmanRequestUrl reqUrl)
+        {
+            return reqUrl.Raw;
+        }
+        else
+        {
+            return string.Empty;
+        }
     }
 
     internal static List<PororocaKeyValueParam> ConvertToPororocaHeaders(PostmanVariable[]? headersParams) =>
         ConvertToPororocaKeyValueParams(headersParams);
 
-    internal static PororocaHttpRequestBody? ConvertToPororocaHttpRequestBody(PostmanRequestBody? body)
+    internal static PororocaHttpRequestBody? ConvertToPororocaHttpRequestBody(PostmanRequestBody? body, string? contentTypeHeaderValue)
     {
         static string FindFileBodyMimeType(PostmanRequestBody? body)
         {
@@ -145,8 +173,10 @@ public static class PostmanCollectionV21Importer
         switch (body?.Mode)
         {
             case PostmanRequestBodyMode.Raw:
-                string rawContentType = FindContentTypeForPostmanRawBodyLanguage(body.Options?.Raw?.Language);
-                myBody.SetRawContent(body.Raw ?? string.Empty, rawContentType);
+                string? contentTypeFromHeader = FindContentTypeForPostmanContentTypeHeader(contentTypeHeaderValue);
+                string contentTypeFromRaw = FindContentTypeForPostmanRawBodyLanguage(body.Options?.Raw?.Language);
+                string contentType = contentTypeFromHeader ?? contentTypeFromRaw;
+                myBody.SetRawContent(body.Raw ?? string.Empty, contentTypeFromHeader ?? contentType);
                 break;
             case PostmanRequestBodyMode.File:
                 string fileContentType = FindFileBodyMimeType(body);
@@ -179,6 +209,17 @@ public static class PostmanCollectionV21Importer
             "text" => DefaultMimeTypeForText,
             _ => DefaultMimeTypeForText
         };
+
+    private static string? FindContentTypeForPostmanContentTypeHeader(string? contentTypeHeaderValue)
+    {
+        if (string.IsNullOrWhiteSpace(contentTypeHeaderValue)) return null;
+        else if (contentTypeHeaderValue.Contains(DefaultMimeTypeForJson)) return DefaultMimeTypeForJson;
+        else if (contentTypeHeaderValue.Contains(DefaultMimeTypeForJavascript)) return DefaultMimeTypeForJavascript;
+        else if (contentTypeHeaderValue.Contains(DefaultMimeTypeForHtml)) return DefaultMimeTypeForHtml;
+        else if (contentTypeHeaderValue.Contains(DefaultMimeTypeForXml)) return DefaultMimeTypeForXml;
+        else if (contentTypeHeaderValue.Contains(DefaultMimeTypeForText)) return DefaultMimeTypeForText;
+        else return null;
+    }
 
     private static List<PororocaKeyValueParam> ConvertToPororocaKeyValueParams(PostmanVariable[]? variables) =>
         (variables ?? Array.Empty<PostmanVariable>())

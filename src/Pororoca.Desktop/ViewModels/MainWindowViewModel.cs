@@ -8,7 +8,9 @@ using Avalonia.Platform;
 using Avalonia.Threading;
 using MessageBox.Avalonia;
 using MessageBox.Avalonia.DTO;
+using MessageBox.Avalonia.Enums;
 using MessageBox.Avalonia.Models;
+using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.UserData;
 using Pororoca.Desktop.Views;
@@ -325,7 +327,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         AddCollection(newCol, showItemInScreen: true);
     }
 
-    private void AddCollection(PororocaCollection col, bool showItemInScreen = false)
+    internal void AddCollection(PororocaCollection col, bool showItemInScreen = false)
     {
         CollectionViewModel colVm = new(this, col, DuplicateCollection);
         CollectionsGroupViewDataCtx.Items.Add(colVm);
@@ -363,53 +365,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         IsWebSocketClientMessageViewVisible = false;
     }
 
-    private async Task ImportCollectionsAsync()
-    {
-        List<FileDialogFilter> fileSelectionfilters = new();
-        // Mac OSX file dialogs have problems with file filters... TODO: find if there is a way to solve this
-        if (!this.isOperatingSystemMacOsx)
-        {
-            fileSelectionfilters.Add(
-                new()
-                {
-                    Name = Localizer.Instance["Collection/ImportCollectionDialogTypes"],
-                    Extensions = new List<string> { PororocaCollectionExtension, PostmanCollectionExtension }
-                }
-            );
-        }
-
-        OpenFileDialog dialog = new()
-        {
-            Title = Localizer.Instance["Collection/ImportCollectionDialogTitle"],
-            AllowMultiple = true,
-            Filters = fileSelectionfilters
-        };
-        string[]? result = await dialog.ShowAsync(MainWindow.Instance!);
-        if (result != null)
-        {
-            foreach (string collectionFilePath in result)
-            {
-                // First, tries to import as a Pororoca collection
-                if (collectionFilePath.EndsWith(PororocaCollectionExtension))
-                {
-                    string fileContent = await File.ReadAllTextAsync(collectionFilePath, Encoding.UTF8);
-                    if (TryImportPororocaCollection(fileContent, out var importedPororocaCollection))
-                    {
-                        AddCollection(importedPororocaCollection!);
-                    }
-                }
-                // If not a valid Pororoca collection, then tries to import as a Postman collection
-                else if (collectionFilePath.EndsWith(PostmanCollectionExtension))
-                {
-                    string fileContent = await File.ReadAllTextAsync(collectionFilePath, Encoding.UTF8);
-                    if (TryImportPostmanCollection(fileContent, out var importedPostmanCollection))
-                    {
-                        AddCollection(importedPostmanCollection!);
-                    }
-                }
-            }
-        }
-    }
+    private Task ImportCollectionsAsync() =>
+        FileExporterImporter.ImportCollectionsAsync(this);
 
     #endregion
 
@@ -486,40 +443,42 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
         Bitmap bitmap = new(assets!.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
 
-        var msgbox = MessageBoxManager.GetMessageBoxCustomWindow(
-            new MessageBoxCustomParamsWithImage()
+        var msgbox = MessageBoxManager.GetMessageBoxStandardWindow(
+            new MessageBoxStandardParams()
             {
                 ContentTitle = Localizer.Instance["UpdateReminder/DialogTitle"],
                 ContentMessage = Localizer.Instance["UpdateReminder/DialogMessage"],
-                Icon = bitmap,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 WindowIcon = new(bitmap),
-                ButtonDefinitions = new[]
-                {
-                    new ButtonDefinition { Name = Localizer.Instance["UpdateReminder/DialogGoToSite"], IsDefault = true },
-                    new ButtonDefinition { Name = Localizer.Instance["UpdateReminder/DialogCancel"], IsCancel = true }
-                }
+                ButtonDefinitions = ButtonEnum.OkCancel
             });
         Dispatcher.UIThread.Post(async () =>
         {
-            string goToSiteButtonStr = Localizer.Instance["UpdateReminder/DialogGoToSite"];
-            string buttonResult = await msgbox.ShowDialog(MainWindow.Instance!);
-            if (buttonResult == goToSiteButtonStr)
+            var buttonResult = await msgbox.ShowDialog(MainWindow.Instance!);
+            if (buttonResult == ButtonResult.Ok)
             {
                 OpenPororocaSiteInWebBrowser();
             }
-        });        
+        });
     }
 
     private static void OpenPororocaSiteInWebBrowser()
     {
+        const string url = "https://github.com/alexandrehtrb/Pororoca";
         try
         {
-            Process.Start(new ProcessStartInfo
+            if (OperatingSystem.IsWindows())
             {
-                FileName = "https://github.com/alexandrehtrb/Pororoca",
-                UseShellExecute = true
-            });
+                Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+            }
+            else if (OperatingSystem.IsLinux())
+            {
+                Process.Start("xdg-open", url);
+            }
+            else if (OperatingSystem.IsMacOS())
+            {
+                Process.Start("open", url);
+            }
         }
         catch (Exception)
         {

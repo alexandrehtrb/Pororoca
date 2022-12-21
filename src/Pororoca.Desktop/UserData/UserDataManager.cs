@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.ExportCollection;
 using Pororoca.Domain.Features.ImportCollection;
-using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
+using static Pororoca.Desktop.ExportImport.FileExporterImporter;
 
 namespace Pororoca.Desktop.UserData;
 
@@ -147,7 +147,7 @@ public sealed class UserDataManager
     private static DirectoryInfo GetUserDataFolder() =>
         /*
             For debugging, the PororocaUserData folder should be located inside the Pororoca.Desktop directory:
-                "Pororoca.Desktop\bin\Debug\net6.0"
+                "Pororoca.Desktop\bin\Debug\net7.0\win-x64\"
             
             For a release executable, the PororocaUserData folder location depends on the OS:
 
@@ -185,7 +185,7 @@ public sealed class UserDataManager
         // do not use single-file app on debug
         string currentDirPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location!)!;
         DirectoryInfo currentDir = new(currentDirPath);
-        return currentDir.Parent!.Parent!.Parent!;
+        return currentDir.Parent!.Parent!.Parent!.Parent!;
     }
 #endif
 

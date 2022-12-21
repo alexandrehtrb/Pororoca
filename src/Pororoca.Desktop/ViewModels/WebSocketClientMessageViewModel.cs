@@ -1,6 +1,7 @@
 using System.Reactive;
 using Avalonia.Controls;
 using AvaloniaEdit.Document;
+using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using ReactiveUI;
@@ -270,12 +271,8 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
         }
     }
 
-    private static async Task<string?> SearchFileWithDialogAsync()
-    {
-        OpenFileDialog dialog = new();
-        string[]? result = await dialog.ShowAsync(MainWindow.Instance!);
-        return result?.FirstOrDefault();
-    }
+    private static Task<string?> SearchFileWithDialogAsync() =>
+        FileExporterImporter.SelectFileFromStorageAsync();
 
     #endregion
 

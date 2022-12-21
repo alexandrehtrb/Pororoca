@@ -20,7 +20,7 @@ public class WebSocketConnectionView : UserControl
         var selectedExchangedMessageEditor = this.FindControl<TextEditor>("SelectedExchangedMessageContentEditor");
         this.selectedExchangedMessageEditorTextMateInstallation = TextEditorConfiguration.Setup(selectedExchangedMessageEditor!, false);
 
-        var exchangedMessagesList = this.FindControl<ListBox>("ExchangedMessagesList");
+        var exchangedMessagesList = this.FindControl<ListBox>("ExchangedMessagesList")!;
         exchangedMessagesList.SelectionChanged += OnSelectedExchangedMessageChanged;
     }
 

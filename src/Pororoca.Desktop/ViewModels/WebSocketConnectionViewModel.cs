@@ -18,6 +18,7 @@ using static Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage.
 using System.Collections.Specialized;
 using System.Security.Authentication;
 using AvaloniaEdit.Document;
+using Pororoca.Desktop.ExportImport;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -40,7 +41,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     #region CONNECTION
 
     private readonly IPororocaVariableResolver varResolver;
-    private readonly IPororocaClientCertificatesProvider clientCertsProvider;
+    private readonly IPororocaHttpClientProvider httpClientProvider;
     private readonly Guid wsId;
     private readonly PororocaWebSocketConnector connector;
 
@@ -161,6 +162,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
                 TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank => Localizer.Instance["RequestValidation/ClientCertificatePkcs12PasswordCannotBeBlank"],
                 TranslateRequestErrors.ClientCertificatePrivateKeyFileNotFound => Localizer.Instance["RequestValidation/ClientCertificatePrivateKeyFileNotFound"],
                 TranslateRequestErrors.InvalidUrl => Localizer.Instance["RequestValidation/InvalidUrl"],
+                TranslateRequestErrors.Http2UnavailableInOSVersion => Localizer.Instance["RequestValidation/Http2Unavailable"],
                 TranslateRequestErrors.WebSocketHttpVersionUnavailable => Localizer.Instance["RequestValidation/WebSocketHttpVersionUnavailable"],
                 TranslateRequestErrors.WebSocketCompressionMaxWindowBitsOutOfRange => Localizer.Instance["RequestValidation/WebSocketCompressionMaxWindowBitsOutOfRange"],
                 TranslateRequestErrors.WebSocketUnknownConnectionTranslationError => Localizer.Instance["RequestValidation/WebSocketUnknownConnectionTranslationError"],
@@ -418,7 +420,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         #region CONNECTION
 
         this.varResolver = variableResolver;
-        this.clientCertsProvider = PororocaClientCertificatesProvider.Singleton;
+        this.httpClientProvider = PororocaHttpClientProvider.Singleton;
         this.wsId = ws.Id;
         this.connector = new(OnWebSocketConnectionChanged, OnWebSocketMessageSending);
 
@@ -696,8 +698,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         {
             InvalidConnectionErrorCode = translateUriErrorCode;
         }
-        else if (!TryTranslateConnection(this.varResolver, this.clientCertsProvider, wsConn, disableTlsVerification,
-                                         out var resolvedClient, out string? translateConnErrorCode))
+        else if (!TryTranslateConnection(this.varResolver, this.httpClientProvider, wsConn, disableTlsVerification,
+                                         out var resolvedClients, out string? translateConnErrorCode))
         {
             InvalidConnectionErrorCode = translateConnErrorCode;
         }
@@ -709,7 +711,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             // Awaiting the request.RequestAsync() here, or simply returning its Task,
             // causes the UI to freeze for a few seconds, especially when performing the first request to a server.
             // That is why we are invoking the code to run in a new thread, like below.
-            await Task.Run(() => this.connector.ConnectAsync(resolvedClient!, resolvedUri!, this.cancelConnectionAttemptTokenSource.Token));
+            await Task.Run(() => this.connector.ConnectAsync(resolvedClients.wsCli!, resolvedClients.httpCli!, resolvedUri!, this.cancelConnectionAttemptTokenSource.Token));
         }
     }
 
@@ -783,7 +785,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #endregion
 
-
     #region MESSAGE DETAIL
 
     private void OnSelectedExchangedMessageChanged(WebSocketExchangedMessageViewModel vm)
@@ -797,8 +798,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     {
         static string GenerateDefaultInitialFileName(WebSocketExchangedMessageViewModel vm)
         {
-            string fileExtensionWithoutDot = vm.Type == PororocaWebSocketMessageType.Text ?
-                                             "txt" :
+            string fileExtensionWithoutDot = vm.IsJsonTextContent ? "json" :
+                                             vm.Type == PororocaWebSocketMessageType.Text ? "txt" :
                                              string.Empty;
 
             return $"websocket-msg-{vm.ShortInstantDescription}.{fileExtensionWithoutDot}";
@@ -806,12 +807,9 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
         if (SelectedExchangedMessage is not null && SelectedExchangedMessage.CanBeSavedToFile)
         {
-            SaveFileDialog saveFileDialog = new()
-            {
-                InitialFileName = GenerateDefaultInitialFileName(SelectedExchangedMessage)
-            };
-
-            string? saveFileOutputPath = await saveFileDialog.ShowAsync(MainWindow.Instance!);
+            string initialFileName = GenerateDefaultInitialFileName(SelectedExchangedMessage);
+            
+            string? saveFileOutputPath = await FileExporterImporter.SelectPathForFileToBeSavedAsync(initialFileName);
             if (saveFileOutputPath != null)
             {
                 const int fileStreamBufferSize = 4096;

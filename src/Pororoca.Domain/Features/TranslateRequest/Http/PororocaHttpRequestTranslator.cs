@@ -84,7 +84,7 @@ public static class PororocaHttpRequestTranslator
         {
             // TODO: Fix bug that charset cannot be passed in contentType below
             string resolvedRawContent = variableResolver.ReplaceTemplates(reqBody.RawContent!);
-            return new(resolvedRawContent, Encoding.UTF8, reqBody.ContentType);
+            return new(resolvedRawContent, Encoding.UTF8, reqBody.ContentType!);
         }
 
         FormUrlEncodedContent MakeFormUrlEncodedContent()
@@ -120,7 +120,7 @@ public static class PororocaHttpRequestTranslator
                 {
                     string resolvedFileSrcPath = variableResolver.ReplaceTemplates(param.FileSrcPath!);
                     string fileName = new FileInfo(param.FileSrcPath!).Name;
-                    formDataContent.Add(content: MakeFileContent(param.FileSrcPath!, param.ContentType),
+                    formDataContent.Add(content: MakeFileContent(resolvedFileSrcPath, param.ContentType),
                                         name: resolvedKey,
                                         fileName: fileName);
                 }

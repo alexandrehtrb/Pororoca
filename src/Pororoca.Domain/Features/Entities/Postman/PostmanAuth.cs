@@ -1,5 +1,8 @@
 #nullable disable warnings
 
+using System.Text.Json;
+using static Pororoca.Domain.Features.Common.JsonConfiguration;
+
 namespace Pororoca.Domain.Features.Entities.Postman;
 
 internal enum PostmanAuthType
@@ -22,23 +25,73 @@ internal class PostmanAuth
 {
     public PostmanAuthType Type { get; set; }
 
-    public PostmanVariable[]? Apikey { get; set; }
+    public object? Basic { get; set; }
 
-    public PostmanVariable[]? Awsv4 { get; set; }
+    public object? Bearer { get; set; }
 
-    public PostmanVariable[]? Basic { get; set; }
+    public (string basicAuthLogin, string basicAuthPwd) ReadBasicAuthValues()
+    {
+        static (string, string) ParseFromVariableArray(PostmanVariable[] arr) =>
+            (arr.FirstOrDefault(p => p.Key == "username")?.Value ?? string.Empty,
+             arr.FirstOrDefault(p => p.Key == "password")?.Value ?? string.Empty);
 
-    public PostmanVariable[]? Bearer { get; set; }
+        if (Basic is JsonElement je)
+        {
+            if (je.ValueKind == JsonValueKind.Object)
+            {
+                var basic = je.Deserialize<PostmanAuthBasic>(options: ExporterImporterJsonOptions);
+                return (basic.Username ?? string.Empty, basic.Password ?? string.Empty);
+            }
+            else if (je.ValueKind == JsonValueKind.Array)
+            {
+                var basic = je.Deserialize<PostmanVariable[]>();
+                return ParseFromVariableArray(basic);
+            }
+        }
+        else if (Basic is PostmanVariable[] arr)
+        {
+            return ParseFromVariableArray(arr);
+        }
+        
+        return (string.Empty, string.Empty);
+    }
 
-    public PostmanVariable[]? Digest { get; set; }
+    public string ReadBearerAuthValue()
+    {
+        static string ParseFromVariableArray(PostmanVariable[] arr) =>
+            arr.FirstOrDefault(p => p.Key == "token")?.Value ?? string.Empty;
 
-    public PostmanVariable[]? Hawk { get; set; }
+        if (Bearer is JsonElement je)
+        {
+            if (je.ValueKind == JsonValueKind.Object)
+            {
+                var bearer = je.Deserialize<PostmanAuthBearer>(options: ExporterImporterJsonOptions);
+                return bearer.Token ?? string.Empty;
+            }
+            else if (je.ValueKind == JsonValueKind.Array)
+            {
+                var bearer = je.Deserialize<PostmanVariable[]>();
+                return ParseFromVariableArray(bearer);
+            }
+        }
+        else if (Bearer is PostmanVariable[] arr)
+        {
+            return ParseFromVariableArray(arr);
+        }
 
-    public PostmanVariable[]? Ntlm { get; set; }
+        return string.Empty;
+    }
+}
 
-    public PostmanVariable[]? Oauth1 { get; set; }
+internal class PostmanAuthBasic
+{
+    public string? Username { get; set; }
+    public string? Password { get; set; }
+}
 
-    public PostmanVariable[]? Oauth2 { get; set; }
+internal class PostmanAuthBearer
+{
+    public string? Token { get; set; }
 }
 
 #nullable enable warnings

@@ -5,11 +5,11 @@ using Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage;
 
 namespace Pororoca.Test.Tests;
 
-public class PororocaTestLibraryWebSocketsHttp1Tests
+public class PororocaTestLibraryWebSocketsTests
 {
     private readonly PororocaTest pororocaTest;
 
-    public PororocaTestLibraryWebSocketsHttp1Tests()
+    public PororocaTestLibraryWebSocketsTests()
     {
         string filePath = GetTestCollectionFilePath();
         this.pororocaTest = PororocaTest.LoadCollectionFromFile(filePath)
@@ -17,11 +17,13 @@ public class PororocaTestLibraryWebSocketsHttp1Tests
                                         .AndDontCheckTlsCertificate();
     }
 
-    [Fact]
-    public async Task Should_connect_and_disconnect_successfully()
+    [Theory]
+    [InlineData("WebSocket HTTP1")]
+    [InlineData("WebSocket HTTP2")]
+    public async Task Should_connect_and_disconnect_successfully(string wsConnName)
     {
         // GIVEN AND WHEN
-        var ws = await this.pororocaTest.ConnectWebSocketAsync("WebSocket HTTP1");
+        var ws = await this.pororocaTest.ConnectWebSocketAsync(wsConnName);
         // THEN
         Assert.NotNull(ws);
         Assert.Null(ws.ConnectionException);
@@ -42,11 +44,13 @@ public class PororocaTestLibraryWebSocketsHttp1Tests
         Assert.Equal(DateTime.Now, srvMsg.ReceivedAtUtc.GetValueOrDefault().DateTime, TimeSpan.FromSeconds(3));
     }
 
-    [Fact]
-    public async Task Should_connect_and_disconnect_with_client_closing_message_successfully()
+    [Theory]
+    [InlineData("WebSocket HTTP1")]
+    [InlineData("WebSocket HTTP2")]
+    public async Task Should_connect_and_disconnect_with_client_closing_message_successfully(string wsConnName)
     {
         // GIVEN AND WHEN
-        var ws = await this.pororocaTest.ConnectWebSocketAsync("WebSocket HTTP1");
+        var ws = await this.pororocaTest.ConnectWebSocketAsync(wsConnName);
         // THEN
         Assert.NotNull(ws);
         Assert.Null(ws.ConnectionException);
@@ -69,11 +73,13 @@ public class PororocaTestLibraryWebSocketsHttp1Tests
         Assert.Equal(DateTime.Now, msg.SentAtUtc.GetValueOrDefault().DateTime, TimeSpan.FromSeconds(2));
     }
 
-    [Fact]
-    public async Task Should_send_and_receive_text_messages_successfully()
+    [Theory]
+    [InlineData("WebSocket HTTP1")]
+    [InlineData("WebSocket HTTP2")]
+    public async Task Should_send_and_receive_text_messages_successfully(string wsConnName)
     {
         // GIVEN
-        var ws = await this.pororocaTest.ConnectWebSocketAsync("WebSocket HTTP1");
+        var ws = await this.pororocaTest.ConnectWebSocketAsync(wsConnName);
         Assert.Equal(PororocaWebSocketConnectorState.Connected, ws.State);
         // WHEN
         var waitForSendAndReply = Task.Delay(TimeSpan.FromSeconds(2));
@@ -97,12 +103,14 @@ public class PororocaTestLibraryWebSocketsHttp1Tests
         await ws.DisconnectAsync();
     }
 
-    [Fact]
-    public async Task Should_send_and_receive_binary_messages_successfully()
+    [Theory]
+    [InlineData("WebSocket HTTP1")]
+    [InlineData("WebSocket HTTP2")]
+    public async Task Should_send_and_receive_binary_messages_successfully(string wsConnName)
     {
         // GIVEN
         this.pororocaTest.SetEnvironmentVariable("Local", "TestFilesDir", GetTestFilesFolderPath());
-        var ws = await this.pororocaTest.ConnectWebSocketAsync("WebSocket HTTP1");
+        var ws = await this.pororocaTest.ConnectWebSocketAsync(wsConnName);
         Assert.Equal(PororocaWebSocketConnectorState.Connected, ws.State);
         // WHEN
         var waitForSendAndReply = Task.Delay(TimeSpan.FromSeconds(2));

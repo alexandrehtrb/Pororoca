@@ -2,28 +2,24 @@
 
   <PropertyGroup>
     <RootNamespace>Pororoca.Test.Tests</RootNamespace>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
-    <EnablePreviewFeatures>True</EnablePreviewFeatures>
   </PropertyGroup>
   <ItemGroup>
-    <RuntimeHostConfigurationOption Include="System.Net.SocketsHttpHandler.Http3Support" Value="true" />
-  </ItemGroup>
-  <ItemGroup>
-    <!--ProjectReference Include="..\..\src\Pororoca.Domain\Pororoca.Domain.csproj"/-->
-    <!--ProjectReference Include="..\..\src\Pororoca.Infrastructure\Pororoca.Infrastructure.csproj"/-->
-    <!--ProjectReference Include="..\..\src\Pororoca.Test\Pororoca.Test.csproj"/-->
-    <PackageReference Include="Pororoca.Test" Version="1.6.0" />
-    <PackageReference Include="Moq" Version="4.18.2" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
+    <ProjectReference Include="..\..\src\Pororoca.Domain\Pororoca.Domain.csproj"/>
+    <ProjectReference Include="..\..\src\Pororoca.Infrastructure\Pororoca.Infrastructure.csproj"/>
+    <ProjectReference Include="..\..\src\Pororoca.Test\Pororoca.Test.csproj"/>
+    <!--PackageReference Include="Pororoca.Test" Version="2.0.0" /-->
+    <PackageReference Include="Moq" Version="4.18.3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="3.1.2">
+    <PackageReference Include="coverlet.collector" Version="3.2.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

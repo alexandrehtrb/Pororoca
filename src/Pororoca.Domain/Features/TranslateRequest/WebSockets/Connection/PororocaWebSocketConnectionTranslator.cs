@@ -7,85 +7,69 @@ using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOp
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Requester;
 using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonValidator;
+using Pororoca.Domain.Features.TranslateRequest.Common;
 
 namespace Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection;
 
 public static class PororocaWebSocketConnectionTranslator
 {
     public static bool TryTranslateConnection(IPororocaVariableResolver varResolver,
-                                              IPororocaClientCertificatesProvider clientCertsProvider,
+                                              IPororocaHttpClientProvider httpClientProvider,
                                               PororocaWebSocketConnection wsConn,
                                               bool disableTlsVerification,
-                                              out ClientWebSocket? wsCli,
+                                              out (ClientWebSocket? wsCli, HttpClient? httpCli) wsAndHttpCli,
                                               out string? errorCode) =>
         TryTranslateConnection(IsWebSocketHttpVersionAvailableInOS,
                                varResolver,
-                               clientCertsProvider,
+                               httpClientProvider,
                                wsConn,
                                disableTlsVerification,
-                               out wsCli,
+                               out wsAndHttpCli,
                                out errorCode);
 
     internal static bool TryTranslateConnection(HttpVersionAvailableVerifier httpVersionVerifier,
                                                 IPororocaVariableResolver varResolver,
-                                                IPororocaClientCertificatesProvider clientCertsProvider,
+                                                IPororocaHttpClientProvider httpClientProvider,
                                                 PororocaWebSocketConnection wsConn,
                                                 bool disableTlsVerification,
-                                                out ClientWebSocket? wsCli,
+                                                out (ClientWebSocket? wsCli, HttpClient? httpCli) wsAndHttpCli,
                                                 out string? errorCode)    
     {
         if (!httpVersionVerifier(wsConn.HttpVersion, out errorCode))
         {
-            wsCli = null;
+            wsAndHttpCli = (null, null);
             return false;
         }
         else
         {
             try
             {
-                wsCli = new();
-
-                IncludeClientCertificateIfSet(varResolver, clientCertsProvider, wsConn, wsCli);
-                SetTlsServerCertificateCheck(wsCli, disableTlsVerification);
+                var resolvedClientCert = ResolveClientCertificate(varResolver, wsConn.CustomAuth?.ClientCertificate);
+                var httpCli = httpClientProvider.Provide(disableTlsVerification, resolvedClientCert);
+                
+                var wsCli = new ClientWebSocket();
+                SetHttpVersion(wsConn, wsCli);
                 SetConnectionRequestHeaders(varResolver, wsConn, wsCli);
                 SetSubprotocols(varResolver, wsConn, wsCli);
                 SetCompressionOptions(wsConn, wsCli);
 
+                wsAndHttpCli = (wsCli, httpCli);
                 return true;
             }
             catch
             {
-                wsCli = null;
+                wsAndHttpCli = (null, null);
                 errorCode = TranslateRequestErrors.WebSocketUnknownConnectionTranslationError;
                 return false;
             }
         }
+    }
+
+    private static void SetHttpVersion(PororocaWebSocketConnection wsConn, ClientWebSocket wsCli)
+    {
+        wsCli.Options.HttpVersionPolicy = HttpVersionPolicy.RequestVersionExact;
+        wsCli.Options.HttpVersion = PororocaRequestCommonTranslator.ResolveHttpVersion(wsConn.HttpVersion);
     }    
-
-    private static void IncludeClientCertificateIfSet(IPororocaVariableResolver variableResolver,
-                                                      IPororocaClientCertificatesProvider clientCertsProvider,
-                                                      PororocaWebSocketConnection wsConn,
-                                                      ClientWebSocket wsCli)
-    {
-        if (wsConn.CustomAuth?.Mode == PororocaRequestAuthMode.ClientCertificate
-         && wsConn.CustomAuth?.ClientCertificate != null)
-        {
-            var resolvedClientCertModel = ResolveClientCertificate(variableResolver, wsConn.CustomAuth!.ClientCertificate!);
-            var cert = clientCertsProvider.Provide(resolvedClientCertModel!);
-
-            wsCli.Options.ClientCertificates ??= new();
-            wsCli.Options.ClientCertificates.Add(cert);
-        }
-    }
-
-    private static void SetTlsServerCertificateCheck(ClientWebSocket wsCli, bool disableSslVerification)
-    {
-        if (disableSslVerification)
-        {
-            wsCli.Options.RemoteCertificateValidationCallback =
-                (sender, certificate, chain, sslPolicyErrors) => true;
-        }
-    }
 
     private static void SetConnectionRequestHeaders(IPororocaVariableResolver varResolver, PororocaWebSocketConnection wsConn, ClientWebSocket wsCli)
     {

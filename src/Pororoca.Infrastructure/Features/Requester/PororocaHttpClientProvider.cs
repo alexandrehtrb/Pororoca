@@ -1,12 +1,13 @@
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Requester;
 using Pororoca.Domain.Features.TranslateRequest;
 using Pororoca.Domain.Features.TranslateRequest.Http;
 
 namespace Pororoca.Infrastructure.Features.Requester;
 
-internal static class PororocaHttpClientProvider
+public sealed class PororocaHttpClientProvider : IPororocaHttpClientProvider
 {
     private static readonly TimeSpan defaultPooledConnectionLifetime = TimeSpan.FromMinutes(20);
 
@@ -14,9 +15,14 @@ internal static class PororocaHttpClientProvider
 
     private static readonly List<PororocaHttpClientHolder> cachedHolders = new();
 
-    internal static HttpClient Provide(bool disableSslVerification, HttpRequestMessage reqMsg)
+    public static readonly PororocaHttpClientProvider Singleton = new();
+
+    private PororocaHttpClientProvider()
     {
-        var resolvedClientCert = GetResolvedClientCertificate(reqMsg);
+    }
+
+    public HttpClient Provide(bool disableSslVerification, PororocaRequestAuthClientCertificate? resolvedClientCert)
+    {
         PororocaHttpClientHolder holder = new(disableSslVerification, resolvedClientCert);
         var cachedHolder = cachedHolders.FirstOrDefault(h => h.Equals(holder));
 
@@ -32,19 +38,6 @@ internal static class PororocaHttpClientProvider
             cachedHolders.Add(holder);
 
             return newClient;
-        }
-    }
-
-    private static PororocaRequestAuthClientCertificate? GetResolvedClientCertificate(HttpRequestMessage reqMsg)
-    {
-        object? clientCertificateObj = reqMsg.Options.FirstOrDefault(o => o.Key == PororocaHttpRequestTranslator.ClientCertificateOptionsKey).Value;
-        if (clientCertificateObj is PororocaRequestAuthClientCertificate resolvedCert)
-        {
-            return resolvedCert;
-        }
-        else
-        {
-            return null;
         }
     }
 
@@ -83,7 +76,7 @@ internal static class PororocaHttpClientProvider
     {
         if (resolvedCert != null)
         {
-            var cert = PororocaClientCertificatesProvider.Singleton.Provide(resolvedCert);
+            var cert = PororocaClientCertificatesProvider.Provide(resolvedCert);
             httpHandler.SslOptions.ClientCertificates ??= new();
             httpHandler.SslOptions.ClientCertificates.Add(cert);
             //httpHandler.SslOptions.LocalCertificateSelectionCallback =

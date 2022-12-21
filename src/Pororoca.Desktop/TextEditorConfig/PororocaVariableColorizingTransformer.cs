@@ -24,7 +24,7 @@ internal class PororocaVariableColorizingTransformer : DocumentColorizingTransfo
                     line.Offset + capture.Index + capture.Length,
                     visualLine =>
                     {
-                        visualLine.TextRunProperties.ForegroundBrush = Brushes.Gold;
+                        visualLine.TextRunProperties.SetForegroundBrush(Brushes.Gold);
                     }
                 );
             }

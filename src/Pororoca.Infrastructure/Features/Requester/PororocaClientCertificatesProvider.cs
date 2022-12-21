@@ -4,15 +4,9 @@ using Pororoca.Domain.Features.Requester;
 
 namespace Pororoca.Infrastructure.Features.Requester;
 
-public sealed class PororocaClientCertificatesProvider : IPororocaClientCertificatesProvider
+internal static class PororocaClientCertificatesProvider
 {
-    public static readonly PororocaClientCertificatesProvider Singleton = new();
-
-    private PororocaClientCertificatesProvider()
-    {
-    }
-
-    public X509Certificate2 Provide(PororocaRequestAuthClientCertificate resolvedClientCert) =>
+    internal static X509Certificate2 Provide(PororocaRequestAuthClientCertificate resolvedClientCert) =>
         resolvedClientCert.Type switch
         {
             PororocaRequestAuthClientCertificateType.Pkcs12 => LoadPkcs12CertificateFromFile(resolvedClientCert),

@@ -36,7 +36,7 @@ public static class PostmanEnvironmentExporterTests
         Assert.Equal(testEnvName, env.Name);
         Assert.Equal("environment", env.Scope);
         Assert.Contains(DateTimeOffset.UtcNow.ToString("yyyy-MM-dd'T'"), env.ExportedAt);
-        Assert.Equal("Postman/9.15.2", env.ExportedUsing);
+        Assert.Equal("Postman/10.5.2", env.ExportedUsing);
         Assert.Equal(2, env.Values.Length);
 
         var var1 = env.Values[0];

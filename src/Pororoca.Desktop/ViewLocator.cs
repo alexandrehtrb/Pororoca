@@ -7,10 +7,10 @@ namespace Pororoca.Desktop;
 
 public class ViewLocator : IDataTemplate
 {
-    public IControl Build(object data)
+    public IControl? Build(object? data)
     {
-        string? name = data.GetType().FullName!.Replace("ViewModel", "View");
-        var type = Type.GetType(name);
+        string? name = data?.GetType()?.FullName?.Replace("ViewModel", "View");
+        var type = name != null ? Type.GetType(name) : null;
 
         if (type != null)
         {
@@ -22,6 +22,6 @@ public class ViewLocator : IDataTemplate
         }
     }
 
-    public bool Match(object data) =>
+    public bool Match(object? data) =>
         data is ViewModelBase;
 }

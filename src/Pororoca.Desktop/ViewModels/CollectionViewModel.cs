@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Text;
 using Avalonia.Controls;
+using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
@@ -10,7 +11,6 @@ using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.ExportCollection;
 using Pororoca.Domain.Features.VariableResolution;
 using ReactiveUI;
-using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
 using static Pororoca.Domain.Features.VariableResolution.IPororocaVariableResolver;
 
 namespace Pororoca.Desktop.ViewModels;
@@ -249,66 +249,14 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
 
     #region EXPORT COLLECTION
 
-    private Task ExportCollectionAsync()
-    {
-        SaveFileDialog saveFileDialog = new()
-        {
-            Title = Localizer.Instance["Collection/ExportCollectionDialogTitle"],
-            Filters = new()
-            {
-                new()
-                {
-                    Name = Localizer.Instance["Collection/PororocaCollectionFormat"],
-                    Extensions = new List<string> { PororocaCollectionExtension }
-                },
-                new()
-                {
-                    Name = Localizer.Instance["Collection/PostmanCollectionFormat"],
-                    Extensions = new List<string> { PostmanCollectionExtension }
-                }
-            }
-        };
+    private Task ExportCollectionAsync() =>
+        FileExporterImporter.ExportCollectionAsync(this);
 
-        return ShowExportCollectionDialogAsync(saveFileDialog);
-    }
+    private Task ExportAsPororocaCollectionAsync() =>
+        FileExporterImporter.ExportAsPororocaCollectionAsync(this);
 
-    private Task ExportAsPororocaCollectionAsync()
-    {
-        SaveFileDialog saveFileDialog = new()
-        {
-            Title = Localizer.Instance["Collection/ExportAsPororocaCollectionDialogTitle"],
-            InitialFileName = $"{Name}.{PororocaCollectionExtension}"
-        };
-
-        return ShowExportCollectionDialogAsync(saveFileDialog);
-    }
-
-    private Task ExportAsPostmanCollectionAsync()
-    {
-        SaveFileDialog saveFileDialog = new()
-        {
-            Title = Localizer.Instance["Collection/ExportAsPostmanCollectionDialogTitle"],
-            InitialFileName = $"{Name}.{PostmanCollectionExtension}"
-        };
-
-        return ShowExportCollectionDialogAsync(saveFileDialog);
-    }
-
-    private async Task ShowExportCollectionDialogAsync(SaveFileDialog saveFileDialog)
-    {
-        string? saveFileOutputPath = await saveFileDialog.ShowAsync(MainWindow.Instance!);
-        if (saveFileOutputPath != null
-            &&
-            (saveFileOutputPath.EndsWith(PororocaCollectionExtension) || saveFileOutputPath.EndsWith(PostmanCollectionExtension))
-           )
-        {
-            var c = ToCollection();
-            string json = saveFileOutputPath.EndsWith(PostmanCollectionExtension) ?
-                PostmanCollectionV21Exporter.ExportAsPostmanCollectionV21(c, !IncludeSecretVariables) :
-                PororocaCollectionExporter.ExportAsPororocaCollection(c, !IncludeSecretVariables);
-            await File.WriteAllTextAsync(saveFileOutputPath, json, Encoding.UTF8);
-        }
-    }
+    private Task ExportAsPostmanCollectionAsync() =>
+        FileExporterImporter.ExportAsPostmanCollectionAsync(this);
 
     #endregion
 
