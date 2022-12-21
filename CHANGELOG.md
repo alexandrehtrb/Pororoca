@@ -13,7 +13,7 @@
 
 ### Breaking Changes
 
-* If you are using Linux and want to make HTTP/3 requests, the [msquic](https://github.com/microsoft/msquic) installed on your machine needs to be upgraded to version 2.x.y. This is because .NET 7 uses msquic v2.
+* If you are using Linux and want to make HTTP/3 requests, the [msquic](https://github.com/microsoft/msquic) version 2.x.y needs to be installed. This is because .NET 7 uses msquic v2.
 
 ### Features
 
