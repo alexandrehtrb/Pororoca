@@ -27,6 +27,7 @@ public static class MimeTypesDetectorTests
     [InlineData("txt", "text/plain")]
     [InlineData("txt", "text/plain; charset=utf-8")]
     [InlineData("gif", "image/gif")]
+    [InlineData("json", "application/problem+json; charset=utf-8")]
     public static void Should_find_file_extension_for_mime_type_declared_in_mapping(string expectedFileExtension, string contentType)
     {
         Assert.True(MimeTypesDetector.TryFindFileExtensionForContentType(contentType, out string? fileExtension));
@@ -44,6 +45,7 @@ public static class MimeTypesDetectorTests
     [InlineData("text/json")]
     [InlineData("application/json")]
     [InlineData("application/json; charset=utf-8")]
+    [InlineData("application/problem+json; charset=utf-8")]
     public static void Should_detect_json_content_when_content_type_is_json(string contentType) =>
         Assert.True(MimeTypesDetector.IsJsonContent(contentType));
 
@@ -57,6 +59,7 @@ public static class MimeTypesDetectorTests
     [Theory]
     [InlineData("text/plain")]
     [InlineData("application/json")]
+    [InlineData("application/problem+json")]
     [InlineData("text/xml")]
     public static void Should_detect_text_content_when_content_type_is_text(string contentType) =>
         Assert.True(MimeTypesDetector.IsTextContent(contentType));

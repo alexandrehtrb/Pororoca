@@ -21,6 +21,7 @@ public static class TestEndpoints
         // HttpContext as a parameter makes some endpoints hidden in Swagger (?)
         app.MapPost("test/post/none", TestPostNone);
         app.MapPost("test/post/json", TestPostJson);
+        app.MapPost("test/post/problemdetails", TestPostProblemDetails);
         app.MapPost("test/post/file", TestPostFile);
         app.MapPost("test/post/urlencoded", TestPostUrlEncoded);
         app.MapPost("test/post/multipartformdata", TestPostMultipartFormData);
@@ -71,6 +72,11 @@ public static class TestEndpoints
 
     private static IResult TestPostJson(dynamic obj) =>
         Results.Ok(obj);
+
+    private static IResult TestPostProblemDetails() =>
+        Results.ValidationProblem(title: "Validation problem title",
+                                  detail: "Validation problem detail",
+                                  errors: new Dictionary<string, string[]>());
 
     private static async Task<string> TestPostFile(HttpRequest httpReq)
     {
