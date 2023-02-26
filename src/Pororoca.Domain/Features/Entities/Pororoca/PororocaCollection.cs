@@ -159,6 +159,14 @@ public sealed class PororocaCollection : IPororocaVariableResolver, ICloneable
         }
     }
 
+    public PororocaCollection ClonePreservingIds() => new(Id, Name, CreatedAt)
+    {
+        Folders = Folders.Select(f => f.ClonePreservingIds()).ToList().AsReadOnly(),
+        Requests = Requests.Select(r => r.ClonePreservingId()).ToList().AsReadOnly(),
+        Variables = Variables.Select(v => (PororocaVariable)v.Clone()).ToList().AsReadOnly(),
+        Environments = Environments.Select(e => e.ClonePreservingId()).ToList().AsReadOnly()
+    };
+
     public object Clone() =>
         new PororocaCollection(Name)
         {

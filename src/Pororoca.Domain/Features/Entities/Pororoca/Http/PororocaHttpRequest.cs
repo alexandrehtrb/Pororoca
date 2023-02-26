@@ -72,6 +72,16 @@ public sealed class PororocaHttpRequest : PororocaRequest
         Body = body;
     }
 
+    public override PororocaHttpRequest ClonePreservingId() => new(Id, Name)
+    {
+        HttpVersion = HttpVersion,
+        HttpMethod = HttpMethod,
+        Url = Url,
+        CustomAuth = (PororocaRequestAuth?)CustomAuth?.Clone(),
+        Headers = Headers?.Select(h => (PororocaKeyValueParam)h.Clone())?.ToList()?.AsReadOnly(),
+        Body = (PororocaHttpRequestBody?)Body?.Clone()
+    };
+
     public override object Clone() =>
         new PororocaHttpRequest(Name)
         {

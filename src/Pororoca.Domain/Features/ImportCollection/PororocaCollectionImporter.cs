@@ -6,15 +6,16 @@ namespace Pororoca.Domain.Features.ImportCollection;
 
 public static class PororocaCollectionImporter
 {
-    public static bool TryImportPororocaCollection(string pororocaCollectionFileContent, out PororocaCollection? pororocaCollection)
+    public static bool TryImportPororocaCollection(string pororocaCollectionFileContent, bool preserveId, out PororocaCollection? pororocaCollection)
     {
         try
         {
             pororocaCollection = JsonSerializer.Deserialize<PororocaCollection>(pororocaCollectionFileContent, options: ExporterImporterJsonOptions);
 
-            // Always generating new id, in case user imports the same collection twice
+            // Generates a new id when importing a collection manually, in case user imports the same collection twice
             // This is to avoid overwriting when saving user collections
-            if (pororocaCollection != null)
+            // But if importing a collection from saved data, the id should be preserved
+            if (pororocaCollection != null && preserveId == false)
             {
                 pororocaCollection.Id = Guid.NewGuid();
             }

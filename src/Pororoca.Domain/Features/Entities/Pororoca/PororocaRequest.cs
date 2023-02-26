@@ -9,4 +9,6 @@ public abstract class PororocaRequest : PororocaCollectionItem
 
     protected PororocaRequest(PororocaRequestType reqType, Guid id, string name) : base(id, name) =>
         RequestType = reqType;
+
+    public abstract PororocaRequest ClonePreservingId();
 }

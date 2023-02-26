@@ -47,6 +47,17 @@ public sealed class PororocaWebSocketConnection : PororocaRequest
         CustomAuth = null;
     }
 
+    public override PororocaWebSocketConnection ClonePreservingId() => new(Id, Name)
+    {
+        HttpVersion = HttpVersion,
+        Url = Url,
+        Headers = Headers?.Select(h => (PororocaKeyValueParam)h.Clone())?.ToList(),
+        CustomAuth = (PororocaRequestAuth?)CustomAuth?.Clone(),
+        ClientMessages = ClientMessages?.Select(m => m.ClonePreservingId())?.ToList(),
+        Subprotocols = Subprotocols,
+        CompressionOptions = (PororocaWebSocketCompressionOptions?)CompressionOptions?.Clone()
+    };
+
     public override object Clone() =>
         new PororocaWebSocketConnection(Name)
         {

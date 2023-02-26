@@ -242,7 +242,7 @@ internal static class FileExporterImporter
                 if (filePath.EndsWith(PororocaCollectionExtension))
                 {
                     string fileContent = await File.ReadAllTextAsync(filePath, Encoding.UTF8);
-                    if (TryImportPororocaCollection(fileContent, out var importedPororocaCollection))
+                    if (TryImportPororocaCollection(fileContent, preserveId: false, out var importedPororocaCollection))
                     {
                         mwvm.AddCollection(importedPororocaCollection!);
                     }

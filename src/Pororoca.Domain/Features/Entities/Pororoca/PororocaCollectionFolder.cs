@@ -71,6 +71,12 @@ public sealed class PororocaCollectionFolder : PororocaCollectionItem, ICloneabl
         Requests = newList.AsReadOnly();
     }
 
+    public PororocaCollectionFolder ClonePreservingIds() => new(Id, Name)
+    {
+        Folders = Folders.Select(f => f.ClonePreservingIds()).ToList(),
+        Requests = Requests.Select(r => r.ClonePreservingId()).ToList()
+    };
+
     public override object Clone() =>
         new PororocaCollectionFolder(Name)
         {

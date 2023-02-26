@@ -29,7 +29,7 @@ public sealed class PororocaTest
         try
         {
             string json = File.ReadAllText(filePath, Encoding.UTF8);
-            if (PororocaCollectionImporter.TryImportPororocaCollection(json, out var col))
+            if (PororocaCollectionImporter.TryImportPororocaCollection(json, preserveId: true, out var col))
             {
                 return new(col!);
             }
