@@ -21,7 +21,10 @@ public sealed class PororocaTestWebSocketConnector : PororocaWebSocketConnector
         this.connection = connection;
     }
 
-    public ValueTask SendMessageAsync(string msgName)
+    public Task SendMessageAsync(string msgName, float waitingTimeInSeconds = 0.5f) =>
+        SendMessageAsync(msgName, TimeSpan.FromSeconds(waitingTimeInSeconds));
+
+    public Task SendMessageAsync(string msgName, TimeSpan waitingTime)
     {
         var msg = this.connection.ClientMessages?.FirstOrDefault(cm => cm.Name == msgName);
         if (msg is null)
@@ -30,12 +33,12 @@ public sealed class PororocaTestWebSocketConnector : PororocaWebSocketConnector
         }
         else
         {
-            return SendMessageAsync(msg!);
+            return SendMessageAsync(msg!, waitingTime);
         }
     }
 
 #pragma warning disable CA1061
-    public ValueTask SendMessageAsync(PororocaWebSocketClientMessage msg)
+    public async Task SendMessageAsync(PororocaWebSocketClientMessage msg, TimeSpan waitingTimeInSeconds)
 #pragma warning restore CA1061
     {
         if (!IsValidClientMessage(this.varResolver, msg, out string? validationErrorCode))
@@ -48,7 +51,9 @@ public sealed class PororocaTestWebSocketConnector : PororocaWebSocketConnector
         }
         else
         {
-            return base.SendMessageAsync(resolvedMsgToSend!);
+            var waitForSendingTask = Task.Delay(waitingTimeInSeconds);
+            var sendingTask = base.SendMessageAsync(resolvedMsgToSend!).AsTask();
+            await Task.WhenAll(waitForSendingTask, sendingTask);            
         }
     }
 
