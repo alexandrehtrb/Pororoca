@@ -108,6 +108,21 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
     protected override void CopyThis() =>
         CollectionsGroupDataCtx.PushToCopy(ToEnvironment());
 
+    protected override void OnNameUpdated(string newName)
+    {
+        base.OnNameUpdated(newName);
+        ((EnvironmentsGroupViewModel)Parent).UpdateSelectedEnvironmentName();
+    }
+
+    public override void DeleteThis()
+    {
+        base.DeleteThis();
+        if (IsCurrentEnvironment)
+        {
+            ((EnvironmentsGroupViewModel)Parent).UpdateSelectedEnvironmentName();
+        }
+    }
+
     #region EXPORT ENVIRONMENT
 
     private Task ExportEnvironmentAsync() =>

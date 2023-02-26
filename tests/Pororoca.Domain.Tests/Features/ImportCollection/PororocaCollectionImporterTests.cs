@@ -16,12 +16,13 @@ public static class PororocaCollectionImporterTests
         string json = GetTestFileJson("EmptyCollection.pororoca_collection.json");
 
         // WHEN AND THEN
-        Assert.True(TryImportPororocaCollection(json, out var col));
+        Assert.True(TryImportPororocaCollection(json, preserveId: false, out var col));
 
         // THEN
         Assert.NotNull(col);
-        // Always generating new id, in case user imports the same collection twice
-        // This is to avoid overwriting when saving user collections
+        // Generates a new id when importing a collection manually, in case user imports the same collection twice
+            // This is to avoid overwriting when saving user collections
+            // But if importing a collection from saved data, the id should be preserved
         Assert.NotEqual(Guid.Parse("ec794541-5c81-49a2-b3d1-113df7432df1"), col!.Id);
         Assert.Equal(DateTimeOffset.Parse("2022-03-03T22:04:15.7115044-03:00"), col.CreatedAt);
         Assert.Equal("Nova coleção", col.Name);
@@ -42,12 +43,13 @@ public static class PororocaCollectionImporterTests
         string json = GetTestFileJson("CollectionWithHttpAndWs.pororoca_collection.json");
 
         // WHEN AND THEN
-        Assert.True(TryImportPororocaCollection(json, out var col));
+        Assert.True(TryImportPororocaCollection(json, preserveId: false, out var col));
 
         // THEN
         Assert.NotNull(col);
-        // Always generating new id, in case user imports the same collection twice
+        // Generates a new id when importing a collection manually, in case user imports the same collection twice
         // This is to avoid overwriting when saving user collections
+        // But if importing a collection from saved data, the id should be preserved
         Assert.NotEqual(Guid.Parse("ecf7eab2-e65b-4913-82c7-555ecedca357"), col!.Id);
         Assert.Equal(DateTimeOffset.Parse("2022-10-13T16:28:05.9560779-03:00"), col.CreatedAt);
         Assert.Equal("CollectionWithHttpAndWs", col.Name);

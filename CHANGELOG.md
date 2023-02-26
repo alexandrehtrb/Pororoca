@@ -1,5 +1,6 @@
 # Changelog
 
+* [2.0.1](#201-2023-02-26)
 * [2.0.0](#200-2022-12-20)
 * [1.6.0](#160-2022-11-20)
 * [1.5.0](#150-2022-09-20)
@@ -8,6 +9,23 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [2.0.1](https://github.com/alexandrehtrb/Pororoca/tree/2.0.1) (2023-02-26)
+
+### Minor features
+
+* Now shows label with the name of selected environment, next to environments group.
+* SendMessageAsync method in Pororoca.Test no longer requires external waiting with Task.Delay, easier to use now.
+
+### Bug Fixes
+
+* Content-Type `application/problem+json` now shows as text in response body
+* Better detection of Pororoca json files when importing collections and environments
+
+### Refactoring
+
+* Removed ids from requests, folders and WebSocket client messages, since they were unused.
+* Removed documentation from this repo. Now available on its own site.
 
 ## [2.0.0](https://github.com/alexandrehtrb/Pororoca/tree/2.0.0) (2022-12-20)
 

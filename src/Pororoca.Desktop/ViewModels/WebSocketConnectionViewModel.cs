@@ -42,7 +42,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     private readonly IPororocaVariableResolver varResolver;
     private readonly IPororocaHttpClientProvider httpClientProvider;
-    private readonly Guid wsId;
     private readonly PororocaWebSocketConnector connector;
 
     private bool isConnectedField;
@@ -421,7 +420,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
         this.varResolver = variableResolver;
         this.httpClientProvider = PororocaHttpClientProvider.Singleton;
-        this.wsId = ws.Id;
         this.connector = new(OnWebSocketConnectionChanged, OnWebSocketMessageSending);
 
         if (ws.ClientMessages is not null)
@@ -646,7 +644,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     public PororocaWebSocketConnection ToWebSocketConnection()
     {
-        PororocaWebSocketConnection newWs = new(this.wsId, Name);
+        PororocaWebSocketConnection newWs = new(Name);
         UpdateConnectionWithInputs(newWs);
         return newWs;
     }

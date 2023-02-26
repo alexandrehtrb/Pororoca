@@ -50,15 +50,17 @@
         </TextBlock>
       </TreeDataTemplate>
       <TreeDataTemplate DataType="{x:Type vm:EnvironmentsGroupViewModel}" ItemsSource="{Binding Items}">
-        <TextBlock Text="{i18n:Localize Environments, Context=CollectionsGroup}">
-          <TextBlock.ContextMenu>
+        <StackPanel Orientation="Horizontal">
+          <StackPanel.ContextMenu>
             <ContextMenu>
               <MenuItem Header="{i18n:Localize NewEnvironment, Context=CollectionsGroupContextMenu}" Command="{Binding AddNewEnvironmentCmd}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
               <MenuItem Header="{i18n:Localize Paste, Context=CollectionsGroupContextMenu}" Command="{Binding PasteToEnvironmentsCmd}" IsEnabled="{Binding CollectionsGroupDataCtx.CanPasteEnvironment}"/>
               <MenuItem Header="{i18n:Localize ImportEnvironment, Context=CollectionsGroupContextMenu}" Command="{Binding ImportEnvironmentsCmd}" IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}"/>
             </ContextMenu>
-          </TextBlock.ContextMenu>
-        </TextBlock>
+          </StackPanel.ContextMenu>
+          <TextBlock Foreground="White" Text="{i18n:Localize Environments, Context=CollectionsGroup}" />
+          <TextBlock Foreground="Cyan" Text="{Binding SelectedEnvironmentName}" />
+        </StackPanel>
       </TreeDataTemplate>
 
       <DataTemplate DataType="{x:Type vm:HttpRequestViewModel}">

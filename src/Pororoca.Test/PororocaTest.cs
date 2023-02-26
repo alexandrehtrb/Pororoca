@@ -29,7 +29,7 @@ public sealed class PororocaTest
         try
         {
             string json = File.ReadAllText(filePath, Encoding.UTF8);
-            if (PororocaCollectionImporter.TryImportPororocaCollection(json, out var col))
+            if (PororocaCollectionImporter.TryImportPororocaCollection(json, preserveId: true, out var col))
             {
                 return new(col!);
             }
@@ -194,19 +194,6 @@ public sealed class PororocaTest
         }
     }
 
-    public Task<PororocaHttpResponse> SendHttpRequestAsync(Guid requestId, CancellationToken cancellationToken = default)
-    {
-        var req = FindHttpRequestInCollection(r => r.Id == requestId);
-        if (req != null)
-        {
-            return SendHttpRequestAsync(req, cancellationToken);
-        }
-        else
-        {
-            throw new Exception($"Error: Request with the ID '{requestId}' was not found.");
-        }
-    }
-
     public Task<PororocaHttpResponse> SendHttpRequestAsync(PororocaHttpRequest req, CancellationToken cancellationToken = default)
     {
         if (!PororocaHttpRequestValidator.IsValidRequest(Collection,
@@ -235,22 +222,6 @@ public sealed class PororocaTest
         else
         {
             throw new Exception($"Error: WebSocket with the name '{wsName}' was not found.");
-        }
-    }
-
-    public Task<PororocaTestWebSocketConnector> ConnectWebSocketAsync(Guid wsId,
-                                                                      OnWebSocketConnectionChanged? onConnectionChanged = null,
-                                                                      OnWebSocketMessageSending? onMessageSending = null,
-                                                                      CancellationToken cancellationToken = default)
-    {
-        var ws = FindWebSocketInCollection(x => x.Id == wsId);
-        if (ws != null)
-        {
-            return ConnectWebSocketAsync(ws, onConnectionChanged, onMessageSending, cancellationToken);
-        }
-        else
-        {
-            throw new Exception($"Error: WebSocket with the ID '{wsId}' was not found.");
         }
     }
 

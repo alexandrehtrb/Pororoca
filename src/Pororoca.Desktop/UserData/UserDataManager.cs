@@ -67,7 +67,7 @@ public sealed class UserDataManager
                     try
                     {
                         string json = File.ReadAllText(f.FullName, Encoding.UTF8);
-                        if (PororocaCollectionImporter.TryImportPororocaCollection(json, out var col))
+                        if (PororocaCollectionImporter.TryImportPororocaCollection(json, preserveId: true, out var col))
                         {
                             return col;
                         }

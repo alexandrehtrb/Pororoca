@@ -59,6 +59,13 @@ public sealed class PororocaEnvironment : ICloneable
         Variables = newList.AsReadOnly();
     }
 
+    public PororocaEnvironment ClonePreservingId()
+    {
+        PororocaEnvironment it = (PororocaEnvironment)Clone();
+        it.Id = this.Id;
+        return it;
+    }
+
     public object Clone() =>
         new PororocaEnvironment(Guid.NewGuid(), Name, CreatedAt)
         {

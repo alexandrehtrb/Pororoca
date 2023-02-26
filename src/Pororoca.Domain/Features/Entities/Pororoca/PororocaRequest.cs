@@ -7,6 +7,6 @@ public abstract class PororocaRequest : PororocaCollectionItem
     [JsonPropertyOrder(-3)]
     public PororocaRequestType RequestType { get; init; }
 
-    protected PororocaRequest(PororocaRequestType reqType, Guid id, string name) : base(id, name) =>
+    protected PororocaRequest(PororocaRequestType reqType, string name) : base(name) =>
         RequestType = reqType;
 }

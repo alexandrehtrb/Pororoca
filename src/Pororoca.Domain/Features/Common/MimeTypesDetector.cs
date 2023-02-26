@@ -6,11 +6,13 @@ public static class MimeTypesDetector
     public const string DefaultMimeTypeForHtml = "text/html";
     public const string DefaultMimeTypeForXml = "text/xml";
     public const string DefaultMimeTypeForJson = "application/json";
+    public const string DefaultMimeTypeForProblemJson = "application/problem+json";
     public const string DefaultMimeTypeForJavascript = "application/javascript";
     public const string DefaultMimeTypeForBinary = "application/octet-stream";
 
     private static readonly string[] textMimeTypes = new[] {
         DefaultMimeTypeForJson,
+        DefaultMimeTypeForProblemJson,
         DefaultMimeTypeForText,
         DefaultMimeTypeForHtml,
         DefaultMimeTypeForXml,
@@ -120,7 +122,6 @@ public static class MimeTypesDetector
             new("bh2", "application/vnd.fujitsu.oasysprs"), // Fujitsu Oasys
             new("bin", "application/mac-binary"),
             new("bin", "application/macbinary"),
-            new("bin", "application/octet-stream"),
             new("bin", "application/octet-stream"),
             new("bin", "application/x-binary"),
             new("bin", "application/x-macbinary"),
@@ -480,6 +481,7 @@ public static class MimeTypesDetector
             new("js", "text/ecmascript"),
             new("js", "text/javascript"),
             new("json", "application/json"), // JavaScript Object Notation (JSON)
+            new("json", "application/problem+json"),
             new("jut", "image/jutvision"),
             new("kar", "audio/midi"),
             new("kar", "music/x-karaoke"),

@@ -57,9 +57,7 @@ public class PororocaTestLibraryWebSocketsTests
         Assert.Equal(PororocaWebSocketConnectorState.Connected, ws.State);
 
         // WHEN
-        var waitForSend = Task.Delay(TimeSpan.FromSeconds(1));
-        var sending = ws.SendMessageAsync("Bye").AsTask();
-        await Task.WhenAll(waitForSend, sending);  
+        await ws.SendMessageAsync("Bye");
         // THEN
         Assert.Null(ws.ConnectionException);
         Assert.Equal(PororocaWebSocketConnectorState.Disconnected, ws.State);
@@ -82,9 +80,7 @@ public class PororocaTestLibraryWebSocketsTests
         var ws = await this.pororocaTest.ConnectWebSocketAsync(wsConnName);
         Assert.Equal(PororocaWebSocketConnectorState.Connected, ws.State);
         // WHEN
-        var waitForSendAndReply = Task.Delay(TimeSpan.FromSeconds(2));
-        var sending = ws.SendMessageAsync("Hello").AsTask();
-        await Task.WhenAll(waitForSendAndReply, sending);        
+        await ws.SendMessageAsync("Hello", waitingTimeInSeconds: 2.0f);
         // THEN
         // The server should reply with a text message
         Assert.Equal(2, ws.ExchangedMessages.Count);
@@ -113,9 +109,7 @@ public class PororocaTestLibraryWebSocketsTests
         var ws = await this.pororocaTest.ConnectWebSocketAsync(wsConnName);
         Assert.Equal(PororocaWebSocketConnectorState.Connected, ws.State);
         // WHEN
-        var waitForSendAndReply = Task.Delay(TimeSpan.FromSeconds(2));
-        var sending = ws.SendMessageAsync("SpiderMan").AsTask();
-        await Task.WhenAll(waitForSendAndReply, sending);        
+        await ws.SendMessageAsync("SpiderMan", waitingTimeInSeconds: 2.0f);
         // THEN
         // The server should reply with a text message
         Assert.Equal(2, ws.ExchangedMessages.Count);

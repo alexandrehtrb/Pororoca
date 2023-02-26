@@ -11,9 +11,6 @@ public enum PororocaWebSocketClientMessageContentMode
 public class PororocaWebSocketClientMessage : PororocaWebSocketMessage, ICloneable
 {
     [JsonInclude]
-    public Guid Id { get; init; }
-
-    [JsonInclude]
     public string Name { get; set; }
 
     [JsonInclude]
@@ -40,7 +37,6 @@ public class PororocaWebSocketClientMessage : PororocaWebSocketMessage, ICloneab
                                           bool disableCompressionForThis) :
         base(PororocaWebSocketMessageDirection.FromClient, msgType)
     {
-        Id = Guid.NewGuid();
         Name = name;
         ContentMode = contentMode;
         RawContent = rawContent;

@@ -33,11 +33,7 @@ public sealed class PororocaCollectionFolder : PororocaCollectionItem, ICloneabl
     }
 #nullable restore warnings
 
-    public PororocaCollectionFolder(string name) : this(Guid.NewGuid(), name)
-    {
-    }
-
-    public PororocaCollectionFolder(Guid id, string name) : base(id, name)
+    public PororocaCollectionFolder(string name) : base(name)
     {
         Folders = new List<PororocaCollectionFolder>().AsReadOnly();
         Requests = new List<PororocaRequest>().AsReadOnly();
@@ -50,10 +46,10 @@ public sealed class PororocaCollectionFolder : PororocaCollectionItem, ICloneabl
         Folders = newList.AsReadOnly();
     }
 
-    public void RemoveFolder(Guid subFolderId)
+    public void RemoveFolder(PororocaCollectionFolder subFolder)
     {
         List<PororocaCollectionFolder> newList = new(Folders);
-        newList.RemoveAll(i => i.Id == subFolderId);
+        newList.Remove(subFolder);
         Folders = newList.AsReadOnly();
     }
 
@@ -64,10 +60,10 @@ public sealed class PororocaCollectionFolder : PororocaCollectionItem, ICloneabl
         Requests = newList.AsReadOnly();
     }
 
-    public void RemoveRequest(Guid reqId)
+    public void RemoveRequest(PororocaRequest req)
     {
         List<PororocaRequest> newList = new(Requests);
-        newList.RemoveAll(i => i.Id == reqId);
+        newList.Remove(req);
         Requests = newList.AsReadOnly();
     }
 

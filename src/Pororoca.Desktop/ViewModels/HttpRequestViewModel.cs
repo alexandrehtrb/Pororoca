@@ -43,7 +43,6 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     private readonly IPororocaRequester requester = PororocaRequester.Singleton;
     private readonly IPororocaVariableResolver variableResolver;
-    private readonly Guid reqId;
 
     private int requestTabsSelectedIndexField;
     public int RequestTabsSelectedIndex // To preserve the state of the last shown request tab
@@ -344,7 +343,6 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         #region REQUEST
 
         this.variableResolver = variableResolver;
-        this.reqId = req.Id;
 
         #endregion
 
@@ -589,7 +587,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     public PororocaHttpRequest ToHttpRequest()
     {
-        PororocaHttpRequest newReq = new(this.reqId, Name);
+        PororocaHttpRequest newReq = new(Name);
         UpdateRequestWithInputs(newReq);
         return newReq;
     }

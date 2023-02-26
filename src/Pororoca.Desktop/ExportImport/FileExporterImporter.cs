@@ -11,6 +11,7 @@ using static Pororoca.Domain.Features.ImportCollection.PororocaCollectionImporte
 using static Pororoca.Domain.Features.ImportCollection.PostmanCollectionV21Importer;
 using static Pororoca.Domain.Features.ImportEnvironment.PororocaEnvironmentImporter;
 using static Pororoca.Domain.Features.ImportEnvironment.PostmanEnvironmentImporter;
+using System.Text.RegularExpressions;
 
 namespace Pororoca.Desktop.ExportImport;
 
@@ -26,6 +27,8 @@ internal static class FileExporterImporter
     private const string PororocaEnvironmentExtensionGlob = $"*.{PororocaEnvironmentExtension}";
     private const string PostmanEnvironmentExtensionGlob = $"*.{PostmanEnvironmentExtension}";
     private const string JsonExtensionGlob = $"*.json";
+
+    private static Regex pororocaSchemaRegex = new("schema\":\\s*\"Pororoca");
 
 
     #region EXPORT COLLECTION
@@ -186,10 +189,12 @@ internal static class FileExporterImporter
         {
             foreach (string filePath in filesPaths)
             {
+                string fileContent = await File.ReadAllTextAsync(filePath, Encoding.UTF8) ?? string.Empty;
+                bool isPororocaEnvironment = pororocaSchemaRegex.IsMatch(fileContent);
+
                 // First, tries to import as a Pororoca environment
-                if (filePath.EndsWith(PororocaEnvironmentExtension))
+                if (isPororocaEnvironment)
                 {
-                    string fileContent = await File.ReadAllTextAsync(filePath, Encoding.UTF8);
                     if (TryImportPororocaEnvironment(fileContent, out var importedPororocaEnvironment))
                     {
                         importedPororocaEnvironment!.IsCurrent = false; // Imported environment should always be disabled
@@ -199,7 +204,6 @@ internal static class FileExporterImporter
                 // If not a valid Pororoca environment, then tries to import as a Postman environment
                 else
                 {
-                    string fileContent = await File.ReadAllTextAsync(filePath, Encoding.UTF8);
                     if (TryImportPostmanEnvironment(fileContent, out var importedPostmanEnvironment))
                     {
                         egvm.AddEnvironment(importedPostmanEnvironment!);
@@ -238,11 +242,13 @@ internal static class FileExporterImporter
         {
             foreach (string filePath in filesPaths)
             {
+                string fileContent = await File.ReadAllTextAsync(filePath, Encoding.UTF8) ?? string.Empty;
+                bool isPororocaCollection = pororocaSchemaRegex.IsMatch(fileContent);
+
                 // First, tries to import as a Pororoca collection
-                if (filePath.EndsWith(PororocaCollectionExtension))
+                if (isPororocaCollection)
                 {
-                    string fileContent = await File.ReadAllTextAsync(filePath, Encoding.UTF8);
-                    if (TryImportPororocaCollection(fileContent, out var importedPororocaCollection))
+                    if (TryImportPororocaCollection(fileContent, preserveId: false, out var importedPororocaCollection))
                     {
                         mwvm.AddCollection(importedPororocaCollection!);
                     }
@@ -250,7 +256,6 @@ internal static class FileExporterImporter
                 // If not a valid Pororoca collection, then tries to import as a Postman collection
                 else
                 {
-                    string fileContent = await File.ReadAllTextAsync(filePath, Encoding.UTF8);
                     if (TryImportPostmanCollection(fileContent, out var importedPostmanCollection))
                     {
                         mwvm.AddCollection(importedPostmanCollection!);

@@ -35,11 +35,7 @@ public sealed class PororocaWebSocketConnection : PororocaRequest
     }
 #nullable restore warnings
 
-    public PororocaWebSocketConnection(string name) : this(Guid.NewGuid(), name)
-    {
-    }
-
-    public PororocaWebSocketConnection(Guid id, string name) : base(PororocaRequestType.Websocket, id, name)
+    public PororocaWebSocketConnection(string name) : base(PororocaRequestType.Websocket, name)
     {
         HttpVersion = 1.1m;
         Url = string.Empty;

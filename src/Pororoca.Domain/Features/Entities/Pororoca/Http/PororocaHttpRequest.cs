@@ -29,11 +29,7 @@ public sealed class PororocaHttpRequest : PororocaRequest
     }
 #nullable restore warnings
 
-    public PororocaHttpRequest(string name) : this(Guid.NewGuid(), name)
-    {
-    }
-
-    public PororocaHttpRequest(Guid id, string name) : base(PororocaRequestType.Http, id, name)
+    public PororocaHttpRequest(string name) : base(PororocaRequestType.Http, name)
     {
         HttpVersion = 1.1m;
         HttpMethod = "GET";

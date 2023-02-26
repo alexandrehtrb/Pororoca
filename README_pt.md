@@ -6,11 +6,11 @@ Pororoca é uma ferramenta de testes de HTTP, como o Postman, mas com diversas m
 
 Está disponível para Windows, Mac OSX e Linux.
 
-![TelaDeExemplo](./docs/pt-BR/imgs/example_screen.png)
+![TelaDeExemplo](./misc/example_screen_pt.png)
 
 ## Instalação
 
-Leia as [instruções](./docs/pt-BR/Instalação.md) e baixe o programa [aqui](https://github.com/alexandrehtrb/Pororoca/releases).
+Leia as [instruções](https://pororoca.pages.dev/pt/docs/installation) e baixe o programa [aqui](https://github.com/alexandrehtrb/Pororoca/releases).
 
 ## Funcionalidades
 
@@ -26,7 +26,7 @@ Leia as [instruções](./docs/pt-BR/Instalação.md) e baixe o programa [aqui](h
 * Inicialização rápida.
 * Gratuito e código-aberto.
 
-Confira a [documentação](./docs/pt-BR/README.md) para saber mais.
+Confira a [documentação](.https://pororoca.pages.dev/pt/docs/) para saber mais.
 
 *Nota*: No Windows, suporte ao HTTP/2 requer Windows 10 ou acima. Suporte ao HTTP/3 requer Linux ou Windows 11 e acima. HTTP/3 está em fase experimental.
 
@@ -36,7 +36,7 @@ HTTP/3 usa o protocolo de transporte QUIC e há algumas preocupações de privac
 
 ## Design
 
-Logo criado por [Anderson Martins](https://www.behance.net/am-dsgn).
+Logo e arte criados por [Anderson Martins](https://www.behance.net/am-dsgn).
 
 ## Contribuindo
 

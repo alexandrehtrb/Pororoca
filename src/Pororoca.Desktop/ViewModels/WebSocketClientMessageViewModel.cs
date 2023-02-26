@@ -248,14 +248,19 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
     protected override void CopyThis() =>
         CollectionsGroupDataCtx.PushToCopy(ToWebSocketClientMessage());
 
-    public PororocaWebSocketClientMessage ToWebSocketClientMessage() =>
-        new(msgType: MessageType,
+    public PororocaWebSocketClientMessage ToWebSocketClientMessage()
+    {
+        PororocaWebSocketClientMessage wsCliMsg = new(
+            msgType: MessageType,
             name: Name,
             contentMode: ContentMode,
             rawContent: RawContent,
             rawContentSyntax: RawContentSyntax,
             fileSrcPath: ContentFileSrcPath,
             disableCompressionForThis: DisableCompressionForThisMessage);
+        
+        return wsCliMsg;
+    }
 
     #endregion
 
