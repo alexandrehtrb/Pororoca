@@ -25,7 +25,7 @@
 ### Refactoring
 
 * Removed ids from requests, folders and WebSocket client messages, since they were unused.
-* Removed documentation from this repo. Will be available on its own site.
+* Removed documentation from this repo. Now available on its own site.
 
 ## [2.0.0](https://github.com/alexandrehtrb/Pororoca/tree/2.0.0) (2022-12-20)
 
