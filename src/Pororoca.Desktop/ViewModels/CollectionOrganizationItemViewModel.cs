@@ -68,7 +68,7 @@ public abstract class CollectionOrganizationItemViewModel : ViewModelBase, IColl
         Parent.OnRenameSubItemSelected(this);
     }
 
-    private void OnNameUpdated(string newName) =>
+    protected virtual void OnNameUpdated(string newName) =>
         Name = newName;
 
     protected void Delete()
@@ -80,7 +80,7 @@ public abstract class CollectionOrganizationItemViewModel : ViewModelBase, IColl
             DeleteThis();
     }
 
-    public void DeleteThis() =>
+    public virtual void DeleteThis() =>
         Parent.DeleteSubItem(this);
     
     public void SetAsItemInFocus(ViewModelBase vm, bool show)

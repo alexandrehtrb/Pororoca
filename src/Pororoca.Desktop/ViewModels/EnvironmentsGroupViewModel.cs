@@ -20,6 +20,13 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
 
     #region ENVIRONMENTS GROUP
 
+    private string? selectedEnvironmentNameField;
+    public string? SelectedEnvironmentName
+    {
+        get => this.selectedEnvironmentNameField;
+        set => this.RaiseAndSetIfChanged(ref this.selectedEnvironmentNameField, value);
+    }
+
     public override ObservableCollection<EnvironmentViewModel> Items { get; }
     public ReactiveCommand<Unit, Unit> ImportEnvironmentsCmd { get; }
 
@@ -47,6 +54,7 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
 
         #region ENVIRONMENTS GROUP
         Items = new(envs.Select(e => new EnvironmentViewModel(this, e, SetEnvironmentAsCurrent)));
+        UpdateSelectedEnvironmentName();
         RefreshSubItemsAvailableMovements();
         #endregion
     }
@@ -107,6 +115,15 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
         {
             evm.IsCurrentEnvironment = evm == envVm;
         }
+        UpdateSelectedEnvironmentName();
+    }
+
+    public void UpdateSelectedEnvironmentName()
+    {
+        var selectedEnv = Items.FirstOrDefault(i => i.IsCurrentEnvironment);
+        SelectedEnvironmentName = selectedEnv is not null ?
+                                  '(' + selectedEnv.Name + ')' :
+                                  null;
     }
 
     public IEnumerable<PororocaEnvironment> ToEnvironments() =>
