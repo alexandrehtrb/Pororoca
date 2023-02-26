@@ -32,7 +32,6 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
     #region COLLECTION FOLDER
 
     private readonly IPororocaVariableResolver variableResolver;
-    private readonly Guid folderId;
     public override ObservableCollection<CollectionOrganizationItemViewModel> Items { get; }
 
     #endregion
@@ -58,7 +57,6 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
         #region COLLECTION FOLDER
 
         this.variableResolver = variableResolver;
-        this.folderId = folder.Id;
 
         Items = new();
         foreach (var subFolder in folder.Folders)
@@ -185,7 +183,7 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
 
     public PororocaCollectionFolder ToCollectionFolder()
     {
-        PororocaCollectionFolder newFolder = new(this.folderId, Name);
+        PororocaCollectionFolder newFolder = new(Name);
         foreach (var colItemVm in Items)
         {
             if (colItemVm is CollectionFolderViewModel colFolderVm)

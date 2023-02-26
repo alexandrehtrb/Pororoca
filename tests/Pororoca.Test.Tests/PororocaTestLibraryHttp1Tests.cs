@@ -155,7 +155,7 @@ public class PororocaTestLibraryHttp1Tests
     [Fact]
     public async Task Should_send_bearer_auth_header_with_http_1_1_successfully()
     {
-        var res = await this.pororocaTest.SendHttpRequestAsync(Guid.Parse("3882d786-afde-49ca-b7f5-eebffab23e5a"));
+        var res = await this.pororocaTest.SendHttpRequestAsync("BEARER");
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
@@ -172,7 +172,7 @@ public class PororocaTestLibraryHttp1Tests
         // https://xunit.net/docs/running-tests-in-parallel
 
         // sending request with new {{BearerAuthToken}} value
-        res = await this.pororocaTest.SendHttpRequestAsync(Guid.Parse("3882d786-afde-49ca-b7f5-eebffab23e5a"));
+        res = await this.pororocaTest.SendHttpRequestAsync("BEARER");
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);

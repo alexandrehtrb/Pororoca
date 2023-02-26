@@ -29,11 +29,7 @@ public sealed class PororocaHttpRequest : PororocaRequest
     }
 #nullable restore warnings
 
-    public PororocaHttpRequest(string name) : this(Guid.NewGuid(), name)
-    {
-    }
-
-    public PororocaHttpRequest(Guid id, string name) : base(PororocaRequestType.Http, id, name)
+    public PororocaHttpRequest(string name) : base(PororocaRequestType.Http, name)
     {
         HttpVersion = 1.1m;
         HttpMethod = "GET";
@@ -71,16 +67,6 @@ public sealed class PororocaHttpRequest : PororocaRequest
         Headers = headers?.ToList()?.AsReadOnly();
         Body = body;
     }
-
-    public override PororocaHttpRequest ClonePreservingId() => new(Id, Name)
-    {
-        HttpVersion = HttpVersion,
-        HttpMethod = HttpMethod,
-        Url = Url,
-        CustomAuth = (PororocaRequestAuth?)CustomAuth?.Clone(),
-        Headers = Headers?.Select(h => (PororocaKeyValueParam)h.Clone())?.ToList()?.AsReadOnly(),
-        Body = (PororocaHttpRequestBody?)Body?.Clone()
-    };
 
     public override object Clone() =>
         new PororocaHttpRequest(Name)

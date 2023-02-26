@@ -84,7 +84,7 @@ public sealed class PororocaCollection : IPororocaVariableResolver, ICloneable
     public void RemoveFolder(PororocaCollectionFolder subFolder)
     {
         List<PororocaCollectionFolder> newList = new(Folders);
-        newList.RemoveAll(i => i.Id == subFolder.Id);
+        newList.Remove(subFolder);
         Folders = newList.AsReadOnly();
     }
 
@@ -95,13 +95,6 @@ public sealed class PororocaCollection : IPororocaVariableResolver, ICloneable
     {
         List<PororocaRequest> newList = new(Requests);
         newList.Add(req);
-        Requests = newList.AsReadOnly();
-    }
-
-    public void RemoveRequest(Guid reqId)
-    {
-        List<PororocaRequest> newList = new(Requests);
-        newList.RemoveAll(i => i.Id == reqId);
         Requests = newList.AsReadOnly();
     }
 
@@ -159,20 +152,20 @@ public sealed class PororocaCollection : IPororocaVariableResolver, ICloneable
         }
     }
 
-    public PororocaCollection ClonePreservingIds() => new(Id, Name, CreatedAt)
-    {
-        Folders = Folders.Select(f => f.ClonePreservingIds()).ToList().AsReadOnly(),
-        Requests = Requests.Select(r => r.ClonePreservingId()).ToList().AsReadOnly(),
-        Variables = Variables.Select(v => (PororocaVariable)v.Clone()).ToList().AsReadOnly(),
-        Environments = Environments.Select(e => e.ClonePreservingId()).ToList().AsReadOnly()
-    };
+    public PororocaCollection ClonePreservingIds() => ConditionalClone(true);
 
-    public object Clone() =>
-        new PororocaCollection(Name)
+    public object Clone() => ConditionalClone(false);
+
+    private PororocaCollection ConditionalClone(bool preserveIds)
+    {
+        var id = preserveIds ? Id : Guid.NewGuid();
+
+        return new(id, Name, CreatedAt)
         {
             Folders = Folders.Select(f => (PororocaCollectionFolder)f.Clone()).ToList().AsReadOnly(),
             Requests = Requests.Select(f => (PororocaRequest)f.Clone()).ToList().AsReadOnly(),
             Variables = Variables.Select(v => (PororocaVariable)v.Clone()).ToList().AsReadOnly(),
-            Environments = Environments.Select(e => (PororocaEnvironment)e.Clone()).ToList().AsReadOnly()
+            Environments = Environments.Select(e => preserveIds ? e.ClonePreservingId() : (PororocaEnvironment)e.Clone()).ToList().AsReadOnly()
         };
+    }
 }

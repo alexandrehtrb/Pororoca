@@ -22,8 +22,6 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
 
     #region WEBSOCKET REQUEST MESSAGE
 
-    private readonly Guid wsCliMsgId;
-
     private bool disableCompressionForThisMessageField;
     public bool DisableCompressionForThisMessage
     {
@@ -189,7 +187,6 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
 
         #region WEBSOCKET REQUEST MESSAGE
 
-        this.wsCliMsgId = msg.Id;
         DisableCompressionForThisMessage = msg.DisableCompressionForThis;
         switch (msg.MessageType)
         {
@@ -262,7 +259,6 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
             fileSrcPath: ContentFileSrcPath,
             disableCompressionForThis: DisableCompressionForThisMessage);
         
-        wsCliMsg.Id = wsCliMsgId;
         return wsCliMsg;
     }
 

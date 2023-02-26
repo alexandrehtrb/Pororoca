@@ -34,19 +34,6 @@ public sealed class PororocaTestWebSocketConnector : PororocaWebSocketConnector
         }
     }
 
-    public ValueTask SendMessageAsync(Guid msgId)
-    {
-        var msg = this.connection.ClientMessages?.FirstOrDefault(cm => cm.Id == msgId);
-        if (msg is null)
-        {
-            throw new Exception($"Error: Could not send WebSocket client message. Cause: Message with the ID '{msgId}' was not found.");
-        }
-        else
-        {
-            return SendMessageAsync(msg!);
-        }
-    }
-
 #pragma warning disable CA1061
     public ValueTask SendMessageAsync(PororocaWebSocketClientMessage msg)
 #pragma warning restore CA1061
