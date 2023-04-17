@@ -8,6 +8,9 @@
     xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
     xmlns:controls="clr-namespace:Pororoca.Desktop.Controls;assembly=Pororoca.Desktop"
     xmlns:AvalonEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+    xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+    xmlns:idd="clr-namespace:Avalonia.Xaml.Interactions.DragAndDrop;assembly=Avalonia.Xaml.Interactions"
+    xmlns:b="clr-namespace:Pororoca.Desktop.Behaviors;assembly=Pororoca.Desktop"
     x:DataType="vm:WebSocketConnectionViewModel"
     x:Class="Pororoca.Desktop.Views.WebSocketConnectionView"
     mc:Ignorable="d"
@@ -22,8 +25,10 @@
       <Setter
           Property="FontSize"
           Value="20" />
-      <!--Setter Property="FontWeight" Value="Bold"/-->
-      <!--Setter Property="FontFamily" Value="{StaticResource CodeFontFamily}"/-->
+      <!--Setter
+      Property="FontWeight" Value="Bold"/-->
+      <!--Setter
+      Property="FontFamily" Value="{StaticResource CodeFontFamily}"/-->
     </Style>
   </UserControl.Styles>
 
@@ -160,7 +165,8 @@
 
       </Grid>
 
-      <!-- The grid below is necessary to preserve a spacing for the progress bar when it is not visible -->
+      <!-- The grid below is necessary to preserve a spacing for the progress bar when it is not
+      visible -->
       <Grid
           Margin="0,0,0,16"
           Height="4"
@@ -269,7 +275,13 @@
                     AutoGenerateColumns="False"
                     Items="{Binding ConnectionRequestHeaders}"
                     SelectedItem="{Binding Path=SelectedConnectionRequestHeader, Mode=TwoWay}"
-                    CanUserResizeColumns="True">
+                    CanUserResizeColumns="True"
+                    Classes="draggable">
+                  <i:Interaction.Behaviors>
+                    <i:BehaviorCollection>
+                      <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}" />
+                    </i:BehaviorCollection>
+                  </i:Interaction.Behaviors>
                   <DataGrid.Columns>
                     <DataGridCheckBoxColumn
                         Width="0.22*"
@@ -331,7 +343,13 @@
                     AutoGenerateColumns="False"
                     Items="{Binding Subprotocols}"
                     SelectedItem="{Binding Path=SelectedSubprotocol, Mode=TwoWay}"
-                    CanUserResizeColumns="True">
+                    CanUserResizeColumns="True"
+                    Classes="draggable">
+                  <i:Interaction.Behaviors>
+                    <i:BehaviorCollection>
+                      <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}" />
+                    </i:BehaviorCollection>
+                  </i:Interaction.Behaviors>
                   <DataGrid.Columns>
                     <DataGridCheckBoxColumn
                         Width="0.34*"
