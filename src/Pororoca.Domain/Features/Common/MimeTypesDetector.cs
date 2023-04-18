@@ -7,12 +7,39 @@ public static class MimeTypesDetector
     public const string DefaultMimeTypeForXml = "text/xml";
     public const string DefaultMimeTypeForJson = "application/json";
     public const string DefaultMimeTypeForProblemJson = "application/problem+json";
+    public const string DefaultMimeTypeForProblemXml = "application/problem+xml";
+    public const string DefaultMimeTypeForDnsJson = "application/dns-json";
+    public const string DefaultMimeTypeForDnsMessage = "application/dns-message";
     public const string DefaultMimeTypeForJavascript = "application/javascript";
     public const string DefaultMimeTypeForBinary = "application/octet-stream";
 
-    private static readonly string[] textMimeTypes = new[] {
+    private static readonly string[] textMimeTypes;
+
+    private static readonly List<KeyValuePair<string, string>> mappings;
+
+    public static readonly List<string> AllMimeTypes;
+
+    static MimeTypesDetector()
+    {
+        textMimeTypes = GetTextMimeTypes();
+        mappings = BuildMappings();
+        AllMimeTypes = mappings.DistinctBy(kv => kv.Value)
+                               .Select(kv => kv.Value)
+                               .ToList();
+        // extra MIME types not with no corresponding file extension
+        // will be added below:
+        AllMimeTypes.Add(DefaultMimeTypeForProblemJson);
+        AllMimeTypes.Add(DefaultMimeTypeForProblemXml);
+        AllMimeTypes.Add(DefaultMimeTypeForDnsJson);
+        AllMimeTypes.Add(DefaultMimeTypeForDnsMessage);
+    }
+
+    private static string[] GetTextMimeTypes() => new[]
+    {
         DefaultMimeTypeForJson,
         DefaultMimeTypeForProblemJson,
+        DefaultMimeTypeForProblemXml,
+        DefaultMimeTypeForDnsJson,
         DefaultMimeTypeForText,
         DefaultMimeTypeForHtml,
         DefaultMimeTypeForXml,
@@ -21,13 +48,6 @@ public static class MimeTypesDetector
         "text/csv",
         "application/xml"
     };
-
-    private static readonly List<KeyValuePair<string, string>> _mappings = BuildMappings();
-
-    public static readonly List<string> AllMimeTypes = _mappings
-                                                       .DistinctBy(kv => kv.Value)
-                                                       .Select(kv => kv.Value)
-                                                       .ToList();
 
     /*
     MIME types list extracted from:
@@ -1278,7 +1298,7 @@ public static class MimeTypesDetector
         string fileExtensionWithoutDot = FileNameUtils.GetFileExtensionWithoutDot(fileNameOrPath) ?? string.Empty;
 
         KeyValuePair<string, string>? match =
-            _mappings.FirstOrDefault(m => string.Equals(fileExtensionWithoutDot, m.Key, StringComparison.InvariantCultureIgnoreCase));
+            mappings.FirstOrDefault(m => string.Equals(fileExtensionWithoutDot, m.Key, StringComparison.InvariantCultureIgnoreCase));
 
         mimeType = match?.Value;
         return mimeType != null;
@@ -1287,7 +1307,7 @@ public static class MimeTypesDetector
     public static bool TryFindFileExtensionForContentType(string contentType, out string? fileExtensionWithoutDot)
     {
         KeyValuePair<string, string>? match =
-            _mappings.FirstOrDefault(m => contentType.Contains(m.Value, StringComparison.InvariantCultureIgnoreCase));
+            mappings.FirstOrDefault(m => contentType.Contains(m.Value, StringComparison.InvariantCultureIgnoreCase));
 
         fileExtensionWithoutDot = match?.Key;
         return fileExtensionWithoutDot != null;
