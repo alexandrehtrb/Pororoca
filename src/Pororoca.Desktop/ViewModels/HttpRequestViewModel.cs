@@ -1,28 +1,18 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Reactive;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
-using Avalonia.Controls;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Common;
-using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Requester;
 using Pororoca.Domain.Features.TranslateRequest;
 using Pororoca.Domain.Features.VariableResolution;
 using Pororoca.Infrastructure.Features.Requester;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
 
 namespace Pororoca.Desktop.ViewModels;
@@ -44,55 +34,40 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     private readonly IPororocaRequester requester = PororocaRequester.Singleton;
     private readonly IPororocaVariableResolver variableResolver;
 
-    private int requestTabsSelectedIndexField;
-    public int RequestTabsSelectedIndex // To preserve the state of the last shown request tab
-    {
-        get => this.requestTabsSelectedIndexField;
-        set => this.RaiseAndSetIfChanged(ref this.requestTabsSelectedIndexField, value);
-    }
+    // To preserve the state of the last shown request tab
+    [Reactive]
+    public int RequestTabsSelectedIndex { get; set; }
 
     #region REQUEST HTTP METHOD
     public ObservableCollection<string> RequestMethodSelectionOptions { get; }
-    private int requestMethodSelectedIndexField;
-    public int RequestMethodSelectedIndex
-    {
-        get => this.requestMethodSelectedIndexField;
-        set => this.RaiseAndSetIfChanged(ref this.requestMethodSelectedIndexField, value);
-    }
+
+    [Reactive]
+    public int RequestMethodSelectedIndex { get; set; }
+
     private HttpMethod RequestMethod =>
-        AvailableHttpMethods[this.requestMethodSelectedIndexField];
+        AvailableHttpMethods[RequestMethodSelectedIndex];
 
     #endregion
 
     #region REQUEST URL
 
-    private string requestUrlField;
-    public string RequestUrl
-    {
-        get => this.requestUrlField;
-        set => this.RaiseAndSetIfChanged(ref this.requestUrlField, value);
-    }
+    [Reactive]
+    public string RequestUrl { get; set; }
 
-    private string resolvedRequestUrlToolTipField;
-    public string ResolvedRequestUrlToolTip
-    {
-        get => this.resolvedRequestUrlToolTipField;
-        set => this.RaiseAndSetIfChanged(ref this.resolvedRequestUrlToolTipField, value);
-    }
+    [Reactive]
+    public string ResolvedRequestUrlToolTip { get; set; }
 
     #endregion
 
     #region REQUEST HTTP VERSION
 
     public ObservableCollection<string> RequestHttpVersionSelectionOptions { get; }
-    private int requestHttpVersionSelectedIndexField;
-    public int RequestHttpVersionSelectedIndex
-    {
-        get => this.requestHttpVersionSelectedIndexField;
-        set => this.RaiseAndSetIfChanged(ref this.requestHttpVersionSelectedIndexField, value);
-    }
+
+    [Reactive]
+    public int RequestHttpVersionSelectedIndex { get; set; }
+
     private decimal RequestHttpVersion =>
-        AvailableHttpVersionsForHttp[this.requestHttpVersionSelectedIndexField];
+        AvailableHttpVersionsForHttp[RequestHttpVersionSelectedIndex];
 
     #endregion
 
@@ -100,18 +75,11 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     private string? invalidRequestMessageErrorCode;
 
-    private bool isInvalidRequestMessageVisibleField;
-    public bool IsInvalidRequestMessageVisible
-    {
-        get => this.isInvalidRequestMessageVisibleField;
-        set => this.RaiseAndSetIfChanged(ref this.isInvalidRequestMessageVisibleField, value);
-    }
-    private string? invalidRequestMessageField;
-    public string? InvalidRequestMessage
-    {
-        get => this.invalidRequestMessageField;
-        set => this.RaiseAndSetIfChanged(ref this.invalidRequestMessageField, value);
-    }
+    [Reactive]
+    public bool IsInvalidRequestMessageVisible { get; set; }
+
+    [Reactive]
+    public string? InvalidRequestMessage { get; set; }
 
     #endregion
 
@@ -126,19 +94,11 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST BODY
 
-    private int requestBodyModeSelectedIndexField;
-    public int RequestBodyModeSelectedIndex
-    {
-        get => this.requestBodyModeSelectedIndexField;
-        set => this.RaiseAndSetIfChanged(ref this.requestBodyModeSelectedIndexField, value);
-    }
+    [Reactive]
+    public int RequestBodyModeSelectedIndex { get; set; }
 
-    private bool isRequestBodyModeNoneSelectedField;
-    public bool IsRequestBodyModeNoneSelected
-    {
-        get => this.isRequestBodyModeNoneSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isRequestBodyModeNoneSelectedField, value);
-    }
+    [Reactive]
+    public bool IsRequestBodyModeNoneSelected { get; set; }
 
     private PororocaHttpRequestBodyMode? RequestBodyMode
     {
@@ -163,26 +123,14 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST BODY RAW
 
-    private bool isRequestBodyModeRawSelectedField;
-    public bool IsRequestBodyModeRawSelected
-    {
-        get => this.isRequestBodyModeRawSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isRequestBodyModeRawSelectedField, value);
-    }
+    [Reactive]
+    public bool IsRequestBodyModeRawSelected { get; set; }
 
-    private string? requestRawContentTypeField;
-    public string? RequestRawContentType
-    {
-        get => this.requestRawContentTypeField;
-        set => this.RaiseAndSetIfChanged(ref this.requestRawContentTypeField, value);
-    }
+    [Reactive]
+    public string? RequestRawContentType { get; set; }
 
-    private TextDocument? requestRawContentTextDocumentField;
-    public TextDocument? RequestRawContentTextDocument
-    {
-        get => this.requestRawContentTextDocumentField;
-        set => this.RaiseAndSetIfChanged(ref this.requestRawContentTextDocumentField, value);
-    }
+    [Reactive]
+    public TextDocument? RequestRawContentTextDocument { get; set; }
 
     public string? RequestRawContent
     {
@@ -194,38 +142,23 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST BODY FILE
 
-    private bool isRequestBodyModeFileSelectedField;
-    public bool IsRequestBodyModeFileSelected
-    {
-        get => this.isRequestBodyModeFileSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isRequestBodyModeFileSelectedField, value);
-    }
+    [Reactive]
+    public bool IsRequestBodyModeFileSelected { get; set; }
 
-    private string? requestFileContentTypeField;
-    public string? RequestFileContentType
-    {
-        get => this.requestFileContentTypeField;
-        set => this.RaiseAndSetIfChanged(ref this.requestFileContentTypeField, value);
-    }
+    [Reactive]
+    public string? RequestFileContentType { get; set; }
 
-    private string? requestBodyFileSrcPathField;
-    public string? RequestBodyFileSrcPath
-    {
-        get => this.requestBodyFileSrcPathField;
-        set => this.RaiseAndSetIfChanged(ref this.requestBodyFileSrcPathField, value);
-    }
+    [Reactive]
+    public string? RequestBodyFileSrcPath { get; set; }
+
     public ReactiveCommand<Unit, Unit> SearchRequestBodyRawFileCmd { get; }
 
     #endregion
 
     #region REQUEST BODY URL ENCODED
 
-    private bool isRequestBodyModeUrlEncodedSelectedField;
-    public bool IsRequestBodyModeUrlEncodedSelected
-    {
-        get => this.isRequestBodyModeUrlEncodedSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isRequestBodyModeUrlEncodedSelectedField, value);
-    }
+    [Reactive]
+    public bool IsRequestBodyModeUrlEncodedSelected { get; set; }
 
     public ObservableCollection<KeyValueParamViewModel> UrlEncodedParams { get; }
     public KeyValueParamViewModel? SelectedUrlEncodedParam { get; set; }
@@ -236,12 +169,8 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST BODY FORM DATA
 
-    private bool isRequestBodyModeFormDataSelectedField;
-    public bool IsRequestBodyModeFormDataSelected
-    {
-        get => this.isRequestBodyModeFormDataSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isRequestBodyModeFormDataSelectedField, value);
-    }
+    [Reactive]
+    public bool IsRequestBodyModeFormDataSelected { get; set; }
 
     public ObservableCollection<HttpRequestFormDataParamViewModel> FormDataParams { get; }
     public HttpRequestFormDataParamViewModel? SelectedFormDataParam { get; set; }
@@ -253,26 +182,14 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST BODY GRAPHQL
 
-    private bool isRequestBodyModeGraphQlSelectedField;
-    public bool IsRequestBodyModeGraphQlSelected
-    {
-        get => this.isRequestBodyModeGraphQlSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isRequestBodyModeGraphQlSelectedField, value);
-    }
+    [Reactive]
+    public bool IsRequestBodyModeGraphQlSelected { get; set; }
 
-    private string? requestBodyGraphQlQueryField;
-    public string? RequestBodyGraphQlQuery
-    {
-        get => this.requestBodyGraphQlQueryField;
-        set => this.RaiseAndSetIfChanged(ref this.requestBodyGraphQlQueryField, value);
-    }
+    [Reactive]
+    public string? RequestBodyGraphQlQuery { get; set; }
 
-    private string? requestBodyGraphQlVariablesField;
-    public string? RequestBodyGraphQlVariables
-    {
-        get => this.requestBodyGraphQlVariablesField;
-        set => this.RaiseAndSetIfChanged(ref this.requestBodyGraphQlVariablesField, value);
-    }
+    [Reactive]
+    public string? RequestBodyGraphQlVariables { get; set; }
 
     #endregion
 
@@ -280,12 +197,8 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST AUTH
 
-    private RequestAuthViewModel requestAuthDataCtxField;
-    public RequestAuthViewModel RequestAuthDataCtx
-    {
-        get => this.requestAuthDataCtxField;
-        set => this.RaiseAndSetIfChanged(ref this.requestAuthDataCtxField, value);
-    }
+    [Reactive]
+    public RequestAuthViewModel RequestAuthDataCtx { get; set; }
 
     #endregion
 
@@ -293,35 +206,23 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region SEND OR CANCEL REQUEST
 
-    private bool isRequestingField;
-    public bool IsRequesting
-    {
-        get => this.isRequestingField;
-        set => this.RaiseAndSetIfChanged(ref this.isRequestingField, value);
-    }
+    [Reactive]
+    public bool IsRequesting { get; set; }
 
     private CancellationTokenSource? sendRequestCancellationTokenSourceField;
 
     public ReactiveCommand<Unit, Unit> CancelRequestCmd { get; }
     public ReactiveCommand<Unit, Unit> SendRequestCmd { get; }
 
-    private bool isSendRequestProgressBarVisibleField;
-    public bool IsSendRequestProgressBarVisible
-    {
-        get => this.isSendRequestProgressBarVisibleField;
-        set => this.RaiseAndSetIfChanged(ref this.isSendRequestProgressBarVisibleField, value);
-    }
+    [Reactive]
+    public bool IsSendRequestProgressBarVisible { get; set; }
 
     #endregion
 
     #region RESPONSE
 
-    private HttpResponseViewModel responseDataCtxField;
-    public HttpResponseViewModel ResponseDataCtx
-    {
-        get => this.responseDataCtxField;
-        set => this.RaiseAndSetIfChanged(ref this.responseDataCtxField, value);
-    }
+    [Reactive]
+    public HttpResponseViewModel ResponseDataCtx { get; set; }
 
     #endregion
 
@@ -351,7 +252,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         int reqMethodSelectionIndex = RequestMethodSelectionOptions.IndexOf(req.HttpMethod);
         RequestMethodSelectedIndex = reqMethodSelectionIndex >= 0 ? reqMethodSelectionIndex : 0;
 
-        this.resolvedRequestUrlToolTipField = this.requestUrlField = req.Url;
+        ResolvedRequestUrlToolTip = RequestUrl = req.Url;
 
         RequestHttpVersionSelectionOptions = new(AvailableHttpVersionsForHttp.Select(FormatHttpVersionString));
         int reqHttpVersionSelectionIndex = RequestHttpVersionSelectionOptions.IndexOf(FormatHttpVersionString(req.HttpVersion));
@@ -413,7 +314,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         #endregion
 
         #region REQUEST AUTH
-        this.requestAuthDataCtxField = new(req.CustomAuth);
+        RequestAuthDataCtx = new(req.CustomAuth);
         #endregion
 
         #region SEND OR CANCEL REQUEST
@@ -422,7 +323,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         #endregion
 
         #region RESPONSE
-        this.responseDataCtxField = new();
+        ResponseDataCtx = new();
         #endregion
     }
 
@@ -598,7 +499,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
             httpVersion: RequestHttpVersion,
             httpMethod: RequestMethod.ToString(),
             url: RequestUrl,
-            customAuth: this.requestAuthDataCtxField.ToCustomAuth(),
+            customAuth: RequestAuthDataCtx.ToCustomAuth(),
             headers: RequestHeaders.Count == 0 ? null : RequestHeaders.Select(h => h.ToKeyValueParam()),
             body: WrapRequestBodyFromInputs());
 

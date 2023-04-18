@@ -1,7 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Reactive;
-using Avalonia.Controls;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
@@ -19,6 +18,7 @@ using System.Collections.Specialized;
 using System.Security.Authentication;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.ExportImport;
+using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -78,19 +78,11 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         }
     }
 
-    private bool isConnectingOrDisconnectingField;
-    public bool IsConnectingOrDisconnecting
-    {
-        get => this.isConnectingOrDisconnectingField;
-        set => this.RaiseAndSetIfChanged(ref this.isConnectingOrDisconnectingField, value);
-    }
+    [Reactive]
+    public bool IsConnectingOrDisconnecting { get; set; }
 
-    private bool isDisableTlsVerificationVisibleField;
-    public bool IsDisableTlsVerificationVisible
-    {
-        get => this.isDisableTlsVerificationVisibleField;
-        set => this.RaiseAndSetIfChanged(ref this.isDisableTlsVerificationVisibleField, value);
-    }
+    [Reactive]
+    public bool IsDisableTlsVerificationVisible { get; set; }
 
     public ReactiveCommand<Unit, Unit> ConnectCmd { get; }
 
@@ -106,26 +98,16 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     public ReactiveCommand<Unit, Unit> DisableTlsVerificationCmd { get; }
 
-    private int selectedConnectionTabIndexField;
-    public int SelectedConnectionTabIndex // To preserve the state of the last shown request tab
-    {
-        get => this.selectedConnectionTabIndexField;
-        set => this.RaiseAndSetIfChanged(ref this.selectedConnectionTabIndexField, value);
-    }
+    // To preserve the state of the last shown request tab
 
-    private string urlField;
-    public string Url
-    {
-        get => this.urlField;
-        set => this.RaiseAndSetIfChanged(ref this.urlField, value);
-    }
+    [Reactive]
+    public int SelectedConnectionTabIndex { get; set; }
 
-    private string resolvedUrlToolTipField;
-    public string ResolvedUrlToolTip
-    {
-        get => this.resolvedUrlToolTipField;
-        set => this.RaiseAndSetIfChanged(ref this.resolvedUrlToolTipField, value);
-    }
+    [Reactive]
+    public string Url { get; set; }
+
+    [Reactive]
+    public string ResolvedUrlToolTip { get; set; }
 
     public override ObservableCollection<WebSocketClientMessageViewModel> Items { get; } = new();
 
@@ -134,14 +116,10 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     #region CONNECTION REQUEST HTTP VERSION
 
     public ObservableCollection<string> HttpVersionSelectionOptions { get; }
-    private int httpVersionSelectedIndexField;
-    public int HttpVersionSelectedIndex
-    {
-        get => this.httpVersionSelectedIndexField;
-        set => this.RaiseAndSetIfChanged(ref this.httpVersionSelectedIndexField, value);
-    }
+    [Reactive]
+    public int HttpVersionSelectedIndex { get; set; }
     private decimal HttpVersion =>
-        AvailableHttpVersionsForWebSockets[this.httpVersionSelectedIndexField];
+        AvailableHttpVersionsForWebSockets[HttpVersionSelectedIndex];
 
     #endregion
 
@@ -170,50 +148,26 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         }
     }
 
-    private bool isInvalidConnectionErrorVisibleField;
-    public bool IsInvalidConnectionErrorVisible
-    {
-        get => this.isInvalidConnectionErrorVisibleField;
-        set => this.RaiseAndSetIfChanged(ref this.isInvalidConnectionErrorVisibleField, value);
-    }
-    private string? invalidConnectionErrorField;
-    public string? InvalidConnectionError
-    {
-        get => this.invalidConnectionErrorField;
-        set => this.RaiseAndSetIfChanged(ref this.invalidConnectionErrorField, value);
-    }
+    [Reactive]
+    public bool IsInvalidConnectionErrorVisible { get; set; }
+    [Reactive]
+    public string? InvalidConnectionError { get; set; }
 
     #endregion
 
     #region CONNECTION OPTIONS
 
-    private int connectionOptionSelectedIndexField;
-    public int ConnectionOptionSelectedIndex
-    {
-        get => this.connectionOptionSelectedIndexField;
-        set => this.RaiseAndSetIfChanged(ref this.connectionOptionSelectedIndexField, value);
-    }
+    [Reactive]
+    public int ConnectionOptionSelectedIndex { get; set; }
 
-    private bool isConnectionOptionHeadersSelectedField;
-    public bool IsConnectionOptionHeadersSelected
-    {
-        get => this.isConnectionOptionHeadersSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isConnectionOptionHeadersSelectedField, value);
-    }
+    [Reactive]
+    public bool IsConnectionOptionHeadersSelected { get; set; }
 
-    private bool isConnectionOptionSubprotocolsSelectedField;
-    public bool IsConnectionOptionSubprotocolsSelected
-    {
-        get => this.isConnectionOptionSubprotocolsSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isConnectionOptionSubprotocolsSelectedField, value);
-    }
+    [Reactive]
+    public bool IsConnectionOptionSubprotocolsSelected { get; set; }
 
-    private bool isConnectionOptionCompressionSelectedField;
-    public bool IsConnectionOptionCompressionSelected
-    {
-        get => this.isConnectionOptionCompressionSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isConnectionOptionCompressionSelectedField, value);
-    }
+    [Reactive]
+    public bool IsConnectionOptionCompressionSelected { get; set; }
 
     #region CONNECTION OPTION HEADERS
 
@@ -235,40 +189,20 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region CONNECTION OPTION COMPRESSION
 
-    private bool enableCompressionField;
-    public bool EnableCompression
-    {
-        get => this.enableCompressionField;
-        set => this.RaiseAndSetIfChanged(ref this.enableCompressionField, value);
-    }
+    [Reactive]
+    public bool EnableCompression { get; set; }
 
-    private bool compressionClientContextTakeoverEnabledField;
-    public bool CompressionClientContextTakeoverEnabled
-    {
-        get => this.compressionClientContextTakeoverEnabledField;
-        set => this.RaiseAndSetIfChanged(ref this.compressionClientContextTakeoverEnabledField, value);
-    }
+    [Reactive]
+    public bool CompressionClientContextTakeoverEnabled { get; set; }
 
-    private int compressionClientMaxWindowBitsField;
-    public int CompressionClientMaxWindowBits
-    {
-        get => this.compressionClientMaxWindowBitsField;
-        set => this.RaiseAndSetIfChanged(ref this.compressionClientMaxWindowBitsField, value);
-    }
+    [Reactive]
+    public int CompressionClientMaxWindowBits { get; set; }
 
-    private bool compressionServerContextTakeoverEnabledField;
-    public bool CompressionServerContextTakeoverEnabled
-    {
-        get => this.compressionServerContextTakeoverEnabledField;
-        set => this.RaiseAndSetIfChanged(ref this.compressionServerContextTakeoverEnabledField, value);
-    }
+    [Reactive]
+    public bool CompressionServerContextTakeoverEnabled { get; set; }
 
-    private int compressionServerMaxWindowBitsField;
-    public int CompressionServerMaxWindowBits
-    {
-        get => this.compressionServerMaxWindowBitsField;
-        set => this.RaiseAndSetIfChanged(ref this.compressionServerMaxWindowBitsField, value);
-    }
+    [Reactive]
+    public int CompressionServerMaxWindowBits { get; set; }
 
     #endregion
 
@@ -276,23 +210,15 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region CONNECTION REQUEST AUTH
 
-    private RequestAuthViewModel requestAuthDataCtxField;
-    public RequestAuthViewModel RequestAuthDataCtx
-    {
-        get => this.requestAuthDataCtxField;
-        set => this.RaiseAndSetIfChanged(ref this.requestAuthDataCtxField, value);
-    }
+    [Reactive]
+    public RequestAuthViewModel RequestAuthDataCtx { get; set; }
 
     #endregion
 
     #region CONNECTION EXCEPTION
 
-    private string? connectionExceptionContentField;
-    public string? ConnectionExceptionContent
-    {
-        get => this.connectionExceptionContentField;
-        set => this.RaiseAndSetIfChanged(ref this.connectionExceptionContentField, value);
-    }
+    [Reactive]
+    public string? ConnectionExceptionContent { get; set; }
 
     #endregion
 
@@ -316,34 +242,18 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         }
     }
 
-    private bool isInvalidClientMessageErrorVisibleField;
-    public bool IsInvalidClientMessageErrorVisible
-    {
-        get => this.isInvalidClientMessageErrorVisibleField;
-        set => this.RaiseAndSetIfChanged(ref this.isInvalidClientMessageErrorVisibleField, value);
-    }
-    private string? invalidClientMessageErrorField;
-    public string? InvalidClientMessageError
-    {
-        get => this.invalidClientMessageErrorField;
-        set => this.RaiseAndSetIfChanged(ref this.invalidClientMessageErrorField, value);
-    }
+    [Reactive]
+    public bool IsInvalidClientMessageErrorVisible { get; set; }
+    [Reactive]
+    public string? InvalidClientMessageError { get; set; }
 
-    private bool isSendingAMessageField;
-    public bool IsSendingAMessage
-    {
-        get => this.isSendingAMessageField;
-        set => this.RaiseAndSetIfChanged(ref this.isSendingAMessageField, value);
-    }
+    [Reactive]
+    public bool IsSendingAMessage { get; set; }
 
     public ObservableCollection<WebSocketExchangedMessageViewModel> ExchangedMessages { get; }
     
-    private int messageToSendSelectedIndexField;
-    public int MessageToSendSelectedIndex
-    {
-        get => this.messageToSendSelectedIndexField;
-        set => this.RaiseAndSetIfChanged(ref this.messageToSendSelectedIndexField, value);
-    }
+    [Reactive]
+    public int MessageToSendSelectedIndex { get; set; }
 
     public ReactiveCommand<Unit, Unit> SendMessageCmd { get; }
 
@@ -351,19 +261,11 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region MESSAGE DETAIL
 
-    private string? selectedExchangedMessageTypeField;
-    public string? SelectedExchangedMessageType
-    {
-        get => this.selectedExchangedMessageTypeField;
-        set => this.RaiseAndSetIfChanged(ref this.selectedExchangedMessageTypeField, value);
-    }
+    [Reactive]
+    public string? SelectedExchangedMessageType { get; set; }
 
-    private TextDocument? selectedExchangedMessageContentTextDocumentField;
-    public TextDocument? SelectedExchangedMessageContentTextDocument
-    {
-        get => this.selectedExchangedMessageContentTextDocumentField;
-        set => this.RaiseAndSetIfChanged(ref this.selectedExchangedMessageContentTextDocumentField, value);
-    }
+    [Reactive]
+    public TextDocument? SelectedExchangedMessageContentTextDocument { get; set; }
 
     public string? SelectedExchangedMessageContent
     {
@@ -388,12 +290,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     public bool IsSelectedExchangedMessageContentJson { get; set; }
 
-    private bool isSaveSelectedExchangedMessageToFileVisibleField;
-    public bool IsSaveSelectedExchangedMessageToFileVisible
-    {
-        get => this.isSaveSelectedExchangedMessageToFileVisibleField;
-        set => this.RaiseAndSetIfChanged(ref this.isSaveSelectedExchangedMessageToFileVisibleField, value);
-    }
+    [Reactive]
+    public bool IsSaveSelectedExchangedMessageToFileVisible { get; set; }
 
     public ReactiveCommand<Unit, Unit> SaveSelectedExchangedMessageToFileCmd { get; }
 
@@ -439,7 +337,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         #endregion
 
         #region CONNECTION REQUEST HTTP VERSION AND URL
-        this.resolvedUrlToolTipField = this.urlField = ws.Url;
+        ResolvedUrlToolTip = Url = ws.Url;
 
         HttpVersionSelectionOptions = new(AvailableHttpVersionsForWebSockets.Select(FormatHttpVersionString));
         int httpVersionSelectionIndex = HttpVersionSelectionOptions.IndexOf(FormatHttpVersionString(ws.HttpVersion));
@@ -447,7 +345,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         #endregion
 
         #region CONNECTION REQUEST AUTH
-        this.requestAuthDataCtxField = new(ws.CustomAuth);
+        RequestAuthDataCtx = new(ws.CustomAuth);
         #endregion
 
         #region CONNECTION OPTIONS
@@ -654,7 +552,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         ws.UpdateName(Name);
         ws.HttpVersion = HttpVersion;
         ws.Url = Url;
-        ws.CustomAuth = this.requestAuthDataCtxField.ToCustomAuth();
+        ws.CustomAuth = RequestAuthDataCtx.ToCustomAuth();
         ws.Headers = ConnectionRequestHeaders.Count == 0 ? null : ConnectionRequestHeaders.Select(h => h.ToKeyValueParam()).ToList();
         ws.ClientMessages = Items.Count == 0 ? null : Items.Select(i => i.ToWebSocketClientMessage()).ToList();
         ws.Subprotocols = Subprotocols.Count == 0 ? null : Subprotocols.Select(s => s.ToKeyValueParam()).ToList();
@@ -747,7 +645,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         }
         else
         {
-            var msg = Items[this.messageToSendSelectedIndexField].ToWebSocketClientMessage();
+            var msg = Items[MessageToSendSelectedIndex].ToWebSocketClientMessage();
 
             if (!IsValidClientMessage(this.varResolver, msg, out string? validationErrorCode))
             {

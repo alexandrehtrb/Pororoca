@@ -8,6 +8,7 @@ using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.ExportEnvironment;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
 
 namespace Pororoca.Desktop.ViewModels;
@@ -33,19 +34,11 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
     private readonly DateTimeOffset envCreatedAt;
     private readonly Action<EnvironmentViewModel> onEnvironmentSetAsCurrent;
 
-    private bool isCurrentEnvironmentField;
-    public bool IsCurrentEnvironment
-    {
-        get => this.isCurrentEnvironmentField;
-        set => this.RaiseAndSetIfChanged(ref this.isCurrentEnvironmentField, value);
-    }
+    [Reactive]
+    public bool IsCurrentEnvironment { get; set; }
 
-    private bool includeSecretVariablesField;
-    public bool IncludeSecretVariables
-    {
-        get => this.includeSecretVariablesField;
-        set => this.RaiseAndSetIfChanged(ref this.includeSecretVariablesField, value);
-    }
+    [Reactive]
+    public bool IncludeSecretVariables { get; set; }
 
     public ObservableCollection<VariableViewModel> Variables { get; }
     public VariableViewModel? SelectedVariable { get; set; }
@@ -57,12 +50,8 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
 
     #region OTHERS
 
-    private bool isOperatingSystemMacOsxField;
-    public bool IsOperatingSystemMacOsx
-    {
-        get => this.isOperatingSystemMacOsxField;
-        set => this.RaiseAndSetIfChanged(ref this.isOperatingSystemMacOsxField, value);
-    }
+    [Reactive]
+    public bool IsOperatingSystemMacOsx { get; set; }
 
     #endregion
 
@@ -72,7 +61,7 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
                                 Func<bool>? isOperatingSystemMacOsx = null) : base(parentVm, env.Name)
     {
         #region OTHERS
-        this.isOperatingSystemMacOsxField = (isOperatingSystemMacOsx ?? OperatingSystem.IsMacOS)();
+        IsOperatingSystemMacOsx = (isOperatingSystemMacOsx ?? OperatingSystem.IsMacOS)();
         #endregion
 
         #region COLLECTION ORGANIZATION

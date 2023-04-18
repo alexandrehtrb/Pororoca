@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Reactive;
-using System.Text;
-using Avalonia.Controls;
 using Pororoca.Desktop.ExportImport;
-using Pororoca.Desktop.Localization;
-using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -15,43 +10,23 @@ public sealed class RequestAuthViewModel : ViewModelBase
 {
     #region REQUEST AUTH
 
-    private int authModeSelectedIndexField;
-    public int AuthModeSelectedIndex
-    {
-        get => this.authModeSelectedIndexField;
-        set => this.RaiseAndSetIfChanged(ref this.authModeSelectedIndexField, value);
-    }
+    [Reactive]
+    public int AuthModeSelectedIndex { get; set; }
 
-    private bool isAuthModeNoneSelectedField;
-    public bool IsAuthModeNoneSelected
-    {
-        get => this.isAuthModeNoneSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isAuthModeNoneSelectedField, value);
-    }
+    [Reactive]
+    public bool IsAuthModeNoneSelected { get; set; }
 
-    private bool isAuthModeBasicSelectedField;
-    public bool IsAuthModeBasicSelected
-    {
-        get => this.isAuthModeBasicSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isAuthModeBasicSelectedField, value);
-    }
+    [Reactive]
+    public bool IsAuthModeBasicSelected { get; set; }
 
-    private bool isAuthModeBearerSelectedField;
-    public bool IsAuthModeBearerSelected
-    {
-        get => this.isAuthModeBearerSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isAuthModeBearerSelectedField, value);
-    }
+    [Reactive]
+    public bool IsAuthModeBearerSelected { get; set; }
 
-    private bool isAuthModeClientCertificateSelectedField;
-    public bool IsAuthModeClientCertificateSelected
-    {
-        get => this.isAuthModeClientCertificateSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isAuthModeClientCertificateSelectedField, value);
-    }
+    [Reactive]
+    public bool IsAuthModeClientCertificateSelected { get; set; }
 
     private PororocaRequestAuthMode? AuthMode =>
-        this.authModeSelectedIndexField switch
+        AuthModeSelectedIndex switch
         { // TODO: Improve this, do not use fixed integers to resolve mode
             3 => PororocaRequestAuthMode.ClientCertificate,
             2 => PororocaRequestAuthMode.Bearer,
@@ -61,65 +36,37 @@ public sealed class RequestAuthViewModel : ViewModelBase
 
     #region REQUEST AUTH BASIC
 
-    private string? basicAuthLoginField;
-    public string? BasicAuthLogin
-    {
-        get => this.basicAuthLoginField;
-        set => this.RaiseAndSetIfChanged(ref this.basicAuthLoginField, value);
-    }
+    [Reactive]
+    public string? BasicAuthLogin { get; set; }
 
-    private string? basicAuthPasswordField;
-    public string? BasicAuthPassword
-    {
-        get => this.basicAuthPasswordField;
-        set => this.RaiseAndSetIfChanged(ref this.basicAuthPasswordField, value);
-    }
+    [Reactive]
+    public string? BasicAuthPassword { get; set; }
 
     #endregion
 
     #region REQUEST AUTH BEARER
 
-    private string? bearerAuthTokenField;
-    public string? BearerAuthToken
-    {
-        get => this.bearerAuthTokenField;
-        set => this.RaiseAndSetIfChanged(ref this.bearerAuthTokenField, value);
-    }
+    [Reactive]
+    public string? BearerAuthToken { get; set; }
 
     #endregion
 
     #region REQUEST AUTH CLIENT CERTIFICATE
 
-    private int clientCertificateTypeSelectedIndexField;
-    public int ClientCertificateTypeSelectedIndex
-    {
-        get => this.clientCertificateTypeSelectedIndexField;
-        set => this.RaiseAndSetIfChanged(ref this.clientCertificateTypeSelectedIndexField, value);
-    }
+    [Reactive]
+    public int ClientCertificateTypeSelectedIndex { get; set; }
 
-    private bool isClientCertificateTypeNoneSelectedField;
-    public bool IsClientCertificateTypeNoneSelected
-    {
-        get => this.isClientCertificateTypeNoneSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isClientCertificateTypeNoneSelectedField, value);
-    }
+    [Reactive]
+    public bool IsClientCertificateTypeNoneSelected { get; set; }
 
-    private bool isClientCertificateTypePkcs12SelectedField;
-    public bool IsClientCertificateTypePkcs12Selected
-    {
-        get => this.isClientCertificateTypePkcs12SelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isClientCertificateTypePkcs12SelectedField, value);
-    }
+    [Reactive]
+    public bool IsClientCertificateTypePkcs12Selected { get; set; }
 
-    private bool isClientCertificateTypePemSelectedField;
-    public bool IsClientCertificateTypePemSelected
-    {
-        get => this.isClientCertificateTypePemSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isClientCertificateTypePemSelectedField, value);
-    }
+    [Reactive]
+    public bool IsClientCertificateTypePemSelected { get; set; }
 
     private PororocaRequestAuthClientCertificateType? ClientCertificateType =>
-        this.clientCertificateTypeSelectedIndexField switch
+        ClientCertificateTypeSelectedIndex switch
         { // TODO: Improve this, do not use fixed integers to resolve mode
             2 => PororocaRequestAuthClientCertificateType.Pem,
             1 => PororocaRequestAuthClientCertificateType.Pkcs12,
@@ -128,19 +75,11 @@ public sealed class RequestAuthViewModel : ViewModelBase
 
     #region REQUEST AUTH CLIENT CERTIFICATE PKCS12
 
-    private string? clientCertificateAuthPkcs12CertificateFilePathField;
-    public string? ClientCertificateAuthPkcs12CertificateFilePath
-    {
-        get => this.clientCertificateAuthPkcs12CertificateFilePathField;
-        set => this.RaiseAndSetIfChanged(ref this.clientCertificateAuthPkcs12CertificateFilePathField, value);
-    }
+    [Reactive]
+    public string? ClientCertificateAuthPkcs12CertificateFilePath { get; set; }
 
-    private string? clientCertificateAuthPkcs12FilePasswordField;
-    public string? ClientCertificateAuthPkcs12FilePassword
-    {
-        get => this.clientCertificateAuthPkcs12FilePasswordField;
-        set => this.RaiseAndSetIfChanged(ref this.clientCertificateAuthPkcs12FilePasswordField, value);
-    }
+    [Reactive]
+    public string? ClientCertificateAuthPkcs12FilePassword { get; set; }
 
     public ReactiveCommand<Unit, Unit> SearchClientCertificatePkcs12FileCmd { get; }
 
@@ -148,26 +87,14 @@ public sealed class RequestAuthViewModel : ViewModelBase
 
     #region REQUEST AUTH CLIENT CERTIFICATE PEM
 
-    private string? clientCertificateAuthPemCertificateFilePathField;
-    public string? ClientCertificateAuthPemCertificateFilePath
-    {
-        get => this.clientCertificateAuthPemCertificateFilePathField;
-        set => this.RaiseAndSetIfChanged(ref this.clientCertificateAuthPemCertificateFilePathField, value);
-    }
+    [Reactive]
+    public string? ClientCertificateAuthPemCertificateFilePath { get; set; }
 
-    private string? clientCertificateAuthPemPrivateKeyFilePathField;
-    public string? ClientCertificateAuthPemPrivateKeyFilePath
-    {
-        get => this.clientCertificateAuthPemPrivateKeyFilePathField;
-        set => this.RaiseAndSetIfChanged(ref this.clientCertificateAuthPemPrivateKeyFilePathField, value);
-    }
+    [Reactive]
+    public string? ClientCertificateAuthPemPrivateKeyFilePath { get; set; }
 
-    private string? clientCertificateAuthPemFilePasswordField;
-    public string? ClientCertificateAuthPemFilePassword
-    {
-        get => this.clientCertificateAuthPemFilePasswordField;
-        set => this.RaiseAndSetIfChanged(ref this.clientCertificateAuthPemFilePasswordField, value);
-    }
+    [Reactive]
+    public string? ClientCertificateAuthPemFilePassword { get; set; }
 
     public ReactiveCommand<Unit, Unit> SearchClientCertificatePemCertFileCmd { get; }
 

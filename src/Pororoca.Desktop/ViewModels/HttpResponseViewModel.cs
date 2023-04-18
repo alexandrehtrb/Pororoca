@@ -1,21 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Net;
 using System.Reactive;
-using System.Text;
-using System.Threading.Tasks;
-using Avalonia.Controls;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.Views;
-using Pororoca.Domain.Features.Common;
-using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using static Pororoca.Domain.Features.Common.MimeTypesDetector;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.ExportImport;
+using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -25,28 +18,17 @@ public sealed class HttpResponseViewModel : ViewModelBase
     private static readonly TimeSpan oneMinute = TimeSpan.FromMinutes(1);
     private PororocaHttpResponse? res;
 
-    private string? responseStatusCodeElapsedTimeTitleField;
-    public string? ResponseStatusCodeElapsedTimeTitle
-    {
-        get => this.responseStatusCodeElapsedTimeTitleField;
-        set => this.RaiseAndSetIfChanged(ref this.responseStatusCodeElapsedTimeTitleField, value);
-    }
+    [Reactive]
+    public string? ResponseStatusCodeElapsedTimeTitle { get; set; }
 
-    private int responseTabsSelectedIndexField;
-    public int ResponseTabsSelectedIndex // To preserve the state of the last shown response tab
-    {
-        get => this.responseTabsSelectedIndexField;
-        set => this.RaiseAndSetIfChanged(ref this.responseTabsSelectedIndexField, value);
-    }
+    // To preserve the state of the last shown response tab
+    [Reactive]
+    public int ResponseTabsSelectedIndex { get; set; }
 
     public ObservableCollection<KeyValueParamViewModel> ResponseHeadersAndTrailers { get; }
 
-    private TextDocument? responseRawContentTextDocumentField;
-    public TextDocument? ResponseRawContentTextDocument
-    {
-        get => this.responseRawContentTextDocumentField;
-        set => this.RaiseAndSetIfChanged(ref this.responseRawContentTextDocumentField, value);
-    }
+    [Reactive]
+    public TextDocument? ResponseRawContentTextDocument { get; set; }
 
     public string? ResponseRawContent
     {
@@ -54,28 +36,16 @@ public sealed class HttpResponseViewModel : ViewModelBase
         set => ResponseRawContentTextDocument = new(value ?? string.Empty);
     }
 
-    private string? responseRawContentTypeField;
-    public string? ResponseRawContentType
-    {
-        get => this.responseRawContentTypeField;
-        set => this.RaiseAndSetIfChanged(ref this.responseRawContentTypeField, value);
-    }
+    [Reactive]
+    public string? ResponseRawContentType { get; set; }
 
-    private bool isSaveResponseBodyToFileVisibleField;
-    public bool IsSaveResponseBodyToFileVisible
-    {
-        get => this.isSaveResponseBodyToFileVisibleField;
-        set => this.RaiseAndSetIfChanged(ref this.isSaveResponseBodyToFileVisibleField, value);
-    }
+    [Reactive]
+    public bool IsSaveResponseBodyToFileVisible { get; set; }
 
     public ReactiveCommand<Unit, Unit> SaveResponseBodyToFileCmd { get; }
 
-    private bool isDisableTlsVerificationVisibleField;
-    public bool IsDisableTlsVerificationVisible
-    {
-        get => this.isDisableTlsVerificationVisibleField;
-        set => this.RaiseAndSetIfChanged(ref this.isDisableTlsVerificationVisibleField, value);
-    }
+    [Reactive]
+    public bool IsDisableTlsVerificationVisible { get; set; }
 
     public ReactiveCommand<Unit, Unit> DisableTlsVerificationCmd { get; }
 

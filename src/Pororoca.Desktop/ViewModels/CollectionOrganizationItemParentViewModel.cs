@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -13,12 +14,8 @@ public interface ICollectionOrganizationItemParentViewModel
 
 public abstract class CollectionOrganizationItemParentViewModel<T> : CollectionOrganizationItemViewModel, ICollectionOrganizationItemParentViewModel where T : ICollectionOrganizationItemViewModel
 {
-    private bool isExpandedField;
-    public bool IsExpanded
-    {
-        get => this.isExpandedField;
-        set => this.RaiseAndSetIfChanged(ref this.isExpandedField, value);
-    }
+    [Reactive]
+    public bool IsExpanded { get; set; }
 
     public abstract ObservableCollection<T> Items { get; }
     public abstract Action<CollectionOrganizationItemViewModel> OnRenameSubItemSelected { get; }

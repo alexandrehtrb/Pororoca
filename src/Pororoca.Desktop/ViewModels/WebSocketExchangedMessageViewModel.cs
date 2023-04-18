@@ -3,73 +3,38 @@ using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
 
 public sealed class WebSocketExchangedMessageViewModel : ViewModelBase
 {
-    private bool isFromServerField;
-    public bool IsFromServer
-    {
-        get => this.isFromServerField;
-        set => this.RaiseAndSetIfChanged(ref this.isFromServerField, value);
-    }
+    [Reactive]
+    public bool IsFromServer { get; set; }
 
-    private bool isFromClientField;
-    public bool IsFromClient
-    {
-        get => this.isFromClientField;
-        set => this.RaiseAndSetIfChanged(ref this.isFromClientField, value);
-    }
+    [Reactive]
+    public bool IsFromClient { get; set; }
 
-    private string? originDescriptionField;
-    public string? OriginDescription
-    {
-        get => this.originDescriptionField;
-        set => this.RaiseAndSetIfChanged(ref this.originDescriptionField, value);
-    }
+    [Reactive]
+    public string? OriginDescription { get; set; }
 
-    private string? messageSizeDescriptionField;
-    public string? MessageSizeDescription
-    {
-        get => this.messageSizeDescriptionField;
-        set => this.RaiseAndSetIfChanged(ref this.messageSizeDescriptionField, value);
-    }
+    [Reactive]
+    public string? MessageSizeDescription { get; set; }
 
-    private string? instantDescriptionField;
-    public string? InstantDescription
-    {
-        get => this.instantDescriptionField;
-        set => this.RaiseAndSetIfChanged(ref this.instantDescriptionField, value);
-    }
+    [Reactive]
+    public string? InstantDescription { get; set; }
 
-    private string? shortInstantDescriptionField;
-    public string? ShortInstantDescription
-    {
-        get => this.shortInstantDescriptionField;
-        set => this.RaiseAndSetIfChanged(ref this.shortInstantDescriptionField, value);
-    }
+    [Reactive]
+    public string? ShortInstantDescription { get; set; }
 
-    private string? typeDescriptionField;
-    public string? TypeDescription
-    {
-        get => this.typeDescriptionField;
-        set => this.RaiseAndSetIfChanged(ref this.typeDescriptionField, value);
-    }
+    [Reactive]
+    public string? TypeDescription { get; set; }
 
-    private string? textContentField;
-    public string? TextContent
-    {
-        get => this.textContentField;
-        set => this.RaiseAndSetIfChanged(ref this.textContentField, value);
-    }
+    [Reactive]
+    public string? TextContent { get; set; }
 
-    private bool isJsonTextContentField;
-    public bool IsJsonTextContent
-    {
-        get => this.isJsonTextContentField;
-        set => this.RaiseAndSetIfChanged(ref this.isJsonTextContentField, value);
-    }
+    [Reactive]
+    public bool IsJsonTextContent { get; set; }
 
     public PororocaWebSocketMessageType Type =>
         this.wsMsg.MessageType;
@@ -130,43 +95,43 @@ public sealed class WebSocketExchangedMessageViewModel : ViewModelBase
         string instantDateTimeFormat = Localizer.Instance["WebSocketExchangedMessages/InstantDescriptionFormat"];
         if (direction == PororocaWebSocketMessageDirection.FromClient)
         {
-            this.isFromClientField = true;
-            this.originDescriptionField = Localizer.Instance["WebSocketExchangedMessages/FromClientToServer"];
-            this.instantDescriptionField = dtUtc.ToString(instantDateTimeFormat);
-            this.shortInstantDescriptionField = dtUtc.LocalDateTime.ToString(shortInstanceDtFormat);
+            IsFromClient = true;
+            OriginDescription = Localizer.Instance["WebSocketExchangedMessages/FromClientToServer"];
+            InstantDescription = dtUtc.ToString(instantDateTimeFormat);
+            ShortInstantDescription = dtUtc.LocalDateTime.ToString(shortInstanceDtFormat);
         }
         else if (direction == PororocaWebSocketMessageDirection.FromServer)
         {
-            this.isFromServerField = true;
-            this.originDescriptionField = Localizer.Instance["WebSocketExchangedMessages/FromServerToClient"];
-            this.instantDescriptionField = dtUtc.ToString(instantDateTimeFormat);
-            this.shortInstantDescriptionField = dtUtc.LocalDateTime.ToString(shortInstanceDtFormat);
+            IsFromServer = true;
+            OriginDescription = Localizer.Instance["WebSocketExchangedMessages/FromServerToClient"];
+            InstantDescription = dtUtc.ToString(instantDateTimeFormat);
+            ShortInstantDescription = dtUtc.LocalDateTime.ToString(shortInstanceDtFormat);
         }
 
         string format;
         if (msgType == PororocaWebSocketMessageType.Close)
         {
             format = Localizer.Instance["WebSocketExchangedMessages/ClosingMessageContentDescriptionFormat"];
-            this.typeDescriptionField = Localizer.Instance["WebSocketClientMessage/MessageTypeClose"];
+            TypeDescription = Localizer.Instance["WebSocketClientMessage/MessageTypeClose"];
         }
         else if (msgType == PororocaWebSocketMessageType.Binary)
         {
             format = Localizer.Instance["WebSocketExchangedMessages/BinaryContentDescriptionFormat"];
-            this.typeDescriptionField = Localizer.Instance["WebSocketClientMessage/MessageTypeBinary"];
+            TypeDescription = Localizer.Instance["WebSocketClientMessage/MessageTypeBinary"];
         }
         else
         {
             format = Localizer.Instance["WebSocketExchangedMessages/TextContentDescriptionFormat"];
-            this.typeDescriptionField = Localizer.Instance["WebSocketClientMessage/MessageTypeText"];
+            TypeDescription = Localizer.Instance["WebSocketClientMessage/MessageTypeText"];
         }
 
-        this.messageSizeDescriptionField = string.Format(format, lengthInBytes);
+        MessageSizeDescription = string.Format(format, lengthInBytes);
 
-        this.textContentField = txtContent ?? this.messageSizeDescriptionField;
+        TextContent = txtContent ?? MessageSizeDescription;
 
         if (txtContent is not null)
         {
-            this.isJsonTextContentField = IsJsonString(this.textContentField);
+            IsJsonTextContent = IsJsonString(TextContent);
         }
     }
 

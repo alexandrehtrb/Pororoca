@@ -1,10 +1,9 @@
 using System.Reactive;
-using Avalonia.Controls;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.ExportImport;
-using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -22,42 +21,22 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
 
     #region WEBSOCKET REQUEST MESSAGE
 
-    private bool disableCompressionForThisMessageField;
-    public bool DisableCompressionForThisMessage
-    {
-        get => this.disableCompressionForThisMessageField;
-        set => this.RaiseAndSetIfChanged(ref this.disableCompressionForThisMessageField, value);
-    }
+    [Reactive]
+    public bool DisableCompressionForThisMessage { get; set; }
 
     #region MESSAGE TYPE
 
-    private int messageTypeSelectedIndexField;
-    public int MessageTypeSelectedIndex
-    {
-        get => this.messageTypeSelectedIndexField;
-        set => this.RaiseAndSetIfChanged(ref this.messageTypeSelectedIndexField, value);
-    }
+    [Reactive]
+    public int MessageTypeSelectedIndex { get; set; }
 
-    private bool isMessageTypeTextSelectedField;
-    public bool IsMessageTypeTextSelected
-    {
-        get => this.isMessageTypeTextSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isMessageTypeTextSelectedField, value);
-    }
+    [Reactive]
+    public bool IsMessageTypeTextSelected { get; set; }
 
-    private bool isMessageTypeBinarySelectedField;
-    public bool IsMessageTypeBinarySelected
-    {
-        get => this.isMessageTypeBinarySelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isMessageTypeBinarySelectedField, value);
-    }
+    [Reactive]
+    public bool IsMessageTypeBinarySelected { get; set; }
 
-    private bool isMessageTypeCloseSelectedField;
-    public bool IsMessageTypeCloseSelected
-    {
-        get => this.isMessageTypeCloseSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isMessageTypeCloseSelectedField, value);
-    }
+    [Reactive]
+    public bool IsMessageTypeCloseSelected { get; set; }
 
     private PororocaWebSocketMessageType MessageType
     {
@@ -78,26 +57,14 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
 
     #region CONTENT
 
-    private int contentModeSelectedIndexField;
-    public int ContentModeSelectedIndex
-    {
-        get => this.contentModeSelectedIndexField;
-        set => this.RaiseAndSetIfChanged(ref this.contentModeSelectedIndexField, value);
-    }
+    [Reactive]
+    public int ContentModeSelectedIndex { get; set; }
 
-    private bool isContentModeRawSelectedField;
-    public bool IsContentModeRawSelected
-    {
-        get => this.isContentModeRawSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isContentModeRawSelectedField, value);
-    }
+    [Reactive]
+    public bool IsContentModeRawSelected { get; set; }
 
-    private bool isContentModeFileSelectedField;
-    public bool IsContentModeFileSelected
-    {
-        get => this.isContentModeFileSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isContentModeFileSelectedField, value);
-    }
+    [Reactive]
+    public bool IsContentModeFileSelected { get; set; }
 
     private PororocaWebSocketClientMessageContentMode ContentMode
     {
@@ -112,12 +79,8 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
         }
     }
 
-    private TextDocument? rawContentTextDocumentField;
-    public TextDocument? RawContentTextDocument
-    {
-        get => this.rawContentTextDocumentField;
-        set => this.RaiseAndSetIfChanged(ref this.rawContentTextDocumentField, value);
-    }
+    [Reactive]
+    public TextDocument? RawContentTextDocument { get; set; }
 
     public string? RawContent
     {
@@ -125,26 +88,14 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
         set => RawContentTextDocument = new(value ?? string.Empty);
     }
 
-    private int rawContentSyntaxSelectedIndexField;
-    public int RawContentSyntaxSelectedIndex
-    {
-        get => this.rawContentSyntaxSelectedIndexField;
-        set => this.RaiseAndSetIfChanged(ref this.rawContentSyntaxSelectedIndexField, value);
-    }
+    [Reactive]
+    public int RawContentSyntaxSelectedIndex { get; set; }
 
-    private bool isRawContentJsonSyntaxSelectedField;
-    public bool IsRawContentJsonSyntaxSelected
-    {
-        get => this.isRawContentJsonSyntaxSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isRawContentJsonSyntaxSelectedField, value);
-    }
+    [Reactive]
+    public bool IsRawContentJsonSyntaxSelected { get; set; }
 
-    private bool isRawContentOtherSyntaxSelectedField;
-    public bool IsRawContentOtherSyntaxSelected
-    {
-        get => this.isRawContentOtherSyntaxSelectedField;
-        set => this.RaiseAndSetIfChanged(ref this.isRawContentOtherSyntaxSelectedField, value);
-    }
+    [Reactive]
+    public bool IsRawContentOtherSyntaxSelected { get; set; }
 
     private PororocaWebSocketMessageRawContentSyntax? RawContentSyntax
     {
@@ -159,12 +110,8 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
         }
     }
 
-    private string? contentFileSrcPathField;
-    public string? ContentFileSrcPath
-    {
-        get => this.contentFileSrcPathField;
-        set => this.RaiseAndSetIfChanged(ref this.contentFileSrcPathField, value);
-    }
+    [Reactive]
+    public string? ContentFileSrcPath { get; set; }
     
     public ReactiveCommand<Unit, Unit> SearchContentFileCmd { get; }
 

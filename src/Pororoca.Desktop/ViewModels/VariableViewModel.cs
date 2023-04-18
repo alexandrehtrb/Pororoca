@@ -1,37 +1,21 @@
 using Pororoca.Domain.Features.Entities.Pororoca;
-using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
 
 public class VariableViewModel : ViewModelBase
 {
-    private bool enabledField;
-    public bool Enabled
-    {
-        get => this.enabledField;
-        set => this.RaiseAndSetIfChanged(ref this.enabledField, value);
-    }
+    [Reactive]
+    public bool Enabled { get; set; }
 
-    private string keyField;
-    public string Key
-    {
-        get => this.keyField;
-        set => this.RaiseAndSetIfChanged(ref this.keyField, value);
-    }
+    [Reactive]
+    public string Key { get; set; }
 
-    private string valueField;
-    public string Value
-    {
-        get => this.valueField;
-        set => this.RaiseAndSetIfChanged(ref this.valueField, value);
-    }
+    [Reactive]
+    public string Value { get; set; }
 
-    private bool isSecretField;
-    public bool IsSecret
-    {
-        get => this.isSecretField;
-        set => this.RaiseAndSetIfChanged(ref this.isSecretField, value);
-    }
+    [Reactive]
+    public bool IsSecret { get; set; }
 
     public VariableViewModel(PororocaVariable v) : this(v.Enabled, v.Key, v.Value ?? string.Empty, v.IsSecret)
     {
@@ -39,12 +23,12 @@ public class VariableViewModel : ViewModelBase
 
     public VariableViewModel(bool enabled, string key, string value, bool isSecret)
     {
-        this.enabledField = enabled;
-        this.keyField = key;
-        this.valueField = value;
-        this.isSecretField = isSecret;
+        Enabled = enabled;
+        Key = key;
+        Value = value;
+        IsSecret = isSecret;
     }
 
     public PororocaVariable ToVariable() =>
-        new(this.enabledField, this.keyField, this.valueField, this.isSecretField);
+        new(Enabled, Key, Value, IsSecret);
 }
