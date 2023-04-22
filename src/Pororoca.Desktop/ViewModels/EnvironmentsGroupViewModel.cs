@@ -4,6 +4,7 @@ using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -20,12 +21,8 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
 
     #region ENVIRONMENTS GROUP
 
-    private string? selectedEnvironmentNameField;
-    public string? SelectedEnvironmentName
-    {
-        get => this.selectedEnvironmentNameField;
-        set => this.RaiseAndSetIfChanged(ref this.selectedEnvironmentNameField, value);
-    }
+    [Reactive]
+    public string? SelectedEnvironmentName { get; set; }
 
     public override ObservableCollection<EnvironmentViewModel> Items { get; }
     public ReactiveCommand<Unit, Unit> ImportEnvironmentsCmd { get; }

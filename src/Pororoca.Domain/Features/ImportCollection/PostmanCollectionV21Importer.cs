@@ -72,12 +72,12 @@ public static class PostmanCollectionV21Importer
         {
             case PostmanAuthType.basic:
                 myAuth = new(PororocaRequestAuthMode.Basic);
-                var basic = auth.ReadBasicAuthValues();
-                myAuth.SetBasicAuth(basic.basicAuthLogin, basic.basicAuthPwd);
+                var (basicAuthLogin, basicAuthPwd) = auth.ReadBasicAuthValues();
+                myAuth.SetBasicAuth(basicAuthLogin, basicAuthPwd);
                 break;
             case PostmanAuthType.bearer:
                 myAuth = new(PororocaRequestAuthMode.Bearer);
-                var bearerToken = auth.ReadBearerAuthValue();
+                string bearerToken = auth.ReadBearerAuthValue();
                 myAuth.SetBearerAuth(bearerToken);
                 break;
             case PostmanAuthType.noauth:
@@ -212,13 +212,20 @@ public static class PostmanCollectionV21Importer
 
     private static string? FindContentTypeForPostmanContentTypeHeader(string? contentTypeHeaderValue)
     {
-        if (string.IsNullOrWhiteSpace(contentTypeHeaderValue)) return null;
-        else if (contentTypeHeaderValue.Contains(DefaultMimeTypeForJson)) return DefaultMimeTypeForJson;
-        else if (contentTypeHeaderValue.Contains(DefaultMimeTypeForJavascript)) return DefaultMimeTypeForJavascript;
-        else if (contentTypeHeaderValue.Contains(DefaultMimeTypeForHtml)) return DefaultMimeTypeForHtml;
-        else if (contentTypeHeaderValue.Contains(DefaultMimeTypeForXml)) return DefaultMimeTypeForXml;
-        else if (contentTypeHeaderValue.Contains(DefaultMimeTypeForText)) return DefaultMimeTypeForText;
-        else return null;
+        if (string.IsNullOrWhiteSpace(contentTypeHeaderValue))
+            return null;
+        else if (contentTypeHeaderValue.Contains(DefaultMimeTypeForJson))
+            return DefaultMimeTypeForJson;
+        else if (contentTypeHeaderValue.Contains(DefaultMimeTypeForJavascript))
+            return DefaultMimeTypeForJavascript;
+        else if (contentTypeHeaderValue.Contains(DefaultMimeTypeForHtml))
+            return DefaultMimeTypeForHtml;
+        else if (contentTypeHeaderValue.Contains(DefaultMimeTypeForXml))
+            return DefaultMimeTypeForXml;
+        else if (contentTypeHeaderValue.Contains(DefaultMimeTypeForText))
+            return DefaultMimeTypeForText;
+        else
+            return null;
     }
 
     private static List<PororocaKeyValueParam> ConvertToPororocaKeyValueParams(PostmanVariable[]? variables) =>

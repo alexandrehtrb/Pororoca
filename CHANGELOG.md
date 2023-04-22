@@ -1,5 +1,6 @@
 # Changelog
 
+* [2.1.0](#210-2023-04-24)
 * [2.0.1](#201-2023-02-26)
 * [2.0.0](#200-2022-12-20)
 * [1.6.0](#160-2022-11-20)
@@ -9,6 +10,28 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [2.1.0](https://github.com/alexandrehtrb/Pororoca/tree/2.1.0) (2023-04-24)
+
+### Features
+
+* Great improvement on UI/UX for headers, URL encoded and form data params, and websocket subprotocols. Their grids now support drag-and-drop and the item removal actions now have a button on each row.
+* Adds MIME types `application/dns-json`, `application/dns-message` and `application/problem+xml` (issue [#19](https://github.com/alexandrehtrb/Pororoca/issues/19)).
+* Protects against rare scenario that response body is text, but not in UTF-8 encoding.
+
+### Bug Fixes
+
+* On Linux, requests with client certificate authentication will have independent SSL sessions of others to the same destination host.
+
+### Refactoring
+
+* Now using `[Reactive]` from ReactiveUI.Fody attributes on ViewModel properties.
+* Reformatted XML views.
+* Reformatted C# code.
+
+### Others
+
+* Raised .NET SDK to 7.0.203.
 
 ## [2.0.1](https://github.com/alexandrehtrb/Pororoca/tree/2.0.1) (2023-02-26)
 

@@ -166,7 +166,7 @@ public static class PororocaHttpResponseTests
         var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
-        Assert.Null(res.GetBodyAsText());
+        Assert.Null(res.GetBodyAsText(null));
     }
 
     [Fact]
@@ -179,7 +179,7 @@ public static class PororocaHttpResponseTests
         var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
-        Assert.Equal("oi", res.GetBodyAsText());
+        Assert.Equal("oi", res.GetBodyAsText(null));
     }
 
     [Fact]
@@ -192,7 +192,7 @@ public static class PororocaHttpResponseTests
         var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
-        Assert.Equal("{" + Environment.NewLine + "  \"id\": 1" + Environment.NewLine + "}", res.GetBodyAsText());
+        Assert.Equal("{" + Environment.NewLine + "  \"id\": 1" + Environment.NewLine + "}", res.GetBodyAsText(null));
     }
 
     [Theory]

@@ -1,15 +1,11 @@
+using Moq;
 using Pororoca.Domain.Features.Entities.Pororoca;
-using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
+using Pororoca.Domain.Features.Requester;
+using Pororoca.Domain.Features.TranslateRequest;
 using Xunit;
 using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonValidator;
-using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonTranslator;
-using Pororoca.Domain.Features.TranslateRequest;
-using Moq;
-using Pororoca.Domain.Features.Requester;
-using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection.PororocaWebSocketConnectionTranslator;
-using System.Security.Cryptography.X509Certificates;
-using System.Net.Security;
 
 namespace Pororoca.Domain.Tests.Features.TranslateRequest.WebSockets.Connection;
 

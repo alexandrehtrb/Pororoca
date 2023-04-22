@@ -49,7 +49,7 @@ public static class TestEndpoints
 
     private static IResult TestGetHeaders(HttpContext httpCtx) =>
         Results.Ok(httpCtx.Request.Headers.ToDictionary(hdr => hdr.Key, hdr => hdr.Value));
-    
+
     private static async Task TestGetTrailers(HttpResponse httpRes)
     {
         httpRes.SupportsTrailers();
@@ -148,7 +148,7 @@ public static class TestEndpoints
         {
             using var webSocket = await httpCtx.WebSockets.AcceptWebSocketAsync();
             TaskCompletionSource<object> socketFinishedTcs = new();
-            
+
             await BackgroundWebSocketsProcessor.RegisterAndProcessAsync(webSocket, socketFinishedTcs);
             await socketFinishedTcs.Task;
 
@@ -166,7 +166,7 @@ public static class TestEndpoints
         {
             using var webSocket = await httpCtx.WebSockets.AcceptWebSocketAsync();
             TaskCompletionSource<object> socketFinishedTcs = new();
-            
+
             await BackgroundWebSocketsProcessor.RegisterAndProcessAsync(webSocket, socketFinishedTcs);
             await socketFinishedTcs.Task;
 

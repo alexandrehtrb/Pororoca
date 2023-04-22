@@ -1,149 +1,357 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
-  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
-  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-  xmlns:v="using:Pororoca.Desktop.Views"
-  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:AvalonEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
-  xmlns:i18n="clr-namespace:Pororoca.Desktop.Localization" x:DataType="vm:HttpRequestViewModel" mc:Ignorable="d" d:DesignWidth="1350" d:DesignHeight="700"
-  xmlns:pages="clr-namespace:Pororoca.Desktop.Pages;assembly=Pororoca.Desktop" x:Class="Pororoca.Desktop.Views.HttpRequestView" FontSize="14" Foreground="{StaticResource SystemBaseHighColor}">
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:v="using:Pororoca.Desktop.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:AvalonEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+    xmlns:i18n="clr-namespace:Pororoca.Desktop.Localization"
+    xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+    xmlns:idd="clr-namespace:Avalonia.Xaml.Interactions.DragAndDrop;assembly=Avalonia.Xaml.Interactions"
+    xmlns:b="clr-namespace:Pororoca.Desktop.Behaviors;assembly=Pororoca.Desktop"
+    x:DataType="vm:HttpRequestViewModel"
+    mc:Ignorable="d"
+    d:DesignWidth="1350"
+    d:DesignHeight="700"
+    xmlns:pages="clr-namespace:Pororoca.Desktop.Pages;assembly=Pororoca.Desktop"
+    x:Class="Pororoca.Desktop.Views.HttpRequestView"
+    FontSize="14"
+    Foreground="{StaticResource SystemBaseHighColor}">
 
   <UserControl.Styles>
     <Style Selector="TabItem">
-      <Setter Property="FontSize" Value="20"/>
-      <!--Setter Property="FontWeight" Value="Bold"/-->
-      <!--Setter Property="FontFamily" Value="{StaticResource CodeFontFamily}"/-->
+      <Setter
+          Property="FontSize"
+          Value="20" />
+      <!--Setter
+      Property="FontWeight" Value="Bold"/-->
+      <!--Setter
+      Property="FontFamily" Value="{StaticResource CodeFontFamily}"/-->
     </Style>
   </UserControl.Styles>
 
-  <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+  <Grid
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Stretch">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <StackPanel Grid.Column="0" Grid.Row="0" Margin="0,24,0,0" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <StackPanel
+        Grid.Column="0"
+        Grid.Row="0"
+        Margin="0,24,0,0"
+        Orientation="Vertical"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch">
 
-      <Grid Margin="24,0,24,0" HorizontalAlignment="Stretch" VerticalAlignment="Top">
-        <v:EditableTextBlockView DataContext="{Binding NameEditableTextBlockViewDataCtx}"/>
+      <Grid
+          Margin="24,0,24,0"
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Top">
+        <v:EditableTextBlockView DataContext="{Binding NameEditableTextBlockViewDataCtx}" />
       </Grid>
 
-      <Grid ShowGridLines="False" Margin="24,40,24,0" Height="40" ColumnDefinitions="Auto, *, Auto, Auto">
+      <Grid
+          ShowGridLines="False"
+          Margin="24,40,24,0"
+          Height="40"
+          ColumnDefinitions="Auto, *, Auto, Auto">
 
-        <ComboBox Grid.Column="0" Grid.Row="0" Width="120" Height="40" Margin="0,0,6,0" FontSize="14" VerticalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Stretch" SelectedIndex="{Binding RequestMethodSelectedIndex, Mode=TwoWay}" Items="{Binding RequestMethodSelectionOptions}"/>
+        <ComboBox
+            Grid.Column="0"
+            Grid.Row="0"
+            Width="120"
+            Height="40"
+            Margin="0,0,6,0"
+            FontSize="14"
+            VerticalContentAlignment="Center"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Stretch"
+            SelectedIndex="{Binding RequestMethodSelectedIndex, Mode=TwoWay}"
+            Items="{Binding RequestMethodSelectionOptions}" />
 
-        <StackPanel Grid.Column="1" Grid.Row="0" Margin="6,0,6,0" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <StackPanel
+            Grid.Column="1"
+            Grid.Row="0"
+            Margin="6,0,6,0"
+            Orientation="Vertical"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
 
-          <TextBox Height="40" FontSize="14" Text="{Binding RequestUrl}" Watermark="{i18n:Localize UrlWatermark, Context=HttpRequest}" VerticalContentAlignment="Center" ToolTip.Placement="Bottom" ToolTip.Tip="{Binding ResolvedRequestUrlToolTip}" PointerEntered="OnRequestUrlPointerEnter" />
+          <TextBox
+              Height="40"
+              FontSize="14"
+              Text="{Binding RequestUrl}"
+              Watermark="{i18n:Localize UrlWatermark, Context=HttpRequest}"
+              VerticalContentAlignment="Center"
+              ToolTip.Placement="Bottom"
+              ToolTip.Tip="{Binding ResolvedRequestUrlToolTip}"
+              PointerEntered="OnRequestUrlPointerEnter" />
 
-          <TextBlock Margin="12,6,12,0" FontSize="14" Foreground="#FF4D4D" Text="{Binding InvalidRequestMessage}" IsVisible="{Binding IsInvalidRequestMessageVisible}"/>
+          <TextBlock
+              Margin="12,6,12,0"
+              FontSize="14"
+              Foreground="#FF4D4D"
+              Text="{Binding InvalidRequestMessage}"
+              IsVisible="{Binding IsInvalidRequestMessageVisible}" />
 
         </StackPanel>
 
-        <ComboBox Grid.Column="2" Grid.Row="0" Width="120" Height="40" Margin="6,0,12,0" FontSize="14" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Stretch" SelectedIndex="{Binding RequestHttpVersionSelectedIndex, Mode=TwoWay}" Items="{Binding RequestHttpVersionSelectionOptions}"/>
+        <ComboBox
+            Grid.Column="2"
+            Grid.Row="0"
+            Width="120"
+            Height="40"
+            Margin="6,0,12,0"
+            FontSize="14"
+            VerticalContentAlignment="Center"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Stretch"
+            SelectedIndex="{Binding RequestHttpVersionSelectedIndex, Mode=TwoWay}"
+            Items="{Binding RequestHttpVersionSelectionOptions}" />
 
-        <Grid Grid.Column="3" Grid.Row="0" Width="104" Margin="12,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Stretch">
+        <Grid
+            Grid.Column="3"
+            Grid.Row="0"
+            Width="104"
+            Margin="12,0,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Stretch">
 
-          <Button Height="40" Width="104" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsVisible="{Binding !IsRequesting}" Command="{Binding SendRequestCmd}" Content="{i18n:Localize SendRequest, Context=HttpRequest}" Classes="Primary"/>
+          <Button
+              Height="40"
+              Width="104"
+              HorizontalContentAlignment="Center"
+              VerticalContentAlignment="Center"
+              IsVisible="{Binding !IsRequesting}"
+              Command="{Binding SendRequestCmd}"
+              Content="{i18n:Localize SendRequest, Context=HttpRequest}"
+              Classes="Primary" />
 
-          <Button Height="40" Width="104" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsVisible="{Binding IsRequesting}" Command="{Binding CancelRequestCmd}" Content="{i18n:Localize CancelRequest, Context=HttpRequest}" Classes="PrimaryInverted"/>
+          <Button
+              Height="40"
+              Width="104"
+              HorizontalContentAlignment="Center"
+              VerticalContentAlignment="Center"
+              IsVisible="{Binding IsRequesting}"
+              Command="{Binding CancelRequestCmd}"
+              Content="{i18n:Localize CancelRequest, Context=HttpRequest}"
+              Classes="PrimaryInverted" />
 
         </Grid>
 
       </Grid>
 
-      <Separator Background="Black" Height="6" Margin="0,36,0,0"/>
+      <Separator
+          Background="Black"
+          Height="6"
+          Margin="0,36,0,0" />
     </StackPanel>
 
-    <Grid Grid.Column="0" Grid.Row="1" Margin="12,0,12,0" VerticalAlignment="Stretch">
+    <Grid
+        Grid.Column="0"
+        Grid.Row="1"
+        Margin="12,0,12,0"
+        VerticalAlignment="Stretch">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*" />
         <ColumnDefinition Width="2" />
         <ColumnDefinition Width="*" />
       </Grid.ColumnDefinitions>
       <Grid.RowDefinitions>
-        <RowDefinition Height="*"/>
+        <RowDefinition Height="*" />
       </Grid.RowDefinitions>
 
       <!-- REQUEST -->
-      <Grid Grid.Column="0" Grid.Row="0">
+      <Grid
+          Grid.Column="0"
+          Grid.Row="0">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-          <RowDefinition Height="Auto"/>
-          <RowDefinition Height="*"/>
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Column="0" Grid.Row="0" Margin="12,28,12,0" FontSize="20" FontWeight="Light" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" Text="{i18n:Localize SectionTitle, Context=HttpRequest}"/>
-        <TabControl Grid.Column="0" Grid.Row="1" Margin="12,24,12,12" TabStripPlacement="Top" SelectedIndex="{Binding RequestTabsSelectedIndex}">
+        <TextBlock
+            Grid.Column="0"
+            Grid.Row="0"
+            Margin="12,28,12,0"
+            FontSize="20"
+            FontWeight="Light"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            TextWrapping="Wrap"
+            Text="{i18n:Localize SectionTitle, Context=HttpRequest}" />
+        <TabControl
+            Grid.Column="0"
+            Grid.Row="1"
+            Margin="12,24,12,12"
+            TabStripPlacement="Top"
+            SelectedIndex="{Binding RequestTabsSelectedIndex}">
           <!-- REQUEST HEADERS -->
           <TabItem>
             <TabItem.Header>
-              <TextBlock Classes="TabItemHeader" Text="{i18n:Localize Headers, Context=HttpRequest}"/>
+              <TextBlock
+                  Classes="TabItemHeader"
+                  Text="{i18n:Localize Headers, Context=HttpRequest}" />
             </TabItem.Header>
             <Grid Margin="-12,12,-12,12">
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
               </Grid.ColumnDefinitions>
               <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
               </Grid.RowDefinitions>
-              <DataGrid Grid.Column="0" Grid.Row="0" VerticalAlignment="Stretch" AutoGenerateColumns="False" Items="{Binding RequestHeaders}" SelectedItem="{Binding Path=SelectedRequestHeader, Mode=TwoWay}" CanUserResizeColumns="True">
+              <Button
+                  Grid.Column="0"
+                  Grid.Row="0"
+                  Height="24"
+                  Width="24"
+                  Margin="12,0,0,0"
+                  Classes="Primary"
+                  Command="{Binding AddNewRequestHeaderCmd}">
+                <Button.Content>
+                  <Image
+                      Source="/Assets/Images/icon_white_add.png"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center"
+                      Width="16"
+                      Height="16" />
+                </Button.Content>
+              </Button>
+              <DataGrid
+                  Grid.Column="0"
+                  Grid.Row="1"
+                  Margin="0,12,0,0"
+                  VerticalAlignment="Stretch"
+                  AutoGenerateColumns="False"
+                  Items="{Binding RequestHeaders}"
+                  CanUserResizeColumns="True"
+                  Classes="draggable">
+                <i:Interaction.Behaviors>
+                  <i:BehaviorCollection>
+                    <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}" />
+                  </i:BehaviorCollection>
+                </i:Interaction.Behaviors>
                 <DataGrid.Columns>
-                  <DataGridCheckBoxColumn Width="0.22*" Binding="{Binding Enabled}">
+                  <DataGridCheckBoxColumn
+                      Width="0.19*"
+                      Binding="{Binding Enabled}">
                     <DataGridCheckBoxColumn.Header>
-                      <TextBlock Text="{i18n:Localize HeaderEnabled, Context=HttpRequest}"/>
+                      <TextBlock Text="{i18n:Localize HeaderEnabled, Context=HttpRequest}" />
                     </DataGridCheckBoxColumn.Header>
                   </DataGridCheckBoxColumn>
-                  <DataGridTextColumn Width="0.33*" Binding="{Binding Key}">
+                  <DataGridTextColumn
+                      Width="0.32*"
+                      Binding="{Binding Key}">
                     <DataGridTextColumn.Header>
-                      <TextBlock Text="{i18n:Localize HeaderName, Context=HttpRequest}"/>
+                      <TextBlock Text="{i18n:Localize HeaderName, Context=HttpRequest}" />
                     </DataGridTextColumn.Header>
                   </DataGridTextColumn>
-                  <DataGridTextColumn Width="0.45*" Binding="{Binding Value}">
+                  <DataGridTextColumn
+                      Width="0.37*"
+                      Binding="{Binding Value}">
                     <DataGridTextColumn.Header>
-                      <TextBlock Text="{i18n:Localize HeaderValue, Context=HttpRequest}"/>
+                      <TextBlock Text="{i18n:Localize HeaderValue, Context=HttpRequest}" />
                     </DataGridTextColumn.Header>
                   </DataGridTextColumn>
+                  <DataGridTemplateColumn
+                      Width="0.12*"
+                      Header="">
+                    <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                        <Button
+                            Command="{Binding RemoveParamCmd}"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            Classes="Trash">
+                        </Button>
+                      </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
                 </DataGrid.Columns>
               </DataGrid>
-              <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Margin="0,12,0,0">
-                <Button Content="{i18n:Localize HeaderAdd, Context=HttpRequest}" Margin="0,0,6,0" Command="{Binding AddNewRequestHeaderCmd}" Classes="Primary"/>
-                <Button Content="{i18n:Localize HeaderRemove, Context=HttpRequest}" Margin="6,0,0,0" Command="{Binding RemoveSelectedRequestHeaderCmd}" Classes="Secondary"/>
-              </StackPanel>
             </Grid>
           </TabItem>
           <!-- REQUEST BODY -->
           <TabItem>
             <TabItem.Header>
-              <TextBlock Classes="TabItemHeader" Text="{i18n:Localize Body, Context=HttpRequest}"/>
+              <TextBlock
+                  Classes="TabItemHeader"
+                  Text="{i18n:Localize Body, Context=HttpRequest}" />
             </TabItem.Header>
             <Grid Margin="-12,12,-12,12">
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
               </Grid.ColumnDefinitions>
               <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
               </Grid.RowDefinitions>
 
-              <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Margin="12,0,12,0" Spacing="12">
+              <StackPanel
+                  Grid.Column="0"
+                  Grid.Row="0"
+                  Orientation="Horizontal"
+                  Margin="12,0,12,0"
+                  Spacing="12">
 
-                <ComboBox Height="36" Width="130" FontSize="14" FontWeight="Light" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Stretch" SelectedIndex="{Binding RequestBodyModeSelectedIndex}">
-                  <ComboBoxItem IsSelected="{Binding IsRequestBodyModeNoneSelected, Mode=TwoWay}" Content="{i18n:Localize BodyModeNone, Context=HttpRequest}"/>
-                  <ComboBoxItem x:Name="reqScrRequestBodyModeSelectionRaw" IsSelected="{Binding IsRequestBodyModeRawSelected, Mode=TwoWay}" Content="{i18n:Localize BodyModeRaw, Context=HttpRequest}"/>
-                  <ComboBoxItem x:Name="reqScrRequestBodyModeSelectionFile" IsSelected="{Binding IsRequestBodyModeFileSelected, Mode=TwoWay}" Content="{i18n:Localize BodyModeFile, Context=HttpRequest}"/>
-                  <ComboBoxItem x:Name="reqScrRequestBodyModeSelectionUrlEncoded" IsSelected="{Binding IsRequestBodyModeUrlEncodedSelected, Mode=TwoWay}" Content="{i18n:Localize BodyModeUrlEncoded, Context=HttpRequest}"/>
-                  <ComboBoxItem x:Name="reqScrRequestBodyModeSelectionFormData" IsSelected="{Binding IsRequestBodyModeFormDataSelected, Mode=TwoWay}" Content="{i18n:Localize BodyModeFormData, Context=HttpRequest}"/>
-                  <ComboBoxItem x:Name="reqScrRequestBodyModeSelectionGraphQl" IsSelected="{Binding IsRequestBodyModeGraphQlSelected, Mode=TwoWay}" Content="{i18n:Localize BodyModeGraphQl, Context=HttpRequest}"/>
+                <ComboBox
+                    Height="36"
+                    Width="140"
+                    FontSize="14"
+                    FontWeight="Light"
+                    VerticalContentAlignment="Center"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Stretch"
+                    SelectedIndex="{Binding RequestBodyModeSelectedIndex}">
+                  <ComboBoxItem
+                      IsSelected="{Binding IsRequestBodyModeNoneSelected, Mode=TwoWay}"
+                      Content="{i18n:Localize BodyModeNone, Context=HttpRequest}" />
+                  <ComboBoxItem
+                      x:Name="reqScrRequestBodyModeSelectionRaw"
+                      IsSelected="{Binding IsRequestBodyModeRawSelected, Mode=TwoWay}"
+                      Content="{i18n:Localize BodyModeRaw, Context=HttpRequest}" />
+                  <ComboBoxItem
+                      x:Name="reqScrRequestBodyModeSelectionFile"
+                      IsSelected="{Binding IsRequestBodyModeFileSelected, Mode=TwoWay}"
+                      Content="{i18n:Localize BodyModeFile, Context=HttpRequest}" />
+                  <ComboBoxItem
+                      x:Name="reqScrRequestBodyModeSelectionUrlEncoded"
+                      IsSelected="{Binding IsRequestBodyModeUrlEncodedSelected, Mode=TwoWay}"
+                      Content="{i18n:Localize BodyModeUrlEncoded, Context=HttpRequest}" />
+                  <ComboBoxItem
+                      x:Name="reqScrRequestBodyModeSelectionFormData"
+                      IsSelected="{Binding IsRequestBodyModeFormDataSelected, Mode=TwoWay}"
+                      Content="{i18n:Localize BodyModeFormData, Context=HttpRequest}" />
+                  <ComboBoxItem
+                      x:Name="reqScrRequestBodyModeSelectionGraphQl"
+                      IsSelected="{Binding IsRequestBodyModeGraphQlSelected, Mode=TwoWay}"
+                      Content="{i18n:Localize BodyModeGraphQl, Context=HttpRequest}" />
                 </ComboBox>
 
-                <AutoCompleteBox Name="RequestBodyRawContentTypeSelector" Height="36" Width="200" FontSize="14" HorizontalAlignment="Left" Watermark="{i18n:Localize BodyRawContentTypeWatermark, Context=HttpRequest}" Items="{Binding AllMimeTypes}" SelectedItem="{Binding RequestRawContentType, Mode=TwoWay}" FilterMode="Contains" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}" />
+                <AutoCompleteBox
+                    Name="RequestBodyRawContentTypeSelector"
+                    Height="36"
+                    Width="190"
+                    FontSize="14"
+                    HorizontalAlignment="Left"
+                    Watermark="{i18n:Localize BodyRawContentTypeWatermark, Context=HttpRequest}"
+                    Items="{Binding AllMimeTypes}"
+                    SelectedItem="{Binding RequestRawContentType, Mode=TwoWay}"
+                    FilterMode="Contains"
+                    IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}" />
               </StackPanel>
               <!-- REQUEST BODY RAW -->
               <AvalonEdit:TextEditor
@@ -165,168 +373,386 @@
                   FontSize="14"
                   Document="{Binding RequestRawContentTextDocument, Mode=TwoWay}" />
               <!-- REQUEST BODY FILE -->
-              <Grid Grid.Column="0" Grid.Row="1" Margin="12,12,12,0" VerticalAlignment="Stretch" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionFile}">
+              <Grid
+                  Grid.Column="0"
+                  Grid.Row="1"
+                  Margin="12,12,12,0"
+                  VerticalAlignment="Stretch"
+                  IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionFile}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto"/>
-                  <RowDefinition Height="Auto"/>
-                  <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <AutoCompleteBox Grid.Column="0" Grid.Row="0" Height="36" Width="180" FontSize="14" HorizontalAlignment="Left" Watermark="{i18n:Localize BodyFileContentTypeWatermark, Context=HttpRequest}" Text="{Binding RequestFileContentType}" Items="{Binding AllMimeTypes}" FilterMode="Contains"/>
-                <TextBox Grid.Column="0" Grid.Row="1" Height="36" Margin="0,12,0,0" FontSize="14" Watermark="{i18n:Localize BodyFileSrcPathWatermark, Context=HttpRequest}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Text="{Binding RequestBodyFileSrcPath}"/>
-                <Button Grid.Column="0" Grid.Row="2" Content="{i18n:Localize BodyFileSearchFile, Context=HttpRequest}" Margin="0,12,0,0" Command="{Binding SearchRequestBodyRawFileCmd}" Classes="Primary"/>
+                <AutoCompleteBox
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Height="36"
+                    Width="180"
+                    FontSize="14"
+                    HorizontalAlignment="Left"
+                    Watermark="{i18n:Localize BodyFileContentTypeWatermark, Context=HttpRequest}"
+                    Text="{Binding RequestFileContentType}"
+                    Items="{Binding AllMimeTypes}"
+                    FilterMode="Contains" />
+                <TextBox
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Height="36"
+                    Margin="0,12,0,0"
+                    FontSize="14"
+                    Watermark="{i18n:Localize BodyFileSrcPathWatermark, Context=HttpRequest}"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Center"
+                    Text="{Binding RequestBodyFileSrcPath}" />
+                <Button
+                    Grid.Column="0"
+                    Grid.Row="2"
+                    Content="{i18n:Localize BodyFileSearchFile, Context=HttpRequest}"
+                    Margin="0,12,0,0"
+                    Command="{Binding SearchRequestBodyRawFileCmd}"
+                    Classes="Primary" />
               </Grid>
               <!-- REQUEST BODY URL ENCODED -->
-              <Grid Grid.Column="0" Grid.Row="1" Margin="12,12,12,0" VerticalAlignment="Stretch" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionUrlEncoded}">
+              <Grid
+                  Grid.Column="0"
+                  Grid.Row="1"
+                  Margin="12,12,12,0"
+                  VerticalAlignment="Stretch"
+                  IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionUrlEncoded}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                  <RowDefinition Height="*"/>
-                  <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <DataGrid Grid.Column="0" Grid.Row="0" Margin="-12,0,-12,0" AutoGenerateColumns="False" Items="{Binding UrlEncodedParams}" SelectedItem="{Binding Path=SelectedUrlEncodedParam, Mode=TwoWay}" CanUserResizeColumns="True">
+                <Button
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Height="24"
+                    Width="24"
+                    Classes="Primary"
+                    Command="{Binding AddNewUrlEncodedParamCmd}">
+                  <Button.Content>
+                    <Image
+                        Source="/Assets/Images/icon_white_add.png"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Width="16"
+                        Height="16" />
+                  </Button.Content>
+                </Button>
+                <DataGrid
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Margin="-12,12,-12,0"
+                    AutoGenerateColumns="False"
+                    Items="{Binding UrlEncodedParams}"
+                    CanUserResizeColumns="True"
+                    Classes="draggable">
+                  <i:Interaction.Behaviors>
+                    <i:BehaviorCollection>
+                      <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}" />
+                    </i:BehaviorCollection>
+                  </i:Interaction.Behaviors>
                   <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Width="0.22*" Binding="{Binding Enabled}">
+                    <DataGridCheckBoxColumn
+                        Width="0.19*"
+                        Binding="{Binding Enabled}">
                       <DataGridCheckBoxColumn.Header>
-                        <TextBlock Text="{i18n:Localize BodyUrlEncodedParamEnabled, Context=HttpRequest}"/>
+                        <TextBlock Text="{i18n:Localize BodyUrlEncodedParamEnabled, Context=HttpRequest}" />
                       </DataGridCheckBoxColumn.Header>
                     </DataGridCheckBoxColumn>
-                    <DataGridTextColumn Width="0.33*" Binding="{Binding Key}">
+                    <DataGridTextColumn
+                        Width="0.32*"
+                        Binding="{Binding Key}">
                       <DataGridTextColumn.Header>
-                        <TextBlock Text="{i18n:Localize BodyUrlEncodedParamName, Context=HttpRequest}"/>
+                        <TextBlock Text="{i18n:Localize BodyUrlEncodedParamName, Context=HttpRequest}" />
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="0.45*" Binding="{Binding Value}">
+                    <DataGridTextColumn
+                        Width="0.35*"
+                        Binding="{Binding Value}">
                       <DataGridTextColumn.Header>
-                        <TextBlock Text="{i18n:Localize BodyUrlEncodedParamValue, Context=HttpRequest}"/>
+                        <TextBlock Text="{i18n:Localize BodyUrlEncodedParamValue, Context=HttpRequest}" />
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
+                    <DataGridTemplateColumn
+                        Width="0.14*"
+                        Header="">
+                      <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                          <Button
+                              Command="{Binding RemoveParamCmd}"
+                              VerticalAlignment="Center"
+                              HorizontalAlignment="Center"
+                              HorizontalContentAlignment="Center"
+                              VerticalContentAlignment="Center"
+                              Classes="Trash">
+                          </Button>
+                        </DataTemplate>
+                      </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                   </DataGrid.Columns>
                 </DataGrid>
-                <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Margin="-12,12,0,0">
-                  <Button Content="{i18n:Localize BodyUrlEncodedParamAdd, Context=HttpRequest}" Margin="0,0,6,0" Command="{Binding AddNewUrlEncodedParamCmd}" Classes="Primary"/>
-                  <Button Content="{i18n:Localize BodyUrlEncodedParamRemove, Context=HttpRequest}" Margin="6,0,0,0" Command="{Binding RemoveSelectedUrlEncodedParamCmd}" Classes="Secondary"/>
-                </StackPanel>
               </Grid>
               <!-- REQUEST BODY MULTIPART FORM DATA -->
-              <Grid Grid.Column="0" Grid.Row="1" Margin="12,12,12,0" VerticalAlignment="Stretch" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionFormData}">
+              <Grid
+                  Grid.Column="0"
+                  Grid.Row="1"
+                  Margin="12,12,12,0"
+                  VerticalAlignment="Stretch"
+                  IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionFormData}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                  <RowDefinition Height="*"/>
-                  <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-
-                <DataGrid Grid.Column="0" Grid.Row="0" Margin="-12,16,-12,0" AutoGenerateColumns="False" Items="{Binding FormDataParams}" SelectedItem="{Binding Path=SelectedFormDataParam, Mode=TwoWay}" CanUserResizeColumns="True">
+                <StackPanel
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Orientation="Horizontal"
+                    Margin="0,8,0,0">
+                  <Button
+                      Content="{i18n:Localize BodyFormDataTextParamAdd, Context=HttpRequest}"
+                      Margin="0,0,3,0"
+                      Command="{Binding AddNewFormDataTextParamCmd}"
+                      Classes="Primary" />
+                  <Button
+                      Content="{i18n:Localize BodyFormDataFileParamAdd, Context=HttpRequest}"
+                      Margin="3,0,0,0"
+                      Command="{Binding AddNewFormDataFileParamCmd}"
+                      Classes="Primary" />
+                </StackPanel>
+                <DataGrid
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Margin="-12,24,-12,0"
+                    AutoGenerateColumns="False"
+                    Items="{Binding FormDataParams}"
+                    CanUserResizeColumns="True"
+                    Classes="draggable">
+                  <i:Interaction.Behaviors>
+                    <i:BehaviorCollection>
+                      <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropFormDataParamViewModelHandler}" />
+                    </i:BehaviorCollection>
+                  </i:Interaction.Behaviors>
                   <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Width="*" Binding="{Binding Enabled}">
+                    <DataGridCheckBoxColumn
+                        Width="0.11*"
+                        Binding="{Binding Enabled}">
                       <DataGridCheckBoxColumn.Header>
-                        <TextBlock Text="{i18n:Localize BodyFormDataParamEnabled, Context=HttpRequest}"/>
+                        <TextBlock Text="{i18n:Localize BodyFormDataParamEnabled, Context=HttpRequest}" />
                       </DataGridCheckBoxColumn.Header>
                     </DataGridCheckBoxColumn>
-                    <DataGridTextColumn Width="*" Binding="{Binding Type}" IsReadOnly="True">
+                    <DataGridTextColumn
+                        Width="0.13*"
+                        Binding="{Binding Type}"
+                        IsReadOnly="True">
                       <DataGridTextColumn.Header>
-                        <TextBlock Text="{i18n:Localize BodyFormDataParamType, Context=HttpRequest}"/>
+                        <TextBlock Text="{i18n:Localize BodyFormDataParamType, Context=HttpRequest}" />
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="2.5*" Binding="{Binding Key}">
+                    <DataGridTextColumn
+                        Width="0.2*"
+                        Binding="{Binding Key}">
                       <DataGridTextColumn.Header>
-                        <TextBlock Text="{i18n:Localize BodyFormDataParamName, Context=HttpRequest}"/>
+                        <TextBlock Text="{i18n:Localize BodyFormDataParamName, Context=HttpRequest}" />
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="2.5*" Binding="{Binding Value}">
+                    <DataGridTextColumn
+                        Width="0.21*"
+                        Binding="{Binding Value}">
                       <DataGridTextColumn.Header>
-                        <TextBlock Text="{i18n:Localize BodyFormDataParamTextOrSrcPath, Context=HttpRequest}"/>
+                        <TextBlock Text="{i18n:Localize BodyFormDataParamTextOrSrcPath, Context=HttpRequest}" />
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="2.5*" Binding="{Binding ContentType}">
+                    <DataGridTextColumn
+                        Width="0.23*"
+                        Binding="{Binding ContentType}">
                       <DataGridTextColumn.Header>
-                        <TextBlock Text="{i18n:Localize BodyFormDataParamContentType, Context=HttpRequest}"/>
+                        <TextBlock Text="{i18n:Localize BodyFormDataParamContentType, Context=HttpRequest}" />
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
+                    <DataGridTemplateColumn
+                        Width="0.12*"
+                        Header="">
+                      <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                          <Button
+                              Command="{Binding RemoveParamCmd}"
+                              VerticalAlignment="Center"
+                              HorizontalAlignment="Center"
+                              HorizontalContentAlignment="Center"
+                              VerticalContentAlignment="Center"
+                              Classes="Trash">
+                          </Button>
+                        </DataTemplate>
+                      </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                   </DataGrid.Columns>
                 </DataGrid>
-                <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Margin="-12,12,0,0">
-                  <Button Content="{i18n:Localize BodyFormDataTextParamAdd, Context=HttpRequest}" Margin="0,0,6,0" Command="{Binding AddNewFormDataTextParamCmd}" Classes="Primary"/>
-                  <Button Content="{i18n:Localize BodyFormDataFileParamAdd, Context=HttpRequest}" Margin="0,0,6,0" Command="{Binding AddNewFormDataFileParamCmd}" Classes="Primary"/>
-                  <Button Content="{i18n:Localize BodyFormDataParamRemove, Context=HttpRequest}" Margin="6,0,0,0" Command="{Binding RemoveSelectedFormDataParamCmd}" Classes="Secondary"/>
-                </StackPanel>
-
               </Grid>
               <!-- REQUEST BODY GRAPH QL -->
-              <Grid Grid.Column="0" Grid.Row="1" Margin="12,12,12,0" VerticalAlignment="Stretch" IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionGraphQl}">
+              <Grid
+                  Grid.Column="0"
+                  Grid.Row="1"
+                  Margin="12,12,12,0"
+                  VerticalAlignment="Stretch"
+                  IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionGraphQl}">
                 <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="0.5*" MinWidth="40" />
+                  <ColumnDefinition
+                      Width="0.5*"
+                      MinWidth="40" />
                   <ColumnDefinition Width="Auto" />
-                  <ColumnDefinition Width="0.5*" MinWidth="40" />
+                  <ColumnDefinition
+                      Width="0.5*"
+                      MinWidth="40" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                  <RowDefinition Height="*"/>
+                  <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <TextBox Grid.Column="0" Grid.Row="0" FontFamily="/Assets/Fonts/SourceCodePro-Regular.ttf#Source Code Pro" FontSize="12" Watermark="{i18n:Localize BodyGraphQlQueryWatermark, Context=HttpRequest}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" AcceptsReturn="True" AcceptsTab="True" Text="{Binding RequestBodyGraphQlQuery}"/>
-                <GridSplitter Grid.Column="1" Grid.Row="0" Margin="12,0,12,0" Width="2" VerticalAlignment="Stretch" Background="Black" />
-                <TextBox Grid.Column="2" Grid.Row="0" FontFamily="/Assets/Fonts/SourceCodePro-Regular.ttf#Source Code Pro" FontSize="12" Watermark="{i18n:Localize BodyGraphQlVariablesWatermark, Context=HttpRequest}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" AcceptsReturn="True" AcceptsTab="True" Text="{Binding RequestBodyGraphQlVariables}"/>
+                <TextBox
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    FontFamily="/Assets/Fonts/SourceCodePro-Regular.ttf#Source Code Pro"
+                    FontSize="12"
+                    Watermark="{i18n:Localize BodyGraphQlQueryWatermark, Context=HttpRequest}"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Top"
+                    AcceptsReturn="True"
+                    AcceptsTab="True"
+                    Text="{Binding RequestBodyGraphQlQuery}" />
+                <GridSplitter
+                    Grid.Column="1"
+                    Grid.Row="0"
+                    Margin="12,0,12,0"
+                    Width="2"
+                    VerticalAlignment="Stretch"
+                    Background="Black" />
+                <TextBox
+                    Grid.Column="2"
+                    Grid.Row="0"
+                    FontFamily="/Assets/Fonts/SourceCodePro-Regular.ttf#Source Code Pro"
+                    FontSize="12"
+                    Watermark="{i18n:Localize BodyGraphQlVariablesWatermark, Context=HttpRequest}"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Top"
+                    AcceptsReturn="True"
+                    AcceptsTab="True"
+                    Text="{Binding RequestBodyGraphQlVariables}" />
               </Grid>
             </Grid>
           </TabItem>
           <!-- REQUEST CUSTOM AUTH -->
           <TabItem>
             <TabItem.Header>
-              <TextBlock Classes="TabItemHeader" Text="{i18n:Localize CustomAuth, Context=HttpRequest}"/>
+              <TextBlock
+                  Classes="TabItemHeader"
+                  Text="{i18n:Localize CustomAuth, Context=HttpRequest}" />
             </TabItem.Header>
-            <v:RequestAuthView DataContext="{Binding RequestAuthDataCtx}"/>
+            <v:RequestAuthView DataContext="{Binding RequestAuthDataCtx}" />
           </TabItem>
         </TabControl>
       </Grid>
-      <GridSplitter Margin="12,0,12,0" Grid.Column="1" Grid.Row="0" Width="2" VerticalAlignment="Stretch" Background="Black" />
+      <GridSplitter
+          Margin="12,0,12,0"
+          Grid.Column="1"
+          Grid.Row="0"
+          Width="2"
+          VerticalAlignment="Stretch"
+          Background="Black" />
       <!-- RESPONSE -->
-      <Grid Grid.Column="2" Grid.Row="0">
+      <Grid
+          Grid.Column="2"
+          Grid.Row="0">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-          <RowDefinition Height="Auto"/>
-          <RowDefinition Height="*"/>
-          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="*" />
+          <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Column="0" Grid.Row="0" Margin="12,28,12,0" FontSize="20" FontWeight="Light" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding ResponseDataCtx.ResponseStatusCodeElapsedTimeTitle}"/>
-        <TabControl Grid.Column="0" Grid.Row="1" Margin="12,24,12,12" TabStripPlacement="Top" VerticalAlignment="Stretch" SelectedIndex="{Binding ResponseDataCtx.ResponseTabsSelectedIndex}">
+        <TextBlock
+            Grid.Column="0"
+            Grid.Row="0"
+            Margin="12,28,12,0"
+            FontSize="20"
+            FontWeight="Light"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            TextWrapping="Wrap"
+            Text="{Binding ResponseDataCtx.ResponseStatusCodeElapsedTimeTitle}" />
+        <TabControl
+            Grid.Column="0"
+            Grid.Row="1"
+            Margin="12,24,12,12"
+            TabStripPlacement="Top"
+            VerticalAlignment="Stretch"
+            SelectedIndex="{Binding ResponseDataCtx.ResponseTabsSelectedIndex}">
           <!-- RESPONSE HEADERS AND TRAILERS -->
           <TabItem>
             <TabItem.Header>
-              <TextBlock Classes="TabItemHeader" Text="{i18n:Localize Headers, Context=HttpResponse}"/>
+              <TextBlock
+                  Classes="TabItemHeader"
+                  Text="{i18n:Localize Headers, Context=HttpResponse}" />
             </TabItem.Header>
-            <DataGrid Margin="-12,12,-12,12" VerticalAlignment="Stretch" AutoGenerateColumns="False" Items="{Binding ResponseDataCtx.ResponseHeadersAndTrailers}" CanUserResizeColumns="True">
-                <DataGrid.Columns>
-                  <DataGridTextColumn Width="*" Binding="{Binding Key}">
-                    <DataGridTextColumn.Header>
-                      <TextBlock Text="{i18n:Localize HeaderName, Context=HttpResponse}"/>
-                    </DataGridTextColumn.Header>
-                  </DataGridTextColumn>
-                  <DataGridTextColumn Width="*" Binding="{Binding Value}">
-                    <DataGridTextColumn.Header>
-                      <TextBlock Text="{i18n:Localize HeaderValue, Context=HttpResponse}"/>
-                    </DataGridTextColumn.Header>
-                  </DataGridTextColumn>
-                </DataGrid.Columns>
-              </DataGrid>
+            <DataGrid
+                Margin="-12,12,-12,12"
+                VerticalAlignment="Stretch"
+                AutoGenerateColumns="False"
+                Items="{Binding ResponseDataCtx.ResponseHeadersAndTrailers}"
+                CanUserResizeColumns="True"
+                Classes="draggable">
+              <i:Interaction.Behaviors>
+                <i:BehaviorCollection>
+                  <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}" />
+                </i:BehaviorCollection>
+              </i:Interaction.Behaviors>
+              <DataGrid.Columns>
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Key}">
+                  <DataGridTextColumn.Header>
+                    <TextBlock Text="{i18n:Localize HeaderName, Context=HttpResponse}" />
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Value}">
+                  <DataGridTextColumn.Header>
+                    <TextBlock Text="{i18n:Localize HeaderValue, Context=HttpResponse}" />
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+              </DataGrid.Columns>
+            </DataGrid>
           </TabItem>
           <!-- RESPONSE BODY -->
           <TabItem>
             <TabItem.Header>
-              <TextBlock Classes="TabItemHeader" Text="{i18n:Localize Body, Context=HttpResponse}"/>
+              <TextBlock
+                  Classes="TabItemHeader"
+                  Text="{i18n:Localize Body, Context=HttpResponse}" />
             </TabItem.Header>
-            <Grid Margin="-12,12,-12,0" VerticalAlignment="Stretch">
+            <Grid
+                Margin="-12,12,-12,0"
+                VerticalAlignment="Stretch">
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
               </Grid.ColumnDefinitions>
               <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
               </Grid.RowDefinitions>
 
               <!-- AcceptsReturn="True" allows for horizontal scrollbar -->
@@ -347,16 +773,36 @@
                   FontWeight="Light"
                   FontSize="14"
                   Document="{Binding ResponseDataCtx.ResponseRawContentTextDocument, Mode=TwoWay}" />
-              <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Margin="0,12,0,0">
-                <Button Content="{i18n:Localize BodySaveToFile, Context=HttpResponse}" Margin="0,0,6,12" IsVisible="{Binding ResponseDataCtx.IsSaveResponseBodyToFileVisible}" Command="{Binding ResponseDataCtx.SaveResponseBodyToFileCmd}" Classes="Primary"/>
-                <Button Content="{i18n:Localize DisableTlsVerification, Context=HttpResponse}" Margin="6,0,0,12" IsVisible="{Binding ResponseDataCtx.IsDisableTlsVerificationVisible}" Command="{Binding ResponseDataCtx.DisableTlsVerificationCmd}" Classes="Primary"/>
+              <StackPanel
+                  Grid.Column="0"
+                  Grid.Row="1"
+                  Orientation="Horizontal"
+                  Margin="0,12,0,0">
+                <Button
+                    Content="{i18n:Localize BodySaveToFile, Context=HttpResponse}"
+                    Margin="0,0,6,12"
+                    IsVisible="{Binding ResponseDataCtx.IsSaveResponseBodyToFileVisible}"
+                    Command="{Binding ResponseDataCtx.SaveResponseBodyToFileCmd}"
+                    Classes="Primary" />
+                <Button
+                    Content="{i18n:Localize DisableTlsVerification, Context=HttpResponse}"
+                    Margin="6,0,0,12"
+                    IsVisible="{Binding ResponseDataCtx.IsDisableTlsVerificationVisible}"
+                    Command="{Binding ResponseDataCtx.DisableTlsVerificationCmd}"
+                    Classes="Primary" />
               </StackPanel>
 
             </Grid>
           </TabItem>
         </TabControl>
         <!-- RESPONSE PROGRESS BAR -->
-        <ProgressBar Grid.Column="0" Grid.Row="2" IsIndeterminate="True" Margin="12,0,12,24" HorizontalAlignment="Stretch" IsVisible="{Binding IsSendRequestProgressBarVisible}" />
+        <ProgressBar
+            Grid.Column="0"
+            Grid.Row="2"
+            IsIndeterminate="True"
+            Margin="12,0,12,24"
+            HorizontalAlignment="Stretch"
+            IsVisible="{Binding IsSendRequestProgressBarVisible}" />
       </Grid>
     </Grid>
   </Grid>

@@ -17,7 +17,7 @@ public static class PororocaWebSocketClientMessageValidatorTests
     {
         Mock<IPororocaVariableResolver> mockedVariableResolver = new();
 
-        string f(string? k) => k == null ? string.Empty : kvs.ContainsKey(k) ? kvs[k] : k;
+        string f(string? k) => k == null ? string.Empty : kvs.TryGetValue(k, out string? value) ? value! : k;
 
         mockedVariableResolver.Setup(x => x.ReplaceTemplates(It.IsAny<string?>()))
                               .Returns((Func<string?, string>)f);

@@ -48,7 +48,8 @@
             x:Name="reqScrRequestCustomAuthBearer"
             IsSelected="{Binding IsAuthModeBearerSelected}"
             Content="{i18n:Localize AuthModeBearer, Context=RequestAuth}" />
-        <!-- Mode=TwoWay in IsSelected below is required, otherwise, layout will disappear when changing between different requests -->
+        <!-- Mode=TwoWay in IsSelected below is required, otherwise, layout will disappear when
+        changing between different requests -->
         <ComboBoxItem
             x:Name="reqScrRequestCustomAuthClientCertificate"
             IsSelected="{Binding IsAuthModeClientCertificateSelected, Mode=TwoWay}"

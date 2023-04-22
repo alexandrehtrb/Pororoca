@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using System.Reactive;
-using System.Text;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
@@ -9,16 +8,13 @@ using Avalonia.Threading;
 using MessageBox.Avalonia;
 using MessageBox.Avalonia.DTO;
 using MessageBox.Avalonia.Enums;
-using MessageBox.Avalonia.Models;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.UserData;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
-using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
-using static Pororoca.Domain.Features.ImportCollection.PororocaCollectionImporter;
-using static Pororoca.Domain.Features.ImportCollection.PostmanCollectionV21Importer;
+using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -26,12 +22,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 {
     #region COLLECTIONS ORGANIZATION
 
-    private CollectionsGroupViewModel collectionsGroupViewDataCtxField;
-    public CollectionsGroupViewModel CollectionsGroupViewDataCtx
-    {
-        get => this.collectionsGroupViewDataCtxField;
-        set => this.RaiseAndSetIfChanged(ref this.collectionsGroupViewDataCtxField, value);
-    }
+    [Reactive]
+    public CollectionsGroupViewModel CollectionsGroupViewDataCtx { get; set; }
 
     public Action<CollectionOrganizationItemViewModel> OnRenameSubItemSelected => onRenameItemSelected;
 
@@ -44,114 +36,57 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #region SCREENS
 
-    private bool isCollectionViewVisibleField = false;
-    public bool IsCollectionViewVisible
-    {
-        get => this.isCollectionViewVisibleField;
-        set => this.RaiseAndSetIfChanged(ref this.isCollectionViewVisibleField, value);
-    }
-    private CollectionViewModel? collectionViewDataCtxField = null;
-    public CollectionViewModel? CollectionViewDataCtx
-    {
-        get => this.collectionViewDataCtxField;
-        set => this.RaiseAndSetIfChanged(ref this.collectionViewDataCtxField, value);
-    }
+    [Reactive]
+    public bool IsCollectionViewVisible { get; set; }
 
-    private bool isCollectionVariablesViewVisibleField = false;
-    public bool IsCollectionVariablesViewVisible
-    {
-        get => this.isCollectionVariablesViewVisibleField;
-        set => this.RaiseAndSetIfChanged(ref this.isCollectionVariablesViewVisibleField, value);
-    }
-    private CollectionVariablesViewModel? collectionVariablesViewDataCtxField = null;
-    public CollectionVariablesViewModel? CollectionVariablesViewDataCtx
-    {
-        get => this.collectionVariablesViewDataCtxField;
-        set => this.RaiseAndSetIfChanged(ref this.collectionVariablesViewDataCtxField, value);
-    }
+    [Reactive]
+    public CollectionViewModel? CollectionViewDataCtx { get; set; }
 
-    private bool isEnvironmentViewVisibleField = false;
-    public bool IsEnvironmentViewVisible
-    {
-        get => this.isEnvironmentViewVisibleField;
-        set => this.RaiseAndSetIfChanged(ref this.isEnvironmentViewVisibleField, value);
-    }
-    private EnvironmentViewModel? environmentViewDataCtxField = null;
-    public EnvironmentViewModel? EnvironmentViewDataCtx
-    {
-        get => this.environmentViewDataCtxField;
-        set => this.RaiseAndSetIfChanged(ref this.environmentViewDataCtxField, value);
-    }
+    [Reactive]
+    public bool IsCollectionVariablesViewVisible { get; set; }
 
-    private bool isCollectionFolderViewVisibleField = false;
-    public bool IsCollectionFolderViewVisible
-    {
-        get => this.isCollectionFolderViewVisibleField;
-        set => this.RaiseAndSetIfChanged(ref this.isCollectionFolderViewVisibleField, value);
-    }
-    private CollectionFolderViewModel? collectionFolderViewDataCtxField = null;
-    public CollectionFolderViewModel? CollectionFolderViewDataCtx
-    {
-        get => this.collectionFolderViewDataCtxField;
-        set => this.RaiseAndSetIfChanged(ref this.collectionFolderViewDataCtxField, value);
-    }
+    [Reactive]
+    public CollectionVariablesViewModel? CollectionVariablesViewDataCtx { get; set; }
 
-    private bool isHttpRequestViewVisibleField = false;
-    public bool IsHttpRequestViewVisible
-    {
-        get => this.isHttpRequestViewVisibleField;
-        set => this.RaiseAndSetIfChanged(ref this.isHttpRequestViewVisibleField, value);
-    }
-    private HttpRequestViewModel? httpRequestViewDataCtxField = null;
-    public HttpRequestViewModel? HttpRequestViewDataCtx
-    {
-        get => this.httpRequestViewDataCtxField;
-        set => this.RaiseAndSetIfChanged(ref this.httpRequestViewDataCtxField, value);
-    }
+    [Reactive]
+    public bool IsEnvironmentViewVisible { get; set; }
 
-    private bool isWebSocketConnectionViewVisibleField = false;
-    public bool IsWebSocketConnectionViewVisible
-    {
-        get => this.isWebSocketConnectionViewVisibleField;
-        set => this.RaiseAndSetIfChanged(ref this.isWebSocketConnectionViewVisibleField, value);
-    }
-    private WebSocketConnectionViewModel? webSocketConnectionViewDataCtxField = null;
-    public WebSocketConnectionViewModel? WebSocketConnectionViewDataCtx
-    {
-        get => this.webSocketConnectionViewDataCtxField;
-        set => this.RaiseAndSetIfChanged(ref this.webSocketConnectionViewDataCtxField, value);
-    }
+    [Reactive]
+    public EnvironmentViewModel? EnvironmentViewDataCtx { get; set; }
 
-    private bool isWebSocketClientMessageViewVisibleField = false;
-    public bool IsWebSocketClientMessageViewVisible
-    {
-        get => this.isWebSocketClientMessageViewVisibleField;
-        set => this.RaiseAndSetIfChanged(ref this.isWebSocketClientMessageViewVisibleField, value);
-    }
-    private WebSocketClientMessageViewModel? webSocketRequestMessageViewDataCtxField = null;
-    public WebSocketClientMessageViewModel? WebSocketClientMessageViewDataCtx
-    {
-        get => this.webSocketRequestMessageViewDataCtxField;
-        set => this.RaiseAndSetIfChanged(ref this.webSocketRequestMessageViewDataCtxField, value);
-    }
+    [Reactive]
+    public bool IsCollectionFolderViewVisible { get; set; }
+
+    [Reactive]
+    public CollectionFolderViewModel? CollectionFolderViewDataCtx { get; set; }
+
+    [Reactive]
+    public bool IsHttpRequestViewVisible { get; set; }
+
+    [Reactive]
+    public HttpRequestViewModel? HttpRequestViewDataCtx { get; set; }
+
+    [Reactive]
+    public bool IsWebSocketConnectionViewVisible { get; set; }
+
+    [Reactive]
+    public WebSocketConnectionViewModel? WebSocketConnectionViewDataCtx { get; set; }
+
+    [Reactive]
+    public bool IsWebSocketClientMessageViewVisible { get; set; }
+
+    [Reactive]
+    public WebSocketClientMessageViewModel? WebSocketClientMessageViewDataCtx { get; set; }
 
     #endregion
 
     #region LANGUAGE
 
-    private bool isLanguagePortugueseField = false;
-    public bool IsLanguagePortuguese
-    {
-        get => this.isLanguagePortugueseField;
-        set => this.RaiseAndSetIfChanged(ref this.isLanguagePortugueseField, value);
-    }
+    [Reactive]
+    public bool IsLanguagePortuguese { get; set; }
 
-    private bool isLanguageEnglishField = false;
-    public bool IsLanguageEnglish
-    {
-        get => this.isLanguageEnglishField;
-        set => this.RaiseAndSetIfChanged(ref this.isLanguageEnglishField, value);
-    }
+    [Reactive]
+    public bool IsLanguageEnglish { get; set; }
 
     public ReactiveCommand<Unit, Unit> SelectLanguagePortuguesCmd { get; }
     public ReactiveCommand<Unit, Unit> SelectLanguageEnglishCmd { get; }
@@ -160,12 +95,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #region GLOBAL OPTIONS
 
-    private bool isSslVerificationDisabledField = false;
-    public bool IsSslVerificationDisabled
-    {
-        get => this.isSslVerificationDisabledField;
-        set => this.RaiseAndSetIfChanged(ref this.isSslVerificationDisabledField, value);
-    }
+    [Reactive]
+    public bool IsSslVerificationDisabled { get; set; }
 
     public ReactiveCommand<Unit, Unit> ToggleSSLVerificationCmd { get; }
 
@@ -190,7 +121,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         #endregion
 
         #region COLLECTIONS ORGANIZATION
-        this.collectionsGroupViewDataCtxField = new(this, OnCollectionsGroupItemSelected);
+        CollectionsGroupViewDataCtx = new(this, OnCollectionsGroupItemSelected);
         ImportCollectionsCmd = ReactiveCommand.CreateFromTask(ImportCollectionsAsync);
         AddNewCollectionCmd = ReactiveCommand.Create(AddNewCollection);
         #endregion

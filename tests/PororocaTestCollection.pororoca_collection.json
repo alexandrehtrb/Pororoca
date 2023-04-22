@@ -673,6 +673,66 @@
           }
         }
       ]
+    },
+    {
+      "name": "DNS QUERIES",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "name": "Get dns-message, CloudFlare",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "https://cloudflare-dns.com/dns-query?dns=q80BAAABAAAAAAAAA3d3dwdleGFtcGxlA2NvbQAAAQAB",
+          "headers": [
+            {
+              "enabled": true,
+              "key": "Accept",
+              "value": "application/dns-message"
+            }
+          ]
+        },
+        {
+          "requestType": "http",
+          "name": "Get dns-json, CloudFlare",
+          "httpVersion": 2.0,
+          "httpMethod": "GET",
+          "url": "https://cloudflare-dns.com/dns-query?name=example.com&type=AAAA",
+          "headers": [
+            {
+              "enabled": true,
+              "key": "Accept",
+              "value": "application/dns-json"
+            }
+          ]
+        },
+        {
+          "requestType": "http",
+          "name": "Post dns-json, CloudFlare",
+          "httpVersion": 2.0,
+          "httpMethod": "POST",
+          "url": "https://cloudflare-dns.com/dns-query",
+          "headers": [
+            {
+              "enabled": true,
+              "key": "Accept",
+              "value": "application/dns-message"
+            }
+          ],
+          "body": {
+            "mode": "file",
+            "contentType": "application/dns-message",
+            "fileSrcPath": "/home/alexandre/Projetos/dns-msg-query-post.bin"
+          }
+        },
+        {
+          "requestType": "http",
+          "name": "Get dns-message, Google",
+          "httpVersion": 2.0,
+          "httpMethod": "GET",
+          "url": "https://dns.google/resolve?name=example.com&type=A"
+        }
+      ]
     }
   ],
   "requests": [

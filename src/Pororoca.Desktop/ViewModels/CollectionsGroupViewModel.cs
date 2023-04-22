@@ -5,6 +5,7 @@ using System.Text;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -34,12 +35,8 @@ public sealed class CollectionsGroupViewModel : CollectionOrganizationItemParent
         }
     }
 
-    private bool hasMultipleItemsSelectedField;
-    public bool HasMultipleItemsSelected
-    {
-        get => this.hasMultipleItemsSelectedField;
-        private set => this.RaiseAndSetIfChanged(ref this.hasMultipleItemsSelectedField, value);
-    }
+    [Reactive]
+    public bool HasMultipleItemsSelected { get; set; }
 
     private readonly Action<ViewModelBase?> onCollectionsGroupItemSelected;
 
@@ -49,26 +46,14 @@ public sealed class CollectionsGroupViewModel : CollectionOrganizationItemParent
 
     private readonly List<ICloneable> copiedDomainObjs;
 
-    private bool canPasteEnvironmentField;
-    public bool CanPasteEnvironment
-    {
-        get => this.canPasteEnvironmentField;
-        private set => this.RaiseAndSetIfChanged(ref this.canPasteEnvironmentField, value);
-    }
+    [Reactive]
+    public bool CanPasteEnvironment { get; set; }
 
-    private bool canPasteCollectionFolderOrRequestField;
-    public bool CanPasteCollectionFolderOrRequest
-    {
-        get => this.canPasteCollectionFolderOrRequestField;
-        private set => this.RaiseAndSetIfChanged(ref this.canPasteCollectionFolderOrRequestField, value);
-    }
+    [Reactive]
+    public bool CanPasteCollectionFolderOrRequest { get; set; }
 
-    private bool canPasteWebSocketClientMessageField;
-    public bool CanPasteWebSocketClientMessage
-    {
-        get => this.canPasteWebSocketClientMessageField;
-        private set => this.RaiseAndSetIfChanged(ref this.canPasteWebSocketClientMessageField, value);
-    }
+    [Reactive]
+    public bool CanPasteWebSocketClientMessage { get; set; }
 
     #endregion
 
@@ -147,7 +132,7 @@ public sealed class CollectionsGroupViewModel : CollectionOrganizationItemParent
                         .Select(o => o.Clone())
                         .Cast<PororocaEnvironment>()
                         .ToList();
-    
+
     public IList<PororocaWebSocketClientMessage> FetchCopiesOfWebSocketClientMessages() =>
         this.copiedDomainObjs.Where(o => o is PororocaWebSocketClientMessage)
                         .Select(o => o.Clone())

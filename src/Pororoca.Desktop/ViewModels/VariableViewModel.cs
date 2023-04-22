@@ -1,50 +1,48 @@
+using System.Collections.ObjectModel;
+using System.Reactive;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
 
 public class VariableViewModel : ViewModelBase
 {
-    private bool enabledField;
-    public bool Enabled
-    {
-        get => this.enabledField;
-        set => this.RaiseAndSetIfChanged(ref this.enabledField, value);
-    }
+    private readonly ObservableCollection<VariableViewModel> parentCollection;
 
-    private string keyField;
-    public string Key
-    {
-        get => this.keyField;
-        set => this.RaiseAndSetIfChanged(ref this.keyField, value);
-    }
+    [Reactive]
+    public bool Enabled { get; set; }
 
-    private string valueField;
-    public string Value
-    {
-        get => this.valueField;
-        set => this.RaiseAndSetIfChanged(ref this.valueField, value);
-    }
+    [Reactive]
+    public string Key { get; set; }
 
-    private bool isSecretField;
-    public bool IsSecret
-    {
-        get => this.isSecretField;
-        set => this.RaiseAndSetIfChanged(ref this.isSecretField, value);
-    }
+    [Reactive]
+    public string Value { get; set; }
 
-    public VariableViewModel(PororocaVariable v) : this(v.Enabled, v.Key, v.Value ?? string.Empty, v.IsSecret)
+    [Reactive]
+    public bool IsSecret { get; set; }
+
+    public ReactiveCommand<Unit, Unit> RemoveVariableCmd { get; }
+
+    public VariableViewModel(ObservableCollection<VariableViewModel> parentCollection, PororocaVariable v)
+        : this(parentCollection, v.Enabled, v.Key, v.Value ?? string.Empty, v.IsSecret)
     {
     }
 
-    public VariableViewModel(bool enabled, string key, string value, bool isSecret)
+    public VariableViewModel(ObservableCollection<VariableViewModel> parentCollection,
+                             bool enabled, string key, string value, bool isSecret)
     {
-        this.enabledField = enabled;
-        this.keyField = key;
-        this.valueField = value;
-        this.isSecretField = isSecret;
+        this.parentCollection = parentCollection;
+        Enabled = enabled;
+        Key = key;
+        Value = value;
+        IsSecret = isSecret;
+        RemoveVariableCmd = ReactiveCommand.Create(RemoveVariable);
     }
 
     public PororocaVariable ToVariable() =>
-        new(this.enabledField, this.keyField, this.valueField, this.isSecretField);
+        new(Enabled, Key, Value, IsSecret);
+
+    public void RemoveVariable() =>
+        this.parentCollection.Remove(this);
 }

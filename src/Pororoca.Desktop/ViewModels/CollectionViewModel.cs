@@ -11,6 +11,7 @@ using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.ExportCollection;
 using Pororoca.Domain.Features.VariableResolution;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using static Pororoca.Domain.Features.VariableResolution.IPororocaVariableResolver;
 
 namespace Pororoca.Desktop.ViewModels;
@@ -41,25 +42,20 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
     #region COLLECTION
 
     private readonly Guid colId;
+
     private readonly DateTimeOffset colCreatedAt;
-    private bool includeSecretVariablesField;
-    public bool IncludeSecretVariables
-    {
-        get => this.includeSecretVariablesField;
-        set => this.RaiseAndSetIfChanged(ref this.includeSecretVariablesField, value);
-    }
+
+    [Reactive]
+    public bool IncludeSecretVariables { get; set; }
+
     public override ObservableCollection<CollectionOrganizationItemViewModel> Items { get; }
 
     #endregion
 
     #region OTHERS
 
-    private bool isOperatingSystemMacOsxField;
-    public bool IsOperatingSystemMacOsx
-    {
-        get => this.isOperatingSystemMacOsxField;
-        set => this.RaiseAndSetIfChanged(ref this.isOperatingSystemMacOsxField, value);
-    }
+    [Reactive]
+    public bool IsOperatingSystemMacOsx { get; set; }
 
     #endregion
 
@@ -69,7 +65,7 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
                                Func<bool>? isOperatingSystemMacOsx = null) : base(parentVm, col.Name)
     {
         #region OTHERS
-        this.isOperatingSystemMacOsxField = (isOperatingSystemMacOsx ?? OperatingSystem.IsMacOS)();
+        IsOperatingSystemMacOsx = (isOperatingSystemMacOsx ?? OperatingSystem.IsMacOS)();
         #endregion
 
         #region COLLECTION ORGANIZATION

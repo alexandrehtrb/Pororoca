@@ -8,6 +8,7 @@ using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.ExportEnvironment;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
 
 namespace Pororoca.Desktop.ViewModels;
@@ -33,36 +34,22 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
     private readonly DateTimeOffset envCreatedAt;
     private readonly Action<EnvironmentViewModel> onEnvironmentSetAsCurrent;
 
-    private bool isCurrentEnvironmentField;
-    public bool IsCurrentEnvironment
-    {
-        get => this.isCurrentEnvironmentField;
-        set => this.RaiseAndSetIfChanged(ref this.isCurrentEnvironmentField, value);
-    }
+    [Reactive]
+    public bool IsCurrentEnvironment { get; set; }
 
-    private bool includeSecretVariablesField;
-    public bool IncludeSecretVariables
-    {
-        get => this.includeSecretVariablesField;
-        set => this.RaiseAndSetIfChanged(ref this.includeSecretVariablesField, value);
-    }
+    [Reactive]
+    public bool IncludeSecretVariables { get; set; }
 
     public ObservableCollection<VariableViewModel> Variables { get; }
-    public VariableViewModel? SelectedVariable { get; set; }
     public ReactiveCommand<Unit, Unit> AddNewVariableCmd { get; }
-    public ReactiveCommand<Unit, Unit> RemoveSelectedVariableCmd { get; }
     public ReactiveCommand<Unit, Unit> SetAsCurrentEnvironmentCmd { get; }
 
     #endregion
 
     #region OTHERS
 
-    private bool isOperatingSystemMacOsxField;
-    public bool IsOperatingSystemMacOsx
-    {
-        get => this.isOperatingSystemMacOsxField;
-        set => this.RaiseAndSetIfChanged(ref this.isOperatingSystemMacOsxField, value);
-    }
+    [Reactive]
+    public bool IsOperatingSystemMacOsx { get; set; }
 
     #endregion
 
@@ -72,7 +59,7 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
                                 Func<bool>? isOperatingSystemMacOsx = null) : base(parentVm, env.Name)
     {
         #region OTHERS
-        this.isOperatingSystemMacOsxField = (isOperatingSystemMacOsx ?? OperatingSystem.IsMacOS)();
+        IsOperatingSystemMacOsx = (isOperatingSystemMacOsx ?? OperatingSystem.IsMacOS)();
         #endregion
 
         #region COLLECTION ORGANIZATION
@@ -94,12 +81,14 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
         this.envCreatedAt = env.CreatedAt;
         this.onEnvironmentSetAsCurrent = onEnvironmentSetAsCurrent;
 
-        Variables = new(env.Variables.Select(v => new VariableViewModel(v)));
+        Variables = new();
+        foreach (var v in env.Variables)
+        {
+            Variables.Add(new(Variables, v));
+        }
         IsCurrentEnvironment = env.IsCurrent;
         AddNewVariableCmd = ReactiveCommand.Create(AddNewVariable);
-        RemoveSelectedVariableCmd = ReactiveCommand.Create(RemoveSelectedVariable);
         SetAsCurrentEnvironmentCmd = ReactiveCommand.Create(SetAsCurrentEnvironment);
-
         #endregion
     }
 
@@ -144,20 +133,7 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
         this.onEnvironmentSetAsCurrent(this);
 
     private void AddNewVariable() =>
-        Variables.Add(new(true, string.Empty, string.Empty, false));
-
-    private void RemoveSelectedVariable()
-    {
-        if (SelectedVariable != null)
-        {
-            Variables.Remove(SelectedVariable);
-            SelectedVariable = null;
-        }
-        else if (Variables.Count == 1)
-        {
-            Variables.Clear();
-        }
-    }
+        Variables.Add(new(Variables, true, string.Empty, string.Empty, false));
 
     public PororocaEnvironment ToEnvironment()
     {

@@ -1,59 +1,47 @@
+using System.Collections.ObjectModel;
+using System.Reactive;
 using Pororoca.Desktop.Localization;
-using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
 
 public sealed class HttpRequestFormDataParamViewModel : ViewModelBase
 {
+    private readonly ObservableCollection<HttpRequestFormDataParamViewModel> parentCollection;
+
     public PororocaHttpRequestFormDataParamType ParamType { get; init; }
 
-    private bool enabledField;
-    public bool Enabled
-    {
-        get => this.enabledField;
-        set => this.RaiseAndSetIfChanged(ref this.enabledField, value);
-    }
+    [Reactive]
+    public bool Enabled { get; set; }
 
-    private string typeField;
-    public string Type
-    {
-        get => this.typeField;
-        set => this.RaiseAndSetIfChanged(ref this.typeField, value);
-    }
+    [Reactive]
+    public string Type { get; set; }
 
-    private string keyField;
-    public string Key
-    {
-        get => this.keyField;
-        set => this.RaiseAndSetIfChanged(ref this.keyField, value);
-    }
+    [Reactive]
+    public string Key { get; set; }
 
-    private string valueField;
-    public string Value
-    {
-        get => this.valueField;
-        set => this.RaiseAndSetIfChanged(ref this.valueField, value);
-    }
+    [Reactive]
+    public string Value { get; set; }
 
-    private string contentTypeField;
-    public string ContentType
-    {
-        get => this.contentTypeField;
-        set => this.RaiseAndSetIfChanged(ref this.contentTypeField, value);
-    }
+    [Reactive]
+    public string ContentType { get; set; }
 
-    public HttpRequestFormDataParamViewModel(PororocaHttpRequestFormDataParam p)
+    public ReactiveCommand<Unit, Unit> RemoveParamCmd { get; }
+
+    public HttpRequestFormDataParamViewModel(ObservableCollection<HttpRequestFormDataParamViewModel> parentCollection, PororocaHttpRequestFormDataParam p)
     {
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
 
+        this.parentCollection = parentCollection;
         ParamType = p.Type;
-        this.enabledField = p.Enabled;
-        this.typeField = ResolveParamTypeText();
-        this.keyField = p.Key;
-        this.valueField = p.FileSrcPath ?? p.TextValue ?? string.Empty;
-        this.contentTypeField = p.ContentType;
+        Enabled = p.Enabled;
+        Type = ResolveParamTypeText();
+        Key = p.Key;
+        Value = p.FileSrcPath ?? p.TextValue ?? string.Empty;
+        ContentType = p.ContentType;
+        RemoveParamCmd = ReactiveCommand.Create(RemoveParam);
     }
 
     public PororocaHttpRequestFormDataParam ToFormDataParam()
@@ -81,4 +69,7 @@ public sealed class HttpRequestFormDataParamViewModel : ViewModelBase
             PororocaHttpRequestFormDataParamType.File => Localizer.Instance["HttpRequest/BodyFormDataParamTypeFile"],
             _ => Localizer.Instance["HttpRequest/BodyFormDataParamTypeText"]
         };
+
+    private void RemoveParam() =>
+        this.parentCollection.Remove(this);
 }

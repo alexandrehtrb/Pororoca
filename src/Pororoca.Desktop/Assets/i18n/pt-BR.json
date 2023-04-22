@@ -159,6 +159,7 @@
   "HttpRequest/SendRequest": "Enviar",
   "HttpRequest/UrlWatermark": "(url da requisição aqui)",
   "HttpResponse/Body": "Corpo",
+  "HttpResponse/BodyCouldNotReadAsUTF8": "(não foi possível ler o corpo como texto UTF-8, {0} bytes)",
   "HttpResponse/BodyContentBinaryNotShown": "(conteúdo binário não-exibido, {0} bytes)",
   "HttpResponse/BodyContentTypeWatermark": "(content-type da resposta aqui)",
   "HttpResponse/BodyContentWatermark": "(corpo da resposta aqui)",

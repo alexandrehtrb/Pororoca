@@ -1,6 +1,6 @@
+using System.Text;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.VariableResolution;
-using System.Text;
 
 namespace Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage;
 
@@ -10,7 +10,7 @@ public static class PororocaWebSocketClientMessageTranslator
                                                  PororocaWebSocketClientMessage wsCliMsg,
                                                  out PororocaWebSocketClientMessageToSend? resolvedMsgToSend,
                                                  out string? errorCode)
-    {        
+    {
         try
         {
             resolvedMsgToSend = wsCliMsg.ContentMode switch

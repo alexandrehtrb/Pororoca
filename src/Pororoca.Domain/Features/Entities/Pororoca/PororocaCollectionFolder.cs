@@ -18,7 +18,7 @@ public sealed class PororocaCollectionFolder : PororocaCollectionItem, ICloneabl
                 .Cast<PororocaHttpRequest>()
                 .ToList()
                 .AsReadOnly();
-    
+
     [JsonIgnore] // JSON IGNORE
     public IReadOnlyList<PororocaWebSocketConnection> WebSocketConnections =>
         Requests.Where(r => r is PororocaWebSocketConnection)

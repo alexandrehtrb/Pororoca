@@ -18,7 +18,7 @@ public static class PororocaWebSocketClientMessageTranslatorTests
     {
         Mock<IPororocaVariableResolver> mockedVariableResolver = new();
 
-        string f(string? k) => k == null ? string.Empty : kvs.ContainsKey(k) ? kvs[k] : k;
+        string f(string? k) => k == null ? string.Empty : kvs.TryGetValue(k, out string? value) ? value! : k;
 
         mockedVariableResolver.Setup(x => x.ReplaceTemplates(It.IsAny<string?>()))
                               .Returns((Func<string?, string>)f);
@@ -50,7 +50,7 @@ public static class PororocaWebSocketClientMessageTranslatorTests
         // THEN
         Assert.True(valid);
         Assert.Null(errorCode);
-        
+
         Assert.NotNull(resolvedMsg);
         Assert.Equal(msgType, resolvedMsg!.MessageType);
         Assert.Equal(disableCompressionForMsg, resolvedMsg!.DisableCompressionForThis);
@@ -84,7 +84,7 @@ public static class PororocaWebSocketClientMessageTranslatorTests
         // THEN
         Assert.True(valid);
         Assert.Null(errorCode);
-        
+
         Assert.NotNull(resolvedMsg);
         Assert.Equal(msgType, resolvedMsg!.MessageType);
         Assert.Equal(disableCompressionForMsg, resolvedMsg!.DisableCompressionForThis);
@@ -119,7 +119,7 @@ public static class PororocaWebSocketClientMessageTranslatorTests
 
         // THEN
         Assert.False(valid);
-        Assert.Equal(TranslateRequestErrors.WebSocketUnknownClientMessageTranslationError, errorCode);        
+        Assert.Equal(TranslateRequestErrors.WebSocketUnknownClientMessageTranslationError, errorCode);
         Assert.Null(resolvedMsg);
 
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{FilePath}}"), Times.Once);

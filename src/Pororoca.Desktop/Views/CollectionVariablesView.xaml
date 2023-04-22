@@ -1,56 +1,135 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
-  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
-  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:i18n="clr-namespace:Pororoca.Desktop.Localization" x:DataType="vm:CollectionVariablesViewModel" mc:Ignorable="d" d:DesignWidth="1350" d:DesignHeight="700"
-  xmlns:pages="clr-namespace:Pororoca.Desktop.Pages;assembly=Pororoca.Desktop" x:Class="Pororoca.Desktop.Views.CollectionVariablesView" FontSize="14" Foreground="{StaticResource SystemBaseHighColor}">
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:i18n="clr-namespace:Pororoca.Desktop.Localization"
+    xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+    xmlns:idd="clr-namespace:Avalonia.Xaml.Interactions.DragAndDrop;assembly=Avalonia.Xaml.Interactions"
+    xmlns:b="clr-namespace:Pororoca.Desktop.Behaviors;assembly=Pororoca.Desktop"
+    x:DataType="vm:CollectionVariablesViewModel"
+    mc:Ignorable="d"
+    d:DesignWidth="1350"
+    d:DesignHeight="700"
+    xmlns:pages="clr-namespace:Pororoca.Desktop.Pages;assembly=Pororoca.Desktop"
+    x:Class="Pororoca.Desktop.Views.CollectionVariablesView"
+    FontSize="14"
+    Foreground="{StaticResource SystemBaseHighColor}">
 
-  <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="24,0,24,0">
+  <Grid
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Stretch"
+      Margin="24,0,24,0">
 
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
 
-    <TextBlock Grid.Column="0" Grid.Row="0" Text="{i18n:Localize Title, Context=CollectionVariables}" Margin="0,24,0,0" FontSize="32" FontWeight="Light" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap"/>
+    <TextBlock
+        Grid.Column="0"
+        Grid.Row="0"
+        Text="{i18n:Localize Title, Context=CollectionVariables}"
+        Margin="0,24,0,0"
+        FontSize="32"
+        FontWeight="Light"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        TextWrapping="Wrap" />
 
-    <DataGrid Grid.Column="0" Grid.Row="1" Margin="0,36,0,0" AutoGenerateColumns="False" Items="{Binding Variables}" SelectedItem="{Binding Path=SelectedVariable, Mode=TwoWay}" CanUserResizeColumns="True">
+    <Button
+        Grid.Column="0"
+        Grid.Row="1"
+        Height="24"
+        Width="24"
+        Margin="0,36,0,0"
+        Classes="Primary"
+        Command="{Binding AddNewVariableCmd}">
+      <Button.Content>
+        <Image
+            Source="/Assets/Images/icon_white_add.png"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Width="16"
+            Height="16" />
+      </Button.Content>
+    </Button>
+
+    <DataGrid
+        Grid.Column="0"
+        Grid.Row="2"
+        Margin="0,12,0,0"
+        AutoGenerateColumns="False"
+        Items="{Binding Variables}"
+        CanUserResizeColumns="True"
+        Classes="draggable">
       <DataGrid.Columns>
-        <DataGridCheckBoxColumn Width="*" Binding="{Binding Enabled}">
+        <DataGridCheckBoxColumn
+            Width="*"
+            Binding="{Binding Enabled}">
           <DataGridCheckBoxColumn.Header>
-            <TextBlock Text="{i18n:Localize VariableEnabled, Context=CollectionVariables}"/>
+            <TextBlock Text="{i18n:Localize VariableEnabled, Context=CollectionVariables}" />
           </DataGridCheckBoxColumn.Header>
         </DataGridCheckBoxColumn>
-        <DataGridTextColumn Width="2*" Binding="{Binding Key}">
+        <DataGridTextColumn
+            Width="2*"
+            Binding="{Binding Key}">
           <DataGridTextColumn.Header>
-            <TextBlock Text="{i18n:Localize VariableName, Context=CollectionVariables}"/>
+            <TextBlock Text="{i18n:Localize VariableName, Context=CollectionVariables}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
-        <DataGridTextColumn Width="2*" Binding="{Binding Value}">
+        <DataGridTextColumn
+            Width="2*"
+            Binding="{Binding Value}">
           <DataGridTextColumn.Header>
-            <TextBlock Text="{i18n:Localize VariableValue, Context=CollectionVariables}"/>
+            <TextBlock Text="{i18n:Localize VariableValue, Context=CollectionVariables}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
-        <DataGridCheckBoxColumn Width="*" Binding="{Binding IsSecret}">
+        <DataGridCheckBoxColumn
+            Width="*"
+            Binding="{Binding IsSecret}">
           <DataGridCheckBoxColumn.Header>
-            <TextBlock Text="{i18n:Localize VariableIsSecret, Context=CollectionVariables}"/>
+            <TextBlock Text="{i18n:Localize VariableIsSecret, Context=CollectionVariables}" />
           </DataGridCheckBoxColumn.Header>
         </DataGridCheckBoxColumn>
+        <DataGridTemplateColumn
+            Width="0.2*"
+            Header="">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <Button
+                  Command="{Binding RemoveVariableCmd}"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Center"
+                  HorizontalContentAlignment="Center"
+                  VerticalContentAlignment="Center"
+                  Classes="Trash">
+              </Button>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
       </DataGrid.Columns>
+      <i:Interaction.Behaviors>
+        <i:BehaviorCollection>
+          <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropVariableViewModelHandler}" />
+        </i:BehaviorCollection>
+      </i:Interaction.Behaviors>
     </DataGrid>
 
-    <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Margin="0,12,0,0">
-      <Button Content="{i18n:Localize AddVariable, Context=CollectionVariables}" Margin="0,0,6,0" Command="{Binding AddNewVariableCmd}" Classes="Primary"/>
-      <Button Content="{i18n:Localize RemoveVariable, Context=CollectionVariables}" Margin="6,0,0,0" Command="{Binding RemoveSelectedVariableCmd}" Classes="Secondary"/>
-    </StackPanel>
-
-    <TextBlock Grid.Column="0" Grid.Row="3" TextWrapping="Wrap" FontSize="12" HorizontalAlignment="Stretch" Margin="0,24,0,24" Text="{i18n:Localize Tip, Context=CollectionVariables}"/>
+    <TextBlock
+        Grid.Column="0"
+        Grid.Row="3"
+        TextWrapping="Wrap"
+        FontSize="12"
+        HorizontalAlignment="Stretch"
+        Margin="0,24,0,24"
+        Text="{i18n:Localize Tip, Context=CollectionVariables}" />
 
   </Grid>
 </UserControl>

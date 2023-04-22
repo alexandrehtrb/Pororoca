@@ -3,8 +3,8 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaEdit;
 using AvaloniaEdit.TextMate;
-using TextMateSharp.Grammars;
 using Pororoca.Desktop.Localization;
+using TextMateSharp.Grammars;
 
 namespace Pororoca.Desktop.TextEditorConfig;
 

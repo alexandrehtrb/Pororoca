@@ -1,42 +1,44 @@
+using System.Collections.ObjectModel;
+using System.Reactive;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
 
 public class KeyValueParamViewModel : ViewModelBase
 {
-    private bool enabledField;
-    public bool Enabled
-    {
-        get => this.enabledField;
-        set => this.RaiseAndSetIfChanged(ref this.enabledField, value);
-    }
+    private readonly ObservableCollection<KeyValueParamViewModel> parentCollection;
 
-    private string keyField;
-    public string Key
-    {
-        get => this.keyField;
-        set => this.RaiseAndSetIfChanged(ref this.keyField, value);
-    }
+    [Reactive]
+    public bool Enabled { get; set; }
 
-    private string valueField;
-    public string Value
-    {
-        get => this.valueField;
-        set => this.RaiseAndSetIfChanged(ref this.valueField, value);
-    }
+    [Reactive]
+    public string Key { get; set; }
 
-    public KeyValueParamViewModel(PororocaKeyValueParam p) : this(p.Enabled, p.Key, p.Value ?? string.Empty)
+    [Reactive]
+    public string Value { get; set; }
+
+    public ReactiveCommand<Unit, Unit> RemoveParamCmd { get; }
+
+    public KeyValueParamViewModel(ObservableCollection<KeyValueParamViewModel> parentCollection, PororocaKeyValueParam p)
+        : this(parentCollection, p.Enabled, p.Key, p.Value ?? string.Empty)
     {
     }
 
-    public KeyValueParamViewModel(bool enabled, string key, string value)
+    public KeyValueParamViewModel(ObservableCollection<KeyValueParamViewModel> parentCollection,
+        bool enabled, string key, string value)
     {
-        this.enabledField = enabled;
-        this.keyField = key;
-        this.valueField = value;
+        this.parentCollection = parentCollection;
+        Enabled = enabled;
+        Key = key;
+        Value = value;
+        RemoveParamCmd = ReactiveCommand.Create(RemoveParam);
     }
 
     public PororocaKeyValueParam ToKeyValueParam() =>
-        new(this.enabledField, this.keyField, this.valueField);
+        new(Enabled, Key, Value);
+
+    private void RemoveParam() =>
+        this.parentCollection.Remove(this);
 }

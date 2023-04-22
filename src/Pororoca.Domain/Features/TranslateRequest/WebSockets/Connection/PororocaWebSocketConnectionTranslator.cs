@@ -1,13 +1,12 @@
 using System.Net.WebSockets;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
+using Pororoca.Domain.Features.Requester;
+using Pororoca.Domain.Features.TranslateRequest.Common;
 using Pororoca.Domain.Features.VariableResolution;
+using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
 using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonTranslator;
-using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
-using Pororoca.Domain.Features.Entities.Pororoca;
-using Pororoca.Domain.Features.Requester;
 using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonValidator;
-using Pororoca.Domain.Features.TranslateRequest.Common;
 
 namespace Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection;
 
@@ -33,7 +32,7 @@ public static class PororocaWebSocketConnectionTranslator
                                                 PororocaWebSocketConnection wsConn,
                                                 bool disableTlsVerification,
                                                 out (ClientWebSocket? wsCli, HttpClient? httpCli) wsAndHttpCli,
-                                                out string? errorCode)    
+                                                out string? errorCode)
     {
         if (!httpVersionVerifier(wsConn.HttpVersion, out errorCode))
         {
@@ -46,7 +45,7 @@ public static class PororocaWebSocketConnectionTranslator
             {
                 var resolvedClientCert = ResolveClientCertificate(varResolver, wsConn.CustomAuth?.ClientCertificate);
                 var httpCli = httpClientProvider.Provide(disableTlsVerification, resolvedClientCert);
-                
+
                 var wsCli = new ClientWebSocket();
                 SetHttpVersion(wsConn, wsCli);
                 SetConnectionRequestHeaders(varResolver, wsConn, wsCli);
@@ -69,7 +68,7 @@ public static class PororocaWebSocketConnectionTranslator
     {
         wsCli.Options.HttpVersionPolicy = HttpVersionPolicy.RequestVersionExact;
         wsCli.Options.HttpVersion = PororocaRequestCommonTranslator.ResolveHttpVersion(wsConn.HttpVersion);
-    }    
+    }
 
     private static void SetConnectionRequestHeaders(IPororocaVariableResolver varResolver, PororocaWebSocketConnection wsConn, ClientWebSocket wsCli)
     {

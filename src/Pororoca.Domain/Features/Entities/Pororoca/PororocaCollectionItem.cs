@@ -8,10 +8,7 @@ public abstract class PororocaCollectionItem : ICloneable
     [JsonInclude]
     public string Name { get; protected set; }
 
-    protected PororocaCollectionItem(string name)
-    {
-        Name = name;
-    }
+    protected PororocaCollectionItem(string name) => Name = name;
 
     public void UpdateName(string name) =>
         Name = name;

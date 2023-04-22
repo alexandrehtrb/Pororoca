@@ -5,9 +5,12 @@ using AvaloniaEdit.Rendering;
 
 namespace Pororoca.Desktop.TextEditorConfig;
 
-internal class PororocaVariableColorizingTransformer : DocumentColorizingTransformer
+internal partial class PororocaVariableColorizingTransformer : DocumentColorizingTransformer
 {
-    private static readonly Regex pororocaVarRegex = new("\\{\\{[\\w\\d]+\\}\\}");
+    private static readonly Regex pororocaVarRegex = GeneratePororocaVariableRegex();
+
+    [GeneratedRegex("\\{\\{[\\w\\d]+\\}\\}")]
+    private static partial Regex GeneratePororocaVariableRegex();
 
     protected override void ColorizeLine(DocumentLine line)
     {

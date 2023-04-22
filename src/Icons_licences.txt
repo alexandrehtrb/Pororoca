@@ -24,3 +24,7 @@ WebSocket icon:
     Source: https://freebiesupply.com/logos/websocket-logo/
     Licence: Unknown, but free
     Changes: Colour changed to white.
+Remove icon:
+    Source: https://pixabay.com/vectors/abort-delete-no-cancel-locked-146096/
+    Licence: Creative Commons.
+    Changes: Changed to white and brown.

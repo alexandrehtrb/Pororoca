@@ -61,8 +61,8 @@ public sealed class PororocaEnvironment : ICloneable
 
     public PororocaEnvironment ClonePreservingId()
     {
-        PororocaEnvironment it = (PororocaEnvironment)Clone();
-        it.Id = this.Id;
+        var it = (PororocaEnvironment)Clone();
+        it.Id = Id;
         return it;
     }
 

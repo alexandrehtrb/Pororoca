@@ -1,5 +1,5 @@
 using Pororoca.Desktop.Views;
-using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -18,33 +18,18 @@ public abstract class CollectionOrganizationItemViewModel : ViewModelBase, IColl
 
     public ICollectionOrganizationItemParentViewModel Parent { get; }
 
-    private bool canMoveUpField;
-    public bool CanMoveUp
-    {
-        get => this.canMoveUpField;
-        set => this.RaiseAndSetIfChanged(ref this.canMoveUpField, value);
-    }
+    [Reactive]
+    public bool CanMoveUp { get; set; }
 
-    private bool canMoveDownField;
-    public bool CanMoveDown
-    {
-        get => this.canMoveDownField;
-        set => this.RaiseAndSetIfChanged(ref this.canMoveDownField, value);
-    }
+    [Reactive]
+    public bool CanMoveDown { get; set; }
 
-    private EditableTextBlockViewModel nameEditableTextBlockViewDataCtxField;
-    public EditableTextBlockViewModel NameEditableTextBlockViewDataCtx
-    {
-        get => this.nameEditableTextBlockViewDataCtxField;
-        set => this.RaiseAndSetIfChanged(ref this.nameEditableTextBlockViewDataCtxField, value);
-    }
+    [Reactive]
+    public EditableTextBlockViewModel NameEditableTextBlockViewDataCtx { get; set; }
 
-    private string nameField;
-    public string Name
-    {
-        get => this.nameField;
-        set => this.RaiseAndSetIfChanged(ref this.nameField, value);
-    }
+    [Reactive]
+    public string Name { get; set; }
+
     protected void MoveThisUp() =>
         Parent.MoveSubItem(this, MoveableItemMovementDirection.Up);
 
@@ -82,7 +67,7 @@ public abstract class CollectionOrganizationItemViewModel : ViewModelBase, IColl
 
     public virtual void DeleteThis() =>
         Parent.DeleteSubItem(this);
-    
+
     public void SetAsItemInFocus(ViewModelBase vm, bool show)
     {
         if (show)
@@ -92,7 +77,7 @@ public abstract class CollectionOrganizationItemViewModel : ViewModelBase, IColl
     protected CollectionOrganizationItemViewModel(ICollectionOrganizationItemParentViewModel parentVm, string name)
     {
         Parent = parentVm;
-        this.nameEditableTextBlockViewDataCtxField = new(name, OnNameUpdated);
-        this.nameField = name;
+        NameEditableTextBlockViewDataCtx = new(name, OnNameUpdated);
+        Name = name;
     }
 }

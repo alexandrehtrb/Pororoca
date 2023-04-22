@@ -20,7 +20,7 @@ internal static class TextEditorUtils
     internal static void SetEditorSyntax(this TextMate.Installation tmInstallation, ref string? currentSyntaxLangId, string? updatedContentType)
     {
         string? updatedSyntaxLangId = FindSyntaxLanguageIdForContentType(updatedContentType);
-        
+
         // only setting a new syntax language if it changed
         if (currentSyntaxLangId != updatedSyntaxLangId)
         {
