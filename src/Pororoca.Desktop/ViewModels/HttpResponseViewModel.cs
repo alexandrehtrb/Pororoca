@@ -117,7 +117,9 @@ public sealed class HttpResponseViewModel : ViewModelBase
             // it triggers the syntax update, that checks the content type
             // if content type is set after, the syntax will not change after content is updated
             ResponseRawContentType = res.ContentType;
-            ResponseRawContent = res.CanDisplayTextBody ? res.GetBodyAsText() : string.Format(Localizer.Instance["HttpResponse/BodyContentBinaryNotShown"], res.GetBodyAsBinary()!.Length);
+            ResponseRawContent = res.CanDisplayTextBody ?
+                                 res.GetBodyAsText(Localizer.Instance["HttpResponse/BodyCouldNotReadAsUTF8"]) :
+                                 string.Format(Localizer.Instance["HttpResponse/BodyContentBinaryNotShown"], res.GetBodyAsBinary()!.Length);
             IsSaveResponseBodyToFileVisible = res.HasBody;
             IsDisableTlsVerificationVisible = false;
         }

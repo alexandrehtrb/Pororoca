@@ -158,6 +158,7 @@
   "HttpRequest/SendRequest": "Send",
   "HttpRequest/UrlWatermark": "(request url here)",
   "HttpResponse/Body": "Body",
+  "HttpResponse/BodyCouldNotReadAsUTF8": "(could not read body as UTF-8 text, {0} bytes)",
   "HttpResponse/BodyContentBinaryNotShown": "(binary content not shown, {0} bytes)",
   "HttpResponse/BodyContentTypeWatermark": "(response content-type here)",
   "HttpResponse/BodyContentWatermark": "(response body here)",

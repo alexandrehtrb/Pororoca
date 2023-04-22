@@ -51,12 +51,11 @@ public sealed class PororocaHttpResponse
         {
             string? contentType = ContentType;
             // Optimistic behavior, considering that if content type is not present, then probably is text
-            // TODO: Check other charsets?
             return contentType == null || MimeTypesDetector.IsTextContent(contentType);
         }
     }
 
-    public string? GetBodyAsText()
+    public string? GetBodyAsText(string? nonUtf8BodyMessageToShow)
     {
         if (this.binaryBody == null || this.binaryBody.Length == 0)
         {
@@ -64,23 +63,44 @@ public sealed class PororocaHttpResponse
         }
         else
         {
-            string bodyStr = Encoding.UTF8.GetString(this.binaryBody);
-            string? contentType = ContentType;
-            if (contentType == null || !MimeTypesDetector.IsJsonContent(contentType))
+            try
             {
-                return bodyStr;
-            }
-            else
-            {
-                try
-                {
-                    dynamic? jsonObj = JsonSerializer.Deserialize<dynamic>(bodyStr);
-                    string prettyPrintJson = JsonSerializer.Serialize(jsonObj, options: ViewJsonResponseOptions);
-                    return prettyPrintJson;
-                }
-                catch
+                string bodyStr = Encoding.UTF8.GetString(this.binaryBody);
+                string? contentType = ContentType;
+                if (contentType == null || !MimeTypesDetector.IsJsonContent(contentType))
                 {
                     return bodyStr;
+                }
+                else
+                {
+                    try
+                    {
+                        dynamic? jsonObj = JsonSerializer.Deserialize<dynamic>(bodyStr);
+                        string prettyPrintJson = JsonSerializer.Serialize(jsonObj, options: ViewJsonResponseOptions);
+                        return prettyPrintJson;
+                    }
+                    catch
+                    {
+                        return bodyStr;
+                    }
+                }
+            }
+            catch
+            {
+                if (nonUtf8BodyMessageToShow is not null)
+                {
+                    try
+                    {
+                        return string.Format(nonUtf8BodyMessageToShow, this.GetBodyAsBinary()!.Length);
+                    }
+                    catch
+                    {
+                        return nonUtf8BodyMessageToShow;
+                    }
+                }
+                else
+                {
+                    return null;
                 }
             }
         }
