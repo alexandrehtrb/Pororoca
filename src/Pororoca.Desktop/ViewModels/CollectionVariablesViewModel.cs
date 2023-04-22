@@ -22,7 +22,10 @@ public sealed class CollectionVariablesViewModel : CollectionOrganizationItemVie
         AddNewVariableCmd = ReactiveCommand.Create(AddNewVariable);
 
         Variables = new();
-        foreach (var v in col.Variables) { Variables.Add(new(Variables, v)); }
+        foreach (var v in col.Variables)
+        {
+            Variables.Add(new(Variables, v));
+        }
     }
 
     #region COLLECTION ORGANIZATION

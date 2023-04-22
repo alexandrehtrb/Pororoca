@@ -28,7 +28,7 @@ public static class PororocaWebSocketConnectionValidatorTests
     {
         Mock<IPororocaVariableResolver> mockedVariableResolver = new();
 
-        string f(string? k) => k == null ? string.Empty : kvs.ContainsKey(k) ? kvs[k] : k;
+        string f(string? k) => k == null ? string.Empty : kvs.TryGetValue(k, out string? value) ? value! : k;
 
         mockedVariableResolver.Setup(x => x.ReplaceTemplates(It.IsAny<string?>()))
                               .Returns((Func<string?, string>)f);
@@ -346,10 +346,10 @@ public static class PororocaWebSocketConnectionValidatorTests
     }
 
     [Theory]
-    [InlineData(8,8)]
-    [InlineData(12,24)]
-    [InlineData(50,12)]
-    [InlineData(-1,99)]
+    [InlineData(8, 8)]
+    [InlineData(12, 24)]
+    [InlineData(50, 12)]
+    [InlineData(-1, 99)]
     public static void Should_forbid_websocket_connection_with_compression_options_max_window_bits_out_of_range(int clientMaxWindowBits, int serverMaxWindowBits)
     {
         // GIVEN
@@ -368,10 +368,10 @@ public static class PororocaWebSocketConnectionValidatorTests
     }
 
     [Theory]
-    [InlineData(9,9)]
-    [InlineData(15,15)]
-    [InlineData(10,14)]
-    [InlineData(12,9)]
+    [InlineData(9, 9)]
+    [InlineData(15, 15)]
+    [InlineData(10, 14)]
+    [InlineData(12, 9)]
     public static void Should_allow_websocket_connection_with_compression_options_max_window_bits_within_range(int clientMaxWindowBits, int serverMaxWindowBits)
     {
         // GIVEN

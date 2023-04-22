@@ -1,8 +1,6 @@
-using Serilog;
 using Pororoca.TestServer.Configurations;
-using Microsoft.AspNetCore.HttpLogging;
-using System.Text;
 using Pororoca.TestServer.Endpoints;
+using Serilog;
 
 namespace Pororoca.TestServer;
 
@@ -79,6 +77,6 @@ public static class Program
            .UseStaticFiles()
            .UseWebSockets(new()
            {
-                KeepAliveInterval = TimeSpan.FromMinutes(2)
+               KeepAliveInterval = TimeSpan.FromMinutes(2)
            });
 }

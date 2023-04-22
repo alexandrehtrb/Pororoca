@@ -1,14 +1,14 @@
 using System.Collections.ObjectModel;
 using System.Net;
 using System.Reactive;
-using Pororoca.Desktop.Localization;
-using Pororoca.Desktop.Views;
-using ReactiveUI;
-using Pororoca.Domain.Features.Entities.Pororoca.Http;
-using static Pororoca.Domain.Features.Common.MimeTypesDetector;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.ExportImport;
+using Pororoca.Desktop.Localization;
+using Pororoca.Desktop.Views;
+using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using static Pororoca.Domain.Features.Common.MimeTypesDetector;
 
 namespace Pororoca.Desktop.ViewModels;
 

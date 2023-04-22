@@ -25,7 +25,7 @@ public sealed class UserPreferences
 
     public Language GetLanguage() =>
         LanguageExtensions.GetLanguageFromLCID(Lang);
-    
+
     public void SetLanguage(Language lang) =>
         Lang = lang.GetLanguageLCID();
 

@@ -299,7 +299,7 @@ public static class BackgroundWebSocketsProcessor
 
         if (stream.ReachedEnd())
             flags |= WebSocketMessageFlags.EndOfMessage;
-        
+
         return flags;
     }
 

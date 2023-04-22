@@ -31,11 +31,11 @@ public class DataGridDragAndDropBehavior<T> : DropHandlerBase where T : class
     private const string DraggingUpClassName = "dragging-up";
     private const string DraggingDownClassName = "dragging-down";
 
-    private DndData _dnd = new();
+    private DndData dnd = new();
 
     private bool Validate(object? sender, DragEventArgs e, object? sourceContext)
     {
-        if (_dnd.SrcDataGrid is not { } srcDg ||
+        if (this.dnd.SrcDataGrid is not { } srcDg ||
             sender is not DataGrid destDg ||
             sourceContext is not T src ||
             srcDg.Items is not IList<T> srcList ||
@@ -49,25 +49,22 @@ public class DataGridDragAndDropBehavior<T> : DropHandlerBase where T : class
             return false;
         }
 
-        DataGridCell cell = visual.FindDescendantOfType<DataGridCell>()!;
+        var cell = visual.FindDescendantOfType<DataGridCell>()!;
         var pos = e.GetPosition(cell);
 
-        _dnd.SrcDataGrid = srcDg;
-        _dnd.DestDataGrid = destDg;
-        _dnd.SrcList = srcList;
-        _dnd.DestList = destList;
-        _dnd.Direction = cell.DesiredSize.Height / 2 > pos.Y ? DragDirection.Up : DragDirection.Down;
-        _dnd.SrcIndex = srcList.IndexOf(src);
-        _dnd.DestIndex = destList.IndexOf(dest);
+        this.dnd.SrcDataGrid = srcDg;
+        this.dnd.DestDataGrid = destDg;
+        this.dnd.SrcList = srcList;
+        this.dnd.DestList = destList;
+        this.dnd.Direction = cell.DesiredSize.Height / 2 > pos.Y ? DragDirection.Up : DragDirection.Down;
+        this.dnd.SrcIndex = srcList.IndexOf(src);
+        this.dnd.DestIndex = destList.IndexOf(dest);
 
         return true;
     }
 
     public override bool Validate(object? sender, DragEventArgs e, object? sourceContext,
-                                  object? targetContext, object? state)
-    {
-        return Validate(sender, e, sourceContext);
-    }
+                                  object? targetContext, object? state) => Validate(sender, e, sourceContext);
 
     public override bool Execute(object? sender, DragEventArgs e, object? sourceContext,
                                  object? targetContext, object? state)
@@ -75,24 +72,24 @@ public class DataGridDragAndDropBehavior<T> : DropHandlerBase where T : class
         if (!Validate(sender, e, sourceContext))
             return false;
 
-        if (_dnd.SrcDataGrid != _dnd.DestDataGrid && _dnd.Direction == DragDirection.Down)
-            _dnd.DestIndex++;
-        else if (_dnd.SrcIndex > _dnd.DestIndex && _dnd.Direction == DragDirection.Down)
-            _dnd.DestIndex++;
-        else if (_dnd.SrcIndex < _dnd.DestIndex && _dnd.Direction == DragDirection.Up)
-            _dnd.DestIndex--;
+        if (this.dnd.SrcDataGrid != this.dnd.DestDataGrid && this.dnd.Direction == DragDirection.Down)
+            this.dnd.DestIndex++;
+        else if (this.dnd.SrcIndex > this.dnd.DestIndex && this.dnd.Direction == DragDirection.Down)
+            this.dnd.DestIndex++;
+        else if (this.dnd.SrcIndex < this.dnd.DestIndex && this.dnd.Direction == DragDirection.Up)
+            this.dnd.DestIndex--;
 
-        MoveItem(_dnd.SrcList, _dnd.DestList, _dnd.SrcIndex, _dnd.DestIndex);
-        _dnd.DestDataGrid.SelectedIndex = _dnd.DestIndex;
-        _dnd.DestDataGrid.ScrollIntoView(_dnd.DestList[_dnd.DestIndex], null);
-        _dnd.SrcDataGrid = null;
+        MoveItem(this.dnd.SrcList, this.dnd.DestList, this.dnd.SrcIndex, this.dnd.DestIndex);
+        this.dnd.DestDataGrid.SelectedIndex = this.dnd.DestIndex;
+        this.dnd.DestDataGrid.ScrollIntoView(this.dnd.DestList[this.dnd.DestIndex], null);
+        this.dnd.SrcDataGrid = null;
         return true;
     }
 
     public override void Enter(object? sender, DragEventArgs e, object? sourceContext,
                                object? targetContext)
     {
-        _dnd.SrcDataGrid ??= sender as DataGrid;
+        this.dnd.SrcDataGrid ??= sender as DataGrid;
         if (!Validate(sender, e, sourceContext))
         {
             e.DragEffects = DragDropEffects.None;
@@ -100,13 +97,13 @@ public class DataGridDragAndDropBehavior<T> : DropHandlerBase where T : class
             return;
         }
 
-        string className = _dnd.Direction switch
+        string className = this.dnd.Direction switch
         {
             DragDirection.Down => DraggingDownClassName,
             DragDirection.Up => DraggingUpClassName,
-            _ => throw new UnreachableException($"Invalid drag direction: {_dnd.Direction}")
+            _ => throw new UnreachableException($"Invalid drag direction: {this.dnd.Direction}")
         };
-        _dnd.DestDataGrid.Classes.Add(className);
+        this.dnd.DestDataGrid.Classes.Add(className);
 
         e.DragEffects |= DragDropEffects.Copy | DragDropEffects.Move | DragDropEffects.Link;
         e.Handled = true;
@@ -125,17 +122,17 @@ public class DataGridDragAndDropBehavior<T> : DropHandlerBase where T : class
         e.DragEffects |= DragDropEffects.Copy | DragDropEffects.Move | DragDropEffects.Link;
         e.Handled = true;
 
-        (string toAdd, string toRemove) classUpdate = _dnd.Direction switch
+        (string toAdd, string toRemove) = this.dnd.Direction switch
         {
             DragDirection.Down => (DraggingDownClassName, DraggingUpClassName),
             DragDirection.Up => (DraggingUpClassName, DraggingDownClassName),
-            _ => throw new UnreachableException($"Invalid drag direction: {_dnd.Direction}")
+            _ => throw new UnreachableException($"Invalid drag direction: {this.dnd.Direction}")
         };
-        if (_dnd.DestDataGrid.Classes.Contains(classUpdate.toAdd))
+        if (this.dnd.DestDataGrid.Classes.Contains(toAdd))
             return;
 
-        _dnd.DestDataGrid.Classes.Remove(classUpdate.toRemove);
-        _dnd.DestDataGrid.Classes.Add(classUpdate.toAdd);
+        this.dnd.DestDataGrid.Classes.Remove(toRemove);
+        this.dnd.DestDataGrid.Classes.Add(toAdd);
     }
 
     public override void Leave(object? sender, RoutedEventArgs e)
@@ -149,7 +146,7 @@ public class DataGridDragAndDropBehavior<T> : DropHandlerBase where T : class
     {
         RemoveDraggingClass(sender as DataGrid);
         base.Drop(sender, e, sourceContext, targetContext);
-        _dnd.SrcDataGrid = null;
+        this.dnd.SrcDataGrid = null;
     }
 
     private static void RemoveDraggingClass(DataGrid? dg)

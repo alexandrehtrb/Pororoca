@@ -44,10 +44,10 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
     private readonly Guid colId;
 
     private readonly DateTimeOffset colCreatedAt;
-    
+
     [Reactive]
     public bool IncludeSecretVariables { get; set; }
-    
+
     public override ObservableCollection<CollectionOrganizationItemViewModel> Items { get; }
 
     #endregion

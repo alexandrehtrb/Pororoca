@@ -52,7 +52,7 @@ internal class PostmanAuth
         {
             return ParseFromVariableArray(arr);
         }
-        
+
         return (string.Empty, string.Empty);
     }
 

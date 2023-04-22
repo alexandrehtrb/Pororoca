@@ -185,7 +185,7 @@ public sealed class RequestAuthViewModel : ViewModelBase
         if (result != null)
         {
             ClientCertificateAuthPemCertificateFilePath = result;
-        }        
+        }
     }
 
     private async Task SearchClientCertificatePemPrivateKeyFileAsync()

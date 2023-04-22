@@ -6,7 +6,7 @@ namespace Pororoca.Domain.Tests.Features.Entities.Pororoca.WebSockets;
 
 public static class WebSocketMessageTypeExtensionsTests
 {
-    
+
     [Theory]
     [InlineData(PororocaWebSocketMessageType.Text, WebSocketMessageType.Text)]
     [InlineData(PororocaWebSocketMessageType.Close, WebSocketMessageType.Close)]

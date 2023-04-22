@@ -82,7 +82,10 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
         this.onEnvironmentSetAsCurrent = onEnvironmentSetAsCurrent;
 
         Variables = new();
-        foreach (var v in env.Variables) { Variables.Add(new(Variables, v)); }
+        foreach (var v in env.Variables)
+        {
+            Variables.Add(new(Variables, v));
+        }
         IsCurrentEnvironment = env.IsCurrent;
         AddNewVariableCmd = ReactiveCommand.Create(AddNewVariable);
         SetAsCurrentEnvironmentCmd = ReactiveCommand.Create(SetAsCurrentEnvironment);

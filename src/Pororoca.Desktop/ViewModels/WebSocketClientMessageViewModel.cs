@@ -112,7 +112,7 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
 
     [Reactive]
     public string? ContentFileSrcPath { get; set; }
-    
+
     public ReactiveCommand<Unit, Unit> SearchContentFileCmd { get; }
 
     #endregion
@@ -205,7 +205,7 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
             rawContentSyntax: RawContentSyntax,
             fileSrcPath: ContentFileSrcPath,
             disableCompressionForThis: DisableCompressionForThisMessage);
-        
+
         return wsCliMsg;
     }
 

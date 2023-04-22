@@ -13,7 +13,7 @@ public sealed class PororocaWebSocketClientMessageToSend : PororocaWebSocketClie
 
     [JsonIgnore]
     public long BytesLength { get; set; } // cannot use BytesStream.Length because this cannot be re-read after stream closes
-    
+
     [JsonIgnore]
     public string? Text { get; set; }
 
@@ -45,7 +45,7 @@ public sealed class PororocaWebSocketClientMessageToSend : PororocaWebSocketClie
 
         if (DisableCompressionForThis)
             flags |= WebSocketMessageFlags.DisableCompression;
-        
+
         return flags;
     }
 

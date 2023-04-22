@@ -1,21 +1,21 @@
 using System.Text;
+using System.Text.RegularExpressions;
 using Avalonia.Platform.Storage;
 using Pororoca.Desktop.Localization;
-using Pororoca.Desktop.Views;
 using Pororoca.Desktop.ViewModels;
-using static Pororoca.Domain.Features.ExportCollection.PostmanCollectionV21Exporter;
+using Pororoca.Desktop.Views;
 using static Pororoca.Domain.Features.ExportCollection.PororocaCollectionExporter;
+using static Pororoca.Domain.Features.ExportCollection.PostmanCollectionV21Exporter;
 using static Pororoca.Domain.Features.ExportEnvironment.PororocaEnvironmentExporter;
 using static Pororoca.Domain.Features.ExportEnvironment.PostmanEnvironmentExporter;
 using static Pororoca.Domain.Features.ImportCollection.PororocaCollectionImporter;
 using static Pororoca.Domain.Features.ImportCollection.PostmanCollectionV21Importer;
 using static Pororoca.Domain.Features.ImportEnvironment.PororocaEnvironmentImporter;
 using static Pororoca.Domain.Features.ImportEnvironment.PostmanEnvironmentImporter;
-using System.Text.RegularExpressions;
 
 namespace Pororoca.Desktop.ExportImport;
 
-internal static class FileExporterImporter
+internal static partial class FileExporterImporter
 {
     internal const string PororocaCollectionExtension = "pororoca_collection.json";
     internal const string PostmanCollectionExtension = "postman_collection.json";
@@ -28,8 +28,10 @@ internal static class FileExporterImporter
     private const string PostmanEnvironmentExtensionGlob = $"*.{PostmanEnvironmentExtension}";
     private const string JsonExtensionGlob = $"*.json";
 
-    private static Regex pororocaSchemaRegex = new("schema\":\\s*\"Pororoca");
+    private static readonly Regex pororocaSchemaRegex = GeneratePororocaSchemaRegex();
 
+    [GeneratedRegex("schema\":\\s*\"Pororoca")]
+    private static partial Regex GeneratePororocaSchemaRegex();
 
     #region EXPORT COLLECTION
 
@@ -82,7 +84,7 @@ internal static class FileExporterImporter
 
     private static async Task ShowExportCollectionDialogAsync(CollectionViewModel cvm, FilePickerSaveOptions opts)
     {
-        var destFilePath = await SelectPathForFileToBeSavedAsync(opts);
+        string? destFilePath = await SelectPathForFileToBeSavedAsync(opts);
 
         if (destFilePath != null)
         {
@@ -147,7 +149,7 @@ internal static class FileExporterImporter
 
     private static async Task ShowExportEnvironmentDialogAsync(EnvironmentViewModel evm, FilePickerSaveOptions opts)
     {
-        var destFilePath = await SelectPathForFileToBeSavedAsync(opts);
+        string? destFilePath = await SelectPathForFileToBeSavedAsync(opts);
 
         if (destFilePath != null)
         {

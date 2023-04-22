@@ -1,8 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using AvaloniaEdit;
-using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.TextEditorConfig;
+using Pororoca.Desktop.ViewModels;
 using Pororoca.Domain.Features.Common;
 
 namespace Pororoca.Desktop.Views;
@@ -17,10 +17,10 @@ public class WebSocketClientMessageView : UserControl
     public WebSocketClientMessageView()
     {
         InitializeComponent();
-        
+
         var rawContentTextEditor = this.FindControl<TextEditor>("RawContentEditor");
         this.rawContentEditorTextMateInstallation = TextEditorConfiguration.Setup(rawContentTextEditor!, true);
-        
+
         this.syntaxModeCombo = this.FindControl<ComboBox>("RawContentSyntaxSelector")!;
         this.syntaxModeCombo.SelectionChanged += OnSelectedRawSyntaxChanged;
 

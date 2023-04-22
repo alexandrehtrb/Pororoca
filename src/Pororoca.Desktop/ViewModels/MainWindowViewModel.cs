@@ -74,7 +74,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     [Reactive]
     public bool IsWebSocketClientMessageViewVisible { get; set; }
-    
+
     [Reactive]
     public WebSocketClientMessageViewModel? WebSocketClientMessageViewDataCtx { get; set; }
 

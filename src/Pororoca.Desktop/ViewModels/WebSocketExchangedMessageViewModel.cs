@@ -49,7 +49,7 @@ public sealed class WebSocketExchangedMessageViewModel : ViewModelBase
             }
             else if (IsClientMessageThatCanBeSaved)
             {
-                var ms = (MemoryStream) ((PororocaWebSocketClientMessageToSend) this.wsMsg).BytesStream;
+                var ms = (MemoryStream)((PororocaWebSocketClientMessageToSend)this.wsMsg).BytesStream;
                 return ms.ToArray();
             }
             else
@@ -80,9 +80,9 @@ public sealed class WebSocketExchangedMessageViewModel : ViewModelBase
     private void SetupTexts()
     {
         if (this.wsMsg is PororocaWebSocketServerMessage wsSrvMsg)
-            SetupTexts(wsSrvMsg.Direction, wsSrvMsg.MessageType, wsSrvMsg.Bytes.Length, (DateTimeOffset) wsSrvMsg.ReceivedAtUtc!, wsSrvMsg.Text);
+            SetupTexts(wsSrvMsg.Direction, wsSrvMsg.MessageType, wsSrvMsg.Bytes.Length, (DateTimeOffset)wsSrvMsg.ReceivedAtUtc!, wsSrvMsg.Text);
         else if (this.wsMsg is PororocaWebSocketClientMessageToSend wsCliMsg)
-            SetupTexts(wsCliMsg.Direction, wsCliMsg.MessageType, wsCliMsg.BytesLength, (DateTimeOffset) wsCliMsg.SentAtUtc!, wsCliMsg.Text);
+            SetupTexts(wsCliMsg.Direction, wsCliMsg.MessageType, wsCliMsg.BytesLength, (DateTimeOffset)wsCliMsg.SentAtUtc!, wsCliMsg.Text);
     }
 
     private void SetupTexts(PororocaWebSocketMessageDirection direction,

@@ -1,6 +1,10 @@
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Reactive;
+using System.Security.Authentication;
+using AvaloniaEdit.Document;
+using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
@@ -9,16 +13,12 @@ using Pororoca.Domain.Features.TranslateRequest;
 using Pororoca.Domain.Features.VariableResolution;
 using Pororoca.Infrastructure.Features.Requester;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
-using static Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection.PororocaWebSocketConnectionValidator;
-using static Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection.PororocaWebSocketConnectionTranslator;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage.PororocaWebSocketClientMessageTranslator;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage.PororocaWebSocketClientMessageValidator;
-using System.Collections.Specialized;
-using System.Security.Authentication;
-using AvaloniaEdit.Document;
-using Pororoca.Desktop.ExportImport;
-using ReactiveUI.Fody.Helpers;
+using static Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection.PororocaWebSocketConnectionTranslator;
+using static Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection.PororocaWebSocketConnectionValidator;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -230,9 +230,9 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             IsInvalidClientMessageErrorVisible = value is not null;
             InvalidClientMessageError = value switch
             {
-                TranslateRequestErrors.WebSocketNotConnected  => Localizer.Instance["RequestValidation/WebSocketNotConnected"],
-                TranslateRequestErrors.WebSocketClientMessageContentFileNotFound  => Localizer.Instance["RequestValidation/WebSocketClientMessageContentFileNotFound"],
-                TranslateRequestErrors.WebSocketUnknownClientMessageTranslationError  => Localizer.Instance["RequestValidation/WebSocketUnknownClientMessageTranslationError"],
+                TranslateRequestErrors.WebSocketNotConnected => Localizer.Instance["RequestValidation/WebSocketNotConnected"],
+                TranslateRequestErrors.WebSocketClientMessageContentFileNotFound => Localizer.Instance["RequestValidation/WebSocketClientMessageContentFileNotFound"],
+                TranslateRequestErrors.WebSocketUnknownClientMessageTranslationError => Localizer.Instance["RequestValidation/WebSocketUnknownClientMessageTranslationError"],
                 _ => Localizer.Instance["RequestValidation/WebSocketUnknownClientMessageTranslationError"]
             };
         }
@@ -247,7 +247,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     public bool IsSendingAMessage { get; set; }
 
     public ObservableCollection<WebSocketExchangedMessageViewModel> ExchangedMessages { get; }
-    
+
     [Reactive]
     public int MessageToSendSelectedIndex { get; set; }
 
@@ -550,7 +550,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         IsConnecting = state == PororocaWebSocketConnectorState.Connecting;
         IsDisconnecting = state == PororocaWebSocketConnectorState.Disconnecting;
         IsConnected = state == PororocaWebSocketConnectorState.Connected;
-        ConnectionExceptionContent = ex?.ToString();        
+        ConnectionExceptionContent = ex?.ToString();
         if (ex is not null)
         {
             // switching to Exception tab
@@ -568,7 +568,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         IsSendingAMessage = isSendingAMessage;
 
     private async Task ConnectAsync()
-    {        
+    {
         var wsConn = ToWebSocketConnection();
         bool disableTlsVerification = ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled;
 
@@ -642,7 +642,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
                 InvalidClientMessageErrorCode = null;
                 await this.connector.SendMessageAsync(resolvedMsgToSend!);
             }
-        }        
+        }
     }
 
     private void OnConnectorExchangedMessagesUpdated(object? sender, NotifyCollectionChangedEventArgs e)
@@ -655,7 +655,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         {
             foreach (object newItem in e.NewItems!)
             {
-                var msg = (PororocaWebSocketMessage) newItem;
+                var msg = (PororocaWebSocketMessage)newItem;
                 ExchangedMessages.Insert(0, new(msg));
             }
         }
@@ -686,13 +686,13 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         if (SelectedExchangedMessage is not null && SelectedExchangedMessage.CanBeSavedToFile)
         {
             string initialFileName = GenerateDefaultInitialFileName(SelectedExchangedMessage);
-            
+
             string? saveFileOutputPath = await FileExporterImporter.SelectPathForFileToBeSavedAsync(initialFileName);
             if (saveFileOutputPath != null)
             {
                 const int fileStreamBufferSize = 4096;
                 using FileStream fs = new(saveFileOutputPath, FileMode.Create, FileAccess.Write, FileShare.None, fileStreamBufferSize, useAsync: true);
-                await fs.WriteAsync((Memory<byte>) SelectedExchangedMessage.Bytes!);
+                await fs.WriteAsync((Memory<byte>)SelectedExchangedMessage.Bytes!);
             }
         }
     }

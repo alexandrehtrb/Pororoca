@@ -21,7 +21,7 @@ public static class AvailablePororocaRequestSelectionOptions
         1.1m,
         2.0m,
         3.0m);
-    
+
     public static readonly IImmutableList<decimal> AvailableHttpVersionsForWebSockets = ImmutableList.Create(
         1.1m,
         2.0m);

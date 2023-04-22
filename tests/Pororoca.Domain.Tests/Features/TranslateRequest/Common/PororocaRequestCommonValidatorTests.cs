@@ -1,9 +1,7 @@
 using Pororoca.Domain.Features.Entities.Pororoca;
-using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using Pororoca.Domain.Features.TranslateRequest;
 using Xunit;
 using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonValidator;
-using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonTranslator;
-using Pororoca.Domain.Features.TranslateRequest;
 
 namespace Pororoca.Domain.Tests.Features.TranslateRequest.Common;
 
@@ -199,7 +197,7 @@ public static class PororocaRequestCommonValidatorTests
         customAuth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertPath}}", null, "{{CertPassword}}");
 
         // WHEN AND THEN
-        Assert.True(CheckClientCertificateFilesAndPassword(col, mockFileExists, customAuth, out string? errorCode));        
+        Assert.True(CheckClientCertificateFilesAndPassword(col, mockFileExists, customAuth, out string? errorCode));
         Assert.Null(errorCode);
     }
 
@@ -220,7 +218,7 @@ public static class PororocaRequestCommonValidatorTests
         customAuth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertPath}}", "{{CertPrvKeyPath}}", "{{CertPassword}}");
 
         // WHEN AND THEN
-        Assert.True(CheckClientCertificateFilesAndPassword(col, mockFileExists, customAuth, out string? errorCode));        
+        Assert.True(CheckClientCertificateFilesAndPassword(col, mockFileExists, customAuth, out string? errorCode));
         Assert.Null(errorCode);
     }
 

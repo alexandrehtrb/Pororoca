@@ -1,22 +1,15 @@
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
-using Xunit;
-using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonValidator;
-using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonTranslator;
 using Pororoca.Domain.Features.TranslateRequest;
+using Xunit;
+using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonTranslator;
 
 namespace Pororoca.Domain.Tests.Features.TranslateRequest.Common;
 
 public static class PororocaRequestCommonTranslatorTests
 {
-    #region MOCKERS
 
-    private static HttpVersionAvailableVerifier MockHttpVersionOSVerifier(bool valid, string? errorCode) =>
-        (decimal x, out string? z) =>
-        {
-            z = errorCode;
-            return valid;
-        };
+    #region MOCKERS
 
     #endregion
 

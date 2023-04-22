@@ -11,7 +11,7 @@ public static class WebSocketMessageTypeExtensions
             WebSocketMessageType.Close => PororocaWebSocketMessageType.Close,
             _ => PororocaWebSocketMessageType.Binary
         };
-    
+
     public static WebSocketMessageType ToWebSocketMessageType(this PororocaWebSocketMessageType msgType) =>
         msgType switch
         {

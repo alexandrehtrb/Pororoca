@@ -28,7 +28,7 @@ public sealed class PororocaHttpResponse
 
     public bool WasCancelled =>
         Exception is TaskCanceledException;
-    
+
     public bool FailedDueToTlsVerification =>
         Exception?.InnerException is AuthenticationException aex
         && aex.Message.Contains("remote certificate is invalid", StringComparison.InvariantCultureIgnoreCase);
@@ -91,7 +91,7 @@ public sealed class PororocaHttpResponse
                 {
                     try
                     {
-                        return string.Format(nonUtf8BodyMessageToShow, this.GetBodyAsBinary()!.Length);
+                        return string.Format(nonUtf8BodyMessageToShow, GetBodyAsBinary()!.Length);
                     }
                     catch
                     {

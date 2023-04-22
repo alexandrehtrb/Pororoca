@@ -1,9 +1,9 @@
+using System.Buffers;
 using System.Collections.ObjectModel;
 using System.Net.WebSockets;
+using System.Threading.Channels;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage;
-using System.Threading.Channels;
-using System.Buffers;
 
 namespace Pororoca.Infrastructure.Features.Requester;
 

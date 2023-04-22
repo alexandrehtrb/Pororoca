@@ -1,6 +1,6 @@
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
-using Pororoca.Infrastructure.Features.Requester;
 using Pororoca.Domain.Features.VariableResolution;
+using Pororoca.Infrastructure.Features.Requester;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage.PororocaWebSocketClientMessageTranslator;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage.PororocaWebSocketClientMessageValidator;
 
@@ -53,7 +53,7 @@ public sealed class PororocaTestWebSocketConnector : PororocaWebSocketConnector
         {
             var waitForSendingTask = Task.Delay(waitingTimeInSeconds);
             var sendingTask = base.SendMessageAsync(resolvedMsgToSend!).AsTask();
-            await Task.WhenAll(waitForSendingTask, sendingTask);            
+            await Task.WhenAll(waitForSendingTask, sendingTask);
         }
     }
 

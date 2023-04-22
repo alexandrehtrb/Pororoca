@@ -67,7 +67,7 @@ public abstract class CollectionOrganizationItemViewModel : ViewModelBase, IColl
 
     public virtual void DeleteThis() =>
         Parent.DeleteSubItem(this);
-    
+
     public void SetAsItemInFocus(ViewModelBase vm, bool show)
     {
         if (show)

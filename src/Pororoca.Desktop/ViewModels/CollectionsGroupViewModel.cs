@@ -132,7 +132,7 @@ public sealed class CollectionsGroupViewModel : CollectionOrganizationItemParent
                         .Select(o => o.Clone())
                         .Cast<PororocaEnvironment>()
                         .ToList();
-    
+
     public IList<PororocaWebSocketClientMessage> FetchCopiesOfWebSocketClientMessages() =>
         this.copiedDomainObjs.Where(o => o is PororocaWebSocketClientMessage)
                         .Select(o => o.Clone())
