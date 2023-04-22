@@ -208,16 +208,33 @@
                 <ColumnDefinition Width="*" />
               </Grid.ColumnDefinitions>
               <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
               </Grid.RowDefinitions>
-              <DataGrid
+              <Button
                   Grid.Column="0"
                   Grid.Row="0"
+                  Height="24"
+                  Width="24"
+                  Margin="12,0,0,0"
+                  Classes="Primary"
+                  Command="{Binding AddNewRequestHeaderCmd}">
+                <Button.Content>
+                  <Image
+                      Source="/Assets/Images/icon_white_add.png"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center"
+                      Width="16"
+                      Height="16" />
+                </Button.Content>
+              </Button>
+              <DataGrid
+                  Grid.Column="0"
+                  Grid.Row="1"
+                  Margin="0,12,0,0"
                   VerticalAlignment="Stretch"
                   AutoGenerateColumns="False"
                   Items="{Binding RequestHeaders}"
-                  SelectedItem="{Binding Path=SelectedRequestHeader, Mode=TwoWay}"
                   CanUserResizeColumns="True"
                   Classes="draggable">
                 <i:Interaction.Behaviors>
@@ -227,44 +244,44 @@
                 </i:Interaction.Behaviors>
                 <DataGrid.Columns>
                   <DataGridCheckBoxColumn
-                      Width="0.22*"
+                      Width="0.19*"
                       Binding="{Binding Enabled}">
                     <DataGridCheckBoxColumn.Header>
                       <TextBlock Text="{i18n:Localize HeaderEnabled, Context=HttpRequest}" />
                     </DataGridCheckBoxColumn.Header>
                   </DataGridCheckBoxColumn>
                   <DataGridTextColumn
-                      Width="0.33*"
+                      Width="0.32*"
                       Binding="{Binding Key}">
                     <DataGridTextColumn.Header>
                       <TextBlock Text="{i18n:Localize HeaderName, Context=HttpRequest}" />
                     </DataGridTextColumn.Header>
                   </DataGridTextColumn>
                   <DataGridTextColumn
-                      Width="0.45*"
+                      Width="0.37*"
                       Binding="{Binding Value}">
                     <DataGridTextColumn.Header>
                       <TextBlock Text="{i18n:Localize HeaderValue, Context=HttpRequest}" />
                     </DataGridTextColumn.Header>
                   </DataGridTextColumn>
+                  <DataGridTemplateColumn
+                      Width="0.12*"
+                      Header="">
+                    <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                        <Button
+                            Command="{Binding RemoveParamCmd}"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            Classes="Trash">
+                        </Button>
+                      </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
                 </DataGrid.Columns>
               </DataGrid>
-              <StackPanel
-                  Grid.Column="0"
-                  Grid.Row="1"
-                  Orientation="Horizontal"
-                  Margin="0,12,0,0">
-                <Button
-                    Content="{i18n:Localize HeaderAdd, Context=HttpRequest}"
-                    Margin="0,0,6,0"
-                    Command="{Binding AddNewRequestHeaderCmd}"
-                    Classes="Primary" />
-                <Button
-                    Content="{i18n:Localize HeaderRemove, Context=HttpRequest}"
-                    Margin="6,0,0,0"
-                    Command="{Binding RemoveSelectedRequestHeaderCmd}"
-                    Classes="Secondary" />
-              </StackPanel>
             </Grid>
           </TabItem>
           <!-- REQUEST BODY -->
@@ -292,7 +309,7 @@
 
                 <ComboBox
                     Height="36"
-                    Width="130"
+                    Width="140"
                     FontSize="14"
                     FontWeight="Light"
                     VerticalContentAlignment="Center"
@@ -327,7 +344,7 @@
                 <AutoCompleteBox
                     Name="RequestBodyRawContentTypeSelector"
                     Height="36"
-                    Width="200"
+                    Width="190"
                     FontSize="14"
                     HorizontalAlignment="Left"
                     Watermark="{i18n:Localize BodyRawContentTypeWatermark, Context=HttpRequest}"
@@ -411,16 +428,31 @@
                   <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                  <RowDefinition Height="*" />
                   <RowDefinition Height="Auto" />
+                  <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <DataGrid
+                <Button
                     Grid.Column="0"
                     Grid.Row="0"
-                    Margin="-12,0,-12,0"
+                    Height="24"
+                    Width="24"
+                    Classes="Primary"
+                    Command="{Binding AddNewUrlEncodedParamCmd}">
+                  <Button.Content>
+                    <Image
+                        Source="/Assets/Images/icon_white_add.png"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Width="16"
+                        Height="16" />
+                  </Button.Content>
+                </Button>
+                <DataGrid
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Margin="-12,12,-12,0"
                     AutoGenerateColumns="False"
                     Items="{Binding UrlEncodedParams}"
-                    SelectedItem="{Binding Path=SelectedUrlEncodedParam, Mode=TwoWay}"
                     CanUserResizeColumns="True"
                     Classes="draggable">
                   <i:Interaction.Behaviors>
@@ -430,44 +462,44 @@
                   </i:Interaction.Behaviors>
                   <DataGrid.Columns>
                     <DataGridCheckBoxColumn
-                        Width="0.22*"
+                        Width="0.19*"
                         Binding="{Binding Enabled}">
                       <DataGridCheckBoxColumn.Header>
                         <TextBlock Text="{i18n:Localize BodyUrlEncodedParamEnabled, Context=HttpRequest}" />
                       </DataGridCheckBoxColumn.Header>
                     </DataGridCheckBoxColumn>
                     <DataGridTextColumn
-                        Width="0.33*"
+                        Width="0.32*"
                         Binding="{Binding Key}">
                       <DataGridTextColumn.Header>
                         <TextBlock Text="{i18n:Localize BodyUrlEncodedParamName, Context=HttpRequest}" />
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                        Width="0.45*"
+                        Width="0.35*"
                         Binding="{Binding Value}">
                       <DataGridTextColumn.Header>
                         <TextBlock Text="{i18n:Localize BodyUrlEncodedParamValue, Context=HttpRequest}" />
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
+                    <DataGridTemplateColumn
+                        Width="0.14*"
+                        Header="">
+                      <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                          <Button
+                              Command="{Binding RemoveParamCmd}"
+                              VerticalAlignment="Center"
+                              HorizontalAlignment="Center"
+                              HorizontalContentAlignment="Center"
+                              VerticalContentAlignment="Center"
+                              Classes="Trash">
+                          </Button>
+                        </DataTemplate>
+                      </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                   </DataGrid.Columns>
                 </DataGrid>
-                <StackPanel
-                    Grid.Column="0"
-                    Grid.Row="1"
-                    Orientation="Horizontal"
-                    Margin="-12,12,0,0">
-                  <Button
-                      Content="{i18n:Localize BodyUrlEncodedParamAdd, Context=HttpRequest}"
-                      Margin="0,0,6,0"
-                      Command="{Binding AddNewUrlEncodedParamCmd}"
-                      Classes="Primary" />
-                  <Button
-                      Content="{i18n:Localize BodyUrlEncodedParamRemove, Context=HttpRequest}"
-                      Margin="6,0,0,0"
-                      Command="{Binding RemoveSelectedUrlEncodedParamCmd}"
-                      Classes="Secondary" />
-                </StackPanel>
               </Grid>
               <!-- REQUEST BODY MULTIPART FORM DATA -->
               <Grid
@@ -480,17 +512,31 @@
                   <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                  <RowDefinition Height="*" />
                   <RowDefinition Height="Auto" />
+                  <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-
-                <DataGrid
+                <StackPanel
                     Grid.Column="0"
                     Grid.Row="0"
-                    Margin="-12,16,-12,0"
+                    Orientation="Horizontal"
+                    Margin="0,8,0,0">
+                  <Button
+                      Content="{i18n:Localize BodyFormDataTextParamAdd, Context=HttpRequest}"
+                      Margin="0,0,3,0"
+                      Command="{Binding AddNewFormDataTextParamCmd}"
+                      Classes="Primary" />
+                  <Button
+                      Content="{i18n:Localize BodyFormDataFileParamAdd, Context=HttpRequest}"
+                      Margin="3,0,0,0"
+                      Command="{Binding AddNewFormDataFileParamCmd}"
+                      Classes="Primary" />
+                </StackPanel>
+                <DataGrid
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Margin="-12,24,-12,0"
                     AutoGenerateColumns="False"
                     Items="{Binding FormDataParams}"
-                    SelectedItem="{Binding Path=SelectedFormDataParam, Mode=TwoWay}"
                     CanUserResizeColumns="True"
                     Classes="draggable">
                   <i:Interaction.Behaviors>
@@ -500,14 +546,14 @@
                   </i:Interaction.Behaviors>
                   <DataGrid.Columns>
                     <DataGridCheckBoxColumn
-                        Width="*"
+                        Width="0.11*"
                         Binding="{Binding Enabled}">
                       <DataGridCheckBoxColumn.Header>
                         <TextBlock Text="{i18n:Localize BodyFormDataParamEnabled, Context=HttpRequest}" />
                       </DataGridCheckBoxColumn.Header>
                     </DataGridCheckBoxColumn>
                     <DataGridTextColumn
-                        Width="*"
+                        Width="0.13*"
                         Binding="{Binding Type}"
                         IsReadOnly="True">
                       <DataGridTextColumn.Header>
@@ -515,50 +561,44 @@
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                        Width="2.5*"
+                        Width="0.2*"
                         Binding="{Binding Key}">
                       <DataGridTextColumn.Header>
                         <TextBlock Text="{i18n:Localize BodyFormDataParamName, Context=HttpRequest}" />
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                        Width="2.5*"
+                        Width="0.21*"
                         Binding="{Binding Value}">
                       <DataGridTextColumn.Header>
                         <TextBlock Text="{i18n:Localize BodyFormDataParamTextOrSrcPath, Context=HttpRequest}" />
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                        Width="2.5*"
+                        Width="0.23*"
                         Binding="{Binding ContentType}">
                       <DataGridTextColumn.Header>
                         <TextBlock Text="{i18n:Localize BodyFormDataParamContentType, Context=HttpRequest}" />
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
+                    <DataGridTemplateColumn
+                        Width="0.12*"
+                        Header="">
+                      <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                          <Button
+                              Command="{Binding RemoveParamCmd}"
+                              VerticalAlignment="Center"
+                              HorizontalAlignment="Center"
+                              HorizontalContentAlignment="Center"
+                              VerticalContentAlignment="Center"
+                              Classes="Trash">
+                          </Button>
+                        </DataTemplate>
+                      </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                   </DataGrid.Columns>
                 </DataGrid>
-                <StackPanel
-                    Grid.Column="0"
-                    Grid.Row="1"
-                    Orientation="Horizontal"
-                    Margin="-12,12,0,0">
-                  <Button
-                      Content="{i18n:Localize BodyFormDataTextParamAdd, Context=HttpRequest}"
-                      Margin="0,0,6,0"
-                      Command="{Binding AddNewFormDataTextParamCmd}"
-                      Classes="Primary" />
-                  <Button
-                      Content="{i18n:Localize BodyFormDataFileParamAdd, Context=HttpRequest}"
-                      Margin="0,0,6,0"
-                      Command="{Binding AddNewFormDataFileParamCmd}"
-                      Classes="Primary" />
-                  <Button
-                      Content="{i18n:Localize BodyFormDataParamRemove, Context=HttpRequest}"
-                      Margin="6,0,0,0"
-                      Command="{Binding RemoveSelectedFormDataParamCmd}"
-                      Classes="Secondary" />
-                </StackPanel>
-
               </Grid>
               <!-- REQUEST BODY GRAPH QL -->
               <Grid

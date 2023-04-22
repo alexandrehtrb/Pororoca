@@ -172,18 +172,14 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     #region CONNECTION OPTION HEADERS
 
     public ObservableCollection<KeyValueParamViewModel> ConnectionRequestHeaders { get; }
-    public KeyValueParamViewModel? SelectedConnectionRequestHeader { get; set; }
     public ReactiveCommand<Unit, Unit> AddNewConnectionRequestHeaderCmd { get; }
-    public ReactiveCommand<Unit, Unit> RemoveSelectedConnectionRequestHeaderCmd { get; }
 
     #endregion
 
     #region CONNECTION OPTION SUBPROTOCOLS
 
     public ObservableCollection<KeyValueParamViewModel> Subprotocols { get; }
-    public KeyValueParamViewModel? SelectedSubprotocol { get; set; }
     public ReactiveCommand<Unit, Unit> AddNewSubprotocolCmd { get; }
-    public ReactiveCommand<Unit, Unit> RemoveSelectedSubprotocolCmd { get; }
 
     #endregion
 
@@ -357,17 +353,29 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
         #region CONNECTION OPTION HEADERS
 
-        ConnectionRequestHeaders = new(ws.Headers?.Select(h => new KeyValueParamViewModel(h)) ?? Array.Empty<KeyValueParamViewModel>());
+        ConnectionRequestHeaders = new();
+        if (ws.Headers is not null)
+        {
+            foreach (var h in ws.Headers)
+            {
+                ConnectionRequestHeaders.Add(new(ConnectionRequestHeaders, h));
+            }
+        }
         AddNewConnectionRequestHeaderCmd = ReactiveCommand.Create(AddNewConnectionRequestHeader);
-        RemoveSelectedConnectionRequestHeaderCmd = ReactiveCommand.Create(RemoveSelectedConnectionRequestHeader);
 
         #endregion
 
         #region CONNECTION OPTION SUBPROTOCOLS
 
-        Subprotocols = new(ws.Subprotocols?.Select(s => new KeyValueParamViewModel(s)) ?? Array.Empty<KeyValueParamViewModel>());
+        Subprotocols = new();
+        if (ws.Subprotocols is not null)
+        {
+            foreach (var s in ws.Subprotocols)
+            {
+                Subprotocols.Add(new(Subprotocols, s));
+            }
+        }
         AddNewSubprotocolCmd = ReactiveCommand.Create(AddNewSubprotocol);
-        RemoveSelectedSubprotocolCmd = ReactiveCommand.Create(RemoveSelectedSubprotocol);
 
         #endregion
 
@@ -493,40 +501,14 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     #region CONNECTION REQUEST HEADERS
 
     private void AddNewConnectionRequestHeader() =>
-        ConnectionRequestHeaders.Add(new(true, string.Empty, string.Empty));
-
-    private void RemoveSelectedConnectionRequestHeader()
-    {
-        if (SelectedConnectionRequestHeader != null)
-        {
-            ConnectionRequestHeaders.Remove(SelectedConnectionRequestHeader);
-            SelectedConnectionRequestHeader = null;
-        }
-        else if (ConnectionRequestHeaders.Count == 1)
-        {
-            ConnectionRequestHeaders.Clear();
-        }
-    }
+        ConnectionRequestHeaders.Add(new(ConnectionRequestHeaders, true, string.Empty, string.Empty));
 
     #endregion
 
     #region CONNECTION OPTION SUBPROTOCOLS
 
     private void AddNewSubprotocol() =>
-        Subprotocols.Add(new(true, string.Empty, string.Empty));
-
-    private void RemoveSelectedSubprotocol()
-    {
-        if (SelectedSubprotocol != null)
-        {
-            Subprotocols.Remove(SelectedSubprotocol);
-            SelectedSubprotocol = null;
-        }
-        else if (Subprotocols.Count == 1)
-        {
-            Subprotocols.Clear();
-        }
-    }
+        Subprotocols.Add(new(Subprotocols, true, string.Empty, string.Empty));
 
     #endregion
 

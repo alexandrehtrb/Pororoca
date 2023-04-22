@@ -76,6 +76,18 @@
             <Setter Property="BorderBrush" Value = "#E3A068" />
         </Style>
 
+        <Style Selector="Button.Trash">
+            <Setter Property="Background">
+                <ImageBrush Source="/Assets/Images/icon_white_remove.png" />
+            </Setter>
+        </Style>
+
+        <Style Selector="Button.Trash:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background">
+                <ImageBrush Source="/Assets/Images/icon_brown_remove.png" />
+            </Setter>
+        </Style>
+
         <Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
             <Setter Property="Background" Value="#183e67" />
         </Style>

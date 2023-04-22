@@ -1,11 +1,16 @@
+using System.Collections.ObjectModel;
+using System.Reactive;
 using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
 
 public sealed class HttpRequestFormDataParamViewModel : ViewModelBase
 {
+    private readonly ObservableCollection<HttpRequestFormDataParamViewModel> parentCollection;
+
     public PororocaHttpRequestFormDataParamType ParamType { get; init; }
 
     [Reactive]
@@ -23,16 +28,20 @@ public sealed class HttpRequestFormDataParamViewModel : ViewModelBase
     [Reactive]
     public string ContentType { get; set; }
 
-    public HttpRequestFormDataParamViewModel(PororocaHttpRequestFormDataParam p)
+    public ReactiveCommand<Unit, Unit> RemoveParamCmd { get; }
+
+    public HttpRequestFormDataParamViewModel(ObservableCollection<HttpRequestFormDataParamViewModel> parentCollection, PororocaHttpRequestFormDataParam p)
     {
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
 
+        this.parentCollection = parentCollection;
         ParamType = p.Type;
         Enabled = p.Enabled;
         Type = ResolveParamTypeText();
         Key = p.Key;
         Value = p.FileSrcPath ?? p.TextValue ?? string.Empty;
         ContentType = p.ContentType;
+        RemoveParamCmd = ReactiveCommand.Create(RemoveParam);
     }
 
     public PororocaHttpRequestFormDataParam ToFormDataParam()
@@ -60,4 +69,7 @@ public sealed class HttpRequestFormDataParamViewModel : ViewModelBase
             PororocaHttpRequestFormDataParamType.File => Localizer.Instance["HttpRequest/BodyFormDataParamTypeFile"],
             _ => Localizer.Instance["HttpRequest/BodyFormDataParamTypeText"]
         };
+
+    private void RemoveParam() =>
+        this.parentCollection.Remove(this);
 }

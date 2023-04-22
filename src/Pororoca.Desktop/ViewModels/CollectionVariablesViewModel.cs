@@ -12,18 +12,17 @@ public sealed class CollectionVariablesViewModel : CollectionOrganizationItemVie
     #region COLLECTION VARIABLES
 
     public ObservableCollection<VariableViewModel> Variables { get; }
-    public VariableViewModel? SelectedVariable { get; set; }
     public ReactiveCommand<Unit, Unit> AddNewVariableCmd { get; }
-    public ReactiveCommand<Unit, Unit> RemoveSelectedVariableCmd { get; }
 
     #endregion
 
     public CollectionVariablesViewModel(ICollectionOrganizationItemParentViewModel parentVm,
                                         PororocaCollection col) : base(parentVm, col.Name)
     {
-        Variables = new(col.Variables.Select(v => new VariableViewModel(v)));
         AddNewVariableCmd = ReactiveCommand.Create(AddNewVariable);
-        RemoveSelectedVariableCmd = ReactiveCommand.Create(RemoveSelectedVariable);
+
+        Variables = new();
+        foreach (var v in col.Variables) { Variables.Add(new(Variables, v)); }
     }
 
     #region COLLECTION ORGANIZATION
@@ -36,20 +35,7 @@ public sealed class CollectionVariablesViewModel : CollectionOrganizationItemVie
     #region COLLECTION VARIABLES
 
     private void AddNewVariable() =>
-        Variables.Add(new(true, string.Empty, string.Empty, false));
-
-    private void RemoveSelectedVariable()
-    {
-        if (SelectedVariable != null)
-        {
-            Variables.Remove(SelectedVariable);
-            SelectedVariable = null;
-        }
-        else if (Variables.Count == 1)
-        {
-            Variables.Clear();
-        }
-    }
+        Variables.Add(new(Variables, true, string.Empty, string.Empty, false));
 
     public IEnumerable<PororocaVariable> ToVariables() =>
         Variables.Select(v => v.ToVariable());

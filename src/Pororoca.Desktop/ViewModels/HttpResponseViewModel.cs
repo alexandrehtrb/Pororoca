@@ -151,14 +151,14 @@ public sealed class HttpResponseViewModel : ViewModelBase
         {
             foreach (var kvp in resHeaders)
             {
-                ResponseHeadersAndTrailers.Add(new(true, kvp.Key, kvp.Value));
+                ResponseHeadersAndTrailers.Add(new(ResponseHeadersAndTrailers, true, kvp.Key, kvp.Value));
             }
         }
         if (resTrailers != null)
         {
             foreach (var kvp in resTrailers)
             {
-                ResponseHeadersAndTrailers.Add(new(true, kvp.Key, kvp.Value));
+                ResponseHeadersAndTrailers.Add(new(ResponseHeadersAndTrailers, true, kvp.Key, kvp.Value));
             }
         }
     }

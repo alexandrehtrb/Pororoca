@@ -86,9 +86,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #region REQUEST HEADERS
 
     public ObservableCollection<KeyValueParamViewModel> RequestHeaders { get; }
-    public KeyValueParamViewModel? SelectedRequestHeader { get; set; }
     public ReactiveCommand<Unit, Unit> AddNewRequestHeaderCmd { get; }
-    public ReactiveCommand<Unit, Unit> RemoveSelectedRequestHeaderCmd { get; }
 
     #endregion
 
@@ -161,9 +159,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     public bool IsRequestBodyModeUrlEncodedSelected { get; set; }
 
     public ObservableCollection<KeyValueParamViewModel> UrlEncodedParams { get; }
-    public KeyValueParamViewModel? SelectedUrlEncodedParam { get; set; }
     public ReactiveCommand<Unit, Unit> AddNewUrlEncodedParamCmd { get; }
-    public ReactiveCommand<Unit, Unit> RemoveSelectedUrlEncodedParamCmd { get; }
 
     #endregion
 
@@ -173,10 +169,8 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     public bool IsRequestBodyModeFormDataSelected { get; set; }
 
     public ObservableCollection<HttpRequestFormDataParamViewModel> FormDataParams { get; }
-    public HttpRequestFormDataParamViewModel? SelectedFormDataParam { get; set; }
     public ReactiveCommand<Unit, Unit> AddNewFormDataTextParamCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewFormDataFileParamCmd { get; }
-    public ReactiveCommand<Unit, Unit> RemoveSelectedFormDataParamCmd { get; }
 
     #endregion
 
@@ -258,9 +252,15 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         int reqHttpVersionSelectionIndex = RequestHttpVersionSelectionOptions.IndexOf(FormatHttpVersionString(req.HttpVersion));
         RequestHttpVersionSelectedIndex = reqHttpVersionSelectionIndex >= 0 ? reqHttpVersionSelectionIndex : 0;
 
-        RequestHeaders = new(req.Headers?.Select(h => new KeyValueParamViewModel(h)) ?? Array.Empty<KeyValueParamViewModel>());
+        RequestHeaders = new();
+        if (req.Headers is not null)
+        {
+            foreach (var h in req.Headers)
+            {
+                RequestHeaders.Add(new(RequestHeaders, h));
+            }
+        }
         AddNewRequestHeaderCmd = ReactiveCommand.Create(AddNewHeader);
-        RemoveSelectedRequestHeaderCmd = ReactiveCommand.Create(RemoveSelectedHeader);
         #endregion
 
         #region REQUEST BODY
@@ -300,14 +300,26 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         RequestBodyFileSrcPath = req.Body?.FileSrcPath;
         SearchRequestBodyRawFileCmd = ReactiveCommand.CreateFromTask(SearchRequestBodyRawFilePathAsync);
         // URL ENCODED
-        UrlEncodedParams = new(req.Body?.UrlEncodedValues?.Select(p => new KeyValueParamViewModel(p)) ?? Array.Empty<KeyValueParamViewModel>());
+        UrlEncodedParams = new();
+        if (req.Body?.UrlEncodedValues is not null)
+        {
+            foreach (var v in req.Body.UrlEncodedValues)
+            {
+                UrlEncodedParams.Add(new(UrlEncodedParams, v));
+            }
+        }
         AddNewUrlEncodedParamCmd = ReactiveCommand.Create(AddNewUrlEncodedParam);
-        RemoveSelectedUrlEncodedParamCmd = ReactiveCommand.Create(RemoveSelectedUrlEncodedParam);
         // FORM DATA
-        FormDataParams = new(req.Body?.FormDataValues?.Select(p => new HttpRequestFormDataParamViewModel(p)) ?? Array.Empty<HttpRequestFormDataParamViewModel>());
+        FormDataParams = new();
+        if (req.Body?.FormDataValues is not null)
+        {
+            foreach (var v in req.Body.FormDataValues)
+            {
+                FormDataParams.Add(new(FormDataParams, v));
+            }
+        }
         AddNewFormDataTextParamCmd = ReactiveCommand.Create(AddNewFormDataTextParam);
         AddNewFormDataFileParamCmd = ReactiveCommand.CreateFromTask(AddNewFormDataFileParam);
-        RemoveSelectedFormDataParamCmd = ReactiveCommand.Create(RemoveSelectedFormDataParam);
         // GRAPHQL
         RequestBodyGraphQlQuery = req.Body?.GraphQlValues?.Query;
         RequestBodyGraphQlVariables = req.Body?.GraphQlValues?.Variables;
@@ -362,20 +374,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #region REQUEST HEADERS
 
     private void AddNewHeader() =>
-        RequestHeaders.Add(new(true, string.Empty, string.Empty));
-
-    private void RemoveSelectedHeader()
-    {
-        if (SelectedRequestHeader != null)
-        {
-            RequestHeaders.Remove(SelectedRequestHeader);
-            SelectedRequestHeader = null;
-        }
-        else if (RequestHeaders.Count == 1)
-        {
-            RequestHeaders.Clear();
-        }
-    }
+        RequestHeaders.Add(new(RequestHeaders, true, string.Empty, string.Empty));
 
     #endregion
 
@@ -403,20 +402,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #region REQUEST BODY URL ENCODED
 
     private void AddNewUrlEncodedParam() =>
-        UrlEncodedParams.Add(new(true, string.Empty, string.Empty));
-
-    private void RemoveSelectedUrlEncodedParam()
-    {
-        if (SelectedUrlEncodedParam != null)
-        {
-            UrlEncodedParams.Remove(SelectedUrlEncodedParam);
-            SelectedUrlEncodedParam = null;
-        }
-        else if (UrlEncodedParams.Count == 1)
-        {
-            UrlEncodedParams.Clear();
-        }
-    }
+        UrlEncodedParams.Add(new(UrlEncodedParams, true, string.Empty, string.Empty));
 
     #endregion
 
@@ -426,7 +412,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     {
         PororocaHttpRequestFormDataParam p = new(true, string.Empty);
         p.SetTextValue(string.Empty, MimeTypesDetector.DefaultMimeTypeForText);
-        FormDataParams.Add(new(p));
+        FormDataParams.Add(new(FormDataParams, p));
     }
 
     private async Task AddNewFormDataFileParam()
@@ -439,20 +425,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
             PororocaHttpRequestFormDataParam p = new(true, string.Empty);
             p.SetFileValue(fileSrcPath, mimeType);
-            FormDataParams.Add(new(p));
-        }
-    }
-
-    private void RemoveSelectedFormDataParam()
-    {
-        if (SelectedFormDataParam != null)
-        {
-            FormDataParams.Remove(SelectedFormDataParam);
-            SelectedFormDataParam = null;
-        }
-        else if (FormDataParams.Count == 1)
-        {
-            FormDataParams.Clear();
+            FormDataParams.Add(new(FormDataParams, p));
         }
     }
 

@@ -41,9 +41,7 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
     public bool IncludeSecretVariables { get; set; }
 
     public ObservableCollection<VariableViewModel> Variables { get; }
-    public VariableViewModel? SelectedVariable { get; set; }
     public ReactiveCommand<Unit, Unit> AddNewVariableCmd { get; }
-    public ReactiveCommand<Unit, Unit> RemoveSelectedVariableCmd { get; }
     public ReactiveCommand<Unit, Unit> SetAsCurrentEnvironmentCmd { get; }
 
     #endregion
@@ -83,12 +81,11 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
         this.envCreatedAt = env.CreatedAt;
         this.onEnvironmentSetAsCurrent = onEnvironmentSetAsCurrent;
 
-        Variables = new(env.Variables.Select(v => new VariableViewModel(v)));
+        Variables = new();
+        foreach (var v in env.Variables) { Variables.Add(new(Variables, v)); }
         IsCurrentEnvironment = env.IsCurrent;
         AddNewVariableCmd = ReactiveCommand.Create(AddNewVariable);
-        RemoveSelectedVariableCmd = ReactiveCommand.Create(RemoveSelectedVariable);
         SetAsCurrentEnvironmentCmd = ReactiveCommand.Create(SetAsCurrentEnvironment);
-
         #endregion
     }
 
@@ -133,20 +130,7 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
         this.onEnvironmentSetAsCurrent(this);
 
     private void AddNewVariable() =>
-        Variables.Add(new(true, string.Empty, string.Empty, false));
-
-    private void RemoveSelectedVariable()
-    {
-        if (SelectedVariable != null)
-        {
-            Variables.Remove(SelectedVariable);
-            SelectedVariable = null;
-        }
-        else if (Variables.Count == 1)
-        {
-            Variables.Clear();
-        }
-    }
+        Variables.Add(new(Variables, true, string.Empty, string.Empty, false));
 
     public PororocaEnvironment ToEnvironment()
     {

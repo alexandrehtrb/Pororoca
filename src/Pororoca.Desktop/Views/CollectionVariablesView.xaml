@@ -27,8 +27,8 @@
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
-      <RowDefinition Height="*" />
       <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
 
@@ -43,13 +43,30 @@
         VerticalAlignment="Top"
         TextWrapping="Wrap" />
 
-    <DataGrid
+    <Button
         Grid.Column="0"
         Grid.Row="1"
+        Height="24"
+        Width="24"
         Margin="0,36,0,0"
+        Classes="Primary"
+        Command="{Binding AddNewVariableCmd}">
+      <Button.Content>
+        <Image
+            Source="/Assets/Images/icon_white_add.png"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Width="16"
+            Height="16" />
+      </Button.Content>
+    </Button>
+
+    <DataGrid
+        Grid.Column="0"
+        Grid.Row="2"
+        Margin="0,12,0,0"
         AutoGenerateColumns="False"
         Items="{Binding Variables}"
-        SelectedItem="{Binding Path=SelectedVariable, Mode=TwoWay}"
         CanUserResizeColumns="True"
         Classes="draggable">
       <DataGrid.Columns>
@@ -81,6 +98,22 @@
             <TextBlock Text="{i18n:Localize VariableIsSecret, Context=CollectionVariables}" />
           </DataGridCheckBoxColumn.Header>
         </DataGridCheckBoxColumn>
+        <DataGridTemplateColumn
+            Width="0.2*"
+            Header="">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <Button
+                  Command="{Binding RemoveVariableCmd}"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Center"
+                  HorizontalContentAlignment="Center"
+                  VerticalContentAlignment="Center"
+                  Classes="Trash">
+              </Button>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
       </DataGrid.Columns>
       <i:Interaction.Behaviors>
         <i:BehaviorCollection>
@@ -88,23 +121,6 @@
         </i:BehaviorCollection>
       </i:Interaction.Behaviors>
     </DataGrid>
-
-    <StackPanel
-        Grid.Column="0"
-        Grid.Row="2"
-        Orientation="Horizontal"
-        Margin="0,12,0,0">
-      <Button
-          Content="{i18n:Localize AddVariable, Context=CollectionVariables}"
-          Margin="0,0,6,0"
-          Command="{Binding AddNewVariableCmd}"
-          Classes="Primary" />
-      <Button
-          Content="{i18n:Localize RemoveVariable, Context=CollectionVariables}"
-          Margin="6,0,0,0"
-          Command="{Binding RemoveSelectedVariableCmd}"
-          Classes="Secondary" />
-    </StackPanel>
 
     <TextBlock
         Grid.Column="0"
