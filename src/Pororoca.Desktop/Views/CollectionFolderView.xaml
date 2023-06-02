@@ -7,11 +7,12 @@
     xmlns:controls="clr-namespace:Pororoca.Desktop.Controls;assembly=Pororoca.Desktop"
     xmlns:i18n="clr-namespace:Pororoca.Desktop.Localization"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    x:DataType="vm:CollectionFolderViewModel"
     mc:Ignorable="d"
     d:DesignWidth="1350"
     d:DesignHeight="700"
     x:Class="Pororoca.Desktop.Views.CollectionFolderView"
+    x:CompileBindings="True"
+    x:DataType="vm:CollectionFolderViewModel"
     FontSize="14">
 
   <StackPanel

@@ -1,4 +1,4 @@
-﻿<UserControl
+<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -12,8 +12,9 @@
     xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
     xmlns:idd="clr-namespace:Avalonia.Xaml.Interactions.DragAndDrop;assembly=Avalonia.Xaml.Interactions.DragAndDrop"
     xmlns:b="clr-namespace:Pororoca.Desktop.Behaviors;assembly=Pororoca.Desktop"
-    x:DataType="vm:WebSocketConnectionViewModel"
     x:Class="Pororoca.Desktop.Views.WebSocketConnectionView"
+    x:CompileBindings="True"
+    x:DataType="vm:WebSocketConnectionViewModel"
     mc:Ignorable="d"
     d:DesignWidth="1350"
     d:DesignHeight="700"
@@ -259,7 +260,7 @@
                   Grid.Column="0"
                   Grid.Row="1"
                   Margin="-12,12,-12,12"
-                  IsVisible="{Binding IsSelected, ElementName=wsScrReqOptionHeaders}">
+                  IsVisible="{ReflectionBinding IsSelected, ElementName=wsScrReqOptionHeaders}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
@@ -344,7 +345,7 @@
                   Grid.Column="0"
                   Grid.Row="1"
                   Margin="-12,12,-12,12"
-                  IsVisible="{Binding IsSelected, ElementName=wsScrReqOptionSubprotocols}">
+                  IsVisible="{ReflectionBinding IsSelected, ElementName=wsScrReqOptionSubprotocols}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
@@ -422,7 +423,7 @@
                   Grid.Column="0"
                   Grid.Row="1"
                   Margin="0,12,0,12"
-                  IsVisible="{Binding IsSelected, ElementName=wsScrReqOptionCompression}">
+                  IsVisible="{ReflectionBinding IsSelected, ElementName=wsScrReqOptionCompression}">
                 <CheckBox
                     x:Name="wsScrReqOptionCompressionEnable"
                     Content="{i18n:Localize EnableCompression, Context=WebSocketConnection}"
@@ -432,7 +433,7 @@
                     Margin="0,12,0,0"
                     Content="{i18n:Localize CompressionClientContextTakeover, Context=WebSocketConnection}"
                     IsChecked="{Binding CompressionClientContextTakeoverEnabled}"
-                    IsEnabled="{Binding IsChecked, ElementName=wsScrReqOptionCompressionEnable}" />
+                    IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}" />
 
                 <StackPanel
                     Orientation="Horizontal"
@@ -444,7 +445,7 @@
                       VerticalAlignment="Center"
                       Margin="0,0,6,0"
                       Text="{i18n:Localize CompressionClientMaxWindowBits, Context=WebSocketConnection}"
-                      IsEnabled="{Binding IsChecked, ElementName=wsScrReqOptionCompressionEnable}" />
+                      IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}" />
                   <NumericUpDown
                       Margin="6,0,0,0"
                       VerticalAlignment="Center"
@@ -452,14 +453,14 @@
                       Minimum="9"
                       Maximum="15"
                       Value="{Binding CompressionClientMaxWindowBits, Mode=TwoWay}"
-                      IsEnabled="{Binding IsChecked, ElementName=wsScrReqOptionCompressionEnable}" />
+                      IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}" />
                 </StackPanel>
 
                 <CheckBox
                     Margin="0,12,0,0"
                     Content="{i18n:Localize CompressionServerContextTakeover, Context=WebSocketConnection}"
                     IsChecked="{Binding CompressionServerContextTakeoverEnabled}"
-                    IsEnabled="{Binding IsChecked, ElementName=wsScrReqOptionCompressionEnable}" />
+                    IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}" />
 
                 <StackPanel
                     Orientation="Horizontal"
@@ -471,7 +472,7 @@
                       VerticalAlignment="Center"
                       Margin="0,0,6,0"
                       Text="{i18n:Localize CompressionServerMaxWindowBits, Context=WebSocketConnection}"
-                      IsEnabled="{Binding IsChecked, ElementName=wsScrReqOptionCompressionEnable}" />
+                      IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}" />
                   <NumericUpDown
                       Margin="6,0,0,0"
                       VerticalAlignment="Center"
@@ -479,7 +480,7 @@
                       Minimum="9"
                       Maximum="15"
                       Value="{Binding CompressionServerMaxWindowBits, Mode=TwoWay}"
-                      IsEnabled="{Binding IsChecked, ElementName=wsScrReqOptionCompressionEnable}" />
+                      IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}" />
                 </StackPanel>
               </StackPanel>
             </Grid>
@@ -742,7 +743,7 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Margin="12,6,12,24"
-            IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}"
+            IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}"
             Foreground="#D4D4D4"
             Background="#1E1E1E"
             HorizontalScrollBarVisibility="Auto"

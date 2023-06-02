@@ -11,11 +11,12 @@
     xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
     xmlns:idd="clr-namespace:Avalonia.Xaml.Interactions.DragAndDrop;assembly=Avalonia.Xaml.Interactions.DragAndDrop"
     xmlns:b="clr-namespace:Pororoca.Desktop.Behaviors;assembly=Pororoca.Desktop"
-    x:DataType="vm:HttpRequestViewModel"
     mc:Ignorable="d"
     d:DesignWidth="1350"
     d:DesignHeight="700"
     x:Class="Pororoca.Desktop.Views.HttpRequestView"
+    x:CompileBindings="True"
+    x:DataType="vm:HttpRequestViewModel"
     FontSize="14">
 
   <UserControl.Styles>
@@ -350,7 +351,7 @@
                     ItemsSource="{Binding AllMimeTypes}"
                     SelectedItem="{Binding RequestRawContentType, Mode=TwoWay}"
                     FilterMode="Contains"
-                    IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}" />
+                    IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}" />
               </StackPanel>
               <!-- REQUEST BODY RAW -->
               <AvalonEdit:TextEditor
@@ -360,7 +361,7 @@
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
                   Margin="0,12,0,0"
-                  IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}"
+                  IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}"
                   Foreground="#D4D4D4"
                   Background="#1E1E1E"
                   HorizontalScrollBarVisibility="Auto"
@@ -377,7 +378,7 @@
                   Grid.Row="1"
                   Margin="12,12,12,0"
                   VerticalAlignment="Stretch"
-                  IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionFile}">
+                  IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestBodyModeSelectionFile}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
@@ -422,7 +423,7 @@
                   Grid.Row="1"
                   Margin="12,12,12,0"
                   VerticalAlignment="Stretch"
-                  IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionUrlEncoded}">
+                  IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestBodyModeSelectionUrlEncoded}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
@@ -506,7 +507,7 @@
                   Grid.Row="1"
                   Margin="12,12,12,0"
                   VerticalAlignment="Stretch"
-                  IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionFormData}">
+                  IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestBodyModeSelectionFormData}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
@@ -605,7 +606,7 @@
                   Grid.Row="1"
                   Margin="12,12,12,0"
                   VerticalAlignment="Stretch"
-                  IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionGraphQl}">
+                  IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestBodyModeSelectionGraphQl}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition
                       Width="0.5*"

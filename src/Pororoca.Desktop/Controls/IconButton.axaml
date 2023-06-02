@@ -4,7 +4,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Class="Pororoca.Desktop.Controls.IconButton"
-    xmlns:controls="clr-namespace:Pororoca.Desktop.Controls">
+    xmlns:controls="clr-namespace:Pororoca.Desktop.Controls"
+    x:CompileBindings="True">
   <ContentControl.Styles>
     <Style Selector="controls|IconButton">
       <Setter Property="Template">
