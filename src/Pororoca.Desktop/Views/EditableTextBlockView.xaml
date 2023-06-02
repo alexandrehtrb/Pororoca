@@ -31,29 +31,38 @@
           Orientation="Horizontal"
           IsVisible="{Binding !IsEditing}">
         <Image
-            Source="/Assets/Images/icon_white_http.png"
             Margin="0,0,12,0"
             IsVisible="{Binding IsHttpRequest}"
             Width="32"
             Height="32"
             VerticalAlignment="Center"
-            HorizontalAlignment="Center" />
+            HorizontalAlignment="Center" >
+                    <Image.Source>
+                        <DrawingImage Drawing="{StaticResource IconHttp}"/>
+                    </Image.Source>
+                </Image>
         <Image
-            Source="/Assets/Images/icon_white_websocket.png"
             Margin="0,0,12,0"
             IsVisible="{Binding IsDisconnectedWebSocket}"
             Width="32"
             Height="32"
             VerticalAlignment="Center"
-            HorizontalAlignment="Center" />
+            HorizontalAlignment="Center">
+                    <Image.Source>
+                        <DrawingImage Drawing="{StaticResource IconWebsocket}"/>
+                    </Image.Source>
+                </Image>
         <Image
-            Source="/Assets/Images/icon_green_websocket.png"
             Margin="0,0,12,0"
             IsVisible="{Binding IsConnectedWebSocket}"
             Width="32"
             Height="32"
             VerticalAlignment="Center"
-            HorizontalAlignment="Center" />
+            HorizontalAlignment="Center">
+                    <Image.Source>
+                        <DrawingImage Drawing="{StaticResource IconWebsocketConnected}"/>
+                    </Image.Source>
+                </Image>
         <TextBlock
             Text="{Binding Txt}"
             FontSize="32"
@@ -87,20 +96,26 @@
         Classes="Primary">
       <Panel>
         <Image
-            Source="/Assets/Images/icon_white_edit.png"
             IsVisible="{Binding !IsEditing}"
             Width="16"
             Height="16"
             VerticalAlignment="Center"
-            HorizontalAlignment="Center" />
-        <Image
-            Source="/Assets/Images/icon_white_check.png"
+            HorizontalAlignment="Center">
+                    <Image.Source>
+                        <DrawingImage Drawing="{StaticResource IconEdit}"/>
+                    </Image.Source>
+                </Image>
+                <Image
             IsVisible="{Binding IsEditing}"
             Width="16"
             Height="16"
             VerticalAlignment="Center"
-            HorizontalAlignment="Center" />
-      </Panel>
+            HorizontalAlignment="Center">
+                    <Image.Source>
+                        <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                    </Image.Source>
+                </Image>
+            </Panel>
     </Button>
   </Grid>
 </UserControl>

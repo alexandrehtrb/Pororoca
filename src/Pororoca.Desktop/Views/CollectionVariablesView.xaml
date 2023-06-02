@@ -43,22 +43,29 @@
         VerticalAlignment="Top"
         TextWrapping="Wrap" />
 
-    <Button
+        <Button
         Grid.Column="0"
         Grid.Row="1"
         Height="24"
         Width="24"
+        HorizontalContentAlignment="Center"
+        VerticalContentAlignment="Center"
+        Padding="2"
         Margin="0,36,0,0"
         Classes="Primary"
         Command="{Binding AddNewVariableCmd}">
-      <Button.Content>
-        <Image
-            Source="/Assets/Images/icon_white_add.png"
+
+
+
+            <Image
             VerticalAlignment="Center"
             HorizontalAlignment="Center"
-            Width="16"
-            Height="16" />
-      </Button.Content>
+            Width="12"
+            Height="12">
+                    <Image.Source>
+                        <DrawingImage Drawing="{StaticResource IconAdd}"/>
+                    </Image.Source>
+                </Image>
     </Button>
 
     <DataGrid

@@ -2,16 +2,16 @@ using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using Avalonia.Media.Imaging;
+using Avalonia.Media;
 
 namespace Pororoca.Desktop.Controls;
 
 public partial class IconButton : UserControl
 {
-    public static readonly StyledProperty<IBitmap> IconProperty =
-        AvaloniaProperty.Register<IconButton, IBitmap>(nameof(Icon));
+    public static readonly StyledProperty<Geometry> IconProperty =
+        AvaloniaProperty.Register<IconButton, Geometry>(nameof(Icon));
 
-    public IBitmap Icon
+    public Geometry Icon
     {
         get => GetValue(IconProperty);
         set => SetValue(IconProperty, value);

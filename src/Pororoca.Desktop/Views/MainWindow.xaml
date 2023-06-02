@@ -41,44 +41,53 @@
                 Header="{i18n:Localize Português, Context=TopMenuLanguage}"
                 Command="{Binding SelectLanguagePortuguesCmd}">
               <MenuItem.Icon>
-                <Image
-                    Source="/Assets/Images/icon_white_check.png"
+                                <Image
                     IsVisible="{Binding IsLanguagePortuguese}"
                     Width="12"
                     Height="12"
                     Margin="4,0,4,0"
                     VerticalAlignment="Center"
-                    HorizontalAlignment="Center" />
-              </MenuItem.Icon>
+                    HorizontalAlignment="Center">
+                                    <Image.Source>
+                                        <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                                    </Image.Source>
+                                </Image>
+                            </MenuItem.Icon>
             </MenuItem>
             <MenuItem
                 Header="{i18n:Localize English, Context=TopMenuLanguage}"
                 Command="{Binding SelectLanguageEnglishCmd}">
               <MenuItem.Icon>
-                <Image
-                    Source="/Assets/Images/icon_white_check.png"
+                                <Image
                     IsVisible="{Binding IsLanguageEnglish}"
                     Width="12"
                     Height="12"
                     Margin="4,0,4,0"
                     VerticalAlignment="Center"
-                    HorizontalAlignment="Center" />
-              </MenuItem.Icon>
+                    HorizontalAlignment="Center">
+                                    <Image.Source>
+                                        <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                                    </Image.Source>
+                                </Image>
+                            </MenuItem.Icon>
             </MenuItem>
           </MenuItem>
           <MenuItem
               Header="{i18n:Localize DisableTlsVerification, Context=TopMenuOptions}"
               Command="{Binding ToggleSSLVerificationCmd}">
             <MenuItem.Icon>
-              <Image
-                  Source="/Assets/Images/icon_white_check.png"
+                            <Image
                   IsVisible="{Binding IsSslVerificationDisabled}"
                   Width="12"
                   Height="12"
                   Margin="4,0,4,0"
                   VerticalAlignment="Center"
-                  HorizontalAlignment="Center" />
-            </MenuItem.Icon>
+                  HorizontalAlignment="Center">
+                                <Image.Source>
+                                    <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                                </Image.Source>
+                            </Image>
+                        </MenuItem.Icon>
           </MenuItem>
         </MenuItem>
         <!--MenuItem
@@ -88,19 +97,13 @@
       <Panel
           DockPanel.Dock="Left"
           Width="240"
-          Background="Black">
-        <!--ExperimentalAcrylicBorder.Material>
-          <ExperimentalAcrylicMaterial TintColor="Black" MaterialOpacity="1" TintOpacity="1" />
-        </ExperimentalAcrylicBorder.Material-->
+          Background="{StaticResource MainWindowSidebarAndSeparatorsColor}">
         <v:CollectionsGroupView DataContext="{Binding CollectionsGroupViewDataCtx}" />
       </Panel>
 
       <Panel
           IsHitTestVisible="True"
-          Background="#0F263F">
-        <!--ExperimentalAcrylicBorder.Material>
-          <ExperimentalAcrylicMaterial TintColor="#0F263F" MaterialOpacity="1" TintOpacity="1" />
-        </ExperimentalAcrylicBorder.Material-->
+          Background="{StaticResource MainWindowBackgroundColor}">
         <Grid
             VerticalAlignment="Stretch"
             HorizontalAlignment="Stretch">

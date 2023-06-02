@@ -149,7 +149,7 @@
           <TextBlock
               Text="{i18n:Localize Environments, Context=CollectionsGroup}" />
           <TextBlock
-              Foreground="Cyan"
+              Foreground="{StaticResource SystemInvertedAccentColor}"
               Text="{Binding SelectedEnvironmentName}" />
         </StackPanel>
       </TreeDataTemplate>
@@ -279,15 +279,18 @@
                   Command="{Binding DeleteEnvironmentCmd}" />
             </ContextMenu>
           </StackPanel.ContextMenu>
-          <Image
-              Source="/Assets/Images/icon_white_check.png"
+            <Image
               IsVisible="{Binding IsCurrentEnvironment}"
               Width="12"
               Height="12"
               Margin="0,0,8,0"
               VerticalAlignment="Center"
-              HorizontalAlignment="Center" />
-          <TextBlock
+              HorizontalAlignment="Center">
+                <Image.Source>
+                    <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                </Image.Source>
+            </Image>
+            <TextBlock
               Text="{Binding Name}" />
         </StackPanel>
       </DataTemplate>

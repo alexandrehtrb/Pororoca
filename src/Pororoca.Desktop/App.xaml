@@ -1,9 +1,6 @@
 <Application xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Pororoca.Desktop" x:Class="Pororoca.Desktop.App"
-    xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
-    xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
-    xmlns:idd="clr-namespace:Avalonia.Xaml.Interactions.DragAndDrop;assembly=Avalonia.Xaml.Interactions.DragAndDrop"
     RequestedThemeVariant="Dark">
     <Application.DataTemplates>
         <local:ViewLocator/>
@@ -11,130 +8,12 @@
 
     <Application.Styles>
         <FluentTheme/>
-        <StyleInclude Source="/Styles/Styles.xaml" />
-        <StyleInclude Source="/Styles/SideBar.xaml" />
         <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
-
-        <Style Selector="TreeView TextBlock">
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-            <Setter Property="Padding" Value="0,0,12,0"/>
-        </Style>
-        
-        <Style Selector="TabControl WrapPanel">
-            <Setter Property="Background" Value="#0A1929"/>
-        </Style>
-
-        <Style Selector="TextBlock.TabItemHeader">
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="Light"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
-            <!-- FontSize="18" FontWeight="Light" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"  -->
-        </Style>
-
-        <Style Selector="DataGridColumnHeader">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="TextBlock.Foreground" Value="White"/>
-            <Setter Property="TextBlock.FontSize" Value="12"/>
-            <Setter Property="TextBlock.FontWeight" Value="Light"/>
-        </Style>
-
-        <Style Selector="Button.Primary">
-            <Setter Property="Background" Value="#A55B1E"/>
-            <Setter Property="Foreground" Value="White"/>
-        </Style>
-
-        <Style Selector="Button.Primary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="#C26B24"/>
-            <Setter Property="Button.Foreground" Value="White"/>
-        </Style>
-
-        <Style Selector="Button.PrimaryInverted">
-            <Setter Property="Background" Value="#38C7AD"/>
-            <Setter Property="Foreground" Value="Black"/>
-        </Style>
-
-        <Style Selector="Button.PrimaryInverted:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="#98E2D4"/>
-            <Setter Property="Button.Foreground" Value="Black"/>
-        </Style>
-
-        <Style Selector="Button.Secondary">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#DB843D"/>
-            <Setter Property="BorderThickness" Value="2" />
-            <Setter Property="BorderBrush" Value = "#DB843D" />
-        </Style>
-
-        <Style Selector="Button.Secondary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Button.Foreground" Value="#E3A068"/>
-            <Setter Property="BorderThickness" Value="2" />
-            <Setter Property="BorderBrush" Value = "#E3A068" />
-        </Style>
-
-        <Style Selector="Button.Trash">
-            <Setter Property="Background">
-                <ImageBrush Source="/Assets/Images/icon_white_remove.png" />
-            </Setter>
-        </Style>
-
-        <Style Selector="Button.Trash:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background">
-                <ImageBrush Source="/Assets/Images/icon_brown_remove.png" />
-            </Setter>
-        </Style>
-
-        <Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="#183e67" />
-        </Style>
-
-        <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="#0F263F" />
-        </Style>
-
-        <Style Selector="DataGrid.dragging-up DataGridRow.dragging">
-            <Setter Property="AdornerLayer.Adorner">
-                <Template>
-                <Border BorderThickness="0 2 0 0" BorderBrush="White" />
-                </Template>
-            </Setter>
-        </Style>
-
-        <Style Selector="DataGrid.dragging-down DataGridRow.dragging">
-            <Setter Property="AdornerLayer.Adorner">
-                <Template>
-                <Border BorderThickness="0 0 0 2" BorderBrush="White" />
-                </Template>
-            </Setter>
-        </Style>
-
-        <Style Selector="DataGrid.draggable DataGridRow">
-            <Setter Property="DragDrop.AllowDrop" Value="True" />
-            <Setter Property="(i:Interaction.Behaviors)">
-                <i:BehaviorCollectionTemplate>
-                <i:BehaviorCollection>
-                    <idd:ContextDragBehavior />
-                    <iac:RoutedEventTriggerBehavior RoutedEvent="{x:Static DragDrop.DragEnterEvent}"
-                                                    RoutingStrategies="Bubble">
-                    <iac:AddClassAction ClassName="dragging" RemoveIfExists="True" />
-                    </iac:RoutedEventTriggerBehavior>
-                    <iac:RoutedEventTriggerBehavior RoutedEvent="{x:Static DragDrop.DragLeaveEvent}"
-                                                    RoutingStrategies="Bubble">
-                    <iac:RemoveClassAction ClassName="dragging" />
-                    </iac:RoutedEventTriggerBehavior>
-                    <iac:RoutedEventTriggerBehavior RoutedEvent="{x:Static DragDrop.DropEvent}"
-                                                    RoutingStrategies="Bubble">
-                    <iac:RemoveClassAction ClassName="dragging" />
-                    </iac:RoutedEventTriggerBehavior>
-                </i:BehaviorCollection>
-                </i:BehaviorCollectionTemplate>
-            </Setter>
-        </Style>
-
+        <StyleInclude Source="/Styles/IconsGeometries.xaml" />
+        <StyleInclude Source="/Styles/StylesResources.xaml" />
+        <StyleInclude Source="/Styles/ComponentsCustomStyling.xaml" />
+        <StyleInclude Source="/Styles/DragAndDropDataGrid.xaml" />
+        <StyleInclude Source="/Styles/SideBar.xaml" />
     </Application.Styles>
 </Application>

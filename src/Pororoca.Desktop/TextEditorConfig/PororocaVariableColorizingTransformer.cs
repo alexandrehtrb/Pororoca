@@ -27,6 +27,7 @@ internal partial class PororocaVariableColorizingTransformer : DocumentColorizin
                     line.Offset + capture.Index + capture.Length,
                     visualLine =>
                     {
+                        // TODO: Get variable highlight color from Styles.xaml
                         visualLine.TextRunProperties.SetForegroundBrush(Brushes.Gold);
                     }
                 );

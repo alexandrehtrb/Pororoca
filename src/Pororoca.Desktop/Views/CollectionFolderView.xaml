@@ -34,17 +34,17 @@
         Margin="0,12,0,0">
 
       <controls:IconButton
-          Icon="/Assets/Images/icon_white_add_folder.png"
+          Icon="{StaticResource IconAddFolderGeometry}"
           Text="{i18n:Localize AddFolder, Context=CollectionFolder}"
           Command="{Binding AddNewFolderCmd}" />
 
       <controls:IconButton
-          Icon="/Assets/Images/icon_white_add.png"
+          Icon="{StaticResource IconAddGeometry}"
           Text="{i18n:Localize AddHttpRequest, Context=CollectionFolder}"
           Command="{Binding AddNewHttpRequestCmd}" />
 
       <controls:IconButton
-          Icon="/Assets/Images/icon_white_websocket.png"
+          Icon="{StaticResource IconWebsocketGeometry}"
           Text="{i18n:Localize AddWebSocketConnection, Context=CollectionFolder}"
           Command="{Binding AddNewWebSocketConnectionCmd}" />
 

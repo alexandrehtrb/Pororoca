@@ -85,14 +85,14 @@
           <TextBlock
               Margin="12,6,12,0"
               FontSize="14"
-              Foreground="#FF4D4D"
+              Foreground="{StaticResource SystemErrorTextColor}"
               Text="{Binding InvalidConnectionError}"
               IsVisible="{Binding IsInvalidConnectionErrorVisible}" />
 
           <TextBlock
               Margin="12,6,12,0"
               FontSize="14"
-              Foreground="#00FF00"
+              Foreground="{StaticResource WebSocketConnectedColor}"
               Text="{i18n:Localize Connected, Context=WebSocketConnection}"
               IsVisible="{Binding IsConnected}" />
 
@@ -181,7 +181,7 @@
 
       <Separator
           Margin="-12,0,-12,0"
-          Background="Black"
+          Background="{StaticResource MainWindowSidebarAndSeparatorsColor}"
           Height="6" />
     </StackPanel>
 
@@ -273,17 +273,23 @@
                     Grid.Row="0"
                     Height="24"
                     Width="24"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Padding="2"
                     Margin="12,0,0,0"
                     Classes="Primary"
                     Command="{Binding AddNewConnectionRequestHeaderCmd}">
                   <Button.Content>
-                    <Image
-                        Source="/Assets/Images/icon_white_add.png"
+                                        <Image
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
-                        Width="16"
-                        Height="16" />
-                  </Button.Content>
+                        Width="12"
+                        Height="12">
+                                            <Image.Source>
+                                                <DrawingImage Drawing="{StaticResource IconAdd}"/>
+                                            </Image.Source>
+                                        </Image>
+                                    </Button.Content>
                 </Button>
                 <DataGrid
                     Grid.Column="0"
@@ -358,17 +364,23 @@
                     Grid.Row="0"
                     Height="24"
                     Width="24"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Padding="2"
                     Margin="12,0,0,0"
                     Classes="Primary"
                     Command="{Binding AddNewSubprotocolCmd}">
                   <Button.Content>
-                    <Image
-                        Source="/Assets/Images/icon_white_add.png"
+                                        <Image
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
-                        Width="16"
-                        Height="16" />
-                  </Button.Content>
+                        Width="12"
+                        Height="12">
+                                            <Image.Source>
+                                                <DrawingImage Drawing="{StaticResource IconAdd}"/>
+                                            </Image.Source>
+                                        </Image>
+                                    </Button.Content>
                 </Button>
                 <DataGrid
                     Grid.Column="0"
@@ -535,7 +547,7 @@
           Grid.Row="0"
           Width="6"
           VerticalAlignment="Stretch"
-          Fill="Black" />
+          Fill="{StaticResource MainWindowSidebarAndSeparatorsColor}" />
       <!-- MESSAGES EXCHANGED -->
       <Grid
           Grid.Column="2"
@@ -563,28 +575,6 @@
             ItemsSource="{Binding ExchangedMessages, Mode=TwoWay}"
             Background="#0A1929"
             SelectedItem="{Binding SelectedExchangedMessage, Mode=TwoWay}">
-          <ListBox.Styles>
-            <Style Selector="TextBlock.WebSocketMessageFromClientPrimary">
-              <Setter
-                  Property="Foreground"
-                  Value="#D77728" />
-            </Style>
-            <Style Selector="TextBlock.WebSocketMessageFromClientSecondary">
-              <Setter
-                  Property="Foreground"
-                  Value="White" />
-            </Style>
-            <Style Selector="TextBlock.WebSocketMessageFromServerPrimary">
-              <Setter
-                  Property="Foreground"
-                  Value="#88DDCE" />
-            </Style>
-            <Style Selector="TextBlock.WebSocketMessageFromServerSecondary">
-              <Setter
-                  Property="Foreground"
-                  Value="White" />
-            </Style>
-          </ListBox.Styles>
 
           <ListBox.ItemTemplate>
             <DataTemplate>
@@ -605,6 +595,7 @@
                 <TextBlock
                     HorizontalAlignment="Left"
                     Margin="4,4,4,0"
+                    MinWidth="160"
                     Text="{Binding MessageSizeDescription}"
                     Classes.WebSocketMessageFromServerSecondary="{Binding IsFromServer}"
                     Classes.WebSocketMessageFromClientSecondary="{Binding IsFromClient}"
@@ -642,17 +633,24 @@
                 Grid.Column="0"
                 Grid.Row="0"
                 Height="40"
+                Width="40"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Padding="2"
                 Margin="0,0,12,0"
                 Classes="Primary"
                 Command="{Binding AddNewWebSocketClientMessageCmd}">
               <Button.Content>
-                <Image
-                    Source="/Assets/Images/icon_white_add.png"
+                                <Image
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     Width="16"
-                    Height="16" />
-              </Button.Content>
+                    Height="16">
+                                    <Image.Source>
+                                        <DrawingImage Drawing="{StaticResource IconAdd}"/>
+                                    </Image.Source>
+                                </Image>
+                            </Button.Content>
             </Button>
 
             <ComboBox
@@ -695,7 +693,7 @@
           <TextBlock
               Margin="12,6,12,0"
               FontSize="14"
-              Foreground="#FF4D4D"
+              Foreground="{StaticResource SystemErrorTextColor}"
               Text="{Binding InvalidClientMessageError}"
               IsVisible="{Binding IsInvalidClientMessageErrorVisible}" />
 
@@ -707,7 +705,7 @@
           Grid.Row="0"
           Width="6"
           VerticalAlignment="Stretch"
-          Fill="Black" />
+          Fill="{StaticResource MainWindowSidebarAndSeparatorsColor}" />
       <!-- MESSAGE DETAIL -->
       <Grid
           Grid.Column="4"
@@ -744,8 +742,8 @@
             VerticalAlignment="Stretch"
             Margin="12,6,12,24"
             IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}"
-            Foreground="#D4D4D4"
-            Background="#1E1E1E"
+            Foreground="{StaticResource TextEditorForeground}"
+            Background="{StaticResource TextEditorBackground}"
             HorizontalScrollBarVisibility="Auto"
             VerticalScrollBarVisibility="Visible"
             IsReadOnly="True"

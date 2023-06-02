@@ -34,45 +34,45 @@
         Margin="0,12,0,0">
 
       <controls:IconButton
-          Icon="/Assets/Images/icon_white_add_folder.png"
+          Icon="{StaticResource IconAddFolderGeometry}"
           Text="{i18n:Localize AddFolder, Context=Collection}"
           Command="{Binding AddNewFolderCmd}" />
 
       <controls:IconButton
-          Icon="/Assets/Images/icon_white_add.png"
+          Icon="{StaticResource IconAddGeometry}"
           Text="{i18n:Localize AddHttpRequest, Context=Collection}"
           Command="{Binding AddNewHttpRequestCmd}" />
 
       <controls:IconButton
-          Icon="/Assets/Images/icon_white_websocket.png"
+          Icon="{StaticResource IconWebsocketGeometry}"
           Text="{i18n:Localize AddWebSocketConnection, Context=Collection}"
           Command="{Binding AddNewWebSocketConnectionCmd}" />
 
       <controls:IconButton
-          Icon="/Assets/Images/icon_white_leaf.png"
+          Icon="{StaticResource IconLeafGeometry}"
           Text="{i18n:Localize AddEnvironment, Context=Collection}"
           Command="{Binding AddNewEnvironmentCmd}" />
 
       <controls:IconButton
-          Icon="/Assets/Images/icon_white_import.png"
+          Icon="{StaticResource IconImportGeometry}"
           Text="{i18n:Localize ImportEnvironment, Context=Collection}"
           Command="{Binding ImportEnvironmentsCmd}" />
 
       <controls:IconButton
           IsVisible="{Binding !IsOperatingSystemMacOsx}"
-          Icon="/Assets/Images/icon_white_export.png"
+          Icon="{StaticResource IconExportGeometry}"
           Text="{i18n:Localize ExportCollection, Context=Collection}"
           Command="{Binding ExportCollectionCmd}" />
 
       <controls:IconButton
           IsVisible="{Binding IsOperatingSystemMacOsx}"
-          Icon="/Assets/Images/icon_white_export.png"
+          Icon="{StaticResource IconExportGeometry}"
           Text="{i18n:Localize ExportAsPororocaCollection, Context=Collection}"
           Command="{Binding ExportAsPororocaCollectionCmd}" />
 
       <controls:IconButton
           IsVisible="{Binding IsOperatingSystemMacOsx}"
-          Icon="/Assets/Images/icon_white_export.png"
+          Icon="{StaticResource IconExportGeometry}"
           Text="{i18n:Localize ExportAsPostmanCollection, Context=Collection}"
           Command="{Binding ExportAsPostmanCollectionCmd}" />
 

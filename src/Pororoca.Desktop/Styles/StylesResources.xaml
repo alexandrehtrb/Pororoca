@@ -1,0 +1,109 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:clr="clr-namespace:System;assembly=mscorlib"
+        xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
+        xmlns:b="clr-namespace:Pororoca.Desktop.Behaviors;assembly=Pororoca.Desktop">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <StackPanel Spacing="5">
+                <TextBlock Text="Code Font Family" FontFamily="{StaticResource CodeFontFamily}" />
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+    <Styles.Resources>
+        <FontFamily x:Key="CodeFontFamily">avares://Pororoca.Desktop/Assets/Fonts#Source Code Pro</FontFamily>
+
+        <Color x:Key="SystemAccentColorDark3">#2B1808</Color>
+        <Color x:Key="SystemAccentColorDark2">#562F10</Color>
+        <Color x:Key="SystemAccentColorDark1">#814718</Color>
+        <Color x:Key="SystemAccentColor">#A55B1E</Color> <!-- Cor de destaque de mouse em cima de item e outros elementos -->
+        <Color x:Key="SystemAccentColorLight1">#C26B24</Color>
+        <Color x:Key="SystemAccentColorLight2">#D77728</Color> 
+        <Color x:Key="SystemAccentColorLight3">#DB843D</Color>
+        <Color x:Key="SystemAccentColorLight4">#E3A068</Color> <!-- Essa não é uma cor padrão do sistema -->
+        <Color x:Key="SystemInvertedAccentColor">#38C7AD</Color> <!-- Essa não é uma cor padrão do sistema -->
+        <Color x:Key="SystemInvertedAccentColorLight1">#88DDCE</Color> <!-- Essa não é uma cor padrão do sistema -->
+        <Color x:Key="SystemInvertedAccentColorLight2">#98E2D4</Color> <!-- Essa não é uma cor padrão do sistema -->
+        <Color x:Key="SystemErrorTextColor">#FF4D4D</Color> <!-- Cor padrão das mensagens de erro -->
+
+        <!--Color x:Key="SystemControlForegroundBaseHighBrush">DarkGreen</Color--> <!-- Cor padrão dos textos -->
+
+        <!--Color x:Key="TabItemHeaderForegroundUnselected">Pink</Color-->
+        <!--Color x:Key="TabItemHeaderForegroundUnselectedPointerOver">Purple</Color-->
+        <!--Color x:Key="TabItemHeaderForegroundUnselectedPressed">Purple</Color-->
+        <!--Color x:Key="TabItemHeaderForegroundSelected">Red</Color-->
+        <!--Color x:Key="TabItemHeaderForegroundSelectedPointerOver">Chartreuse</Color-->
+        <!--Color x:Key="TabItemHeaderForegroundSelectedPressed">Chartreuse</Color-->
+        
+        <Color x:Key="DataGridColumnHeaderForegroundBrush">White</Color>
+        <!--Color x:Key="DataGridGridLinesBrush">White</Color-->
+        
+        <!--Color x:Key="TextControlForeground">SeaGreen</Color-->
+        <!--Color x:Key="TextControlForegroundPointerOver">Pink</Color-->
+        <!--Color x:Key="TextControlForegroundFocused">LightSalmon</Color-->
+        <!--Color x:Key="TextControlBorderBrush">LawnGreen</Color-->
+        <!--Color x:Key="TextControlBorderBrushPointerOver">Aqua</Color-->
+        <!--Color x:Key="TextControlBorderBrushFocused">Tomato</Color-->
+        <!--Color x:Key="TextControlPlaceholderForeground">Pink</Color-->
+        <!--Color x:Key="TextControlPlaceholderForegroundPointerOver">Pink</Color-->
+        <!--Color x:Key="TextControlPlaceholderForegroundFocused">LightSalmon</Color-->
+
+        <!--SolidColorBrush x:Key="ComboBoxForeground" Color="{StaticResource TextControlForeground}"/-->
+        <!--SolidColorBrush x:Key="ComboBoxForegroundFocused" Color="{StaticResource TextControlForegroundFocused}"/-->
+        <!--SolidColorBrush x:Key="ComboBoxForegroundFocusedPressed" Color="{StaticResource TextControlForegroundFocused}"/-->
+        <!--SolidColorBrush x:Key="ComboBoxBorderBrush" Color="{StaticResource TextControlBorderBrush}"/-->
+        <!--SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver" Color="{StaticResource TextControlBorderBrushPointerOver}"/-->
+        <!--SolidColorBrush x:Key="ComboBoxBorderBrushPressed" Color="{StaticResource TextControlBorderBrushFocused}"/-->
+        <!--SolidColorBrush x:Key="ComboBoxPlaceHolderForeground" Color="{StaticResource TextControlPlaceholderForeground}"/-->
+        <!--SolidColorBrush x:Key="ComboBoxPlaceHolderForegroundFocusedPressed" Color="{StaticResource TextControlPlaceholderForegroundFocused}"/-->
+        <!--SolidColorBrush x:Key="ComboBoxDropDownGlyphForeground" Color="{StaticResource TextControlForeground}"/-->
+        <!--SolidColorBrush x:Key="ComboBoxDropDownGlyphForegroundFocused" Color="{StaticResource TextControlForegroundFocused}"/-->
+        <!--SolidColorBrush x:Key="ComboBoxDropDownGlyphForegroundFocusedPressed" Color="{StaticResource TextControlForegroundFocused}"/-->
+
+        <SolidColorBrush x:Key="MainWindowBackgroundColor" Color="#0F263F"/>
+        <SolidColorBrush x:Key="MainWindowDarkBackgroundColor" Color="#0A1929"/>
+        <SolidColorBrush x:Key="MainWindowLightBackgroundColor" Color="Transparent"/>
+        <SolidColorBrush x:Key="MainWindowSidebarAndSeparatorsColor" Color="Black"/>
+        <SolidColorBrush x:Key="DragAndDropDataGridItemDraggingColor" Color="White"/>
+        <SolidColorBrush x:Key="ButtonPrimaryBackgroundColor" Color="{StaticResource SystemAccentColor}"/>
+        <SolidColorBrush x:Key="ButtonPrimaryTextColor" Color="White"/>
+        <SolidColorBrush x:Key="ButtonPrimaryHighlightBackgroundColor" Color="{StaticResource SystemAccentColorLight1}"/>
+        <SolidColorBrush x:Key="ButtonPrimaryHighlightTextColor" Color="White"/>
+        <SolidColorBrush x:Key="ButtonPrimaryInvertedBackgroundColor" Color="{StaticResource SystemInvertedAccentColor}"/>
+        <SolidColorBrush x:Key="ButtonPrimaryInvertedTextColor" Color="Black"/>
+        <SolidColorBrush x:Key="ButtonPrimaryInvertedHighlightBackgroundColor" Color="{StaticResource SystemInvertedAccentColorLight2}"/>
+        <SolidColorBrush x:Key="ButtonPrimaryInvertedHighlightTextColor" Color="Black"/>
+        <SolidColorBrush x:Key="ButtonSecondaryBackgroundColor" Color="Transparent"/>
+        <SolidColorBrush x:Key="ButtonSecondaryBorderColor" Color="{StaticResource SystemAccentColorLight3}"/>
+        <SolidColorBrush x:Key="ButtonSecondaryTextColor" Color="{StaticResource SystemAccentColorLight3}"/>
+        <SolidColorBrush x:Key="ButtonSecondaryHighlightBackgroundColor" Color="Transparent"/>
+        <SolidColorBrush x:Key="ButtonSecondaryHighlightBorderColor" Color="{StaticResource SystemAccentColorLight4}"/>
+        <SolidColorBrush x:Key="ButtonSecondaryHighlightTextColor" Color="{StaticResource SystemAccentColorLight4}"/>
+        <SolidColorBrush x:Key="WebSocketMessageFromClientPrimaryColor" Color="{StaticResource SystemAccentColorLight2}"/>
+        <SolidColorBrush x:Key="WebSocketMessageFromClientSecondaryColor" Color="White"/>
+        <SolidColorBrush x:Key="WebSocketMessageFromServerPrimaryColor" Color="{StaticResource SystemInvertedAccentColorLight1}"/>
+        <SolidColorBrush x:Key="WebSocketMessageFromServerSecondaryColor" Color="White"/> 
+        <SolidColorBrush x:Key="WebSocketConnectedColor" Color="Green"/>
+        <Color x:Key="TextEditorBackground">#1E1E1E</Color>
+        <Color x:Key="TextEditorForeground">#D4D4D4</Color>
+        <!-- TODO: Configurar tema do editor de texto e cor de variável Pororoca através de styles -->
+        <!--Color x:Key="TextEditorPororocaVariableHighlightForeground">Gold</Color-->
+        <!--clr:String x:Key="TextEditorTheme">DarkPlus</clr:String-->
+
+
+        <SolidColorBrush x:Key="DefaultIconsColor" Color="White"/>
+        <GeometryDrawing x:Key="IconAdd" Brush="{StaticResource DefaultIconsColor}" Geometry="{StaticResource IconAddGeometry}" />
+        <GeometryDrawing x:Key="IconAddFolder" Brush="{StaticResource DefaultIconsColor}" Geometry="{StaticResource IconAddFolderGeometry}" />
+        <GeometryDrawing x:Key="IconCheck" Brush="{StaticResource DefaultIconsColor}" Geometry="{StaticResource IconCheckGeometry}" />
+        <GeometryDrawing x:Key="IconEdit" Brush="{StaticResource DefaultIconsColor}" Geometry="{StaticResource IconEditGeometry}" />
+        <GeometryDrawing x:Key="IconExport" Brush="{StaticResource DefaultIconsColor}" Geometry="{StaticResource IconExportGeometry}" />
+        <GeometryDrawing x:Key="IconImport" Brush="{StaticResource DefaultIconsColor}" Geometry="{StaticResource IconImportGeometry}" />
+        <GeometryDrawing x:Key="IconHttp" Brush="{StaticResource DefaultIconsColor}" Geometry="{StaticResource IconHttpGeometry}" />
+        <GeometryDrawing x:Key="IconLeaf" Brush="{StaticResource DefaultIconsColor}" Geometry="{StaticResource IconLeafGeometry}" />
+        <GeometryDrawing x:Key="IconRemove" Brush="{StaticResource DefaultIconsColor}" Geometry="{StaticResource IconRemoveGeometry}" />
+        <GeometryDrawing x:Key="IconRemovePointerOver" Brush="{StaticResource SystemAccentColor}" Geometry="{StaticResource IconRemoveGeometry}" />
+        <GeometryDrawing x:Key="IconWebsocket" Brush="{StaticResource DefaultIconsColor}" Geometry="{StaticResource IconWebsocketGeometry}" />
+        <GeometryDrawing x:Key="IconWebsocketConnected" Brush="{StaticResource WebSocketConnectedColor}" Geometry="{StaticResource IconWebsocketGeometry}" />
+    </Styles.Resources>
+
+</Styles>

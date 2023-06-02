@@ -57,19 +57,19 @@
       <controls:IconButton
           IsVisible="{Binding !IsOperatingSystemMacOsx}"
           Margin="12,0,0,0"
-          Icon="/Assets/Images/icon_white_export.png"
+          Icon="{StaticResource IconExportGeometry}"
           Text="{i18n:Localize ExportEnvironment, Context=Environment}"
           Command="{Binding ExportEnvironmentCmd}" />
       <controls:IconButton
           IsVisible="{Binding IsOperatingSystemMacOsx}"
           Margin="12,0,0,0"
-          Icon="/Assets/Images/icon_white_export.png"
+          Icon="{StaticResource IconExportGeometry}"
           Text="{i18n:Localize ExportAsPororocaEnvironment, Context=Environment}"
           Command="{Binding ExportAsPororocaEnvironmentCmd}" />
       <controls:IconButton
           IsVisible="{Binding IsOperatingSystemMacOsx}"
           Margin="12,0,0,0"
-          Icon="/Assets/Images/icon_white_export.png"
+          Icon="{StaticResource IconExportGeometry}"
           Text="{i18n:Localize ExportAsPostmanEnvironment, Context=Environment}"
           Command="{Binding ExportAsPostmanEnvironmentCmd}" />
       <CheckBox
@@ -83,17 +83,21 @@
         Grid.Row="2"
         Height="24"
         Width="24"
+        HorizontalContentAlignment="Center"
+        VerticalContentAlignment="Center"
+        Padding="2"
         Margin="0,36,0,0"
         Classes="Primary"
         Command="{Binding AddNewVariableCmd}">
-      <Button.Content>
-        <Image
-            Source="/Assets/Images/icon_white_add.png"
+                <Image
             VerticalAlignment="Center"
             HorizontalAlignment="Center"
-            Width="16"
-            Height="16" />
-      </Button.Content>
+            Width="12"
+            Height="12">
+                    <Image.Source>
+                        <DrawingImage Drawing="{StaticResource IconAdd}"/>
+                    </Image.Source>
+                </Image>
     </Button>
 
     <DataGrid

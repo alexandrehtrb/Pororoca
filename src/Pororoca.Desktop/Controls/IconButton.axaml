@@ -19,14 +19,24 @@
                   HorizontalAlignment="Center"
                   Orientation="Horizontal"
                   Background="Transparent"
+                  Margin="2"
                   Height="16"
                   Width="180">
-                <Image
-                    Source="{TemplateBinding Icon}"
-                    Width="16"
-                    Height="16"
-                    Margin="4 0 8 0" />
-                <TextBlock
+                  <Image
+                      VerticalAlignment="Center"
+                      Width="16"
+                      Height="16"
+                      Margin="4 0 8 0">
+                      <Image.Source>
+                          <DrawingImage>
+                              <DrawingImage.Drawing>
+                                  <GeometryDrawing Brush="{StaticResource DefaultIconsColor}" Geometry="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}"/>
+                              </DrawingImage.Drawing>
+                          </DrawingImage>
+                      </Image.Source>                      
+                  </Image>
+                  <TextBlock
+                      VerticalAlignment="Center"
                     Text="{TemplateBinding Text}"
                     Margin="4 0 8 0"
                     FontSize="14" />

@@ -97,7 +97,7 @@
           <TextBlock
               Margin="12,6,12,0"
               FontSize="14"
-              Foreground="#FF4D4D"
+              Foreground="{StaticResource SystemErrorTextColor}"
               Text="{Binding InvalidRequestMessage}"
               IsVisible="{Binding IsInvalidRequestMessageVisible}" />
 
@@ -149,7 +149,7 @@
       </Grid>
 
       <Separator
-          Background="Black"
+          Background="{StaticResource MainWindowSidebarAndSeparatorsColor}"
           Height="6"
           Margin="0,36,0,0" />
     </StackPanel>
@@ -216,17 +216,23 @@
                   Grid.Row="0"
                   Height="24"
                   Width="24"
+                  HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Padding="2"
                   Margin="12,0,0,0"
                   Classes="Primary"
                   Command="{Binding AddNewRequestHeaderCmd}">
                 <Button.Content>
-                  <Image
-                      Source="/Assets/Images/icon_white_add.png"
+                                    <Image
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
-                      Width="16"
-                      Height="16" />
-                </Button.Content>
+                      Width="12"
+                      Height="12" >
+                                        <Image.Source>
+                                            <DrawingImage Drawing="{StaticResource IconAdd}"/>
+                                        </Image.Source>
+                                    </Image>
+                                </Button.Content>
               </Button>
               <DataGrid
                   Grid.Column="0"
@@ -362,8 +368,8 @@
                   VerticalAlignment="Stretch"
                   Margin="0,12,0,0"
                   IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}"
-                  Foreground="#D4D4D4"
-                  Background="#1E1E1E"
+                  Foreground="{StaticResource TextEditorForeground}"
+                  Background="{StaticResource TextEditorBackground}"
                   HorizontalScrollBarVisibility="Auto"
                   VerticalScrollBarVisibility="Visible"
                   IsReadOnly="False"
@@ -436,16 +442,22 @@
                     Grid.Row="0"
                     Height="24"
                     Width="24"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Padding="2"
                     Classes="Primary"
                     Command="{Binding AddNewUrlEncodedParamCmd}">
                   <Button.Content>
-                    <Image
-                        Source="/Assets/Images/icon_white_add.png"
+                                        <Image
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
-                        Width="16"
-                        Height="16" />
-                  </Button.Content>
+                        Width="12"
+                        Height="12">
+                                            <Image.Source>
+                                                <DrawingImage Drawing="{StaticResource IconAdd}"/>
+                                            </Image.Source>
+                                        </Image>
+                                    </Button.Content>
                 </Button>
                 <DataGrid
                     Grid.Column="0"
@@ -670,7 +682,7 @@
           Grid.Row="0"
           Width="2"
           VerticalAlignment="Stretch"
-          Background="Black" />
+          Background="{StaticResource MainWindowSidebarAndSeparatorsColor}" />
       <!-- RESPONSE -->
       <Grid
           Grid.Column="2"
@@ -763,8 +775,8 @@
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
                   Margin="0,0,0,0"
-                  Foreground="#D4D4D4"
-                  Background="#1E1E1E"
+                  Foreground="{StaticResource TextEditorForeground}"
+                  Background="{StaticResource TextEditorBackground}"
                   HorizontalScrollBarVisibility="Auto"
                   VerticalScrollBarVisibility="Visible"
                   IsReadOnly="True"
