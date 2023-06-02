@@ -634,7 +634,8 @@
                 <TextBox
                     Grid.Column="0"
                     Grid.Row="0"
-                    FontFamily="/Assets/Fonts/SourceCodePro-Regular.ttf#Source Code Pro"
+                    FontFamily="{StaticResource CodeFontFamily}"
+                    FontWeight="Light"
                     FontSize="12"
                     Watermark="{i18n:Localize BodyGraphQlQueryWatermark, Context=HttpRequest}"
                     HorizontalAlignment="Stretch"
@@ -653,7 +654,8 @@
                 <TextBox
                     Grid.Column="2"
                     Grid.Row="0"
-                    FontFamily="/Assets/Fonts/SourceCodePro-Regular.ttf#Source Code Pro"
+                    FontFamily="{StaticResource CodeFontFamily}"
+                    FontWeight="Light"
                     FontSize="12"
                     Watermark="{i18n:Localize BodyGraphQlVariablesWatermark, Context=HttpRequest}"
                     HorizontalAlignment="Stretch"

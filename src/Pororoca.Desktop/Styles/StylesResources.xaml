@@ -6,12 +6,12 @@
     <Design.PreviewWith>
         <Border Padding="20">
             <StackPanel Spacing="5">
-                <TextBlock Text="Code Font Family" FontFamily="{StaticResource CodeFontFamily}" />
+                <TextBlock Text="Code Font Family" FontFamily="{StaticResource CodeFontFamily}" FontWeight="Light"/>
             </StackPanel>
         </Border>
     </Design.PreviewWith>
     <Styles.Resources>
-        <FontFamily x:Key="CodeFontFamily">avares://Pororoca.Desktop/Assets/Fonts#Source Code Pro</FontFamily>
+        <FontFamily x:Key="CodeFontFamily">Cascadia Code,Consolas,Menlo,Monospace</FontFamily>
 
         <Color x:Key="SystemAccentColorDark3">#2B1808</Color>
         <Color x:Key="SystemAccentColorDark2">#562F10</Color>
