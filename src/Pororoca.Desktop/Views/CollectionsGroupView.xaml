@@ -1,4 +1,4 @@
-﻿<UserControl
+<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
@@ -10,13 +10,12 @@
     d:DesignWidth="1350"
     d:DesignHeight="700"
     x:Class="Pororoca.Desktop.Views.CollectionsGroupView"
-    FontSize="14"
-    Foreground="{StaticResource SystemBaseHighColor}">
+    FontSize="14">
 
   <TreeView
       Classes="sidebar"
       Margin="0 40 0 20"
-      Items="{Binding Items}"
+      ItemsSource="{Binding Items}"
       SelectedItem="{Binding CollectionGroupSelectedItem, Mode=TwoWay}"
       SelectedItems="{Binding CollectionGroupSelectedItems, Mode=TwoWay}"
       SelectionMode="Multiple"
@@ -147,7 +146,6 @@
             </ContextMenu>
           </StackPanel.ContextMenu>
           <TextBlock
-              Foreground="White"
               Text="{i18n:Localize Environments, Context=CollectionsGroup}" />
           <TextBlock
               Foreground="Cyan"
@@ -289,7 +287,6 @@
               VerticalAlignment="Center"
               HorizontalAlignment="Center" />
           <TextBlock
-              Foreground="White"
               Text="{Binding Name}" />
         </StackPanel>
       </DataTemplate>

@@ -19,7 +19,7 @@ internal static class TextEditorConfiguration
 
         editor.ContextMenu = new ContextMenu
         {
-            Items = new List<MenuItem>
+            ItemsSource = new List<MenuItem>
             {
                 new MenuItem { Header = Localizer.Instance["TextEditor/Copy"], InputGesture = new KeyGesture(Key.C, KeyModifiers.Control) },
                 new MenuItem { Header = Localizer.Instance["TextEditor/Paste"], InputGesture = new KeyGesture(Key.V, KeyModifiers.Control) },

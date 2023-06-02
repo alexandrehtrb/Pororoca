@@ -1,4 +1,4 @@
-﻿<UserControl
+<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
@@ -8,16 +8,15 @@
     xmlns:AvalonEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
     xmlns:i18n="clr-namespace:Pororoca.Desktop.Localization"
     xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
-    xmlns:idd="clr-namespace:Avalonia.Xaml.Interactions.DragAndDrop;assembly=Avalonia.Xaml.Interactions"
+    xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
+    xmlns:idd="clr-namespace:Avalonia.Xaml.Interactions.DragAndDrop;assembly=Avalonia.Xaml.Interactions.DragAndDrop"
     xmlns:b="clr-namespace:Pororoca.Desktop.Behaviors;assembly=Pororoca.Desktop"
     x:DataType="vm:HttpRequestViewModel"
     mc:Ignorable="d"
     d:DesignWidth="1350"
     d:DesignHeight="700"
-    xmlns:pages="clr-namespace:Pororoca.Desktop.Pages;assembly=Pororoca.Desktop"
     x:Class="Pororoca.Desktop.Views.HttpRequestView"
-    FontSize="14"
-    Foreground="{StaticResource SystemBaseHighColor}">
+    FontSize="14">
 
   <UserControl.Styles>
     <Style Selector="TabItem">
@@ -74,7 +73,7 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Stretch"
             SelectedIndex="{Binding RequestMethodSelectedIndex, Mode=TwoWay}"
-            Items="{Binding RequestMethodSelectionOptions}" />
+            ItemsSource="{Binding RequestMethodSelectionOptions}" />
 
         <StackPanel
             Grid.Column="1"
@@ -114,7 +113,7 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Stretch"
             SelectedIndex="{Binding RequestHttpVersionSelectedIndex, Mode=TwoWay}"
-            Items="{Binding RequestHttpVersionSelectionOptions}" />
+            ItemsSource="{Binding RequestHttpVersionSelectionOptions}" />
 
         <Grid
             Grid.Column="3"
@@ -234,7 +233,7 @@
                   Margin="0,12,0,0"
                   VerticalAlignment="Stretch"
                   AutoGenerateColumns="False"
-                  Items="{Binding RequestHeaders}"
+                  ItemsSource="{Binding RequestHeaders}"
                   CanUserResizeColumns="True"
                   Classes="draggable">
                 <i:Interaction.Behaviors>
@@ -348,7 +347,7 @@
                     FontSize="14"
                     HorizontalAlignment="Left"
                     Watermark="{i18n:Localize BodyRawContentTypeWatermark, Context=HttpRequest}"
-                    Items="{Binding AllMimeTypes}"
+                    ItemsSource="{Binding AllMimeTypes}"
                     SelectedItem="{Binding RequestRawContentType, Mode=TwoWay}"
                     FilterMode="Contains"
                     IsVisible="{Binding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}" />
@@ -396,7 +395,7 @@
                     HorizontalAlignment="Left"
                     Watermark="{i18n:Localize BodyFileContentTypeWatermark, Context=HttpRequest}"
                     Text="{Binding RequestFileContentType}"
-                    Items="{Binding AllMimeTypes}"
+                    ItemsSource="{Binding AllMimeTypes}"
                     FilterMode="Contains" />
                 <TextBox
                     Grid.Column="0"
@@ -452,7 +451,7 @@
                     Grid.Row="1"
                     Margin="-12,12,-12,0"
                     AutoGenerateColumns="False"
-                    Items="{Binding UrlEncodedParams}"
+                    ItemsSource="{Binding UrlEncodedParams}"
                     CanUserResizeColumns="True"
                     Classes="draggable">
                   <i:Interaction.Behaviors>
@@ -536,7 +535,7 @@
                     Grid.Row="1"
                     Margin="-12,24,-12,0"
                     AutoGenerateColumns="False"
-                    Items="{Binding FormDataParams}"
+                    ItemsSource="{Binding FormDataParams}"
                     CanUserResizeColumns="True"
                     Classes="draggable">
                   <i:Interaction.Behaviors>
@@ -711,7 +710,7 @@
                 Margin="-12,12,-12,12"
                 VerticalAlignment="Stretch"
                 AutoGenerateColumns="False"
-                Items="{Binding ResponseDataCtx.ResponseHeadersAndTrailers}"
+                ItemsSource="{Binding ResponseDataCtx.ResponseHeadersAndTrailers}"
                 CanUserResizeColumns="True"
                 Classes="draggable">
               <i:Interaction.Behaviors>

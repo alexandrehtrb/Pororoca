@@ -365,7 +365,7 @@ internal static partial class FileExporterImporter
             List<string> filesPaths = new();
             foreach (var file in files!)
             {
-                if (file is null || !file.TryGetUri(out var uri))
+                if (file is null || file.Path is null)
                 {
                     continue;
                 }
@@ -373,7 +373,7 @@ internal static partial class FileExporterImporter
                 // uri.LocalPath returns the correct path in Linux and Windows
                 // careful with file paths with whitespaces in them
                 // TODO: confirm behavior for MacOSX
-                filesPaths.Add(uri.LocalPath);
+                filesPaths.Add(file.Path.AbsolutePath);
             }
 
             return filesPaths;
@@ -391,12 +391,12 @@ internal static partial class FileExporterImporter
     {
         var destFile = await MainWindow.Instance!.StorageProvider.SaveFilePickerAsync(opts);
 
-        if (destFile != null && destFile.TryGetUri(out var uri))
+        if (destFile != null && destFile.Path is not null)
         {
             // uri.LocalPath returns the correct path in Linux and Windows
             // careful with file paths with whitespaces in them
             // TODO: confirm behavior for MacOSX
-            return uri.LocalPath;
+            return destFile.Path.AbsolutePath;
         }
         else
         {

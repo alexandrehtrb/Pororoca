@@ -9,16 +9,15 @@
     xmlns:controls="clr-namespace:Pororoca.Desktop.Controls;assembly=Pororoca.Desktop"
     xmlns:AvalonEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
     xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
-    xmlns:idd="clr-namespace:Avalonia.Xaml.Interactions.DragAndDrop;assembly=Avalonia.Xaml.Interactions"
+    xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
+    xmlns:idd="clr-namespace:Avalonia.Xaml.Interactions.DragAndDrop;assembly=Avalonia.Xaml.Interactions.DragAndDrop"
     xmlns:b="clr-namespace:Pororoca.Desktop.Behaviors;assembly=Pororoca.Desktop"
     x:DataType="vm:WebSocketConnectionViewModel"
     x:Class="Pororoca.Desktop.Views.WebSocketConnectionView"
     mc:Ignorable="d"
     d:DesignWidth="1350"
     d:DesignHeight="700"
-    xmlns:pages="clr-namespace:Pororoca.Desktop.Pages;assembly=Pororoca.Desktop"
-    FontSize="14"
-    Foreground="{StaticResource SystemBaseHighColor}">
+    FontSize="14">
 
   <UserControl.Styles>
     <Style Selector="TabItem">
@@ -109,7 +108,7 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Stretch"
             SelectedIndex="{Binding HttpVersionSelectedIndex, Mode=TwoWay}"
-            Items="{Binding HttpVersionSelectionOptions}" />
+            ItemsSource="{Binding HttpVersionSelectionOptions}" />
 
         <Button
             Grid.Column="2"
@@ -291,7 +290,7 @@
                     Margin="0,12,0,0"
                     VerticalAlignment="Stretch"
                     AutoGenerateColumns="False"
-                    Items="{Binding ConnectionRequestHeaders}"
+                    ItemsSource="{Binding ConnectionRequestHeaders}"
                     CanUserResizeColumns="True"
                     Classes="draggable">
                   <i:Interaction.Behaviors>
@@ -376,7 +375,7 @@
                     Margin="0,12,0,0"
                     VerticalAlignment="Stretch"
                     AutoGenerateColumns="False"
-                    Items="{Binding Subprotocols}"
+                    ItemsSource="{Binding Subprotocols}"
                     CanUserResizeColumns="True"
                     Classes="draggable">
                   <i:Interaction.Behaviors>
@@ -560,7 +559,7 @@
             Margin="12,24,12,8"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Items="{Binding ExchangedMessages, Mode=TwoWay}"
+            ItemsSource="{Binding ExchangedMessages, Mode=TwoWay}"
             Background="#0A1929"
             SelectedItem="{Binding SelectedExchangedMessage, Mode=TwoWay}">
           <ListBox.Styles>
@@ -663,7 +662,7 @@
                 FontWeight="Light"
                 VerticalContentAlignment="Center"
                 HorizontalAlignment="Stretch"
-                Items="{Binding Items}"
+                ItemsSource="{Binding Items}"
                 SelectedIndex="{Binding MessageToSendSelectedIndex, Mode=TwoWay}">
               <ComboBox.ItemTemplate>
                 <DataTemplate>

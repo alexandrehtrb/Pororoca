@@ -1,4 +1,4 @@
-﻿<UserControl
+<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
@@ -8,10 +8,8 @@
     mc:Ignorable="d"
     d:DesignWidth="1350"
     d:DesignHeight="700"
-    xmlns:pages="clr-namespace:Pororoca.Desktop.Pages;assembly=Pororoca.Desktop"
     x:Class="Pororoca.Desktop.Views.EditableTextBlockView"
-    FontSize="14"
-    Foreground="{StaticResource SystemBaseHighColor}">
+    FontSize="14">
 
   <Grid ShowGridLines="False">
     <Grid.ColumnDefinitions>
