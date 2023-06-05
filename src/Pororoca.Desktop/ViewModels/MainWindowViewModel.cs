@@ -371,8 +371,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     private void ShowUpdateReminder()
     {
-        var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
-        Bitmap bitmap = new(assets!.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
+        Bitmap bitmap = new(AssetLoader.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
 
         var msgbox = MessageBoxManager.GetMessageBoxStandardWindow(
             new MessageBoxStandardParams()

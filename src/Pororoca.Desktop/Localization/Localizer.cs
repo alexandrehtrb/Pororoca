@@ -35,18 +35,13 @@ public class Localizer : INotifyPropertyChanged
     public bool LoadLanguage(Language language)
     {
         Language = language;
-        var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
 
         Uri uri = new($"avares://Pororoca.Desktop/Assets/i18n/{language.GetLanguageLCID()}.json");
-        if (assets != null && assets.Exists(uri))
-        {
-            using var stringsFileUtf8Stream = assets.Open(uri);
-            this._mappings = JsonSerializer.Deserialize<Dictionary<string, string>>(stringsFileUtf8Stream);
-            Invalidate();
+        using var stringsFileUtf8Stream = AssetLoader.Open(uri);
+        this._mappings = JsonSerializer.Deserialize<Dictionary<string, string>>(stringsFileUtf8Stream);
+        Invalidate();
 
-            return true;
-        }
-        return false;
+        return true;
     } // LoadLanguage
 
     public void Invalidate()
