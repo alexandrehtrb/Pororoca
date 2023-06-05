@@ -12,6 +12,7 @@
     x:Class="Pororoca.Desktop.Views.MainWindow"
     x:CompileBindings="True"
     x:DataType="vm:MainWindowViewModel"
+    FontFamily="{StaticResource DefaultFontFamily}"
     Icon="/Assets/pororoca_icon.ico"
     Title="Pororoca">
 
