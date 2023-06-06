@@ -76,7 +76,6 @@
           IsVisible="{Binding IsEditing}"
           FontSize="18"
           Padding="8,4,8,4"
-          FontWeight="Light"
           VerticalContentAlignment="Center"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"

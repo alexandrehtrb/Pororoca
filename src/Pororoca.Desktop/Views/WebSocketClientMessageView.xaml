@@ -6,7 +6,7 @@
     xmlns:v="using:Pororoca.Desktop.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:i18n="clr-namespace:Pororoca.Desktop.Localization"
-    xmlns:AvalonEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+    xmlns:AvaloniaEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
     xmlns:controls="clr-namespace:Pororoca.Desktop.Controls;assembly=Pororoca.Desktop"
     mc:Ignorable="d"
     d:DesignWidth="1350"
@@ -76,8 +76,6 @@
           Height="40"
           Width="240"
           Margin="0,12,0,0"
-          FontSize="14"
-          VerticalContentAlignment="Center"
           SelectedIndex="{Binding MessageTypeSelectedIndex, Mode=TwoWay}">
         <ComboBoxItem
             IsSelected="{Binding IsMessageTypeTextSelected, Mode=TwoWay}"
@@ -99,9 +97,6 @@
         <ComboBox
             Height="36"
             Width="120"
-            FontSize="14"
-            FontWeight="Light"
-            VerticalContentAlignment="Center"
             SelectedIndex="{Binding ContentModeSelectedIndex, Mode=TwoWay}">
           <ComboBoxItem
               x:Name="wsScrReqMsgContentModeSelectionRaw"
@@ -119,9 +114,6 @@
             Height="36"
             Width="120"
             Margin="12,0,0,0"
-            FontSize="14"
-            FontWeight="Light"
-            VerticalContentAlignment="Center"
             SelectedIndex="{Binding RawContentSyntaxSelectedIndex, Mode=TwoWay}">
           <ComboBoxItem
               IsSelected="{Binding IsRawContentJsonSyntaxSelected, Mode=TwoWay}"
@@ -137,15 +129,12 @@
             IsVisible="{ReflectionBinding IsSelected, ElementName=wsScrReqMsgContentModeSelectionRaw}"
             Height="36"
             Width="120"
-            Margin="12,0,0,0"
-            FontSize="14"
-            FontWeight="Light"
-            VerticalContentAlignment="Center" /-->
+            Margin="12,0,0,0" /-->
 
       </StackPanel>
 
 
-      <AvalonEdit:TextEditor
+      <AvaloniaEdit:TextEditor
           Name="RawContentEditor"
           Grid.Column="0"
           Grid.Row="3"
@@ -153,15 +142,7 @@
           VerticalAlignment="Stretch"
           Margin="0,12,0,0"
           IsVisible="{ReflectionBinding IsSelected, ElementName=wsScrReqMsgContentModeSelectionRaw}"
-          Foreground="{StaticResource TextEditorForeground}"
-          Background="{StaticResource TextEditorBackground}"
-          HorizontalScrollBarVisibility="Auto"
-          VerticalScrollBarVisibility="Visible"
           IsReadOnly="False"
-          ShowLineNumbers="True"
-          FontFamily="Cascadia Code,Consolas,Menlo,Monospace"
-          FontWeight="Light"
-          FontSize="14"
           Document="{Binding RawContentTextDocument}" />
 
       <StackPanel
@@ -175,11 +156,9 @@
           IsVisible="{ReflectionBinding IsSelected, ElementName=wsScrReqMsgContentModeSelectionFile}">
 
         <TextBox
-            Height="36"
             IsVisible="{ReflectionBinding IsSelected, ElementName=wsScrReqMsgContentModeSelectionFile}"
             HorizontalContentAlignment="Left"
             VerticalContentAlignment="Center"
-            FontSize="14"
             Watermark="{i18n:Localize ContentFileSrcPathWatermark, Context=WebSocketClientMessage}"
             Text="{Binding ContentFileSrcPath, Mode=TwoWay}" />
 
