@@ -11,7 +11,7 @@
         </Border>
     </Design.PreviewWith>
     <Styles.Resources>
-        <FontFamily x:Key="DefaultFontFamily">avares://Pororoca.Desktop/Assets/Fonts#Lato</FontFamily>
+        <FontFamily x:Key="DefaultFontFamily">avares://Pororoca.Desktop/Assets/Fonts#Cabin</FontFamily>
         <FontFamily x:Key="CodeFontFamily">Cascadia Code,Consolas,Menlo,Monospace</FontFamily>
 
         <Color x:Key="SystemAccentColorDark3">#2B1808</Color>
