@@ -110,6 +110,17 @@ public sealed class HttpResponseViewModel : ViewModelBase
     {
         if (res != null && res.Successful)
         {
+            // Gambiarra to temporarily fix this bug:
+            // https://github.com/AvaloniaUI/Avalonia/issues/9527
+            // When a response is received but the selected tab is Body, 
+            // the Response Headers DataGrid would not be updated.
+            // To remediate this, we will first switch to Headers tab, then go back to Body tab.
+            bool wasShowingResponseBody = (ResponseTabsSelectedIndex == 1);
+            if (wasShowingResponseBody)
+            {
+                ResponseTabsSelectedIndex = 0; // switch to Headers tab
+            }
+
             this.res = res;
             ResponseStatusCodeElapsedTimeTitle = FormatSuccessfulResponseTitle(res.ElapsedTime, (HttpStatusCode)res.StatusCode!);
             UpdateHeadersAndTrailers(res.Headers, res.Trailers);
@@ -122,6 +133,11 @@ public sealed class HttpResponseViewModel : ViewModelBase
                                  string.Format(Localizer.Instance["HttpResponse/BodyContentBinaryNotShown"], res.GetBodyAsBinary()!.Length);
             IsSaveResponseBodyToFileVisible = res.HasBody;
             IsDisableTlsVerificationVisible = false;
+
+            if (wasShowingResponseBody)
+            {
+                ResponseTabsSelectedIndex = 1; // switch back to Body tab
+            }
         }
         else if (res != null && !res.WasCancelled) // Not success, but also not cancelled. If cancelled, do nothing.
         {
