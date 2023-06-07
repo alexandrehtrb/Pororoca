@@ -1,19 +1,8 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:clr="clr-namespace:System;assembly=mscorlib"
-        xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
-        xmlns:b="clr-namespace:Pororoca.Desktop.Behaviors;assembly=Pororoca.Desktop">
-    <Design.PreviewWith>
-        <Border Padding="20">
-            <StackPanel Spacing="5">
-                <TextBlock Text="Code Font Family" FontFamily="{StaticResource CodeFontFamily}" FontWeight="Light"/>
-            </StackPanel>
-        </Border>
-    </Design.PreviewWith>
+        xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop">
     <Styles.Resources>
-        <FontFamily x:Key="DefaultFontFamily">avares://Pororoca.Desktop/Assets/Fonts#Cabin</FontFamily>
-        <FontFamily x:Key="CodeFontFamily">Cascadia Code,Consolas,Menlo,Monospace</FontFamily>
-
         <Color x:Key="SystemAccentColorDark3">#2B1808</Color>
         <Color x:Key="SystemAccentColorDark2">#562F10</Color>
         <Color x:Key="SystemAccentColorDark1">#814718</Color>
