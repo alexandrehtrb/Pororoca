@@ -160,6 +160,7 @@
             HorizontalContentAlignment="Left"
             VerticalContentAlignment="Center"
             Watermark="{i18n:Localize ContentFileSrcPathWatermark, Context=WebSocketClientMessage}"
+            Classes="SingleLine"
             Text="{Binding ContentFileSrcPath, Mode=TwoWay}" />
 
         <Button

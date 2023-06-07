@@ -89,12 +89,12 @@
               VerticalContentAlignment="Center"
               ToolTip.Placement="Bottom"
               ToolTip.Tip="{Binding ResolvedRequestUrlToolTip}"
+              Classes="SingleLine"
               PointerEntered="OnRequestUrlPointerEnter" />
 
           <TextBlock
               Margin="12,6,12,0"
-              FontSize="14"
-              Foreground="{StaticResource SystemErrorTextColor}"
+              Classes="ErrorMessage"
               Text="{Binding InvalidRequestMessage}"
               IsVisible="{Binding IsInvalidRequestMessageVisible}" />
 
@@ -144,7 +144,7 @@
       </Grid>
 
       <Separator
-          Background="{StaticResource MainWindowSidebarAndSeparatorsColor}"
+          Classes="Separator"
           Height="6"
           Margin="0,36,0,0" />
     </StackPanel>
@@ -392,6 +392,7 @@
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Left"
                     VerticalContentAlignment="Center"
+                    Classes="SingleLine"
                     Text="{Binding RequestBodyFileSrcPath}" />
                 <Button
                     Grid.Column="0"
@@ -612,14 +613,9 @@
                 <TextBox
                     Grid.Column="0"
                     Grid.Row="0"
-                    FontFamily="{StaticResource CodeFontFamily}"
-                    FontSize="12"
                     Watermark="{i18n:Localize BodyGraphQlQueryWatermark, Context=HttpRequest}"
                     HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Left"
-                    VerticalContentAlignment="Top"
-                    AcceptsReturn="True"
-                    AcceptsTab="True"
+                    Classes="CodeTextBox"
                     Text="{Binding RequestBodyGraphQlQuery}" />
                 <GridSplitter
                     Grid.Column="1"
@@ -627,18 +623,13 @@
                     Margin="12,0,12,0"
                     Width="2"
                     VerticalAlignment="Stretch"
-                    Background="Black" />
+                    Classes="Separator" />
                 <TextBox
                     Grid.Column="2"
                     Grid.Row="0"
-                    FontFamily="{StaticResource CodeFontFamily}"
-                    FontSize="12"
                     Watermark="{i18n:Localize BodyGraphQlVariablesWatermark, Context=HttpRequest}"
                     HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Left"
-                    VerticalContentAlignment="Top"
-                    AcceptsReturn="True"
-                    AcceptsTab="True"
+                    Classes="CodeTextBox"
                     Text="{Binding RequestBodyGraphQlVariables}" />
               </Grid>
             </Grid>
@@ -660,7 +651,7 @@
           Grid.Row="0"
           Width="2"
           VerticalAlignment="Stretch"
-          Background="{StaticResource MainWindowSidebarAndSeparatorsColor}" />
+          Classes="Separator" />
       <!-- RESPONSE -->
       <Grid
           Grid.Column="2"

@@ -98,7 +98,7 @@
       <Panel
           DockPanel.Dock="Left"
           Width="240"
-          Background="{StaticResource MainWindowSidebarAndSeparatorsColor}">
+          Background="{StaticResource MainWindowSidebarColor}">
         <v:CollectionsGroupView DataContext="{Binding CollectionsGroupViewDataCtx}" />
       </Panel>
 

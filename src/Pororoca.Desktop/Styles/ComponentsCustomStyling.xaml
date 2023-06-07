@@ -9,7 +9,7 @@
     </Style>
 
     <Style Selector="TabControl WrapPanel">
-        <Setter Property="Background" Value="{StaticResource MainWindowDarkBackgroundColor}"/>
+        <Setter Property="Background" Value="{StaticResource MainWindowDarkerBackgroundColor}"/>
     </Style>
 
     <Style Selector="ComboBox">
@@ -18,10 +18,19 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
 
-    <Style Selector="TextBox">
+    <Style Selector="TextBox.SingleLine">
         <Setter Property="FontWeight" Value="Light"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="Height" Value="36"/>
+    </Style>
+
+    <Style Selector="TextBox.CodeTextBox">
+        <Setter Property="FontFamily" Value="Cascadia Code,Consolas,Menlo,Monospace"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Top" />
+        <Setter Property="AcceptsReturn" Value="True" />
+        <Setter Property="AcceptsTab" Value="True" />
     </Style>
 
     <Style Selector="TextBlock.SectionTitle">
@@ -40,10 +49,27 @@
         <Setter Property="TextWrapping" Value="Wrap"/>
     </Style>
 
+    <Style Selector="TextBlock.ErrorMessage">
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Foreground" Value="{StaticResource SystemErrorTextColor}"/>
+    </Style>
+
     <Style Selector="DataGridColumnHeader">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="TextBlock.FontSize" Value="14"/>
         <Setter Property="TextBlock.FontWeight" Value="Light"/>
+    </Style>
+
+    <Style Selector="GridSplitter.Separator">
+        <Setter Property="Background" Value="{StaticResource MainWindowSeparatorsColor}"/>
+    </Style>
+    
+    <Style Selector="Rectangle.Separator">
+        <Setter Property="Fill" Value="{StaticResource MainWindowSeparatorsColor}"/>
+    </Style>
+
+    <Style Selector="Separator.Separator">
+        <Setter Property="Background" Value="{StaticResource MainWindowSeparatorsColor}"/>
     </Style>
 
     <Style Selector="Button.Primary">
@@ -101,7 +127,7 @@
     </Style>
 
     <Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Background" Value="{StaticResource MainWindowLightBackgroundColor}" />
+        <Setter Property="Background" Value="{StaticResource MainWindowLighterBackgroundColor}" />
     </Style>
 
     <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
@@ -134,5 +160,5 @@
         <Setter Property="FontWeight" Value="Light"/>
         <Setter Property="FontSize" Value="14"/>
     </Style>
-    
+
 </Styles>

@@ -26,6 +26,8 @@
         <Color x:Key="SystemInvertedAccentColorLight1">#88DDCE</Color> <!-- Essa não é uma cor padrão do sistema -->
         <Color x:Key="SystemInvertedAccentColorLight2">#98E2D4</Color> <!-- Essa não é uma cor padrão do sistema -->
         <Color x:Key="SystemErrorTextColor">#FF4D4D</Color> <!-- Cor padrão das mensagens de erro -->
+        <!-- SystemBaseHighColor é a cor padrão normal dos textos (preto no tema claro, branco no tema escuro) -->
+        <!-- SystemAltHighColor é a cor padrão invertida dos textos (branco no tema claro, preto no tema escuro) -->
 
         <!--Color x:Key="SystemControlForegroundBaseHighBrush">DarkGreen</Color--> <!-- Cor padrão dos textos -->
 
@@ -62,9 +64,10 @@
         <!--SolidColorBrush x:Key="ComboBoxDropDownGlyphForegroundFocusedPressed" Color="{StaticResource TextControlForegroundFocused}"/-->
 
         <SolidColorBrush x:Key="MainWindowBackgroundColor" Color="#0F263F"/>
-        <SolidColorBrush x:Key="MainWindowDarkBackgroundColor" Color="#0A1929"/>
-        <SolidColorBrush x:Key="MainWindowLightBackgroundColor" Color="Transparent"/>
-        <SolidColorBrush x:Key="MainWindowSidebarAndSeparatorsColor" Color="Black"/>
+        <SolidColorBrush x:Key="MainWindowDarkerBackgroundColor" Color="#0A1929"/>
+        <SolidColorBrush x:Key="MainWindowLighterBackgroundColor" Color="Transparent"/>
+        <SolidColorBrush x:Key="MainWindowSidebarColor" Color="Black"/>
+        <SolidColorBrush x:Key="MainWindowSeparatorsColor" Color="Black"/>
         <SolidColorBrush x:Key="DragAndDropDataGridItemDraggingColor" Color="White"/>
         <SolidColorBrush x:Key="ButtonPrimaryBackgroundColor" Color="{StaticResource SystemAccentColor}"/>
         <SolidColorBrush x:Key="ButtonPrimaryTextColor" Color="White"/>

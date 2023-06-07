@@ -25,10 +25,6 @@
       <Setter
           Property="FontSize"
           Value="20" />
-      <!--Setter
-      Property="FontWeight" Value="Bold"/-->
-      <!--Setter
-      Property="FontFamily" Value="{StaticResource CodeFontFamily}"/-->
     </Style>
   </UserControl.Styles>
 
@@ -79,12 +75,12 @@
               VerticalContentAlignment="Center"
               ToolTip.Placement="Bottom"
               ToolTip.Tip="{Binding ResolvedUrlToolTip}"
+              Classes="SingleLine"
               PointerEntered="OnUrlPointerEnter" />
 
           <TextBlock
               Margin="12,6,12,0"
-              FontSize="14"
-              Foreground="{StaticResource SystemErrorTextColor}"
+              Classes="ErrorMessage"
               Text="{Binding InvalidConnectionError}"
               IsVisible="{Binding IsInvalidConnectionErrorVisible}" />
 
@@ -178,7 +174,7 @@
 
       <Separator
           Margin="-12,0,-12,0"
-          Background="{StaticResource MainWindowSidebarAndSeparatorsColor}"
+          Classes="Separator"
           Height="6" />
     </StackPanel>
 
@@ -509,15 +505,11 @@
                   Grid.Column="0"
                   Grid.Row="0"
                   Margin="0,12,0,12"
-                  FontFamily="{StaticResource CodeFontFamily}"
-                  FontSize="12"
                   Watermark="{i18n:Localize ConnectionExceptionWatermark, Context=WebSocketConnection}"
                   TextWrapping="NoWrap"
                   IsReadOnly="True"
-                  AcceptsReturn="True"
                   HorizontalAlignment="Stretch"
-                  HorizontalContentAlignment="Left"
-                  VerticalContentAlignment="Top"
+                  Classes="CodeTextBox"
                   Text="{Binding ConnectionExceptionContent}" />
               <Button
                   Grid.Column="0"
@@ -537,7 +529,7 @@
           Grid.Row="0"
           Width="6"
           VerticalAlignment="Stretch"
-          Fill="{StaticResource MainWindowSidebarAndSeparatorsColor}" />
+          Classes="Separator" />
       <!-- MESSAGES EXCHANGED -->
       <Grid
           Grid.Column="2"
@@ -675,8 +667,7 @@
 
           <TextBlock
               Margin="12,6,12,0"
-              FontSize="14"
-              Foreground="{StaticResource SystemErrorTextColor}"
+              Classes="ErrorMessage"
               Text="{Binding InvalidClientMessageError}"
               IsVisible="{Binding IsInvalidClientMessageErrorVisible}" />
 
@@ -688,7 +679,7 @@
           Grid.Row="0"
           Width="6"
           VerticalAlignment="Stretch"
-          Fill="{StaticResource MainWindowSidebarAndSeparatorsColor}" />
+          Classes="Separator" />
       <!-- MESSAGE DETAIL -->
       <Grid
           Grid.Column="4"
@@ -709,6 +700,7 @@
             Height="40"
             Text="{Binding SelectedExchangedMessageType}"
             Watermark="{i18n:Localize MessageTypeWatermark, Context=WebSocketExchangedMessageDetail}"
+            Classes="SingleLine"
             VerticalContentAlignment="Center" />
 
         <!-- AcceptsReturn="True" allows for horizontal scrollbar -->

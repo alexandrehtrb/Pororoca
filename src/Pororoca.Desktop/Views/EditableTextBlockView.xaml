@@ -79,6 +79,7 @@
           VerticalContentAlignment="Center"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
+          Classes="SingleLine"
           KeyDown="OnKeyDownHandler" />
     </Grid>
 

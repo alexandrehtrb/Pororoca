@@ -84,6 +84,7 @@
           HorizontalAlignment="Left"
           VerticalContentAlignment="Center"
           Watermark="{i18n:Localize AuthModeBasicLoginWatermark, Context=RequestAuth}"
+          Classes="SingleLine"
           Text="{Binding BasicAuthLogin}" />
       <TextBox
           Width="200"
@@ -91,6 +92,7 @@
           HorizontalAlignment="Left"
           VerticalContentAlignment="Center"
           Watermark="{i18n:Localize AuthModeBasicPasswordWatermark, Context=RequestAuth}"
+          Classes="SingleLine"
           Text="{Binding BasicAuthPassword}" />
     </StackPanel>
     <!-- BEARER AUTH -->
@@ -104,6 +106,7 @@
           HorizontalAlignment="Left"
           VerticalContentAlignment="Center"
           Watermark="{i18n:Localize AuthModeBearerTokenWatermark, Context=RequestAuth}"
+          Classes="SingleLine"
           Text="{Binding BearerAuthToken}" />
     </StackPanel>
     <!-- CLIENT CERTIFICATE AUTH -->
@@ -129,6 +132,7 @@
             Watermark="{i18n:Localize CertificateFilePathWatermark, Context=RequestAuth}"
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
+            Classes="SingleLine"
             Text="{Binding ClientCertificateAuthPkcs12CertificateFilePath}" />
         <TextBox
             Width="240"
@@ -136,6 +140,7 @@
             Watermark="{i18n:Localize FilePasswordWatermark, Context=RequestAuth}"
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
+            Classes="SingleLine"
             Text="{Binding ClientCertificateAuthPkcs12FilePassword}" />
         <Button
             Margin="0,12,0,0"
@@ -153,6 +158,7 @@
             Watermark="{i18n:Localize CertificateFilePathWatermark, Context=RequestAuth}"
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
+            Classes="SingleLine"
             Text="{Binding ClientCertificateAuthPemCertificateFilePath}" />
         <TextBox
             Width="240"
@@ -160,6 +166,7 @@
             Watermark="{i18n:Localize PrivateKeyFilePathWatermark, Context=RequestAuth}"
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
+            Classes="SingleLine"
             Text="{Binding ClientCertificateAuthPemPrivateKeyFilePath}" />
         <TextBox
             Width="240"
@@ -167,6 +174,7 @@
             Watermark="{i18n:Localize FilePasswordWatermark, Context=RequestAuth}"
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
+            Classes="SingleLine"
             Text="{Binding ClientCertificateAuthPemFilePassword}" />
         <StackPanel
             Orientation="Horizontal"
