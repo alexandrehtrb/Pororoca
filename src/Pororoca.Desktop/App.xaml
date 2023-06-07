@@ -10,7 +10,7 @@
         <FluentTheme/>
         <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
-        <StyleInclude Source="/Styles/IconsGeometries.xaml" />
+        <StyleInclude Source="/Styles/Icons.xaml" />
         <StyleInclude Source="/Styles/StylesResources.xaml" />
         <StyleInclude Source="/Styles/ComponentsCustomStyling.xaml" />
         <StyleInclude Source="/Styles/DragAndDropDataGrid.xaml" />

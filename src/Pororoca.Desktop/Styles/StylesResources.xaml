@@ -85,26 +85,12 @@
         <SolidColorBrush x:Key="WebSocketMessageFromServerPrimaryColor" Color="{StaticResource SystemInvertedAccentColorLight1}"/>
         <SolidColorBrush x:Key="WebSocketMessageFromServerSecondaryColor" Color="White"/> 
         <SolidColorBrush x:Key="WebSocketConnectedColor" Color="Green"/>
+        <SolidColorBrush x:Key="DefaultIconsColor" Color="White"/>
         <Color x:Key="TextEditorBackground">#1E1E1E</Color>
         <Color x:Key="TextEditorForeground">#D4D4D4</Color>
         <!-- TODO: Configurar tema do editor de texto e cor de variável Pororoca através de styles -->
         <!--Color x:Key="TextEditorPororocaVariableHighlightForeground">Gold</Color-->
         <!--clr:String x:Key="TextEditorTheme">DarkPlus</clr:String-->
-
-
-        <SolidColorBrush x:Key="DefaultIconsColor" Color="White"/>
-        <GeometryDrawing x:Key="IconAdd" Brush="{StaticResource DefaultIconsColor}" Geometry="{StaticResource IconAddGeometry}" />
-        <GeometryDrawing x:Key="IconAddFolder" Brush="{StaticResource DefaultIconsColor}" Geometry="{StaticResource IconAddFolderGeometry}" />
-        <GeometryDrawing x:Key="IconCheck" Brush="{StaticResource DefaultIconsColor}" Geometry="{StaticResource IconCheckGeometry}" />
-        <GeometryDrawing x:Key="IconEdit" Brush="{StaticResource DefaultIconsColor}" Geometry="{StaticResource IconEditGeometry}" />
-        <GeometryDrawing x:Key="IconExport" Brush="{StaticResource DefaultIconsColor}" Geometry="{StaticResource IconExportGeometry}" />
-        <GeometryDrawing x:Key="IconImport" Brush="{StaticResource DefaultIconsColor}" Geometry="{StaticResource IconImportGeometry}" />
-        <GeometryDrawing x:Key="IconHttp" Brush="{StaticResource DefaultIconsColor}" Geometry="{StaticResource IconHttpGeometry}" />
-        <GeometryDrawing x:Key="IconLeaf" Brush="{StaticResource DefaultIconsColor}" Geometry="{StaticResource IconLeafGeometry}" />
-        <GeometryDrawing x:Key="IconRemove" Brush="{StaticResource DefaultIconsColor}" Geometry="{StaticResource IconRemoveGeometry}" />
-        <GeometryDrawing x:Key="IconRemovePointerOver" Brush="{StaticResource SystemAccentColor}" Geometry="{StaticResource IconRemoveGeometry}" />
-        <GeometryDrawing x:Key="IconWebsocket" Brush="{StaticResource DefaultIconsColor}" Geometry="{StaticResource IconWebsocketGeometry}" />
-        <GeometryDrawing x:Key="IconWebsocketConnected" Brush="{StaticResource WebSocketConnectedColor}" Geometry="{StaticResource IconWebsocketGeometry}" />
     </Styles.Resources>
 
 </Styles>
