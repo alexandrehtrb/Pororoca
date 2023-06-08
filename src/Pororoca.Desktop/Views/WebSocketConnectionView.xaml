@@ -551,7 +551,6 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             ItemsSource="{Binding ExchangedMessages, Mode=TwoWay}"
-            Background="#0A1929"
             SelectedItem="{Binding SelectedExchangedMessage, Mode=TwoWay}">
 
           <ListBox.ItemTemplate>

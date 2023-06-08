@@ -54,9 +54,10 @@
 
         <SolidColorBrush x:Key="MainWindowBackgroundColor" Color="#0F263F"/>
         <SolidColorBrush x:Key="MainWindowDarkerBackgroundColor" Color="#0A1929"/>
-        <SolidColorBrush x:Key="MainWindowLighterBackgroundColor" Color="Transparent"/>
         <SolidColorBrush x:Key="MainWindowSidebarColor" Color="Black"/>
         <SolidColorBrush x:Key="MainWindowSeparatorsColor" Color="Black"/>
+        <SolidColorBrush x:Key="ListBoxBackgroundColor" Color="#0A1929"/>
+        <SolidColorBrush x:Key="ListBoxItemSelectedBackgroundColor" Color="#0F263F"/>
         <SolidColorBrush x:Key="DragAndDropDataGridItemDraggingColor" Color="White"/>
         <SolidColorBrush x:Key="ButtonPrimaryBackgroundColor" Color="{StaticResource SystemAccentColor}"/>
         <SolidColorBrush x:Key="ButtonPrimaryTextColor" Color="White"/>

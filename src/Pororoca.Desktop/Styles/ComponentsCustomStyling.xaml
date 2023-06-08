@@ -126,12 +126,12 @@
         </Setter>
     </Style>
 
-    <Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Background" Value="{StaticResource MainWindowLighterBackgroundColor}" />
+    <Style Selector="ListBox">
+        <Setter Property="Background" Value="{StaticResource ListBoxBackgroundColor}"/>
     </Style>
 
     <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Background" Value="{StaticResource MainWindowBackgroundColor}" />
+        <Setter Property="Background" Value="{StaticResource ListBoxItemSelectedBackgroundColor}" />
     </Style>
 
     <Style Selector="TextBlock.WebSocketMessageFromClientPrimary">
