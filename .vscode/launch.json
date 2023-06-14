@@ -20,7 +20,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "buildDesktop",
-            "program": "${workspaceFolder}/src/Pororoca.Desktop/bin/Debug/net7.0/win-x64/Pororoca.Desktop.dll",
+            "program": "${workspaceFolder}/src/Pororoca.Desktop/bin/Debug/net7.0/Pororoca.Desktop.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/Pororoca.Desktop",
             "console": "internalConsole",

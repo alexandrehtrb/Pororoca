@@ -10,7 +10,7 @@ using static Pororoca.Desktop.ExportImport.FileExporterImporter;
 
 namespace Pororoca.Desktop.UserData;
 
-public sealed class UserDataManager
+public static class UserDataManager
 {
     private const string appDataProgramFolderName = "Pororoca";
     private const string userDataFolderName = "PororocaUserData";
@@ -91,11 +91,7 @@ public sealed class UserDataManager
     {
         CreateUserDataFolderIfNotExists();
         DeleteUserDataFiles();
-        return Task.WhenAll(new[]
-        {
-            SaveUserPreferences(userPrefs),
-            SaveUserCollections(collections)
-        });
+        return Task.WhenAll(SaveUserPreferences(userPrefs), SaveUserCollections(collections));
     }
 
     private static Task SaveUserPreferences(UserPreferences userPrefs)
@@ -185,7 +181,17 @@ public sealed class UserDataManager
         // do not use single-file app on debug
         string currentDirPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location!)!;
         DirectoryInfo currentDir = new(currentDirPath);
-        return currentDir.Parent!.Parent!.Parent!.Parent!;
+        // for some reason, when debugging on Windows, the executable is located at:
+        // \src\Pororoca.Desktop\bin\Debug\net7.0\Pororoca.Desktop.dll,
+        // without the subfolder "win-x64"
+        if (OperatingSystem.IsWindows())
+        {
+            return currentDir.Parent!.Parent!.Parent!;
+        }
+        else
+        {
+            return currentDir.Parent!.Parent!.Parent!.Parent!;
+        }
     }
 #endif
 
