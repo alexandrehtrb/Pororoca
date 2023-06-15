@@ -22,24 +22,26 @@
                   Margin="2"
                   Height="16"
                   Width="180">
-                  <Image
-                      VerticalAlignment="Center"
-                      Width="16"
-                      Height="16"
-                      Margin="4 0 8 0">
-                      <Image.Source>
-                          <DrawingImage>
-                              <DrawingImage.Drawing>
-                                  <GeometryDrawing Brush="{DynamicResource DefaultIconsBrush}" Geometry="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}"/>
-                              </DrawingImage.Drawing>
-                          </DrawingImage>
-                      </Image.Source>                      
-                  </Image>
-                  <TextBlock
-                      VerticalAlignment="Center"
+                <Image
+                    VerticalAlignment="Center"
+                    Width="16"
+                    Height="16"
+                    Margin="4 0 8 0">
+                  <Image.Source>
+                    <DrawingImage>
+                      <DrawingImage.Drawing>
+                        <GeometryDrawing
+                            Brush="{DynamicResource DefaultIconsBrush}"
+                            Geometry="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}"/>
+                      </DrawingImage.Drawing>
+                    </DrawingImage>
+                  </Image.Source>
+                </Image>
+                <TextBlock
+                    VerticalAlignment="Center"
                     Text="{TemplateBinding Text}"
                     Margin="4 0 8 0"
-                    FontSize="14" />
+                    FontSize="14"/>
               </StackPanel>
             </Button.Content>
           </Button>

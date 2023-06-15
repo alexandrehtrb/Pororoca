@@ -2,37 +2,37 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Pororoca.Desktop">
-    <ResourceDictionary.ThemeDictionaries>
-        <ResourceDictionary x:Key="{x:Static local:PororocaThemeManager.AmazonianNight}">
-            <!-- System colours overrides below -->
-            <Color x:Key="SystemAccentColorDark3">#2B1808</Color>
-            <Color x:Key="SystemAccentColorDark2">#562F10</Color>
-            <Color x:Key="SystemAccentColorDark1">#814718</Color>
-            <Color x:Key="SystemAccentColor">#A55B1E</Color>
-            <Color x:Key="SystemAccentColorLight1">#C26B24</Color>
-            <Color x:Key="SystemAccentColorLight2">#D77728</Color>
-            <Color x:Key="SystemAccentColorLight3">#DB843D</Color>
-            <Color x:Key="SystemErrorTextColor">#FF4D4D</Color>
-            <!-- Custom colours below -->
-            <Color x:Key="SystemInvertedAccentColor">#38C7AD</Color>
-            <Color x:Key="SystemInvertedAccentColorLight1">#88DDCE</Color>
-            <Color x:Key="SystemInvertedAccentColorLight2">#98E2D4</Color>
-            <Color x:Key="MainWindowMenuColor">Black</Color>
-            <Color x:Key="MainWindowBackgroundColor">#0F263F</Color>
-            <Color x:Key="MainWindowDarkerBackgroundColor">#0A1929</Color>
-            <Color x:Key="MainWindowSidebarColor">Black</Color>
-            <Color x:Key="MainWindowSeparatorsColor">Black</Color>
-            <Color x:Key="ListBoxBackgroundColor">#0A1929</Color>
-            <Color x:Key="ListBoxItemSelectedBackgroundColor">#0F263F</Color>
-            <Color x:Key="DragAndDropDataGridItemDraggingColor">White</Color>
-            <Color x:Key="ButtonPrimaryTextColor">White</Color>
-            <Color x:Key="ButtonPrimaryInvertedTextColor">Black</Color>
-            <Color x:Key="WebSocketConnectedColor">Lime</Color>
-            <Color x:Key="WebSocketMessageFromClientPrimaryColor">#D77728</Color>
-            <Color x:Key="WebSocketMessageFromServerPrimaryColor">#88DDCE</Color>
-            <Color x:Key="DefaultIconsColor">White</Color>
-            <Color x:Key="TextEditorBackgroundColor">#1E1E1E</Color>
-            <Color x:Key="TextEditorForegroundColor">#D4D4D4</Color>
-        </ResourceDictionary>
-    </ResourceDictionary.ThemeDictionaries>
+  <ResourceDictionary.ThemeDictionaries>
+    <ResourceDictionary x:Key="{x:Static local:PororocaThemeManager.AmazonianNight}">
+      <!-- System colours overrides below -->
+      <Color x:Key="SystemAccentColorDark3">#2B1808</Color>
+      <Color x:Key="SystemAccentColorDark2">#562F10</Color>
+      <Color x:Key="SystemAccentColorDark1">#814718</Color>
+      <Color x:Key="SystemAccentColor">#A55B1E</Color>
+      <Color x:Key="SystemAccentColorLight1">#C26B24</Color>
+      <Color x:Key="SystemAccentColorLight2">#D77728</Color>
+      <Color x:Key="SystemAccentColorLight3">#DB843D</Color>
+      <Color x:Key="SystemErrorTextColor">#FF4D4D</Color>
+      <!-- Custom colours below -->
+      <Color x:Key="SystemInvertedAccentColor">#38C7AD</Color>
+      <Color x:Key="SystemInvertedAccentColorLight1">#88DDCE</Color>
+      <Color x:Key="SystemInvertedAccentColorLight2">#98E2D4</Color>
+      <Color x:Key="MainWindowMenuColor">Black</Color>
+      <Color x:Key="MainWindowBackgroundColor">#0F263F</Color>
+      <Color x:Key="MainWindowDarkerBackgroundColor">#0A1929</Color>
+      <Color x:Key="MainWindowSidebarColor">Black</Color>
+      <Color x:Key="MainWindowSeparatorsColor">Black</Color>
+      <Color x:Key="ListBoxBackgroundColor">#0A1929</Color>
+      <Color x:Key="ListBoxItemSelectedBackgroundColor">#0F263F</Color>
+      <Color x:Key="DragAndDropDataGridItemDraggingColor">White</Color>
+      <Color x:Key="ButtonPrimaryTextColor">White</Color>
+      <Color x:Key="ButtonPrimaryInvertedTextColor">Black</Color>
+      <Color x:Key="WebSocketConnectedColor">Lime</Color>
+      <Color x:Key="WebSocketMessageFromClientPrimaryColor">#D77728</Color>
+      <Color x:Key="WebSocketMessageFromServerPrimaryColor">#88DDCE</Color>
+      <Color x:Key="DefaultIconsColor">White</Color>
+      <Color x:Key="TextEditorBackgroundColor">#1E1E1E</Color>
+      <Color x:Key="TextEditorForegroundColor">#D4D4D4</Color>
+    </ResourceDictionary>
+  </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

@@ -1,25 +1,27 @@
-<Application xmlns="https://github.com/avaloniaui"
+<Application
+    xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Pororoca.Desktop" x:Class="Pororoca.Desktop.App">
-    <Application.DataTemplates>
-        <local:ViewLocator/>
-    </Application.DataTemplates>
-    <Application.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <MergeResourceInclude Source="/Styles/Themes.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Application.Resources>
-    <Application.Styles>
-        <FluentTheme/>
-        <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
-        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
-        <StyleInclude Source="/Styles/Fonts.xaml" />
-        <StyleInclude Source="/Styles/Icons.xaml" />
-        <StyleInclude Source="/Styles/BrushesDefinitions.xaml" />
-        <StyleInclude Source="/Styles/ComponentsCustomStyling.xaml" />
-        <StyleInclude Source="/Styles/DragAndDropDataGrid.xaml" />
-        <StyleInclude Source="/Styles/SideBar.xaml" />
-    </Application.Styles>
+    xmlns:local="using:Pororoca.Desktop"
+    x:Class="Pororoca.Desktop.App">
+  <Application.DataTemplates>
+    <local:ViewLocator/>
+  </Application.DataTemplates>
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <MergeResourceInclude Source="/Styles/Themes.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
+  <Application.Styles>
+    <FluentTheme/>
+    <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml"/>
+    <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+    <StyleInclude Source="/Styles/Fonts.xaml"/>
+    <StyleInclude Source="/Styles/Icons.xaml"/>
+    <StyleInclude Source="/Styles/BrushesDefinitions.xaml"/>
+    <StyleInclude Source="/Styles/ComponentsCustomStyling.xaml"/>
+    <StyleInclude Source="/Styles/DragAndDropDataGrid.xaml"/>
+    <StyleInclude Source="/Styles/SideBar.xaml"/>
+  </Application.Styles>
 </Application>

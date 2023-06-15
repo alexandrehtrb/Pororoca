@@ -25,14 +25,14 @@
       Margin="24,0,24,0">
 
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="*" />
-      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
     <Grid
@@ -41,7 +41,7 @@
         HorizontalAlignment="Stretch"
         VerticalAlignment="Top"
         Margin="0,24,0,0">
-      <v:EditableTextBlockView DataContext="{Binding NameEditableTextBlockViewDataCtx}" />
+      <v:EditableTextBlockView DataContext="{Binding NameEditableTextBlockViewDataCtx}"/>
     </Grid>
 
     <StackPanel
@@ -53,29 +53,29 @@
           Content="{i18n:Localize SetAsCurrentEnvironment, Context=Environment}"
           IsEnabled="{Binding !IsCurrentEnvironment}"
           Command="{Binding SetAsCurrentEnvironmentCmd}"
-          Classes="Primary" />
+          Classes="Primary"/>
       <controls:IconButton
           IsVisible="{Binding !IsOperatingSystemMacOsx}"
           Margin="12,0,0,0"
           Icon="{StaticResource IconExportGeometry}"
           Text="{i18n:Localize ExportEnvironment, Context=Environment}"
-          Command="{Binding ExportEnvironmentCmd}" />
+          Command="{Binding ExportEnvironmentCmd}"/>
       <controls:IconButton
           IsVisible="{Binding IsOperatingSystemMacOsx}"
           Margin="12,0,0,0"
           Icon="{StaticResource IconExportGeometry}"
           Text="{i18n:Localize ExportAsPororocaEnvironment, Context=Environment}"
-          Command="{Binding ExportAsPororocaEnvironmentCmd}" />
+          Command="{Binding ExportAsPororocaEnvironmentCmd}"/>
       <controls:IconButton
           IsVisible="{Binding IsOperatingSystemMacOsx}"
           Margin="12,0,0,0"
           Icon="{StaticResource IconExportGeometry}"
           Text="{i18n:Localize ExportAsPostmanEnvironment, Context=Environment}"
-          Command="{Binding ExportAsPostmanEnvironmentCmd}" />
+          Command="{Binding ExportAsPostmanEnvironmentCmd}"/>
       <CheckBox
           Margin="12,0,0,0"
           Content="{i18n:Localize ExportIncludeSecrets, Context=Environment}"
-          IsChecked="{Binding IncludeSecretVariables}" />
+          IsChecked="{Binding IncludeSecretVariables}"/>
     </StackPanel>
 
     <Button
@@ -89,15 +89,15 @@
         Margin="0,36,0,0"
         Classes="Primary"
         Command="{Binding AddNewVariableCmd}">
-                <Image
-            VerticalAlignment="Center"
-            HorizontalAlignment="Center"
-            Width="12"
-            Height="12">
-                    <Image.Source>
-                        <DrawingImage Drawing="{StaticResource IconAdd}"/>
-                    </Image.Source>
-                </Image>
+      <Image
+          VerticalAlignment="Center"
+          HorizontalAlignment="Center"
+          Width="12"
+          Height="12">
+        <Image.Source>
+          <DrawingImage Drawing="{StaticResource IconAdd}"/>
+        </Image.Source>
+      </Image>
     </Button>
 
     <DataGrid
@@ -113,28 +113,28 @@
             Width="*"
             Binding="{Binding Enabled}">
           <DataGridCheckBoxColumn.Header>
-            <TextBlock Text="{i18n:Localize VariableEnabled, Context=Environment}" />
+            <TextBlock Text="{i18n:Localize VariableEnabled, Context=Environment}"/>
           </DataGridCheckBoxColumn.Header>
         </DataGridCheckBoxColumn>
         <DataGridTextColumn
             Width="2*"
             Binding="{Binding Key}">
           <DataGridTextColumn.Header>
-            <TextBlock Text="{i18n:Localize VariableName, Context=Environment}" />
+            <TextBlock Text="{i18n:Localize VariableName, Context=Environment}"/>
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
             Width="2*"
             Binding="{Binding Value}">
           <DataGridTextColumn.Header>
-            <TextBlock Text="{i18n:Localize VariableValue, Context=Environment}" />
+            <TextBlock Text="{i18n:Localize VariableValue, Context=Environment}"/>
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridCheckBoxColumn
             Width="*"
             Binding="{Binding IsSecret}">
           <DataGridCheckBoxColumn.Header>
-            <TextBlock Text="{i18n:Localize VariableIsSecret, Context=Environment}" />
+            <TextBlock Text="{i18n:Localize VariableIsSecret, Context=Environment}"/>
           </DataGridCheckBoxColumn.Header>
         </DataGridCheckBoxColumn>
         <DataGridTemplateColumn
@@ -156,7 +156,7 @@
       </DataGrid.Columns>
       <i:Interaction.Behaviors>
         <i:BehaviorCollection>
-          <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropVariableViewModelHandler}" />
+          <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropVariableViewModelHandler}"/>
         </i:BehaviorCollection>
       </i:Interaction.Behaviors>
     </DataGrid>
@@ -168,7 +168,7 @@
         FontSize="12"
         HorizontalAlignment="Stretch"
         Margin="0,24,0,24"
-        Text="{i18n:Localize Tip, Context=Environment}" />
+        Text="{i18n:Localize Tip, Context=Environment}"/>
 
   </Grid>
 </UserControl>

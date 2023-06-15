@@ -16,185 +16,187 @@
     Icon="/Assets/pororoca_icon.ico"
     Title="Pororoca">
 
-    <Design.DataContext>
-        <vm:MainWindowViewModel />
-    </Design.DataContext>
+  <Design.DataContext>
+    <vm:MainWindowViewModel/>
+  </Design.DataContext>
 
-    <Panel>
-        <DockPanel HorizontalAlignment="Stretch" Background="{DynamicResource MainWindowMenuBrush}">
-            <Menu DockPanel.Dock="Top">
-                <MenuItem Header="{i18n:Localize File, Context=TopMenu}">
-                    <MenuItem
+  <Panel>
+    <DockPanel
+        HorizontalAlignment="Stretch"
+        Background="{DynamicResource MainWindowMenuBrush}">
+      <Menu DockPanel.Dock="Top">
+        <MenuItem Header="{i18n:Localize File, Context=TopMenu}">
+          <MenuItem
               Header="{i18n:Localize NewCollection, Context=TopMenuFile}"
-              Command="{Binding AddNewCollectionCmd}" />
-                    <Separator />
-                    <MenuItem
+              Command="{Binding AddNewCollectionCmd}"/>
+          <Separator/>
+          <MenuItem
               Header="{i18n:Localize ImportCollection, Context=TopMenuFile}"
-              Command="{Binding ImportCollectionsCmd}" />
-                    <Separator />
-                    <MenuItem
+              Command="{Binding ImportCollectionsCmd}"/>
+          <Separator/>
+          <MenuItem
               Header="{i18n:Localize Exit, Context=TopMenuFile}"
-              Click="OnCloseMainWindow" />
-                </MenuItem>
-                <MenuItem Header="{i18n:Localize Options, Context=TopMenu}">
-                    <MenuItem Header="{i18n:Localize Theme, Context=TopMenuOptions}">
-                        <MenuItem
-                    Header="{i18n:Localize Light, Context=TopMenuTheme}"
-                    Command="{Binding SwitchToLightThemeCmd}">
-                            <MenuItem.Icon>
-                                <Image
+              Click="OnCloseMainWindow"/>
+        </MenuItem>
+        <MenuItem Header="{i18n:Localize Options, Context=TopMenu}">
+          <MenuItem Header="{i18n:Localize Theme, Context=TopMenuOptions}">
+            <MenuItem
+                Header="{i18n:Localize Light, Context=TopMenuTheme}"
+                Command="{Binding SwitchToLightThemeCmd}">
+              <MenuItem.Icon>
+                <Image
                     IsVisible="{Binding IsThemeLight}"
                     Classes="MenuItemCheckMark">
-                                    <Image.Source>
-                                        <DrawingImage Drawing="{StaticResource IconCheck}"/>
-                                    </Image.Source>
-                                </Image>
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem
-                    Header="{i18n:Localize Dark, Context=TopMenuTheme}"
-                    Command="{Binding SwitchToDarkThemeCmd}">
-                            <MenuItem.Icon>
-                                <Image
+                  <Image.Source>
+                    <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                  </Image.Source>
+                </Image>
+              </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem
+                Header="{i18n:Localize Dark, Context=TopMenuTheme}"
+                Command="{Binding SwitchToDarkThemeCmd}">
+              <MenuItem.Icon>
+                <Image
                     IsVisible="{Binding IsThemeDark}"
                     Classes="MenuItemCheckMark">
-                                    <Image.Source>
-                                        <DrawingImage Drawing="{StaticResource IconCheck}"/>
-                                    </Image.Source>
-                                </Image>
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem
-                    Header="{i18n:Localize Pampa, Context=TopMenuTheme}"
-                    Command="{Binding SwitchToPampaThemeCmd}">
-                            <MenuItem.Icon>
-                                <Image
+                  <Image.Source>
+                    <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                  </Image.Source>
+                </Image>
+              </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem
+                Header="{i18n:Localize Pampa, Context=TopMenuTheme}"
+                Command="{Binding SwitchToPampaThemeCmd}">
+              <MenuItem.Icon>
+                <Image
                     IsVisible="{Binding IsThemePampa}"
                     Classes="MenuItemCheckMark">
-                                    <Image.Source>
-                                        <DrawingImage Drawing="{StaticResource IconCheck}"/>
-                                    </Image.Source>
-                                </Image>
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem
-                    Header="{i18n:Localize AmazonianNight, Context=TopMenuTheme}"
-                    Command="{Binding SwitchToAmazonianNightThemeCmd}">
-                            <MenuItem.Icon>
-                                <Image
+                  <Image.Source>
+                    <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                  </Image.Source>
+                </Image>
+              </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem
+                Header="{i18n:Localize AmazonianNight, Context=TopMenuTheme}"
+                Command="{Binding SwitchToAmazonianNightThemeCmd}">
+              <MenuItem.Icon>
+                <Image
                     IsVisible="{Binding IsThemeAmazonianNight}"
                     Classes="MenuItemCheckMark">
-                                    <Image.Source>
-                                        <DrawingImage Drawing="{StaticResource IconCheck}"/>
-                                    </Image.Source>
-                                </Image>
-                            </MenuItem.Icon>
-                        </MenuItem>
-                    </MenuItem>
-                    <MenuItem Header="{i18n:Localize Language, Context=TopMenuOptions}">
-                        <MenuItem
+                  <Image.Source>
+                    <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                  </Image.Source>
+                </Image>
+              </MenuItem.Icon>
+            </MenuItem>
+          </MenuItem>
+          <MenuItem Header="{i18n:Localize Language, Context=TopMenuOptions}">
+            <MenuItem
                 Header="{i18n:Localize Português, Context=TopMenuLanguage}"
                 Command="{Binding SelectLanguagePortuguesCmd}">
-                            <MenuItem.Icon>
-                                <Image
+              <MenuItem.Icon>
+                <Image
                     IsVisible="{Binding IsLanguagePortuguese}"
                     Classes="MenuItemCheckMark">
-                                    <Image.Source>
-                                        <DrawingImage Drawing="{StaticResource IconCheck}"/>
-                                    </Image.Source>
-                                </Image>
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem
+                  <Image.Source>
+                    <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                  </Image.Source>
+                </Image>
+              </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem
                 Header="{i18n:Localize English, Context=TopMenuLanguage}"
                 Command="{Binding SelectLanguageEnglishCmd}">
-                            <MenuItem.Icon>
-                                <Image
+              <MenuItem.Icon>
+                <Image
                     IsVisible="{Binding IsLanguageEnglish}"
                     Classes="MenuItemCheckMark">
-                                    <Image.Source>
-                                        <DrawingImage Drawing="{StaticResource IconCheck}"/>
-                                    </Image.Source>
-                                </Image>
-                            </MenuItem.Icon>
-                        </MenuItem>
-                    </MenuItem>
-                    <MenuItem
+                  <Image.Source>
+                    <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                  </Image.Source>
+                </Image>
+              </MenuItem.Icon>
+            </MenuItem>
+          </MenuItem>
+          <MenuItem
               Header="{i18n:Localize DisableTlsVerification, Context=TopMenuOptions}"
               Command="{Binding ToggleSSLVerificationCmd}">
-                        <MenuItem.Icon>
-                            <Image
+            <MenuItem.Icon>
+              <Image
                   IsVisible="{Binding IsSslVerificationDisabled}"
                   Classes="MenuItemCheckMark">
-                                <Image.Source>
-                                    <DrawingImage Drawing="{StaticResource IconCheck}"/>
-                                </Image.Source>
-                            </Image>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </MenuItem>
-                <!--MenuItem
+                <Image.Source>
+                  <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                </Image.Source>
+              </Image>
+            </MenuItem.Icon>
+          </MenuItem>
+        </MenuItem>
+        <!--MenuItem
         Header="{i18n:Localize Contribute, Context=TopMenu}"/-->
-            </Menu>
+      </Menu>
 
-            <Panel
+      <Panel
           DockPanel.Dock="Left"
           Width="240"
           Background="{DynamicResource MainWindowSidebarBrush}">
-                <v:CollectionsGroupView DataContext="{Binding CollectionsGroupViewDataCtx}" />
-            </Panel>
+        <v:CollectionsGroupView DataContext="{Binding CollectionsGroupViewDataCtx}"/>
+      </Panel>
 
-            <Panel
+      <Panel
           IsHitTestVisible="True"
           Background="{DynamicResource MainWindowBackgroundBrush}">
-                <Grid
+        <Grid
             VerticalAlignment="Stretch"
             HorizontalAlignment="Stretch">
-                    <Grid
+          <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
               IsVisible="{Binding IsCollectionViewVisible}">
-                        <v:CollectionView DataContext="{Binding CollectionViewDataCtx}" />
-                    </Grid>
-                    <Grid
+            <v:CollectionView DataContext="{Binding CollectionViewDataCtx}"/>
+          </Grid>
+          <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
               IsVisible="{Binding IsCollectionVariablesViewVisible}">
-                        <v:CollectionVariablesView DataContext="{Binding CollectionVariablesViewDataCtx}" />
-                    </Grid>
-                    <Grid
+            <v:CollectionVariablesView DataContext="{Binding CollectionVariablesViewDataCtx}"/>
+          </Grid>
+          <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
               IsVisible="{Binding IsEnvironmentViewVisible}">
-                        <v:EnvironmentView DataContext="{Binding EnvironmentViewDataCtx}" />
-                    </Grid>
-                    <Grid
+            <v:EnvironmentView DataContext="{Binding EnvironmentViewDataCtx}"/>
+          </Grid>
+          <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
               IsVisible="{Binding IsCollectionFolderViewVisible}">
-                        <v:CollectionFolderView DataContext="{Binding CollectionFolderViewDataCtx}" />
-                    </Grid>
-                    <Grid
+            <v:CollectionFolderView DataContext="{Binding CollectionFolderViewDataCtx}"/>
+          </Grid>
+          <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
               IsVisible="{Binding IsHttpRequestViewVisible}">
-                        <v:HttpRequestView DataContext="{Binding HttpRequestViewDataCtx}" />
-                    </Grid>
-                    <Grid
+            <v:HttpRequestView DataContext="{Binding HttpRequestViewDataCtx}"/>
+          </Grid>
+          <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
               IsVisible="{Binding IsWebSocketConnectionViewVisible}">
-                        <v:WebSocketConnectionView DataContext="{Binding WebSocketConnectionViewDataCtx}" />
-                    </Grid>
-                    <Grid
+            <v:WebSocketConnectionView DataContext="{Binding WebSocketConnectionViewDataCtx}"/>
+          </Grid>
+          <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
               IsVisible="{Binding IsWebSocketClientMessageViewVisible}">
-                        <v:WebSocketClientMessageView DataContext="{Binding WebSocketClientMessageViewDataCtx}" />
-                    </Grid>
-                </Grid>
-            </Panel>
+            <v:WebSocketClientMessageView DataContext="{Binding WebSocketClientMessageViewDataCtx}"/>
+          </Grid>
+        </Grid>
+      </Panel>
 
-        </DockPanel>
-    </Panel>
+    </DockPanel>
+  </Panel>
 </Window>

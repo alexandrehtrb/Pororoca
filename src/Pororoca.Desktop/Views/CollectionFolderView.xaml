@@ -25,7 +25,7 @@
         HorizontalAlignment="Stretch"
         VerticalAlignment="Top"
         Margin="0,24,0,0">
-      <v:EditableTextBlockView DataContext="{Binding NameEditableTextBlockViewDataCtx}" />
+      <v:EditableTextBlockView DataContext="{Binding NameEditableTextBlockViewDataCtx}"/>
     </Grid>
 
     <StackPanel
@@ -36,17 +36,17 @@
       <controls:IconButton
           Icon="{StaticResource IconAddFolderGeometry}"
           Text="{i18n:Localize AddFolder, Context=CollectionFolder}"
-          Command="{Binding AddNewFolderCmd}" />
+          Command="{Binding AddNewFolderCmd}"/>
 
       <controls:IconButton
           Icon="{StaticResource IconAddGeometry}"
           Text="{i18n:Localize AddHttpRequest, Context=CollectionFolder}"
-          Command="{Binding AddNewHttpRequestCmd}" />
+          Command="{Binding AddNewHttpRequestCmd}"/>
 
       <controls:IconButton
           Icon="{StaticResource IconWebsocketGeometry}"
           Text="{i18n:Localize AddWebSocketConnection, Context=CollectionFolder}"
-          Command="{Binding AddNewWebSocketConnectionCmd}" />
+          Command="{Binding AddNewWebSocketConnectionCmd}"/>
 
     </StackPanel>
 

@@ -36,11 +36,11 @@
             Width="32"
             Height="32"
             VerticalAlignment="Center"
-            HorizontalAlignment="Center" >
-                    <Image.Source>
-                        <DrawingImage Drawing="{StaticResource IconHttp}"/>
-                    </Image.Source>
-                </Image>
+            HorizontalAlignment="Center">
+          <Image.Source>
+            <DrawingImage Drawing="{StaticResource IconHttp}"/>
+          </Image.Source>
+        </Image>
         <Image
             Margin="0,0,12,0"
             IsVisible="{Binding IsDisconnectedWebSocket}"
@@ -48,10 +48,10 @@
             Height="32"
             VerticalAlignment="Center"
             HorizontalAlignment="Center">
-                    <Image.Source>
-                        <DrawingImage Drawing="{StaticResource IconWebsocket}"/>
-                    </Image.Source>
-                </Image>
+          <Image.Source>
+            <DrawingImage Drawing="{StaticResource IconWebsocket}"/>
+          </Image.Source>
+        </Image>
         <Image
             Margin="0,0,12,0"
             IsVisible="{Binding IsConnectedWebSocket}"
@@ -59,16 +59,16 @@
             Height="32"
             VerticalAlignment="Center"
             HorizontalAlignment="Center">
-                    <Image.Source>
-                        <DrawingImage Drawing="{StaticResource IconWebsocketConnected}"/>
-                    </Image.Source>
-                </Image>
+          <Image.Source>
+            <DrawingImage Drawing="{StaticResource IconWebsocketConnected}"/>
+          </Image.Source>
+        </Image>
         <TextBlock
             Text="{Binding Txt}"
             FontSize="32"
             FontWeight="Light"
             HorizontalAlignment="Stretch"
-            VerticalAlignment="Center" />
+            VerticalAlignment="Center"/>
       </StackPanel>
 
       <TextBox
@@ -80,7 +80,7 @@
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
           Classes="SingleLine"
-          KeyDown="OnKeyDownHandler" />
+          KeyDown="OnKeyDownHandler"/>
     </Grid>
 
     <Button
@@ -101,21 +101,21 @@
             Height="16"
             VerticalAlignment="Center"
             HorizontalAlignment="Center">
-                    <Image.Source>
-                        <DrawingImage Drawing="{StaticResource IconEdit}"/>
-                    </Image.Source>
-                </Image>
-                <Image
+          <Image.Source>
+            <DrawingImage Drawing="{StaticResource IconEdit}"/>
+          </Image.Source>
+        </Image>
+        <Image
             IsVisible="{Binding IsEditing}"
             Width="16"
             Height="16"
             VerticalAlignment="Center"
             HorizontalAlignment="Center">
-                    <Image.Source>
-                        <DrawingImage Drawing="{StaticResource IconCheck}"/>
-                    </Image.Source>
-                </Image>
-            </Panel>
+          <Image.Source>
+            <DrawingImage Drawing="{StaticResource IconCheck}"/>
+          </Image.Source>
+        </Image>
+      </Panel>
     </Button>
   </Grid>
 </UserControl>

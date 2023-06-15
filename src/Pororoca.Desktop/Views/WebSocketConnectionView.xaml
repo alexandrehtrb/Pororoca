@@ -24,7 +24,7 @@
     <Style Selector="TabItem">
       <Setter
           Property="FontSize"
-          Value="20" />
+          Value="20"/>
     </Style>
   </UserControl.Styles>
 
@@ -32,11 +32,11 @@
       HorizontalAlignment="Stretch"
       VerticalAlignment="Stretch">
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
     <StackPanel
@@ -51,7 +51,7 @@
           Margin="24,0,24,0"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Top">
-        <v:EditableTextBlockView DataContext="{Binding NameEditableTextBlockViewDataCtx}" />
+        <v:EditableTextBlockView DataContext="{Binding NameEditableTextBlockViewDataCtx}"/>
       </Grid>
 
       <Grid
@@ -76,20 +76,20 @@
               ToolTip.Placement="Bottom"
               ToolTip.Tip="{Binding ResolvedUrlToolTip}"
               Classes="SingleLine"
-              PointerEntered="OnUrlPointerEnter" />
+              PointerEntered="OnUrlPointerEnter"/>
 
           <TextBlock
               Margin="12,6,12,0"
               Classes="ErrorMessage"
               Text="{Binding InvalidConnectionError}"
-              IsVisible="{Binding IsInvalidConnectionErrorVisible}" />
+              IsVisible="{Binding IsInvalidConnectionErrorVisible}"/>
 
           <TextBlock
               Margin="12,6,12,0"
               FontSize="14"
               Foreground="{DynamicResource WebSocketConnectedBrush}"
               Text="{i18n:Localize Connected, Context=WebSocketConnection}"
-              IsVisible="{Binding IsConnected}" />
+              IsVisible="{Binding IsConnected}"/>
 
         </StackPanel>
 
@@ -102,7 +102,7 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Stretch"
             SelectedIndex="{Binding HttpVersionSelectedIndex, Mode=TwoWay}"
-            ItemsSource="{Binding HttpVersionSelectionOptions}" />
+            ItemsSource="{Binding HttpVersionSelectionOptions}"/>
 
         <Button
             Grid.Column="2"
@@ -115,7 +115,7 @@
             IsVisible="{Binding !IsConnected}"
             Command="{Binding ConnectCmd}"
             Content="{i18n:Localize Connect, Context=WebSocketConnection}"
-            Classes="Primary" />
+            Classes="Primary"/>
 
         <Button
             Grid.Column="2"
@@ -128,7 +128,7 @@
             IsVisible="{Binding IsConnecting}"
             Command="{Binding CancelConnectCmd}"
             Content="{i18n:Localize CancelConnect, Context=WebSocketConnection}"
-            Classes="Primary" />
+            Classes="Primary"/>
 
         <Button
             Grid.Column="2"
@@ -141,7 +141,7 @@
             IsVisible="{Binding IsConnected}"
             Command="{Binding DisconnectCmd}"
             Content="{i18n:Localize Disconnect, Context=WebSocketConnection}"
-            Classes="PrimaryInverted" />
+            Classes="PrimaryInverted"/>
 
         <Button
             Grid.Column="2"
@@ -154,12 +154,11 @@
             IsVisible="{Binding IsDisconnecting}"
             Command="{Binding CancelDisconnectCmd}"
             Content="{i18n:Localize CancelDisconnect, Context=WebSocketConnection}"
-            Classes="PrimaryInverted" />
+            Classes="PrimaryInverted"/>
 
       </Grid>
 
-      <!-- The grid below is necessary to preserve a spacing for the progress bar when it is not
-      visible -->
+      <!-- The grid below is necessary to preserve a spacing for the progress bar when it is not visible -->
       <Grid
           Margin="0,0,0,16"
           Height="4"
@@ -169,13 +168,13 @@
             IsIndeterminate="True"
             VerticalAlignment="Stretch"
             HorizontalAlignment="Stretch"
-            IsVisible="{Binding IsConnectingOrDisconnecting}" />
+            IsVisible="{Binding IsConnectingOrDisconnecting}"/>
       </Grid>
 
       <Separator
           Margin="-12,0,-12,0"
           Classes="Separator"
-          Height="6" />
+          Height="6"/>
     </StackPanel>
 
     <Grid
@@ -196,7 +195,7 @@
             Grid.Row="0"
             Margin="12,28,12,0"
             Classes="SectionTitle"
-            Text="{i18n:Localize SectionTitle, Context=WebSocketConnection}" />
+            Text="{i18n:Localize SectionTitle, Context=WebSocketConnection}"/>
         <TabControl
             Grid.Column="0"
             Grid.Row="1"
@@ -208,16 +207,16 @@
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
-                  Text="{i18n:Localize ConnectionRequestOptions, Context=WebSocketConnection}" />
+                  Text="{i18n:Localize ConnectionRequestOptions, Context=WebSocketConnection}"/>
             </TabItem.Header>
 
             <Grid Margin="0,12,0,0">
               <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*"/>
               </Grid.ColumnDefinitions>
               <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
               </Grid.RowDefinitions>
 
               <ComboBox
@@ -231,15 +230,15 @@
                 <ComboBoxItem
                     x:Name="wsScrReqOptionHeaders"
                     IsSelected="{Binding IsConnectionOptionHeadersSelected, Mode=TwoWay}"
-                    Content="{i18n:Localize OptionHeaders, Context=WebSocketConnection}" />
+                    Content="{i18n:Localize OptionHeaders, Context=WebSocketConnection}"/>
                 <ComboBoxItem
                     x:Name="wsScrReqOptionSubprotocols"
                     IsSelected="{Binding IsConnectionOptionSubprotocolsSelected, Mode=TwoWay}"
-                    Content="{i18n:Localize OptionSubprotocols, Context=WebSocketConnection}" />
+                    Content="{i18n:Localize OptionSubprotocols, Context=WebSocketConnection}"/>
                 <ComboBoxItem
                     x:Name="wsScrReqOptionCompression"
                     IsSelected="{Binding IsConnectionOptionCompressionSelected, Mode=TwoWay}"
-                    Content="{i18n:Localize OptionCompression, Context=WebSocketConnection}" />
+                    Content="{i18n:Localize OptionCompression, Context=WebSocketConnection}"/>
               </ComboBox>
               <!-- CONNECTION REQUEST HEADERS -->
               <Grid
@@ -248,11 +247,11 @@
                   Margin="-12,12,-12,12"
                   IsVisible="{ReflectionBinding IsSelected, ElementName=wsScrReqOptionHeaders}">
                 <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="*" />
+                  <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition Height="*" />
+                  <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Button
                     Grid.Column="0"
@@ -266,16 +265,16 @@
                     Classes="Primary"
                     Command="{Binding AddNewConnectionRequestHeaderCmd}">
                   <Button.Content>
-                                        <Image
+                    <Image
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         Width="12"
                         Height="12">
-                                            <Image.Source>
-                                                <DrawingImage Drawing="{StaticResource IconAdd}"/>
-                                            </Image.Source>
-                                        </Image>
-                                    </Button.Content>
+                      <Image.Source>
+                        <DrawingImage Drawing="{StaticResource IconAdd}"/>
+                      </Image.Source>
+                    </Image>
+                  </Button.Content>
                 </Button>
                 <DataGrid
                     Grid.Column="0"
@@ -288,7 +287,7 @@
                     Classes="draggable">
                   <i:Interaction.Behaviors>
                     <i:BehaviorCollection>
-                      <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}" />
+                      <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}"/>
                     </i:BehaviorCollection>
                   </i:Interaction.Behaviors>
                   <DataGrid.Columns>
@@ -296,21 +295,21 @@
                         Width="0.22*"
                         Binding="{Binding Enabled}">
                       <DataGridCheckBoxColumn.Header>
-                        <TextBlock Text="{i18n:Localize ConnectionRequestHeaderEnabled, Context=WebSocketConnection}" />
+                        <TextBlock Text="{i18n:Localize ConnectionRequestHeaderEnabled, Context=WebSocketConnection}"/>
                       </DataGridCheckBoxColumn.Header>
                     </DataGridCheckBoxColumn>
                     <DataGridTextColumn
                         Width="0.33*"
                         Binding="{Binding Key}">
                       <DataGridTextColumn.Header>
-                        <TextBlock Text="{i18n:Localize ConnectionRequestHeaderName, Context=WebSocketConnection}" />
+                        <TextBlock Text="{i18n:Localize ConnectionRequestHeaderName, Context=WebSocketConnection}"/>
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTextColumn
                         Width="0.45*"
                         Binding="{Binding Value}">
                       <DataGridTextColumn.Header>
-                        <TextBlock Text="{i18n:Localize ConnectionRequestHeaderValue, Context=WebSocketConnection}" />
+                        <TextBlock Text="{i18n:Localize ConnectionRequestHeaderValue, Context=WebSocketConnection}"/>
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTemplateColumn
@@ -339,11 +338,11 @@
                   Margin="-12,12,-12,12"
                   IsVisible="{ReflectionBinding IsSelected, ElementName=wsScrReqOptionSubprotocols}">
                 <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="*" />
+                  <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition Height="*" />
+                  <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Button
                     Grid.Column="0"
@@ -357,16 +356,16 @@
                     Classes="Primary"
                     Command="{Binding AddNewSubprotocolCmd}">
                   <Button.Content>
-                                        <Image
+                    <Image
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         Width="12"
                         Height="12">
-                                            <Image.Source>
-                                                <DrawingImage Drawing="{StaticResource IconAdd}"/>
-                                            </Image.Source>
-                                        </Image>
-                                    </Button.Content>
+                      <Image.Source>
+                        <DrawingImage Drawing="{StaticResource IconAdd}"/>
+                      </Image.Source>
+                    </Image>
+                  </Button.Content>
                 </Button>
                 <DataGrid
                     Grid.Column="0"
@@ -379,7 +378,7 @@
                     Classes="draggable">
                   <i:Interaction.Behaviors>
                     <i:BehaviorCollection>
-                      <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}" />
+                      <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}"/>
                     </i:BehaviorCollection>
                   </i:Interaction.Behaviors>
                   <DataGrid.Columns>
@@ -387,14 +386,14 @@
                         Width="0.34*"
                         Binding="{Binding Enabled}">
                       <DataGridCheckBoxColumn.Header>
-                        <TextBlock Text="{i18n:Localize ConnectionRequestSubprotocolEnabled, Context=WebSocketConnection}" />
+                        <TextBlock Text="{i18n:Localize ConnectionRequestSubprotocolEnabled, Context=WebSocketConnection}"/>
                       </DataGridCheckBoxColumn.Header>
                     </DataGridCheckBoxColumn>
                     <DataGridTextColumn
                         Width="0.66*"
                         Binding="{Binding Key}">
                       <DataGridTextColumn.Header>
-                        <TextBlock Text="{i18n:Localize ConnectionRequestSubprotocolName, Context=WebSocketConnection}" />
+                        <TextBlock Text="{i18n:Localize ConnectionRequestSubprotocolName, Context=WebSocketConnection}"/>
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTemplateColumn
@@ -425,13 +424,13 @@
                 <CheckBox
                     x:Name="wsScrReqOptionCompressionEnable"
                     Content="{i18n:Localize EnableCompression, Context=WebSocketConnection}"
-                    IsChecked="{Binding EnableCompression}" />
+                    IsChecked="{Binding EnableCompression}"/>
 
                 <CheckBox
                     Margin="0,12,0,0"
                     Content="{i18n:Localize CompressionClientContextTakeover, Context=WebSocketConnection}"
                     IsChecked="{Binding CompressionClientContextTakeoverEnabled}"
-                    IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}" />
+                    IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}"/>
 
                 <StackPanel
                     Orientation="Horizontal"
@@ -443,7 +442,7 @@
                       VerticalAlignment="Center"
                       Margin="0,0,6,0"
                       Text="{i18n:Localize CompressionClientMaxWindowBits, Context=WebSocketConnection}"
-                      IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}" />
+                      IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}"/>
                   <NumericUpDown
                       Margin="6,0,0,0"
                       VerticalAlignment="Center"
@@ -451,14 +450,14 @@
                       Minimum="9"
                       Maximum="15"
                       Value="{Binding CompressionClientMaxWindowBits, Mode=TwoWay}"
-                      IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}" />
+                      IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}"/>
                 </StackPanel>
 
                 <CheckBox
                     Margin="0,12,0,0"
                     Content="{i18n:Localize CompressionServerContextTakeover, Context=WebSocketConnection}"
                     IsChecked="{Binding CompressionServerContextTakeoverEnabled}"
-                    IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}" />
+                    IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}"/>
 
                 <StackPanel
                     Orientation="Horizontal"
@@ -470,7 +469,7 @@
                       VerticalAlignment="Center"
                       Margin="0,0,6,0"
                       Text="{i18n:Localize CompressionServerMaxWindowBits, Context=WebSocketConnection}"
-                      IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}" />
+                      IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}"/>
                   <NumericUpDown
                       Margin="6,0,0,0"
                       VerticalAlignment="Center"
@@ -478,7 +477,7 @@
                       Minimum="9"
                       Maximum="15"
                       Value="{Binding CompressionServerMaxWindowBits, Mode=TwoWay}"
-                      IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}" />
+                      IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}"/>
                 </StackPanel>
               </StackPanel>
             </Grid>
@@ -488,16 +487,16 @@
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
-                  Text="{i18n:Localize CustomAuth, Context=WebSocketConnection}" />
+                  Text="{i18n:Localize CustomAuth, Context=WebSocketConnection}"/>
             </TabItem.Header>
-            <v:RequestAuthView DataContext="{Binding RequestAuthDataCtx}" />
+            <v:RequestAuthView DataContext="{Binding RequestAuthDataCtx}"/>
           </TabItem>
           <!-- CONNECTION EXCEPTION -->
           <TabItem>
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
-                  Text="{i18n:Localize ConnectionException, Context=WebSocketConnection}" />
+                  Text="{i18n:Localize ConnectionException, Context=WebSocketConnection}"/>
             </TabItem.Header>
             <Grid RowDefinitions="*, Auto">
               <!-- AcceptsReturn="True" allows for horizontal scrollbar -->
@@ -510,7 +509,7 @@
                   IsReadOnly="True"
                   HorizontalAlignment="Stretch"
                   Classes="CodeTextBox"
-                  Text="{Binding ConnectionExceptionContent}" />
+                  Text="{Binding ConnectionExceptionContent}"/>
               <Button
                   Grid.Column="0"
                   Grid.Row="1"
@@ -518,7 +517,7 @@
                   Margin="0,0,0,12"
                   IsVisible="{Binding IsDisableTlsVerificationVisible}"
                   Command="{Binding DisableTlsVerificationCmd}"
-                  Classes="Primary" />
+                  Classes="Primary"/>
             </Grid>
           </TabItem>
         </TabControl>
@@ -529,7 +528,7 @@
           Grid.Row="0"
           Width="6"
           VerticalAlignment="Stretch"
-          Classes="Separator" />
+          Classes="Separator"/>
       <!-- MESSAGES EXCHANGED -->
       <Grid
           Grid.Column="2"
@@ -541,7 +540,7 @@
             Grid.Row="0"
             Margin="12,28,12,0"
             Classes="SectionTitle"
-            Text="{i18n:Localize SectionTitle, Context=WebSocketExchangedMessages}" />
+            Text="{i18n:Localize SectionTitle, Context=WebSocketExchangedMessages}"/>
 
         <ListBox
             Name="ExchangedMessagesList"
@@ -568,7 +567,7 @@
                     FontWeight="Regular"
                     TextAlignment="Left"
                     TextWrapping="NoWrap"
-                    TextTrimming="CharacterEllipsis" />
+                    TextTrimming="CharacterEllipsis"/>
                 <TextBlock
                     HorizontalAlignment="Left"
                     Margin="4,4,4,0"
@@ -581,7 +580,7 @@
                     FontWeight="Light"
                     TextAlignment="Left"
                     TextWrapping="NoWrap"
-                    TextTrimming="CharacterEllipsis" />
+                    TextTrimming="CharacterEllipsis"/>
                 <TextBlock
                     HorizontalAlignment="Stretch"
                     Margin="4,4,4,2"
@@ -592,7 +591,7 @@
                     FontWeight="Light"
                     TextAlignment="Left"
                     TextWrapping="NoWrap"
-                    TextTrimming="CharacterEllipsis" />
+                    TextTrimming="CharacterEllipsis"/>
               </StackPanel>
             </DataTemplate>
           </ListBox.ItemTemplate>
@@ -618,16 +617,16 @@
                 Classes="Primary"
                 Command="{Binding AddNewWebSocketClientMessageCmd}">
               <Button.Content>
-                                <Image
+                <Image
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     Width="16"
                     Height="16">
-                                    <Image.Source>
-                                        <DrawingImage Drawing="{StaticResource IconAdd}"/>
-                                    </Image.Source>
-                                </Image>
-                            </Button.Content>
+                  <Image.Source>
+                    <DrawingImage Drawing="{StaticResource IconAdd}"/>
+                  </Image.Source>
+                </Image>
+              </Button.Content>
             </Button>
 
             <ComboBox
@@ -639,7 +638,7 @@
                 SelectedIndex="{Binding MessageToSendSelectedIndex, Mode=TwoWay}">
               <ComboBox.ItemTemplate>
                 <DataTemplate>
-                  <TextBlock Text="{Binding Name}" />
+                  <TextBlock Text="{Binding Name}"/>
                 </DataTemplate>
               </ComboBox.ItemTemplate>
             </ComboBox>
@@ -654,7 +653,7 @@
                 VerticalContentAlignment="Center"
                 Command="{Binding SendMessageCmd}"
                 Content="{i18n:Localize SendMessage, Context=WebSocketExchangedMessages}"
-                Classes="Primary" />
+                Classes="Primary"/>
 
           </Grid>
 
@@ -662,13 +661,13 @@
               IsIndeterminate="True"
               Margin="0,12,0,0"
               HorizontalAlignment="Stretch"
-              IsVisible="{Binding IsSendingAMessage}" />
+              IsVisible="{Binding IsSendingAMessage}"/>
 
           <TextBlock
               Margin="12,6,12,0"
               Classes="ErrorMessage"
               Text="{Binding InvalidClientMessageError}"
-              IsVisible="{Binding IsInvalidClientMessageErrorVisible}" />
+              IsVisible="{Binding IsInvalidClientMessageErrorVisible}"/>
 
         </StackPanel>
       </Grid>
@@ -678,7 +677,7 @@
           Grid.Row="0"
           Width="6"
           VerticalAlignment="Stretch"
-          Classes="Separator" />
+          Classes="Separator"/>
       <!-- MESSAGE DETAIL -->
       <Grid
           Grid.Column="4"
@@ -690,7 +689,7 @@
             Grid.Row="0"
             Margin="12,28,12,0"
             Classes="SectionTitle"
-            Text="{i18n:Localize SectionTitle, Context=WebSocketExchangedMessageDetail}" />
+            Text="{i18n:Localize SectionTitle, Context=WebSocketExchangedMessageDetail}"/>
 
         <TextBox
             Grid.Column="0"
@@ -700,7 +699,7 @@
             Text="{Binding SelectedExchangedMessageType}"
             Watermark="{i18n:Localize MessageTypeWatermark, Context=WebSocketExchangedMessageDetail}"
             Classes="SingleLine"
-            VerticalContentAlignment="Center" />
+            VerticalContentAlignment="Center"/>
 
         <!-- AcceptsReturn="True" allows for horizontal scrollbar -->
         <AvaloniaEdit:TextEditor
@@ -712,7 +711,7 @@
             Margin="12,6,12,24"
             IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}"
             IsReadOnly="True"
-            Document="{Binding SelectedExchangedMessageContentTextDocument}" />
+            Document="{Binding SelectedExchangedMessageContentTextDocument}"/>
 
         <Button
             Grid.Column="0"
@@ -721,7 +720,7 @@
             Margin="12,0,12,24"
             IsVisible="{Binding IsSaveSelectedExchangedMessageToFileVisible}"
             Command="{Binding SaveSelectedExchangedMessageToFileCmd}"
-            Classes="Primary" />
+            Classes="Primary"/>
       </Grid>
     </Grid>
   </Grid>

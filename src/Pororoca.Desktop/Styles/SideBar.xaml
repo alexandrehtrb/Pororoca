@@ -1,5 +1,6 @@
-<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <Design.PreviewWith>
     <Border Padding="20">
       <TabControl Classes="sidebar">
@@ -9,9 +10,15 @@
     </Border>
   </Design.PreviewWith>
   <Style Selector="TabControl.sidebar">
-    <Setter Property="TabStripPlacement" Value="Left"/>
-    <Setter Property="Padding" Value="0 0 0 0"/>
-    <Setter Property="Background" Value="{x:Null}"/>
+    <Setter
+        Property="TabStripPlacement"
+        Value="Left"/>
+    <Setter
+        Property="Padding"
+        Value="0 0 0 0"/>
+    <Setter
+        Property="Background"
+        Value="{x:Null}"/>
     <Setter Property="Template">
       <ControlTemplate>
         <Border
@@ -19,27 +26,34 @@
             BorderBrush="{TemplateBinding BorderBrush}"
             BorderThickness="{TemplateBinding BorderThickness}">
           <DockPanel>
-            <ScrollViewer Width="240" Margin="0 30 0 0"
+            <ScrollViewer
+                Width="240"
+                Margin="0 30 0 0"
                 Name="PART_ScrollViewer"
                 HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
                 VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
                 Background="{TemplateBinding Background}"
                 DockPanel.Dock="Left">
-              <ItemsPresenter Name="PART_ItemsPresenter"
-                ItemsPanel="{TemplateBinding ItemsPanel}"
-                DockPanel.Dock="{TemplateBinding TabStripPlacement}" />
+              <ItemsPresenter
+                  Name="PART_ItemsPresenter"
+                  ItemsPanel="{TemplateBinding ItemsPanel}"
+                  DockPanel.Dock="{TemplateBinding TabStripPlacement}"/>
             </ScrollViewer>
-            <ContentControl Content="{TemplateBinding Tag}" HorizontalContentAlignment="Right" DockPanel.Dock="Bottom"/>
-            <ScrollViewer Background="{x:Null}"
+            <ContentControl
+                Content="{TemplateBinding Tag}"
+                HorizontalContentAlignment="Right"
+                DockPanel.Dock="Bottom"/>
+            <ScrollViewer
+                Background="{x:Null}"
                 HorizontalScrollBarVisibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedItem.(ScrollViewer.HorizontalScrollBarVisibility)}"
                 VerticalScrollBarVisibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedItem.(ScrollViewer.VerticalScrollBarVisibility)}">
               <ContentPresenter
-                      Name="PART_SelectedContentHost"
-                      Margin="{TemplateBinding Padding}"
-                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                      Content="{TemplateBinding SelectedContent}"
-                      ContentTemplate="{TemplateBinding SelectedContentTemplate}">
+                  Name="PART_SelectedContentHost"
+                  Margin="{TemplateBinding Padding}"
+                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                  Content="{TemplateBinding SelectedContent}"
+                  ContentTemplate="{TemplateBinding SelectedContentTemplate}">
               </ContentPresenter>
             </ScrollViewer>
           </DockPanel>
@@ -49,23 +63,45 @@
   </Style>
 
   <Style Selector="TabControl.sidebar > TabItem">
-    <Setter Property="BorderThickness" Value="0"/>    
-    <Setter Property="FontSize" Value="14"/>
-    <Setter Property="Margin" Value="0"/>
-    <Setter Property="Padding" Value="16"/>    
-    <Setter Property="Width" Value="240" />
-    <Setter Property="HorizontalContentAlignment" Value="Stretch" />    
-    <Setter Property="(ScrollViewer.HorizontalScrollBarVisibility)" Value="Auto"/>
-    <Setter Property="(ScrollViewer.VerticalScrollBarVisibility)" Value="Auto"/>
+    <Setter
+        Property="BorderThickness"
+        Value="0"/>
+    <Setter
+        Property="FontSize"
+        Value="14"/>
+    <Setter
+        Property="Margin"
+        Value="0"/>
+    <Setter
+        Property="Padding"
+        Value="16"/>
+    <Setter
+        Property="Width"
+        Value="240"/>
+    <Setter
+        Property="HorizontalContentAlignment"
+        Value="Stretch"/>
+    <Setter
+        Property="(ScrollViewer.HorizontalScrollBarVisibility)"
+        Value="Auto"/>
+    <Setter
+        Property="(ScrollViewer.VerticalScrollBarVisibility)"
+        Value="Auto"/>
   </Style>
   <Style Selector="TabControl.sidebar > TabItem:selected /template/ Border#PART_SelectedPipe">
-    <Setter Property="IsVisible" Value="False" />
+    <Setter
+        Property="IsVisible"
+        Value="False"/>
   </Style>
   <Style Selector="TabControl.sidebar > TabItem:selected">
-    <Setter Property="Background" Value="#1fffffff"/>
+    <Setter
+        Property="Background"
+        Value="#1fffffff"/>
   </Style>
 
   <Style Selector="TabControl.sidebar > TabItem:pointerover /template/ Border#PART_LayoutRoot">
-    <Setter Property="Background" Value="#3fffffff"/>    
+    <Setter
+        Property="Background"
+        Value="#3fffffff"/>
   </Style>
 </Styles>

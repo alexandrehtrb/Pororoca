@@ -23,13 +23,13 @@
       Margin="24,0,24,0">
 
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="*" />
-      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
     <TextBlock
@@ -41,9 +41,9 @@
         FontWeight="Light"
         HorizontalAlignment="Left"
         VerticalAlignment="Top"
-        TextWrapping="Wrap" />
+        TextWrapping="Wrap"/>
 
-        <Button
+    <Button
         Grid.Column="0"
         Grid.Row="1"
         Height="24"
@@ -56,16 +56,15 @@
         Command="{Binding AddNewVariableCmd}">
 
 
-
-            <Image
-            VerticalAlignment="Center"
-            HorizontalAlignment="Center"
-            Width="12"
-            Height="12">
-                    <Image.Source>
-                        <DrawingImage Drawing="{StaticResource IconAdd}"/>
-                    </Image.Source>
-                </Image>
+      <Image
+          VerticalAlignment="Center"
+          HorizontalAlignment="Center"
+          Width="12"
+          Height="12">
+        <Image.Source>
+          <DrawingImage Drawing="{StaticResource IconAdd}"/>
+        </Image.Source>
+      </Image>
     </Button>
 
     <DataGrid
@@ -81,28 +80,28 @@
             Width="*"
             Binding="{Binding Enabled}">
           <DataGridCheckBoxColumn.Header>
-            <TextBlock Text="{i18n:Localize VariableEnabled, Context=CollectionVariables}" />
+            <TextBlock Text="{i18n:Localize VariableEnabled, Context=CollectionVariables}"/>
           </DataGridCheckBoxColumn.Header>
         </DataGridCheckBoxColumn>
         <DataGridTextColumn
             Width="2*"
             Binding="{Binding Key}">
           <DataGridTextColumn.Header>
-            <TextBlock Text="{i18n:Localize VariableName, Context=CollectionVariables}" />
+            <TextBlock Text="{i18n:Localize VariableName, Context=CollectionVariables}"/>
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
             Width="2*"
             Binding="{Binding Value}">
           <DataGridTextColumn.Header>
-            <TextBlock Text="{i18n:Localize VariableValue, Context=CollectionVariables}" />
+            <TextBlock Text="{i18n:Localize VariableValue, Context=CollectionVariables}"/>
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridCheckBoxColumn
             Width="*"
             Binding="{Binding IsSecret}">
           <DataGridCheckBoxColumn.Header>
-            <TextBlock Text="{i18n:Localize VariableIsSecret, Context=CollectionVariables}" />
+            <TextBlock Text="{i18n:Localize VariableIsSecret, Context=CollectionVariables}"/>
           </DataGridCheckBoxColumn.Header>
         </DataGridCheckBoxColumn>
         <DataGridTemplateColumn
@@ -124,7 +123,7 @@
       </DataGrid.Columns>
       <i:Interaction.Behaviors>
         <i:BehaviorCollection>
-          <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropVariableViewModelHandler}" />
+          <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropVariableViewModelHandler}"/>
         </i:BehaviorCollection>
       </i:Interaction.Behaviors>
     </DataGrid>
@@ -136,7 +135,7 @@
         FontSize="12"
         HorizontalAlignment="Stretch"
         Margin="0,24,0,24"
-        Text="{i18n:Localize Tip, Context=CollectionVariables}" />
+        Text="{i18n:Localize Tip, Context=CollectionVariables}"/>
 
   </Grid>
 </UserControl>

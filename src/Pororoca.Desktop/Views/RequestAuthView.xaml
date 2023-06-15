@@ -15,11 +15,11 @@
 
   <Grid Margin="0,12,0,0">
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
     <StackPanel
@@ -35,21 +35,20 @@
           SelectedIndex="{Binding AuthModeSelectedIndex}">
         <ComboBoxItem
             IsSelected="{Binding IsAuthModeNoneSelected}"
-            Content="{i18n:Localize AuthModeNone, Context=RequestAuth}" />
+            Content="{i18n:Localize AuthModeNone, Context=RequestAuth}"/>
         <ComboBoxItem
             x:Name="reqScrRequestCustomAuthBasic"
             IsSelected="{Binding IsAuthModeBasicSelected}"
-            Content="{i18n:Localize AuthModeBasic, Context=RequestAuth}" />
+            Content="{i18n:Localize AuthModeBasic, Context=RequestAuth}"/>
         <ComboBoxItem
             x:Name="reqScrRequestCustomAuthBearer"
             IsSelected="{Binding IsAuthModeBearerSelected}"
-            Content="{i18n:Localize AuthModeBearer, Context=RequestAuth}" />
-        <!-- Mode=TwoWay in IsSelected below is required, otherwise, layout will disappear when
-        changing between different requests -->
+            Content="{i18n:Localize AuthModeBearer, Context=RequestAuth}"/>
+        <!-- Mode=TwoWay in IsSelected below is required, otherwise, layout will disappear when changing between different requests -->
         <ComboBoxItem
             x:Name="reqScrRequestCustomAuthClientCertificate"
             IsSelected="{Binding IsAuthModeClientCertificateSelected, Mode=TwoWay}"
-            Content="{i18n:Localize AuthModeClientCertificate, Context=RequestAuth}" />
+            Content="{i18n:Localize AuthModeClientCertificate, Context=RequestAuth}"/>
       </ComboBox>
 
       <ComboBox
@@ -61,15 +60,15 @@
           IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestCustomAuthClientCertificate}">
         <ComboBoxItem
             IsSelected="{Binding IsClientCertificateTypeNoneSelected, Mode=TwoWay}"
-            Content="{i18n:Localize ClientCertificateTypeNone, Context=RequestAuth}" />
+            Content="{i18n:Localize ClientCertificateTypeNone, Context=RequestAuth}"/>
         <ComboBoxItem
             x:Name="reqScrRequestClientCertificateAuthPkcs12"
             IsSelected="{Binding IsClientCertificateTypePkcs12Selected, Mode=TwoWay}"
-            Content="{i18n:Localize ClientCertificateTypePkcs12, Context=RequestAuth}" />
+            Content="{i18n:Localize ClientCertificateTypePkcs12, Context=RequestAuth}"/>
         <ComboBoxItem
             x:Name="reqScrRequestClientCertificateAuthPem"
             IsSelected="{Binding IsClientCertificateTypePemSelected, Mode=TwoWay}"
-            Content="{i18n:Localize ClientCertificateTypePem, Context=RequestAuth}" />
+            Content="{i18n:Localize ClientCertificateTypePem, Context=RequestAuth}"/>
       </ComboBox>
     </StackPanel>
 
@@ -85,7 +84,7 @@
           VerticalContentAlignment="Center"
           Watermark="{i18n:Localize AuthModeBasicLoginWatermark, Context=RequestAuth}"
           Classes="SingleLine"
-          Text="{Binding BasicAuthLogin}" />
+          Text="{Binding BasicAuthLogin}"/>
       <TextBox
           Width="200"
           Margin="0,12,0,0"
@@ -93,7 +92,7 @@
           VerticalContentAlignment="Center"
           Watermark="{i18n:Localize AuthModeBasicPasswordWatermark, Context=RequestAuth}"
           Classes="SingleLine"
-          Text="{Binding BasicAuthPassword}" />
+          Text="{Binding BasicAuthPassword}"/>
     </StackPanel>
     <!-- BEARER AUTH -->
     <StackPanel
@@ -107,7 +106,7 @@
           VerticalContentAlignment="Center"
           Watermark="{i18n:Localize AuthModeBearerTokenWatermark, Context=RequestAuth}"
           Classes="SingleLine"
-          Text="{Binding BearerAuthToken}" />
+          Text="{Binding BearerAuthToken}"/>
     </StackPanel>
     <!-- CLIENT CERTIFICATE AUTH -->
     <Grid
@@ -116,10 +115,10 @@
         Margin="0,12,0,0"
         IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestCustomAuthClientCertificate}">
       <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
       <Grid.RowDefinitions>
-        <RowDefinition Height="*" />
+        <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
 
       <!-- CLIENT CERTIFICATE AUTH PKCS#12 -->
@@ -133,7 +132,7 @@
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
             Classes="SingleLine"
-            Text="{Binding ClientCertificateAuthPkcs12CertificateFilePath}" />
+            Text="{Binding ClientCertificateAuthPkcs12CertificateFilePath}"/>
         <TextBox
             Width="240"
             Margin="0,12,0,0"
@@ -141,12 +140,12 @@
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
             Classes="SingleLine"
-            Text="{Binding ClientCertificateAuthPkcs12FilePassword}" />
+            Text="{Binding ClientCertificateAuthPkcs12FilePassword}"/>
         <Button
             Margin="0,12,0,0"
             Content="{i18n:Localize Pkcs12SearchFile, Context=RequestAuth}"
             Command="{Binding SearchClientCertificatePkcs12FileCmd}"
-            Classes="Primary" />
+            Classes="Primary"/>
       </StackPanel>
       <!-- CLIENT CERTIFICATE AUTH PEM -->
       <StackPanel
@@ -159,7 +158,7 @@
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
             Classes="SingleLine"
-            Text="{Binding ClientCertificateAuthPemCertificateFilePath}" />
+            Text="{Binding ClientCertificateAuthPemCertificateFilePath}"/>
         <TextBox
             Width="240"
             Margin="0,12,0,0"
@@ -167,7 +166,7 @@
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
             Classes="SingleLine"
-            Text="{Binding ClientCertificateAuthPemPrivateKeyFilePath}" />
+            Text="{Binding ClientCertificateAuthPemPrivateKeyFilePath}"/>
         <TextBox
             Width="240"
             Margin="0,12,0,0"
@@ -175,7 +174,7 @@
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
             Classes="SingleLine"
-            Text="{Binding ClientCertificateAuthPemFilePassword}" />
+            Text="{Binding ClientCertificateAuthPemFilePassword}"/>
         <StackPanel
             Orientation="Horizontal"
             Margin="0,12,0,0">
@@ -183,19 +182,19 @@
               Content="{i18n:Localize PemSearchCertFile, Context=RequestAuth}"
               Margin="0,0,6,0"
               Command="{Binding SearchClientCertificatePemCertFileCmd}"
-              Classes="Primary" />
+              Classes="Primary"/>
           <Button
               Content="{i18n:Localize PemSearchPrivateKeyFile, Context=RequestAuth}"
               Margin="6,0,0,0"
               Command="{Binding SearchClientCertificatePemPrivateKeyFileCmd}"
-              Classes="Primary" />
+              Classes="Primary"/>
         </StackPanel>
         <TextBlock
             TextWrapping="Wrap"
             FontSize="12"
             HorizontalAlignment="Stretch"
             Margin="0,24,0,24"
-            Text="{i18n:Localize PemClientCertificatesTip, Context=RequestAuth}" />
+            Text="{i18n:Localize PemClientCertificatesTip, Context=RequestAuth}"/>
       </StackPanel>
     </Grid>
 

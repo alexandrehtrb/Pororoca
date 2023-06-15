@@ -21,11 +21,11 @@
       VerticalAlignment="Stretch"
       Margin="24,24,24,24">
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
     <Grid
@@ -33,7 +33,7 @@
         Grid.Row="0"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Top">
-      <v:EditableTextBlockView DataContext="{Binding NameEditableTextBlockViewDataCtx}" />
+      <v:EditableTextBlockView DataContext="{Binding NameEditableTextBlockViewDataCtx}"/>
     </Grid>
 
     <Grid
@@ -41,13 +41,13 @@
         Grid.Column="0"
         Grid.Row="1">
       <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
       <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
 
       <StackPanel
@@ -58,7 +58,7 @@
 
         <CheckBox
             Content="{i18n:Localize DisableCompressionForThisMessage, Context=WebSocketClientMessage}"
-            IsChecked="{Binding DisableCompressionForThisMessage}" />
+            IsChecked="{Binding DisableCompressionForThisMessage}"/>
 
         <TextBlock
             TextWrapping="Wrap"
@@ -67,7 +67,7 @@
             Margin="4,0,0,0"
             Text="{i18n:Localize DisableCompressionForThisMessageTip, Context=WebSocketClientMessage}"
             ToolTip.Placement="Right"
-            ToolTip.Tip="{i18n:Localize DisableCompressionExplanation, Context=WebSocketClientMessage}" />
+            ToolTip.Tip="{i18n:Localize DisableCompressionExplanation, Context=WebSocketClientMessage}"/>
       </StackPanel>
 
       <ComboBox
@@ -79,13 +79,13 @@
           SelectedIndex="{Binding MessageTypeSelectedIndex, Mode=TwoWay}">
         <ComboBoxItem
             IsSelected="{Binding IsMessageTypeTextSelected, Mode=TwoWay}"
-            Content="{i18n:Localize MessageTypeText, Context=WebSocketClientMessage}" />
+            Content="{i18n:Localize MessageTypeText, Context=WebSocketClientMessage}"/>
         <ComboBoxItem
             IsSelected="{Binding IsMessageTypeBinarySelected, Mode=TwoWay}"
-            Content="{i18n:Localize MessageTypeBinary, Context=WebSocketClientMessage}" />
+            Content="{i18n:Localize MessageTypeBinary, Context=WebSocketClientMessage}"/>
         <ComboBoxItem
             IsSelected="{Binding IsMessageTypeCloseSelected, Mode=TwoWay}"
-            Content="{i18n:Localize MessageTypeClose, Context=WebSocketClientMessage}" />
+            Content="{i18n:Localize MessageTypeClose, Context=WebSocketClientMessage}"/>
       </ComboBox>
 
       <StackPanel
@@ -101,11 +101,11 @@
           <ComboBoxItem
               x:Name="wsScrReqMsgContentModeSelectionRaw"
               IsSelected="{Binding IsContentModeRawSelected, Mode=TwoWay}"
-              Content="{i18n:Localize ContentModeRaw, Context=WebSocketClientMessage}" />
+              Content="{i18n:Localize ContentModeRaw, Context=WebSocketClientMessage}"/>
           <ComboBoxItem
               x:Name="wsScrReqMsgContentModeSelectionFile"
               IsSelected="{Binding IsContentModeFileSelected, Mode=TwoWay}"
-              Content="{i18n:Localize ContentModeFile, Context=WebSocketClientMessage}" />
+              Content="{i18n:Localize ContentModeFile, Context=WebSocketClientMessage}"/>
         </ComboBox>
 
         <ComboBox
@@ -117,19 +117,15 @@
             SelectedIndex="{Binding RawContentSyntaxSelectedIndex, Mode=TwoWay}">
           <ComboBoxItem
               IsSelected="{Binding IsRawContentJsonSyntaxSelected, Mode=TwoWay}"
-              Content="{i18n:Localize RawContentJsonSyntax, Context=WebSocketClientMessage}" />
+              Content="{i18n:Localize RawContentJsonSyntax, Context=WebSocketClientMessage}"/>
           <ComboBoxItem
               IsSelected="{Binding IsRawContentOtherSyntaxSelected, Mode=TwoWay}"
-              Content="{i18n:Localize RawContentOtherSyntax, Context=WebSocketClientMessage}" />
+              Content="{i18n:Localize RawContentOtherSyntax, Context=WebSocketClientMessage}"/>
         </ComboBox>
 
         <!-- This is for testing syntax colour themes -->
         <!--ComboBox
-            Name="RawContentThemeSelector"
-            IsVisible="{ReflectionBinding IsSelected, ElementName=wsScrReqMsgContentModeSelectionRaw}"
-            Height="36"
-            Width="120"
-            Margin="12,0,0,0" /-->
+        Name="RawContentThemeSelector" IsVisible="{ReflectionBinding IsSelected, ElementName=wsScrReqMsgContentModeSelectionRaw}" Height="36" Width="120" Margin="12,0,0,0" /-->
 
       </StackPanel>
 
@@ -143,7 +139,7 @@
           Margin="0,12,0,0"
           IsVisible="{ReflectionBinding IsSelected, ElementName=wsScrReqMsgContentModeSelectionRaw}"
           IsReadOnly="False"
-          Document="{Binding RawContentTextDocument}" />
+          Document="{Binding RawContentTextDocument}"/>
 
       <StackPanel
           Grid.Column="0"
@@ -161,13 +157,13 @@
             VerticalContentAlignment="Center"
             Watermark="{i18n:Localize ContentFileSrcPathWatermark, Context=WebSocketClientMessage}"
             Classes="SingleLine"
-            Text="{Binding ContentFileSrcPath, Mode=TwoWay}" />
+            Text="{Binding ContentFileSrcPath, Mode=TwoWay}"/>
 
         <Button
             Margin="0,12,0,0"
             Content="{i18n:Localize ContentFileSearchFile, Context=WebSocketClientMessage}"
             Command="{Binding SearchContentFileCmd}"
-            Classes="Primary" />
+            Classes="Primary"/>
 
       </StackPanel>
 
