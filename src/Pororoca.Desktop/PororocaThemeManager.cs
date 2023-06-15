@@ -54,7 +54,7 @@ public static class PororocaThemeManager
             var textEditorTheme = TextEditorConfiguration.DefaultRegistryOptions!.Value!.LoadTheme(textEditorThemeName);
             TextEditorConfiguration.TextMateInstallations.ForEach(tmi => tmi.SetTheme(textEditorTheme));
         }
-        
+
         currentThemeField = theme;
     }
 

@@ -120,24 +120,14 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #endregion
 
-    #region OTHERS
-
-    private readonly bool isOperatingSystemMacOsx;
-
-    #endregion
-
     #region USER PREFERENCES
 
     private UserPreferences? UserPrefs { get; set; }
 
     #endregion
 
-    public MainWindowViewModel(Func<bool>? isOperatingSystemMacOsx = null)
+    public MainWindowViewModel()
     {
-        #region OTHERS
-        this.isOperatingSystemMacOsx = (isOperatingSystemMacOsx ?? OperatingSystem.IsMacOS)();
-        #endregion
-
         #region COLLECTIONS ORGANIZATION
         CollectionsGroupViewDataCtx = new(this, OnCollectionsGroupItemSelected);
         ImportCollectionsCmd = ReactiveCommand.CreateFromTask(ImportCollectionsAsync);
@@ -353,7 +343,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     private void SwitchToTheme(PororocaTheme theme)
     {
         PororocaThemeManager.CurrentTheme = theme;
-        UpdateMenuSelectedTheme();        
+        UpdateMenuSelectedTheme();
     }
 
     private void UpdateMenuSelectedTheme()
