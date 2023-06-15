@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;

@@ -1,4 +1,3 @@
-using Avalonia;
 using Avalonia.Platform;
 using TextMateSharp.Grammars;
 using TextMateSharp.Internal.Grammars.Reader;

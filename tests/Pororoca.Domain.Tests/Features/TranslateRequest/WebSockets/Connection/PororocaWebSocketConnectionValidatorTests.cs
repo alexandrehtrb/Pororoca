@@ -1,6 +1,5 @@
 using Moq;
 using Pororoca.Domain.Features.Entities.Pororoca;
-using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.TranslateRequest;
 using Pororoca.Domain.Features.VariableResolution;

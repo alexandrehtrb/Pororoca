@@ -4,7 +4,6 @@ using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.ImportCollection;
 using Pororoca.Domain.Features.Requester;
-using Pororoca.Domain.Features.TranslateRequest;
 using Pororoca.Domain.Features.TranslateRequest.Http;
 using Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection;
 using Pororoca.Infrastructure.Features.Requester;

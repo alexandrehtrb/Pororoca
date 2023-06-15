@@ -1,7 +1,5 @@
-using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Text;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using ReactiveUI;

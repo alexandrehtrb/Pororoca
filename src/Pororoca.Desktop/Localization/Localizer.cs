@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
-using System.Text;
 using System.Text.Json;
-using Avalonia;
 using Avalonia.Platform;
 
 namespace Pororoca.Desktop.Localization;

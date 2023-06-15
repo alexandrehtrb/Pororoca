@@ -1,6 +1,3 @@
-using System;
-using System.Reflection;
-using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Postman;
 using Xunit;

@@ -1,9 +1,6 @@
 using System.Net;
-using System.Security.Cryptography.X509Certificates;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Requester;
-using Pororoca.Domain.Features.TranslateRequest;
-using Pororoca.Domain.Features.TranslateRequest.Http;
 
 namespace Pororoca.Infrastructure.Features.Requester;
 

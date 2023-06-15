@@ -1,4 +1,3 @@
-using System;
 using System.Reactive;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;

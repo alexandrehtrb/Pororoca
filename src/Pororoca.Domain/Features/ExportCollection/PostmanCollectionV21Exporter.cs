@@ -1,6 +1,4 @@
-using System.Runtime.CompilerServices;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Postman;

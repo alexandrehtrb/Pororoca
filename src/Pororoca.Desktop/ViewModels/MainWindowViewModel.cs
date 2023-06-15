@@ -1,10 +1,8 @@
 using System.Diagnostics;
 using System.Reactive;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using Avalonia.Styling;
 using Avalonia.Threading;
 using MessageBox.Avalonia;
 using MessageBox.Avalonia.DTO;
@@ -16,7 +14,6 @@ using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using TextMateSharp.Themes;
 
 namespace Pororoca.Desktop.ViewModels;
 

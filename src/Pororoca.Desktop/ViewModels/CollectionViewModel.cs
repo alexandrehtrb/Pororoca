@@ -1,14 +1,10 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
-using System.Text;
-using Avalonia.Controls;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
-using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
-using Pororoca.Domain.Features.ExportCollection;
 using Pororoca.Domain.Features.VariableResolution;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;

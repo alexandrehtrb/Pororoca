@@ -1,15 +1,9 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
-using System.Text;
-using Avalonia.Controls;
 using Pororoca.Desktop.ExportImport;
-using Pororoca.Desktop.Localization;
-using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
-using Pororoca.Domain.Features.ExportEnvironment;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
 
 namespace Pororoca.Desktop.ViewModels;
 

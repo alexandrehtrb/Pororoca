@@ -1,9 +1,4 @@
-using System.Net;
-using System.Net.Http.Headers;
-using System.Text;
-using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
-using Pororoca.Domain.Features.VariableResolution;
 using Xunit;
 
 namespace Pororoca.Domain.Tests.Features.Entities.Pororoca;

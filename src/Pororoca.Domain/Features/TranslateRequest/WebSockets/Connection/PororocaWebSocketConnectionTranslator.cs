@@ -4,7 +4,6 @@ using Pororoca.Domain.Features.Requester;
 using Pororoca.Domain.Features.TranslateRequest.Common;
 using Pororoca.Domain.Features.VariableResolution;
 using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
-using static Pororoca.Domain.Features.Common.JsonConfiguration;
 using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonTranslator;
 using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonValidator;
 

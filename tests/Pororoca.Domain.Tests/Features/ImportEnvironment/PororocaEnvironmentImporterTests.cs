@@ -1,5 +1,4 @@
 using System.Text;
-using Pororoca.Domain.Features.Entities.Pororoca;
 using Xunit;
 using static Pororoca.Domain.Features.ImportEnvironment.PororocaEnvironmentImporter;
 

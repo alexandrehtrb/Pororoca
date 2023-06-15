@@ -2,7 +2,6 @@ using System.Text.Json;
 using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage;
-using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
