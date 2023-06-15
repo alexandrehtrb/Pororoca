@@ -9,7 +9,15 @@
     </Style>
 
     <Style Selector="TabControl WrapPanel">
-        <Setter Property="Background" Value="{StaticResource MainWindowDarkerBackgroundColor}"/>
+        <Setter Property="Background" Value="{DynamicResource MainWindowDarkerBackgroundBrush}"/>
+    </Style>
+
+    <Style Selector="Image.MenuItemCheckMark">
+        <Setter Property="Width" Value="12"/>
+        <Setter Property="Height" Value="12"/>
+        <Setter Property="Margin" Value="4,0,4,0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
     </Style>
 
     <Style Selector="ComboBox">
@@ -51,7 +59,7 @@
 
     <Style Selector="TextBlock.ErrorMessage">
         <Setter Property="FontSize" Value="16"/>
-        <Setter Property="Foreground" Value="{StaticResource SystemErrorTextColor}"/>
+        <Setter Property="Foreground" Value="{DynamicResource SystemErrorTextColor}"/>
     </Style>
 
     <Style Selector="DataGridColumnHeader">
@@ -61,56 +69,56 @@
     </Style>
 
     <Style Selector="GridSplitter.Separator">
-        <Setter Property="Background" Value="{StaticResource MainWindowSeparatorsColor}"/>
+        <Setter Property="Background" Value="{DynamicResource MainWindowSeparatorsBrush}"/>
     </Style>
     
     <Style Selector="Rectangle.Separator">
-        <Setter Property="Fill" Value="{StaticResource MainWindowSeparatorsColor}"/>
+        <Setter Property="Fill" Value="{DynamicResource MainWindowSeparatorsBrush}"/>
     </Style>
 
     <Style Selector="Separator.Separator">
-        <Setter Property="Background" Value="{StaticResource MainWindowSeparatorsColor}"/>
+        <Setter Property="Background" Value="{DynamicResource MainWindowSeparatorsBrush}"/>
     </Style>
 
     <Style Selector="Button.Primary">
-        <Setter Property="Background" Value="{StaticResource ButtonPrimaryBackgroundColor}"/>
-        <Setter Property="Foreground" Value="{StaticResource ButtonPrimaryTextColor}"/>
+        <Setter Property="Background" Value="{DynamicResource ButtonPrimaryBackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource ButtonPrimaryTextBrush}"/>
     </Style>
 
     <Style Selector="Button.Primary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Background" Value="{StaticResource ButtonPrimaryHighlightBackgroundColor}"/>
-        <Setter Property="Button.Foreground" Value="{StaticResource ButtonPrimaryHighlightTextColor}"/>
+        <Setter Property="Background" Value="{DynamicResource ButtonPrimaryHighlightBackgroundBrush}"/>
+        <Setter Property="Button.Foreground" Value="{DynamicResource ButtonPrimaryHighlightTextBrush}"/>
     </Style>
 
     <Style Selector="Button.PrimaryInverted">
-        <Setter Property="Background" Value="{StaticResource ButtonPrimaryInvertedBackgroundColor}"/>
-        <Setter Property="Foreground" Value="{StaticResource ButtonPrimaryInvertedTextColor}"/>
+        <Setter Property="Background" Value="{DynamicResource ButtonPrimaryInvertedBackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource ButtonPrimaryInvertedTextBrush}"/>
     </Style>
 
     <Style Selector="Button.PrimaryInverted:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Background" Value="{StaticResource ButtonPrimaryInvertedHighlightBackgroundColor}"/>
-        <Setter Property="Button.Foreground" Value="{StaticResource ButtonPrimaryInvertedHighlightTextColor}"/>
+        <Setter Property="Background" Value="{DynamicResource ButtonPrimaryInvertedHighlightBackgroundBrush}"/>
+        <Setter Property="Button.Foreground" Value="{DynamicResource ButtonPrimaryInvertedHighlightTextBrush}"/>
     </Style>
 
     <Style Selector="Button.Secondary">
-        <Setter Property="Background" Value="{StaticResource ButtonSecondaryBackgroundColor}"/>
-        <Setter Property="Foreground" Value="{StaticResource ButtonSecondaryTextColor}"/>
+        <Setter Property="Background" Value="{DynamicResource ButtonSecondaryBackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource ButtonSecondaryTextBrush}"/>
         <Setter Property="BorderThickness" Value="2" />
-        <Setter Property="BorderBrush" Value = "{StaticResource ButtonSecondaryBorderColor}" />
+        <Setter Property="BorderBrush" Value = "{DynamicResource ButtonSecondaryBorderBrush}" />
     </Style>
 
     <Style Selector="Button.Secondary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Background" Value="{StaticResource ButtonSecondaryHighlightBackgroundColor}"/>
-        <Setter Property="Button.Foreground" Value="{StaticResource ButtonSecondaryHighlightTextColor}"/>
+        <Setter Property="Background" Value="{DynamicResource ButtonSecondaryHighlightBackgroundBrush}"/>
+        <Setter Property="Button.Foreground" Value="{DynamicResource ButtonSecondaryHighlightTextBrush}"/>
         <Setter Property="BorderThickness" Value="2" />
-        <Setter Property="BorderBrush" Value = "{StaticResource ButtonSecondaryHighlightBorderColor}" />
+        <Setter Property="BorderBrush" Value = "{DynamicResource ButtonSecondaryHighlightBorderBrush}" />
     </Style>
 
     <Style Selector="Button.Trash">
         <Setter Property="Background">
             <DrawingBrush>
                 <DrawingBrush.Drawing>
-                    <GeometryDrawing Brush="{StaticResource DefaultIconsColor}" Geometry="{StaticResource IconRemoveGeometry}" />
+                    <GeometryDrawing Brush="{DynamicResource DefaultIconsBrush}" Geometry="{StaticResource IconRemoveGeometry}" />
                 </DrawingBrush.Drawing>
             </DrawingBrush>
         </Setter>
@@ -120,39 +128,39 @@
         <Setter Property="Background">
             <DrawingBrush>
                 <DrawingBrush.Drawing>
-                    <GeometryDrawing Brush="{StaticResource SystemAccentColor}" Geometry="{StaticResource IconRemoveGeometry}" />
+                    <GeometryDrawing Brush="{DynamicResource SystemAccentColor}" Geometry="{StaticResource IconRemoveGeometry}" />
                 </DrawingBrush.Drawing>
             </DrawingBrush>
         </Setter>
     </Style>
 
     <Style Selector="ListBox">
-        <Setter Property="Background" Value="{StaticResource ListBoxBackgroundColor}"/>
+        <Setter Property="Background" Value="{DynamicResource ListBoxBackgroundBrush}"/>
     </Style>
 
     <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Background" Value="{StaticResource ListBoxItemSelectedBackgroundColor}" />
+        <Setter Property="Background" Value="{DynamicResource ListBoxItemSelectedBackgroundBrush}" />
     </Style>
 
     <Style Selector="TextBlock.WebSocketMessageFromClientPrimary">
-        <Setter Property="Foreground" Value="{StaticResource WebSocketMessageFromClientPrimaryColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource WebSocketMessageFromClientPrimaryBrush}" />
     </Style>
     
     <Style Selector="TextBlock.WebSocketMessageFromClientSecondary">
-        <Setter Property="Foreground" Value="{StaticResource WebSocketMessageFromClientSecondaryColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource WebSocketMessageFromClientSecondaryBrush}" />
     </Style>
     
     <Style Selector="TextBlock.WebSocketMessageFromServerPrimary">
-        <Setter Property="Foreground" Value="{StaticResource WebSocketMessageFromServerPrimaryColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource WebSocketMessageFromServerPrimaryBrush}" />
     </Style>
     
     <Style Selector="TextBlock.WebSocketMessageFromServerSecondary">
-        <Setter Property="Foreground" Value="{StaticResource WebSocketMessageFromServerSecondaryColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource WebSocketMessageFromServerSecondaryBrush}" />
     </Style>
 
     <Style Selector="AvaloniaEdit|TextEditor">
-        <Setter Property="Foreground" Value="{StaticResource TextEditorForeground}" />
-        <Setter Property="Background" Value="{StaticResource TextEditorBackground}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextEditorForegroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource TextEditorBackgroundBrush}" />
         <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
         <Setter Property="VerticalScrollBarVisibility" Value="Visible" />
         <Setter Property="ShowLineNumbers" Value="True" />

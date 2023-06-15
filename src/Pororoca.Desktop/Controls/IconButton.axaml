@@ -30,7 +30,7 @@
                       <Image.Source>
                           <DrawingImage>
                               <DrawingImage.Drawing>
-                                  <GeometryDrawing Brush="{StaticResource DefaultIconsColor}" Geometry="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                  <GeometryDrawing Brush="{DynamicResource DefaultIconsBrush}" Geometry="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}"/>
                               </DrawingImage.Drawing>
                           </DrawingImage>
                       </Image.Source>                      

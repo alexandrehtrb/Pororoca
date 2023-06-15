@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Avalonia.Styling;
 using Avalonia.Threading;
 using MessageBox.Avalonia;
 using MessageBox.Avalonia.DTO;
@@ -15,6 +16,7 @@ using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using TextMateSharp.Themes;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -84,12 +86,31 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     [Reactive]
     public bool IsLanguagePortuguese { get; set; }
+    public ReactiveCommand<Unit, Unit> SelectLanguagePortuguesCmd { get; }
 
     [Reactive]
     public bool IsLanguageEnglish { get; set; }
-
-    public ReactiveCommand<Unit, Unit> SelectLanguagePortuguesCmd { get; }
     public ReactiveCommand<Unit, Unit> SelectLanguageEnglishCmd { get; }
+
+    #endregion
+
+    #region THEMES
+
+    [Reactive]
+    public bool IsThemeLight { get; set; }
+    public ReactiveCommand<Unit, Unit> SwitchToLightThemeCmd { get; }
+
+    [Reactive]
+    public bool IsThemeDark { get; set; }
+    public ReactiveCommand<Unit, Unit> SwitchToDarkThemeCmd { get; }
+
+    [Reactive]
+    public bool IsThemePampa { get; set; }
+    public ReactiveCommand<Unit, Unit> SwitchToPampaThemeCmd { get; }
+
+    [Reactive]
+    public bool IsThemeAmazonianNight { get; set; }
+    public ReactiveCommand<Unit, Unit> SwitchToAmazonianNightThemeCmd { get; }
 
     #endregion
 
@@ -129,6 +150,14 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         #region LANGUAGE
         SelectLanguagePortuguesCmd = ReactiveCommand.Create(() => SelectLanguage(Language.PtBr));
         SelectLanguageEnglishCmd = ReactiveCommand.Create(() => SelectLanguage(Language.EnGb));
+        #endregion
+
+        #region THEMES
+        SwitchToLightThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Light));
+        SwitchToPampaThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Pampa));
+        SwitchToDarkThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Dark));
+        SwitchToAmazonianNightThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.AmazonianNight));
+        UpdateMenuSelectedTheme();
         #endregion
 
         #region GLOBAL OPTIONS
@@ -322,6 +351,36 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #endregion
 
+    #region THEMES
+
+    private void SwitchToTheme(PororocaTheme theme)
+    {
+        PororocaThemeManager.CurrentTheme = theme;
+        UpdateMenuSelectedTheme();        
+    }
+
+    private void UpdateMenuSelectedTheme()
+    {
+        IsThemeLight = IsThemeDark = IsThemePampa = IsThemeAmazonianNight = false;
+        switch (PororocaThemeManager.CurrentTheme)
+        {
+            case PororocaTheme.Light:
+                IsThemeLight = true;
+                break;
+            case PororocaTheme.Dark:
+                IsThemeDark = true;
+                break;
+            case PororocaTheme.Pampa:
+                IsThemePampa = true;
+                break;
+            case PororocaTheme.AmazonianNight:
+                IsThemeAmazonianNight = true;
+                break;
+        }
+    }
+
+    #endregion
+
     #region GLOBAL OPTIONS
 
     private void ToggleSslVerification() =>
@@ -332,7 +391,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     #region USER DATA
 
     private static UserPreferences GetDefaultUserPrefs() =>
-        new(Language.EnGb, DateTime.Now);
+        new(Language.EnGb, DateTime.Now, PororocaTheme.AmazonianNight);
 
     private void LoadUserData()
     {
@@ -365,6 +424,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
                                     .Select(cvm => cvm.ToCollection())
                                     .DistinctBy(c => c.Id)
                                     .ToArray();
+
+        UserPrefs!.Theme = PororocaThemeManager.CurrentTheme;
 
         UserDataManager.SaveUserData(UserPrefs, cols).GetAwaiter().GetResult();
     }

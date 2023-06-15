@@ -149,7 +149,7 @@
           <TextBlock
               Text="{i18n:Localize Environments, Context=CollectionsGroup}" />
           <TextBlock
-              Foreground="{StaticResource SystemInvertedAccentColor}"
+              Foreground="{DynamicResource SystemInvertedAccentColor}"
               Text="{Binding SelectedEnvironmentName}" />
         </StackPanel>
       </TreeDataTemplate>

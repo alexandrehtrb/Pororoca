@@ -87,7 +87,7 @@
           <TextBlock
               Margin="12,6,12,0"
               FontSize="14"
-              Foreground="{StaticResource WebSocketConnectedColor}"
+              Foreground="{DynamicResource WebSocketConnectedBrush}"
               Text="{i18n:Localize Connected, Context=WebSocketConnection}"
               IsVisible="{Binding IsConnected}" />
 

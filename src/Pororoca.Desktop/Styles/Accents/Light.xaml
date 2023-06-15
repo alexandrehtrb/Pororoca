@@ -1,0 +1,37 @@
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+            <!-- System colours overrides below -->
+            <Color x:Key="SystemAccentColorDark3">#4e6006</Color>
+            <Color x:Key="SystemAccentColorDark2">#759009</Color>
+            <Color x:Key="SystemAccentColorDark1">#9cc00c</Color>
+            <Color x:Key="SystemAccentColor">#c4f00f</Color>
+            <Color x:Key="SystemAccentColorLight1">#cff33f</Color>
+            <Color x:Key="SystemAccentColorLight2">#dbf66f</Color>
+            <Color x:Key="SystemAccentColorLight3">#e7f99f</Color>
+            <Color x:Key="SystemErrorTextColor">Red</Color>
+            <!-- Custom colours below -->
+            <Color x:Key="SystemInvertedAccentColor">#550527</Color>
+            <Color x:Key="SystemInvertedAccentColorLight1">#780736</Color>
+            <Color x:Key="SystemInvertedAccentColorLight2">#a90a4c</Color>
+            <Color x:Key="MainWindowMenuColor">#999999</Color>
+            <Color x:Key="MainWindowBackgroundColor">Gainsboro</Color>
+            <Color x:Key="MainWindowDarkerBackgroundColor">Silver</Color>
+            <Color x:Key="MainWindowSidebarColor">Silver</Color>
+            <Color x:Key="MainWindowSeparatorsColor">Silver</Color>
+            <Color x:Key="ListBoxBackgroundColor">Silver</Color>
+            <Color x:Key="ListBoxItemSelectedBackgroundColor">Gainsboro</Color>
+            <Color x:Key="DragAndDropDataGridItemDraggingColor">Black</Color>
+            <Color x:Key="ButtonPrimaryTextColor">Black</Color>
+            <Color x:Key="ButtonPrimaryInvertedTextColor">White</Color>
+            <Color x:Key="WebSocketConnectedColor">#a90a4c</Color>
+            <Color x:Key="WebSocketMessageFromClientPrimaryColor">#780736</Color>
+            <Color x:Key="WebSocketMessageFromServerPrimaryColor">Green</Color>
+            <Color x:Key="DefaultIconsColor">Black</Color>
+            <Color x:Key="TextEditorBackgroundColor">White</Color>
+            <Color x:Key="TextEditorForegroundColor">Black</Color>
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+</ResourceDictionary>

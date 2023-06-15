@@ -15,7 +15,7 @@
     <Style Selector="DataGrid.dragging-up DataGridRow.dragging">
         <Setter Property="AdornerLayer.Adorner">
             <Template>
-                <Border BorderThickness="0 2 0 0" BorderBrush="{StaticResource DragAndDropDataGridItemDraggingColor}" />
+                <Border BorderThickness="0 2 0 0" BorderBrush="{StaticResource DragAndDropDataGridItemDraggingBrush}" />
             </Template>
         </Setter>
     </Style>
@@ -23,7 +23,7 @@
     <Style Selector="DataGrid.dragging-down DataGridRow.dragging">
         <Setter Property="AdornerLayer.Adorner">
             <Template>
-                <Border BorderThickness="0 0 0 2" BorderBrush="{StaticResource DragAndDropDataGridItemDraggingColor}" />
+                <Border BorderThickness="0 0 0 2" BorderBrush="{StaticResource DragAndDropDataGridItemDraggingBrush}" />
             </Template>
         </Setter>
     </Style>
