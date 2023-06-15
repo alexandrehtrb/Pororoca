@@ -22,15 +22,21 @@
       SelectionMode="Multiple"
       ScrollViewer.HorizontalScrollBarVisibility="Disabled">
     <TreeView.Styles>
-      <Style Selector="TreeViewItem">
         <!-- Items in the ItemsSource need to have these properties for the binding to work -->
-        <Setter
-            Property="IsExpanded"
-            Value="{Binding IsExpanded, Mode=TwoWay}" />
-        <!--Setter
-        Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" /-->
+        <!-- Because we are used CompiledBindings now, we need to declare x:DataType for each expandable vm -->
+      <Style Selector="TreeViewItem" x:DataType="vm:CollectionViewModel">
+        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
       </Style>
-    </TreeView.Styles>
+            <Style Selector="TreeViewItem" x:DataType="vm:CollectionFolderViewModel">
+                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+            </Style>
+            <Style Selector="TreeViewItem" x:DataType="vm:EnvironmentsGroupViewModel">
+                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+            </Style>
+            <Style Selector="TreeViewItem" x:DataType="vm:WebSocketConnectionViewModel">
+                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+            </Style>
+        </TreeView.Styles>
     <TreeView.DataTemplates>
 
       <TreeDataTemplate
@@ -126,35 +132,34 @@
           </TextBlock.ContextMenu>
         </TextBlock>
       </TreeDataTemplate>
-      <TreeDataTemplate
+            <TreeDataTemplate
           DataType="{x:Type vm:EnvironmentsGroupViewModel}"
           ItemsSource="{Binding Items}">
-        <StackPanel Orientation="Horizontal">
-          <StackPanel.ContextMenu>
-            <ContextMenu>
-              <MenuItem
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem
                   Header="{i18n:Localize NewEnvironment, Context=CollectionsGroupContextMenu}"
                   Command="{Binding AddNewEnvironmentCmd}"
                   IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}" />
-              <MenuItem
+                            <MenuItem
                   Header="{i18n:Localize Paste, Context=CollectionsGroupContextMenu}"
                   Command="{Binding PasteToEnvironmentsCmd}"
                   IsEnabled="{Binding CollectionsGroupDataCtx.CanPasteEnvironment}" />
-              <MenuItem
+                            <MenuItem
                   Header="{i18n:Localize ImportEnvironment, Context=CollectionsGroupContextMenu}"
                   Command="{Binding ImportEnvironmentsCmd}"
                   IsVisible="{Binding !CollectionsGroupDataCtx.HasMultipleItemsSelected}" />
-            </ContextMenu>
-          </StackPanel.ContextMenu>
-          <TextBlock
+                        </ContextMenu>
+                    </StackPanel.ContextMenu>
+                    <TextBlock
               Text="{i18n:Localize Environments, Context=CollectionsGroup}" />
-          <TextBlock
+                    <TextBlock
               Foreground="{DynamicResource SystemInvertedAccentColor}"
               Text="{Binding SelectedEnvironmentName}" />
-        </StackPanel>
-      </TreeDataTemplate>
-
-      <DataTemplate DataType="{x:Type vm:HttpRequestViewModel}">
+                </StackPanel>
+            </TreeDataTemplate>
+            <DataTemplate DataType="{x:Type vm:HttpRequestViewModel}">
         <TextBlock Text="{Binding Name}">
           <TextBlock.ContextMenu>
             <ContextMenu>
