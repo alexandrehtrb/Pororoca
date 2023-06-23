@@ -72,7 +72,7 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
 
     public void AddNewEnvironment()
     {
-        PororocaEnvironment newEnv = new(Localizer.Instance["Environment/NewEnvironment"]);
+        PororocaEnvironment newEnv = new(Localizer.Instance.Environment.NewEnvironment);
         AddEnvironment(newEnv, showItemInScreen: true);
     }
 

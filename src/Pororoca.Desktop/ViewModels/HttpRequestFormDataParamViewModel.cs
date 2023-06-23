@@ -66,8 +66,8 @@ public sealed class HttpRequestFormDataParamViewModel : ViewModelBase
     private string ResolveParamTypeText() =>
         ParamType switch
         {
-            PororocaHttpRequestFormDataParamType.File => Localizer.Instance["HttpRequest/BodyFormDataParamTypeFile"],
-            _ => Localizer.Instance["HttpRequest/BodyFormDataParamTypeText"]
+            PororocaHttpRequestFormDataParamType.File => Localizer.Instance.HttpRequest.BodyFormDataParamTypeFile,
+            _ => Localizer.Instance.HttpRequest.BodyFormDataParamTypeText
         };
 
     private void RemoveParam() =>

@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <DebugType>embedded</DebugType>
+    <EmitCompilerGeneratedFiles Condition="'$(Configuration)'=='Debug'">true</EmitCompilerGeneratedFiles>
     <!--
       line below will include INSTALLED_ON_WINDOWS preprocessor directive
       when "-p:PublishForInstallOnWindows" is specified in dotnet build, run or publish
@@ -19,11 +20,18 @@
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <Copyright>AlexandreHTRB</Copyright>
     <!-- Licence also available at https://github.com/alexandrehtrb/Pororoca/LICENCE.md -->
-    <!--TieredCompilationQuickJitForLoops>true</TieredCompilationQuickJitForLoops-->
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Pororoca.Domain\Pororoca.Domain.csproj"/>
     <ProjectReference Include="..\Pororoca.Infrastructure\Pororoca.Infrastructure.csproj"/>
+    <ProjectReference Include="..\Pororoca.Desktop.Localization.SourceGeneration\Pororoca.Desktop.Localization.SourceGeneration.csproj"
+                      ReferenceOutputAssembly="false"
+                      OutputItemType="Analyzer" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="./Localization/i18n_keys.json" />
+    <AdditionalFiles Include="./Localization/en-gb.i18n_lang.json" />
+    <AdditionalFiles Include="./Localization/pt-br.i18n_lang.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="**\*.xaml.cs">
@@ -47,7 +55,7 @@
     <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.0.0-rc1.1" />
     <PackageReference Include="AvaloniaEdit.TextMate" Version="11.0.0-rc1.1" />
     <PackageReference Include="TextMateSharp.Grammars" Version="1.0.55" />
-    
+
     <PackageReference Include="ReactiveUI.Fody" Version="18.4.26" />
     <PackageReference Include="MessageBox.Avalonia" Version="2.3.1-rc1" />
   </ItemGroup>

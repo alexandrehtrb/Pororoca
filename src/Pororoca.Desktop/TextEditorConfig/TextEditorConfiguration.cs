@@ -27,9 +27,10 @@ internal static class TextEditorConfiguration
         {
             ItemsSource = new List<MenuItem>
             {
-                new MenuItem { Header = Localizer.Instance["TextEditor/Copy"], InputGesture = new KeyGesture(Key.C, KeyModifiers.Control) },
-                new MenuItem { Header = Localizer.Instance["TextEditor/Paste"], InputGesture = new KeyGesture(Key.V, KeyModifiers.Control) },
-                new MenuItem { Header = Localizer.Instance["TextEditor/Cut"], InputGesture = new KeyGesture(Key.X, KeyModifiers.Control) }
+                // TODO: fix text editors' context menu (i18n and actions not working)
+                new MenuItem { Header = "Copy", InputGesture = new KeyGesture(Key.C, KeyModifiers.Control) },
+                new MenuItem { Header = "Paste", InputGesture = new KeyGesture(Key.V, KeyModifiers.Control) },
+                new MenuItem { Header = "Cut", InputGesture = new KeyGesture(Key.X, KeyModifiers.Control) }
             }
         };
         editor.Options.ShowBoxForControlCharacters = true;

@@ -4,7 +4,6 @@
     xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:i18n="clr-namespace:Pororoca.Desktop.Localization"
     xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
     xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
     xmlns:idd="clr-namespace:Avalonia.Xaml.Interactions.DragAndDrop;assembly=Avalonia.Xaml.Interactions.DragAndDrop"
@@ -35,7 +34,7 @@
     <TextBlock
         Grid.Column="0"
         Grid.Row="0"
-        Text="{i18n:Localize Title, Context=CollectionVariables}"
+        Text="{Binding i18n.CollectionVariables.Title}"
         Margin="0,24,0,0"
         FontSize="32"
         FontWeight="Light"
@@ -80,28 +79,28 @@
             Width="*"
             Binding="{Binding Enabled}">
           <DataGridCheckBoxColumn.Header>
-            <TextBlock Text="{i18n:Localize VariableEnabled, Context=CollectionVariables}"/>
+            <TextBlock Text="{Binding i18n.CollectionVariables.VariableEnabled}"/>
           </DataGridCheckBoxColumn.Header>
         </DataGridCheckBoxColumn>
         <DataGridTextColumn
             Width="2*"
             Binding="{Binding Key}">
           <DataGridTextColumn.Header>
-            <TextBlock Text="{i18n:Localize VariableName, Context=CollectionVariables}"/>
+            <TextBlock Text="{Binding i18n.CollectionVariables.VariableName}"/>
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
             Width="2*"
             Binding="{Binding Value}">
           <DataGridTextColumn.Header>
-            <TextBlock Text="{i18n:Localize VariableValue, Context=CollectionVariables}"/>
+            <TextBlock Text="{Binding i18n.CollectionVariables.VariableValue}"/>
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridCheckBoxColumn
             Width="*"
             Binding="{Binding IsSecret}">
           <DataGridCheckBoxColumn.Header>
-            <TextBlock Text="{i18n:Localize VariableIsSecret, Context=CollectionVariables}"/>
+            <TextBlock Text="{Binding i18n.CollectionVariables.VariableIsSecret}"/>
           </DataGridCheckBoxColumn.Header>
         </DataGridCheckBoxColumn>
         <DataGridTemplateColumn
@@ -135,7 +134,7 @@
         FontSize="12"
         HorizontalAlignment="Stretch"
         Margin="0,24,0,24"
-        Text="{i18n:Localize Tip, Context=CollectionVariables}"/>
+        Text="{Binding i18n.CollectionVariables.Tip}"/>
 
   </Grid>
 </UserControl>

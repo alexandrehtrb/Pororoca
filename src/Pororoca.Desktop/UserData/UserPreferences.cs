@@ -20,16 +20,16 @@ public sealed class UserPreferences
 
     public UserPreferences(Language lang, DateTime updateReminderLastShownDate, PororocaTheme theme)
     {
-        Lang = lang.GetLanguageLCID();
+        Lang = lang.ToLCID();
         UpdateReminderLastShownAt = updateReminderLastShownDate.ToString("yyyy-MM-dd");
         Theme = theme;
     }
 
     public Language GetLanguage() =>
-        LanguageExtensions.GetLanguageFromLCID(Lang);
+        LanguageExtensions.GetLanguageByLCID(Lang);
 
     public void SetLanguage(Language lang) =>
-        Lang = lang.GetLanguageLCID();
+        Lang = lang.ToLCID();
 
     private DateTime? UpdateReminderLastShownDate
     {

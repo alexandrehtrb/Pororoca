@@ -120,19 +120,19 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
 
     private void AddNewFolder()
     {
-        PororocaCollectionFolder newFolder = new(Localizer.Instance["Folder/NewFolder"]);
+        PororocaCollectionFolder newFolder = new(Localizer.Instance.Folder.NewFolder);
         AddFolder(newFolder, showItemInScreen: true);
     }
 
     private void AddNewHttpRequest()
     {
-        PororocaHttpRequest newReq = new(Localizer.Instance["HttpRequest/NewRequest"]);
+        PororocaHttpRequest newReq = new(Localizer.Instance.HttpRequest.NewRequest);
         AddHttpRequest(newReq, showItemInScreen: true);
     }
 
     private void AddNewWebSocketConnection()
     {
-        PororocaWebSocketConnection newWs = new(Localizer.Instance["WebSocketConnection/NewConnection"]);
+        PororocaWebSocketConnection newWs = new(Localizer.Instance.WebSocketConnection.NewConnection);
         AddWebSocketConnection(newWs, showItemInScreen: true);
     }
 

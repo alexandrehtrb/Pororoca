@@ -5,7 +5,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:v="using:Pororoca.Desktop.Views"
     xmlns:controls="clr-namespace:Pororoca.Desktop.Controls;assembly=Pororoca.Desktop"
-    xmlns:i18n="clr-namespace:Pororoca.Desktop.Localization"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignWidth="1350"
@@ -35,17 +34,17 @@
 
       <controls:IconButton
           Icon="{StaticResource IconAddFolderGeometry}"
-          Text="{i18n:Localize AddFolder, Context=CollectionFolder}"
+          Text="{Binding i18n.CollectionFolder.AddFolder}"
           Command="{Binding AddNewFolderCmd}"/>
 
       <controls:IconButton
           Icon="{StaticResource IconAddGeometry}"
-          Text="{i18n:Localize AddHttpRequest, Context=CollectionFolder}"
+          Text="{Binding i18n.CollectionFolder.AddHttpRequest}"
           Command="{Binding AddNewHttpRequestCmd}"/>
 
       <controls:IconButton
           Icon="{StaticResource IconWebsocketGeometry}"
-          Text="{i18n:Localize AddWebSocketConnection, Context=CollectionFolder}"
+          Text="{Binding i18n.CollectionFolder.AddWebSocketConnection}"
           Command="{Binding AddNewWebSocketConnectionCmd}"/>
 
     </StackPanel>

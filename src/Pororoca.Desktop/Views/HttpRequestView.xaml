@@ -6,7 +6,6 @@
     xmlns:v="using:Pororoca.Desktop.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:AvaloniaEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
-    xmlns:i18n="clr-namespace:Pororoca.Desktop.Localization"
     xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
     xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
     xmlns:idd="clr-namespace:Avalonia.Xaml.Interactions.DragAndDrop;assembly=Avalonia.Xaml.Interactions.DragAndDrop"
@@ -85,7 +84,7 @@
           <TextBox
               Height="40"
               Text="{Binding RequestUrl}"
-              Watermark="{i18n:Localize UrlWatermark, Context=HttpRequest}"
+              Watermark="{Binding i18n.HttpRequest.UrlWatermark}"
               VerticalContentAlignment="Center"
               ToolTip.Placement="Bottom"
               ToolTip.Tip="{Binding ResolvedRequestUrlToolTip}"
@@ -126,7 +125,7 @@
               VerticalContentAlignment="Center"
               IsVisible="{Binding !IsRequesting}"
               Command="{Binding SendRequestCmd}"
-              Content="{i18n:Localize SendRequest, Context=HttpRequest}"
+              Content="{Binding i18n.HttpRequest.SendRequest}"
               Classes="Primary"/>
 
           <Button
@@ -136,7 +135,7 @@
               VerticalContentAlignment="Center"
               IsVisible="{Binding IsRequesting}"
               Command="{Binding CancelRequestCmd}"
-              Content="{i18n:Localize CancelRequest, Context=HttpRequest}"
+              Content="{Binding i18n.HttpRequest.CancelRequest}"
               Classes="PrimaryInverted"/>
 
         </Grid>
@@ -180,7 +179,7 @@
             Grid.Row="0"
             Margin="12,28,12,0"
             Classes="SectionTitle"
-            Text="{i18n:Localize SectionTitle, Context=HttpRequest}"/>
+            Text="{Binding i18n.HttpRequest.SectionTitle}"/>
         <TabControl
             Grid.Column="0"
             Grid.Row="1"
@@ -192,7 +191,7 @@
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
-                  Text="{i18n:Localize Headers, Context=HttpRequest}"/>
+                  Text="{Binding i18n.HttpRequest.Headers}"/>
             </TabItem.Header>
             <Grid Margin="-12,12,-12,12">
               <Grid.ColumnDefinitions>
@@ -244,21 +243,21 @@
                       Width="0.19*"
                       Binding="{Binding Enabled}">
                     <DataGridCheckBoxColumn.Header>
-                      <TextBlock Text="{i18n:Localize HeaderEnabled, Context=HttpRequest}"/>
+                      <TextBlock Text="{Binding i18n.HttpRequest.HeaderEnabled}"/>
                     </DataGridCheckBoxColumn.Header>
                   </DataGridCheckBoxColumn>
                   <DataGridTextColumn
                       Width="0.32*"
                       Binding="{Binding Key}">
                     <DataGridTextColumn.Header>
-                      <TextBlock Text="{i18n:Localize HeaderName, Context=HttpRequest}"/>
+                      <TextBlock Text="{Binding i18n.HttpRequest.HeaderName}"/>
                     </DataGridTextColumn.Header>
                   </DataGridTextColumn>
                   <DataGridTextColumn
                       Width="0.37*"
                       Binding="{Binding Value}">
                     <DataGridTextColumn.Header>
-                      <TextBlock Text="{i18n:Localize HeaderValue, Context=HttpRequest}"/>
+                      <TextBlock Text="{Binding i18n.HttpRequest.HeaderValue}"/>
                     </DataGridTextColumn.Header>
                   </DataGridTextColumn>
                   <DataGridTemplateColumn
@@ -286,7 +285,7 @@
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
-                  Text="{i18n:Localize Body, Context=HttpRequest}"/>
+                  Text="{Binding i18n.HttpRequest.Body}"/>
             </TabItem.Header>
             <Grid Margin="-12,12,-12,12">
               <Grid.ColumnDefinitions>
@@ -312,27 +311,27 @@
                     SelectedIndex="{Binding RequestBodyModeSelectedIndex}">
                   <ComboBoxItem
                       IsSelected="{Binding IsRequestBodyModeNoneSelected, Mode=TwoWay}"
-                      Content="{i18n:Localize BodyModeNone, Context=HttpRequest}"/>
+                      Content="{Binding i18n.HttpRequest.BodyModeNone}"/>
                   <ComboBoxItem
                       x:Name="reqScrRequestBodyModeSelectionRaw"
                       IsSelected="{Binding IsRequestBodyModeRawSelected, Mode=TwoWay}"
-                      Content="{i18n:Localize BodyModeRaw, Context=HttpRequest}"/>
+                      Content="{Binding i18n.HttpRequest.BodyModeRaw}"/>
                   <ComboBoxItem
                       x:Name="reqScrRequestBodyModeSelectionFile"
                       IsSelected="{Binding IsRequestBodyModeFileSelected, Mode=TwoWay}"
-                      Content="{i18n:Localize BodyModeFile, Context=HttpRequest}"/>
+                      Content="{Binding i18n.HttpRequest.BodyModeFile}"/>
                   <ComboBoxItem
                       x:Name="reqScrRequestBodyModeSelectionUrlEncoded"
                       IsSelected="{Binding IsRequestBodyModeUrlEncodedSelected, Mode=TwoWay}"
-                      Content="{i18n:Localize BodyModeUrlEncoded, Context=HttpRequest}"/>
+                      Content="{Binding i18n.HttpRequest.BodyModeUrlEncoded}"/>
                   <ComboBoxItem
                       x:Name="reqScrRequestBodyModeSelectionFormData"
                       IsSelected="{Binding IsRequestBodyModeFormDataSelected, Mode=TwoWay}"
-                      Content="{i18n:Localize BodyModeFormData, Context=HttpRequest}"/>
+                      Content="{Binding i18n.HttpRequest.BodyModeFormData}"/>
                   <ComboBoxItem
                       x:Name="reqScrRequestBodyModeSelectionGraphQl"
                       IsSelected="{Binding IsRequestBodyModeGraphQlSelected, Mode=TwoWay}"
-                      Content="{i18n:Localize BodyModeGraphQl, Context=HttpRequest}"/>
+                      Content="{Binding i18n.HttpRequest.BodyModeGraphQl}"/>
                 </ComboBox>
 
                 <AutoCompleteBox
@@ -341,7 +340,7 @@
                     Width="190"
                     FontSize="14"
                     HorizontalAlignment="Left"
-                    Watermark="{i18n:Localize BodyRawContentTypeWatermark, Context=HttpRequest}"
+                    Watermark="{Binding i18n.HttpRequest.BodyRawContentTypeWatermark}"
                     ItemsSource="{Binding AllMimeTypes}"
                     SelectedItem="{Binding RequestRawContentType, Mode=TwoWay}"
                     FilterMode="Contains"
@@ -380,7 +379,7 @@
                     Width="180"
                     FontSize="14"
                     HorizontalAlignment="Left"
-                    Watermark="{i18n:Localize BodyFileContentTypeWatermark, Context=HttpRequest}"
+                    Watermark="{Binding i18n.HttpRequest.BodyFileContentTypeWatermark}"
                     Text="{Binding RequestFileContentType}"
                     ItemsSource="{Binding AllMimeTypes}"
                     FilterMode="Contains"/>
@@ -388,7 +387,7 @@
                     Grid.Column="0"
                     Grid.Row="1"
                     Margin="0,12,0,0"
-                    Watermark="{i18n:Localize BodyFileSrcPathWatermark, Context=HttpRequest}"
+                    Watermark="{Binding i18n.HttpRequest.BodyFileSrcPathWatermark}"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Left"
                     VerticalContentAlignment="Center"
@@ -397,7 +396,7 @@
                 <Button
                     Grid.Column="0"
                     Grid.Row="2"
-                    Content="{i18n:Localize BodyFileSearchFile, Context=HttpRequest}"
+                    Content="{Binding i18n.HttpRequest.BodyFileSearchFile}"
                     Margin="0,12,0,0"
                     Command="{Binding SearchRequestBodyRawFileCmd}"
                     Classes="Primary"/>
@@ -456,21 +455,21 @@
                         Width="0.19*"
                         Binding="{Binding Enabled}">
                       <DataGridCheckBoxColumn.Header>
-                        <TextBlock Text="{i18n:Localize BodyUrlEncodedParamEnabled, Context=HttpRequest}"/>
+                        <TextBlock Text="{Binding i18n.HttpRequest.BodyUrlEncodedParamEnabled}"/>
                       </DataGridCheckBoxColumn.Header>
                     </DataGridCheckBoxColumn>
                     <DataGridTextColumn
                         Width="0.32*"
                         Binding="{Binding Key}">
                       <DataGridTextColumn.Header>
-                        <TextBlock Text="{i18n:Localize BodyUrlEncodedParamName, Context=HttpRequest}"/>
+                        <TextBlock Text="{Binding i18n.HttpRequest.BodyUrlEncodedParamName}"/>
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTextColumn
                         Width="0.35*"
                         Binding="{Binding Value}">
                       <DataGridTextColumn.Header>
-                        <TextBlock Text="{i18n:Localize BodyUrlEncodedParamValue, Context=HttpRequest}"/>
+                        <TextBlock Text="{Binding i18n.HttpRequest.BodyUrlEncodedParamValue}"/>
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTemplateColumn
@@ -512,12 +511,12 @@
                     Orientation="Horizontal"
                     Margin="0,8,0,0">
                   <Button
-                      Content="{i18n:Localize BodyFormDataTextParamAdd, Context=HttpRequest}"
+                      Content="{Binding i18n.HttpRequest.BodyFormDataTextParamAdd}"
                       Margin="0,0,3,0"
                       Command="{Binding AddNewFormDataTextParamCmd}"
                       Classes="Primary"/>
                   <Button
-                      Content="{i18n:Localize BodyFormDataFileParamAdd, Context=HttpRequest}"
+                      Content="{Binding i18n.HttpRequest.BodyFormDataFileParamAdd}"
                       Margin="3,0,0,0"
                       Command="{Binding AddNewFormDataFileParamCmd}"
                       Classes="Primary"/>
@@ -540,7 +539,7 @@
                         Width="0.11*"
                         Binding="{Binding Enabled}">
                       <DataGridCheckBoxColumn.Header>
-                        <TextBlock Text="{i18n:Localize BodyFormDataParamEnabled, Context=HttpRequest}"/>
+                        <TextBlock Text="{Binding i18n.HttpRequest.BodyFormDataParamEnabled}"/>
                       </DataGridCheckBoxColumn.Header>
                     </DataGridCheckBoxColumn>
                     <DataGridTextColumn
@@ -548,28 +547,28 @@
                         Binding="{Binding Type}"
                         IsReadOnly="True">
                       <DataGridTextColumn.Header>
-                        <TextBlock Text="{i18n:Localize BodyFormDataParamType, Context=HttpRequest}"/>
+                        <TextBlock Text="{Binding i18n.HttpRequest.BodyFormDataParamType}"/>
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTextColumn
                         Width="0.2*"
                         Binding="{Binding Key}">
                       <DataGridTextColumn.Header>
-                        <TextBlock Text="{i18n:Localize BodyFormDataParamName, Context=HttpRequest}"/>
+                        <TextBlock Text="{Binding i18n.HttpRequest.BodyFormDataParamName}"/>
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTextColumn
                         Width="0.21*"
                         Binding="{Binding Value}">
                       <DataGridTextColumn.Header>
-                        <TextBlock Text="{i18n:Localize BodyFormDataParamTextOrSrcPath, Context=HttpRequest}"/>
+                        <TextBlock Text="{Binding i18n.HttpRequest.BodyFormDataParamTextOrSrcPath}"/>
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTextColumn
                         Width="0.23*"
                         Binding="{Binding ContentType}">
                       <DataGridTextColumn.Header>
-                        <TextBlock Text="{i18n:Localize BodyFormDataParamContentType, Context=HttpRequest}"/>
+                        <TextBlock Text="{Binding i18n.HttpRequest.BodyFormDataParamContentType}"/>
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTemplateColumn
@@ -613,7 +612,7 @@
                 <TextBox
                     Grid.Column="0"
                     Grid.Row="0"
-                    Watermark="{i18n:Localize BodyGraphQlQueryWatermark, Context=HttpRequest}"
+                    Watermark="{Binding i18n.HttpRequest.BodyGraphQlQueryWatermark}"
                     HorizontalAlignment="Stretch"
                     Classes="CodeTextBox"
                     Text="{Binding RequestBodyGraphQlQuery}"/>
@@ -627,7 +626,7 @@
                 <TextBox
                     Grid.Column="2"
                     Grid.Row="0"
-                    Watermark="{i18n:Localize BodyGraphQlVariablesWatermark, Context=HttpRequest}"
+                    Watermark="{Binding i18n.HttpRequest.BodyGraphQlVariablesWatermark}"
                     HorizontalAlignment="Stretch"
                     Classes="CodeTextBox"
                     Text="{Binding RequestBodyGraphQlVariables}"/>
@@ -639,7 +638,7 @@
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
-                  Text="{i18n:Localize CustomAuth, Context=HttpRequest}"/>
+                  Text="{Binding i18n.HttpRequest.CustomAuth}"/>
             </TabItem.Header>
             <v:RequestAuthView DataContext="{Binding RequestAuthDataCtx}"/>
           </TabItem>
@@ -682,7 +681,7 @@
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
-                  Text="{i18n:Localize Headers, Context=HttpResponse}"/>
+                  Text="{Binding i18n.HttpResponse.Headers}"/>
             </TabItem.Header>
             <DataGrid
                 Margin="-12,12,-12,12"
@@ -701,14 +700,14 @@
                     Width="*"
                     Binding="{Binding Key}">
                   <DataGridTextColumn.Header>
-                    <TextBlock Text="{i18n:Localize HeaderName, Context=HttpResponse}"/>
+                    <TextBlock Text="{Binding i18n.HttpResponse.HeaderName}"/>
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="*"
                     Binding="{Binding Value}">
                   <DataGridTextColumn.Header>
-                    <TextBlock Text="{i18n:Localize HeaderValue, Context=HttpResponse}"/>
+                    <TextBlock Text="{Binding i18n.HttpResponse.HeaderValue}"/>
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
               </DataGrid.Columns>
@@ -719,7 +718,7 @@
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
-                  Text="{i18n:Localize Body, Context=HttpResponse}"/>
+                  Text="{Binding i18n.HttpResponse.Body}"/>
             </TabItem.Header>
             <Grid
                 Margin="-12,12,-12,0"
@@ -748,13 +747,13 @@
                   Orientation="Horizontal"
                   Margin="0,12,0,0">
                 <Button
-                    Content="{i18n:Localize BodySaveToFile, Context=HttpResponse}"
+                    Content="{Binding i18n.HttpResponse.BodySaveToFile}"
                     Margin="0,0,6,12"
                     IsVisible="{Binding ResponseDataCtx.IsSaveResponseBodyToFileVisible}"
                     Command="{Binding ResponseDataCtx.SaveResponseBodyToFileCmd}"
                     Classes="Primary"/>
                 <Button
-                    Content="{i18n:Localize DisableTlsVerification, Context=HttpResponse}"
+                    Content="{Binding i18n.HttpResponse.DisableTlsVerification}"
                     Margin="6,0,0,12"
                     IsVisible="{Binding ResponseDataCtx.IsDisableTlsVerificationVisible}"
                     Command="{Binding ResponseDataCtx.DisableTlsVerificationCmd}"
