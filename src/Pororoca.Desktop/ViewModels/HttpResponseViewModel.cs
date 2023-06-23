@@ -129,8 +129,8 @@ public sealed class HttpResponseViewModel : ViewModelBase
             // if content type is set after, the syntax will not change after content is updated
             ResponseRawContentType = res.ContentType;
             ResponseRawContent = res.CanDisplayTextBody ?
-                                 res.GetBodyAsText(Localizer.Instance["HttpResponse/BodyCouldNotReadAsUTF8"]) :
-                                 string.Format(Localizer.Instance["HttpResponse/BodyContentBinaryNotShown"], res.GetBodyAsBinary()!.Length);
+                                 res.GetBodyAsText(Localizer.Instance.HttpResponse.BodyCouldNotReadAsUTF8) :
+                                 string.Format(Localizer.Instance.HttpResponse.BodyContentBinaryNotShown, res.GetBodyAsBinary()!.Length);
             IsSaveResponseBodyToFileVisible = res.HasBody;
             IsDisableTlsVerificationVisible = false;
 
@@ -155,7 +155,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
         }
         else if (this.res == null) // No response obtained yet.
         {
-            ResponseStatusCodeElapsedTimeTitle = Localizer.Instance["HttpResponse/SectionTitle"];
+            ResponseStatusCodeElapsedTimeTitle = Localizer.Instance.HttpResponse.SectionTitle;
             IsDisableTlsVerificationVisible = false;
             ResponseRawContentType = null;
             ResponseRawContent = string.Empty;
@@ -182,12 +182,12 @@ public sealed class HttpResponseViewModel : ViewModelBase
     }
 
     private static string FormatSuccessfulResponseTitle(TimeSpan elapsedTime, HttpStatusCode statusCode) =>
-        string.Format(Localizer.Instance["HttpResponse/SectionTitleSuccessfulFormat"],
+        string.Format(Localizer.Instance.HttpResponse.SectionTitleSuccessfulFormat,
                       FormatHttpStatusCode(statusCode),
                       FormatElapsedTime(elapsedTime));
 
     private static string FormatFailedResponseTitle(TimeSpan elapsedTime) =>
-        string.Format(Localizer.Instance["HttpResponse/SectionTitleFailedFormat"],
+        string.Format(Localizer.Instance.HttpResponse.SectionTitleFailedFormat,
                       FormatElapsedTime(elapsedTime));
 
     private static string FormatHttpStatusCode(HttpStatusCode statusCode) =>
@@ -195,9 +195,9 @@ public sealed class HttpResponseViewModel : ViewModelBase
 
     private static string FormatElapsedTime(TimeSpan elapsedTime) =>
         elapsedTime < oneSecond ?
-        string.Format(Localizer.Instance["HttpResponse/ElapsedTimeMillisecondsFormat"], (int)elapsedTime.TotalMilliseconds) :
+        string.Format(Localizer.Instance.HttpResponse.ElapsedTimeMillisecondsFormat, (int)elapsedTime.TotalMilliseconds) :
         elapsedTime < oneMinute ? // More or equal than one second, but less than one minute
-        string.Format(Localizer.Instance["HttpResponse/ElapsedTimeSecondsFormat"], elapsedTime.TotalSeconds) : // TODO: Format digit separator according to language
-        string.Format(Localizer.Instance["HttpResponse/ElapsedTimeMinutesFormat"], elapsedTime.Minutes, elapsedTime.Seconds);
+        string.Format(Localizer.Instance.HttpResponse.ElapsedTimeSecondsFormat, elapsedTime.TotalSeconds) : // TODO: Format digit separator according to language
+        string.Format(Localizer.Instance.HttpResponse.ElapsedTimeMinutesFormat, elapsedTime.Minutes, elapsedTime.Seconds);
 
 }

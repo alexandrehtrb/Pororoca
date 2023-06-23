@@ -135,15 +135,15 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             IsInvalidConnectionErrorVisible = value is not null;
             InvalidConnectionError = value switch
             {
-                TranslateRequestErrors.ClientCertificateFileNotFound => Localizer.Instance["RequestValidation/ClientCertificateFileNotFound"],
-                TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank => Localizer.Instance["RequestValidation/ClientCertificatePkcs12PasswordCannotBeBlank"],
-                TranslateRequestErrors.ClientCertificatePrivateKeyFileNotFound => Localizer.Instance["RequestValidation/ClientCertificatePrivateKeyFileNotFound"],
-                TranslateRequestErrors.InvalidUrl => Localizer.Instance["RequestValidation/InvalidUrl"],
-                TranslateRequestErrors.Http2UnavailableInOSVersion => Localizer.Instance["RequestValidation/Http2Unavailable"],
-                TranslateRequestErrors.WebSocketHttpVersionUnavailable => Localizer.Instance["RequestValidation/WebSocketHttpVersionUnavailable"],
-                TranslateRequestErrors.WebSocketCompressionMaxWindowBitsOutOfRange => Localizer.Instance["RequestValidation/WebSocketCompressionMaxWindowBitsOutOfRange"],
-                TranslateRequestErrors.WebSocketUnknownConnectionTranslationError => Localizer.Instance["RequestValidation/WebSocketUnknownConnectionTranslationError"],
-                _ => Localizer.Instance["RequestValidation/WebSocketUnknownConnectionTranslationError"]
+                TranslateRequestErrors.ClientCertificateFileNotFound => Localizer.Instance.RequestValidation.ClientCertificateFileNotFound,
+                TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank => Localizer.Instance.RequestValidation.ClientCertificatePkcs12PasswordCannotBeBlank,
+                TranslateRequestErrors.ClientCertificatePrivateKeyFileNotFound => Localizer.Instance.RequestValidation.ClientCertificatePrivateKeyFileNotFound,
+                TranslateRequestErrors.InvalidUrl => Localizer.Instance.RequestValidation.InvalidUrl,
+                TranslateRequestErrors.Http2UnavailableInOSVersion => Localizer.Instance.RequestValidation.Http2Unavailable,
+                TranslateRequestErrors.WebSocketHttpVersionUnavailable => Localizer.Instance.RequestValidation.WebSocketHttpVersionUnavailable,
+                TranslateRequestErrors.WebSocketCompressionMaxWindowBitsOutOfRange => Localizer.Instance.RequestValidation.WebSocketCompressionMaxWindowBitsOutOfRange,
+                TranslateRequestErrors.WebSocketUnknownConnectionTranslationError => Localizer.Instance.RequestValidation.WebSocketUnknownConnectionTranslationError,
+                _ => Localizer.Instance.RequestValidation.WebSocketUnknownConnectionTranslationError
             };
         }
     }
@@ -230,10 +230,10 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             IsInvalidClientMessageErrorVisible = value is not null;
             InvalidClientMessageError = value switch
             {
-                TranslateRequestErrors.WebSocketNotConnected => Localizer.Instance["RequestValidation/WebSocketNotConnected"],
-                TranslateRequestErrors.WebSocketClientMessageContentFileNotFound => Localizer.Instance["RequestValidation/WebSocketClientMessageContentFileNotFound"],
-                TranslateRequestErrors.WebSocketUnknownClientMessageTranslationError => Localizer.Instance["RequestValidation/WebSocketUnknownClientMessageTranslationError"],
-                _ => Localizer.Instance["RequestValidation/WebSocketUnknownClientMessageTranslationError"]
+                TranslateRequestErrors.WebSocketNotConnected => Localizer.Instance.RequestValidation.WebSocketNotConnected,
+                TranslateRequestErrors.WebSocketClientMessageContentFileNotFound => Localizer.Instance.RequestValidation.WebSocketClientMessageContentFileNotFound,
+                TranslateRequestErrors.WebSocketUnknownClientMessageTranslationError => Localizer.Instance.RequestValidation.WebSocketUnknownClientMessageTranslationError,
+                _ => Localizer.Instance.RequestValidation.WebSocketUnknownClientMessageTranslationError
             };
         }
     }
@@ -445,7 +445,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     private void AddNewWebSocketClientMessage()
     {
         PororocaWebSocketClientMessage wsReqMsg = new(PororocaWebSocketMessageType.Text,
-                                                       Localizer.Instance["WebSocketClientMessage/NewMessage"],
+                                                       Localizer.Instance.WebSocketClientMessage.NewMessage,
                                                        PororocaWebSocketClientMessageContentMode.Raw,
                                                        string.Empty,
                                                        PororocaWebSocketMessageRawContentSyntax.Json,

@@ -135,8 +135,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         #endregion
 
         #region LANGUAGE
-        SelectLanguagePortuguesCmd = ReactiveCommand.Create(() => SelectLanguage(Language.PtBr));
-        SelectLanguageEnglishCmd = ReactiveCommand.Create(() => SelectLanguage(Language.EnGb));
+        SelectLanguagePortuguesCmd = ReactiveCommand.Create(() => SelectLanguage(Language.Portuguese));
+        SelectLanguageEnglishCmd = ReactiveCommand.Create(() => SelectLanguage(Language.English));
         #endregion
 
         #region THEMES
@@ -270,7 +270,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     private void AddNewCollection()
     {
-        PororocaCollection newCol = new(Localizer.Instance["Collection/NewCollection"]);
+        PororocaCollection newCol = new(Localizer.Instance.Collection.NewCollection);
         AddCollection(newCol, showItemInScreen: true);
     }
 
@@ -321,15 +321,15 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     private void SelectLanguage(Language lang)
     {
-        Localizer.Instance.LoadLanguage(lang);
+        Localizer.Instance.CurrentLanguage = lang;
         switch (lang)
         {
-            case Language.PtBr:
+            case Language.Portuguese:
                 IsLanguagePortuguese = true;
                 IsLanguageEnglish = false;
                 break;
             default:
-            case Language.EnGb:
+            case Language.English:
                 IsLanguagePortuguese = false;
                 IsLanguageEnglish = true;
                 break;
@@ -378,7 +378,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     #region USER DATA
 
     private static UserPreferences GetDefaultUserPrefs() =>
-        new(Language.EnGb, DateTime.Now, PororocaTheme.AmazonianNight);
+        new(Language.English, DateTime.Now, PororocaTheme.AmazonianNight);
 
     private void LoadUserData()
     {
@@ -404,7 +404,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     public void SaveUserData()
     {
-        UserPrefs!.SetLanguage(Localizer.Instance.Language);
+        UserPrefs!.SetLanguage(Localizer.Instance.CurrentLanguage);
 
         var cols = CollectionsGroupViewDataCtx
                                     .Items
@@ -424,8 +424,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         var msgbox = MessageBoxManager.GetMessageBoxStandardWindow(
             new MessageBoxStandardParams()
             {
-                ContentTitle = Localizer.Instance["UpdateReminder/DialogTitle"],
-                ContentMessage = Localizer.Instance["UpdateReminder/DialogMessage"],
+                ContentTitle = Localizer.Instance.UpdateReminder.DialogTitle,
+                ContentMessage = Localizer.Instance.UpdateReminder.DialogMessage,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 WindowIcon = new(bitmap),
                 ButtonDefinitions = ButtonEnum.OkCancel

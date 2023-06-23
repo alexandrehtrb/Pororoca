@@ -5,7 +5,6 @@
     xmlns:v="using:Pororoca.Desktop.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:i18n="clr-namespace:Pororoca.Desktop.Localization"
     mc:Ignorable="d"
     d:DesignWidth="800"
     d:DesignHeight="450"
@@ -25,23 +24,23 @@
         HorizontalAlignment="Stretch"
         Background="{DynamicResource MainWindowMenuBrush}">
       <Menu DockPanel.Dock="Top">
-        <MenuItem Header="{i18n:Localize File, Context=TopMenu}">
+        <MenuItem Header="{Binding i18n.TopMenu.File}">
           <MenuItem
-              Header="{i18n:Localize NewCollection, Context=TopMenuFile}"
+              Header="{Binding i18n.TopMenuFile.NewCollection}"
               Command="{Binding AddNewCollectionCmd}"/>
           <Separator/>
           <MenuItem
-              Header="{i18n:Localize ImportCollection, Context=TopMenuFile}"
+              Header="{Binding i18n.TopMenuFile.ImportCollection}"
               Command="{Binding ImportCollectionsCmd}"/>
           <Separator/>
           <MenuItem
-              Header="{i18n:Localize Exit, Context=TopMenuFile}"
+              Header="{Binding i18n.TopMenuFile.Exit}"
               Click="OnCloseMainWindow"/>
         </MenuItem>
-        <MenuItem Header="{i18n:Localize Options, Context=TopMenu}">
-          <MenuItem Header="{i18n:Localize Theme, Context=TopMenuOptions}">
+        <MenuItem Header="{Binding i18n.TopMenu.Options}">
+          <MenuItem Header="{Binding i18n.TopMenuOptions.Theme}">
             <MenuItem
-                Header="{i18n:Localize Light, Context=TopMenuTheme}"
+                Header="{Binding i18n.TopMenuTheme.Light}"
                 Command="{Binding SwitchToLightThemeCmd}">
               <MenuItem.Icon>
                 <Image
@@ -54,7 +53,7 @@
               </MenuItem.Icon>
             </MenuItem>
             <MenuItem
-                Header="{i18n:Localize Dark, Context=TopMenuTheme}"
+                Header="{Binding i18n.TopMenuTheme.Dark}"
                 Command="{Binding SwitchToDarkThemeCmd}">
               <MenuItem.Icon>
                 <Image
@@ -67,7 +66,7 @@
               </MenuItem.Icon>
             </MenuItem>
             <MenuItem
-                Header="{i18n:Localize Pampa, Context=TopMenuTheme}"
+                Header="{Binding i18n.TopMenuTheme.Pampa}"
                 Command="{Binding SwitchToPampaThemeCmd}">
               <MenuItem.Icon>
                 <Image
@@ -80,7 +79,7 @@
               </MenuItem.Icon>
             </MenuItem>
             <MenuItem
-                Header="{i18n:Localize AmazonianNight, Context=TopMenuTheme}"
+                Header="{Binding i18n.TopMenuTheme.AmazonianNight}"
                 Command="{Binding SwitchToAmazonianNightThemeCmd}">
               <MenuItem.Icon>
                 <Image
@@ -93,9 +92,9 @@
               </MenuItem.Icon>
             </MenuItem>
           </MenuItem>
-          <MenuItem Header="{i18n:Localize Language, Context=TopMenuOptions}">
+          <MenuItem Header="{Binding i18n.TopMenuOptions.Language}">
             <MenuItem
-                Header="{i18n:Localize Português, Context=TopMenuLanguage}"
+                Header="{Binding i18n.TopMenuLanguage.Português}"
                 Command="{Binding SelectLanguagePortuguesCmd}">
               <MenuItem.Icon>
                 <Image
@@ -108,7 +107,7 @@
               </MenuItem.Icon>
             </MenuItem>
             <MenuItem
-                Header="{i18n:Localize English, Context=TopMenuLanguage}"
+                Header="{Binding i18n.TopMenuLanguage.English}"
                 Command="{Binding SelectLanguageEnglishCmd}">
               <MenuItem.Icon>
                 <Image
@@ -122,7 +121,7 @@
             </MenuItem>
           </MenuItem>
           <MenuItem
-              Header="{i18n:Localize DisableTlsVerification, Context=TopMenuOptions}"
+              Header="{Binding i18n.TopMenuOptions.DisableTlsVerification}"
               Command="{Binding ToggleSSLVerificationCmd}">
             <MenuItem.Icon>
               <Image
@@ -136,7 +135,7 @@
           </MenuItem>
         </MenuItem>
         <!--MenuItem
-        Header="{i18n:Localize Contribute, Context=TopMenu}"/-->
+        Header="{Binding i18n.TopMenu.Contribute}"/-->
       </Menu>
 
       <Panel

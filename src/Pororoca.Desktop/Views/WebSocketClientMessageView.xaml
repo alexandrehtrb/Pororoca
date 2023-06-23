@@ -5,7 +5,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:v="using:Pororoca.Desktop.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:i18n="clr-namespace:Pororoca.Desktop.Localization"
     xmlns:AvaloniaEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
     xmlns:controls="clr-namespace:Pororoca.Desktop.Controls;assembly=Pororoca.Desktop"
     mc:Ignorable="d"
@@ -57,7 +56,7 @@
           Orientation="Horizontal">
 
         <CheckBox
-            Content="{i18n:Localize DisableCompressionForThisMessage, Context=WebSocketClientMessage}"
+            Content="{Binding i18n.WebSocketClientMessage.DisableCompressionForThisMessage}"
             IsChecked="{Binding DisableCompressionForThisMessage}"/>
 
         <TextBlock
@@ -65,9 +64,9 @@
             FontSize="14"
             VerticalAlignment="Center"
             Margin="4,0,0,0"
-            Text="{i18n:Localize DisableCompressionForThisMessageTip, Context=WebSocketClientMessage}"
+            Text="{Binding i18n.WebSocketClientMessage.DisableCompressionForThisMessageTip}"
             ToolTip.Placement="Right"
-            ToolTip.Tip="{i18n:Localize DisableCompressionExplanation, Context=WebSocketClientMessage}"/>
+            ToolTip.Tip="{Binding i18n.WebSocketClientMessage.DisableCompressionExplanation}"/>
       </StackPanel>
 
       <ComboBox
@@ -79,13 +78,13 @@
           SelectedIndex="{Binding MessageTypeSelectedIndex, Mode=TwoWay}">
         <ComboBoxItem
             IsSelected="{Binding IsMessageTypeTextSelected, Mode=TwoWay}"
-            Content="{i18n:Localize MessageTypeText, Context=WebSocketClientMessage}"/>
+            Content="{Binding i18n.WebSocketClientMessage.MessageTypeText}"/>
         <ComboBoxItem
             IsSelected="{Binding IsMessageTypeBinarySelected, Mode=TwoWay}"
-            Content="{i18n:Localize MessageTypeBinary, Context=WebSocketClientMessage}"/>
+            Content="{Binding i18n.WebSocketClientMessage.MessageTypeBinary}"/>
         <ComboBoxItem
             IsSelected="{Binding IsMessageTypeCloseSelected, Mode=TwoWay}"
-            Content="{i18n:Localize MessageTypeClose, Context=WebSocketClientMessage}"/>
+            Content="{Binding i18n.WebSocketClientMessage.MessageTypeClose}"/>
       </ComboBox>
 
       <StackPanel
@@ -101,11 +100,11 @@
           <ComboBoxItem
               x:Name="wsScrReqMsgContentModeSelectionRaw"
               IsSelected="{Binding IsContentModeRawSelected, Mode=TwoWay}"
-              Content="{i18n:Localize ContentModeRaw, Context=WebSocketClientMessage}"/>
+              Content="{Binding i18n.WebSocketClientMessage.ContentModeRaw}"/>
           <ComboBoxItem
               x:Name="wsScrReqMsgContentModeSelectionFile"
               IsSelected="{Binding IsContentModeFileSelected, Mode=TwoWay}"
-              Content="{i18n:Localize ContentModeFile, Context=WebSocketClientMessage}"/>
+              Content="{Binding i18n.WebSocketClientMessage.ContentModeFile}"/>
         </ComboBox>
 
         <ComboBox
@@ -117,10 +116,10 @@
             SelectedIndex="{Binding RawContentSyntaxSelectedIndex, Mode=TwoWay}">
           <ComboBoxItem
               IsSelected="{Binding IsRawContentJsonSyntaxSelected, Mode=TwoWay}"
-              Content="{i18n:Localize RawContentJsonSyntax, Context=WebSocketClientMessage}"/>
+              Content="{Binding i18n.WebSocketClientMessage.RawContentJsonSyntax}"/>
           <ComboBoxItem
               IsSelected="{Binding IsRawContentOtherSyntaxSelected, Mode=TwoWay}"
-              Content="{i18n:Localize RawContentOtherSyntax, Context=WebSocketClientMessage}"/>
+              Content="{Binding i18n.WebSocketClientMessage.RawContentOtherSyntax}"/>
         </ComboBox>
 
         <!-- This is for testing syntax colour themes -->
@@ -155,13 +154,13 @@
             IsVisible="{ReflectionBinding IsSelected, ElementName=wsScrReqMsgContentModeSelectionFile}"
             HorizontalContentAlignment="Left"
             VerticalContentAlignment="Center"
-            Watermark="{i18n:Localize ContentFileSrcPathWatermark, Context=WebSocketClientMessage}"
+            Watermark="{Binding i18n.WebSocketClientMessage.ContentFileSrcPathWatermark}"
             Classes="SingleLine"
             Text="{Binding ContentFileSrcPath, Mode=TwoWay}"/>
 
         <Button
             Margin="0,12,0,0"
-            Content="{i18n:Localize ContentFileSearchFile, Context=WebSocketClientMessage}"
+            Content="{Binding i18n.WebSocketClientMessage.ContentFileSearchFile}"
             Command="{Binding SearchContentFileCmd}"
             Classes="Primary"/>
 
