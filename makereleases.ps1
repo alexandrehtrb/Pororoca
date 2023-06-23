@@ -17,7 +17,7 @@ function Run-Pipeline
 	Run-UnitTests -Stopwatch $sw
 	Clean-OutputFolder -Stopwatch $sw
 
-	Generate-PororocaTestRelease -Stopwatch $sw
+	Generate-PororocaTestRelease -Stopwatch $sw -VersionName $versionName
 	foreach ($runtime in $runtimes)
 	{
 		Generate-PororocaDesktopRelease -Stopwatch $sw -VersionName $versionName -Runtime $runtime
@@ -133,9 +133,10 @@ function Clean-OutputFolder
         [System.Diagnostics.Stopwatch]$stopwatch
     )
 
-	Write-Host "Deleting 'out' folder..." -ForegroundColor DarkYellow
+	Write-Host "Deleting and creating 'out' folder..." -ForegroundColor DarkYellow
 	$stopwatch.Restart()
 	Remove-Item "./out/" -Recurse -ErrorAction Ignore
+	New-Item -ItemType "Directory" -Name "out"
 	$stopwatch.Stop()
 	Write-Host "Output folder deleted ($($stopwatch.Elapsed.Seconds)s)." -ForegroundColor DarkGreen
 }
@@ -151,7 +152,8 @@ function Read-VersionName
 
 function Generate-PororocaTestRelease {
     param (
-        [System.Diagnostics.Stopwatch]$stopwatch
+        [System.Diagnostics.Stopwatch]$stopwatch,
+        [string]$versionName
     )
 
 	Write-Host "Publishing Pororoca.Test library..." -ForegroundColor DarkYellow
@@ -160,6 +162,9 @@ function Generate-PororocaTestRelease {
 		--nologo `
 		--verbosity quiet `
 		--configuration Release
+	
+	Copy-Item -Path "./src/Pororoca.Test/bin/Release/Pororoca.Test.${versionName}.nupkg" `
+	          -Destination "./out/Pororoca.Test.${versionName}.nupkg"
 
 	Write-Host "Package created! ($($stopwatch.Elapsed.Seconds)s)." -ForegroundColor DarkGreen
 }
