@@ -135,10 +135,10 @@ function Clean-OutputFolder
 
 	Write-Host "Deleting and creating 'out' folder..." -ForegroundColor DarkYellow
 	$stopwatch.Restart()
-	Remove-Item "./out/" -Recurse -ErrorAction Ignore
-	New-Item -ItemType "Directory" -Name "out"
+	[void](Remove-Item "./out/" -Recurse -ErrorAction Ignore)
+	[void](mkdir "out")
 	$stopwatch.Stop()
-	Write-Host "Output folder deleted ($($stopwatch.Elapsed.Seconds)s)." -ForegroundColor DarkGreen
+	Write-Host "Output folder cleaned ($($stopwatch.Elapsed.Seconds)s)." -ForegroundColor DarkGreen
 }
 
 #################### Release generation ####################

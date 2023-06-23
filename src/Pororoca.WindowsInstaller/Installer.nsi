@@ -53,7 +53,7 @@
 
 ; ----------------------------------------  INSTALLER ATTRIBUTES 
 Name "${PRODUCT_NAME} ${SHORT_VERSION}"
-BrandingText "©2022 ${COMPANY_NAME}"
+BrandingText "©2023 ${COMPANY_NAME}"
 Icon "${INPUT_FILES_DIR}\pororoca_icon.ico"
 VIProductVersion "${PRODUCT_VERSION}"
 VIFileVersion "${VERSION}"
@@ -277,12 +277,7 @@ Section !$(SectionProgramFiles) SectionCoreFiles
 	!insertmacro MULTIUSER_RegistryAddInstallInfo ; add registry keys
 	WriteRegStr "${LANGDLL_REGISTRY_ROOT}" "${LANGDLL_REGISTRY_KEY}" "${LANGDLL_REGISTRY_VALUENAME}" $LANGUAGE ; write language
 
-	File "${INPUT_FILES_DIR}\${PROGEXE}"
-	File "${INPUT_FILES_DIR}\libHarfBuzzSharp.dll"
-	File "${INPUT_FILES_DIR}\libSkiaSharp.dll"
-	File "${INPUT_FILES_DIR}\onigwrap.dll"
-	File "${INPUT_FILES_DIR}\msquic.dll"
-	File "${INPUT_FILES_DIR}\${LICENSE_FILE}"
+	File /r "${INPUT_FILES_DIR}\*.*"
 	
 SectionEnd
 

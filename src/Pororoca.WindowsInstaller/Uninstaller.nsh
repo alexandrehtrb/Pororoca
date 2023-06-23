@@ -28,9 +28,14 @@ Section "un.$(SectionProgramFiles)" SectionUninstallProgram
 
 	; Try to delete the EXE as the first step - if it's in use, don't remove anything else
 	!insertmacro DeleteRetryAbort "$INSTDIR\${PROGEXE}"
+	!insertmacro DeleteRetryAbort "$INSTDIR\av_libglesv2.dll"
 	!insertmacro DeleteRetryAbort "$INSTDIR\libHarfBuzzSharp.dll"
 	!insertmacro DeleteRetryAbort "$INSTDIR\libSkiaSharp.dll"
-	!insertmacro DeleteRetryAbort "$INSTDIR\onigwrap.dll"
+	${if} ${RunningX64}
+		!insertmacro DeleteRetryAbort "$INSTDIR\onigwrap-x64.dll"
+	${else}
+		!insertmacro DeleteRetryAbort "$INSTDIR\onigwrap-x86.dll"
+	${endif}
 	!insertmacro DeleteRetryAbort "$INSTDIR\msquic.dll"
 	
 	!ifdef LICENSE_FILE
