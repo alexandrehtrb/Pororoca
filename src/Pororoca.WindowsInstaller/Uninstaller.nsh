@@ -37,6 +37,7 @@ Section "un.$(SectionProgramFiles)" SectionUninstallProgram
 		!insertmacro DeleteRetryAbort "$INSTDIR\onigwrap-x86.dll"
 	${endif}
 	!insertmacro DeleteRetryAbort "$INSTDIR\msquic.dll"
+	!insertmacro DeleteRetryAbort "$INSTDIR\pororoca_icon.ico"
 	
 	!ifdef LICENSE_FILE
 		!insertmacro DeleteRetryAbort "$INSTDIR\${LICENSE_FILE}"
