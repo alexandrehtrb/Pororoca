@@ -304,38 +304,34 @@
                   Spacing="12">
 
                 <ComboBox
+                    x:Name="cbReqBodyMode"
                     Height="36"
                     Width="140"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Stretch"
-                    SelectedIndex="{Binding RequestBodyModeSelectedIndex}">
+                    SelectedIndex="{Binding RequestBodyModeSelectedIndex, Mode=TwoWay}">
                   <ComboBoxItem
-                      IsSelected="{Binding IsRequestBodyModeNoneSelected, Mode=TwoWay}"
+                      x:Name="cbiReqBodyModeNone"
                       Content="{Binding i18n.HttpRequest.BodyModeNone}"/>
                   <ComboBoxItem
-                      x:Name="reqScrRequestBodyModeSelectionRaw"
-                      IsSelected="{Binding IsRequestBodyModeRawSelected, Mode=TwoWay}"
+                      x:Name="cbiReqBodyModeRaw"
                       Content="{Binding i18n.HttpRequest.BodyModeRaw}"/>
                   <ComboBoxItem
-                      x:Name="reqScrRequestBodyModeSelectionFile"
-                      IsSelected="{Binding IsRequestBodyModeFileSelected, Mode=TwoWay}"
+                      x:Name="cbiReqBodyModeFile"
                       Content="{Binding i18n.HttpRequest.BodyModeFile}"/>
                   <ComboBoxItem
-                      x:Name="reqScrRequestBodyModeSelectionUrlEncoded"
-                      IsSelected="{Binding IsRequestBodyModeUrlEncodedSelected, Mode=TwoWay}"
+                      x:Name="cbiReqBodyModeUrlEncoded"
                       Content="{Binding i18n.HttpRequest.BodyModeUrlEncoded}"/>
                   <ComboBoxItem
-                      x:Name="reqScrRequestBodyModeSelectionFormData"
-                      IsSelected="{Binding IsRequestBodyModeFormDataSelected, Mode=TwoWay}"
+                      x:Name="cbiReqBodyModeFormData"
                       Content="{Binding i18n.HttpRequest.BodyModeFormData}"/>
                   <ComboBoxItem
-                      x:Name="reqScrRequestBodyModeSelectionGraphQl"
-                      IsSelected="{Binding IsRequestBodyModeGraphQlSelected, Mode=TwoWay}"
+                      x:Name="cbiReqBodyModeGraphQl"
                       Content="{Binding i18n.HttpRequest.BodyModeGraphQl}"/>
                 </ComboBox>
 
                 <AutoCompleteBox
-                    Name="RequestBodyRawContentTypeSelector"
+                    x:Name="acbReqBodyRawContentType"
                     Height="36"
                     Width="190"
                     FontSize="14"
@@ -343,27 +339,25 @@
                     Watermark="{Binding i18n.HttpRequest.BodyRawContentTypeWatermark}"
                     ItemsSource="{Binding AllMimeTypes}"
                     SelectedItem="{Binding RequestRawContentType, Mode=TwoWay}"
-                    FilterMode="Contains"
-                    IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}"/>
+                    FilterMode="Contains"/>
               </StackPanel>
               <!-- REQUEST BODY RAW -->
               <AvaloniaEdit:TextEditor
-                  Name="RequestBodyRawContentEditor"
+                  x:Name="teReqBodyRawContent"
                   Grid.Column="0"
                   Grid.Row="1"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
                   Margin="0,12,0,0"
-                  IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}"
                   IsReadOnly="False"
                   Document="{Binding RequestRawContentTextDocument, Mode=TwoWay}"/>
               <!-- REQUEST BODY FILE -->
               <Grid
+                  x:Name="grReqBodyFile"
                   Grid.Column="0"
                   Grid.Row="1"
                   Margin="12,12,12,0"
-                  VerticalAlignment="Stretch"
-                  IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestBodyModeSelectionFile}">
+                  VerticalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
@@ -403,11 +397,11 @@
               </Grid>
               <!-- REQUEST BODY URL ENCODED -->
               <Grid
+                  x:Name="grReqBodyUrlEncoded"
                   Grid.Column="0"
                   Grid.Row="1"
                   Margin="12,12,12,0"
-                  VerticalAlignment="Stretch"
-                  IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestBodyModeSelectionUrlEncoded}">
+                  VerticalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
@@ -493,11 +487,11 @@
               </Grid>
               <!-- REQUEST BODY MULTIPART FORM DATA -->
               <Grid
+                  x:Name="grReqBodyFormData"
                   Grid.Column="0"
                   Grid.Row="1"
                   Margin="12,12,12,0"
-                  VerticalAlignment="Stretch"
-                  IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestBodyModeSelectionFormData}">
+                  VerticalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
@@ -592,11 +586,11 @@
               </Grid>
               <!-- REQUEST BODY GRAPH QL -->
               <Grid
+                  x:Name="grReqBodyGraphQl"
                   Grid.Column="0"
                   Grid.Row="1"
                   Margin="12,12,12,0"
-                  VerticalAlignment="Stretch"
-                  IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestBodyModeSelectionGraphQl}">
+                  VerticalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition
                       Width="0.5*"

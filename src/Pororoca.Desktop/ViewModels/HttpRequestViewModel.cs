@@ -95,34 +95,20 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     [Reactive]
     public int RequestBodyModeSelectedIndex { get; set; }
 
-    [Reactive]
-    public bool IsRequestBodyModeNoneSelected { get; set; }
-
-    private PororocaHttpRequestBodyMode? RequestBodyMode
+    public PororocaHttpRequestBodyMode? RequestBodyMode => RequestBodyModeSelectedIndex switch
     {
-        get
-        {
-            if (IsRequestBodyModeFormDataSelected)
-                return PororocaHttpRequestBodyMode.FormData;
-            if (IsRequestBodyModeUrlEncodedSelected)
-                return PororocaHttpRequestBodyMode.UrlEncoded;
-            if (IsRequestBodyModeFileSelected)
-                return PororocaHttpRequestBodyMode.File;
-            if (IsRequestBodyModeRawSelected)
-                return PororocaHttpRequestBodyMode.Raw;
-            if (IsRequestBodyModeGraphQlSelected)
-                return PororocaHttpRequestBodyMode.GraphQl;
-            else
-                return null;
-        }
-    }
+        0 => null,
+        1 => PororocaHttpRequestBodyMode.Raw,
+        2 => PororocaHttpRequestBodyMode.File,
+        3 => PororocaHttpRequestBodyMode.UrlEncoded,
+        4 => PororocaHttpRequestBodyMode.FormData,
+        5 => PororocaHttpRequestBodyMode.GraphQl,
+        _ => null
+    };
 
     public static ObservableCollection<string> AllMimeTypes { get; } = new(MimeTypesDetector.AllMimeTypes);
 
     #region REQUEST BODY RAW
-
-    [Reactive]
-    public bool IsRequestBodyModeRawSelected { get; set; }
 
     [Reactive]
     public string? RequestRawContentType { get; set; }
@@ -141,9 +127,6 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #region REQUEST BODY FILE
 
     [Reactive]
-    public bool IsRequestBodyModeFileSelected { get; set; }
-
-    [Reactive]
     public string? RequestFileContentType { get; set; }
 
     [Reactive]
@@ -155,18 +138,12 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST BODY URL ENCODED
 
-    [Reactive]
-    public bool IsRequestBodyModeUrlEncodedSelected { get; set; }
-
     public ObservableCollection<KeyValueParamViewModel> UrlEncodedParams { get; }
     public ReactiveCommand<Unit, Unit> AddNewUrlEncodedParamCmd { get; }
 
     #endregion
 
     #region REQUEST BODY FORM DATA
-
-    [Reactive]
-    public bool IsRequestBodyModeFormDataSelected { get; set; }
 
     public ObservableCollection<HttpRequestFormDataParamViewModel> FormDataParams { get; }
     public ReactiveCommand<Unit, Unit> AddNewFormDataTextParamCmd { get; }
@@ -175,9 +152,6 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #endregion
 
     #region REQUEST BODY GRAPHQL
-
-    [Reactive]
-    public bool IsRequestBodyModeGraphQlSelected { get; set; }
 
     [Reactive]
     public string? RequestBodyGraphQlQuery { get; set; }
@@ -269,27 +243,21 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         {
             case PororocaHttpRequestBodyMode.GraphQl:
                 RequestBodyModeSelectedIndex = 5;
-                IsRequestBodyModeGraphQlSelected = true;
                 break;
             case PororocaHttpRequestBodyMode.FormData:
                 RequestBodyModeSelectedIndex = 4;
-                IsRequestBodyModeFormDataSelected = true;
                 break;
             case PororocaHttpRequestBodyMode.UrlEncoded:
                 RequestBodyModeSelectedIndex = 3;
-                IsRequestBodyModeUrlEncodedSelected = true;
                 break;
             case PororocaHttpRequestBodyMode.File:
                 RequestBodyModeSelectedIndex = 2;
-                IsRequestBodyModeFileSelected = true;
                 break;
             case PororocaHttpRequestBodyMode.Raw:
                 RequestBodyModeSelectedIndex = 1;
-                IsRequestBodyModeRawSelected = true;
                 break;
             default:
                 RequestBodyModeSelectedIndex = 0;
-                IsRequestBodyModeNoneSelected = true;
                 break;
         }
         // RAW
