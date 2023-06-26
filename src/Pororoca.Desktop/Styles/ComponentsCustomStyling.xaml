@@ -242,7 +242,7 @@
       <DrawingBrush>
         <DrawingBrush.Drawing>
           <GeometryDrawing
-              Brush="{DynamicResource SystemAccentColor}"
+              Brush="{DynamicResource SystemInvertedAccentColor}"
               Geometry="{StaticResource IconRemoveGeometry}"/>
         </DrawingBrush.Drawing>
       </DrawingBrush>
