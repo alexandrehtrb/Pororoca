@@ -29,29 +29,13 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
     [Reactive]
     public int MessageTypeSelectedIndex { get; set; }
 
-    [Reactive]
-    public bool IsMessageTypeTextSelected { get; set; }
-
-    [Reactive]
-    public bool IsMessageTypeBinarySelected { get; set; }
-
-    [Reactive]
-    public bool IsMessageTypeCloseSelected { get; set; }
-
-    private PororocaWebSocketMessageType MessageType
+    public PororocaWebSocketMessageType MessageType => MessageTypeSelectedIndex switch
     {
-        get
-        {
-            if (IsMessageTypeTextSelected)
-                return PororocaWebSocketMessageType.Text;
-            if (IsMessageTypeBinarySelected)
-                return PororocaWebSocketMessageType.Binary;
-            if (IsMessageTypeCloseSelected)
-                return PororocaWebSocketMessageType.Close;
-            else
-                return PororocaWebSocketMessageType.Text;
-        }
-    }
+        0 => PororocaWebSocketMessageType.Text,
+        1 => PororocaWebSocketMessageType.Binary,
+        2 => PororocaWebSocketMessageType.Close,
+        _ => PororocaWebSocketMessageType.Text
+    };
 
     #endregion
 
@@ -60,24 +44,12 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
     [Reactive]
     public int ContentModeSelectedIndex { get; set; }
 
-    [Reactive]
-    public bool IsContentModeRawSelected { get; set; }
-
-    [Reactive]
-    public bool IsContentModeFileSelected { get; set; }
-
-    private PororocaWebSocketClientMessageContentMode ContentMode
+    public PororocaWebSocketClientMessageContentMode ContentMode => ContentModeSelectedIndex switch
     {
-        get
-        {
-            if (IsContentModeRawSelected)
-                return PororocaWebSocketClientMessageContentMode.Raw;
-            if (IsContentModeFileSelected)
-                return PororocaWebSocketClientMessageContentMode.File;
-            else
-                return PororocaWebSocketClientMessageContentMode.Raw;
-        }
-    }
+        0 => PororocaWebSocketClientMessageContentMode.Raw,
+        1 => PororocaWebSocketClientMessageContentMode.File,
+        _ => PororocaWebSocketClientMessageContentMode.Raw
+    };
 
     [Reactive]
     public TextDocument? RawContentTextDocument { get; set; }
@@ -91,24 +63,12 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
     [Reactive]
     public int RawContentSyntaxSelectedIndex { get; set; }
 
-    [Reactive]
-    public bool IsRawContentJsonSyntaxSelected { get; set; }
-
-    [Reactive]
-    public bool IsRawContentOtherSyntaxSelected { get; set; }
-
-    private PororocaWebSocketMessageRawContentSyntax? RawContentSyntax
+    public PororocaWebSocketMessageRawContentSyntax? RawContentSyntax => RawContentSyntaxSelectedIndex switch
     {
-        get
-        {
-            if (IsRawContentJsonSyntaxSelected)
-                return PororocaWebSocketMessageRawContentSyntax.Json;
-            if (IsRawContentOtherSyntaxSelected)
-                return PororocaWebSocketMessageRawContentSyntax.Other;
-            else
-                return null;
-        }
-    }
+        0 => PororocaWebSocketMessageRawContentSyntax.Json,
+        1 => PororocaWebSocketMessageRawContentSyntax.Other,
+        _ => PororocaWebSocketMessageRawContentSyntax.Other
+    };
 
     [Reactive]
     public string? ContentFileSrcPath { get; set; }
@@ -141,15 +101,12 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
             default:
             case PororocaWebSocketMessageType.Text:
                 MessageTypeSelectedIndex = 0;
-                IsMessageTypeTextSelected = true;
                 break;
             case PororocaWebSocketMessageType.Binary:
                 MessageTypeSelectedIndex = 1;
-                IsMessageTypeBinarySelected = true;
                 break;
             case PororocaWebSocketMessageType.Close:
                 MessageTypeSelectedIndex = 2;
-                IsMessageTypeCloseSelected = true;
                 break;
         }
         switch (msg.ContentMode)
@@ -158,11 +115,9 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
             default:
             case PororocaWebSocketClientMessageContentMode.Raw:
                 ContentModeSelectedIndex = 0;
-                IsContentModeRawSelected = true;
                 break;
             case PororocaWebSocketClientMessageContentMode.File:
                 ContentModeSelectedIndex = 1;
-                IsContentModeFileSelected = true;
                 break;
         }
 
@@ -176,11 +131,9 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
             default:
             case PororocaWebSocketMessageRawContentSyntax.Json:
                 RawContentSyntaxSelectedIndex = 0;
-                IsRawContentJsonSyntaxSelected = true;
                 break;
             case PororocaWebSocketMessageRawContentSyntax.Other:
                 RawContentSyntaxSelectedIndex = 1;
-                IsRawContentOtherSyntaxSelected = true;
                 break;
         }
 
@@ -210,7 +163,6 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
     }
 
     #endregion
-
 
     #region OTHERS
 

@@ -77,13 +77,10 @@
           Margin="0,12,0,0"
           SelectedIndex="{Binding MessageTypeSelectedIndex, Mode=TwoWay}">
         <ComboBoxItem
-            IsSelected="{Binding IsMessageTypeTextSelected, Mode=TwoWay}"
             Content="{Binding i18n.WebSocketClientMessage.MessageTypeText}"/>
         <ComboBoxItem
-            IsSelected="{Binding IsMessageTypeBinarySelected, Mode=TwoWay}"
             Content="{Binding i18n.WebSocketClientMessage.MessageTypeBinary}"/>
         <ComboBoxItem
-            IsSelected="{Binding IsMessageTypeCloseSelected, Mode=TwoWay}"
             Content="{Binding i18n.WebSocketClientMessage.MessageTypeClose}"/>
       </ComboBox>
 
@@ -94,31 +91,30 @@
           Orientation="Horizontal">
 
         <ComboBox
+            x:Name="cbWsCliMsgContentMode"
             Height="36"
             Width="120"
             SelectedIndex="{Binding ContentModeSelectedIndex, Mode=TwoWay}">
           <ComboBoxItem
-              x:Name="wsScrReqMsgContentModeSelectionRaw"
-              IsSelected="{Binding IsContentModeRawSelected, Mode=TwoWay}"
+              x:Name="cbiWsCliMsgContentModeRaw"
               Content="{Binding i18n.WebSocketClientMessage.ContentModeRaw}"/>
           <ComboBoxItem
-              x:Name="wsScrReqMsgContentModeSelectionFile"
-              IsSelected="{Binding IsContentModeFileSelected, Mode=TwoWay}"
+              x:Name="cbiWsCliMsgContentModeFile"
               Content="{Binding i18n.WebSocketClientMessage.ContentModeFile}"/>
         </ComboBox>
 
         <ComboBox
+            x:Name="cbWsCliMsgContentRawSyntax"
             Name="RawContentSyntaxSelector"
-            IsVisible="{ReflectionBinding IsSelected, ElementName=wsScrReqMsgContentModeSelectionRaw}"
             Height="36"
             Width="120"
             Margin="12,0,0,0"
             SelectedIndex="{Binding RawContentSyntaxSelectedIndex, Mode=TwoWay}">
           <ComboBoxItem
-              IsSelected="{Binding IsRawContentJsonSyntaxSelected, Mode=TwoWay}"
+              x:Name="cbiWsCliMsgContentRawSyntaxJson"
               Content="{Binding i18n.WebSocketClientMessage.RawContentJsonSyntax}"/>
           <ComboBoxItem
-              IsSelected="{Binding IsRawContentOtherSyntaxSelected, Mode=TwoWay}"
+              x:Name="cbiWsCliMsgContentRawSyntaxOther"
               Content="{Binding i18n.WebSocketClientMessage.RawContentOtherSyntax}"/>
         </ComboBox>
 
@@ -130,28 +126,26 @@
 
 
       <AvaloniaEdit:TextEditor
-          Name="RawContentEditor"
+          x:Name="teWsCliMsgContentRaw"
           Grid.Column="0"
           Grid.Row="3"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
           Margin="0,12,0,0"
-          IsVisible="{ReflectionBinding IsSelected, ElementName=wsScrReqMsgContentModeSelectionRaw}"
           IsReadOnly="False"
           Document="{Binding RawContentTextDocument}"/>
 
       <StackPanel
+          x:Name="spWsCliMsgContentFile"
           Grid.Column="0"
           Grid.Row="3"
           Margin="0,12,0,0"
           Width="200"
           HorizontalAlignment="Left"
           VerticalAlignment="Stretch"
-          Orientation="Vertical"
-          IsVisible="{ReflectionBinding IsSelected, ElementName=wsScrReqMsgContentModeSelectionFile}">
+          Orientation="Vertical">
 
         <TextBox
-            IsVisible="{ReflectionBinding IsSelected, ElementName=wsScrReqMsgContentModeSelectionFile}"
             HorizontalContentAlignment="Left"
             VerticalContentAlignment="Center"
             Watermark="{Binding i18n.WebSocketClientMessage.ContentFileSrcPathWatermark}"
