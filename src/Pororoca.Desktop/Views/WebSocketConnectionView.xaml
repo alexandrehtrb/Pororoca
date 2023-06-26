@@ -219,6 +219,7 @@
               </Grid.RowDefinitions>
 
               <ComboBox
+                  x:Name="cbWsScrReqOptions"
                   Grid.Column="0"
                   Grid.Row="0"
                   Height="36"
@@ -227,24 +228,21 @@
                   VerticalAlignment="Stretch"
                   SelectedIndex="{Binding ConnectionOptionSelectedIndex, Mode=TwoWay}">
                 <ComboBoxItem
-                    x:Name="wsScrReqOptionHeaders"
-                    IsSelected="{Binding IsConnectionOptionHeadersSelected, Mode=TwoWay}"
+                    x:Name="cbiWsScrReqOptionHeaders"
                     Content="{Binding i18n.WebSocketConnection.OptionHeaders}"/>
                 <ComboBoxItem
-                    x:Name="wsScrReqOptionSubprotocols"
-                    IsSelected="{Binding IsConnectionOptionSubprotocolsSelected, Mode=TwoWay}"
+                    x:Name="cbiWsScrReqOptionSubprotocols"
                     Content="{Binding i18n.WebSocketConnection.OptionSubprotocols}"/>
                 <ComboBoxItem
-                    x:Name="wsScrReqOptionCompression"
-                    IsSelected="{Binding IsConnectionOptionCompressionSelected, Mode=TwoWay}"
+                    x:Name="cbiWsScrReqOptionCompression"
                     Content="{Binding i18n.WebSocketConnection.OptionCompression}"/>
               </ComboBox>
               <!-- CONNECTION REQUEST HEADERS -->
               <Grid
+                  x:Name="grWsConnReqHeaders"
                   Grid.Column="0"
                   Grid.Row="1"
-                  Margin="-12,12,-12,12"
-                  IsVisible="{ReflectionBinding IsSelected, ElementName=wsScrReqOptionHeaders}">
+                  Margin="-12,12,-12,12">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
@@ -332,10 +330,10 @@
               </Grid>
               <!-- CONNECTION REQUEST SUBPROTOCOLS -->
               <Grid
+                  x:Name="grWsConnReqSubprotocols"
                   Grid.Column="0"
                   Grid.Row="1"
-                  Margin="-12,12,-12,12"
-                  IsVisible="{ReflectionBinding IsSelected, ElementName=wsScrReqOptionSubprotocols}">
+                  Margin="-12,12,-12,12">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
@@ -416,22 +414,46 @@
               </Grid>
               <!-- CONNECTION COMPRESSION -->
               <StackPanel
+                  x:Name="spWsConnReqCompression"
                   Grid.Column="0"
                   Grid.Row="1"
-                  Margin="0,12,0,12"
-                  IsVisible="{ReflectionBinding IsSelected, ElementName=wsScrReqOptionCompression}">
+                  Margin="0,12,0,12">
                 <CheckBox
-                    x:Name="wsScrReqOptionCompressionEnable"
+                    x:Name="cbWsConnReqCompressionEnable"
                     Content="{Binding i18n.WebSocketConnection.EnableCompression}"
                     IsChecked="{Binding EnableCompression}"/>
 
-                <CheckBox
-                    Margin="0,12,0,0"
-                    Content="{Binding i18n.WebSocketConnection.CompressionClientContextTakeover}"
-                    IsChecked="{Binding CompressionClientContextTakeoverEnabled}"
-                    IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}"/>
+                <StackPanel x:Name="spWsConnReqCompressionOptions" IsVisible="{Binding EnableCompression}">
+                    <CheckBox
+                        Margin="0,12,0,0"
+                        Content="{Binding i18n.WebSocketConnection.CompressionClientContextTakeover}"
+                        IsChecked="{Binding CompressionClientContextTakeoverEnabled}"/>
 
-                <StackPanel
+                    <StackPanel
+                        Orientation="Horizontal"
+                        Margin="0,12,0,0">
+                      <TextBlock
+                          TextWrapping="Wrap"
+                          FontSize="14"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Center"
+                          Margin="0,0,6,0"
+                          Text="{Binding i18n.WebSocketConnection.CompressionClientMaxWindowBits}"/>
+                      <NumericUpDown
+                          Margin="6,0,0,0"
+                          VerticalAlignment="Center"
+                          Increment="1"
+                          Minimum="9"
+                          Maximum="15"
+                          Value="{Binding CompressionClientMaxWindowBits, Mode=TwoWay}"/>
+                    </StackPanel>
+
+                    <CheckBox
+                        Margin="0,12,0,0"
+                        Content="{Binding i18n.WebSocketConnection.CompressionServerContextTakeover}"
+                        IsChecked="{Binding CompressionServerContextTakeoverEnabled}"/>
+
+                    <StackPanel
                     Orientation="Horizontal"
                     Margin="0,12,0,0">
                   <TextBlock
@@ -440,45 +462,18 @@
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Center"
                       Margin="0,0,6,0"
-                      Text="{Binding i18n.WebSocketConnection.CompressionClientMaxWindowBits}"
-                      IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}"/>
+                      Text="{Binding i18n.WebSocketConnection.CompressionServerMaxWindowBits}"/>
                   <NumericUpDown
                       Margin="6,0,0,0"
                       VerticalAlignment="Center"
                       Increment="1"
                       Minimum="9"
                       Maximum="15"
-                      Value="{Binding CompressionClientMaxWindowBits, Mode=TwoWay}"
-                      IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}"/>
+                      Value="{Binding CompressionServerMaxWindowBits, Mode=TwoWay}"/>
                 </StackPanel>
 
-                <CheckBox
-                    Margin="0,12,0,0"
-                    Content="{Binding i18n.WebSocketConnection.CompressionServerContextTakeover}"
-                    IsChecked="{Binding CompressionServerContextTakeoverEnabled}"
-                    IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}"/>
-
-                <StackPanel
-                    Orientation="Horizontal"
-                    Margin="0,12,0,0">
-                  <TextBlock
-                      TextWrapping="Wrap"
-                      FontSize="14"
-                      HorizontalAlignment="Stretch"
-                      VerticalAlignment="Center"
-                      Margin="0,0,6,0"
-                      Text="{Binding i18n.WebSocketConnection.CompressionServerMaxWindowBits}"
-                      IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}"/>
-                  <NumericUpDown
-                      Margin="6,0,0,0"
-                      VerticalAlignment="Center"
-                      Increment="1"
-                      Minimum="9"
-                      Maximum="15"
-                      Value="{Binding CompressionServerMaxWindowBits, Mode=TwoWay}"
-                      IsEnabled="{ReflectionBinding IsChecked, ElementName=wsScrReqOptionCompressionEnable}"/>
                 </StackPanel>
-              </StackPanel>
+            </StackPanel>
             </Grid>
           </TabItem>
           <!-- CONNECTION REQUEST AUTH -->
@@ -708,7 +703,6 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Margin="12,6,12,24"
-            IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestBodyModeSelectionRaw}"
             IsReadOnly="True"
             Document="{Binding SelectedExchangedMessageContentTextDocument}"/>
 

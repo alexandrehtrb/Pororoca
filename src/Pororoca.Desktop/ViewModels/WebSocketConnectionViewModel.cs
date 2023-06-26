@@ -160,15 +160,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     [Reactive]
     public int ConnectionOptionSelectedIndex { get; set; }
 
-    [Reactive]
-    public bool IsConnectionOptionHeadersSelected { get; set; }
-
-    [Reactive]
-    public bool IsConnectionOptionSubprotocolsSelected { get; set; }
-
-    [Reactive]
-    public bool IsConnectionOptionCompressionSelected { get; set; }
-
     #region CONNECTION OPTION HEADERS
 
     public ObservableCollection<KeyValueParamViewModel> ConnectionRequestHeaders { get; }
@@ -347,9 +338,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         #region CONNECTION OPTIONS
 
         ConnectionOptionSelectedIndex = 0;
-        IsConnectionOptionHeadersSelected = true;
-        IsConnectionOptionSubprotocolsSelected = false;
-        IsConnectionOptionCompressionSelected = false;
 
         #region CONNECTION OPTION HEADERS
 
