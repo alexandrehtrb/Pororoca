@@ -27,56 +27,52 @@
         Orientation="Horizontal"
         Spacing="12">
       <ComboBox
+          x:Name="cbReqAuthType"
           Height="36"
           Width="190"
           HorizontalAlignment="Left"
           VerticalAlignment="Stretch"
           SelectedIndex="{Binding AuthModeSelectedIndex}">
         <ComboBoxItem
-            IsSelected="{Binding IsAuthModeNoneSelected}"
+            x:Name="cbiReqAuthNone"
             Content="{Binding i18n.RequestAuth.AuthModeNone}"/>
         <ComboBoxItem
-            x:Name="reqScrRequestCustomAuthBasic"
-            IsSelected="{Binding IsAuthModeBasicSelected}"
+            x:Name="cbiReqAuthBasic"
             Content="{Binding i18n.RequestAuth.AuthModeBasic}"/>
         <ComboBoxItem
-            x:Name="reqScrRequestCustomAuthBearer"
-            IsSelected="{Binding IsAuthModeBearerSelected}"
+            x:Name="cbiReqAuthBearer"
             Content="{Binding i18n.RequestAuth.AuthModeBearer}"/>
         <!-- Mode=TwoWay in IsSelected below is required, otherwise, layout will disappear when changing between different requests -->
         <ComboBoxItem
-            x:Name="reqScrRequestCustomAuthClientCertificate"
-            IsSelected="{Binding IsAuthModeClientCertificateSelected, Mode=TwoWay}"
+            x:Name="cbiReqAuthClientCertificate"
             Content="{Binding i18n.RequestAuth.AuthModeClientCertificate}"/>
       </ComboBox>
 
       <ComboBox
+          x:Name="cbReqAuthClientCertificateType"
           Height="36"
           Width="110"
           HorizontalAlignment="Left"
           VerticalAlignment="Stretch"
-          SelectedIndex="{Binding ClientCertificateTypeSelectedIndex}"
-          IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestCustomAuthClientCertificate}">
+          SelectedIndex="{Binding ClientCertificateTypeSelectedIndex}">
         <ComboBoxItem
-            IsSelected="{Binding IsClientCertificateTypeNoneSelected, Mode=TwoWay}"
+            x:Name="cbiReqAuthClientCertificateNone"
             Content="{Binding i18n.RequestAuth.ClientCertificateTypeNone}"/>
         <ComboBoxItem
-            x:Name="reqScrRequestClientCertificateAuthPkcs12"
-            IsSelected="{Binding IsClientCertificateTypePkcs12Selected, Mode=TwoWay}"
+            x:Name="cbiReqAuthClientCertificatePkcs12"
             Content="{Binding i18n.RequestAuth.ClientCertificateTypePkcs12}"/>
         <ComboBoxItem
-            x:Name="reqScrRequestClientCertificateAuthPem"
-            IsSelected="{Binding IsClientCertificateTypePemSelected, Mode=TwoWay}"
+            x:Name="cbiReqAuthClientCertificatePem"
             Content="{Binding i18n.RequestAuth.ClientCertificateTypePem}"/>
       </ComboBox>
     </StackPanel>
 
     <!-- BASIC AUTH-->
     <StackPanel
+        x:Name="spReqAuthBasic"
         Grid.Column="0"
         Grid.Row="1"
-        Margin="0,12,0,0"
-        IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestCustomAuthBasic}">
+        Margin="0,12,0,0">
       <TextBox
           Width="200"
           HorizontalAlignment="Left"
@@ -95,10 +91,10 @@
     </StackPanel>
     <!-- BEARER AUTH -->
     <StackPanel
+        x:Name="spReqAuthBearer"
         Grid.Column="0"
         Grid.Row="1"
-        Margin="0,12,0,0"
-        IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestCustomAuthBearer}">
+        Margin="0,12,0,0">
       <TextBox
           Width="200"
           HorizontalAlignment="Left"
@@ -109,10 +105,10 @@
     </StackPanel>
     <!-- CLIENT CERTIFICATE AUTH -->
     <Grid
+        x:Name="grReqAuthClientCertificate"
         Grid.Column="0"
         Grid.Row="1"
-        Margin="0,12,0,0"
-        IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestCustomAuthClientCertificate}">
+        Margin="0,12,0,0">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
@@ -122,9 +118,9 @@
 
       <!-- CLIENT CERTIFICATE AUTH PKCS#12 -->
       <StackPanel
+          x:Name="spReqAuthClientCertificatePkcs12"
           Grid.Column="0"
-          Grid.Row="0"
-          IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestClientCertificateAuthPkcs12}">
+          Grid.Row="0">
         <TextBox
             Width="240"
             Watermark="{Binding i18n.RequestAuth.CertificateFilePathWatermark}"
@@ -148,9 +144,9 @@
       </StackPanel>
       <!-- CLIENT CERTIFICATE AUTH PEM -->
       <StackPanel
+          x:Name="spReqAuthClientCertificatePem"
           Grid.Column="0"
-          Grid.Row="0"
-          IsVisible="{ReflectionBinding IsSelected, ElementName=reqScrRequestClientCertificateAuthPem}">
+          Grid.Row="0">
         <TextBox
             Width="240"
             Watermark="{Binding i18n.RequestAuth.CertificateFilePathWatermark}"

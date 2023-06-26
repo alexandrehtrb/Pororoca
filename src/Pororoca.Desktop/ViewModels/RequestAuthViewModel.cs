@@ -13,18 +13,6 @@ public sealed class RequestAuthViewModel : ViewModelBase
     [Reactive]
     public int AuthModeSelectedIndex { get; set; }
 
-    [Reactive]
-    public bool IsAuthModeNoneSelected { get; set; }
-
-    [Reactive]
-    public bool IsAuthModeBasicSelected { get; set; }
-
-    [Reactive]
-    public bool IsAuthModeBearerSelected { get; set; }
-
-    [Reactive]
-    public bool IsAuthModeClientCertificateSelected { get; set; }
-
     private PororocaRequestAuthMode? AuthMode =>
         AuthModeSelectedIndex switch
         { // TODO: Improve this, do not use fixed integers to resolve mode
@@ -55,15 +43,6 @@ public sealed class RequestAuthViewModel : ViewModelBase
 
     [Reactive]
     public int ClientCertificateTypeSelectedIndex { get; set; }
-
-    [Reactive]
-    public bool IsClientCertificateTypeNoneSelected { get; set; }
-
-    [Reactive]
-    public bool IsClientCertificateTypePkcs12Selected { get; set; }
-
-    [Reactive]
-    public bool IsClientCertificateTypePemSelected { get; set; }
 
     private PororocaRequestAuthClientCertificateType? ClientCertificateType =>
         ClientCertificateTypeSelectedIndex switch
@@ -106,36 +85,22 @@ public sealed class RequestAuthViewModel : ViewModelBase
 
     #endregion
 
-    #region OTHERS
-
-    private readonly bool isOperatingSystemMacOsx;
-
-    #endregion
-
-    public RequestAuthViewModel(PororocaRequestAuth? customAuth, Func<bool>? isOperatingSystemMacOsx = null)
+    public RequestAuthViewModel(PororocaRequestAuth? customAuth)
     {
-        #region OTHERS
-        this.isOperatingSystemMacOsx = (isOperatingSystemMacOsx ?? OperatingSystem.IsMacOS)();
-        #endregion
-
         // TODO: Improve this, do not use fixed values to resolve index
         switch (customAuth?.Mode)
         {
             case PororocaRequestAuthMode.Basic:
                 AuthModeSelectedIndex = 1;
-                IsAuthModeBasicSelected = true;
                 break;
             case PororocaRequestAuthMode.Bearer:
                 AuthModeSelectedIndex = 2;
-                IsAuthModeBearerSelected = true;
                 break;
             case PororocaRequestAuthMode.ClientCertificate:
                 AuthModeSelectedIndex = 3;
-                IsAuthModeClientCertificateSelected = true;
                 break;
             default:
                 AuthModeSelectedIndex = 0;
-                IsAuthModeNoneSelected = true;
                 break;
         }
         BasicAuthLogin = customAuth?.BasicAuthLogin;
@@ -149,18 +114,15 @@ public sealed class RequestAuthViewModel : ViewModelBase
                 ClientCertificateAuthPkcs12CertificateFilePath = customAuth.ClientCertificate!.CertificateFilePath!;
                 ClientCertificateAuthPkcs12FilePassword = customAuth.ClientCertificate!.FilePassword;
                 ClientCertificateTypeSelectedIndex = 1;
-                IsClientCertificateTypePkcs12Selected = true;
                 break;
             case PororocaRequestAuthClientCertificateType.Pem:
                 ClientCertificateAuthPemCertificateFilePath = customAuth.ClientCertificate!.CertificateFilePath!;
                 ClientCertificateAuthPemPrivateKeyFilePath = customAuth.ClientCertificate!.PrivateKeyFilePath!;
                 ClientCertificateAuthPemFilePassword = customAuth.ClientCertificate!.FilePassword;
                 ClientCertificateTypeSelectedIndex = 2;
-                IsClientCertificateTypePemSelected = true;
                 break;
             default:
                 ClientCertificateTypeSelectedIndex = 0;
-                IsClientCertificateTypeNoneSelected = true;
                 break;
         }
         SearchClientCertificatePkcs12FileCmd = ReactiveCommand.CreateFromTask(SearchClientCertificatePkcs12FileAsync);
