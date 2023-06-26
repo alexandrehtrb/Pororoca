@@ -40,6 +40,7 @@
       <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="#eae395"/>
       <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#e2d86a"/>
       <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPressed" Color="#d9cc3f"/>
+      <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="#09b3f6"/>
     </ResourceDictionary>
   </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>
