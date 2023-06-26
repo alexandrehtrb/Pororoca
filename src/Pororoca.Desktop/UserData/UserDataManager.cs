@@ -49,69 +49,81 @@ public static class UserDataManager
         }
     }
 
-    public static PororocaCollection[] LoadUserCollections()
+    public static PororocaCollection[] LoadUserCollections() =>
+        FetchSavedUserCollectionsFiles()
+        .Select(f =>
+        {
+            try
+            {
+                string json = File.ReadAllText(f.FullName, Encoding.UTF8);
+                if (PororocaCollectionImporter.TryImportPororocaCollection(json, preserveId: true, out var col))
+                {
+                    return col;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        })
+        .Where(c => c != null)
+        .Cast<PororocaCollection>()
+        .ToArray();
+
+    private static IEnumerable<FileInfo> FetchSavedUserCollectionsFiles()
     {
         string userDataFolderPath = GetUserDataFilePath(string.Empty);
         DirectoryInfo userDataFolder = new(userDataFolderPath);
         if (!userDataFolder.Exists)
         {
-            return Array.Empty<PororocaCollection>();
+            return Array.Empty<FileInfo>();
         }
         else
         {
             return userDataFolder
                 .GetFiles()
-                .Where(f => f.FullName.EndsWith(PororocaCollectionExtension))
-                .Select(f =>
-                {
-                    try
-                    {
-                        string json = File.ReadAllText(f.FullName, Encoding.UTF8);
-                        if (PororocaCollectionImporter.TryImportPororocaCollection(json, preserveId: true, out var col))
-                        {
-                            return col;
-                        }
-                        else
-                        {
-                            return null;
-                        }
-                    }
-                    catch
-                    {
-                        return null;
-                    }
-                })
-                .Where(c => c != null)
-                .Cast<PororocaCollection>()
-                .ToArray();
+                .Where(f => f.FullName.EndsWith(PororocaCollectionExtension));
         }
     }
 
-    public static Task SaveUserData(UserPreferences userPrefs, IEnumerable<PororocaCollection> collections)
+    public static void SaveUserData(UserPreferences userPrefs, IEnumerable<PororocaCollection> collections)
     {
         CreateUserDataFolderIfNotExists();
-        DeleteUserDataFiles();
-        return Task.WhenAll(SaveUserPreferences(userPrefs), SaveUserCollections(collections));
+        SaveUserPreferences(userPrefs);
+        SaveUserCollections(collections);
     }
 
-    private static Task SaveUserPreferences(UserPreferences userPrefs)
+    private static void SaveUserPreferences(UserPreferences userPrefs)
     {
         string path = GetUserDataFilePath(userPreferencesFileName);
         string json = JsonSerializer.Serialize(userPrefs, options: userPreferencesJsonOptions);
-        return File.WriteAllTextAsync(path, json, Encoding.UTF8);
+        File.WriteAllText(path, json, Encoding.UTF8);
     }
 
-    private static Task SaveUserCollections(IEnumerable<PororocaCollection> collections)
+    private static void SaveUserCollections(IEnumerable<PororocaCollection> collections)
     {
-        List<Task> savingTasks = new();
+        var savedColsPaths = FetchSavedUserCollectionsFiles().Select(c => c.FullName).ToList();
+
         foreach (var col in collections)
         {
             string path = GetUserDataFilePath($"{col.Id}.{PororocaCollectionExtension}");
             string json = PororocaCollectionExporter.ExportAsPororocaCollection(col, false);
-            savingTasks.Add(File.WriteAllTextAsync(path, json, Encoding.UTF8));
+
+            File.WriteAllText(path, json, Encoding.UTF8);
+            // Marking collections that were deleted, to delete their files
+            savedColsPaths.Remove(path);
         }
-        return Task.WhenAll(savingTasks);
-    }
+
+        // The collections found in the folder that do not exist anymore will be deleted
+        foreach (string collectionThatDoesntExistAnymorePath in savedColsPaths)
+        {
+            File.Delete(collectionThatDoesntExistAnymorePath);
+        }
+    }        
 
     private static void CreateUserDataFolderIfNotExists()
     {
@@ -120,16 +132,6 @@ public static class UserDataManager
         if (!di.Exists)
         {
             di.Create();
-        }
-    }
-
-    private static void DeleteUserDataFiles()
-    {
-        string folderPath = GetUserDataFilePath(string.Empty);
-        DirectoryInfo di = new(folderPath);
-        foreach (var fi in di.GetFiles())
-        {
-            fi.Delete();
         }
     }
 

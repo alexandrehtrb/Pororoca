@@ -414,7 +414,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
         UserPrefs!.Theme = PororocaThemeManager.CurrentTheme;
 
-        UserDataManager.SaveUserData(UserPrefs, cols).GetAwaiter().GetResult();
+        UserDataManager.SaveUserData(UserPrefs, cols);
     }
 
     private void ShowUpdateReminder()
