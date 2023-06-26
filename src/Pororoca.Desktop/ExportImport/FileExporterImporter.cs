@@ -373,7 +373,7 @@ internal static partial class FileExporterImporter
                 // uri.LocalPath returns the correct path in Linux and Windows
                 // careful with file paths with whitespaces in them
                 // TODO: confirm behavior for MacOSX
-                filesPaths.Add(file.Path.AbsolutePath);
+                filesPaths.Add(file.Path.LocalPath);
             }
 
             return filesPaths;
@@ -396,7 +396,7 @@ internal static partial class FileExporterImporter
             // uri.LocalPath returns the correct path in Linux and Windows
             // careful with file paths with whitespaces in them
             // TODO: confirm behavior for MacOSX
-            return destFile.Path.AbsolutePath;
+            return destFile.Path.LocalPath;
         }
         else
         {
