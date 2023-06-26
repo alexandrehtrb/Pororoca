@@ -1,5 +1,5 @@
-using System.Text.Json;
 using Pororoca.Desktop.Localization;
+using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage;
 using ReactiveUI.Fody.Helpers;
@@ -130,27 +130,7 @@ public sealed class WebSocketExchangedMessageViewModel : ViewModelBase
 
         if (txtContent is not null)
         {
-            IsJsonTextContent = IsJsonString(TextContent);
-        }
-    }
-
-    private static bool IsJsonString(string? str)
-    {
-        if (!string.IsNullOrWhiteSpace(str))
-        {
-            try
-            {
-                JsonSerializer.Deserialize<dynamic>(str);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return false;
+            IsJsonTextContent = JsonUtils.IsValidJson(TextContent);
         }
     }
 }
