@@ -106,7 +106,18 @@ public static class UserDataManager
 
     private static void SaveUserCollections(IEnumerable<PororocaCollection> collections)
     {
-        var savedColsPaths = FetchSavedUserCollectionsFiles().Select(c => c.FullName).ToList();
+        List<Guid> savedColsIds;
+
+        try
+        {
+            savedColsIds = FetchSavedUserCollectionsFiles()
+                .Select(c => Guid.Parse(Path.GetFileName(c.FullName).Replace($".{PororocaCollectionExtension}", string.Empty)))
+                .ToList();
+        }
+        catch
+        {
+            savedColsIds = new();
+        }
 
         foreach (var col in collections)
         {
@@ -115,13 +126,14 @@ public static class UserDataManager
 
             File.WriteAllText(path, json, Encoding.UTF8);
             // Marking collections that were deleted, to delete their files
-            savedColsPaths.Remove(path);
+            savedColsIds.Remove(col.Id);
         }
 
         // The collections found in the folder that do not exist anymore will be deleted
-        foreach (string collectionThatDoesntExistAnymorePath in savedColsPaths)
+        foreach (var savedColId in savedColsIds)
         {
-            File.Delete(collectionThatDoesntExistAnymorePath);
+            string path = GetUserDataFilePath($"{savedColId}.{PororocaCollectionExtension}");
+            File.Delete(path);
         }
     }        
 
