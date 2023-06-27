@@ -308,9 +308,9 @@ function Make-AppFolderIfMacOS
 		[void](mkdir "${outputFolder}/Pororoca.app/Contents")
 		[void](mkdir "${outputFolder}/Pororoca.app/Contents/MacOS")
 		[void](mkdir "${outputFolder}/Pororoca.app/Contents/Resources")
-		Copy-Item -Path "./src/Pororoca.Desktop/Assets/MacOSX/Info.plist" `
+		Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/Info.plist" `
 				  -Destination "${outputFolder}/Pororoca.app/Contents/"
-		Copy-Item -Path "./src/Pororoca.Desktop/Assets/MacOSX/pororoca.icns" `
+		Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/pororoca.icns" `
 				  -Destination "${outputFolder}/Pororoca.app/Contents/Resources/"
 		Get-ChildItem $outputFolder -File | Copy-Item -Destination "${outputFolder}/Pororoca.app/Contents/MacOS/" -Force
 		Get-ChildItem $outputFolder -File | Remove-Item
