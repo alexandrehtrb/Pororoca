@@ -399,7 +399,7 @@ function Pack-ReleaseInWindowsInstaller
 	makensis -WX -V2 "/XOutFile ${installerOutFileAbsolutePath}" `
 		"/DSHORT_VERSION=${versionName}" `
 		"/DINPUT_FILES_DIR=${installerFilesDirAbsolutePath}" `
-		.\src\Pororoca.WindowsInstaller\Installer.nsi
+		.\src\Pororoca.Desktop.WindowsInstaller\Installer.nsi
 
 	Remove-Item $installerFilesFolder -Force -Recurse -ErrorAction Ignore
 }
