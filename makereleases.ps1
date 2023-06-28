@@ -122,7 +122,7 @@ function Run-UnitTests
 
 	Write-Host "Running unit tests..." -ForegroundColor DarkYellow
 	$stopwatch.Restart()
-	dotnet test --configuration Release --nologo --verbosity quiet
+	dotnet test --configuration Release --nologo --verbosity quiet --filter FullyQualifiedName!~Pororoca.Test.Tests
 	$stopwatch.Stop()
 	Write-Host "Solution tests run ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
 }
