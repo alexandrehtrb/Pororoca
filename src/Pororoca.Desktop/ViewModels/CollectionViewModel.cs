@@ -259,21 +259,21 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
 
     public PororocaCollection ToCollection()
     {
-        PororocaCollection newCol = new(this.colId, Name, this.colCreatedAt);
-        foreach (var colItemVm in Items)
-        {
-            if (colItemVm is CollectionVariablesViewModel colVarsVm)
-                newCol.UpdateVariables(colVarsVm.ToVariables());
-            else if (colItemVm is EnvironmentsGroupViewModel colEnvsVm)
-                newCol.UpdateEnvironments(colEnvsVm.ToEnvironments());
-            else if (colItemVm is CollectionFolderViewModel colFolderVm)
-                newCol.AddFolder(colFolderVm.ToCollectionFolder());
-            else if (colItemVm is HttpRequestViewModel httpReqVm)
-                newCol.AddRequest(httpReqVm.ToHttpRequest());
-            else if (colItemVm is WebSocketConnectionViewModel wsVm)
-                newCol.AddRequest(wsVm.ToWebSocketConnection());
-        }
-        return newCol;
+        var variables = ((CollectionVariablesViewModel)Items.First(i => i is CollectionVariablesViewModel)).ToVariables().ToList();
+        var envs = ((EnvironmentsGroupViewModel)Items.First(i => i is EnvironmentsGroupViewModel)).ToEnvironments().ToList();
+        var folders = Items.Where(i => i is CollectionFolderViewModel).Cast<CollectionFolderViewModel>().Select(x => x.ToCollectionFolder()).ToList();
+        var reqs = Items.Where(i => i is HttpRequestViewModel || i is WebSocketConnectionViewModel)
+                        .Select(i =>
+                        {
+                            if (i is HttpRequestViewModel httpReqVm)
+                                return (PororocaRequest)httpReqVm.ToHttpRequest();
+                            if (i is WebSocketConnectionViewModel wsConnVm)
+                                return (PororocaRequest)wsConnVm.ToWebSocketConnection();
+                            else
+                                throw new InvalidDataException();
+                        }).ToList();
+
+        return new PororocaCollection(this.colId, Name, this.colCreatedAt, variables, envs, folders, reqs);
     }
 
     public string ReplaceTemplates(string? strToReplaceTemplatedVariables)

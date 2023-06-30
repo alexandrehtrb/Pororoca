@@ -69,11 +69,13 @@ public sealed class PororocaTest
         var variable = Collection.Variables.FirstOrDefault(v => v.Key == key);
         if (variable != null)
         {
-            variable.Value = value;
+            var newVariable = variable with { Value = value };
+            Collection.Variables.Remove(variable);
+            Collection.Variables.Add(newVariable);
         }
         else
         {
-            Collection.AddVariable(new(true, key, value, false));
+            Collection.Variables.Add(new(true, key, value, false));
         }
     }
 
@@ -88,7 +90,9 @@ public sealed class PororocaTest
         var variable = env.Variables.FirstOrDefault(v => v.Key == key);
         if (variable != null)
         {
-            variable.Value = value;
+            var newVariable = variable with { Value = value };
+            env.RemoveVariable(key);
+            env.AddVariable(newVariable);
         }
         else
         {

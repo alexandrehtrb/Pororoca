@@ -74,8 +74,8 @@ public sealed class PororocaHttpRequest : PororocaRequest
             HttpVersion = HttpVersion,
             HttpMethod = HttpMethod,
             Url = Url,
-            CustomAuth = (PororocaRequestAuth?)CustomAuth?.Clone(),
-            Headers = Headers?.Select(h => (PororocaKeyValueParam)h.Clone())?.ToList()?.AsReadOnly(),
+            CustomAuth = CustomAuth?.Copy(),
+            Headers = Headers?.Select(h => h.Copy())?.ToList()?.AsReadOnly(),
             Body = (PororocaHttpRequestBody?)Body?.Clone()
         };
 }

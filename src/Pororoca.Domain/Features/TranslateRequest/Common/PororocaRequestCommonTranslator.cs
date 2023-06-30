@@ -107,10 +107,10 @@ public static class PororocaRequestCommonTranslator
                                      null : resolvedFilePassword;
 
         return new(
-            type: unresolvedClientCertificate.Type,
-            certificateFilePath: variableResolver.ReplaceTemplates(unresolvedClientCertificate.CertificateFilePath),
-            privateKeyFilePath: nulledPrivateKeyFilePath,
-            filePassword: nulledFilePassword
+            Type: unresolvedClientCertificate.Type,
+            CertificateFilePath: variableResolver.ReplaceTemplates(unresolvedClientCertificate.CertificateFilePath),
+            PrivateKeyFilePath: nulledPrivateKeyFilePath,
+            FilePassword: nulledFilePassword
         );
     }
 

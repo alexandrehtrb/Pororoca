@@ -24,13 +24,13 @@ public abstract class PororocaWebSocketMessage
     public PororocaWebSocketMessageType MessageType { get; private set; }
 
 #nullable disable warnings
-    public PororocaWebSocketMessage() : this(PororocaWebSocketMessageDirection.FromClient, PororocaWebSocketMessageType.Text)
+    protected PororocaWebSocketMessage() : this(PororocaWebSocketMessageDirection.FromClient, PororocaWebSocketMessageType.Text)
     {
         // Parameterless constructor for JSON deserialization
     }
 #nullable restore warnings
 
-    public PororocaWebSocketMessage(PororocaWebSocketMessageDirection direction, PororocaWebSocketMessageType msgType)
+    protected PororocaWebSocketMessage(PororocaWebSocketMessageDirection direction, PororocaWebSocketMessageType msgType)
     {
         Direction = direction;
         MessageType = msgType;

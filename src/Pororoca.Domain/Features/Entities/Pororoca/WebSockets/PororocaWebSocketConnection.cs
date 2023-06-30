@@ -48,10 +48,10 @@ public sealed class PororocaWebSocketConnection : PororocaRequest
         {
             HttpVersion = HttpVersion,
             Url = Url,
-            Headers = Headers?.Select(h => (PororocaKeyValueParam)h.Clone())?.ToList(),
-            CustomAuth = (PororocaRequestAuth?)CustomAuth?.Clone(),
+            Headers = Headers?.Select(h => h.Copy())?.ToList(),
+            CustomAuth = CustomAuth?.Copy(),
             ClientMessages = ClientMessages?.Select(m => (PororocaWebSocketClientMessage)m.Clone())?.ToList(),
             Subprotocols = Subprotocols,
-            CompressionOptions = (PororocaWebSocketCompressionOptions?)CompressionOptions?.Clone()
+            CompressionOptions = CompressionOptions?.Copy()
         };
 }

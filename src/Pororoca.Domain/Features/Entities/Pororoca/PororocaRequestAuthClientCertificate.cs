@@ -2,41 +2,22 @@ using System.Text.Json.Serialization;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca;
 
-public sealed class PororocaRequestAuthClientCertificate : ICloneable
+public enum PororocaRequestAuthClientCertificateType
 {
-    [JsonInclude]
-    public PororocaRequestAuthClientCertificateType Type { get; private set; }
+    Pkcs12,
+    Pem
+}
 
-    [JsonInclude]
-    public string CertificateFilePath { get; private set; }
+public sealed record PororocaRequestAuthClientCertificate
+(
+    [property: JsonInclude] PororocaRequestAuthClientCertificateType Type,
+    [property: JsonInclude] string CertificateFilePath,
+    [property: JsonInclude] string? PrivateKeyFilePath,
+    [property: JsonInclude] string? FilePassword
+)
+{
+    // Parameterless constructor for JSON deserialization
+    public PororocaRequestAuthClientCertificate() : this(PororocaRequestAuthClientCertificateType.Pem, string.Empty, string.Empty, null) { }
 
-    [JsonInclude]
-    public string? PrivateKeyFilePath { get; private set; }
-
-    [JsonInclude]
-    public string? FilePassword { get; private set; }
-
-#nullable disable warnings
-    public PororocaRequestAuthClientCertificate() : this(PororocaRequestAuthClientCertificateType.Pem, string.Empty, string.Empty, null)
-    {
-        // Parameterless constructor for JSON deserialization
-    }
-#nullable restore warnings
-
-    public PororocaRequestAuthClientCertificate(PororocaRequestAuthClientCertificateType type, string certificateFilePath, string? privateKeyFilePath, string? filePassword)
-    {
-        Type = type;
-        CertificateFilePath = certificateFilePath;
-        PrivateKeyFilePath = privateKeyFilePath;
-        FilePassword = filePassword;
-    }
-
-    public object Clone() =>
-        new PororocaRequestAuthClientCertificate()
-        {
-            Type = Type,
-            CertificateFilePath = CertificateFilePath,
-            PrivateKeyFilePath = PrivateKeyFilePath,
-            FilePassword = FilePassword
-        };
+    public PororocaRequestAuthClientCertificate Copy() => this with { };
 }

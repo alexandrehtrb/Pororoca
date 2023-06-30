@@ -20,7 +20,7 @@ public static class PororocaRequestCommonTranslatorTests
     {
         // GIVEN
         PororocaCollection col = new(string.Empty);
-        col.AddVariable(new(true, "BaseUrl", "http://www.pudim.com.br", false));
+        col.Variables.Add(new(true, "BaseUrl", "http://www.pudim.com.br", false));
 
         // WHEN
         bool valid = TryResolveRequestUri(col, "{{BaseUrl}}", out var uri, out string? errorCode);
@@ -37,7 +37,7 @@ public static class PororocaRequestCommonTranslatorTests
     {
         // GIVEN
         PororocaCollection col = new(string.Empty);
-        col.AddVariable(new(true, "BaseUrl", "http://www.pudim.com.br", false));
+        col.Variables.Add(new(true, "BaseUrl", "http://www.pudim.com.br", false));
 
         // WHEN
         bool valid = TryResolveRequestUri(col, "https://www.miniclip.com", out var uri, out string? errorCode);
@@ -58,9 +58,9 @@ public static class PororocaRequestCommonTranslatorTests
     {
         // GIVEN
         PororocaCollection col = new(string.Empty);
-        col.AddVariable(new(true, "BaseUrl", "http://www.pudim.com.br", false));
-        col.AddVariable(new(false, "BaseUrl2", "https://www.pudim.com.br", false));
-        col.AddVariable(new(true, "BaseUrl3", "https:/www.aaa.gov", false));
+        col.Variables.Add(new(true, "BaseUrl", "http://www.pudim.com.br", false));
+        col.Variables.Add(new(false, "BaseUrl2", "https://www.pudim.com.br", false));
+        col.Variables.Add(new(true, "BaseUrl3", "https:/www.aaa.gov", false));
 
         // WHEN
         bool valid = TryResolveRequestUri(col, unresolvedUrl, out var uri, out string? errorCode);
@@ -122,8 +122,8 @@ public static class PororocaRequestCommonTranslatorTests
     {
         // GIVEN
         PororocaCollection col = new("VarResolver");
-        col.AddVariable(new(true, "ExpiresHeader", "Expires", false));
-        col.AddVariable(new(true, "ExpiresAt", "2021-12-02", false));
+        col.Variables.Add(new(true, "ExpiresHeader", "Expires", false));
+        col.Variables.Add(new(true, "ExpiresAt", "2021-12-02", false));
 
         var headers = new PororocaKeyValueParam[]
         {
@@ -152,8 +152,8 @@ public static class PororocaRequestCommonTranslatorTests
     {
         // GIVEN
         PororocaCollection col = new("VarResolver");
-        col.AddVariable(new(true, "CookieHeader", "Cookie", false));
-        col.AddVariable(new(true, "TestCookie2", "cookie2", false));
+        col.Variables.Add(new(true, "CookieHeader", "Cookie", false));
+        col.Variables.Add(new(true, "TestCookie2", "cookie2", false));
 
         var headers = new PororocaKeyValueParam[]
         {
@@ -181,10 +181,10 @@ public static class PororocaRequestCommonTranslatorTests
     {
         // GIVEN
         PororocaCollection col = new("VarResolver");
-        col.AddVariable(new(true, "CookieHeader", "Cookie", false));
-        col.AddVariable(new(true, "TestCookie2", "cookie2", false));
-        col.AddVariable(new(true, "MyAuthHeader", "Authorization", false));
-        col.AddVariable(new(true, "MyAuthToken", "tkn", false));
+        col.Variables.Add(new(true, "CookieHeader", "Cookie", false));
+        col.Variables.Add(new(true, "TestCookie2", "cookie2", false));
+        col.Variables.Add(new(true, "MyAuthHeader", "Authorization", false));
+        col.Variables.Add(new(true, "MyAuthToken", "tkn", false));
 
         var headers = new PororocaKeyValueParam[]
         {
@@ -215,10 +215,10 @@ public static class PororocaRequestCommonTranslatorTests
     {
         // GIVEN
         PororocaCollection col = new("VarResolver");
-        col.AddVariable(new(true, "CookieHeader", "Cookie", false));
-        col.AddVariable(new(true, "TestCookie2", "cookie2", false));
-        col.AddVariable(new(true, "Username", "usr", false));
-        col.AddVariable(new(true, "Password", "pwd", false));
+        col.Variables.Add(new(true, "CookieHeader", "Cookie", false));
+        col.Variables.Add(new(true, "TestCookie2", "cookie2", false));
+        col.Variables.Add(new(true, "Username", "usr", false));
+        col.Variables.Add(new(true, "Password", "pwd", false));
 
         var headers = new PororocaKeyValueParam[]
         {
@@ -230,8 +230,7 @@ public static class PororocaRequestCommonTranslatorTests
             new(true, "{{CookieHeader}}", "{{TestCookie3}}")
         };
 
-        PororocaRequestAuth reqAuth = new();
-        reqAuth.SetBasicAuth("{{Username}}", "{{Password}}");
+        PororocaRequestAuth reqAuth = PororocaRequestAuth.MakeBasicAuth("{{Username}}", "{{Password}}");
 
         // WHEN
         var contentHeaders = ResolveNonContentHeaders(col, headers, reqAuth);
@@ -251,9 +250,9 @@ public static class PororocaRequestCommonTranslatorTests
     {
         // GIVEN
         PororocaCollection col = new("VarResolver");
-        col.AddVariable(new(true, "CookieHeader", "Cookie", false));
-        col.AddVariable(new(true, "TestCookie2", "cookie2", false));
-        col.AddVariable(new(true, "BearerToken", "tkn", false));
+        col.Variables.Add(new(true, "CookieHeader", "Cookie", false));
+        col.Variables.Add(new(true, "TestCookie2", "cookie2", false));
+        col.Variables.Add(new(true, "BearerToken", "tkn", false));
 
         var headers = new PororocaKeyValueParam[]
         {
@@ -265,8 +264,7 @@ public static class PororocaRequestCommonTranslatorTests
             new(true, "{{CookieHeader}}", "{{TestCookie3}}")
         };
 
-        PororocaRequestAuth reqAuth = new();
-        reqAuth.SetBearerAuth("{{BearerToken}}");
+        PororocaRequestAuth reqAuth = PororocaRequestAuth.MakeBearerAuth("{{BearerToken}}");
 
         // WHEN
         var contentHeaders = ResolveNonContentHeaders(col, headers, reqAuth);
@@ -290,11 +288,10 @@ public static class PororocaRequestCommonTranslatorTests
     {
         // GIVEN
         PororocaCollection col = new("VarResolver");
-        col.AddVariable(new(true, "CertificateFilePath", "./cert.p12", false));
-        col.AddVariable(new(true, "PrivateKeyFilePassword", "my_pwd", false));
+        col.Variables.Add(new(true, "CertificateFilePath", "./cert.p12", false));
+        col.Variables.Add(new(true, "PrivateKeyFilePassword", "my_pwd", false));
 
-        PororocaRequestAuth reqAuth = new();
-        reqAuth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "{{PrivateKeyFilePassword}}");
+        PororocaRequestAuth reqAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "{{PrivateKeyFilePassword}}");
 
         PororocaHttpRequest req = new();
         req.UpdateUrl("http://www.pudim.com.br");
@@ -316,12 +313,11 @@ public static class PororocaRequestCommonTranslatorTests
     {
         // GIVEN
         PororocaCollection col = new("VarResolver");
-        col.AddVariable(new(true, "CertificateFilePath", "./cert.pem", false));
-        col.AddVariable(new(true, "PrivateKeyFilePath", "./private_key.key", false));
-        col.AddVariable(new(true, "PrivateKeyFilePassword", "my_pwd", false));
+        col.Variables.Add(new(true, "CertificateFilePath", "./cert.pem", false));
+        col.Variables.Add(new(true, "PrivateKeyFilePath", "./private_key.key", false));
+        col.Variables.Add(new(true, "PrivateKeyFilePassword", "my_pwd", false));
 
-        PororocaRequestAuth reqAuth = new();
-        reqAuth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", "{{PrivateKeyFilePath}}", "{{PrivateKeyFilePassword}}");
+        PororocaRequestAuth reqAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", "{{PrivateKeyFilePath}}", "{{PrivateKeyFilePassword}}");
 
         PororocaHttpRequest req = new();
         req.UpdateUrl("http://www.pudim.com.br");
@@ -343,11 +339,10 @@ public static class PororocaRequestCommonTranslatorTests
     {
         // GIVEN
         PororocaCollection col = new("VarResolver");
-        col.AddVariable(new(true, "CertificateFilePath", "./cert.pem", false));
-        col.AddVariable(new(true, "FilePassword", "my_pwd", false));
+        col.Variables.Add(new(true, "CertificateFilePath", "./cert.pem", false));
+        col.Variables.Add(new(true, "FilePassword", "my_pwd", false));
 
-        PororocaRequestAuth reqAuth = new();
-        reqAuth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", null, "{{FilePassword}}");
+        PororocaRequestAuth reqAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", null, "{{FilePassword}}");
 
         PororocaHttpRequest req = new();
         req.UpdateUrl("http://www.pudim.com.br");

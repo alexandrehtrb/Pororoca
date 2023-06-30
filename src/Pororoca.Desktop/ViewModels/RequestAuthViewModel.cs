@@ -165,34 +165,29 @@ public sealed class RequestAuthViewModel : ViewModelBase
 
     public PororocaRequestAuth? ToCustomAuth()
     {
-        PororocaRequestAuth auth = new();
         switch (AuthMode)
         {
             case PororocaRequestAuthMode.ClientCertificate:
                 var type = ClientCertificateType;
                 if (type == PororocaRequestAuthClientCertificateType.Pem)
                 {
-                    auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, ClientCertificateAuthPemCertificateFilePath!, ClientCertificateAuthPemPrivateKeyFilePath, ClientCertificateAuthPemFilePassword);
+                    return PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, ClientCertificateAuthPemCertificateFilePath!, ClientCertificateAuthPemPrivateKeyFilePath, ClientCertificateAuthPemFilePassword);
                 }
                 else if (type == PororocaRequestAuthClientCertificateType.Pkcs12)
                 {
-                    auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, ClientCertificateAuthPkcs12CertificateFilePath!, null, ClientCertificateAuthPkcs12FilePassword);
+                    return PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, ClientCertificateAuthPkcs12CertificateFilePath!, null, ClientCertificateAuthPkcs12FilePassword);
                 }
                 else
                 {
                     return null;
                 }
-                break;
             case PororocaRequestAuthMode.Bearer:
-                auth.SetBearerAuth(BearerAuthToken ?? string.Empty);
-                break;
+                return PororocaRequestAuth.MakeBearerAuth(BearerAuthToken ?? string.Empty);
             case PororocaRequestAuthMode.Basic:
-                auth.SetBasicAuth(BasicAuthLogin ?? string.Empty, BasicAuthPassword ?? string.Empty);
-                break;
+                return PororocaRequestAuth.MakeBasicAuth(BasicAuthLogin ?? string.Empty, BasicAuthPassword ?? string.Empty);
             default:
                 return null;
         }
-        return auth;
     }
 
     #endregion

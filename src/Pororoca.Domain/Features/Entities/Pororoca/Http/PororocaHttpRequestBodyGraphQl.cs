@@ -1,28 +1,9 @@
 namespace Pororoca.Domain.Features.Entities.Pororoca.Http;
 
-public class PororocaHttpRequestBodyGraphQl : ICloneable
+public sealed record PororocaHttpRequestBodyGraphQl(string? Query, string? Variables)
 {
-    public string? Query { get; set; }
+    // Parameterless constructor for JSON deserialization
+    public PororocaHttpRequestBodyGraphQl() : this(null, null) { }
 
-    public string? Variables { get; set; }
-
-#nullable disable warnings
-    public PororocaHttpRequestBodyGraphQl() : this(null, null)
-    {
-        // Parameterless constructor for JSON deserialization
-    }
-#nullable restore warnings
-
-    public PororocaHttpRequestBodyGraphQl(string? query, string? variables)
-    {
-        Query = query;
-        Variables = variables;
-    }
-
-    public object Clone() =>
-        new PororocaHttpRequestBodyGraphQl()
-        {
-            Query = Query,
-            Variables = Variables
-        };
+    public PororocaHttpRequestBodyGraphQl Copy() => this with { };
 }

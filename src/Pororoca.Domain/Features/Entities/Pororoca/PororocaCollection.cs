@@ -6,31 +6,21 @@ using static Pororoca.Domain.Features.VariableResolution.IPororocaVariableResolv
 
 namespace Pororoca.Domain.Features.Entities.Pororoca;
 
-public sealed class PororocaCollection : IPororocaVariableResolver, ICloneable
+public sealed record PororocaCollection
+(
+    [property: JsonInclude] Guid Id,
+    [property: JsonInclude] string Name,
+    [property: JsonInclude] DateTimeOffset CreatedAt,
+    [property: JsonInclude] List<PororocaVariable> Variables,
+    [property: JsonInclude] List<PororocaEnvironment> Environments,
+    [property: JsonInclude] List<PororocaCollectionFolder> Folders,
+    [property: JsonInclude] List<PororocaRequest> Requests
+) : IPororocaVariableResolver
 {
     public const string SchemaVersion = "Pororoca/1";
 
+    [JsonPropertyOrder(-1)]
     public string Schema => SchemaVersion; // Needs to be object variable, not static
-
-    [JsonInclude]
-    public Guid Id { get; set; }
-
-    [JsonInclude]
-    public string Name { get; private set; }
-
-    public DateTimeOffset CreatedAt { get; init; }
-
-    [JsonInclude]
-    public IReadOnlyList<PororocaVariable> Variables { get; private set; }
-
-    [JsonInclude]
-    public IReadOnlyList<PororocaEnvironment> Environments { get; private set; }
-
-    [JsonInclude]
-    public IReadOnlyList<PororocaCollectionFolder> Folders { get; private set; }
-
-    [JsonInclude]
-    public IReadOnlyList<PororocaRequest> Requests { get; private set; }
 
     [JsonIgnore] // JSON IGNORE
     public IReadOnlyList<PororocaHttpRequest> HttpRequests =>
@@ -46,91 +36,12 @@ public sealed class PororocaCollection : IPororocaVariableResolver, ICloneable
                 .ToList()
                 .AsReadOnly();
 
-#nullable disable warnings
-    public PororocaCollection()
-    {
-        // Parameterless constructor for JSON deserialization
-    }
-#nullable restore warnings
+    public PororocaCollection(Guid guid, string name, DateTimeOffset createdAt) : this(guid, name, createdAt, new(), new(), new(), new()) { }
 
-    public PororocaCollection(string name) : this(Guid.NewGuid(), name, DateTimeOffset.Now)
-    {
-    }
+    public PororocaCollection(string name) : this(Guid.NewGuid(), name, DateTimeOffset.Now) { }
 
-    public PororocaCollection(Guid guid, string name, DateTimeOffset createdAt)
-    {
-        Id = guid;
-        Name = name;
-        CreatedAt = createdAt;
-        Folders = new List<PororocaCollectionFolder>().AsReadOnly();
-        Requests = new List<PororocaRequest>().AsReadOnly();
-        Variables = new List<PororocaVariable>().AsReadOnly();
-        Environments = new List<PororocaEnvironment>().AsReadOnly();
-    }
-
-    public void UpdateName(string name) =>
-        Name = name;
-
-    public void UpdateVariables(IEnumerable<PororocaVariable> vars) =>
-        Variables = vars.ToList().AsReadOnly();
-
-    public void AddFolder(PororocaCollectionFolder folder)
-    {
-        List<PororocaCollectionFolder> newList = new(Folders);
-        newList.Add(folder);
-        Folders = newList.AsReadOnly();
-    }
-
-    public void RemoveFolder(PororocaCollectionFolder subFolder)
-    {
-        List<PororocaCollectionFolder> newList = new(Folders);
-        newList.Remove(subFolder);
-        Folders = newList.AsReadOnly();
-    }
-
-    public void UpdateFolders(IEnumerable<PororocaCollectionFolder> folders) =>
-        Folders = folders.ToList().AsReadOnly();
-
-    public void AddRequest(PororocaRequest req)
-    {
-        List<PororocaRequest> newList = new(Requests);
-        newList.Add(req);
-        Requests = newList.AsReadOnly();
-    }
-
-    public void UpdateRequests(IEnumerable<PororocaRequest> reqs) =>
-        Requests = reqs.ToList().AsReadOnly();
-
-    public void AddVariable(PororocaVariable variable)
-    {
-        List<PororocaVariable> newList = new(Variables);
-        newList.Add(variable);
-        Variables = newList.AsReadOnly();
-    }
-
-    public void RemoveVariable(string variableKey)
-    {
-        List<PororocaVariable> newList = new(Variables);
-        newList.RemoveAll(i => i.Key == variableKey);
-        Variables = newList.AsReadOnly();
-    }
-
-    public void AddEnvironment(PororocaEnvironment env)
-    {
-        List<PororocaEnvironment> newList = new(Environments);
-        newList.Add(env);
-        Environments = newList.AsReadOnly();
-    }
-
-    public void RemoveEnvironment(Guid envId)
-    {
-        List<PororocaEnvironment> newList = new(Environments);
-        newList.RemoveAll(i => i.Id == envId);
-        Environments = newList.AsReadOnly();
-    }
-
-    public void UpdateEnvironments(IEnumerable<PororocaEnvironment> envs) =>
-        Environments = envs.ToList().AsReadOnly();
+    // Parameterless constructor for JSON deserialization
+    public PororocaCollection() : this(string.Empty) { }
 
     public string ReplaceTemplates(string? strToReplaceTemplatedVariables)
     {
@@ -152,20 +63,12 @@ public sealed class PororocaCollection : IPororocaVariableResolver, ICloneable
         }
     }
 
-    public PororocaCollection ClonePreservingIds() => ConditionalClone(true);
-
-    public object Clone() => ConditionalClone(false);
-
-    private PororocaCollection ConditionalClone(bool preserveIds)
+    public PororocaCollection Copy(bool preserveIds) => this with
     {
-        var id = preserveIds ? Id : Guid.NewGuid();
-
-        return new(id, Name, CreatedAt)
-        {
-            Folders = Folders.Select(f => (PororocaCollectionFolder)f.Clone()).ToList().AsReadOnly(),
-            Requests = Requests.Select(f => (PororocaRequest)f.Clone()).ToList().AsReadOnly(),
-            Variables = Variables.Select(v => (PororocaVariable)v.Clone()).ToList().AsReadOnly(),
-            Environments = Environments.Select(e => preserveIds ? e.ClonePreservingId() : (PororocaEnvironment)e.Clone()).ToList().AsReadOnly()
-        };
-    }
+        Id = preserveIds ? Id : Guid.NewGuid(),
+        Folders = Folders.Select(f => (PororocaCollectionFolder)f.Clone()).ToList(),
+        Requests = Requests.Select(f => (PororocaRequest)f.Clone()).ToList(),
+        Variables = Variables.Select(v => v.Copy()).ToList(),
+        Environments = Environments.Select(e => preserveIds ? e.ClonePreservingId() : (PororocaEnvironment)e.Clone()).ToList()
+    };
 }

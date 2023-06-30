@@ -287,16 +287,16 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     private void DuplicateCollection(CollectionViewModel colVm)
     {
-        var collectionCopy = (PororocaCollection)colVm.ToCollection().Clone();
+        var collectionCopy = colVm.ToCollection().Copy(preserveIds: false);
         AddCollection(collectionCopy);
     }
 
     private void onRenameItemSelected(ViewModelBase vm) =>
         OnCollectionsGroupItemSelected(vm);
 
-    public void DeleteSubItem(ICollectionOrganizationItemViewModel colVm)
+    public void DeleteSubItem(ICollectionOrganizationItemViewModel item)
     {
-        CollectionsGroupViewDataCtx.Items.Remove((CollectionViewModel)colVm);
+        CollectionsGroupViewDataCtx.Items.Remove((CollectionViewModel)item);
         CollectionsGroupViewDataCtx.RefreshSubItemsAvailableMovements();
         onAfterItemDeleted();
     }

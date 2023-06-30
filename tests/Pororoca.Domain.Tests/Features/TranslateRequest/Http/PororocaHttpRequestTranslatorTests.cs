@@ -30,8 +30,8 @@ public static class PororocaHttpRequestTranslatorTests
     {
         // GIVEN
         PororocaCollection col = new("VarResolver");
-        col.AddVariable(new(true, "keyX", "key3", false));
-        col.AddVariable(new(true, "keyXvalue", "value3", false));
+        col.Variables.Add(new(true, "keyX", "key3", false));
+        col.Variables.Add(new(true, "keyXvalue", "value3", false));
 
         var formUrlEncodedParams = new PororocaKeyValueParam[]
         {
@@ -176,8 +176,8 @@ public static class PororocaHttpRequestTranslatorTests
     {
         // GIVEN
         PororocaCollection col = new("VarResolver");
-        col.AddVariable(new(true, "keyX", "key3", false));
-        col.AddVariable(new(true, "keyXvalue", "value3", false));
+        col.Variables.Add(new(true, "keyX", "key3", false));
+        col.Variables.Add(new(true, "keyXvalue", "value3", false));
         Dictionary<string, string> resolvedContentHeaders = new(1)
         {
             { "Content-Language", "pt-BR" }
@@ -215,10 +215,10 @@ public static class PororocaHttpRequestTranslatorTests
     {
         // GIVEN
         PororocaCollection col = new("VarResolver");
-        col.AddVariable(new(true, "keyX", "key3", false));
-        col.AddVariable(new(true, "keyXvalue", "value3", false));
+        col.Variables.Add(new(true, "keyX", "key3", false));
+        col.Variables.Add(new(true, "keyXvalue", "value3", false));
         string fileName = "testfilecontent2.json";
-        col.AddVariable(new(true, "MyFileName", fileName, false));
+        col.Variables.Add(new(true, "MyFileName", fileName, false));
         Dictionary<string, string> resolvedContentHeaders = new(1)
         {
             { "Content-Language", "pt-BR" }
