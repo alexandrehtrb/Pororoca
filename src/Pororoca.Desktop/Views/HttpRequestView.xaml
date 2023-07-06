@@ -231,8 +231,7 @@
                   VerticalAlignment="Stretch"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding RequestHeaders}"
-                  CanUserResizeColumns="True"
-                  Classes="draggable">
+                  CanUserResizeColumns="True">
                 <i:Interaction.Behaviors>
                   <i:BehaviorCollection>
                     <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}"/>
@@ -437,8 +436,7 @@
                     Margin="-12,12,-12,0"
                     AutoGenerateColumns="False"
                     ItemsSource="{Binding UrlEncodedParams}"
-                    CanUserResizeColumns="True"
-                    Classes="draggable">
+                    CanUserResizeColumns="True">
                   <i:Interaction.Behaviors>
                     <i:BehaviorCollection>
                       <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}"/>
@@ -521,8 +519,7 @@
                     Margin="-12,24,-12,0"
                     AutoGenerateColumns="False"
                     ItemsSource="{Binding FormDataParams}"
-                    CanUserResizeColumns="True"
-                    Classes="draggable">
+                    CanUserResizeColumns="True">
                   <i:Interaction.Behaviors>
                     <i:BehaviorCollection>
                       <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropFormDataParamViewModelHandler}"/>
@@ -682,8 +679,7 @@
                 VerticalAlignment="Stretch"
                 AutoGenerateColumns="False"
                 ItemsSource="{Binding ResponseDataCtx.ResponseHeadersAndTrailers}"
-                CanUserResizeColumns="True"
-                Classes="draggable">
+                CanUserResizeColumns="True">
               <i:Interaction.Behaviors>
                 <i:BehaviorCollection>
                   <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}"/>

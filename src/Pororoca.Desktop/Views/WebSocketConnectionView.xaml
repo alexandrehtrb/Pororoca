@@ -280,8 +280,7 @@
                     VerticalAlignment="Stretch"
                     AutoGenerateColumns="False"
                     ItemsSource="{Binding ConnectionRequestHeaders}"
-                    CanUserResizeColumns="True"
-                    Classes="draggable">
+                    CanUserResizeColumns="True">
                   <i:Interaction.Behaviors>
                     <i:BehaviorCollection>
                       <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}"/>
@@ -371,8 +370,7 @@
                     VerticalAlignment="Stretch"
                     AutoGenerateColumns="False"
                     ItemsSource="{Binding Subprotocols}"
-                    CanUserResizeColumns="True"
-                    Classes="draggable">
+                    CanUserResizeColumns="True">
                   <i:Interaction.Behaviors>
                     <i:BehaviorCollection>
                       <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}"/>

@@ -72,8 +72,7 @@
         Margin="0,12,0,0"
         AutoGenerateColumns="False"
         ItemsSource="{Binding Variables}"
-        CanUserResizeColumns="True"
-        Classes="draggable">
+        CanUserResizeColumns="True">
       <DataGrid.Columns>
         <DataGridCheckBoxColumn
             Width="*"
