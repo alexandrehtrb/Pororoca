@@ -1,6 +1,6 @@
 ﻿{
   "schema": "Pororoca/1",
-  "id": "dcf73a4e-de6b-4c27-9399-bcb45a6644a5",
+  "id": "7886f77e-8f37-4ebc-ad05-eae94de0970a",
   "name": "PororocaTestCollection",
   "createdAt": "2022-11-20T11:42:17.0475178-03:00",
   "variables": [
@@ -159,13 +159,11 @@
   ],
   "folders": [
     {
-      "id": "88b47b16-f4cc-44f4-b567-963ed52a88b4",
       "name": "GET",
       "folders": [],
       "requests": [
         {
           "requestType": "http",
-          "id": "49f53a76-53e6-4d77-a299-714c2afa67bc",
           "name": "JSON",
           "httpVersion": 1.1,
           "httpMethod": "GET",
@@ -173,7 +171,6 @@
         },
         {
           "requestType": "http",
-          "id": "5d089f9f-e20e-45fe-b6b5-a04619dd1a7a",
           "name": "HEADERS",
           "httpVersion": 1.1,
           "httpMethod": "GET",
@@ -193,7 +190,6 @@
         },
         {
           "requestType": "http",
-          "id": "e3ecd8ab-7f96-4723-a926-cbbe0d785f7b",
           "name": "GZIP",
           "httpVersion": 1.1,
           "httpMethod": "GET",
@@ -202,13 +198,11 @@
       ]
     },
     {
-      "id": "b6eaeca4-5382-4c25-97aa-9284deeb92ba",
       "name": "POST",
       "folders": [],
       "requests": [
         {
           "requestType": "http",
-          "id": "8a44804a-63ec-4701-83ed-f71d54c70a64",
           "name": "EMPTY",
           "httpVersion": 1.1,
           "httpMethod": "POST",
@@ -216,7 +210,6 @@
         },
         {
           "requestType": "http",
-          "id": "17716cab-5d7c-40f8-aa52-5afc2fb418c8",
           "name": "RAW JSON",
           "httpVersion": 1.1,
           "httpMethod": "POST",
@@ -229,41 +222,18 @@
         },
         {
           "requestType": "http",
-          "id": "cd626aba-77b0-4ce0-b173-0ddaf3391675",
-          "name": "RAW JSON 2",
-          "httpVersion": 1.1,
-          "httpMethod": "POST",
-          "url": "{{HttpBinUrl}}/anything",
-          "body": {
-            "mode": "raw",
-            "contentType": "application/json",
-            "rawContent": "{\r\n\t\"id\": {{Secret4}},\r\n\t\"nome\": \"Alexandre\"\r\n}"
-          }
-        },
-        {
-          "requestType": "http",
-          "id": "299f6113-1591-44ff-a020-e96886fe5be7",
-          "name": "RAW XML",
-          "httpVersion": 1.1,
-          "httpMethod": "GET",
-          "url": "http://crystallography.net/xml/examples/relational-database-xhtml/test-database-schema-xhtml.xml"
-        },
-        {
-          "requestType": "http",
-          "id": "dc04f420-e8cd-4104-812f-c2f06142297b",
           "name": "FILE",
           "httpVersion": 1.1,
           "httpMethod": "POST",
           "url": "{{HttpBinUrl}}/anything",
           "body": {
             "mode": "file",
-            "contentType": "text/plain",
-            "fileSrcPath": "C:\\Users\\Alexandre\\Desktop\\Message.txt"
+            "contentType": "image/jpeg",
+            "fileSrcPath": "/home/alexandre/Imagens/response-20220205-222855.jpeg"
           }
         },
         {
           "requestType": "http",
-          "id": "d18d2296-9d02-45bf-9de7-071dea1b93b8",
           "name": "FORM URL ENCODED",
           "httpVersion": 1.1,
           "httpMethod": "POST",
@@ -301,7 +271,6 @@
         },
         {
           "requestType": "http",
-          "id": "b4e2e709-05e5-4ec4-be29-5f0230a34f1d",
           "name": "MULTIPART FORM DATA",
           "httpVersion": 1.1,
           "httpMethod": "POST",
@@ -334,35 +303,20 @@
                 "enabled": true,
                 "type": "file",
                 "key": "arq",
-                "contentType": "text/plain",
-                "fileSrcPath": "C:\\Users\\Alexandre\\Desktop\\aaa.txt"
+                "contentType": "image/jpeg",
+                "fileSrcPath": "/home/alexandre/Imagens/response-20220410-205158.jpeg"
               }
             ]
-          }
-        },
-        {
-          "requestType": "http",
-          "id": "6497b3c9-bb8e-41d3-afd2-dadae86b0720",
-          "name": "EMPTY",
-          "httpVersion": 1.1,
-          "httpMethod": "POST",
-          "url": "{{HttpBinUrl}}/anything",
-          "body": {
-            "mode": "raw",
-            "contentType": "text/xml",
-            "rawContent": "<Project Sdk=\"Microsoft.NET.Sdk\">\r\n  <PropertyGroup>\r\n    <TargetFramework>net7.0</TargetFramework>\r\n    <ImplicitUsings>enable</ImplicitUsings>\r\n    <Nullable>enable</Nullable>\r\n  </PropertyGroup>\r\n</Project>"
           }
         }
       ]
     },
     {
-      "id": "417ae182-3830-4b05-8817-099be124d110",
       "name": "AUTH",
       "folders": [],
       "requests": [
         {
           "requestType": "http",
-          "id": "980811ba-570e-442c-aa0b-abc34104acb9",
           "name": "BASIC",
           "httpVersion": 1.1,
           "httpMethod": "GET",
@@ -375,7 +329,6 @@
         },
         {
           "requestType": "http",
-          "id": "90572e8f-c1f2-4335-84c2-d89a6458d7ed",
           "name": "BEARER",
           "httpVersion": 1.1,
           "httpMethod": "GET",
@@ -388,13 +341,11 @@
       ]
     },
     {
-      "id": "92f4dbf7-1a70-4330-99b8-26cfb2d025cb",
       "name": "BAD SSL",
       "folders": [],
       "requests": [
         {
           "requestType": "http",
-          "id": "3efe7b07-6560-4d48-96b1-f74cf3470657",
           "name": "SELF-SIGNED",
           "httpVersion": 1.1,
           "httpMethod": "GET",
@@ -403,13 +354,11 @@
       ]
     },
     {
-      "id": "f08dd9b9-cb67-4fd0-b57b-c95f7ec40f89",
       "name": "HTTP/2",
       "folders": [],
       "requests": [
         {
           "requestType": "http",
-          "id": "9c719b13-9beb-4355-911d-7992a4e74d18",
           "name": "GET TEXT",
           "httpVersion": 2.0,
           "httpMethod": "GET",
@@ -417,7 +366,6 @@
         },
         {
           "requestType": "http",
-          "id": "37c6b7ff-5bec-4e66-aadb-1ef815576076",
           "name": "POST JSON",
           "httpVersion": 2.0,
           "httpMethod": "POST",
@@ -430,7 +378,6 @@
         },
         {
           "requestType": "http",
-          "id": "1d2a4612-997d-47ac-a990-5d871672ef02",
           "name": "AKAMAI",
           "httpVersion": 2.0,
           "httpMethod": "GET",
@@ -439,13 +386,11 @@
       ]
     },
     {
-      "id": "15105454-cc12-4c9e-8d1e-5aa0ee9bbf2c",
       "name": "HTTP/3",
       "folders": [],
       "requests": [
         {
           "requestType": "http",
-          "id": "65816d9e-d4a4-4b24-92cd-153875f3cbfa",
           "name": "GET TEXT",
           "httpVersion": 3.0,
           "httpMethod": "GET",
@@ -453,7 +398,6 @@
         },
         {
           "requestType": "http",
-          "id": "399b3912-3b13-4f5d-a36c-c7b7f3c48b7e",
           "name": "POST JSON",
           "httpVersion": 3.0,
           "httpMethod": "POST",
@@ -466,7 +410,6 @@
         },
         {
           "requestType": "http",
-          "id": "316f4e35-507a-42ff-aa58-d66371dee9fd",
           "name": "AIOQUIC HTTP/3 TEST PAGE",
           "httpVersion": 3.0,
           "httpMethod": "GET",
@@ -474,7 +417,6 @@
         },
         {
           "requestType": "http",
-          "id": "317ace35-507a-42ff-aa58-d66371dee9fd",
           "name": "CLOUDFLARE QUIC",
           "httpVersion": 3.0,
           "httpMethod": "GET",
@@ -483,13 +425,11 @@
       ]
     },
     {
-      "id": "af754dfa-673d-45f0-bdf0-e6d9b66e8d9b",
       "name": "FILES",
       "folders": [],
       "requests": [
         {
           "requestType": "http",
-          "id": "624170b7-9e78-4cc0-a39f-a8c80ad2f866",
           "name": "TXT",
           "httpVersion": 1.1,
           "httpMethod": "GET",
@@ -497,7 +437,6 @@
         },
         {
           "requestType": "http",
-          "id": "795a63fd-4eff-444e-9840-558f9b90de5a",
           "name": "HTML",
           "httpVersion": 1.1,
           "httpMethod": "GET",
@@ -505,7 +444,6 @@
         },
         {
           "requestType": "http",
-          "id": "9eb96bc2-833c-4536-9764-b0fecd3c479a",
           "name": "JPG",
           "httpVersion": 1.1,
           "httpMethod": "GET",
@@ -514,13 +452,11 @@
       ]
     },
     {
-      "id": "7d6f39f6-367a-497b-9420-96327826f586",
       "name": "GRAPHQL",
       "folders": [],
       "requests": [
         {
           "requestType": "http",
-          "id": "3cf8a72b-d17e-4a40-9b40-98d4f0223408",
           "name": "Get all fruits",
           "httpVersion": 1.1,
           "httpMethod": "POST",
@@ -534,7 +470,6 @@
         },
         {
           "requestType": "http",
-          "id": "01b4064f-917b-452c-8710-538e0d489726",
           "name": "Get fruit Goiaba",
           "httpVersion": 1.1,
           "httpMethod": "POST",
@@ -549,7 +484,6 @@
         },
         {
           "requestType": "http",
-          "id": "9725b0d1-0a1a-47ee-aecb-e15214cb8936",
           "name": "Add fruit Acerola",
           "httpVersion": 1.1,
           "httpMethod": "POST",
@@ -564,7 +498,6 @@
         },
         {
           "requestType": "http",
-          "id": "248c6d33-d0a9-40e1-a89f-b30a0a1c5c18",
           "name": "Get fruit Coco",
           "httpVersion": 1.1,
           "httpMethod": "POST",
@@ -580,13 +513,11 @@
       ]
     },
     {
-      "id": "a69dc6c9-0f7f-44c8-ba24-e018b7399ec8",
       "name": "CLIENT CERTIFICATES",
       "folders": [],
       "requests": [
         {
           "requestType": "http",
-          "id": "4aba765c-39c4-43dd-8b43-d9a3e5b085f2",
           "name": "No cert provided",
           "httpVersion": 1.1,
           "httpMethod": "GET",
@@ -594,7 +525,6 @@
         },
         {
           "requestType": "http",
-          "id": "50d83605-dce4-4843-9c4b-e39f7c0918c6",
           "name": "PKCS#12 cert",
           "httpVersion": 1.1,
           "httpMethod": "GET",
@@ -610,7 +540,6 @@
         },
         {
           "requestType": "http",
-          "id": "362336f8-8390-41fd-bd10-865105b34d18",
           "name": "PEM cert with conjoined unencrypted private key",
           "httpVersion": 1.1,
           "httpMethod": "GET",
@@ -625,7 +554,6 @@
         },
         {
           "requestType": "http",
-          "id": "80ea9140-f75e-47b4-b4a0-3286956f03f0",
           "name": "PEM cert with conjoined encrypted private key",
           "httpVersion": 1.1,
           "httpMethod": "GET",
@@ -641,7 +569,6 @@
         },
         {
           "requestType": "http",
-          "id": "bfb5164e-b235-492d-a730-35662241a9b9",
           "name": "PEM cert with separate unencrypted private key",
           "httpVersion": 1.1,
           "httpMethod": "GET",
@@ -657,7 +584,6 @@
         },
         {
           "requestType": "http",
-          "id": "0586ee0e-9819-4ca0-8a2b-6ee2a336115d",
           "name": "PEM cert with separate encrypted private key",
           "httpVersion": 1.1,
           "httpMethod": "GET",
@@ -738,13 +664,11 @@
   "requests": [
     {
       "requestType": "websocket",
-      "id": "36acf2ca-44ec-4b44-b29b-867b3c493357",
       "name": "WEBSOCKETS HTTP1",
       "httpVersion": 1.1,
       "url": "wss://localhost:5001/test/http1websocket",
       "clientMessages": [
         {
-          "id": "228b9fa2-ac66-413f-83d0-aff79b118ce5",
           "name": "Oi",
           "contentMode": "raw",
           "rawContent": "oi",
@@ -754,7 +678,6 @@
           "messageType": "text"
         },
         {
-          "id": "62b9bc82-189f-4832-ae8a-b8b1e437ebfb",
           "name": "Coco",
           "contentMode": "raw",
           "rawContent": "{\r\n\t\"fruitId\": {{CocoId}},\r\n\t\"msgType\": \"random\",\r\n\t\"msg\": \"coco\"\r\n}",
@@ -764,7 +687,6 @@
           "messageType": "text"
         },
         {
-          "id": "a6b48bd0-30cd-44a5-b645-44c0ee09c5e0",
           "name": "Acerola",
           "contentMode": "raw",
           "rawContent": "{\r\n\t\"fruitId\": {{AcerolaId}},\r\n\t\"msgType\": \"random\",\r\n\t\"msg\": \"acerola\"\r\n}",
@@ -774,7 +696,6 @@
           "messageType": "text"
         },
         {
-          "id": "836fd0eb-c5da-4bcd-a18b-de64cae5982d",
           "name": "Spiderman",
           "contentMode": "file",
           "rawContent": "",
@@ -785,7 +706,6 @@
           "messageType": "binary"
         },
         {
-          "id": "762941e6-7d0b-4a2d-b854-4d8e43161950",
           "name": "Bye",
           "contentMode": "raw",
           "rawContent": "Adiós",
@@ -798,13 +718,11 @@
     },
     {
       "requestType": "websocket",
-      "id": "36acf2ca-44ec-1c11-b29b-867b3c493357",
       "name": "WEBSOCKETS HTTP2",
       "httpVersion": 2.0,
       "url": "wss://localhost:5001/test/http2websocket",
       "clientMessages": [
         {
-          "id": "228b9fa2-ac66-412f-83d0-aff79b118ce5",
           "name": "Oi",
           "contentMode": "raw",
           "rawContent": "oi",
@@ -814,7 +732,6 @@
           "messageType": "text"
         },
         {
-          "id": "62b9bc82-189f-4032-ae8a-b8b1e437ebfb",
           "name": "Coco",
           "contentMode": "raw",
           "rawContent": "{\r\n\t\"fruitId\": {{CocoId}},\r\n\t\"msgType\": \"random\",\r\n\t\"msg\": \"coco\"\r\n}",
@@ -824,7 +741,6 @@
           "messageType": "text"
         },
         {
-          "id": "a6b48bd0-30cd-44a5-b005-44c0ee09c5e0",
           "name": "Acerola",
           "contentMode": "raw",
           "rawContent": "{\r\n\t\"fruitId\": {{AcerolaId}},\r\n\t\"msgType\": \"random\",\r\n\t\"msg\": \"acerola\"\r\n}",
@@ -834,7 +750,6 @@
           "messageType": "text"
         },
         {
-          "id": "836fd0eb-c5da-4bcd-a18b-de04cae5982d",
           "name": "Spiderman",
           "contentMode": "file",
           "rawContent": "",
@@ -845,7 +760,6 @@
           "messageType": "binary"
         },
         {
-          "id": "762901e6-7d0b-4a2d-b854-4d8e43161950",
           "name": "Bye",
           "contentMode": "raw",
           "rawContent": "Adiós",
