@@ -45,11 +45,8 @@ public sealed class PororocaTest
 
     public PororocaTest AndUseTheEnvironment(string environmentName)
     {
-        var selectedEnv = Collection.Environments.FirstOrDefault(e => e.Name == environmentName);
-        if (selectedEnv == null)
-        {
-            throw new Exception($"Error: Environment with the name '{environmentName}' was not found.");
-        }
+        var selectedEnv = Collection.Environments.FirstOrDefault(e => e.Name == environmentName)
+            ?? throw new Exception($"Error: Environment with the name '{environmentName}' was not found.");
 
         foreach (var env in Collection.Environments)
         {
@@ -81,11 +78,8 @@ public sealed class PororocaTest
 
     public void SetEnvironmentVariable(string environmentName, string key, string? value)
     {
-        var env = Collection.Environments.FirstOrDefault(e => e.Name == environmentName);
-        if (env is null)
-        {
-            throw new Exception($"Error: Environment with the name '{environmentName}' was not found.");
-        }
+        var env = Collection.Environments.FirstOrDefault(e => e.Name == environmentName)
+            ?? throw new Exception($"Error: Environment with the name '{environmentName}' was not found.");
 
         var variable = env.Variables.FirstOrDefault(v => v.Key == key);
         if (variable != null)

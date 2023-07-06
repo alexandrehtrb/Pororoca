@@ -95,48 +95,33 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
         #region WEBSOCKET REQUEST MESSAGE
 
         DisableCompressionForThisMessage = msg.DisableCompressionForThis;
-        switch (msg.MessageType)
+        MessageTypeSelectedIndex = msg.MessageType switch
         {
+            PororocaWebSocketMessageType.Text => 0,
+            PororocaWebSocketMessageType.Binary => 1,
+            PororocaWebSocketMessageType.Close => 2,
             // TODO: Improve this, do not use fixed values to resolve index
-            default:
-            case PororocaWebSocketMessageType.Text:
-                MessageTypeSelectedIndex = 0;
-                break;
-            case PororocaWebSocketMessageType.Binary:
-                MessageTypeSelectedIndex = 1;
-                break;
-            case PororocaWebSocketMessageType.Close:
-                MessageTypeSelectedIndex = 2;
-                break;
-        }
-        switch (msg.ContentMode)
+            _ => 0,
+        };
+        ContentModeSelectedIndex = msg.ContentMode switch
         {
+            PororocaWebSocketClientMessageContentMode.Raw => 0,
+            PororocaWebSocketClientMessageContentMode.File => 1,
             // TODO: Improve this, do not use fixed values to resolve index
-            default:
-            case PororocaWebSocketClientMessageContentMode.Raw:
-                ContentModeSelectedIndex = 0;
-                break;
-            case PororocaWebSocketClientMessageContentMode.File:
-                ContentModeSelectedIndex = 1;
-                break;
-        }
+            _ => 0,
+        };
 
         // we need to always set RawContent with a value, even if it is null,
         // to initialize with a TextDocument object
         RawContent = msg.RawContent;
 
-        switch (msg.RawContentSyntax)
+        RawContentSyntaxSelectedIndex = msg.RawContentSyntax switch
         {
+            PororocaWebSocketMessageRawContentSyntax.Json => 0,
+            PororocaWebSocketMessageRawContentSyntax.Other => 1,
             // TODO: Improve this, do not use fixed values to resolve index
-            default:
-            case PororocaWebSocketMessageRawContentSyntax.Json:
-                RawContentSyntaxSelectedIndex = 0;
-                break;
-            case PororocaWebSocketMessageRawContentSyntax.Other:
-                RawContentSyntaxSelectedIndex = 1;
-                break;
-        }
-
+            _ => 0,
+        };
         ContentFileSrcPath = msg.FileSrcPath;
         SearchContentFileCmd = ReactiveCommand.CreateFromTask(SearchContentFileAsync);
 

@@ -423,57 +423,59 @@
                     Content="{Binding i18n.WebSocketConnection.EnableCompression}"
                     IsChecked="{Binding EnableCompression}"/>
 
-                <StackPanel x:Name="spWsConnReqCompressionOptions" IsVisible="{Binding EnableCompression}">
-                    <CheckBox
-                        Margin="0,12,0,0"
-                        Content="{Binding i18n.WebSocketConnection.CompressionClientContextTakeover}"
-                        IsChecked="{Binding CompressionClientContextTakeoverEnabled}"/>
+                <StackPanel
+                    x:Name="spWsConnReqCompressionOptions"
+                    IsVisible="{Binding EnableCompression}">
+                  <CheckBox
+                      Margin="0,12,0,0"
+                      Content="{Binding i18n.WebSocketConnection.CompressionClientContextTakeover}"
+                      IsChecked="{Binding CompressionClientContextTakeoverEnabled}"/>
 
-                    <StackPanel
-                        Orientation="Horizontal"
-                        Margin="0,12,0,0">
-                      <TextBlock
-                          TextWrapping="Wrap"
-                          FontSize="14"
-                          HorizontalAlignment="Stretch"
-                          VerticalAlignment="Center"
-                          Margin="0,0,6,0"
-                          Text="{Binding i18n.WebSocketConnection.CompressionClientMaxWindowBits}"/>
-                      <NumericUpDown
-                          Margin="6,0,0,0"
-                          VerticalAlignment="Center"
-                          Increment="1"
-                          Minimum="9"
-                          Maximum="15"
-                          Value="{Binding CompressionClientMaxWindowBits, Mode=TwoWay}"/>
-                    </StackPanel>
+                  <StackPanel
+                      Orientation="Horizontal"
+                      Margin="0,12,0,0">
+                    <TextBlock
+                        TextWrapping="Wrap"
+                        FontSize="14"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Margin="0,0,6,0"
+                        Text="{Binding i18n.WebSocketConnection.CompressionClientMaxWindowBits}"/>
+                    <NumericUpDown
+                        Margin="6,0,0,0"
+                        VerticalAlignment="Center"
+                        Increment="1"
+                        Minimum="9"
+                        Maximum="15"
+                        Value="{Binding CompressionClientMaxWindowBits, Mode=TwoWay}"/>
+                  </StackPanel>
 
-                    <CheckBox
-                        Margin="0,12,0,0"
-                        Content="{Binding i18n.WebSocketConnection.CompressionServerContextTakeover}"
-                        IsChecked="{Binding CompressionServerContextTakeoverEnabled}"/>
+                  <CheckBox
+                      Margin="0,12,0,0"
+                      Content="{Binding i18n.WebSocketConnection.CompressionServerContextTakeover}"
+                      IsChecked="{Binding CompressionServerContextTakeoverEnabled}"/>
 
-                    <StackPanel
-                    Orientation="Horizontal"
-                    Margin="0,12,0,0">
-                  <TextBlock
-                      TextWrapping="Wrap"
-                      FontSize="14"
-                      HorizontalAlignment="Stretch"
-                      VerticalAlignment="Center"
-                      Margin="0,0,6,0"
-                      Text="{Binding i18n.WebSocketConnection.CompressionServerMaxWindowBits}"/>
-                  <NumericUpDown
-                      Margin="6,0,0,0"
-                      VerticalAlignment="Center"
-                      Increment="1"
-                      Minimum="9"
-                      Maximum="15"
-                      Value="{Binding CompressionServerMaxWindowBits, Mode=TwoWay}"/>
+                  <StackPanel
+                      Orientation="Horizontal"
+                      Margin="0,12,0,0">
+                    <TextBlock
+                        TextWrapping="Wrap"
+                        FontSize="14"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Margin="0,0,6,0"
+                        Text="{Binding i18n.WebSocketConnection.CompressionServerMaxWindowBits}"/>
+                    <NumericUpDown
+                        Margin="6,0,0,0"
+                        VerticalAlignment="Center"
+                        Increment="1"
+                        Minimum="9"
+                        Maximum="15"
+                        Value="{Binding CompressionServerMaxWindowBits, Mode=TwoWay}"/>
+                  </StackPanel>
+
                 </StackPanel>
-
-                </StackPanel>
-            </StackPanel>
+              </StackPanel>
             </Grid>
           </TabItem>
           <!-- CONNECTION REQUEST AUTH -->

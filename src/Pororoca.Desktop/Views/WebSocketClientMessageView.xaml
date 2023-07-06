@@ -76,12 +76,9 @@
           Width="240"
           Margin="0,12,0,0"
           SelectedIndex="{Binding MessageTypeSelectedIndex, Mode=TwoWay}">
-        <ComboBoxItem
-            Content="{Binding i18n.WebSocketClientMessage.MessageTypeText}"/>
-        <ComboBoxItem
-            Content="{Binding i18n.WebSocketClientMessage.MessageTypeBinary}"/>
-        <ComboBoxItem
-            Content="{Binding i18n.WebSocketClientMessage.MessageTypeClose}"/>
+        <ComboBoxItem Content="{Binding i18n.WebSocketClientMessage.MessageTypeText}"/>
+        <ComboBoxItem Content="{Binding i18n.WebSocketClientMessage.MessageTypeBinary}"/>
+        <ComboBoxItem Content="{Binding i18n.WebSocketClientMessage.MessageTypeClose}"/>
       </ComboBox>
 
       <StackPanel

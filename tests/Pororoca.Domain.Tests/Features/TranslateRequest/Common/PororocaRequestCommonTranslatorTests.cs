@@ -230,7 +230,7 @@ public static class PororocaRequestCommonTranslatorTests
             new(true, "{{CookieHeader}}", "{{TestCookie3}}")
         };
 
-        PororocaRequestAuth reqAuth = PororocaRequestAuth.MakeBasicAuth("{{Username}}", "{{Password}}");
+        var reqAuth = PororocaRequestAuth.MakeBasicAuth("{{Username}}", "{{Password}}");
 
         // WHEN
         var contentHeaders = ResolveNonContentHeaders(col, headers, reqAuth);
@@ -264,7 +264,7 @@ public static class PororocaRequestCommonTranslatorTests
             new(true, "{{CookieHeader}}", "{{TestCookie3}}")
         };
 
-        PororocaRequestAuth reqAuth = PororocaRequestAuth.MakeBearerAuth("{{BearerToken}}");
+        var reqAuth = PororocaRequestAuth.MakeBearerAuth("{{BearerToken}}");
 
         // WHEN
         var contentHeaders = ResolveNonContentHeaders(col, headers, reqAuth);
@@ -291,7 +291,7 @@ public static class PororocaRequestCommonTranslatorTests
         col.Variables.Add(new(true, "CertificateFilePath", "./cert.p12", false));
         col.Variables.Add(new(true, "PrivateKeyFilePassword", "my_pwd", false));
 
-        PororocaRequestAuth reqAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "{{PrivateKeyFilePassword}}");
+        var reqAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "{{PrivateKeyFilePassword}}");
 
         PororocaHttpRequest req = new();
         req.UpdateUrl("http://www.pudim.com.br");
@@ -317,7 +317,7 @@ public static class PororocaRequestCommonTranslatorTests
         col.Variables.Add(new(true, "PrivateKeyFilePath", "./private_key.key", false));
         col.Variables.Add(new(true, "PrivateKeyFilePassword", "my_pwd", false));
 
-        PororocaRequestAuth reqAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", "{{PrivateKeyFilePath}}", "{{PrivateKeyFilePassword}}");
+        var reqAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", "{{PrivateKeyFilePath}}", "{{PrivateKeyFilePassword}}");
 
         PororocaHttpRequest req = new();
         req.UpdateUrl("http://www.pudim.com.br");
@@ -342,7 +342,7 @@ public static class PororocaRequestCommonTranslatorTests
         col.Variables.Add(new(true, "CertificateFilePath", "./cert.pem", false));
         col.Variables.Add(new(true, "FilePassword", "my_pwd", false));
 
-        PororocaRequestAuth reqAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", null, "{{FilePassword}}");
+        var reqAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", null, "{{FilePassword}}");
 
         PororocaHttpRequest req = new();
         req.UpdateUrl("http://www.pudim.com.br");

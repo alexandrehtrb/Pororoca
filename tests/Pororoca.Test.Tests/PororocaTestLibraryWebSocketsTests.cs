@@ -1,7 +1,7 @@
-using Xunit;
-using Pororoca.Infrastructure.Features.Requester;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage;
+using Pororoca.Infrastructure.Features.Requester;
+using Xunit;
 
 namespace Pororoca.Test.Tests;
 
@@ -94,7 +94,7 @@ public class PororocaTestLibraryWebSocketsTests
         Assert.Equal(PororocaWebSocketMessageType.Text, replyMsg.MessageType);
         Assert.Equal("received text (5 bytes): Hello", replyMsg.Text);
         Assert.Equal(DateTime.Now, replyMsg.ReceivedAtUtc.GetValueOrDefault().DateTime, TimeSpan.FromSeconds(3));
-        
+
         // Teardown
         await ws.DisconnectAsync();
     }
@@ -123,7 +123,7 @@ public class PororocaTestLibraryWebSocketsTests
         Assert.Equal(PororocaWebSocketMessageType.Text, replyMsg.MessageType);
         Assert.Equal("received binary 9784 bytes", replyMsg.Text);
         Assert.Equal(DateTime.Now, replyMsg.ReceivedAtUtc.GetValueOrDefault().DateTime, TimeSpan.FromSeconds(3));
-        
+
         // Teardown
         await ws.DisconnectAsync();
     }

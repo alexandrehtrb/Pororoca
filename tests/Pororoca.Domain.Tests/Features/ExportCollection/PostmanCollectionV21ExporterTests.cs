@@ -285,7 +285,7 @@ public static class PostmanCollectionV21ExporterTests
     public static void Should_convert_pororoca_req_basic_auth_to_postman_req_auth_correctly()
     {
         // GIVEN
-        PororocaRequestAuth reqAuth = PororocaRequestAuth.MakeBasicAuth("usr", "pwd");
+        var reqAuth = PororocaRequestAuth.MakeBasicAuth("usr", "pwd");
 
         // WHEN
         var postmanAuth = ConvertToPostmanAuth(reqAuth);
@@ -315,7 +315,7 @@ public static class PostmanCollectionV21ExporterTests
     public static void Should_convert_pororoca_req_bearer_auth_to_postman_req_auth_correctly()
     {
         // GIVEN
-        PororocaRequestAuth reqAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
+        var reqAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
 
         // WHEN
         var postmanAuth = ConvertToPostmanAuth(reqAuth);
@@ -347,7 +347,7 @@ public static class PostmanCollectionV21ExporterTests
         PororocaKeyValueParam h1 = new(true, "Key1", "Value1");
         PororocaKeyValueParam h2 = new(false, "Key2", "Value2");
         req.UpdateHeaders(new[] { h1, h2 });
-        PororocaRequestAuth auth = PororocaRequestAuth.MakeBasicAuth("usr", "pwd");
+        var auth = PororocaRequestAuth.MakeBasicAuth("usr", "pwd");
         req.UpdateCustomAuth(auth);
         req.UpdateMethod("POST");
         req.UpdateUrl("http://www.abc.com.br");

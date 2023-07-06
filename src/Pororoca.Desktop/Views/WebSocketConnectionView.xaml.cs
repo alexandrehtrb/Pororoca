@@ -32,7 +32,7 @@ public class WebSocketConnectionView : UserControl
 
     private void SetupSelectedOptionsPanelsVisibility()
     {
-        ComboBox cbWsScrReqOptions = this.FindControl<ComboBox>("cbWsScrReqOptions")!;
+        var cbWsScrReqOptions = this.FindControl<ComboBox>("cbWsScrReqOptions")!;
 
         ComboBoxItem cbiWsScrReqOptionHeaders = this.FindControl<ComboBoxItem>("cbiWsScrReqOptionHeaders")!,
             cbiWsScrReqOptionSubprotocols = this.FindControl<ComboBoxItem>("cbiWsScrReqOptionSubprotocols")!,

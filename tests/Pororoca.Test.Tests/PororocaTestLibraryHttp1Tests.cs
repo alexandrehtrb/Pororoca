@@ -1,6 +1,6 @@
-using Xunit;
 using System.Net;
 using Pororoca.Test;
+using Xunit;
 
 namespace Pororoca.Test.Tests;
 
@@ -88,7 +88,7 @@ public class PororocaTestLibraryHttp1Tests
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
         Assert.Equal("application/json; charset=utf-8", res.ContentType);
-        
+
         var jsonObj = res.GetJsonBodyAs<Dictionary<string, int>>();
         Assert.NotNull(jsonObj);
         Assert.Contains(new KeyValuePair<string, int>("id", 1), jsonObj);

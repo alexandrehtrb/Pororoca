@@ -88,21 +88,13 @@ public sealed class RequestAuthViewModel : ViewModelBase
     public RequestAuthViewModel(PororocaRequestAuth? customAuth)
     {
         // TODO: Improve this, do not use fixed values to resolve index
-        switch (customAuth?.Mode)
+        AuthModeSelectedIndex = (customAuth?.Mode) switch
         {
-            case PororocaRequestAuthMode.Basic:
-                AuthModeSelectedIndex = 1;
-                break;
-            case PororocaRequestAuthMode.Bearer:
-                AuthModeSelectedIndex = 2;
-                break;
-            case PororocaRequestAuthMode.ClientCertificate:
-                AuthModeSelectedIndex = 3;
-                break;
-            default:
-                AuthModeSelectedIndex = 0;
-                break;
-        }
+            PororocaRequestAuthMode.Basic => 1,
+            PororocaRequestAuthMode.Bearer => 2,
+            PororocaRequestAuthMode.ClientCertificate => 3,
+            _ => 0,
+        };
         BasicAuthLogin = customAuth?.BasicAuthLogin;
         BasicAuthPassword = customAuth?.BasicAuthPassword;
         BearerAuthToken = customAuth?.BearerToken;

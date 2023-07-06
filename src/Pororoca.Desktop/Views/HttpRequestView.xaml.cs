@@ -59,7 +59,7 @@ public class HttpRequestView : UserControl
 
     private void SetupSelectedOptionsPanelsVisibility()
     {
-        ComboBox cbReqBodyMode = this.FindControl<ComboBox>("cbReqBodyMode")!;
+        var cbReqBodyMode = this.FindControl<ComboBox>("cbReqBodyMode")!;
 
         ComboBoxItem cbiReqBodyModeNone = this.FindControl<ComboBoxItem>("cbiReqBodyModeNone")!,
             cbiReqBodyModeRaw = this.FindControl<ComboBoxItem>("cbiReqBodyModeRaw")!,

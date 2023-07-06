@@ -1,5 +1,5 @@
-using ReactiveUI;
 using Pororoca.Desktop.Localization;
+using ReactiveUI;
 
 namespace Pororoca.Desktop.ViewModels;
 

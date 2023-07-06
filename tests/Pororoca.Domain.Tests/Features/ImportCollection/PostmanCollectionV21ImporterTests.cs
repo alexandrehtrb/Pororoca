@@ -445,7 +445,7 @@ public static class PostmanCollectionV21ImporterTests
     public static void Should_convert_postman_req_with_inherited_auth_to_pororoca_req_correctly()
     {
         // GIVEN
-        PororocaRequestAuth collectionScopedAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
+        var collectionScopedAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
         string reqName = "MyRequest";
         var postmanRequest = CreateTestRequestWithAuth();
         postmanRequest.Auth = null;

@@ -1,7 +1,7 @@
-using Microsoft.CodeAnalysis;
 using System.Collections.Immutable;
 using System.Text;
 using System.Text.Json;
+using Microsoft.CodeAnalysis;
 
 namespace Pororoca.Desktop.Localization.SourceGeneration;
 
@@ -26,7 +26,7 @@ public class LocalizationSourceGenerator : IIncrementalGenerator
         var allLangsProvider = langFilesProvider
                                 .Select(static (file, _) => LanguageExtensions.GetLanguageByLCID(Path.GetFileNameWithoutExtension(file.Path).Split('.')[0]))
                                 .Collect();
-        
+
         var allLangsAndAllKeysProvider = allLangsProvider.Combine(keyFilesContentsProvider).Combine(assemblyNameProvider);
 
         // read their contents and save their name
@@ -39,7 +39,7 @@ public class LocalizationSourceGenerator : IIncrementalGenerator
         {
             string name = x.Left.name, content = x.Left.content, assemblyName = x.Right!;
             string lcid = name.Split('.')[0];
-            Language lang = LanguageExtensions.GetLanguageByLCID(lcid);
+            var lang = LanguageExtensions.GetLanguageByLCID(lcid);
             var langDict = JsonSerializer.Deserialize<Dictionary<string, string>>(content)!;
             spc.AddSource($"{lang}Strings.g.cs", BuildCodeForLanguageClass(assemblyName, lang, langDict));
         });
@@ -48,12 +48,12 @@ public class LocalizationSourceGenerator : IIncrementalGenerator
         {
             string assemblyName = x.Right!;
             var allLangs = x.Left.Left;
-            var allKeysWithContexts = x.Left.Right[0]!;
-            var allContexts = allKeysWithContexts.Select(ck => ck.Split('/')[0]!).Distinct().ToArray();
+            string[] allKeysWithContexts = x.Left.Right[0]!;
+            string[] allContexts = allKeysWithContexts.Select(ck => ck.Split('/')[0]!).Distinct().ToArray();
             List<(string ctx, string[] ctxKeys)> contextsWithKeys = new();
-            foreach (var ctx in allContexts)
+            foreach (string? ctx in allContexts)
             {
-                var ctxKeys = allKeysWithContexts
+                string[] ctxKeys = allKeysWithContexts
                     .Where(ck => ck.StartsWith(ctx + '/'))
                     .Select(ck => ck.Split('/')[1])
                     .ToArray();
@@ -160,9 +160,9 @@ public class LocalizationSourceGenerator : IIncrementalGenerator
     private string BuildCodeForContextsClasses(string assemblyName, List<(string ctx, string[] ctxKeys)> contextsWithKeys)
     {
         StringBuilder sb = new($"using ReactiveUI;\nnamespace {assemblyName}.Localization;\n");
-        foreach (var ctxWithKeys in contextsWithKeys)
+        foreach (var (ctx, ctxKeys) in contextsWithKeys)
         {
-            sb.AppendLine(BuildCodeForContextClass(ctxWithKeys.ctx, ctxWithKeys.ctxKeys));
+            sb.AppendLine(BuildCodeForContextClass(ctx, ctxKeys));
         }
         return sb.ToString();
     }

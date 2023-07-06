@@ -420,7 +420,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     private void ShowUpdateReminder()
     {
         Bitmap bitmap = new(AssetLoader.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
-        
+
         var msgbox = MessageBoxManager.GetMessageBoxStandard(
             new MessageBoxStandardParams()
             {
