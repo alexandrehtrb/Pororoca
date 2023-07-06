@@ -4,13 +4,13 @@ using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
-using MessageBox.Avalonia;
 using MessageBox.Avalonia.DTO;
 using MessageBox.Avalonia.Enums;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.UserData;
-using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -420,8 +420,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     private void ShowUpdateReminder()
     {
         Bitmap bitmap = new(AssetLoader.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
-
-        var msgbox = MessageBoxManager.GetMessageBoxStandardWindow(
+        
+        var msgbox = MessageBoxManager.GetMessageBoxStandard(
             new MessageBoxStandardParams()
             {
                 ContentTitle = Localizer.Instance.UpdateReminder.DialogTitle,
@@ -432,7 +432,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
             });
         Dispatcher.UIThread.Post(async () =>
         {
-            var buttonResult = await msgbox.ShowDialog(MainWindow.Instance!);
+            var buttonResult = await msgbox.ShowAsync();
             if (buttonResult == ButtonResult.Ok)
             {
                 OpenPororocaSiteInWebBrowser();
