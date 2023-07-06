@@ -29,7 +29,7 @@ public static class PororocaThemeManager
         set => ApplyTheme(value);
     }
 
-    public static PororocaTheme DefaultTheme => PororocaTheme.AmazonianNight;
+    public static PororocaTheme DefaultTheme => PororocaTheme.Dark;
 
     private static void ApplyTheme(PororocaTheme theme)
     {
@@ -71,7 +71,7 @@ public static class PororocaThemeManager
         {
             PororocaTheme.Light => ThemeName.Light,
             PororocaTheme.Pampa => ThemeName.Light,
-            PororocaTheme.Dark => ThemeName.Abbys,
+            PororocaTheme.Dark => ThemeName.DarkPlus,
             PororocaTheme.AmazonianNight => ThemeName.DarkPlus,
             _ => ThemeName.DarkPlus
         };

@@ -1,5 +1,6 @@
 # Changelog
 
+* [2.2.0](#220-2023-07-06)
 * [2.1.0](#210-2023-04-24)
 * [2.0.1](#201-2023-02-26)
 * [2.0.0](#200-2022-12-20)
@@ -10,6 +11,32 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [2.2.0](https://github.com/alexandrehtrb/Pororoca/tree/2.2.0) (2023-07-06)
+
+### Features
+
+* Visual themes are now available: light, dark, pampa and amazonian night.
+* Default font now is Cabin.
+
+### Bug Fixes
+
+* Previously, response headers were not being updated if the response body tab was the one selected. Now, they are always updated.
+
+### Refactors
+
+* Organized visual styles in separate files, allowing for easier theming.
+* Icons are now vectorized.
+* Internationalization texts are now provided by a source generator.
+* Compiled bindings are now the default in all visual controls.
+* JSON strings are now detected using Utf8JsonReader from System.Text.Json, in a faster way.
+* Safer mechanism of saving user collections on app shutdown.
+* Some Pororoca domain classes were refactored into records.
+
+### Others
+
+* Raised Avalonia version to 11.0.0.
+* Raised .NET SDK version to 7.0.305.
 
 ## [2.1.0](https://github.com/alexandrehtrb/Pororoca/tree/2.1.0) (2023-04-24)
 

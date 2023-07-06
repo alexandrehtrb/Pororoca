@@ -378,7 +378,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     #region USER DATA
 
     private static UserPreferences GetDefaultUserPrefs() =>
-        new(Language.English, DateTime.Now, PororocaTheme.AmazonianNight);
+        new(Language.English, DateTime.Now, PororocaThemeManager.DefaultTheme);
 
     private void LoadUserData()
     {
