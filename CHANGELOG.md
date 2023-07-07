@@ -22,6 +22,7 @@
 ### Bug Fixes
 
 * Previously, response headers were not being updated if the response body tab was the one selected. Now, they are always updated.
+* Removed duplicated `application/problem+json` MIME type.
 
 ### Refactors
 

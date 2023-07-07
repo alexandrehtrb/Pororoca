@@ -501,7 +501,6 @@ public static class MimeTypesDetector
             new("js", "text/ecmascript"),
             new("js", "text/javascript"),
             new("json", "application/json"), // JavaScript Object Notation (JSON)
-            new("json", "application/problem+json"),
             new("jut", "image/jutvision"),
             new("kar", "audio/midi"),
             new("kar", "music/x-karaoke"),
