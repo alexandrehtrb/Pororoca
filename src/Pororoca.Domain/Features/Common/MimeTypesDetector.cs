@@ -28,8 +28,6 @@ public static class MimeTypesDetector
                                .ToList();
         // extra MIME types not with no corresponding file extension
         // will be added below:
-        AllMimeTypes.Add(DefaultMimeTypeForProblemJson);
-        AllMimeTypes.Add(DefaultMimeTypeForProblemXml);
         AllMimeTypes.Add(DefaultMimeTypeForDnsJson);
         AllMimeTypes.Add(DefaultMimeTypeForDnsMessage);
     }
@@ -63,6 +61,7 @@ public static class MimeTypesDetector
             new("html", "text/html"), // HyperText Markup Language (HTML)
             new("xml", "text/xml"), // XML - Extensible Markup Language
             new("xml", "application/xml"),
+            new("xml", "application/problem+xml"),
             new("jpeg", "image/jpeg"), // JPEG Image
             new("jpg", "image/jpeg"), // JPEG Image
 
@@ -501,6 +500,7 @@ public static class MimeTypesDetector
             new("js", "text/ecmascript"),
             new("js", "text/javascript"),
             new("json", "application/json"), // JavaScript Object Notation (JSON)
+            new("json", "application/problem+json"),
             new("jut", "image/jutvision"),
             new("kar", "audio/midi"),
             new("kar", "music/x-karaoke"),
