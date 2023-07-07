@@ -86,7 +86,6 @@
               Text="{Binding RequestUrl}"
               Watermark="{Binding i18n.HttpRequest.UrlWatermark}"
               VerticalContentAlignment="Center"
-              ToolTip.Placement="Bottom"
               ToolTip.Tip="{Binding ResolvedRequestUrlToolTip}"
               Classes="SingleLine"
               PointerEntered="OnRequestUrlPointerEnter"/>

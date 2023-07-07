@@ -65,7 +65,6 @@
             VerticalAlignment="Center"
             Margin="4,0,0,0"
             Text="{Binding i18n.WebSocketClientMessage.DisableCompressionForThisMessageTip}"
-            ToolTip.Placement="Right"
             ToolTip.Tip="{Binding i18n.WebSocketClientMessage.DisableCompressionExplanation}"/>
       </StackPanel>
 

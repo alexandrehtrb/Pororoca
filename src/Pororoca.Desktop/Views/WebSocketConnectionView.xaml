@@ -72,7 +72,6 @@
               Text="{Binding Url}"
               Watermark="{Binding i18n.WebSocketConnection.UrlWatermark}"
               VerticalContentAlignment="Center"
-              ToolTip.Placement="Bottom"
               ToolTip.Tip="{Binding ResolvedUrlToolTip}"
               Classes="SingleLine"
               PointerEntered="OnUrlPointerEnter"/>
