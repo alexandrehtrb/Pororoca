@@ -39,8 +39,8 @@ public static class UserDataManager
         {
             try
             {
-                var fs = File.Open(userPreferencesFilePath, FileMode.Open, FileAccess.Read);
-                return JsonSerializer.Deserialize<UserPreferences>(fs, options: userPreferencesJsonOptions);
+                string json = File.ReadAllText(userPreferencesFilePath, Encoding.UTF8);
+                return JsonSerializer.Deserialize<UserPreferences>(json, options: userPreferencesJsonOptions);
             }
             catch
             {
@@ -195,17 +195,8 @@ public static class UserDataManager
         // do not use single-file app on debug
         string currentDirPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location!)!;
         DirectoryInfo currentDir = new(currentDirPath);
-        // for some reason, when debugging on Windows, the executable is located at:
-        // \src\Pororoca.Desktop\bin\Debug\net7.0\Pororoca.Desktop.dll,
-        // without the subfolder "win-x64"
-        if (OperatingSystem.IsWindows())
-        {
-            return currentDir.Parent!.Parent!.Parent!;
-        }
-        else
-        {
-            return currentDir.Parent!.Parent!.Parent!.Parent!;
-        }
+        // .NET 7 no longer has runtime identifer divided Debug folder
+        return currentDir.Parent!.Parent!.Parent!;
     }
 #endif
 
