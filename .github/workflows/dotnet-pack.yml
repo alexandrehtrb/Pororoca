@@ -27,11 +27,11 @@ jobs:
     - name: Execute unit tests
       run: dotnet test --no-build --configuration Release --nologo --verbosity quiet --filter FullyQualifiedName!~Pororoca.Test.Tests
 
-    - name: Read release version
+    - name: Read package version
       shell: pwsh
       run: |
         ([XML]$desktopCsprojXml = Get-Content ./src/Pororoca.Test/Pororoca.Test.csproj)
-        $versionName = $desktopCsprojXml.Project.PropertyGroup.Version
+        $versionName = $desktopCsprojXml.Project.PropertyGroup.PackageVersion
         echo "VERSION_NAME=${versionName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
     
     - name: Generate Pororoca.Test NuGet
