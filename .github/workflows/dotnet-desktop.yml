@@ -55,10 +55,10 @@ jobs:
           - { os: ubuntu-latest, rid: 'osx-x64' }
           - { os: ubuntu-latest, rid: 'osx-arm64' }
           - { os: ubuntu-latest, rid: 'linux-x64' }
-          - { os: windows-latest, rid: "win-x86" }
-          - { os: windows-latest, rid: "win-x86", withInstaller: 'withInstaller' }
-          - { os: windows-latest, rid: "win-x64" }
-          - { os: windows-latest, rid: "win-x64", withInstaller: 'withInstaller' }
+          - { os: windows-latest, rid: "win-x86", installation: 'portable' }
+          - { os: windows-latest, rid: "win-x86", installation: 'withInstaller' }
+          - { os: windows-latest, rid: "win-x64", installation: 'portable' }
+          - { os: windows-latest, rid: "win-x64", installation: 'withInstaller' }
 
     runs-on: ${{ matrix.config.os }} # we run many different builds
     
@@ -66,7 +66,7 @@ jobs:
       OUTPUT_FOLDER: ${{ format('./out/{0}/', matrix.config.rid) }}
       PUBLISH_SINGLE_FILE: ${{ startsWith(matrix.config.rid, 'win') }}
       RID: ${{ matrix.config.rid }}
-      WINDOWS_INSTALLER_RELEASE: ${{ matrix.config.withInstaller == 'withInstaller' }}
+      WINDOWS_INSTALLER_RELEASE: ${{ startsWith(matrix.config.rid, 'win') && matrix.config.installation == 'withInstaller' }}
       
     steps:
     - name: Checkout
@@ -80,19 +80,19 @@ jobs:
         dotnet-version: 7.0.x
 
     - name: Install NSIS (Windows installer version only)
-      if: ${{ runner.os == 'Windows' && matrix.config.withInstaller == 'withInstaller' }}
+      if: ${{ runner.os == 'Windows' && matrix.config.installation == 'withInstaller' }}
       uses: repolevedavaj/install-nsis@v1.0.0
       with:
         nsis-version: 3.08
     
     - name: Add NSIS to PATH (Windows installer version only)
-      if: ${{ runner.os == 'Windows' && matrix.config.withInstaller == 'withInstaller' }}
+      if: ${{ runner.os == 'Windows' && matrix.config.installation == 'withInstaller' }}
       shell: pwsh
       run: |
         echo "${env:ProgramFiles(x86)}\NSIS" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
     - name: Check if NSIS was added to PATH (Windows installer version only)
-      if: ${{ runner.os == 'Windows' && matrix.config.withInstaller }}
+      if: ${{ runner.os == 'Windows' && matrix.config.installation == 'withInstaller' }}
       shell: pwsh
       run: makensis /VERSION
 
@@ -100,10 +100,10 @@ jobs:
     #  run: dotnet restore --nologo --verbosity quiet
       
     #- name: Build solution
-    #  run: dotnet build --configuration Release --nologo --verbosity quiet
+    #  run: dotnet build --no-restore --configuration Release --nologo --verbosity quiet
 
     #- name: Execute unit tests
-    #  run: dotnet test --configuration Release --nologo --verbosity quiet --filter FullyQualifiedName!~Pororoca.Test.Tests
+    #  run: dotnet test --no-build --configuration Release --nologo --verbosity quiet --filter FullyQualifiedName!~Pororoca.Test.Tests
 
     #- name: Read application version
     #  shell: pwsh
@@ -166,8 +166,8 @@ jobs:
       shell: pwsh
       run: Copy-Item -Path "./pororoca.png" -Destination $env:OUTPUT_FOLDER
       
-    - name: Copy icon for installer (Windows installer version only)
-      if: ${{ runner.os == 'Windows' && matrix.config.withInstaller == 'withInstaller' }}
+    - name: Copy icon for Windows installer
+      if: ${{ runner.os == 'Windows' && matrix.config.installation == 'withInstaller' }}
       shell: pwsh
       run: Copy-Item -Path "./src/Pororoca.Desktop/Assets/pororoca_icon.ico" -Destination $env:OUTPUT_FOLDER
    
@@ -175,13 +175,41 @@ jobs:
       shell: pwsh
       run: Copy-Item -Path "./LICENCE.md" -Destination $env:OUTPUT_FOLDER
       
-    - name: Check created files
+    - name: Compress package
+      if: ${{ matrix.config.installation != 'withInstaller' }}
       shell: pwsh
-      run: ls -r ./out/
+      run: |
+        $zipName = (${env:RID}.zip);
+        if ($IsWindows)
+        {
+          Compress-Archive -CompressionLevel Optimal -Path $outputFolder -DestinationPath "./out/${zipName}"	
+        }
+        else
+        {
+          cd $env:OUTPUT_FOLDER
+          zip -9 -r ../${zipName} *
+          cd ../..
+        }
+        Remove-Item $env:OUTPUT_FOLDER -Force -Recurse -ErrorAction Ignore
+    
+    - name: Make installer for Windows
+      if: ${{ startsWith(matrix.config.rid, 'win') && matrix.config.installation == 'withInstaller' }}
+      shell: pwsh
+      run: |
+        $installerFileName = ($env:RID + "_installer.exe"
+        $installerOutFileAbsolutePath = $((Resolve-Path ".\out\").ToString()) + "\" + $installerFileName
+        $installerFilesDirAbsolutePath = (Resolve-Path $env:OUTPUT_FOLDER).ToString()
+        # makensis must be added to PATH
+        # -WX ` # treat warnings as errors
+        # -V2 ` # verbosity no info
+        makensis -WX -V2 "/XOutFile ${installerOutFileAbsolutePath}" `
+          "/DSHORT_VERSION=${versionName}" `
+          "/DINPUT_FILES_DIR=${installerFilesDirAbsolutePath}" `
+          .\src\Pororoca.Desktop.WindowsInstaller\Installer.nsi
+        Remove-Item $env:OUTPUT_FOLDER -Force -Recurse -ErrorAction Ignore
 
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
-    #- name: Upload build artifacts
-    #  uses: actions/upload-artifact@v3
-    #  with:
-    #    name: MSIX Package
-    #    path: ${{ env.Wap_Project_Directory }}\AppPackages
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        path: './out/'
