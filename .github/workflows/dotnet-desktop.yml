@@ -1,12 +1,10 @@
-name: Generate Pororoca Desktop releases
+name: Generate Pororoca Desktop
 
 on:
   workflow_dispatch:
 
 jobs:
-
   build:
-
     strategy:
       matrix:
         config:
@@ -54,14 +52,14 @@ jobs:
       shell: pwsh
       run: makensis /VERSION
 
-    #- name: Restore solution
-    #  run: dotnet restore --nologo --verbosity quiet
+    - name: Restore solution
+      run: dotnet restore --nologo --verbosity quiet
       
-    #- name: Build solution
-    #  run: dotnet build --no-restore --configuration Release --nologo --verbosity quiet
+    - name: Build solution
+      run: dotnet build --no-restore --configuration Release --nologo --verbosity quiet
 
-    #- name: Execute unit tests
-    #  run: dotnet test --no-build --configuration Release --nologo --verbosity quiet --filter FullyQualifiedName!~Pororoca.Test.Tests
+    - name: Execute unit tests
+      run: dotnet test --no-build --configuration Release --nologo --verbosity quiet --filter FullyQualifiedName!~Pororoca.Test.Tests
 
     - name: Read release version
       shell: pwsh
@@ -138,18 +136,20 @@ jobs:
       if: ${{ matrix.config.installation != 'withInstaller' }}
       shell: pwsh
       run: |
-        $zipName = "Pororoca_${env:VERSION_NAME}_${env:RID}.zip";
-        if ($IsWindows)
-        {
-          Compress-Archive -CompressionLevel Optimal -Path $env:OUTPUT_FOLDER -DestinationPath "./out/${zipName}"	
+        if ($env:RID -like "win*") {
+          $zipName = "Pororoca_${env:VERSION_NAME}_${env:RID}_portable.zip";
+        } else {
+          $zipName = "Pororoca_${env:VERSION_NAME}_${env:RID}.zip";
         }
-        else
-        {
+        if ($IsWindows) {
+          Compress-Archive -CompressionLevel Optimal -Path $env:OUTPUT_FOLDER -DestinationPath "./out/${zipName}"	
+        } else {
           cd $env:OUTPUT_FOLDER
           zip -9 -r ../${zipName} *
           cd ../..
         }
         Remove-Item $env:OUTPUT_FOLDER -Force -Recurse -ErrorAction Ignore
+        echo "ARTIFACT_NAME=${zipName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
     
     - name: Make installer for Windows
       if: ${{ startsWith(matrix.config.rid, 'win') && matrix.config.installation == 'withInstaller' }}
@@ -166,9 +166,10 @@ jobs:
           "/DINPUT_FILES_DIR=${installerFilesDirAbsolutePath}" `
           .\src\Pororoca.Desktop.WindowsInstaller\Installer.nsi
         Remove-Item $env:OUTPUT_FOLDER -Force -Recurse -ErrorAction Ignore
+        echo "ARTIFACT_NAME=${installerFileName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
-    # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
+        name: ${{ env.ARTIFACT_NAME }}
         path: './out/'
