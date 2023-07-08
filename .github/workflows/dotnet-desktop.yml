@@ -183,7 +183,7 @@ jobs:
         $zipName = "Pororoca_${env:VERSION_NAME}_${env:RID}.zip";
         if ($IsWindows)
         {
-          Compress-Archive -CompressionLevel Optimal -Path $outputFolder -DestinationPath "./out/${zipName}"	
+          Compress-Archive -CompressionLevel Optimal -Path $env:OUTPUT_FOLDER -DestinationPath "./out/${zipName}"	
         }
         else
         {
