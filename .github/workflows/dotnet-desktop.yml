@@ -105,11 +105,12 @@ jobs:
     #- name: Execute unit tests
     #  run: dotnet test --no-build --configuration Release --nologo --verbosity quiet --filter FullyQualifiedName!~Pororoca.Test.Tests
 
-    #- name: Read application version
-    #  shell: pwsh
-    #  run: |
-    #    ([XML]$desktopCsprojXml = Get-Content ./src/Pororoca.Desktop/Pororoca.Desktop.csproj)
-    #    $versionName = $desktopCsprojXml.Project.PropertyGroup.Version
+    - name: Read release version
+      shell: pwsh
+      run: |
+        ([XML]$desktopCsprojXml = Get-Content ./src/Pororoca.Desktop/Pororoca.Desktop.csproj)
+        $versionName = $desktopCsprojXml.Project.PropertyGroup.Version
+        echo "VERSION_NAME=${versionName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
           
     - name: Generate Pororoca Desktop dlls
       shell: pwsh
@@ -179,7 +180,7 @@ jobs:
       if: ${{ matrix.config.installation != 'withInstaller' }}
       shell: pwsh
       run: |
-        $zipName = (${env:RID}.zip);
+        $zipName = "Pororoca_${env:VERSION_NAME}_${env:RID}.zip";
         if ($IsWindows)
         {
           Compress-Archive -CompressionLevel Optimal -Path $outputFolder -DestinationPath "./out/${zipName}"	
@@ -196,7 +197,7 @@ jobs:
       if: ${{ startsWith(matrix.config.rid, 'win') && matrix.config.installation == 'withInstaller' }}
       shell: pwsh
       run: |
-        $installerFileName = ($env:RID + "_installer.exe"
+        $installerFileName = "Pororoca_${env:VERSION_NAME}_${env:RID}_installer.exe";
         $installerOutFileAbsolutePath = $((Resolve-Path ".\out\").ToString()) + "\" + $installerFileName
         $installerFilesDirAbsolutePath = (Resolve-Path $env:OUTPUT_FOLDER).ToString()
         # makensis must be added to PATH
