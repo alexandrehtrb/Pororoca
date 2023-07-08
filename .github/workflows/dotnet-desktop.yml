@@ -64,7 +64,7 @@ jobs:
     
     env:
       OUTPUT_FOLDER: ${{ format('./out/{0}/', matrix.config.rid) }}
-      PUBLISH_SINGLE_FILE: ${{ runner.os == 'Windows' }}
+      PUBLISH_SINGLE_FILE: ${{ startsWith(matrix.config.rid, 'win') }}
       RID: ${{ matrix.config.rid }}
       WINDOWS_INSTALLER_RELEASE: ${{ matrix.config.withInstaller == 'withInstaller' }}
       
@@ -139,7 +139,7 @@ jobs:
         }
         else
         {
-          Rename-Item "${{env:OUTPUT_FOLDER}}/Pororoca.Desktop" -NewName "Pororoca"
+          Rename-Item "${env:OUTPUT_FOLDER}/Pororoca.Desktop" -NewName "Pororoca"
         }
     
     - name: Set executable attributes (UNIX only)
