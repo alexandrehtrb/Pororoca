@@ -52,22 +52,19 @@ jobs:
     strategy:
       matrix:
         config:
-          #- { os: ubuntu-latest, rid: 'osx-x64' }
-          #- { os: ubuntu-latest, rid: 'osx-arm64' }
-          #- { os: ubuntu-latest, rid: 'linux-x64' }
-          #- { os: windows-latest, rid: "win-x86" }
-          #- { os: windows-latest, rid: "win-x86", withInstaller: 'withInstaller' }
+          - { os: ubuntu-latest, rid: 'osx-x64' }
+          - { os: ubuntu-latest, rid: 'osx-arm64' }
+          - { os: ubuntu-latest, rid: 'linux-x64' }
+          - { os: windows-latest, rid: "win-x86" }
+          - { os: windows-latest, rid: "win-x86", withInstaller: 'withInstaller' }
           - { os: windows-latest, rid: "win-x64" }
           - { os: windows-latest, rid: "win-x64", withInstaller: 'withInstaller' }
 
     runs-on: ${{ matrix.config.os }} # we run many different builds
     
-    #env:
-    #  Solution_Name: your-solution-name                         # Replace with your solution name, i.e. MyWpfApp.sln.
-    #  Test_Project_Path: your-test-project-path                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
-    #  Wap_Project_Directory: your-wap-project-directory-name    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
-    #  Wap_Project_Path: your-wap-project-path                   # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
-
+    env:
+      OUTPUT_FOLDER: ${{ format('./out/{0}/', matrix.config.rid }}
+      
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -111,25 +108,77 @@ jobs:
     #    ([XML]$desktopCsprojXml = Get-Content ./src/Pororoca.Desktop/Pororoca.Desktop.csproj)
     #    $versionName = $desktopCsprojXml.Project.PropertyGroup.Version
           
-    - name: Publish Pororoca Desktop dlls
+    - name: Generate Pororoca Desktop dlls
       env:
         PUBLISH_SINGLE_FILE: ${{ runner.os == 'Windows' }}
         RID: ${{ matrix.config.rid }}
         WINDOWS_INSTALLER_RELEASE: ${{ matrix.config.withInstaller == 'withInstaller' }}
       shell: pwsh
       run: |
-        echo $env:PUBLISH_SINGLE_FILE;echo $env:RID;echo $env:WINDOWS_INSTALLER_RELEASE;
-        $outputFolder = ("./out/" + $env:RID)
-        mkdir $outputFolder
+        [void](mkdir $outputFolder);
         dotnet publish ./src/Pororoca.Desktop/Pororoca.Desktop.csproj `
         --verbosity quiet `
         --nologo `
         --configuration Release `
-        -p:PublishSingleFile=$env:PUBLISH_SINGLE_FILE `
-        -p:PublishForInstallOnWindows=$env:WINDOWS_INSTALLER_RELEASE `
+        -p:PublishSingleFile=${env:PUBLISH_SINGLE_FILE} `
+        -p:PublishForInstallOnWindows=${env:WINDOWS_INSTALLER_RELEASE} `
         --self-contained true `
-        --runtime $env:RID `
-        --output $outputFolder
+        --runtime ${env:RID} `
+        --output ${env:OUTPUT_FOLDER};
+        if ($runtime -like "*win*")
+        {
+          # let's copy the msquic.dll file next to the generated .exe
+          Copy-Item -Path "./src/Pororoca.Desktop/bin/Release/net7.0/${runtime}/msquic.dll" -Destination $outputFolder
+        }
+    
+    - name: Rename executable
+      shell: pwsh
+      run: |
+        if ($env:RID -like "*win*")
+        {
+          Rename-Item -Path "${env:OUTPUT_FOLDER}/Pororoca.Desktop.exe" -NewName "Pororoca.exe"
+        }
+        else
+        {
+          Rename-Item "${{env:OUTPUT_FOLDER}}/Pororoca.Desktop" -NewName "Pororoca"
+        }
+    
+    - name: Set executable attributes (UNIX only)
+      if: ${{ startsWith(matrix.config.rid, 'linux') || startsWith(matrix.config.rid, 'osx') }}
+      shell: pwsh
+      run: chmod +x "${env:OUTPUT_FOLDER}/Pororoca"
+      
+    - name: Make Pororoca.app structure (Mac OSX only)
+      if: ${{ startsWith(matrix.config.rid, 'osx') }}
+      shell: pwsh
+      run: |
+        [void](mkdir "${env:OUTPUT_FOLDER}/Pororoca.app")
+        [void](mkdir "${env:OUTPUT_FOLDER}/Pororoca.app/Contents")
+        [void](mkdir "${env:OUTPUT_FOLDER}/Pororoca.app/Contents/MacOS")
+        [void](mkdir "${env:OUTPUT_FOLDER}/Pororoca.app/Contents/Resources")
+        Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/Info.plist" -Destination "${env:OUTPUT_FOLDER}/Pororoca.app/Contents/"
+        Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/pororoca.icns" -Destination "${env:OUTPUT_FOLDER}/Pororoca.app/Contents/Resources/"
+        Get-ChildItem $env:OUTPUT_FOLDER -File | Copy-Item -Destination "${env:OUTPUT_FOLDER}/Pororoca.app/Contents/MacOS/" -Force
+        Get-ChildItem $env:OUTPUT_FOLDER -File | Remove-Item
+    
+    # so Linux users can create desktop launchers
+    - name: Copy logo (Linux only)
+      if: ${{ startsWith(matrix.config.rid, 'linux') }}
+      shell: pwsh
+      run: Copy-Item -Path "./pororoca.png" -Destination $env:OUTPUT_FOLDER
+      
+    - name: Copy icon for installer (Windows installer version only)
+      if: ${{ runner.os == 'Windows' && matrix.config.withInstaller == 'withInstaller' }}
+      shell: pwsh
+      run: Copy-Item -Path "./src/Pororoca.Desktop/Assets/pororoca_icon.ico" -Destination $env:OUTPUT_FOLDER
+   
+    - name: Copy licence
+      shell: pwsh
+      run: Copy-Item -Path "./LICENCE.md" -Destination $env:OUTPUT_FOLDER
+      
+    - name: Check created files
+      shell: pwsh
+      run: ls -r ./out/
 
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
     #- name: Upload build artifacts
