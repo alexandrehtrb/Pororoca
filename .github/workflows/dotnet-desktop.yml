@@ -63,7 +63,10 @@ jobs:
     runs-on: ${{ matrix.config.os }} # we run many different builds
     
     env:
-      OUTPUT_FOLDER: ${{ format('./out/{0}/', matrix.config.rid }}
+      OUTPUT_FOLDER: ${{ format('./out/{0}/', matrix.config.rid) }}
+      PUBLISH_SINGLE_FILE: ${{ runner.os == 'Windows' }}
+      RID: ${{ matrix.config.rid }}
+      WINDOWS_INSTALLER_RELEASE: ${{ matrix.config.withInstaller == 'withInstaller' }}
       
     steps:
     - name: Checkout
@@ -109,10 +112,6 @@ jobs:
     #    $versionName = $desktopCsprojXml.Project.PropertyGroup.Version
           
     - name: Generate Pororoca Desktop dlls
-      env:
-        PUBLISH_SINGLE_FILE: ${{ runner.os == 'Windows' }}
-        RID: ${{ matrix.config.rid }}
-        WINDOWS_INSTALLER_RELEASE: ${{ matrix.config.withInstaller == 'withInstaller' }}
       shell: pwsh
       run: |
         [void](mkdir $outputFolder);
