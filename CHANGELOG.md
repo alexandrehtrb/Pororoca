@@ -38,7 +38,7 @@
 
 * Raised Avalonia version to 11.0.0.
 * Raised .NET SDK version to 7.0.305.
-* Created GitHub Actions pipelines for generation of Pororoca Desktop and Pororoca.Test releases.
+* Created GitHub Actions pipeline for generation of Pororoca Desktop and Pororoca.Test releases.
 * Drag and drop on tables was removed due to conflict with text inputs. This feature hopefully will be back soon.
 
 ## [2.1.0](https://github.com/alexandrehtrb/Pororoca/tree/2.1.0) (2023-04-24)
