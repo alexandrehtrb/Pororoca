@@ -75,19 +75,19 @@ jobs:
         dotnet-version: 7.0.x
 
     - name: Install NSIS (Windows installer version only)
-      if: ${{ env.WINDOWS_INSTALLER_RELEASE }}
+      if: ${{ env.WINDOWS_INSTALLER_RELEASE == 'true' }}
       uses: repolevedavaj/install-nsis@v1.0.0
       with:
         nsis-version: 3.08
     
     - name: Add NSIS to PATH (Windows installer version only)
-      if: ${{ env.WINDOWS_INSTALLER_RELEASE }}
+      if: ${{ env.WINDOWS_INSTALLER_RELEASE == 'true' }}
       shell: pwsh
       run: |
         echo "${env:ProgramFiles(x86)}\NSIS" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
     - name: Check if NSIS was added to PATH (Windows installer version only)
-      if: ${{ env.WINDOWS_INSTALLER_RELEASE }}
+      if: ${{ env.WINDOWS_INSTALLER_RELEASE == 'true' }}
       shell: pwsh
       run: makensis /VERSION
 
@@ -163,7 +163,7 @@ jobs:
       run: Copy-Item -Path "./pororoca.png" -Destination $env:OUTPUT_FOLDER
       
     - name: Copy icon for Windows installer
-      if: ${{ env.WINDOWS_INSTALLER_RELEASE }}
+      if: ${{ env.WINDOWS_INSTALLER_RELEASE == 'true' }}
       shell: pwsh
       run: Copy-Item -Path "./src/Pororoca.Desktop/Assets/pororoca_icon.ico" -Destination $env:OUTPUT_FOLDER
    
@@ -190,7 +190,7 @@ jobs:
         Remove-Item $env:OUTPUT_FOLDER -Force -Recurse -ErrorAction Ignore
     
     - name: Make installer for Windows
-      if: ${{ env.WINDOWS_INSTALLER_RELEASE }}
+      if: ${{ env.WINDOWS_INSTALLER_RELEASE == 'true' }}
       shell: pwsh
       run: |
         $installerFileName = "Pororoca_${env:VERSION_NAME}_${env:RID}_installer.exe";
