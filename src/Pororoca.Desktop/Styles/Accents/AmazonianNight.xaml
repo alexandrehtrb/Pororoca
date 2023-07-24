@@ -22,6 +22,7 @@
       <Color x:Key="MainWindowDarkerBackgroundColor">#0A1929</Color>
       <Color x:Key="MainWindowSidebarColor">Black</Color>
       <Color x:Key="MainWindowSeparatorsColor">Black</Color>
+      <Color x:Key="CurrentEnvironmentLabelColor">#38C7AD</Color>
       <Color x:Key="ListBoxBackgroundColor">#0A1929</Color>
       <Color x:Key="ListBoxItemSelectedBackgroundColor">#0F263F</Color>
       <Color x:Key="DragAndDropDataGridItemDraggingColor">White</Color>

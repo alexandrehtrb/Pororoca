@@ -249,6 +249,54 @@
     </Setter>
   </Style>
 
+  <Style Selector="Button.MoveDown">
+    <Setter Property="Background">
+      <DrawingBrush>
+        <DrawingBrush.Drawing>
+          <GeometryDrawing
+              Brush="{DynamicResource DefaultIconsBrush}"
+              Geometry="{StaticResource IconArrowDownGeometry}"/>
+        </DrawingBrush.Drawing>
+      </DrawingBrush>
+    </Setter>
+  </Style>
+
+  <Style Selector="Button.MoveDown:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background">
+      <DrawingBrush>
+        <DrawingBrush.Drawing>
+          <GeometryDrawing
+              Brush="{DynamicResource SystemInvertedAccentColor}"
+              Geometry="{StaticResource IconArrowDownGeometry}"/>
+        </DrawingBrush.Drawing>
+      </DrawingBrush>
+    </Setter>
+  </Style>
+  
+  <Style Selector="Button.MoveUp">
+    <Setter Property="Background">
+      <DrawingBrush>
+        <DrawingBrush.Drawing>
+          <GeometryDrawing
+              Brush="{DynamicResource DefaultIconsBrush}"
+              Geometry="{StaticResource IconArrowUpGeometry}"/>
+        </DrawingBrush.Drawing>
+      </DrawingBrush>
+    </Setter>
+  </Style>
+
+  <Style Selector="Button.MoveUp:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background">
+      <DrawingBrush>
+        <DrawingBrush.Drawing>
+          <GeometryDrawing
+              Brush="{DynamicResource SystemInvertedAccentColor}"
+              Geometry="{StaticResource IconArrowUpGeometry}"/>
+        </DrawingBrush.Drawing>
+      </DrawingBrush>
+    </Setter>
+  </Style>
+
   <Style Selector="ListBox">
     <Setter
         Property="Background"

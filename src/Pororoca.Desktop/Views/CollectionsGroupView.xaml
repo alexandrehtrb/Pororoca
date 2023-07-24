@@ -169,7 +169,7 @@
           </StackPanel.ContextMenu>
           <TextBlock Text="{Binding i18n.CollectionsGroup.Environments}"/>
           <TextBlock
-              Foreground="{DynamicResource SystemInvertedAccentColor}"
+              Foreground="{DynamicResource CurrentEnvironmentLabelColor}"
               Text="{Binding SelectedEnvironmentName}"/>
         </StackPanel>
       </TreeDataTemplate>
