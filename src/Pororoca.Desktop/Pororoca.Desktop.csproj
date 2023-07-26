@@ -22,8 +22,8 @@
     <!--TieredCompilationQuickJitForLoops>true</TieredCompilationQuickJitForLoops-->
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Pororoca.Domain\Pororoca.Domain.csproj"/>
-    <ProjectReference Include="..\Pororoca.Infrastructure\Pororoca.Infrastructure.csproj"/>
+    <ProjectReference Include="..\Pororoca.Domain\Pororoca.Domain.csproj" />
+    <ProjectReference Include="..\Pororoca.Infrastructure\Pororoca.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="**\*.xaml.cs">
@@ -33,6 +33,9 @@
       <SubType>Designer</SubType>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Assets\i18n\ru-RU.json" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.0.0-preview4" />

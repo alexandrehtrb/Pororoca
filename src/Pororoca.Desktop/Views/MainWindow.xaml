@@ -63,6 +63,20 @@
                     HorizontalAlignment="Center" />
               </MenuItem.Icon>
             </MenuItem>
+            <MenuItem
+                Header="{i18n:Localize Russian, Context=TopMenuLanguage}"
+                Command="{Binding SelectLanguageRussianCmd}">
+                <MenuItem.Icon>
+                    <Image
+                        Source="/Assets/Images/icon_white_check.png"
+                        IsVisible="{Binding IsLanguageRussian}"
+                        Width="12"
+                        Height="12"
+                        Margin="4,0,4,0"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center" />
+                </MenuItem.Icon>
+            </MenuItem>
           </MenuItem>
           <MenuItem
               Header="{i18n:Localize DisableTlsVerification, Context=TopMenuOptions}"

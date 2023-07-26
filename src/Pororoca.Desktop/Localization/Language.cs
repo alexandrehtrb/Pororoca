@@ -3,7 +3,8 @@ namespace Pororoca.Desktop.Localization;
 public enum Language
 {
     PtBr = 1,
-    EnGb = 2
+    EnGb = 2,
+    RuRu = 3
 }
 
 public static class LanguageExtensions
@@ -13,6 +14,7 @@ public static class LanguageExtensions
         {
             Language.PtBr => "pt-BR",
             Language.EnGb => "en-GB",
+            Language.RuRu => "ru-RU",
             _ => "en-GB"
         };
 
@@ -21,6 +23,9 @@ public static class LanguageExtensions
         {
             "pt-BR" => Language.PtBr,
             "en-GB" => Language.EnGb,
+            "ru-RU" => Language.RuRu,
             _ => Language.EnGb
         };
+
+
 }
