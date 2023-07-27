@@ -175,6 +175,7 @@
 	"TopMenuFile/NewCollection",
 	"TopMenuLanguage/English",
 	"TopMenuLanguage/Português",
+    "TopMenuLanguage/Russian",
 	"TopMenuOptions/DisableTlsVerification",
 	"TopMenuOptions/Language",
 	"TopMenuOptions/Theme",

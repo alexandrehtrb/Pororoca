@@ -119,6 +119,19 @@
                 </Image>
               </MenuItem.Icon>
             </MenuItem>
+            <MenuItem
+                Header="{Binding i18n.TopMenuLanguage.Russian}"
+                Command="{Binding SelectLanguageRussianCmd}">
+              <MenuItem.Icon>
+                <Image
+                     IsVisible="{Binding IsLanguageRussian}"
+                     Classes="MenuItemCheckMark">
+                    <Image.Source>
+                        <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                    </Image.Source>
+                </Image>
+              </MenuItem.Icon>
+            </MenuItem>
           </MenuItem>
           <MenuItem
               Header="{Binding i18n.TopMenuOptions.DisableTlsVerification}"

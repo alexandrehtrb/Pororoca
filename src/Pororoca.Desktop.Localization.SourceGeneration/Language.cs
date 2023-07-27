@@ -3,7 +3,8 @@ namespace Pororoca.Desktop.Localization.SourceGeneration;
 public enum Language
 {
     Portuguese,
-    English
+    English,
+    Russian
 }
 
 public static class LanguageExtensions
@@ -12,6 +13,7 @@ public static class LanguageExtensions
     {
         Language.Portuguese => "pt-br",
         Language.English => "en-gb",
+        Language.Russian => "ru-ru",
         _ => "en-gb",
     };
 
@@ -19,6 +21,7 @@ public static class LanguageExtensions
     {
         "pt-br" => Language.Portuguese,
         "en-gb" => Language.English,
+        "ru-ru" => Language.Russian,
         _ => throw new KeyNotFoundException($"No language found for LCID '{lcid}'.")
     };
 }

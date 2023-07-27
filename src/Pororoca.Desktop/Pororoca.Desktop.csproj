@@ -22,16 +22,15 @@
     <!-- Licence also available at https://github.com/alexandrehtrb/Pororoca/LICENCE.md -->
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Pororoca.Domain\Pororoca.Domain.csproj"/>
-    <ProjectReference Include="..\Pororoca.Infrastructure\Pororoca.Infrastructure.csproj"/>
-    <ProjectReference Include="..\Pororoca.Desktop.Localization.SourceGeneration\Pororoca.Desktop.Localization.SourceGeneration.csproj"
-                      ReferenceOutputAssembly="false"
-                      OutputItemType="Analyzer" />
+    <ProjectReference Include="..\Pororoca.Domain\Pororoca.Domain.csproj" />
+    <ProjectReference Include="..\Pororoca.Infrastructure\Pororoca.Infrastructure.csproj" />
+    <ProjectReference Include="..\Pororoca.Desktop.Localization.SourceGeneration\Pororoca.Desktop.Localization.SourceGeneration.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="./Localization/i18n_keys.json" />
     <AdditionalFiles Include="./Localization/en-gb.i18n_lang.json" />
     <AdditionalFiles Include="./Localization/pt-br.i18n_lang.json" />
+    <AdditionalFiles Include="./Localization/ru-ru.i18n_lang.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="**\*.xaml.cs">
