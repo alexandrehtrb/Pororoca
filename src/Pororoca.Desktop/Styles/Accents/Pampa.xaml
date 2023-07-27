@@ -16,7 +16,7 @@
       <!-- Custom colours below -->
       <Color x:Key="SystemInvertedAccentColor">CornflowerBlue</Color>
       <Color x:Key="SystemInvertedAccentColorLight1">#5387f9</Color>
-      <Color x:Key="SystemInvertedAccentColorLight2">#2265f7</Color>
+      <Color x:Key="SystemInvertedAccentColorLight2">#00487C</Color>
       <Color x:Key="MainWindowMenuColor">#B8B261</Color>
       <Color x:Key="MainWindowBackgroundColor">PaleGoldenrod</Color>
       <Color x:Key="MainWindowDarkerBackgroundColor">DarkKhaki</Color>
