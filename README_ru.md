@@ -10,7 +10,7 @@ Pororoca - это инструмент тестирования HTTP, вдохн
 
 ## Установка
 
-Прочитайте [instructions](https://pororoca.io/docs/installation) и скачайте программу [здесь](https://github.com/alexandrehtrb/Pororoca/releases).
+Прочитайте [инструкции](https://pororoca.io/docs/installation) и скачайте программу [здесь](https://github.com/alexandrehtrb/Pororoca/releases).
 
 ## Возможности
 
@@ -26,7 +26,7 @@ Pororoca - это инструмент тестирования HTTP, вдохн
 * Быстрое время запуска.
 * Бесплатный и с открытым исходным кодом.
 
-Проверьте [documentation](https://pororoca.io/docs/) чтобы узнать больше.
+Посмотрите [документацию](https://pororoca.io/docs/) чтобы узнать больше.
 
 *Примечание*: В Windows для поддержки HTTP/2 требуется Windows 10 и более поздняя. Для поддержки HTTP/3 требуется Linux или Windows 11 и более поздняя. HTTP/3 все еще экспериментальный.
 
