@@ -82,10 +82,13 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
         };
         foreach (var folder in col.Folders)
             Items.Add(new CollectionFolderViewModel(this, this, folder));
-        foreach (var req in col.HttpRequests)
-            Items.Add(new HttpRequestViewModel(this, this, req));
-        foreach (var ws in col.WebSocketConnections)
-            Items.Add(new WebSocketConnectionViewModel(this, this, ws));
+        foreach (var req in col.Requests)
+        {
+            if (req is PororocaHttpRequest httpReq)
+                Items.Add(new HttpRequestViewModel(this, this, httpReq));
+            else if (req is PororocaWebSocketConnection ws)
+                Items.Add(new WebSocketConnectionViewModel(this, this, ws));
+        }
 
         RefreshSubItemsAvailableMovements();
 
@@ -138,22 +141,12 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
 
     public void AddFolder(PororocaCollectionFolder folderToAdd, bool showItemInScreen = false)
     {
-        var variablesGroup = Items.First(i => i is CollectionVariablesViewModel);
-        var environmentsGroup = Items.First(i => i is EnvironmentsGroupViewModel);
-        var existingFolders = Items.Where(i => i is CollectionFolderViewModel);
-        var existingRequests = Items.Where(i => i is HttpRequestViewModel || i is WebSocketConnectionViewModel);
         CollectionFolderViewModel folderToAddVm = new(this, this, folderToAdd);
 
-        var rearrangedItems = new[] { variablesGroup, environmentsGroup }
-                                                                .Concat(existingFolders)
-                                                                .Append(folderToAddVm)
-                                                                .Concat(existingRequests)
-                                                                .ToArray();
-        Items.Clear();
-        foreach (var item in rearrangedItems)
-        {
-            Items.Add(item);
-        }
+        int indexOfLastFolder = Items.GetLastIndexOf<CollectionFolderViewModel>();
+        int indexToInsertAt = indexOfLastFolder == -1 ? 2 : (indexOfLastFolder + 1);
+        Items.Insert(indexToInsertAt, folderToAddVm);
+
         IsExpanded = true;
         RefreshSubItemsAvailableMovements();
         SetAsItemInFocus(folderToAddVm, showItemInScreen);
@@ -161,23 +154,9 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
 
     public void AddHttpRequest(PororocaHttpRequest reqToAdd, bool showItemInScreen = false)
     {
-        var variablesGroup = Items.First(i => i is CollectionVariablesViewModel);
-        var environmentsGroup = Items.First(i => i is EnvironmentsGroupViewModel);
-        var existingFolders = Items.Where(i => i is CollectionFolderViewModel);
-        var existingRequests = Items.Where(i => i is HttpRequestViewModel || i is WebSocketConnectionViewModel);
         HttpRequestViewModel reqToAddVm = new(this, this, reqToAdd);
+        Items.Add(reqToAddVm); // always at the end
 
-        var rearrangedItems = new[] { variablesGroup, environmentsGroup }
-                               .Concat(existingFolders)
-                               .Concat(existingRequests)
-                               .Append(reqToAddVm)
-                               .ToArray();
-
-        Items.Clear();
-        foreach (var item in rearrangedItems)
-        {
-            Items.Add(item);
-        }
         IsExpanded = true;
         RefreshSubItemsAvailableMovements();
         SetAsItemInFocus(reqToAddVm, showItemInScreen);
@@ -185,23 +164,9 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
 
     public void AddWebSocketConnection(PororocaWebSocketConnection wsToAdd, bool showItemInScreen = false)
     {
-        var variablesGroup = Items.First(i => i is CollectionVariablesViewModel);
-        var environmentsGroup = Items.First(i => i is EnvironmentsGroupViewModel);
-        var existingFolders = Items.Where(i => i is CollectionFolderViewModel);
-        var existingRequests = Items.Where(i => i is HttpRequestViewModel || i is WebSocketConnectionViewModel);
         WebSocketConnectionViewModel wsToAddVm = new(this, this, wsToAdd);
+        Items.Add(wsToAddVm); // always at the end
 
-        var rearrangedItems = new[] { variablesGroup, environmentsGroup }
-                               .Concat(existingFolders)
-                               .Concat(existingRequests)
-                               .Append(wsToAddVm)
-                               .ToArray();
-
-        Items.Clear();
-        foreach (var item in rearrangedItems)
-        {
-            Items.Add(item);
-        }
         IsExpanded = true;
         RefreshSubItemsAvailableMovements();
         SetAsItemInFocus(wsToAddVm, showItemInScreen);

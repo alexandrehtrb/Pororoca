@@ -48,10 +48,13 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
         Items = new();
         foreach (var subFolder in folder.Folders)
             Items.Add(new CollectionFolderViewModel(this, variableResolver, subFolder));
-        foreach (var req in folder.HttpRequests)
-            Items.Add(new HttpRequestViewModel(this, variableResolver, req));
-        foreach (var ws in folder.WebSocketConnections)
-            Items.Add(new WebSocketConnectionViewModel(this, variableResolver, ws));
+        foreach (var req in folder.Requests)
+        {
+            if (req is PororocaHttpRequest httpReq)
+                Items.Add(new HttpRequestViewModel(this, variableResolver, httpReq));
+            else if (req is PororocaWebSocketConnection ws)
+                Items.Add(new WebSocketConnectionViewModel(this, variableResolver, ws));
+        }
 
         RefreshSubItemsAvailableMovements();
 
@@ -109,18 +112,10 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
 
     public void AddFolder(PororocaCollectionFolder folderToAdd, bool showItemInScreen = false)
     {
-        var existingFolders = Items.Where(i => i is CollectionFolderViewModel);
-        var existingRequests = Items.Where(i => i is HttpRequestViewModel || i is WebSocketConnectionViewModel);
         CollectionFolderViewModel folderToAddVm = new(this, this.variableResolver, folderToAdd);
-
-        var rearrangedItems = existingFolders.Append(folderToAddVm)
-                                             .Concat(existingRequests)
-                                             .ToArray();
-        Items.Clear();
-        foreach (var item in rearrangedItems)
-        {
-            Items.Add(item);
-        }
+        int indexToInsertAt = Items.GetLastIndexOf<CollectionFolderViewModel>() + 1;
+        Items.Insert(indexToInsertAt, folderToAddVm);
+        
         IsExpanded = true;
         RefreshSubItemsAvailableMovements();
         SetAsItemInFocus(folderToAddVm, showItemInScreen);
@@ -128,18 +123,9 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
 
     public void AddHttpRequest(PororocaHttpRequest reqToAdd, bool showItemInScreen = false)
     {
-        var existingFolders = Items.Where(i => i is CollectionFolderViewModel).ToArray();
-        var existingRequests = Items.Where(i => i is HttpRequestViewModel || i is WebSocketConnectionViewModel).ToArray();
         HttpRequestViewModel reqToAddVm = new(this, this.variableResolver, reqToAdd);
+        Items.Add(reqToAddVm); // always at the end
 
-        var rearrangedItems = existingFolders.Concat(existingRequests)
-                                             .Append(reqToAddVm)
-                                             .ToArray();
-        Items.Clear();
-        foreach (var item in rearrangedItems)
-        {
-            Items.Add(item);
-        }
         IsExpanded = true;
         RefreshSubItemsAvailableMovements();
         SetAsItemInFocus(reqToAddVm, showItemInScreen);
@@ -147,18 +133,9 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
 
     public void AddWebSocketConnection(PororocaWebSocketConnection wsToAdd, bool showItemInScreen = false)
     {
-        var existingFolders = Items.Where(i => i is CollectionFolderViewModel).ToArray();
-        var existingRequests = Items.Where(i => i is HttpRequestViewModel || i is WebSocketConnectionViewModel).ToArray();
         WebSocketConnectionViewModel wsToAddVm = new(this, this.variableResolver, wsToAdd);
+        Items.Add(wsToAddVm); // always at the end
 
-        var rearrangedItems = existingFolders.Concat(existingRequests)
-                                             .Append(wsToAddVm)
-                                             .ToArray();
-        Items.Clear();
-        foreach (var item in rearrangedItems)
-        {
-            Items.Add(item);
-        }
         IsExpanded = true;
         RefreshSubItemsAvailableMovements();
         SetAsItemInFocus(wsToAddVm, showItemInScreen);
