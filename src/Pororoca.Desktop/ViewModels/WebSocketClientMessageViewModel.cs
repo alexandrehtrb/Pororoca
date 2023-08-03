@@ -1,6 +1,7 @@
 using System.Reactive;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.ExportImport;
+using Pororoca.Desktop.HotKeys;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -9,16 +10,6 @@ namespace Pororoca.Desktop.ViewModels;
 
 public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItemViewModel
 {
-    #region COLLECTION ORGANIZATION
-
-    public ReactiveCommand<Unit, Unit> CopyCmd { get; }
-    public ReactiveCommand<Unit, Unit> RenameCmd { get; }
-    public ReactiveCommand<Unit, Unit> MoveUpCmd { get; }
-    public ReactiveCommand<Unit, Unit> MoveDownCmd { get; }
-    public ReactiveCommand<Unit, Unit> DeleteCmd { get; }
-
-    #endregion
-
     #region WEBSOCKET REQUEST MESSAGE
 
     [Reactive]
@@ -82,16 +73,6 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
     public WebSocketClientMessageViewModel(ICollectionOrganizationItemParentViewModel parentVm,
                                            PororocaWebSocketClientMessage msg) : base(parentVm, msg.Name)
     {
-        #region COLLECTION ORGANIZATION
-
-        CopyCmd = ReactiveCommand.Create(Copy);
-        RenameCmd = ReactiveCommand.Create(RenameThis);
-        MoveUpCmd = ReactiveCommand.Create(MoveThisUp);
-        MoveDownCmd = ReactiveCommand.Create(MoveThisDown);
-        DeleteCmd = ReactiveCommand.Create(Delete);
-
-        #endregion
-
         #region WEBSOCKET REQUEST MESSAGE
 
         DisableCompressionForThisMessage = msg.DisableCompressionForThis;
@@ -131,7 +112,7 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
     #region COLLECTION ORGANIZATION
 
     protected override void CopyThis() =>
-        CollectionsGroupDataCtx.PushToCopy(ToWebSocketClientMessage());
+        ClipboardArea.Instance.PushToCopy(ToWebSocketClientMessage());
 
     public PororocaWebSocketClientMessage ToWebSocketClientMessage()
     {

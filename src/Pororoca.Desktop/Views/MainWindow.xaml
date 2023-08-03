@@ -19,6 +19,18 @@
     <vm:MainWindowViewModel/>
   </Design.DataContext>
 
+  <Window.KeyBindings>
+    <!-- Keyboard shortcuts are defined in CollectionsGroupView and MainWindow -->
+    <KeyBinding Command="{Binding HotKeys.RenameCmd}" Gesture="F2" />
+    <KeyBinding Command="{Binding HotKeys.FocusOnUrlCmd}" Gesture="F4" />
+    <KeyBinding Command="{Binding HotKeys.SendRequestOrConnectWebSocketCmd}" Gesture="F5" />
+    <KeyBinding Command="{Binding HotKeys.CancelRequestOrDisconnectWebSocketCmd}" Gesture="F6" />
+    <KeyBinding Command="{Binding HotKeys.CycleNextEnvironmentToActiveCmd}" Gesture="F8" />
+    <KeyBinding Command="{Binding HotKeys.SaveResponseToFileCmd}" Gesture="Ctrl+S" />
+    <KeyBinding Command="{Binding HotKeys.MoveUpCmd}" Gesture="Alt+Up" />
+    <KeyBinding Command="{Binding HotKeys.MoveDownCmd}" Gesture="Alt+Down" />
+  </Window.KeyBindings>
+
   <Panel>
     <DockPanel
         HorizontalAlignment="Stretch"
@@ -35,6 +47,7 @@
           <Separator/>
           <MenuItem
               Header="{Binding i18n.TopMenuFile.Exit}"
+              InputGesture="Alt+F4"
               Click="OnCloseMainWindow"/>
         </MenuItem>
         <MenuItem Header="{Binding i18n.TopMenu.Options}">
@@ -192,13 +205,13 @@
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
               IsVisible="{Binding IsHttpRequestViewVisible}">
-            <v:HttpRequestView DataContext="{Binding HttpRequestViewDataCtx}"/>
+            <v:HttpRequestView x:Name="httpReqView" DataContext="{Binding HttpRequestViewDataCtx}"/>
           </Grid>
           <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
               IsVisible="{Binding IsWebSocketConnectionViewVisible}">
-            <v:WebSocketConnectionView DataContext="{Binding WebSocketConnectionViewDataCtx}"/>
+            <v:WebSocketConnectionView x:Name="wsConnView" DataContext="{Binding WebSocketConnectionViewDataCtx}"/>
           </Grid>
           <Grid
               VerticalAlignment="Stretch"

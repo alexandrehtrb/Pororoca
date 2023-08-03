@@ -273,7 +273,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     public void MoveSubItem(ICollectionOrganizationItemViewModel colItemVm, MoveableItemMovementDirection direction) =>
         CollectionsGroupViewDataCtx.MoveSubItem(colItemVm, direction);
 
-    private void AddNewCollection()
+    public void AddNewCollection()
     {
         PororocaCollection newCol = new(Localizer.Instance.Collection.NewCollection);
         AddCollection(newCol, showItemInScreen: true);
@@ -281,7 +281,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     internal void AddCollection(PororocaCollection col, bool showItemInScreen = false)
     {
-        CollectionViewModel colVm = new(this, col, DuplicateCollection);
+        CollectionViewModel colVm = new(this, col);
         CollectionsGroupViewDataCtx.Items.Add(colVm);
         CollectionsGroupViewDataCtx.RefreshSubItemsAvailableMovements();
         if (showItemInScreen)
@@ -290,7 +290,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         }
     }
 
-    private void DuplicateCollection(CollectionViewModel colVm)
+    public void DuplicateCollection(CollectionViewModel colVm)
     {
         var collectionCopy = colVm.ToCollection().Copy(preserveIds: false);
         AddCollection(collectionCopy);

@@ -11,12 +11,38 @@ public class EditableTextBlockView : UserControl
 
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
+    protected override void OnDataContextBeginUpdate()
+    {
+        if (DataContext is EditableTextBlockViewModel vm)
+        {
+            vm.OnIsEditingChanged = null;
+        }
+        base.OnDataContextBeginUpdate();
+    }
+
+    protected override void OnDataContextEndUpdate()
+    {
+        base.OnDataContextEndUpdate();
+        if (DataContext is EditableTextBlockViewModel vm)
+        {
+            vm.OnIsEditingChanged = OnIsEditingChanged;
+        }
+    }
+
     public void OnKeyDownHandler(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Return)
         {
             var vm = (EditableTextBlockViewModel)DataContext!;
             vm.EditOrApplyTxtChange();
+        }
+    }
+
+    private void OnIsEditingChanged(bool isEditing)
+    {
+        if (isEditing)
+        {
+            this.FindControl<TextBox>("txtBox")?.Focus();
         }
     }
 }

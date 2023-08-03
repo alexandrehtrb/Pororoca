@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
+using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
@@ -15,15 +16,9 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
 
     public override Action OnAfterItemDeleted => Parent.OnAfterItemDeleted;
     public override Action<CollectionOrganizationItemViewModel> OnRenameSubItemSelected => Parent.OnRenameSubItemSelected;
-    public ReactiveCommand<Unit, Unit> MoveUpCmd { get; }
-    public ReactiveCommand<Unit, Unit> MoveDownCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewFolderCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewHttpRequestCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewWebSocketConnectionCmd { get; }
-    public ReactiveCommand<Unit, Unit> CopyFolderCmd { get; }
-    public ReactiveCommand<Unit, Unit> PasteToFolderCmd { get; }
-    public ReactiveCommand<Unit, Unit> RenameFolderCmd { get; }
-    public ReactiveCommand<Unit, Unit> DeleteFolderCmd { get; }
 
     #endregion
 
@@ -40,15 +35,9 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
     {
         #region COLLECTION ORGANIZATION
 
-        MoveUpCmd = ReactiveCommand.Create(MoveThisUp);
-        MoveDownCmd = ReactiveCommand.Create(MoveThisDown);
         AddNewFolderCmd = ReactiveCommand.Create(AddNewFolder);
         AddNewHttpRequestCmd = ReactiveCommand.Create(AddNewHttpRequest);
         AddNewWebSocketConnectionCmd = ReactiveCommand.Create(AddNewWebSocketConnection);
-        CopyFolderCmd = ReactiveCommand.Create(Copy);
-        PasteToFolderCmd = ReactiveCommand.Create(PasteToThis);
-        RenameFolderCmd = ReactiveCommand.Create(RenameThis);
-        DeleteFolderCmd = ReactiveCommand.Create(Delete);
 
         #endregion
 
@@ -84,11 +73,11 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
     }
 
     protected override void CopyThis() =>
-        CollectionsGroupDataCtx.PushToCopy(ToCollectionFolder());
+        ClipboardArea.Instance.PushToCopy(ToCollectionFolder());
 
     public override void PasteToThis()
     {
-        var itemsToPaste = CollectionsGroupDataCtx.FetchCopiesOfFoldersAndReqs();
+        var itemsToPaste = ClipboardArea.Instance.FetchCopiesOfFoldersAndReqs();
         foreach (var itemToPaste in itemsToPaste)
         {
             if (itemToPaste is PororocaCollectionFolder folderToPaste)

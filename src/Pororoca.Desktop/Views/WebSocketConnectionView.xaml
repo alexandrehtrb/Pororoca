@@ -68,6 +68,7 @@
             VerticalAlignment="Stretch">
 
           <TextBox
+              x:Name="tbUrl"
               Height="40"
               Text="{Binding Url}"
               Watermark="{Binding i18n.WebSocketConnection.UrlWatermark}"

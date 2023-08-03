@@ -82,6 +82,7 @@
             VerticalAlignment="Stretch">
 
           <TextBox
+              x:Name="tbUrl"
               Height="40"
               Text="{Binding RequestUrl}"
               Watermark="{Binding i18n.HttpRequest.UrlWatermark}"

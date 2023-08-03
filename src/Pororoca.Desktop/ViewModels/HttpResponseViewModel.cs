@@ -62,7 +62,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
     private void OnLanguageChanged() =>
         UpdateWithResponse(this.res);
 
-    private async Task SaveResponseBodyToFileAsync()
+    public async Task SaveResponseBodyToFileAsync()
     {
         string GenerateDefaultInitialFileName(string fileExtensionWithoutDot)
         {

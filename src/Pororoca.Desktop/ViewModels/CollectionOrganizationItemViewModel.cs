@@ -30,40 +30,29 @@ public abstract class CollectionOrganizationItemViewModel : ViewModelBase, IColl
     [Reactive]
     public string Name { get; set; }
 
-    protected void MoveThisUp() =>
+    public void MoveThisUp() =>
         Parent.MoveSubItem(this, MoveableItemMovementDirection.Up);
 
-    protected void MoveThisDown() =>
+    public void MoveThisDown() =>
         Parent.MoveSubItem(this, MoveableItemMovementDirection.Down);
-
-    protected void Copy()
-    {
-        bool isMultipleCopy = CollectionsGroupDataCtx.HasMultipleItemsSelected;
-        if (isMultipleCopy)
-            CollectionsGroupDataCtx.CopyMultiple();
-        else
-            CopyThis();
-    }
 
     protected abstract void CopyThis();
 
-    protected void RenameThis()
+    public void RenameThis()
     {
-        NameEditableTextBlockViewDataCtx.IsEditing = true;
-        Parent.OnRenameSubItemSelected(this);
+        if (NameEditableTextBlockViewDataCtx.IsEditing == false)
+        {
+            NameEditableTextBlockViewDataCtx.IsEditing = true;
+            Parent.OnRenameSubItemSelected(this);
+        }
+        else
+        {
+            NameEditableTextBlockViewDataCtx.EditOrApplyTxtChange();
+        }
     }
 
     protected virtual void OnNameUpdated(string newName) =>
         Name = newName;
-
-    protected void Delete()
-    {
-        bool isMultipleCopy = CollectionsGroupDataCtx.HasMultipleItemsSelected;
-        if (isMultipleCopy)
-            CollectionsGroupDataCtx.DeleteMultiple();
-        else
-            DeleteThis();
-    }
 
     public virtual void DeleteThis() =>
         Parent.DeleteSubItem(this);

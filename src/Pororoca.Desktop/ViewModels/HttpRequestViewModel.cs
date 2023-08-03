@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Reactive;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.ExportImport;
+using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Common;
@@ -19,16 +20,6 @@ namespace Pororoca.Desktop.ViewModels;
 
 public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 {
-    #region COLLECTION ORGANIZATION
-
-    public ReactiveCommand<Unit, Unit> MoveUpCmd { get; }
-    public ReactiveCommand<Unit, Unit> MoveDownCmd { get; }
-    public ReactiveCommand<Unit, Unit> CopyRequestCmd { get; }
-    public ReactiveCommand<Unit, Unit> RenameRequestCmd { get; }
-    public ReactiveCommand<Unit, Unit> DeleteRequestCmd { get; }
-
-    #endregion
-
     #region REQUEST
 
     private readonly IPororocaRequester requester = PororocaRequester.Singleton;
@@ -200,13 +191,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     {
         #region COLLECTION ORGANIZATION
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
-
         NameEditableTextBlockViewDataCtx.IsHttpRequest = true;
-        MoveUpCmd = ReactiveCommand.Create(MoveThisUp);
-        MoveDownCmd = ReactiveCommand.Create(MoveThisDown);
-        CopyRequestCmd = ReactiveCommand.Create(Copy);
-        RenameRequestCmd = ReactiveCommand.Create(RenameThis);
-        DeleteRequestCmd = ReactiveCommand.Create(Delete);
         #endregion
 
         #region REQUEST
@@ -310,7 +295,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #region COLLECTION ORGANIZATION
 
     protected override void CopyThis() =>
-        CollectionsGroupDataCtx.PushToCopy(ToHttpRequest());
+        ClipboardArea.Instance.PushToCopy(ToHttpRequest());
 
     private void OnLanguageChanged()
     {
@@ -448,12 +433,12 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region SEND OR CANCEL REQUEST
 
-    private void CancelRequest() =>
+    public void CancelRequest() =>
         // CancellationToken will cause a failed PororocaResponse,
         // therefore is not necessary to here call method ShowNotSendingRequestUI()
         this.sendRequestCancellationTokenSourceField!.Cancel();
 
-    private async Task SendRequestAsync()
+    public async Task SendRequestAsync()
     {
         ClearInvalidRequestMessage();
         var generatedReq = ToHttpRequest();

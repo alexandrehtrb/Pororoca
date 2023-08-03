@@ -20,8 +20,18 @@ public sealed class EditableTextBlockViewModel : ViewModelBase
     [Reactive]
     public string Txt { get; set; }
 
-    [Reactive]
-    public bool IsEditing { get; set; }
+    private bool isEditingField;
+    public bool IsEditing
+    {
+        get => this.isEditingField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.isEditingField, value);
+            OnIsEditingChanged?.Invoke(value);
+        }
+    }
+
+    public Action<bool>? OnIsEditingChanged { get; set; }
 
     public ReactiveCommand<Unit, Unit> EditOrApplyTxtChangeCmd { get; }
 

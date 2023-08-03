@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
 using Pororoca.Desktop.ExportImport;
+using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
@@ -18,16 +19,10 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
 
     public override Action OnAfterItemDeleted => Parent.OnAfterItemDeleted;
     public override Action<CollectionOrganizationItemViewModel> OnRenameSubItemSelected => Parent.OnRenameSubItemSelected;
-    public ReactiveCommand<Unit, Unit> MoveUpCmd { get; }
-    public ReactiveCommand<Unit, Unit> MoveDownCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewFolderCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewHttpRequestCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewWebSocketConnectionCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewEnvironmentCmd { get; }
-    public ReactiveCommand<Unit, Unit> DuplicateCollectionCmd { get; }
-    public ReactiveCommand<Unit, Unit> PasteToCollectionCmd { get; }
-    public ReactiveCommand<Unit, Unit> RenameCollectionCmd { get; }
-    public ReactiveCommand<Unit, Unit> DeleteCollectionCmd { get; }
     public ReactiveCommand<Unit, Unit> ImportEnvironmentsCmd { get; }
     public ReactiveCommand<Unit, Unit> ExportCollectionCmd { get; }
     public ReactiveCommand<Unit, Unit> ExportAsPororocaCollectionCmd { get; }
@@ -57,7 +52,6 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
 
     public CollectionViewModel(ICollectionOrganizationItemParentViewModel parentVm,
                                PororocaCollection col,
-                               Action<CollectionViewModel> onDuplicateCollectionSelected,
                                Func<bool>? isOperatingSystemMacOsx = null) : base(parentVm, col.Name)
     {
         #region OTHERS
@@ -66,16 +60,10 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
 
         #region COLLECTION ORGANIZATION
 
-        MoveUpCmd = ReactiveCommand.Create(MoveThisUp);
-        MoveDownCmd = ReactiveCommand.Create(MoveThisDown);
         AddNewFolderCmd = ReactiveCommand.Create(AddNewFolder);
         AddNewHttpRequestCmd = ReactiveCommand.Create(AddNewHttpRequest);
         AddNewWebSocketConnectionCmd = ReactiveCommand.Create(AddNewWebSocketConnection);
         AddNewEnvironmentCmd = ReactiveCommand.Create(AddNewEnvironment);
-        DuplicateCollectionCmd = ReactiveCommand.Create(() => onDuplicateCollectionSelected(this));
-        PasteToCollectionCmd = ReactiveCommand.Create(PasteToThis);
-        RenameCollectionCmd = ReactiveCommand.Create(RenameThis);
-        DeleteCollectionCmd = ReactiveCommand.Create(Delete);
         ImportEnvironmentsCmd = ReactiveCommand.CreateFromTask(ImportEnvironmentsAsync);
         ExportCollectionCmd = ReactiveCommand.CreateFromTask(ExportCollectionAsync);
         ExportAsPororocaCollectionCmd = ReactiveCommand.CreateFromTask(ExportAsPororocaCollectionAsync);
@@ -224,7 +212,7 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
 
     public override void PasteToThis()
     {
-        var itemsToPaste = CollectionsGroupDataCtx.FetchCopiesOfFoldersAndReqs();
+        var itemsToPaste = ClipboardArea.Instance.FetchCopiesOfFoldersAndReqs();
         foreach (var itemToPaste in itemsToPaste)
         {
             if (itemToPaste is PororocaCollectionFolder folderToPaste)

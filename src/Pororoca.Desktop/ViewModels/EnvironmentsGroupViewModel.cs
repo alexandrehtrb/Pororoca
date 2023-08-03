@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
 using Pororoca.Desktop.ExportImport;
+using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
@@ -15,7 +16,6 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
     public override Action<CollectionOrganizationItemViewModel> OnRenameSubItemSelected => Parent.OnRenameSubItemSelected;
     public override Action OnAfterItemDeleted => Parent.OnAfterItemDeleted;
     public ReactiveCommand<Unit, Unit> AddNewEnvironmentCmd { get; }
-    public ReactiveCommand<Unit, Unit> PasteToEnvironmentsCmd { get; }
 
     #endregion
 
@@ -45,7 +45,6 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
 
         #region COLLECTION ORGANIZATION
         AddNewEnvironmentCmd = ReactiveCommand.Create(AddNewEnvironment);
-        PasteToEnvironmentsCmd = ReactiveCommand.Create(PasteToThis);
         ImportEnvironmentsCmd = ReactiveCommand.CreateFromTask(ImportEnvironmentsAsync);
         #endregion
 
@@ -95,7 +94,7 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
 
     public override void PasteToThis()
     {
-        var envsToPaste = CollectionsGroupDataCtx.FetchCopiesOfEnvironments();
+        var envsToPaste = ClipboardArea.Instance.FetchCopiesOfEnvironments();
         foreach (var envToPaste in envsToPaste)
         {
             AddEnvironment(envToPaste);
@@ -113,6 +112,28 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
             evm.IsCurrentEnvironment = evm == envVm;
         }
         UpdateSelectedEnvironmentName();
+    }
+
+    public void SetNextEnvironmentAsActive()
+    {
+        if (Items.Count == 0)
+        {
+            return;
+        }
+
+        var selectedEnv = Items.FirstOrDefault(i => i.IsCurrentEnvironment);
+        int nextIndex;
+        if (selectedEnv == null)
+        {
+            nextIndex = 0;
+        }
+        else
+        {
+            int currentIndex = Items.IndexOf(selectedEnv);
+            nextIndex = (currentIndex + 1) % Items.Count;
+        }
+        var nextEnv = Items[nextIndex];
+        SetEnvironmentAsCurrent(nextEnv);
     }
 
     public void UpdateSelectedEnvironmentName()

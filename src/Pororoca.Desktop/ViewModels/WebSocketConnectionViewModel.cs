@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Security.Authentication;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.ExportImport;
+using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
@@ -29,12 +30,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     public override Action OnAfterItemDeleted => Parent.OnAfterItemDeleted;
     public override Action<CollectionOrganizationItemViewModel> OnRenameSubItemSelected => Parent.OnRenameSubItemSelected;
     public ReactiveCommand<Unit, Unit> AddNewWebSocketClientMessageCmd { get; }
-    public ReactiveCommand<Unit, Unit> PasteToWebSocketConnectionCmd { get; }
-    public ReactiveCommand<Unit, Unit> CopyCmd { get; }
-    public ReactiveCommand<Unit, Unit> RenameCmd { get; }
-    public ReactiveCommand<Unit, Unit> MoveUpCmd { get; }
-    public ReactiveCommand<Unit, Unit> MoveDownCmd { get; }
-    public ReactiveCommand<Unit, Unit> DeleteCmd { get; }
 
     #endregion
 
@@ -293,12 +288,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
         NameEditableTextBlockViewDataCtx.IsDisconnectedWebSocket = true;
         AddNewWebSocketClientMessageCmd = ReactiveCommand.Create(AddNewWebSocketClientMessage);
-        PasteToWebSocketConnectionCmd = ReactiveCommand.Create(PasteToThis);
-        CopyCmd = ReactiveCommand.Create(Copy);
-        RenameCmd = ReactiveCommand.Create(RenameThis);
-        MoveUpCmd = ReactiveCommand.Create(MoveThisUp);
-        MoveDownCmd = ReactiveCommand.Create(MoveThisDown);
-        DeleteCmd = ReactiveCommand.Create(Delete);
         #endregion
 
         #region CONNECTION
@@ -419,11 +408,11 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     }
 
     protected override void CopyThis() =>
-        CollectionsGroupDataCtx.PushToCopy(ToWebSocketConnection());
+        ClipboardArea.Instance.PushToCopy(ToWebSocketConnection());
 
     public override void PasteToThis()
     {
-        var itemsToPaste = CollectionsGroupDataCtx.FetchCopiesOfWebSocketClientMessages();
+        var itemsToPaste = ClipboardArea.Instance.FetchCopiesOfWebSocketClientMessages();
         foreach (var itemToPaste in itemsToPaste)
         {
             AddWebSocketClientMessage(itemToPaste);
@@ -555,7 +544,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     private void OnWebSocketMessageSending(bool isSendingAMessage) =>
         IsSendingAMessage = isSendingAMessage;
 
-    private async Task ConnectAsync()
+    public async Task ConnectAsync()
     {
         var wsConn = ToWebSocketConnection();
         bool disableTlsVerification = ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled;
@@ -581,10 +570,10 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         }
     }
 
-    private void CancelConnect() =>
+    public void CancelConnect() =>
         this.cancelConnectionAttemptTokenSource?.Cancel();
 
-    private Task DisconnectAsync()
+    public Task DisconnectAsync()
     {
         this.cancelDisconnectionAttemptTokenSource = new();
         // This needs to be done in a different thread.
@@ -660,7 +649,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         IsSaveSelectedExchangedMessageToFileVisible = vm.CanBeSavedToFile;
     }
 
-    private async Task SaveSelectedExchangedMessageToFileAsync()
+    public async Task SaveSelectedExchangedMessageToFileAsync()
     {
         static string GenerateDefaultInitialFileName(WebSocketExchangedMessageViewModel vm)
         {
