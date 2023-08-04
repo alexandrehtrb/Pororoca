@@ -6,13 +6,12 @@ using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.Views;
 using ReactiveUI;
 using Avalonia.Platform;
-using MessageBox.Avalonia.DTO;
-using MessageBox.Avalonia.Enums;
-using MsBox.Avalonia;
-using MsBox.Avalonia.Enums;
 using Pororoca.Desktop.Localization;
 using Avalonia.Media.Imaging;
 using ReactiveUI.Fody.Helpers;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Dto;
+using MsBox.Avalonia.Enums;
 
 namespace Pororoca.Desktop.HotKeys;
 
@@ -29,6 +28,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
     public ReactiveCommand<Unit, Unit> DuplicateCmd { get; }
     public ReactiveCommand<Unit, Unit> MoveUpCmd { get; }
     public ReactiveCommand<Unit, Unit> MoveDownCmd { get; }
+    public ReactiveCommand<Unit, Unit> ShowHelpCmd { get; }
     public ReactiveCommand<Unit, Unit> RenameCmd { get; }
     public ReactiveCommand<Unit, Unit> SendRequestOrConnectWebSocketCmd { get; }
     public ReactiveCommand<Unit, Unit> CancelRequestOrDisconnectWebSocketCmd { get; }
@@ -62,6 +62,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
         // Moving items up and down is not great yet
         MoveUpCmd = ReactiveCommand.Create(MoveSelectedItemUp);
         MoveDownCmd = ReactiveCommand.Create(MoveSelectedItemDown);
+        ShowHelpCmd = ReactiveCommand.Create(ShowHelpDialog);
         RenameCmd = ReactiveCommand.Create(RenameSelectedItem);
         FocusOnUrlCmd = ReactiveCommand.Create(FocusOnUrl);
         SendRequestOrConnectWebSocketCmd = ReactiveCommand.Create(SendRequestOrConnectWebSocket);
@@ -253,6 +254,26 @@ public sealed class KeyboardShortcuts : ViewModelBase
     {
         if (SelectedItem is CollectionOrganizationItemViewModel coivm)
             coivm.MoveThisDown();
+    }
+
+    #endregion
+
+    #region DELETE
+
+    private void ShowHelpDialog()
+    {
+        Bitmap bitmap = new(AssetLoader.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
+
+        var msgbox = MessageBoxManager.GetMessageBoxStandard(
+            new MessageBoxStandardParams()
+            {
+                ContentTitle = Localizer.Instance.HelpDialog.Title,
+                ContentMessage = Localizer.Instance.HelpDialog.Content,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                WindowIcon = new(bitmap),
+                ButtonDefinitions = ButtonEnum.Ok
+            });
+        Dispatcher.UIThread.Post(async () => await msgbox.ShowAsync());
     }
 
     #endregion
