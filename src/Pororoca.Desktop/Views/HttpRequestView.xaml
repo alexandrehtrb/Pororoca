@@ -82,6 +82,7 @@
             VerticalAlignment="Stretch">
 
           <TextBox
+              x:Name="tbUrl"
               Height="40"
               Text="{Binding RequestUrl}"
               Watermark="{Binding i18n.HttpRequest.UrlWatermark}"
@@ -125,6 +126,7 @@
               IsVisible="{Binding !IsRequesting}"
               Command="{Binding SendRequestCmd}"
               Content="{Binding i18n.HttpRequest.SendRequest}"
+              ToolTip.Tip="{Binding i18n.HttpRequest.SendRequestToolTip}"
               Classes="Primary"/>
 
           <Button
@@ -135,6 +137,7 @@
               IsVisible="{Binding IsRequesting}"
               Command="{Binding CancelRequestCmd}"
               Content="{Binding i18n.HttpRequest.CancelRequest}"
+              ToolTip.Tip="{Binding i18n.HttpRequest.CancelRequestToolTip}"
               Classes="PrimaryInverted"/>
 
         </Grid>
@@ -737,6 +740,8 @@
                   Margin="0,12,0,0">
                 <Button
                     Content="{Binding i18n.HttpResponse.BodySaveToFile}"
+                    ToolTip.Tip="{Binding i18n.HttpResponse.BodySaveToFileToolTip}"
+                    ToolTip.Placement="Top"
                     Margin="0,0,6,12"
                     IsVisible="{Binding ResponseDataCtx.IsSaveResponseBodyToFileVisible}"
                     Command="{Binding ResponseDataCtx.SaveResponseBodyToFileCmd}"
