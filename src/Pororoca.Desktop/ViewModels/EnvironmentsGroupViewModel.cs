@@ -102,23 +102,32 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
         UpdateSelectedEnvironmentName();
     }
 
-    public void SetNextEnvironmentAsActive()
+    public void CycleActiveEnvironment(bool trueIfNextFalseIfPrevious)
     {
         if (Items.Count == 0)
         {
-            return;
+            return; // if there are no environments
         }
 
         var selectedEnv = Items.FirstOrDefault(i => i.IsCurrentEnvironment);
         int nextIndex;
         if (selectedEnv == null)
         {
-            nextIndex = 0;
+            nextIndex = 0; // if no active environments, the first one will be activated
         }
         else
         {
             int currentIndex = Items.IndexOf(selectedEnv);
-            nextIndex = (currentIndex + 1) % Items.Count;
+            if (trueIfNextFalseIfPrevious)
+            {
+                // cycling forward
+                nextIndex = (currentIndex + 1) % Items.Count;
+            }
+            else
+            {
+                // cycling backwards
+                nextIndex = (currentIndex - 1 + Items.Count) % Items.Count;
+            }
         }
         var nextEnv = Items[nextIndex];
         SetEnvironmentAsCurrent(nextEnv);

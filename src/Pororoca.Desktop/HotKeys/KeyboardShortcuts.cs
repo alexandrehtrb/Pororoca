@@ -32,6 +32,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
     public ReactiveCommand<Unit, Unit> RenameCmd { get; }
     public ReactiveCommand<Unit, Unit> SendRequestOrConnectWebSocketCmd { get; }
     public ReactiveCommand<Unit, Unit> CancelRequestOrDisconnectWebSocketCmd { get; }
+    public ReactiveCommand<Unit, Unit> CyclePreviousEnvironmentToActiveCmd { get; }
     public ReactiveCommand<Unit, Unit> CycleNextEnvironmentToActiveCmd { get; }
     public ReactiveCommand<Unit, Unit> SaveResponseToFileCmd { get; }
     public ReactiveCommand<Unit, Unit> FocusOnUrlCmd { get; }
@@ -65,7 +66,8 @@ public sealed class KeyboardShortcuts : ViewModelBase
         FocusOnUrlCmd = ReactiveCommand.Create(FocusOnUrl);
         SendRequestOrConnectWebSocketCmd = ReactiveCommand.Create(SendRequestOrConnectWebSocket);
         CancelRequestOrDisconnectWebSocketCmd = ReactiveCommand.Create(CancelRequestOrDisconnectWebSocket);
-        CycleNextEnvironmentToActiveCmd = ReactiveCommand.Create(CycleNextEnvironmentToActive);
+        CyclePreviousEnvironmentToActiveCmd = ReactiveCommand.Create(() => CycleActiveEnvironments(false));
+        CycleNextEnvironmentToActiveCmd = ReactiveCommand.Create(() => CycleActiveEnvironments(true));
         SaveResponseToFileCmd = ReactiveCommand.Create(SaveResponseToFile);
     }
 
@@ -332,7 +334,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
 
     #region CYCLE ENVIRONMENTS
 
-    internal void CycleNextEnvironmentToActive()
+    internal void CycleActiveEnvironments(bool trueIfNextFalseIfPrevious)
     {
         if (SelectedItem is CollectionOrganizationItemViewModel coivm)
         {
@@ -350,7 +352,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
             }
             var cvm = (CollectionViewModel)coivm;
             var egvm = (EnvironmentsGroupViewModel)cvm.Items.First(y => y is EnvironmentsGroupViewModel);
-            egvm.SetNextEnvironmentAsActive();
+            egvm.CycleActiveEnvironment(trueIfNextFalseIfPrevious);
         }
     }
 

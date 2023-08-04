@@ -25,6 +25,7 @@
     <KeyBinding Command="{Binding HotKeys.FocusOnUrlCmd}" Gesture="F4" />
     <KeyBinding Command="{Binding HotKeys.SendRequestOrConnectWebSocketCmd}" Gesture="F5" />
     <KeyBinding Command="{Binding HotKeys.CancelRequestOrDisconnectWebSocketCmd}" Gesture="F6" />
+    <KeyBinding Command="{Binding HotKeys.CyclePreviousEnvironmentToActiveCmd}" Gesture="F7" />
     <KeyBinding Command="{Binding HotKeys.CycleNextEnvironmentToActiveCmd}" Gesture="F8" />
     <KeyBinding Command="{Binding HotKeys.SaveResponseToFileCmd}" Gesture="Ctrl+S" />
     <KeyBinding Command="{Binding HotKeys.MoveUpCmd}" Gesture="Alt+Up" />
