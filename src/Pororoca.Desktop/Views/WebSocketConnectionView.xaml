@@ -114,6 +114,7 @@
             IsVisible="{Binding !IsConnected}"
             Command="{Binding ConnectCmd}"
             Content="{Binding i18n.WebSocketConnection.Connect}"
+            ToolTip.Tip="{Binding i18n.WebSocketConnection.ConnectToolTip}"
             Classes="Primary"/>
 
         <Button
@@ -127,6 +128,7 @@
             IsVisible="{Binding IsConnecting}"
             Command="{Binding CancelConnectCmd}"
             Content="{Binding i18n.WebSocketConnection.CancelConnect}"
+            ToolTip.Tip="{Binding i18n.WebSocketConnection.CancelConnectToolTip}"
             Classes="Primary"/>
 
         <Button
@@ -140,6 +142,7 @@
             IsVisible="{Binding IsConnected}"
             Command="{Binding DisconnectCmd}"
             Content="{Binding i18n.WebSocketConnection.Disconnect}"
+            ToolTip.Tip="{Binding i18n.WebSocketConnection.DisconnectToolTip}"
             Classes="PrimaryInverted"/>
 
         <Button
@@ -710,6 +713,8 @@
             Grid.Column="0"
             Grid.Row="3"
             Content="{Binding i18n.WebSocketExchangedMessageDetail.SaveToFile}"
+            ToolTip.Tip="{Binding i18n.WebSocketExchangedMessageDetail.SaveToFileToolTip}"
+            ToolTip.Placement="Top"
             Margin="12,0,12,24"
             IsVisible="{Binding IsSaveSelectedExchangedMessageToFileVisible}"
             Command="{Binding SaveSelectedExchangedMessageToFileCmd}"

@@ -90,6 +90,7 @@
         Width="40"
         Margin="12,0,0,0"
         Command="{Binding EditOrApplyTxtChangeCmd}"
+        ToolTip.Tip="{Binding i18n.EditableTextBlock.RenameToolTip}"
         HorizontalContentAlignment="Center"
         VerticalContentAlignment="Center"
         HorizontalAlignment="Left"
