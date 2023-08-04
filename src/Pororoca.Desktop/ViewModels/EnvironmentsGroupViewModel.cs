@@ -57,18 +57,6 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
 
     #region COLLECTION ORGANIZATION
 
-    public override void RefreshSubItemsAvailableMovements()
-    {
-        for (int x = 0; x < Items.Count; x++)
-        {
-            var envVm = Items[x];
-            bool canMoveUp = x > 0;
-            bool canMoveDown = x < Items.Count - 1;
-            envVm.CanMoveUp = canMoveUp;
-            envVm.CanMoveDown = canMoveDown;
-        }
-    }
-
     public void AddNewEnvironment()
     {
         PororocaEnvironment newEnv = new(Localizer.Instance.Environment.NewEnvironment);

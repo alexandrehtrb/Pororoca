@@ -44,7 +44,17 @@ public abstract class CollectionOrganizationItemParentViewModel<T> : CollectionO
         }
     }
 
-    public abstract void RefreshSubItemsAvailableMovements();
+    public virtual void RefreshSubItemsAvailableMovements()
+    {
+        for (int x = 0; x < Items.Count; x++)
+        {
+            if (Items[x] is CollectionOrganizationItemViewModel colItemVm)
+            {
+                colItemVm.CanMoveUp = x > 0;
+                colItemVm.CanMoveDown = x < Items.Count - 1;
+            }
+        }
+    }
 
     public abstract void PasteToThis();
 

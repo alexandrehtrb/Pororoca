@@ -102,10 +102,22 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
         for (int x = 0; x < Items.Count; x++)
         {
             var colItemVm = Items[x];
-            bool canMoveUp = x > 2; // Variables and Environments must remain at their positions
-            bool canMoveDown = x < Items.Count - 1;
-            colItemVm.CanMoveUp = canMoveUp;
-            colItemVm.CanMoveDown = canMoveDown;
+            int indexOfLastSubfolder = Items.GetLastIndexOf<CollectionFolderViewModel>();
+            if (colItemVm is CollectionVariablesViewModel || colItemVm is EnvironmentsGroupViewModel)
+            {
+                // Variables and Environments must remain at their positions
+                colItemVm.CanMoveUp = colItemVm.CanMoveDown = false;
+            }
+            else if (colItemVm is CollectionFolderViewModel)
+            {
+                colItemVm.CanMoveUp = x > 2;
+                colItemVm.CanMoveDown = x < indexOfLastSubfolder;
+            }
+            else // http requests and websockets
+            {
+                colItemVm.CanMoveUp = x > (indexOfLastSubfolder == -1 ? 2 : (indexOfLastSubfolder + 1));
+                colItemVm.CanMoveDown = x < Items.Count - 1;
+            }
         }
     }
 

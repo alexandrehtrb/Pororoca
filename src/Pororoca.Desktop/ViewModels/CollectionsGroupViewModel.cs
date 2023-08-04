@@ -47,17 +47,6 @@ public sealed class CollectionsGroupViewModel : CollectionOrganizationItemParent
 
     #region COLLECTIONS ORGANIZATION
 
-    public override void RefreshSubItemsAvailableMovements()
-    {
-        for (int x = 0; x < Items.Count; x++)
-        {
-            CollectionOrganizationItemViewModel colItemVm = Items[x];
-            bool canMoveUp = x > 0;
-            bool canMoveDown = x < Items.Count - 1;
-            colItemVm.CanMoveUp = canMoveUp;
-            colItemVm.CanMoveDown = canMoveDown;
-        }
-    }
     private void OnCollectionGroupSelectedItemsChanged(object? sender, NotifyCollectionChangedEventArgs e) =>
         KeyboardShortcuts.Instance.HasMultipleItemsSelected = CollectionGroupSelectedItems.Count > 1;
 
