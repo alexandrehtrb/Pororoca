@@ -357,15 +357,20 @@ public sealed class KeyboardShortcuts : ViewModelBase
     internal void FocusOnUrl()
     {
         var mwvm = MainWindowVm;
+        TextBox? tbUrl = null;
         if (mwvm.IsHttpRequestViewVisible)
         {
-            var tbUrl = MainWindow.Instance!.FindControl<HttpRequestView>("httpReqView")?.FindControl<TextBox>("tbUrl");
-            tbUrl?.Focus();
+            tbUrl = MainWindow.Instance!.FindControl<HttpRequestView>("httpReqView")?.FindControl<TextBox>("tbUrl");
         }
         else if (mwvm.IsWebSocketConnectionViewVisible)
         {
-            var tbUrl = MainWindow.Instance!.FindControl<HttpRequestView>("wsConnView")?.FindControl<TextBox>("tbUrl");
-            tbUrl?.Focus();
+            tbUrl = MainWindow.Instance!.FindControl<HttpRequestView>("wsConnView")?.FindControl<TextBox>("tbUrl");
+        }
+
+        if (tbUrl is not null)
+        {
+            tbUrl.Focus();
+            tbUrl.CaretIndex = tbUrl.Text is null ? 0 : tbUrl.Text.Length;
         }
     }
 
