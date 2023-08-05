@@ -1,6 +1,6 @@
 # Changelog
 
-* [2.2.0](#220-2023-07-06)
+* [2.2.0](#220-2023-08-07)
 * [2.1.0](#210-2023-04-24)
 * [2.0.1](#201-2023-02-26)
 * [2.0.0](#200-2022-12-20)
@@ -12,12 +12,30 @@
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
 
-## [2.2.0](https://github.com/alexandrehtrb/Pororoca/tree/2.2.0) (2023-07-06)
+## [2.2.0](https://github.com/alexandrehtrb/Pororoca/tree/2.2.0) (2023-08-07)
 
 ### Features
 
 * Visual themes are now available: light, dark, pampa and amazonian night.
 * Default font now is Cabin.
+* Adds russian language by [@RVShershnev](https://github.com/RVShershnev)
+* A dialog now appears to confirm if you really want to delete an item.
+* Keyboard shortcuts added! They are:
+  * F1 - Show help
+  * F2 - Rename
+  * F4 - Focus on URL
+  * F5 - Send request / connect WebSocket
+  * F6 - Cancel request / disconnect WebSocket
+  * F7 - Set previous environment as active
+  * F8 - Set next environment as active
+  * Ctrl+S - Save response body to file
+  * Alt+Up - Move item up in tree
+  * Alt+Down - Move item down in tree
+  * Ctrl+X - Cut items
+  * Ctrl+C - Copy items
+  * Ctrl+V - Paste items
+  * Ctrl+D - Duplicate collection
+  * Delete - Delete items
 
 ### Bug Fixes
 
@@ -33,13 +51,18 @@
 * JSON strings are now detected using Utf8JsonReader from System.Text.Json, in a faster way.
 * Safer mechanism of saving user collections on app shutdown.
 * Some Pororoca domain classes were refactored into records.
+* Code for copying, pasting and adding items is simpler now.
 
 ### Others
 
-* Raised Avalonia version to 11.0.0.
-* Raised .NET SDK version to 7.0.305.
+* Raised Avalonia version to 11.0.2.
+* Raised .NET SDK version to 7.0.306.
 * Created GitHub Actions pipeline for generation of Pororoca Desktop and Pororoca.Test releases.
 * Drag and drop on tables was removed due to conflict with text inputs. This feature hopefully will be back soon.
+
+### New Contributors
+
+* [@RVShershnev](https://github.com/RVShershnev) made his first contributions in PRs [#24](https://github.com/alexandrehtrb/Pororoca/pull/24) and [#25](https://github.com/alexandrehtrb/Pororoca/pull/25)
 
 ## [2.1.0](https://github.com/alexandrehtrb/Pororoca/tree/2.1.0) (2023-04-24)
 
