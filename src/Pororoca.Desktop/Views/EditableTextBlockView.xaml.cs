@@ -42,7 +42,9 @@ public class EditableTextBlockView : UserControl
     {
         if (isEditing)
         {
-            this.FindControl<TextBox>("txtBox")?.Focus();
+            var txtBox = this.FindControl<TextBox>("txtBox")!;
+            txtBox.Focus();
+            txtBox.CaretIndex = txtBox.Text is null ? 0 : txtBox.Text.Length;
         }
     }
 }
