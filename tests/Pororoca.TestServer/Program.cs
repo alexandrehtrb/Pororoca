@@ -40,7 +40,7 @@ public static class Program
         Log.Logger = new LoggerConfiguration()
             .ReadFrom.Configuration(configuration)
             .Enrich.FromLogContext()
-            .Enrich.WithProperty("ApplicationName", typeof(Program).Assembly.GetName().Name)
+            .Enrich.WithProperty("ApplicationName", typeof(Program).Assembly.GetName().Name ?? "Pororoca.TestServer")
             .WriteTo.Console()
             .CreateLogger();
 
