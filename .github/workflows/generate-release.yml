@@ -39,49 +39,49 @@ on:
 
 jobs:
   nuget:
-    if: ${{ inputs.nuget == 'true' }}
+    if: ${{ inputs.nuget }}
     uses: ./.github/workflows/generate-pororoca-test-nuget-wfw.yml
   linux-x64:
-    if: ${{ inputs.linux-x64 == 'true' }}
+    if: ${{ inputs.linux-x64 }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
     with:
       os: ubuntu-latest
       rid: linux-x64
   osx-x64:
-    if: ${{ inputs.osx-x64 == 'true' }}
+    if: ${{ inputs.osx-x64 }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
     with:
       os: ubuntu-latest
       rid: osx-x64
   osx-arm64:
-    if: ${{ inputs.osx-arm64 == 'true' }}
+    if: ${{ inputs.osx-arm64 }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
     with:
       os: ubuntu-latest
       rid: osx-arm64
   win-x64-installer:
-    if: ${{ inputs.win-x64-installer == 'true' }}
+    if: ${{ inputs.win-x64-installer }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
     with:
       os: windows-latest
       rid: win-x64
       installation: withInstaller
   win-x64-portable:
-    if: ${{ inputs.win-x64-portable == 'true' }}
+    if: ${{ inputs.win-x64-portable }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
     with:
       os: windows-latest
       rid: win-x64
       installation: portable
   win-x86-installer:
-    if: ${{ inputs.win-x86-installer == 'true' }}
+    if: ${{ inputs.win-x86-installer }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
     with:
       os: windows-latest
       rid: win-x86
       installation: withInstaller
   win-x86-portable:
-    if: ${{ inputs.win-x86-portable == 'true' }}
+    if: ${{ inputs.win-x86-portable }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
     with:
       os: windows-latest
