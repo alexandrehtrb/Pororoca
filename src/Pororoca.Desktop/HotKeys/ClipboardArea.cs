@@ -11,17 +11,27 @@ public sealed class ClipboardArea : ViewModelBase
 
     private readonly List<ICloneable> copiedDomainObjs = new();
 
-    [Reactive]
-    public bool CanPasteEnvironment { get; set; }
+    internal List<CollectionOrganizationItemViewModel>? ItemsMarkedForCut { get; set; }
 
     [Reactive]
-    public bool CanPasteCollectionFolderOrRequest { get; set; }
+    public bool CanPasteEnvironment { get; private set; }
 
     [Reactive]
-    public bool CanPasteWebSocketClientMessage { get; set; }
+    public bool CanPasteCollectionFolderOrRequest { get; private set; }
+
+    [Reactive]
+    public bool CanPasteWebSocketClientMessage { get; private set; }
 
     public bool OnlyHasCopiesOfWebSocketClientMessages =>
         this.copiedDomainObjs.TrueForAll(x => x is PororocaWebSocketClientMessage);
+
+    public void ClearCopiedItems()
+    {
+        this.copiedDomainObjs.Clear();
+        CanPasteEnvironment = false;
+        CanPasteCollectionFolderOrRequest = false;
+        CanPasteWebSocketClientMessage = false;
+    }
 
     public void PushToCopy(params ICloneable[] domainObjsToCopy)
     {

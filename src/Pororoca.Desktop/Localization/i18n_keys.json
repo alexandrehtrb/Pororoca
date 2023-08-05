@@ -1,4 +1,8 @@
 [
+	"CannotCopyOrCutCollectionDialog/Title",
+	"CannotCopyOrCutCollectionDialog/Content",
+	"CannotPasteItemToItselfDialog/Title",
+	"CannotPasteItemToItselfDialog/Content",
 	"Collection/AddEnvironment",
 	"Collection/AddFolder",
 	"Collection/AddHttpRequest",
@@ -33,6 +37,7 @@
 	"CollectionsGroup/Environments",
 	"CollectionsGroup/Variables",
 	"CollectionsGroupContextMenu/Copy",
+	"CollectionsGroupContextMenu/Cut",
 	"CollectionsGroupContextMenu/Delete",
 	"CollectionsGroupContextMenu/Duplicate",
 	"CollectionsGroupContextMenu/Export",

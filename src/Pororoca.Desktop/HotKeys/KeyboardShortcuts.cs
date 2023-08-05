@@ -22,6 +22,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
     [Reactive]
     public bool HasMultipleItemsSelected { get; set; }
 
+    public ReactiveCommand<Unit, Unit> CutCmd { get; }
     public ReactiveCommand<Unit, Unit> CopyCmd { get; }
     public ReactiveCommand<Unit, Unit> PasteCmd { get; }
     public ReactiveCommand<Unit, Unit> DeleteCmd { get; }
@@ -45,16 +46,18 @@ public sealed class KeyboardShortcuts : ViewModelBase
     private CollectionsGroupViewModel CollectionsGroupVm => 
         MainWindowVm.CollectionsGroupViewDataCtx;
 
-    private ViewModelBase? SelectedItem =>
+    private CollectionOrganizationItemViewModel? SelectedItem =>
         CollectionsGroupVm.CollectionGroupSelectedItem;
 
-    private ObservableCollection<ViewModelBase> SelectedItems =>
+    private ObservableCollection<CollectionOrganizationItemViewModel> SelectedItems =>
         CollectionsGroupVm.CollectionGroupSelectedItems;
 
     #endregion
 
     private KeyboardShortcuts()
     {
+        // TODO: Add keyboard shortcut for undo (Ctrl+Z)
+        CutCmd = ReactiveCommand.Create(CutSelectedItems);
         CopyCmd = ReactiveCommand.Create(CopySelectedItems);
         PasteCmd = ReactiveCommand.Create(PasteCopiedItems);
         DeleteCmd = ReactiveCommand.Create(AskUserToConfirmDeleteItems);
@@ -72,7 +75,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
         SaveResponseToFileCmd = ReactiveCommand.Create(SaveResponseToFile);
     }
 
-    #region COPY
+    #region COPY AND CUT
 
     private bool HasAnyParentAlsoSelected(CollectionOrganizationItemViewModel itemVm)
     {
@@ -95,7 +98,55 @@ public sealed class KeyboardShortcuts : ViewModelBase
         return false;
     }
 
+    private void CutSelectedItems()
+    {
+        // IMPORTANT: needs to be a new list, not just a reference
+        // IMPORTANT: Collections can not be marked for cut deletion (after pasting), 
+        // because they cannot be pasted into other collections
+        if (AreAnyCollectionsBeingCopiedOrCut())
+        {
+            ShowCollectionsCannotBeCopiedOrCutDialog();
+            return;
+        }
+
+        ClipboardArea.ItemsMarkedForCut = SelectedItems.ToList();
+
+        PushSelectedItemsToClipboardArea();
+    }
+
     private void CopySelectedItems()
+    {
+        // we must clear items marked for cut if it's just a copy
+        if (AreAnyCollectionsBeingCopiedOrCut())
+        {
+            ShowCollectionsCannotBeCopiedOrCutDialog();
+            return;
+        }
+
+        ClipboardArea.ItemsMarkedForCut = null;
+
+        PushSelectedItemsToClipboardArea();
+    }
+
+    private bool AreAnyCollectionsBeingCopiedOrCut() =>
+        SelectedItems.Any(x => x is CollectionViewModel);
+
+    private void ShowCollectionsCannotBeCopiedOrCutDialog()
+    {
+        Bitmap bitmap = new(AssetLoader.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
+        var msgbox = MessageBoxManager.GetMessageBoxStandard(
+            new MessageBoxStandardParams()
+            {
+                ContentTitle = Localizer.Instance.CannotCopyOrCutCollectionDialog.Title,
+                ContentMessage = Localizer.Instance.CannotCopyOrCutCollectionDialog.Content,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                WindowIcon = new(bitmap),
+                ButtonDefinitions = ButtonEnum.Ok
+            });
+        Dispatcher.UIThread.Post(async () => await msgbox.ShowAsync());
+    }
+
+    private void PushSelectedItemsToClipboardArea()
     {
         var reqsToCopy = SelectedItems
                          .Where(i => i is HttpRequestViewModel reqVm && !HasAnyParentAlsoSelected(reqVm))
@@ -120,6 +171,24 @@ public sealed class KeyboardShortcuts : ViewModelBase
     #region PASTE
 
     private void PasteCopiedItems()
+    {
+        if (ClipboardArea.ItemsMarkedForCut?.Any(x => x == SelectedItem) == true)
+        {
+            ShowCannotPasteCutItemToItselfDialog();
+            return;
+        }
+
+        PasteCopiedItemsToSpecificVm();
+
+        if (ClipboardArea.ItemsMarkedForCut is not null)
+        {
+            DeleteMultiple(ClipboardArea.ItemsMarkedForCut);
+            ClipboardArea.ClearCopiedItems();
+            ClipboardArea.ItemsMarkedForCut = null;
+        }
+    }
+
+    private void PasteCopiedItemsToSpecificVm()
     {
         if (SelectedItem is CollectionViewModel cvm)
         {
@@ -169,6 +238,21 @@ public sealed class KeyboardShortcuts : ViewModelBase
         }
     }
 
+    private void ShowCannotPasteCutItemToItselfDialog()
+    {
+        Bitmap bitmap = new(AssetLoader.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
+        var msgbox = MessageBoxManager.GetMessageBoxStandard(
+            new MessageBoxStandardParams()
+            {
+                ContentTitle = Localizer.Instance.CannotPasteItemToItselfDialog.Title,
+                ContentMessage = Localizer.Instance.CannotPasteItemToItselfDialog.Content,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                WindowIcon = new(bitmap),
+                ButtonDefinitions = ButtonEnum.Ok
+            });
+        Dispatcher.UIThread.Post(async () => await msgbox.ShowAsync());
+    }
+
     #endregion
 
     #region DELETE
@@ -185,15 +269,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
         }
         else
         {
-            string itemName;
-            if (SelectedItem is CollectionOrganizationItemViewModel coivm)
-            {
-                itemName = coivm.Name;
-            }
-            else
-            {
-                itemName = string.Empty;
-            }
+            string itemName = SelectedItem?.Name ?? string.Empty;
             dialogMsg = string.Format(Localizer.Instance.DeleteItemsDialog.MessageSingleItem, itemName);
         }
 
@@ -211,13 +287,13 @@ public sealed class KeyboardShortcuts : ViewModelBase
             var buttonResult = await msgbox.ShowAsync();
             if (buttonResult == ButtonResult.Ok)
             {
-                DeleteMultiple();
+                DeleteMultiple(SelectedItems);
             }
         });
     }
 
-    private void DeleteMultiple() =>
-        SelectedItems
+    private void DeleteMultiple(ICollection<CollectionOrganizationItemViewModel> itemsToDelete) =>
+        itemsToDelete
         .Where(i => i is CollectionViewModel
                  || i is CollectionFolderViewModel
                  || i is EnvironmentViewModel
@@ -244,17 +320,9 @@ public sealed class KeyboardShortcuts : ViewModelBase
     
     #region MOVE UP AND DOWN
 
-    private void MoveSelectedItemUp()
-    {
-        if (SelectedItem is CollectionOrganizationItemViewModel coivm)
-            coivm.MoveThisUp();
-    }
+    private void MoveSelectedItemUp() => SelectedItem?.MoveThisUp();
 
-    private void MoveSelectedItemDown()
-    {
-        if (SelectedItem is CollectionOrganizationItemViewModel coivm)
-            coivm.MoveThisDown();
-    }
+    private void MoveSelectedItemDown() => SelectedItem?.MoveThisDown();
 
     #endregion
 
@@ -280,11 +348,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
 
     #region RENAME
 
-    private void RenameSelectedItem()
-    {
-        if (SelectedItem is CollectionOrganizationItemViewModel coivm)
-            coivm.RenameThis();
-    }
+    private void RenameSelectedItem() => SelectedItem?.RenameThis();
 
     #endregion
 
@@ -357,24 +421,21 @@ public sealed class KeyboardShortcuts : ViewModelBase
 
     internal void CycleActiveEnvironments(bool trueIfNextFalseIfPrevious)
     {
-        if (SelectedItem is CollectionOrganizationItemViewModel coivm)
+        var x = SelectedItem;
+        while (x is not CollectionViewModel)
         {
-            var x = coivm;
-            while (coivm is not CollectionViewModel)
+            if (x?.Parent is CollectionOrganizationItemViewModel coipvm)
             {
-                if (coivm.Parent is CollectionOrganizationItemViewModel coipvm)
-                {
-                    coivm = coipvm;
-                }
-                else
-                {
-                    return;
-                }
+                x = coipvm;
             }
-            var cvm = (CollectionViewModel)coivm;
-            var egvm = (EnvironmentsGroupViewModel)cvm.Items.First(y => y is EnvironmentsGroupViewModel);
-            egvm.CycleActiveEnvironment(trueIfNextFalseIfPrevious);
+            else
+            {
+                return;
+            }
         }
+        var cvm = (CollectionViewModel)x;
+        var egvm = (EnvironmentsGroupViewModel)cvm.Items.First(y => y is EnvironmentsGroupViewModel);
+        egvm.CycleActiveEnvironment(trueIfNextFalseIfPrevious);
     }
 
     #endregion

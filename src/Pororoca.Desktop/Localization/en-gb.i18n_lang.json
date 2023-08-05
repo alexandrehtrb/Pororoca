@@ -1,4 +1,8 @@
 {
+    "CannotCopyOrCutCollectionDialog/Title": "Pororoca - Copy items",
+    "CannotCopyOrCutCollectionDialog/Content": "You can duplicate, but not copy or cut a collection.",
+    "CannotPasteItemToItselfDialog/Title":"Pororoca - Cut items",
+    "CannotPasteItemToItselfDialog/Content":"Cannot paste a cut item to itself.",
     "Collection/AddEnvironment": "Add environment",
     "Collection/AddFolder": "Add folder",
     "Collection/AddHttpRequest": "Add HTTP request",
@@ -33,6 +37,7 @@
     "CollectionsGroup/Environments": "Environments",
     "CollectionsGroup/Variables": "Variables",
     "CollectionsGroupContextMenu/Copy": "Copy",
+    "CollectionsGroupContextMenu/Cut": "Cut",
     "CollectionsGroupContextMenu/Delete": "Delete",
     "CollectionsGroupContextMenu/Duplicate": "Duplicate",
     "CollectionsGroupContextMenu/Export": "Export",

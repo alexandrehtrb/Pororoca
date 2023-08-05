@@ -57,7 +57,7 @@ public abstract class CollectionOrganizationItemViewModel : ViewModelBase, IColl
     public virtual void DeleteThis() =>
         Parent.DeleteSubItem(this);
 
-    public void SetAsItemInFocus(ViewModelBase vm, bool show)
+    public void SetAsItemInFocus(CollectionOrganizationItemViewModel vm, bool show)
     {
         if (show)
             CollectionsGroupDataCtx.CollectionGroupSelectedItem = vm;

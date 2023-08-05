@@ -23,6 +23,7 @@
       <TreeView.KeyBindings>
         <!-- Commands need to be defined for both keybindings and context menu actions -->
         <!-- Keyboard shortcuts are defined in CollectionsGroupView and MainWindow -->
+        <KeyBinding Command="{Binding HotKeys.CutCmd}" Gesture="Ctrl+X" />
         <KeyBinding Command="{Binding HotKeys.CopyCmd}" Gesture="Ctrl+C" />
         <KeyBinding Command="{Binding HotKeys.PasteCmd}" Gesture="Ctrl+V" />
         <KeyBinding Command="{Binding HotKeys.DeleteCmd}" Gesture="Delete" />
@@ -134,6 +135,10 @@
                   Command="{Binding AddNewWebSocketConnectionCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
+                  Header="{Binding i18n.CollectionsGroupContextMenu.Cut}"
+                  Command="{Binding HotKeys.CutCmd}"
+                  InputGesture="Ctrl+X"/>
+              <MenuItem
                   Header="{Binding i18n.CollectionsGroupContextMenu.Copy}"
                   Command="{Binding HotKeys.CopyCmd}"
                   InputGesture="Ctrl+C"/>
@@ -199,6 +204,10 @@
           <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem
+                  Header="{Binding i18n.CollectionsGroupContextMenu.Cut}"
+                  Command="{Binding HotKeys.CutCmd}"
+                  InputGesture="Ctrl+X"/>
+              <MenuItem
                   Header="{Binding i18n.CollectionsGroupContextMenu.Copy}"
                   Command="{Binding HotKeys.CopyCmd}"
                   InputGesture="Ctrl+C"/>
@@ -238,14 +247,18 @@
                   Command="{Binding AddNewWebSocketClientMessageCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Paste}"
-                  Command="{Binding HotKeys.PasteCmd}"
-                  InputGesture="Ctrl+V"
-                  IsEnabled="{Binding ClipboardArea.CanPasteWebSocketClientMessage}"/>
+                  Header="{Binding i18n.CollectionsGroupContextMenu.Cut}"
+                  Command="{Binding HotKeys.CutCmd}"
+                  InputGesture="Ctrl+X"/>
               <MenuItem
                   Header="{Binding i18n.CollectionsGroupContextMenu.Copy}"
                   Command="{Binding HotKeys.CopyCmd}"
                   InputGesture="Ctrl+C"/>
+              <MenuItem
+                  Header="{Binding i18n.CollectionsGroupContextMenu.Paste}"
+                  Command="{Binding HotKeys.PasteCmd}"
+                  InputGesture="Ctrl+V"
+                  IsEnabled="{Binding ClipboardArea.CanPasteWebSocketClientMessage}"/>
               <MenuItem
                   Header="{Binding i18n.CollectionsGroupContextMenu.Rename}"
                   Command="{Binding HotKeys.RenameCmd}"
@@ -275,6 +288,10 @@
         <TextBlock Text="{Binding Name}">
           <TextBlock.ContextMenu>
             <ContextMenu>
+              <MenuItem
+                  Header="{Binding i18n.CollectionsGroupContextMenu.Cut}"
+                  Command="{Binding HotKeys.CutCmd}"
+                  InputGesture="Ctrl+X"/>
               <MenuItem
                   Header="{Binding i18n.CollectionsGroupContextMenu.Copy}"
                   Command="{Binding HotKeys.CopyCmd}"
@@ -313,6 +330,10 @@
                   Command="{Binding SetAsCurrentEnvironmentCmd}"
                   IsEnabled="{Binding !IsCurrentEnvironment}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
+              <MenuItem
+                  Header="{Binding i18n.CollectionsGroupContextMenu.Cut}"
+                  Command="{Binding HotKeys.CutCmd}"
+                  InputGesture="Ctrl+X"/>
               <MenuItem
                   Header="{Binding i18n.CollectionsGroupContextMenu.Copy}"
                   Command="{Binding HotKeys.CopyCmd}"

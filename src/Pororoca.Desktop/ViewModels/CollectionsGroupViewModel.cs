@@ -19,10 +19,10 @@ public sealed class CollectionsGroupViewModel : CollectionOrganizationItemParent
 
     public override ObservableCollection<CollectionViewModel> Items { get; }
 
-    public ObservableCollection<ViewModelBase> CollectionGroupSelectedItems { get; }
+    public ObservableCollection<CollectionOrganizationItemViewModel> CollectionGroupSelectedItems { get; }
 
-    private ViewModelBase? collectionGroupSelectedItemField;
-    public ViewModelBase? CollectionGroupSelectedItem
+    private CollectionOrganizationItemViewModel? collectionGroupSelectedItemField;
+    public CollectionOrganizationItemViewModel? CollectionGroupSelectedItem
     {
         get => this.collectionGroupSelectedItemField;
         set
@@ -32,12 +32,12 @@ public sealed class CollectionsGroupViewModel : CollectionOrganizationItemParent
         }
     }
 
-    private readonly Action<ViewModelBase?> onCollectionsGroupItemSelected;
+    private readonly Action<CollectionOrganizationItemViewModel?> onCollectionsGroupItemSelected;
 
     #endregion
 
     public CollectionsGroupViewModel(ICollectionOrganizationItemParentViewModel parentVm,
-                                     Action<ViewModelBase?> onCollectionsGroupItemSelected) : base(parentVm, string.Empty)
+                                     Action<CollectionOrganizationItemViewModel?> onCollectionsGroupItemSelected) : base(parentVm, string.Empty)
     {
         this.onCollectionsGroupItemSelected = onCollectionsGroupItemSelected;
         Items = new();

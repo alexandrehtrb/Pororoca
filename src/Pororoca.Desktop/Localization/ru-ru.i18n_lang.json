@@ -1,4 +1,8 @@
 {
+  "CannotCopyOrCutCollectionDialog/Title": "Pororoca - Копировать элементы",
+  "CannotCopyOrCutCollectionDialog/Content": "Вы можете дублировать, но не копировать или вырезать коллекцию.",
+  "CannotPasteItemToItselfDialog/Title":"Pororoca - Вырезать предметы",
+  "CannotPasteItemToItselfDialog/Content":"Невозможно вставить вырезанный элемент сам в себя.",
   "Collection/AddEnvironment": "Добавить окружение",
   "Collection/AddFolder": "Добавить папку",
   "Collection/AddHttpRequest": "Добавить HTTP запрос",
@@ -25,6 +29,7 @@
   "CollectionsGroup/Environments": "Окружения",
   "CollectionsGroup/Variables": "Переменные",
   "CollectionsGroupContextMenu/Copy": "Копировать",
+  "CollectionsGroupContextMenu/Cut": "Резать",
   "CollectionsGroupContextMenu/Delete": "Удалить",
   "CollectionsGroupContextMenu/Duplicate": "Дублировать",
   "CollectionsGroupContextMenu/Export": "Экспорт",

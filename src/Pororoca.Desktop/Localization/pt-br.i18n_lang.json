@@ -1,4 +1,8 @@
 {
+    "CannotCopyOrCutCollectionDialog/Title": "Pororoca - Copiar itens",
+    "CannotCopyOrCutCollectionDialog/Content": "Você pode duplicar, mas não copiar ou recortar uma coleção.",
+    "CannotPasteItemToItselfDialog/Title":"Pororoca - Recortar itens",
+    "CannotPasteItemToItselfDialog/Content":"Não é possível colar um item recortado a si mesmo.",
     "Collection/AddEnvironment": "Adicionar ambiente",
     "Collection/AddFolder": "Adicionar pasta",
     "Collection/AddHttpRequest": "Adicionar req. HTTP",
@@ -33,6 +37,7 @@
     "CollectionsGroup/Environments": "Ambientes",
     "CollectionsGroup/Variables": "Variáveis",
     "CollectionsGroupContextMenu/Copy": "Copiar",
+    "CollectionsGroupContextMenu/Cut": "Recortar",
     "CollectionsGroupContextMenu/Delete": "Excluir",
     "CollectionsGroupContextMenu/Duplicate": "Duplicar",
     "CollectionsGroupContextMenu/Export": "Exportar",
