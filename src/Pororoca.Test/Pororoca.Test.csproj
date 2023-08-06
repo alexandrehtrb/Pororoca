@@ -4,7 +4,7 @@
     <!-- To generate the package: 'dotnet pack -c Release' -->
     <PackageId>Pororoca.Test</PackageId>
     <PackageIcon>pororoca.png</PackageIcon>
-    <PackageVersion>2.1.0</PackageVersion>
+    <PackageVersion>2.2.0</PackageVersion>
     <Description>Package for running Pororoca requests from tests.</Description>
     <RepositoryUrl>https://github.com/alexandrehtrb/Pororoca.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

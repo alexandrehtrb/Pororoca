@@ -1,0 +1,399 @@
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:AvaloniaEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit">
+
+  <Style Selector="TreeView TextBlock">
+    <Setter
+        Property="FontSize"
+        Value="14"/>
+    <Setter
+        Property="TextTrimming"
+        Value="CharacterEllipsis"/>
+    <Setter
+        Property="Padding"
+        Value="0,0,12,0"/>
+  </Style>
+
+  <Style Selector="TabControl WrapPanel">
+    <Setter
+        Property="Background"
+        Value="{DynamicResource MainWindowDarkerBackgroundBrush}"/>
+  </Style>
+
+  <Style Selector="Image.MenuItemCheckMark">
+    <Setter
+        Property="Width"
+        Value="12"/>
+    <Setter
+        Property="Height"
+        Value="12"/>
+    <Setter
+        Property="Margin"
+        Value="4,0,4,0"/>
+    <Setter
+        Property="VerticalAlignment"
+        Value="Center"/>
+    <Setter
+        Property="HorizontalAlignment"
+        Value="Center"/>
+  </Style>
+
+  <Style Selector="ComboBox">
+    <Setter
+        Property="FontWeight"
+        Value="Light"/>
+    <Setter
+        Property="FontSize"
+        Value="14"/>
+    <Setter
+        Property="VerticalContentAlignment"
+        Value="Center"/>
+  </Style>
+
+  <Style Selector="TextBox.SingleLine">
+    <Setter
+        Property="FontWeight"
+        Value="Light"/>
+    <Setter
+        Property="FontSize"
+        Value="14"/>
+    <Setter
+        Property="Height"
+        Value="36"/>
+  </Style>
+
+  <Style Selector="AutoCompleteBox.HasValidationProblem">
+    <Setter
+        Property="BorderThickness"
+        Value="2"/>
+    <Setter
+        Property="BorderBrush"
+        Value="{DynamicResource SystemErrorTextColor}"/>
+    <Setter
+        Property="Background"
+        Value="{DynamicResource InputBackgroundValidationProblemBrush}"/>
+  </Style>
+
+  <Style Selector="ComboBox.HasValidationProblem">
+    <Setter
+        Property="BorderThickness"
+        Value="2"/>
+    <Setter
+        Property="BorderBrush"
+        Value="{DynamicResource SystemErrorTextColor}"/>
+    <Setter
+        Property="Background"
+        Value="{DynamicResource InputBackgroundValidationProblemBrush}"/>
+  </Style>
+
+  <Style Selector="TextBox.HasValidationProblem">
+    <Setter
+        Property="BorderThickness"
+        Value="2"/>
+    <Setter
+        Property="BorderBrush"
+        Value="{DynamicResource SystemErrorTextColor}"/>
+    <Setter
+        Property="Background"
+        Value="{DynamicResource InputBackgroundValidationProblemBrush}"/>
+  </Style>
+
+  <Style Selector="TextBox.CodeTextBox">
+    <Setter
+        Property="FontFamily"
+        Value="Cascadia Code,Consolas,Menlo,Monospace"/>
+    <Setter
+        Property="FontSize"
+        Value="12"/>
+    <Setter
+        Property="HorizontalContentAlignment"
+        Value="Left"/>
+    <Setter
+        Property="VerticalContentAlignment"
+        Value="Top"/>
+    <Setter
+        Property="AcceptsReturn"
+        Value="True"/>
+    <Setter
+        Property="AcceptsTab"
+        Value="True"/>
+  </Style>
+
+  <Style Selector="TextBlock.SectionTitle">
+    <Setter
+        Property="FontSize"
+        Value="20"/>
+    <Setter
+        Property="FontWeight"
+        Value="Light"/>
+    <Setter
+        Property="HorizontalAlignment"
+        Value="Left"/>
+    <Setter
+        Property="VerticalAlignment"
+        Value="Center"/>
+    <Setter
+        Property="TextWrapping"
+        Value="Wrap"/>
+  </Style>
+
+  <Style Selector="TextBlock.TabItemHeader">
+    <Setter
+        Property="FontSize"
+        Value="16"/>
+    <Setter
+        Property="FontWeight"
+        Value="Light"/>
+    <Setter
+        Property="HorizontalAlignment"
+        Value="Center"/>
+    <Setter
+        Property="VerticalAlignment"
+        Value="Center"/>
+    <Setter
+        Property="TextWrapping"
+        Value="Wrap"/>
+  </Style>
+
+  <Style Selector="TextBlock.ErrorMessage">
+    <Setter
+        Property="FontSize"
+        Value="16"/>
+    <Setter
+        Property="Foreground"
+        Value="{DynamicResource SystemErrorTextColor}"/>
+  </Style>
+
+  <Style Selector="DataGridColumnHeader">
+    <Setter
+        Property="Background"
+        Value="Transparent"/>
+    <Setter
+        Property="TextBlock.FontSize"
+        Value="14"/>
+    <Setter
+        Property="TextBlock.FontWeight"
+        Value="Light"/>
+  </Style>
+
+  <Style Selector="GridSplitter.Separator">
+    <Setter
+        Property="Background"
+        Value="{DynamicResource MainWindowSeparatorsBrush}"/>
+  </Style>
+
+  <Style Selector="Rectangle.Separator">
+    <Setter
+        Property="Fill"
+        Value="{DynamicResource MainWindowSeparatorsBrush}"/>
+  </Style>
+
+  <Style Selector="Separator.Separator">
+    <Setter
+        Property="Background"
+        Value="{DynamicResource MainWindowSeparatorsBrush}"/>
+  </Style>
+
+  <Style Selector="Button.Primary">
+    <Setter
+        Property="Background"
+        Value="{DynamicResource ButtonPrimaryBackgroundBrush}"/>
+    <Setter
+        Property="Foreground"
+        Value="{DynamicResource ButtonPrimaryTextBrush}"/>
+  </Style>
+
+  <Style Selector="Button.Primary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter
+        Property="Background"
+        Value="{DynamicResource ButtonPrimaryHighlightBackgroundBrush}"/>
+    <Setter
+        Property="Button.Foreground"
+        Value="{DynamicResource ButtonPrimaryHighlightTextBrush}"/>
+  </Style>
+
+  <Style Selector="Button.PrimaryInverted">
+    <Setter
+        Property="Background"
+        Value="{DynamicResource ButtonPrimaryInvertedBackgroundBrush}"/>
+    <Setter
+        Property="Foreground"
+        Value="{DynamicResource ButtonPrimaryInvertedTextBrush}"/>
+  </Style>
+
+  <Style Selector="Button.PrimaryInverted:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter
+        Property="Background"
+        Value="{DynamicResource ButtonPrimaryInvertedHighlightBackgroundBrush}"/>
+    <Setter
+        Property="Button.Foreground"
+        Value="{DynamicResource ButtonPrimaryInvertedHighlightTextBrush}"/>
+  </Style>
+
+  <Style Selector="Button.Secondary">
+    <Setter
+        Property="Background"
+        Value="{DynamicResource ButtonSecondaryBackgroundBrush}"/>
+    <Setter
+        Property="Foreground"
+        Value="{DynamicResource ButtonSecondaryTextBrush}"/>
+    <Setter
+        Property="BorderThickness"
+        Value="2"/>
+    <Setter
+        Property="BorderBrush"
+        Value="{DynamicResource ButtonSecondaryBorderBrush}"/>
+  </Style>
+
+  <Style Selector="Button.Secondary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter
+        Property="Background"
+        Value="{DynamicResource ButtonSecondaryHighlightBackgroundBrush}"/>
+    <Setter
+        Property="Button.Foreground"
+        Value="{DynamicResource ButtonSecondaryHighlightTextBrush}"/>
+    <Setter
+        Property="BorderThickness"
+        Value="2"/>
+    <Setter
+        Property="BorderBrush"
+        Value="{DynamicResource ButtonSecondaryHighlightBorderBrush}"/>
+  </Style>
+
+  <Style Selector="Button.Trash">
+    <Setter Property="Background">
+      <DrawingBrush>
+        <DrawingBrush.Drawing>
+          <GeometryDrawing
+              Brush="{DynamicResource DefaultIconsBrush}"
+              Geometry="{StaticResource IconRemoveGeometry}"/>
+        </DrawingBrush.Drawing>
+      </DrawingBrush>
+    </Setter>
+  </Style>
+
+  <Style Selector="Button.Trash:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background">
+      <DrawingBrush>
+        <DrawingBrush.Drawing>
+          <GeometryDrawing
+              Brush="{DynamicResource SystemInvertedAccentColor}"
+              Geometry="{StaticResource IconRemoveGeometry}"/>
+        </DrawingBrush.Drawing>
+      </DrawingBrush>
+    </Setter>
+  </Style>
+
+  <Style Selector="Button.MoveDown">
+    <Setter Property="Background">
+      <DrawingBrush>
+        <DrawingBrush.Drawing>
+          <GeometryDrawing
+              Brush="{DynamicResource DefaultIconsBrush}"
+              Geometry="{StaticResource IconArrowDownGeometry}"/>
+        </DrawingBrush.Drawing>
+      </DrawingBrush>
+    </Setter>
+  </Style>
+
+  <Style Selector="Button.MoveDown:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background">
+      <DrawingBrush>
+        <DrawingBrush.Drawing>
+          <GeometryDrawing
+              Brush="{DynamicResource SystemInvertedAccentColor}"
+              Geometry="{StaticResource IconArrowDownGeometry}"/>
+        </DrawingBrush.Drawing>
+      </DrawingBrush>
+    </Setter>
+  </Style>
+  
+  <Style Selector="Button.MoveUp">
+    <Setter Property="Background">
+      <DrawingBrush>
+        <DrawingBrush.Drawing>
+          <GeometryDrawing
+              Brush="{DynamicResource DefaultIconsBrush}"
+              Geometry="{StaticResource IconArrowUpGeometry}"/>
+        </DrawingBrush.Drawing>
+      </DrawingBrush>
+    </Setter>
+  </Style>
+
+  <Style Selector="Button.MoveUp:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background">
+      <DrawingBrush>
+        <DrawingBrush.Drawing>
+          <GeometryDrawing
+              Brush="{DynamicResource SystemInvertedAccentColor}"
+              Geometry="{StaticResource IconArrowUpGeometry}"/>
+        </DrawingBrush.Drawing>
+      </DrawingBrush>
+    </Setter>
+  </Style>
+
+  <Style Selector="ListBox">
+    <Setter
+        Property="Background"
+        Value="{DynamicResource ListBoxBackgroundBrush}"/>
+  </Style>
+
+  <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter
+        Property="Background"
+        Value="{DynamicResource ListBoxItemSelectedBackgroundBrush}"/>
+  </Style>
+
+  <Style Selector="TextBlock.WebSocketMessageFromClientPrimary">
+    <Setter
+        Property="Foreground"
+        Value="{DynamicResource WebSocketMessageFromClientPrimaryBrush}"/>
+  </Style>
+
+  <Style Selector="TextBlock.WebSocketMessageFromClientSecondary">
+    <Setter
+        Property="Foreground"
+        Value="{DynamicResource WebSocketMessageFromClientSecondaryBrush}"/>
+  </Style>
+
+  <Style Selector="TextBlock.WebSocketMessageFromServerPrimary">
+    <Setter
+        Property="Foreground"
+        Value="{DynamicResource WebSocketMessageFromServerPrimaryBrush}"/>
+  </Style>
+
+  <Style Selector="TextBlock.WebSocketMessageFromServerSecondary">
+    <Setter
+        Property="Foreground"
+        Value="{DynamicResource WebSocketMessageFromServerSecondaryBrush}"/>
+  </Style>
+
+  <Style Selector="AvaloniaEdit|TextEditor">
+    <Setter
+        Property="Foreground"
+        Value="{DynamicResource TextEditorForegroundBrush}"/>
+    <Setter
+        Property="Background"
+        Value="{DynamicResource TextEditorBackgroundBrush}"/>
+    <Setter
+        Property="HorizontalScrollBarVisibility"
+        Value="Auto"/>
+    <Setter
+        Property="VerticalScrollBarVisibility"
+        Value="Visible"/>
+    <Setter
+        Property="ShowLineNumbers"
+        Value="True"/>
+    <Setter
+        Property="FontFamily"
+        Value="Cascadia Code,Consolas,Menlo,Monospace"/>
+    <Setter
+        Property="FontWeight"
+        Value="Light"/>
+    <Setter
+        Property="FontSize"
+        Value="14"/>
+  </Style>
+
+</Styles>

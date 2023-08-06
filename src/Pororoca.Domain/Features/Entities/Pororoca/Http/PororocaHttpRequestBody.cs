@@ -2,6 +2,15 @@ using System.Text.Json.Serialization;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca.Http;
 
+public enum PororocaHttpRequestBodyMode
+{
+    Raw,
+    File,
+    UrlEncoded,
+    FormData,
+    GraphQl
+}
+
 public sealed class PororocaHttpRequestBody : ICloneable
 {
     [JsonInclude]
@@ -75,8 +84,8 @@ public sealed class PororocaHttpRequestBody : ICloneable
             ContentType = ContentType,
             RawContent = RawContent,
             FileSrcPath = FileSrcPath,
-            UrlEncodedValues = UrlEncodedValues?.Select(u => (PororocaKeyValueParam)u.Clone())?.ToList()?.AsReadOnly(),
+            UrlEncodedValues = UrlEncodedValues?.Select(u => u.Copy())?.ToList()?.AsReadOnly(),
             FormDataValues = FormDataValues?.Select(f => (PororocaHttpRequestFormDataParam)f.Clone())?.ToList()?.AsReadOnly(),
-            GraphQlValues = (PororocaHttpRequestBodyGraphQl?)GraphQlValues?.Clone()
+            GraphQlValues = GraphQlValues?.Copy()
         };
 }

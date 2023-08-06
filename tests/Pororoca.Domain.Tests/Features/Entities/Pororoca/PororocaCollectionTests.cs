@@ -1,17 +1,10 @@
-using System.Net;
-using System.Net.Http.Headers;
-using System.Text;
-using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
-using Pororoca.Domain.Features.VariableResolution;
 using Xunit;
 
 namespace Pororoca.Domain.Tests.Features.Entities.Pororoca;
 
 public static class PororocaCollectionTests
 {
-    private static readonly TimeSpan testElapsedTime = TimeSpan.FromSeconds(4);
-
     [Theory]
     [InlineData(null)]
     [InlineData("")]
@@ -42,7 +35,8 @@ public static class PororocaCollectionTests
     {
         // GIVEN
         var col = CreateTestCollection();
-        col.UpdateEnvironments(Array.Empty<PororocaEnvironment>());
+        col.Environments.Clear();
+        col.Environments.AddRange(Array.Empty<PororocaEnvironment>());
 
         // WHEN
         string resolvedStr = col.ReplaceTemplates(strToReplaceTemplates);
@@ -111,17 +105,18 @@ public static class PororocaCollectionTests
         PororocaVariable v4env2 = new(false, "k4", "v4env2", false);
         var env2Vars = new PororocaVariable[] { v1env2, v3env2, v4env2 };
 
-        col.UpdateVariables(colVars);
+        col.Variables.Clear();
+        col.Variables.AddRange(colVars);
 
         PororocaEnvironment env1 = new("MyEnvironment1");
         env1.IsCurrent = false;
         env1.UpdateVariables(env1Vars);
-        col.AddEnvironment(env1);
+        col.Environments.Add(env1);
 
         PororocaEnvironment env2 = new("MyEnvironment2");
         env2.IsCurrent = true;
         env2.UpdateVariables(env2Vars);
-        col.AddEnvironment(env2);
+        col.Environments.Add(env2);
 
         return col;
     }

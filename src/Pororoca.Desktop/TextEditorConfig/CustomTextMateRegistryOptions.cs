@@ -1,4 +1,3 @@
-using Avalonia;
 using Avalonia.Platform;
 using TextMateSharp.Grammars;
 using TextMateSharp.Internal.Grammars.Reader;
@@ -49,9 +48,8 @@ internal class CustomTextMateRegistryOptions : IRegistryOptions
 
     private static IRawGrammar LoadPororocaJsonGrammar()
     {
-        var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
         Uri tmLangUri = new($"avares://Pororoca.Desktop/Assets/TextMateGrammars/JSONC_pororoca.tmLanguage.json");
-        using var stream = assets!.Open(tmLangUri);
+        using var stream = AssetLoader.Open(tmLangUri);
         using StreamReader sr = new(stream);
         return GrammarReader.ReadGrammarSync(sr);
     }

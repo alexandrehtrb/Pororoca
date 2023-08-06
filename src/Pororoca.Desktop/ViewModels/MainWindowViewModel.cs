@@ -1,17 +1,15 @@
 using System.Diagnostics;
 using System.Reactive;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
-using MessageBox.Avalonia;
-using MessageBox.Avalonia.DTO;
-using MessageBox.Avalonia.Enums;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Dto;
+using MsBox.Avalonia.Enums;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.UserData;
-using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -84,12 +82,35 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     [Reactive]
     public bool IsLanguagePortuguese { get; set; }
+    public ReactiveCommand<Unit, Unit> SelectLanguagePortuguesCmd { get; }
 
     [Reactive]
     public bool IsLanguageEnglish { get; set; }
-
-    public ReactiveCommand<Unit, Unit> SelectLanguagePortuguesCmd { get; }
     public ReactiveCommand<Unit, Unit> SelectLanguageEnglishCmd { get; }
+
+    [Reactive]
+    public bool IsLanguageRussian { get; set; }
+    public ReactiveCommand<Unit, Unit> SelectLanguageRussianCmd { get; }
+
+    #endregion
+
+    #region THEMES
+
+    [Reactive]
+    public bool IsThemeLight { get; set; }
+    public ReactiveCommand<Unit, Unit> SwitchToLightThemeCmd { get; }
+
+    [Reactive]
+    public bool IsThemeDark { get; set; }
+    public ReactiveCommand<Unit, Unit> SwitchToDarkThemeCmd { get; }
+
+    [Reactive]
+    public bool IsThemePampa { get; set; }
+    public ReactiveCommand<Unit, Unit> SwitchToPampaThemeCmd { get; }
+
+    [Reactive]
+    public bool IsThemeAmazonianNight { get; set; }
+    public ReactiveCommand<Unit, Unit> SwitchToAmazonianNightThemeCmd { get; }
 
     #endregion
 
@@ -102,24 +123,14 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #endregion
 
-    #region OTHERS
-
-    private readonly bool isOperatingSystemMacOsx;
-
-    #endregion
-
     #region USER PREFERENCES
 
     private UserPreferences? UserPrefs { get; set; }
 
     #endregion
 
-    public MainWindowViewModel(Func<bool>? isOperatingSystemMacOsx = null)
+    public MainWindowViewModel()
     {
-        #region OTHERS
-        this.isOperatingSystemMacOsx = (isOperatingSystemMacOsx ?? OperatingSystem.IsMacOS)();
-        #endregion
-
         #region COLLECTIONS ORGANIZATION
         CollectionsGroupViewDataCtx = new(this, OnCollectionsGroupItemSelected);
         ImportCollectionsCmd = ReactiveCommand.CreateFromTask(ImportCollectionsAsync);
@@ -127,8 +138,17 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         #endregion
 
         #region LANGUAGE
-        SelectLanguagePortuguesCmd = ReactiveCommand.Create(() => SelectLanguage(Language.PtBr));
-        SelectLanguageEnglishCmd = ReactiveCommand.Create(() => SelectLanguage(Language.EnGb));
+        SelectLanguagePortuguesCmd = ReactiveCommand.Create(() => SelectLanguage(Language.Portuguese));
+        SelectLanguageEnglishCmd = ReactiveCommand.Create(() => SelectLanguage(Language.English));
+        SelectLanguageRussianCmd = ReactiveCommand.Create(() => SelectLanguage(Language.Russian));
+        #endregion
+
+        #region THEMES
+        SwitchToLightThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Light));
+        SwitchToPampaThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Pampa));
+        SwitchToDarkThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Dark));
+        SwitchToAmazonianNightThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.AmazonianNight));
+        UpdateMenuSelectedTheme();
         #endregion
 
         #region GLOBAL OPTIONS
@@ -252,15 +272,15 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     public void MoveSubItem(ICollectionOrganizationItemViewModel colItemVm, MoveableItemMovementDirection direction) =>
         CollectionsGroupViewDataCtx.MoveSubItem(colItemVm, direction);
 
-    private void AddNewCollection()
+    public void AddNewCollection()
     {
-        PororocaCollection newCol = new(Localizer.Instance["Collection/NewCollection"]);
+        PororocaCollection newCol = new(Localizer.Instance.Collection.NewCollection);
         AddCollection(newCol, showItemInScreen: true);
     }
 
     internal void AddCollection(PororocaCollection col, bool showItemInScreen = false)
     {
-        CollectionViewModel colVm = new(this, col, DuplicateCollection);
+        CollectionViewModel colVm = new(this, col);
         CollectionsGroupViewDataCtx.Items.Add(colVm);
         CollectionsGroupViewDataCtx.RefreshSubItemsAvailableMovements();
         if (showItemInScreen)
@@ -269,18 +289,18 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         }
     }
 
-    private void DuplicateCollection(CollectionViewModel colVm)
+    public void DuplicateCollection(CollectionViewModel colVm)
     {
-        var collectionCopy = (PororocaCollection)colVm.ToCollection().Clone();
+        var collectionCopy = colVm.ToCollection().Copy(preserveIds: false);
         AddCollection(collectionCopy);
     }
 
     private void onRenameItemSelected(ViewModelBase vm) =>
         OnCollectionsGroupItemSelected(vm);
 
-    public void DeleteSubItem(ICollectionOrganizationItemViewModel colVm)
+    public void DeleteSubItem(ICollectionOrganizationItemViewModel item)
     {
-        CollectionsGroupViewDataCtx.Items.Remove((CollectionViewModel)colVm);
+        CollectionsGroupViewDataCtx.Items.Remove((CollectionViewModel)item);
         CollectionsGroupViewDataCtx.RefreshSubItemsAvailableMovements();
         onAfterItemDeleted();
     }
@@ -305,17 +325,54 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     private void SelectLanguage(Language lang)
     {
-        Localizer.Instance.LoadLanguage(lang);
+        Localizer.Instance.CurrentLanguage = lang;
         switch (lang)
         {
-            case Language.PtBr:
+            case Language.Portuguese:
                 IsLanguagePortuguese = true;
                 IsLanguageEnglish = false;
+                IsLanguageRussian = false;
                 break;
             default:
-            case Language.EnGb:
+            case Language.English:
                 IsLanguagePortuguese = false;
                 IsLanguageEnglish = true;
+                IsLanguageRussian = false;
+                break;
+            case Language.Russian:
+                IsLanguagePortuguese = false;
+                IsLanguageEnglish = false;
+                IsLanguageRussian = true;
+                break;
+        }
+    }
+
+    #endregion
+
+    #region THEMES
+
+    private void SwitchToTheme(PororocaTheme theme)
+    {
+        PororocaThemeManager.CurrentTheme = theme;
+        UpdateMenuSelectedTheme();
+    }
+
+    private void UpdateMenuSelectedTheme()
+    {
+        IsThemeLight = IsThemeDark = IsThemePampa = IsThemeAmazonianNight = false;
+        switch (PororocaThemeManager.CurrentTheme)
+        {
+            case PororocaTheme.Light:
+                IsThemeLight = true;
+                break;
+            case PororocaTheme.Dark:
+                IsThemeDark = true;
+                break;
+            case PororocaTheme.Pampa:
+                IsThemePampa = true;
+                break;
+            case PororocaTheme.AmazonianNight:
+                IsThemeAmazonianNight = true;
                 break;
         }
     }
@@ -332,7 +389,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     #region USER DATA
 
     private static UserPreferences GetDefaultUserPrefs() =>
-        new(Language.EnGb, DateTime.Now);
+        new(Language.English, DateTime.Now, PororocaThemeManager.DefaultTheme);
 
     private void LoadUserData()
     {
@@ -358,7 +415,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     public void SaveUserData()
     {
-        UserPrefs!.SetLanguage(Localizer.Instance.Language);
+        UserPrefs!.SetLanguage(Localizer.Instance.CurrentLanguage);
 
         var cols = CollectionsGroupViewDataCtx
                                     .Items
@@ -366,26 +423,27 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
                                     .DistinctBy(c => c.Id)
                                     .ToArray();
 
-        UserDataManager.SaveUserData(UserPrefs, cols).GetAwaiter().GetResult();
+        UserPrefs!.Theme = PororocaThemeManager.CurrentTheme;
+
+        UserDataManager.SaveUserData(UserPrefs, cols);
     }
 
     private void ShowUpdateReminder()
     {
-        var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
-        Bitmap bitmap = new(assets!.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
+        Bitmap bitmap = new(AssetLoader.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
 
-        var msgbox = MessageBoxManager.GetMessageBoxStandardWindow(
+        var msgbox = MessageBoxManager.GetMessageBoxStandard(
             new MessageBoxStandardParams()
             {
-                ContentTitle = Localizer.Instance["UpdateReminder/DialogTitle"],
-                ContentMessage = Localizer.Instance["UpdateReminder/DialogMessage"],
+                ContentTitle = Localizer.Instance.UpdateReminder.DialogTitle,
+                ContentMessage = Localizer.Instance.UpdateReminder.DialogMessage,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 WindowIcon = new(bitmap),
                 ButtonDefinitions = ButtonEnum.OkCancel
             });
         Dispatcher.UIThread.Post(async () =>
         {
-            var buttonResult = await msgbox.ShowDialog(MainWindow.Instance!);
+            var buttonResult = await msgbox.ShowAsync();
             if (buttonResult == ButtonResult.Ok)
             {
                 OpenPororocaSiteInWebBrowser();

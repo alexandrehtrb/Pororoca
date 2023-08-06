@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>Pororoca.Desktop</AssemblyName>
     <OutputType>WinExe</OutputType>
@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <DebugType>embedded</DebugType>
+    <EmitCompilerGeneratedFiles Condition="'$(Configuration)'=='Debug'">true</EmitCompilerGeneratedFiles>
     <!--
       line below will include INSTALLED_ON_WINDOWS preprocessor directive
       when "-p:PublishForInstallOnWindows" is specified in dotnet build, run or publish
@@ -14,16 +15,22 @@
     <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
     <PublishReadyToRun>True</PublishReadyToRun>
     <ApplicationIcon>Assets/pororoca_icon.ico</ApplicationIcon>
-    <Version>2.1.0</Version>
+    <Version>2.2.0</Version>
     <FileVersion>$(Version)</FileVersion>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <Copyright>AlexandreHTRB</Copyright>
     <!-- Licence also available at https://github.com/alexandrehtrb/Pororoca/LICENCE.md -->
-    <!--TieredCompilationQuickJitForLoops>true</TieredCompilationQuickJitForLoops-->
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Pororoca.Domain\Pororoca.Domain.csproj"/>
-    <ProjectReference Include="..\Pororoca.Infrastructure\Pororoca.Infrastructure.csproj"/>
+    <ProjectReference Include="..\Pororoca.Domain\Pororoca.Domain.csproj" />
+    <ProjectReference Include="..\Pororoca.Infrastructure\Pororoca.Infrastructure.csproj" />
+    <ProjectReference Include="..\Pororoca.Desktop.Localization.SourceGeneration\Pororoca.Desktop.Localization.SourceGeneration.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="./Localization/i18n_keys.json" />
+    <AdditionalFiles Include="./Localization/en-gb.i18n_lang.json" />
+    <AdditionalFiles Include="./Localization/pt-br.i18n_lang.json" />
+    <AdditionalFiles Include="./Localization/ru-ru.i18n_lang.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="**\*.xaml.cs">
@@ -35,20 +42,20 @@
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.0-preview4" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview4" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview4" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview4" />
-    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.0.0-preview4" />
+    <PackageReference Include="Avalonia" Version="11.0.2" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.2" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.2" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.2" />
+    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.0.2" />
     <!-- Without the package below, the app does not compile in Release configuration -->
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.0-preview4" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.2" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0-preview4" />
-    <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.0.0-preview2" />
-    <PackageReference Include="AvaloniaEdit.TextMate" Version="11.0.0-preview2" />
-    <PackageReference Include="TextMateSharp.Grammars" Version="1.0.50" />
-    
-    <PackageReference Include="ReactiveUI.Fody" Version="18.4.26" />
-    <PackageReference Include="MessageBox.Avalonia" Version="2.2.0" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.2" />
+    <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.0.1" />
+    <PackageReference Include="AvaloniaEdit.TextMate" Version="11.0.1" />
+    <PackageReference Include="TextMateSharp.Grammars" Version="1.0.55" />
+
+    <PackageReference Include="ReactiveUI.Fody" Version="19.4.1" />
+    <PackageReference Include="MessageBox.Avalonia" Version="3.1.2" />
   </ItemGroup>
 </Project>

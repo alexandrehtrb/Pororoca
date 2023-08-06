@@ -4,7 +4,6 @@ using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.ImportCollection;
 using Pororoca.Domain.Features.Requester;
-using Pororoca.Domain.Features.TranslateRequest;
 using Pororoca.Domain.Features.TranslateRequest.Http;
 using Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection;
 using Pororoca.Infrastructure.Features.Requester;
@@ -46,11 +45,8 @@ public sealed class PororocaTest
 
     public PororocaTest AndUseTheEnvironment(string environmentName)
     {
-        var selectedEnv = Collection.Environments.FirstOrDefault(e => e.Name == environmentName);
-        if (selectedEnv == null)
-        {
-            throw new Exception($"Error: Environment with the name '{environmentName}' was not found.");
-        }
+        var selectedEnv = Collection.Environments.FirstOrDefault(e => e.Name == environmentName)
+            ?? throw new Exception($"Error: Environment with the name '{environmentName}' was not found.");
 
         foreach (var env in Collection.Environments)
         {
@@ -70,26 +66,27 @@ public sealed class PororocaTest
         var variable = Collection.Variables.FirstOrDefault(v => v.Key == key);
         if (variable != null)
         {
-            variable.Value = value;
+            var newVariable = variable with { Value = value };
+            Collection.Variables.Remove(variable);
+            Collection.Variables.Add(newVariable);
         }
         else
         {
-            Collection.AddVariable(new(true, key, value, false));
+            Collection.Variables.Add(new(true, key, value, false));
         }
     }
 
     public void SetEnvironmentVariable(string environmentName, string key, string? value)
     {
-        var env = Collection.Environments.FirstOrDefault(e => e.Name == environmentName);
-        if (env is null)
-        {
-            throw new Exception($"Error: Environment with the name '{environmentName}' was not found.");
-        }
+        var env = Collection.Environments.FirstOrDefault(e => e.Name == environmentName)
+            ?? throw new Exception($"Error: Environment with the name '{environmentName}' was not found.");
 
         var variable = env.Variables.FirstOrDefault(v => v.Key == key);
         if (variable != null)
         {
-            variable.Value = value;
+            var newVariable = variable with { Value = value };
+            env.RemoveVariable(key);
+            env.AddVariable(newVariable);
         }
         else
         {

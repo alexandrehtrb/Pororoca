@@ -2,7 +2,6 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using AvaloniaEdit;
 using Pororoca.Desktop.TextEditorConfig;
-using Pororoca.Desktop.ViewModels;
 using Pororoca.Domain.Features.Common;
 
 namespace Pororoca.Desktop.Views;
@@ -11,32 +10,73 @@ public class WebSocketClientMessageView : UserControl
 {
     private readonly AvaloniaEdit.TextMate.TextMate.Installation rawContentEditorTextMateInstallation;
     private string? currentRawContentSyntaxLangId;
-    private readonly ComboBox syntaxModeCombo;
-    //private readonly ComboBox syntaxThemeCombo;
 
     public WebSocketClientMessageView()
     {
         InitializeComponent();
 
-        var rawContentTextEditor = this.FindControl<TextEditor>("RawContentEditor");
+        var rawContentTextEditor = this.FindControl<TextEditor>("teWsCliMsgContentRaw");
         this.rawContentEditorTextMateInstallation = TextEditorConfiguration.Setup(rawContentTextEditor!, true);
-
-        this.syntaxModeCombo = this.FindControl<ComboBox>("RawContentSyntaxSelector")!;
-        this.syntaxModeCombo.SelectionChanged += OnSelectedRawSyntaxChanged;
 
         // This is for testing syntax colour themes
         /*this.syntaxThemeCombo = this.FindControl<ComboBox>("RawContentThemeSelector");
         this.syntaxThemeCombo.Items = Enum.GetNames(typeof(ThemeName));
         this.syntaxThemeCombo.SelectedItem = ThemeName.DarkPlus;
         this.syntaxThemeCombo.SelectionChanged += SyntaxThemeCombo_SelectionChanged;*/
+
+        SetupSelectedOptionsPanelsVisibility();
     }
 
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
-    #region VIEW COMPONENTS EVENTS
+    #region PANELS VISIBILITY CONTROL
 
-    private void OnSelectedRawSyntaxChanged(object? sender, SelectionChangedEventArgs e) =>
-        ApplySelectedRawContentSyntaxFromVm();
+    private void SetupSelectedOptionsPanelsVisibility()
+    {
+        ComboBox cbWsCliMsgContentMode = this.FindControl<ComboBox>("cbWsCliMsgContentMode")!,
+            cbWsCliMsgContentRawSyntax = this.FindControl<ComboBox>("cbWsCliMsgContentRawSyntax")!;
+
+        ComboBoxItem cbiWsCliMsgContentModeRaw = this.FindControl<ComboBoxItem>("cbiWsCliMsgContentModeRaw")!,
+                    cbiWsCliMsgContentModeFile = this.FindControl<ComboBoxItem>("cbiWsCliMsgContentModeFile")!,
+                    cbiWsCliMsgContentRawSyntaxJson = this.FindControl<ComboBoxItem>("cbiWsCliMsgContentRawSyntaxJson")!,
+                    cbiWsCliMsgContentRawSyntaxOther = this.FindControl<ComboBoxItem>("cbiWsCliMsgContentRawSyntaxOther")!;
+
+        var teWsCliMsgContentRaw = this.FindControl<TextEditor>("teWsCliMsgContentRaw")!;
+
+        var spWsCliMsgContentFile = this.FindControl<StackPanel>("spWsCliMsgContentFile")!;
+
+        cbWsCliMsgContentMode.SelectionChanged += (sender, e) =>
+        {
+            object? selected = e.AddedItems.Count > 0 ? e.AddedItems[0] : null;
+            if (selected == cbiWsCliMsgContentModeRaw)
+            {
+                cbWsCliMsgContentRawSyntax.IsVisible = teWsCliMsgContentRaw.IsVisible = true;
+                spWsCliMsgContentFile.IsVisible = false;
+            }
+            else if (selected == cbiWsCliMsgContentModeFile)
+            {
+                cbWsCliMsgContentRawSyntax.IsVisible = teWsCliMsgContentRaw.IsVisible = false;
+                spWsCliMsgContentFile.IsVisible = true;
+            }
+        };
+
+        cbWsCliMsgContentRawSyntax.SelectionChanged += (sender, e) =>
+        {
+            object? selected = e.AddedItems.Count > 0 ? e.AddedItems[0] : null;
+            if (selected == cbiWsCliMsgContentRawSyntaxJson)
+            {
+                ApplySelectedRawContentSyntax(MimeTypesDetector.DefaultMimeTypeForJson);
+            }
+            else if (selected == cbiWsCliMsgContentRawSyntaxOther)
+            {
+                ApplySelectedRawContentSyntax(null);
+            }
+        };
+    }
+
+    #endregion
+
+    #region VIEW COMPONENTS EVENTS
 
     /*private void SyntaxThemeCombo_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
@@ -49,33 +89,10 @@ public class WebSocketClientMessageView : UserControl
 
     #endregion
 
-    #region ON DATA CONTEXT CHANGED
-
-    protected override void OnDataContextChanged(EventArgs e)
-    {
-        LoadRawContentFromVmIfSelected();
-        base.OnDataContextChanged(e);
-    }
-
-    private void LoadRawContentFromVmIfSelected()
-    {
-        var vm = (WebSocketClientMessageViewModel?)DataContext;
-        if (vm is not null && vm.IsContentModeRawSelected)
-        {
-            ApplySelectedRawContentSyntaxFromVm();
-        }
-    }
-
-    #endregion
-
     #region HELPERS
 
-    private void ApplySelectedRawContentSyntaxFromVm()
-    {
-        var vm = (WebSocketClientMessageViewModel?)DataContext;
-        string? contentType = vm is not null && vm.IsRawContentJsonSyntaxSelected ? MimeTypesDetector.DefaultMimeTypeForJson : null;
+    private void ApplySelectedRawContentSyntax(string? contentType) =>
         this.rawContentEditorTextMateInstallation.SetEditorSyntax(ref this.currentRawContentSyntaxLangId, contentType);
-    }
 
     #endregion
 }

@@ -1,6 +1,5 @@
 using Moq;
 using Pororoca.Domain.Features.Entities.Pororoca;
-using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.TranslateRequest;
 using Pororoca.Domain.Features.VariableResolution;
@@ -144,8 +143,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         var mockedVariableResolver = MockVariableResolver("{{CertificateFilePath}}", "./cert.p12");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(false);
-        PororocaRequestAuth auth = new();
-        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "prvkeypwd");
+        var auth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "prvkeypwd");
         PororocaWebSocketConnection ws = new();
         ws.Url = "ws://www.pudim.com.br";
         ws.CustomAuth = auth;
@@ -170,8 +168,7 @@ public static class PororocaWebSocketConnectionValidatorTests
             { "./cert.pem", false },
             { "./private_key.key", true }
         });
-        PororocaRequestAuth auth = new();
-        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", "./private_key.key", "prvkeypwd");
+        var auth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", "./private_key.key", "prvkeypwd");
         PororocaWebSocketConnection ws = new();
         ws.Url = "ws://www.pudim.com.br";
         ws.CustomAuth = auth;
@@ -197,8 +194,7 @@ public static class PororocaWebSocketConnectionValidatorTests
             { "./cert.pem", true },
             { "./private_key.key", false }
         });
-        PororocaRequestAuth auth = new();
-        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "./cert.pem", "{{PrivateKeyFilePath}}", "prvkeypwd");
+        var auth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "./cert.pem", "{{PrivateKeyFilePath}}", "prvkeypwd");
         PororocaWebSocketConnection ws = new();
         ws.Url = "ws://www.pudim.com.br";
         ws.CustomAuth = auth;
@@ -223,8 +219,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         var mockedVariableResolver = MockVariableResolver("{{CertificateFilePath}}", "./cert.p12");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
-        PororocaRequestAuth auth = new();
-        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, filePassword);
+        var auth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, filePassword);
         PororocaWebSocketConnection ws = new();
         ws.Url = "ws://www.pudim.com.br";
         ws.CustomAuth = auth;
@@ -249,8 +244,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         });
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
-        PororocaRequestAuth auth = new();
-        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "{{PrivateKeyFilePassword}}");
+        var auth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "{{PrivateKeyFilePassword}}");
         PororocaWebSocketConnection ws = new();
         ws.Url = "ws://www.pudim.com.br";
         ws.CustomAuth = auth;
@@ -279,8 +273,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         });
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
-        PororocaRequestAuth auth = new();
-        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", "{{PrivateKeyFilePath}}", "{{PrivateKeyFilePassword}}");
+        var auth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", "{{PrivateKeyFilePath}}", "{{PrivateKeyFilePassword}}");
         PororocaWebSocketConnection ws = new();
         ws.Url = "ws://www.pudim.com.br";
         ws.CustomAuth = auth;
@@ -309,8 +302,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         });
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
-        PororocaRequestAuth auth = new();
-        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", null, "{{FilePassword}}");
+        var auth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", null, "{{FilePassword}}");
         PororocaWebSocketConnection ws = new();
         ws.Url = "ws://www.pudim.com.br";
         ws.CustomAuth = auth;

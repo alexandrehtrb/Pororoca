@@ -39,14 +39,14 @@ internal static partial class FileExporterImporter
     {
         FilePickerSaveOptions opts = new()
         {
-            Title = Localizer.Instance["Collection/ExportCollectionDialogTitle"],
+            Title = Localizer.Instance.Collection.ExportCollectionDialogTitle,
             FileTypeChoices = new List<FilePickerFileType>()
             {
-                new(Localizer.Instance["Collection/PororocaCollectionFormat"])
+                new(Localizer.Instance.Collection.PororocaCollectionFormat)
                 {
                     Patterns = new List<string> { PororocaCollectionExtensionGlob }
                 },
-                new(Localizer.Instance["Collection/PostmanCollectionFormat"])
+                new(Localizer.Instance.Collection.PostmanCollectionFormat)
                 {
                     Patterns = new List<string> { PostmanCollectionExtensionGlob }
                 }
@@ -64,7 +64,7 @@ internal static partial class FileExporterImporter
     {
         FilePickerSaveOptions opts = new()
         {
-            Title = Localizer.Instance["Collection/ExportAsPororocaCollectionDialogTitle"],
+            Title = Localizer.Instance.Collection.ExportAsPororocaCollectionDialogTitle,
             SuggestedFileName = $"{cvm.Name}.{PororocaCollectionExtension}"
         };
 
@@ -75,7 +75,7 @@ internal static partial class FileExporterImporter
     {
         FilePickerSaveOptions opts = new()
         {
-            Title = Localizer.Instance["Collection/ExportAsPostmanCollectionDialogTitle"],
+            Title = Localizer.Instance.Collection.ExportAsPostmanCollectionDialogTitle,
             SuggestedFileName = $"{cvm.Name}.{PostmanCollectionExtension}"
         };
 
@@ -104,14 +104,14 @@ internal static partial class FileExporterImporter
     {
         FilePickerSaveOptions opts = new()
         {
-            Title = Localizer.Instance["Environment/ExportEnvironmentDialogTitle"],
+            Title = Localizer.Instance.Environment.ExportEnvironmentDialogTitle,
             FileTypeChoices = new List<FilePickerFileType>()
             {
-                new(Localizer.Instance["Environment/PororocaEnvironmentFormat"])
+                new(Localizer.Instance.Environment.PororocaEnvironmentFormat)
                 {
                     Patterns = new List<string> { PororocaEnvironmentExtensionGlob }
                 },
-                new(Localizer.Instance["Environment/PostmanEnvironmentFormat"])
+                new(Localizer.Instance.Environment.PostmanEnvironmentFormat)
                 {
                     Patterns = new List<string> { PostmanEnvironmentExtensionGlob }
                 }
@@ -129,7 +129,7 @@ internal static partial class FileExporterImporter
     {
         FilePickerSaveOptions opts = new()
         {
-            Title = Localizer.Instance["Environment/ExportAsPororocaEnvironmentDialogTitle"],
+            Title = Localizer.Instance.Environment.ExportAsPororocaEnvironmentDialogTitle,
             SuggestedFileName = $"{evm.Name}.{PororocaEnvironmentExtension}"
         };
 
@@ -140,7 +140,7 @@ internal static partial class FileExporterImporter
     {
         FilePickerSaveOptions opts = new()
         {
-            Title = Localizer.Instance["Environment/ExportAsPostmanEnvironmentDialogTitle"],
+            Title = Localizer.Instance.Environment.ExportAsPostmanEnvironmentDialogTitle,
             SuggestedFileName = $"{evm.Name}.{PostmanEnvironmentExtension}"
         };
 
@@ -172,7 +172,7 @@ internal static partial class FileExporterImporter
         if (!OperatingSystem.IsMacOS())
         {
             fileSelectionfilters.Add(
-                new(Localizer.Instance["Collection/ImportEnvironmentDialogTypes"])
+                new(Localizer.Instance.Collection.ImportEnvironmentDialogTypes)
                 {
                     Patterns = new List<string> { PororocaEnvironmentExtensionGlob, PostmanEnvironmentExtensionGlob, JsonExtensionGlob }
                 }
@@ -181,7 +181,7 @@ internal static partial class FileExporterImporter
 
         FilePickerOpenOptions opts = new()
         {
-            Title = Localizer.Instance["Collection/ImportEnvironmentDialogTitle"],
+            Title = Localizer.Instance.Collection.ImportEnvironmentDialogTitle,
             AllowMultiple = true,
             FileTypeFilter = fileSelectionfilters
         };
@@ -226,7 +226,7 @@ internal static partial class FileExporterImporter
         if (!OperatingSystem.IsMacOS())
         {
             fileSelectionfilters.Add(
-                new(Localizer.Instance["Collection/ImportCollectionDialogTypes"])
+                new(Localizer.Instance.Collection.ImportCollectionDialogTypes)
                 {
                     Patterns = new List<string> { PororocaCollectionExtensionGlob, PostmanCollectionExtensionGlob, JsonExtensionGlob }
                 }
@@ -235,7 +235,7 @@ internal static partial class FileExporterImporter
 
         FilePickerOpenOptions opts = new()
         {
-            Title = Localizer.Instance["Collection/ImportCollectionDialogTitle"],
+            Title = Localizer.Instance.Collection.ImportCollectionDialogTitle,
             AllowMultiple = true,
             FileTypeFilter = fileSelectionfilters
         };
@@ -278,7 +278,7 @@ internal static partial class FileExporterImporter
         if (!OperatingSystem.IsMacOS())
         {
             fileSelectionfilters.Add(
-                new(Localizer.Instance["RequestAuth/Pkcs12ImportCertificateFileTypesDescription"])
+                new(Localizer.Instance.RequestAuth.Pkcs12ImportCertificateFileTypesDescription)
                 {
                     Patterns = new List<string> { "*.p12", "*.pfx" }
                 }
@@ -287,7 +287,7 @@ internal static partial class FileExporterImporter
 
         FilePickerOpenOptions opts = new()
         {
-            Title = Localizer.Instance["RequestAuth/Pkcs12ImportCertificateFileDialogTitle"],
+            Title = Localizer.Instance.RequestAuth.Pkcs12ImportCertificateFileDialogTitle,
             AllowMultiple = false,
             FileTypeFilter = fileSelectionfilters
         };
@@ -302,7 +302,7 @@ internal static partial class FileExporterImporter
         if (!OperatingSystem.IsMacOS())
         {
             fileSelectionfilters.Add(
-                new(Localizer.Instance["RequestAuth/PemImportCertificateFileTypesDescription"])
+                new(Localizer.Instance.RequestAuth.PemImportCertificateFileTypesDescription)
                 {
                     Patterns = new List<string> { "*.cer", "*.crt", "*.pem" }
                 }
@@ -311,7 +311,7 @@ internal static partial class FileExporterImporter
 
         FilePickerOpenOptions opts = new()
         {
-            Title = Localizer.Instance["RequestAuth/PemImportCertificateFileDialogTitle"],
+            Title = Localizer.Instance.RequestAuth.PemImportCertificateFileDialogTitle,
             AllowMultiple = false,
             FileTypeFilter = fileSelectionfilters
         };
@@ -326,7 +326,7 @@ internal static partial class FileExporterImporter
         if (!OperatingSystem.IsMacOS())
         {
             fileSelectionfilters.Add(
-                new(Localizer.Instance["RequestAuth/PemImportPrivateKeyFileTypesDescription"])
+                new(Localizer.Instance.RequestAuth.PemImportPrivateKeyFileTypesDescription)
                 {
                     Patterns = new List<string> { "*.cer", "*.crt", "*.pem", "*.key" }
                 }
@@ -335,7 +335,7 @@ internal static partial class FileExporterImporter
 
         FilePickerOpenOptions opts = new()
         {
-            Title = Localizer.Instance["RequestAuth/PemImportPrivateKeyFileDialogTitle"],
+            Title = Localizer.Instance.RequestAuth.PemImportPrivateKeyFileDialogTitle,
             AllowMultiple = false,
             FileTypeFilter = fileSelectionfilters
         };
@@ -365,7 +365,7 @@ internal static partial class FileExporterImporter
             List<string> filesPaths = new();
             foreach (var file in files!)
             {
-                if (file is null || !file.TryGetUri(out var uri))
+                if (file is null || file.Path is null)
                 {
                     continue;
                 }
@@ -373,7 +373,7 @@ internal static partial class FileExporterImporter
                 // uri.LocalPath returns the correct path in Linux and Windows
                 // careful with file paths with whitespaces in them
                 // TODO: confirm behavior for MacOSX
-                filesPaths.Add(uri.LocalPath);
+                filesPaths.Add(file.Path.LocalPath);
             }
 
             return filesPaths;
@@ -391,12 +391,12 @@ internal static partial class FileExporterImporter
     {
         var destFile = await MainWindow.Instance!.StorageProvider.SaveFilePickerAsync(opts);
 
-        if (destFile != null && destFile.TryGetUri(out var uri))
+        if (destFile != null && destFile.Path is not null)
         {
             // uri.LocalPath returns the correct path in Linux and Windows
             // careful with file paths with whitespaces in them
             // TODO: confirm behavior for MacOSX
-            return uri.LocalPath;
+            return destFile.Path.LocalPath;
         }
         else
         {

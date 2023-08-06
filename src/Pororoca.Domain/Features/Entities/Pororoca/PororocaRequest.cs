@@ -2,6 +2,12 @@ using System.Text.Json.Serialization;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca;
 
+public enum PororocaRequestType
+{
+    Http,
+    Websocket
+}
+
 public abstract class PororocaRequest : PororocaCollectionItem
 {
     [JsonPropertyOrder(-3)]

@@ -1,15 +1,10 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
-using System.Text;
-using Avalonia.Controls;
 using Pororoca.Desktop.ExportImport;
-using Pororoca.Desktop.Localization;
-using Pororoca.Desktop.Views;
+using Pororoca.Desktop.HotKeys;
 using Pororoca.Domain.Features.Entities.Pororoca;
-using Pororoca.Domain.Features.ExportEnvironment;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -17,11 +12,6 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
 {
     #region COLLECTION ORGANIZATION
 
-    public ReactiveCommand<Unit, Unit> MoveUpCmd { get; }
-    public ReactiveCommand<Unit, Unit> MoveDownCmd { get; }
-    public ReactiveCommand<Unit, Unit> CopyEnvironmentCmd { get; }
-    public ReactiveCommand<Unit, Unit> RenameEnvironmentCmd { get; }
-    public ReactiveCommand<Unit, Unit> DeleteEnvironmentCmd { get; }
     public ReactiveCommand<Unit, Unit> ExportEnvironmentCmd { get; }
     public ReactiveCommand<Unit, Unit> ExportAsPororocaEnvironmentCmd { get; }
     public ReactiveCommand<Unit, Unit> ExportAsPostmanEnvironmentCmd { get; }
@@ -64,11 +54,6 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
 
         #region COLLECTION ORGANIZATION
 
-        MoveUpCmd = ReactiveCommand.Create(MoveThisUp);
-        MoveDownCmd = ReactiveCommand.Create(MoveThisDown);
-        CopyEnvironmentCmd = ReactiveCommand.Create(Copy);
-        RenameEnvironmentCmd = ReactiveCommand.Create(RenameThis);
-        DeleteEnvironmentCmd = ReactiveCommand.Create(Delete);
         ExportEnvironmentCmd = ReactiveCommand.CreateFromTask(ExportEnvironmentAsync);
         ExportAsPororocaEnvironmentCmd = ReactiveCommand.CreateFromTask(ExportAsPororocaEnvironmentAsync);
         ExportAsPostmanEnvironmentCmd = ReactiveCommand.CreateFromTask(ExportAsPostmanEnvironmentAsync);
@@ -95,7 +80,7 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
     #region COLLECTION ORGANIZATION
 
     protected override void CopyThis() =>
-        CollectionsGroupDataCtx.PushToCopy(ToEnvironment());
+        ClipboardArea.Instance.PushToCopy(ToEnvironment());
 
     protected override void OnNameUpdated(string newName)
     {

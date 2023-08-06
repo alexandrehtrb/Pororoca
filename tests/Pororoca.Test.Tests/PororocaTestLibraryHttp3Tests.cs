@@ -1,5 +1,5 @@
-using Xunit;
 using System.Net;
+using Xunit;
 
 namespace Pororoca.Test.Tests;
 
@@ -23,7 +23,7 @@ public class PororocaTestLibraryHttp3Tests
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
         Assert.Equal("application/json; charset=utf-8", res.ContentType);
-        
+
         var jsonObj = res.GetJsonBodyAs<Dictionary<string, int>>();
         Assert.NotNull(jsonObj);
         Assert.Contains(new KeyValuePair<string, int>("id", 1), jsonObj);
@@ -37,7 +37,7 @@ public class PororocaTestLibraryHttp3Tests
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
         Assert.Equal("application/json; charset=utf-8", res.ContentType);
-        
+
         var jsonObj = res.GetJsonBodyAs<Dictionary<string, int>>();
         Assert.NotNull(jsonObj);
         Assert.Contains(new KeyValuePair<string, int>("id", 1), jsonObj);
@@ -51,11 +51,11 @@ public class PororocaTestLibraryHttp3Tests
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
         Assert.Equal("application/json; charset=utf-8", res.ContentType);
-        
+
         Assert.NotNull(res.Headers);
-        Assert.Contains(new("Trailer","MyTrailer"), res.Headers);
+        Assert.Contains(new("Trailer", "MyTrailer"), res.Headers);
         Assert.NotNull(res.Trailers);
-        Assert.Contains(new("mytrailer","MyTrailerValue"), res.Trailers);
+        Assert.Contains(new("mytrailer", "MyTrailerValue"), res.Trailers);
 
         var jsonObj = res.GetJsonBodyAs<Dictionary<string, int>>();
         Assert.NotNull(jsonObj);

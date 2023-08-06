@@ -4,7 +4,6 @@ using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.TranslateRequest;
 using Pororoca.Domain.Features.VariableResolution;
 using Xunit;
-using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonValidator;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage.PororocaWebSocketClientMessageTranslator;
 
 

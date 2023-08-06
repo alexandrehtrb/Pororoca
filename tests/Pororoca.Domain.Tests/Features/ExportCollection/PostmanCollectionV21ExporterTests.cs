@@ -1,4 +1,3 @@
-using System;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Postman;
@@ -286,8 +285,7 @@ public static class PostmanCollectionV21ExporterTests
     public static void Should_convert_pororoca_req_basic_auth_to_postman_req_auth_correctly()
     {
         // GIVEN
-        PororocaRequestAuth reqAuth = new();
-        reqAuth.SetBasicAuth("usr", "pwd");
+        var reqAuth = PororocaRequestAuth.MakeBasicAuth("usr", "pwd");
 
         // WHEN
         var postmanAuth = ConvertToPostmanAuth(reqAuth);
@@ -317,8 +315,7 @@ public static class PostmanCollectionV21ExporterTests
     public static void Should_convert_pororoca_req_bearer_auth_to_postman_req_auth_correctly()
     {
         // GIVEN
-        PororocaRequestAuth reqAuth = new();
-        reqAuth.SetBearerAuth("tkn");
+        var reqAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
 
         // WHEN
         var postmanAuth = ConvertToPostmanAuth(reqAuth);
@@ -350,8 +347,7 @@ public static class PostmanCollectionV21ExporterTests
         PororocaKeyValueParam h1 = new(true, "Key1", "Value1");
         PororocaKeyValueParam h2 = new(false, "Key2", "Value2");
         req.UpdateHeaders(new[] { h1, h2 });
-        PororocaRequestAuth auth = new();
-        auth.SetBasicAuth("usr", "pwd");
+        var auth = PororocaRequestAuth.MakeBasicAuth("usr", "pwd");
         req.UpdateCustomAuth(auth);
         req.UpdateMethod("POST");
         req.UpdateUrl("http://www.abc.com.br");
@@ -449,9 +445,9 @@ public static class PostmanCollectionV21ExporterTests
         req2.UpdateUrl("https://www.ghi.com.br");
         PororocaCollectionFolder folder1 = new("Folder1");
         folder1.AddRequest(req2);
-        col.AddRequest(req1);
-        col.AddFolder(folder1);
-        col.UpdateVariables(new PororocaVariable[]
+        col.Requests.Add(req1);
+        col.Folders.Add(folder1);
+        col.Variables.AddRange(new PororocaVariable[]
         {
             new(true, "Key1", "Value1", false),
             new(false, "Key2", "Value2", true)

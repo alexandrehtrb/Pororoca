@@ -2,210 +2,88 @@ name: Release
 
 on:
   workflow_dispatch:
+    inputs:
+      nuget:
+        #description: 'Pororoca.Test NuGet'
+        required: true
+        default: true
+        type: boolean
+      linux-x64:
+        required: true
+        default: true
+        type: boolean
+      osx-x64:
+        required: true
+        default: true
+        type: boolean
+      osx-arm64:
+        required: true
+        default: true
+        type: boolean
+      win-x64-installer:
+        required: true
+        default: true
+        type: boolean
+      win-x64-portable:
+        required: true
+        default: true
+        type: boolean
+      win-x86-installer:
+        required: true
+        default: true
+        type: boolean
+      win-x86-portable:
+        required: true
+        default: true
+        type: boolean
 
 jobs:
-
-  generatePororocaTestNuget:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-
-    - name: Install .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 7.0.x
-
-    - name: Restore solution
-      run: dotnet restore --nologo --verbosity quiet
-      
-    - name: Build solution
-      run: dotnet build --no-restore --configuration Release --nologo --verbosity quiet
-
-    - name: Execute unit tests
-      run: dotnet test --no-build --configuration Release --nologo --verbosity quiet --filter FullyQualifiedName!~Pororoca.Test.Tests
-
-    - name: Read package version
-      shell: pwsh
-      run: |
-        ([XML]$nugetCsprojXml = Get-Content ./src/Pororoca.Test/Pororoca.Test.csproj)
-        $versionName = $nugetCsprojXml.Project.PropertyGroup.PackageVersion
-        echo "VERSION_NAME=${versionName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-    
-    - name: Pack NuGet
-      run: dotnet pack ./src/Pororoca.Test/Pororoca.Test.csproj --nologo --verbosity quiet --configuration Release
-          
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        path: ${{ format('./src/Pororoca.Test/bin/Release/Pororoca.Test.{0}.nupkg', env.VERSION_NAME) }}
-
-  generatePororocaDesktop:
-    strategy:
-      matrix:
-        config:
-          - { os: ubuntu-latest, rid: 'osx-x64' }
-          - { os: ubuntu-latest, rid: 'osx-arm64' }
-          - { os: ubuntu-latest, rid: 'linux-x64' }
-          - { os: windows-latest, rid: "win-x86", installation: 'portable' }
-          - { os: windows-latest, rid: "win-x86", installation: 'withInstaller' }
-          - { os: windows-latest, rid: "win-x64", installation: 'portable' }
-          - { os: windows-latest, rid: "win-x64", installation: 'withInstaller' }
-
-    runs-on: ${{ matrix.config.os }} # we run many different builds
-    
-    env:
-      OUTPUT_FOLDER: ${{ format('./out/{0}/', matrix.config.rid) }}
-      PUBLISH_SINGLE_FILE: ${{ startsWith(matrix.config.rid, 'win') }}
-      RID: ${{ matrix.config.rid }}
-      WINDOWS_INSTALLER_RELEASE: ${{ startsWith(matrix.config.rid, 'win') && matrix.config.installation == 'withInstaller' }}
-      
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-
-    - name: Install .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 7.0.x
-
-    - name: Install NSIS (Windows installer version only)
-      if: ${{ env.WINDOWS_INSTALLER_RELEASE }}
-      uses: repolevedavaj/install-nsis@v1.0.0
-      with:
-        nsis-version: 3.08
-    
-    - name: Add NSIS to PATH (Windows installer version only)
-      if: ${{ env.WINDOWS_INSTALLER_RELEASE }}
-      shell: pwsh
-      run: |
-        echo "${env:ProgramFiles(x86)}\NSIS" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-
-    - name: Check if NSIS was added to PATH (Windows installer version only)
-      if: ${{ env.WINDOWS_INSTALLER_RELEASE }}
-      shell: pwsh
-      run: makensis /VERSION
-
-    - name: Restore solution
-      run: dotnet restore --nologo --verbosity quiet
-      
-    - name: Build solution
-      run: dotnet build --no-restore --configuration Release --nologo --verbosity quiet
-
-    - name: Execute unit tests
-      run: dotnet test --no-build --configuration Release --nologo --verbosity quiet --filter FullyQualifiedName!~Pororoca.Test.Tests
-
-    - name: Read release version
-      shell: pwsh
-      run: |
-        ([XML]$desktopCsprojXml = Get-Content ./src/Pororoca.Desktop/Pororoca.Desktop.csproj)
-        $versionName = $desktopCsprojXml.Project.PropertyGroup.Version
-        echo "VERSION_NAME=${versionName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-          
-    - name: Generate Pororoca Desktop dlls
-      shell: pwsh
-      run: |
-        [void](mkdir $env:OUTPUT_FOLDER);
-        dotnet publish ./src/Pororoca.Desktop/Pororoca.Desktop.csproj `
-        --verbosity quiet `
-        --nologo `
-        --configuration Release `
-        -p:PublishSingleFile=${env:PUBLISH_SINGLE_FILE} `
-        -p:PublishForInstallOnWindows=${env:WINDOWS_INSTALLER_RELEASE} `
-        --self-contained true `
-        --runtime ${env:RID} `
-        --output ${env:OUTPUT_FOLDER};
-        if ($env:RID -like "*win*")
-        {
-          # let's copy the msquic.dll file next to the generated .exe
-          Copy-Item -Path "./src/Pororoca.Desktop/bin/Release/net7.0/${env:RID}/msquic.dll" -Destination $env:OUTPUT_FOLDER
-        }
-    
-    - name: Rename executable
-      shell: pwsh
-      run: |
-        if ($env:RID -like "*win*")
-        {
-          Rename-Item -Path "${env:OUTPUT_FOLDER}/Pororoca.Desktop.exe" -NewName "Pororoca.exe"
-        }
-        else
-        {
-          Rename-Item "${env:OUTPUT_FOLDER}/Pororoca.Desktop" -NewName "Pororoca"
-        }
-    
-    - name: Set executable attributes (UNIX only)
-      if: ${{ startsWith(matrix.config.rid, 'linux') || startsWith(matrix.config.rid, 'osx') }}
-      shell: pwsh
-      run: chmod +x "${env:OUTPUT_FOLDER}/Pororoca"
-      
-    - name: Make Pororoca.app structure (Mac OSX only)
-      if: ${{ startsWith(matrix.config.rid, 'osx') }}
-      shell: pwsh
-      run: |
-        [void](mkdir "${env:OUTPUT_FOLDER}/Pororoca.app")
-        [void](mkdir "${env:OUTPUT_FOLDER}/Pororoca.app/Contents")
-        [void](mkdir "${env:OUTPUT_FOLDER}/Pororoca.app/Contents/MacOS")
-        [void](mkdir "${env:OUTPUT_FOLDER}/Pororoca.app/Contents/Resources")
-        Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/Info.plist" -Destination "${env:OUTPUT_FOLDER}/Pororoca.app/Contents/"
-        Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/pororoca.icns" -Destination "${env:OUTPUT_FOLDER}/Pororoca.app/Contents/Resources/"
-        Get-ChildItem $env:OUTPUT_FOLDER -File | Copy-Item -Destination "${env:OUTPUT_FOLDER}/Pororoca.app/Contents/MacOS/" -Force
-        Get-ChildItem $env:OUTPUT_FOLDER -File | Remove-Item
-    
-    # so Linux users can create desktop launchers
-    - name: Copy logo (Linux only)
-      if: ${{ startsWith(matrix.config.rid, 'linux') }}
-      shell: pwsh
-      run: Copy-Item -Path "./pororoca.png" -Destination $env:OUTPUT_FOLDER
-      
-    - name: Copy icon for Windows installer
-      if: ${{ env.WINDOWS_INSTALLER_RELEASE }}
-      shell: pwsh
-      run: Copy-Item -Path "./src/Pororoca.Desktop/Assets/pororoca_icon.ico" -Destination $env:OUTPUT_FOLDER
-   
-    - name: Copy licence
-      shell: pwsh
-      run: Copy-Item -Path "./LICENCE.md" -Destination $env:OUTPUT_FOLDER
-      
-    - name: Compress package
-      if: ${{ matrix.config.installation != 'withInstaller' }}
-      shell: pwsh
-      run: |
-        if ($env:RID -like "win*") {
-          $zipName = "Pororoca_${env:VERSION_NAME}_${env:RID}_portable.zip";
-        } else {
-          $zipName = "Pororoca_${env:VERSION_NAME}_${env:RID}.zip";
-        }
-        if ($IsWindows) {
-          Compress-Archive -CompressionLevel Optimal -Path $env:OUTPUT_FOLDER -DestinationPath "./out/${zipName}"	
-        } else {
-          cd $env:OUTPUT_FOLDER
-          zip -9 -r ../${zipName} *
-          cd ../..
-        }
-        Remove-Item $env:OUTPUT_FOLDER -Force -Recurse -ErrorAction Ignore
-    
-    - name: Make installer for Windows
-      if: ${{ env.WINDOWS_INSTALLER_RELEASE }}
-      shell: pwsh
-      run: |
-        $installerFileName = "Pororoca_${env:VERSION_NAME}_${env:RID}_installer.exe";
-        $installerOutFileAbsolutePath = $((Resolve-Path ".\out\").ToString()) + "\" + $installerFileName
-        $installerFilesDirAbsolutePath = (Resolve-Path $env:OUTPUT_FOLDER).ToString()
-        # makensis must be added to PATH
-        # -WX ` # treat warnings as errors
-        # -V2 ` # verbosity no info
-        makensis -WX -V2 "/XOutFile ${installerOutFileAbsolutePath}" `
-          "/DSHORT_VERSION=${env:VERSION_NAME}" `
-          "/DINPUT_FILES_DIR=${installerFilesDirAbsolutePath}" `
-          .\src\Pororoca.Desktop.WindowsInstaller\Installer.nsi
-        Remove-Item $env:OUTPUT_FOLDER -Force -Recurse -ErrorAction Ignore
-
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        path: './out/'
+  nuget:
+    if: ${{ inputs.nuget }}
+    uses: ./.github/workflows/generate-pororoca-test-nuget-wfw.yml
+  linux-x64:
+    if: ${{ inputs.linux-x64 }}
+    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    with:
+      os: ubuntu-latest
+      rid: linux-x64
+  osx-x64:
+    if: ${{ inputs.osx-x64 }}
+    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    with:
+      os: ubuntu-latest
+      rid: osx-x64
+  osx-arm64:
+    if: ${{ inputs.osx-arm64 }}
+    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    with:
+      os: ubuntu-latest
+      rid: osx-arm64
+  win-x64-installer:
+    if: ${{ inputs.win-x64-installer }}
+    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    with:
+      os: windows-latest
+      rid: win-x64
+      installation: withInstaller
+  win-x64-portable:
+    if: ${{ inputs.win-x64-portable }}
+    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    with:
+      os: windows-latest
+      rid: win-x64
+      installation: portable
+  win-x86-installer:
+    if: ${{ inputs.win-x86-installer }}
+    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    with:
+      os: windows-latest
+      rid: win-x86
+      installation: withInstaller
+  win-x86-portable:
+    if: ${{ inputs.win-x86-portable }}
+    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    with:
+      os: windows-latest
+      rid: win-x86
+      installation: portable

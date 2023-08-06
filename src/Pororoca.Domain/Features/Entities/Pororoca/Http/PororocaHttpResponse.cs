@@ -55,7 +55,7 @@ public sealed class PororocaHttpResponse
         }
     }
 
-    public string? GetBodyAsText(string? nonUtf8BodyMessageToShow)
+    public string? GetBodyAsText(string? nonUtf8BodyMessageToShow = null)
     {
         if (this.binaryBody == null || this.binaryBody.Length == 0)
         {

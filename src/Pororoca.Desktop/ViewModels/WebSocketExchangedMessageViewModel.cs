@@ -1,8 +1,7 @@
-using System.Text.Json;
 using Pororoca.Desktop.Localization;
+using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage;
-using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
@@ -92,18 +91,18 @@ public sealed class WebSocketExchangedMessageViewModel : ViewModelBase
                             string? txtContent)
     {
         const string shortInstanceDtFormat = "yyyyMMdd-HHmmss";
-        string instantDateTimeFormat = Localizer.Instance["WebSocketExchangedMessages/InstantDescriptionFormat"];
+        string instantDateTimeFormat = Localizer.Instance.WebSocketExchangedMessages.InstantDescriptionFormat;
         if (direction == PororocaWebSocketMessageDirection.FromClient)
         {
             IsFromClient = true;
-            OriginDescription = Localizer.Instance["WebSocketExchangedMessages/FromClientToServer"];
+            OriginDescription = Localizer.Instance.WebSocketExchangedMessages.FromClientToServer;
             InstantDescription = dtUtc.ToString(instantDateTimeFormat);
             ShortInstantDescription = dtUtc.LocalDateTime.ToString(shortInstanceDtFormat);
         }
         else if (direction == PororocaWebSocketMessageDirection.FromServer)
         {
             IsFromServer = true;
-            OriginDescription = Localizer.Instance["WebSocketExchangedMessages/FromServerToClient"];
+            OriginDescription = Localizer.Instance.WebSocketExchangedMessages.FromServerToClient;
             InstantDescription = dtUtc.ToString(instantDateTimeFormat);
             ShortInstantDescription = dtUtc.LocalDateTime.ToString(shortInstanceDtFormat);
         }
@@ -111,18 +110,18 @@ public sealed class WebSocketExchangedMessageViewModel : ViewModelBase
         string format;
         if (msgType == PororocaWebSocketMessageType.Close)
         {
-            format = Localizer.Instance["WebSocketExchangedMessages/ClosingMessageContentDescriptionFormat"];
-            TypeDescription = Localizer.Instance["WebSocketClientMessage/MessageTypeClose"];
+            format = Localizer.Instance.WebSocketExchangedMessages.ClosingMessageContentDescriptionFormat;
+            TypeDescription = Localizer.Instance.WebSocketClientMessage.MessageTypeClose;
         }
         else if (msgType == PororocaWebSocketMessageType.Binary)
         {
-            format = Localizer.Instance["WebSocketExchangedMessages/BinaryContentDescriptionFormat"];
-            TypeDescription = Localizer.Instance["WebSocketClientMessage/MessageTypeBinary"];
+            format = Localizer.Instance.WebSocketExchangedMessages.BinaryContentDescriptionFormat;
+            TypeDescription = Localizer.Instance.WebSocketClientMessage.MessageTypeBinary;
         }
         else
         {
-            format = Localizer.Instance["WebSocketExchangedMessages/TextContentDescriptionFormat"];
-            TypeDescription = Localizer.Instance["WebSocketClientMessage/MessageTypeText"];
+            format = Localizer.Instance.WebSocketExchangedMessages.TextContentDescriptionFormat;
+            TypeDescription = Localizer.Instance.WebSocketClientMessage.MessageTypeText;
         }
 
         MessageSizeDescription = string.Format(format, lengthInBytes);
@@ -131,27 +130,7 @@ public sealed class WebSocketExchangedMessageViewModel : ViewModelBase
 
         if (txtContent is not null)
         {
-            IsJsonTextContent = IsJsonString(TextContent);
-        }
-    }
-
-    private static bool IsJsonString(string? str)
-    {
-        if (!string.IsNullOrWhiteSpace(str))
-        {
-            try
-            {
-                JsonSerializer.Deserialize<dynamic>(str);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return false;
+            IsJsonTextContent = JsonUtils.IsValidJson(TextContent);
         }
     }
 }

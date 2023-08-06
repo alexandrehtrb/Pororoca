@@ -1,6 +1,6 @@
  <h1>Pororoca <img style="margin: 4px 0 0 4px" height="32" src="pororoca.png" alt="Pororoca Logo"/></h1>
 
-[Ler em português](README_pt.md)
+[Ler em português](README_pt.md) | [Читать на русском](README_ru.md)
 
 Pororoca is a HTTP testing tool, inspired by Postman, but with many improvements.
 
@@ -20,7 +20,7 @@ Read the [instructions](https://pororoca.io/docs/installation) and download the 
 * Secret variables.
 * Collections and environments can be exported together in a single file.
 * Full export and import compatibility with Postman.
-* Much lower memory usage - around five times less than Postman.
+* Much lower memory usage - two to three times less than Postman.
 * Automated testing.
 * WebSockets.
 * Fast startup time.

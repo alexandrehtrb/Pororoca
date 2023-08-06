@@ -38,8 +38,8 @@ public class DataGridDragAndDropBehavior<T> : DropHandlerBase where T : class
         if (this.dnd.SrcDataGrid is not { } srcDg ||
             sender is not DataGrid destDg ||
             sourceContext is not T src ||
-            srcDg.Items is not IList<T> srcList ||
-            destDg.Items is not IList<T> destList ||
+            srcDg.ItemsSource is not IList<T> srcList ||
+            destDg.ItemsSource is not IList<T> destList ||
             destDg.GetVisualAt(e.GetPosition(destDg),
               v => v.FindDescendantOfType<DataGridCell>() is not null) is not Control
               {

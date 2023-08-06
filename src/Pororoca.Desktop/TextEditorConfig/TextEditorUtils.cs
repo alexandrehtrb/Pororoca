@@ -30,7 +30,7 @@ internal static class TextEditorUtils
             }
             else
             {
-                string scopeName = TextEditorConfiguration.DefaultRegistryOptions!.GetScopeByLanguageId(updatedSyntaxLangId);
+                string scopeName = TextEditorConfiguration.DefaultRegistryOptions!.Value!.GetScopeByLanguageId(updatedSyntaxLangId);
                 tmInstallation.SetGrammar(scopeName);
             }
             currentSyntaxLangId = updatedSyntaxLangId;

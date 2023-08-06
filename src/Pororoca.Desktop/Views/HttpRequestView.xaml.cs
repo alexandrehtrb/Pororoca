@@ -4,6 +4,7 @@ using Avalonia.Markup.Xaml;
 using AvaloniaEdit;
 using Pororoca.Desktop.TextEditorConfig;
 using Pororoca.Desktop.ViewModels;
+using Pororoca.Domain.Features.Entities.Pororoca.Http;
 
 namespace Pororoca.Desktop.Views;
 
@@ -19,15 +20,17 @@ public class HttpRequestView : UserControl
     {
         InitializeComponent();
 
-        var httpReqRawBodyEditor = this.FindControl<TextEditor>("RequestBodyRawContentEditor");
+        var httpReqRawBodyEditor = this.FindControl<TextEditor>("teReqBodyRawContent");
         this.httpReqRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(httpReqRawBodyEditor!, true);
 
-        var httpReqRawContentTypeSelector = this.FindControl<AutoCompleteBox>("RequestBodyRawContentTypeSelector")!;
+        var httpReqRawContentTypeSelector = this.FindControl<AutoCompleteBox>("acbReqBodyRawContentType")!;
         httpReqRawContentTypeSelector.SelectionChanged += OnRequestBodyRawContentTypeChanged;
 
         var httpResRawBodyEditor = this.FindControl<TextEditor>("ResponseBodyRawContentEditor")!;
         this.httpResRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(httpResRawBodyEditor!, false);
         httpResRawBodyEditor.DocumentChanged += OnResponseRawBodyEditorDocumentChanged;
+
+        SetupSelectedOptionsPanelsVisibility();
     }
 
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
@@ -43,7 +46,7 @@ public class HttpRequestView : UserControl
     private void LoadRequestRawContentSyntaxFromVmIfSelected()
     {
         var vm = (HttpRequestViewModel?)DataContext;
-        if (vm is not null && vm.IsRequestBodyModeRawSelected)
+        if (vm is not null && vm.RequestBodyMode == PororocaHttpRequestBodyMode.Raw)
         {
             ApplySelectedRequestRawContentSyntax(vm.RequestRawContentType);
         }
@@ -53,6 +56,84 @@ public class HttpRequestView : UserControl
     #endregion
 
     #region VIEW COMPONENTS EVENTS
+
+    private void SetupSelectedOptionsPanelsVisibility()
+    {
+        var cbReqBodyMode = this.FindControl<ComboBox>("cbReqBodyMode")!;
+
+        ComboBoxItem cbiReqBodyModeNone = this.FindControl<ComboBoxItem>("cbiReqBodyModeNone")!,
+            cbiReqBodyModeRaw = this.FindControl<ComboBoxItem>("cbiReqBodyModeRaw")!,
+            cbiReqBodyModeFile = this.FindControl<ComboBoxItem>("cbiReqBodyModeFile")!,
+            cbiReqBodyModeUrlEncoded = this.FindControl<ComboBoxItem>("cbiReqBodyModeUrlEncoded")!,
+            cbiReqBodyModeFormData = this.FindControl<ComboBoxItem>("cbiReqBodyModeFormData")!,
+            cbiReqBodyModeGraphQl = this.FindControl<ComboBoxItem>("cbiReqBodyModeGraphQl")!;
+
+        Grid grReqBodyFile = this.FindControl<Grid>("grReqBodyFile")!,
+             grReqBodyUrlEncoded = this.FindControl<Grid>("grReqBodyUrlEncoded")!,
+             grReqBodyFormData = this.FindControl<Grid>("grReqBodyFormData")!,
+             grReqBodyGraphQl = this.FindControl<Grid>("grReqBodyGraphQl")!;
+
+        var acbReqBodyRawContentType = this.FindControl<AutoCompleteBox>("acbReqBodyRawContentType")!;
+        var teReqBodyRawContent = this.FindControl<TextEditor>("teReqBodyRawContent")!;
+
+        cbReqBodyMode.SelectionChanged += (sender, e) =>
+        {
+            object? selected = e.AddedItems.Count > 0 ? e.AddedItems[0] : null;
+            if (selected == cbiReqBodyModeNone)
+            {
+                acbReqBodyRawContentType.IsVisible =
+                teReqBodyRawContent.IsVisible =
+                grReqBodyFile.IsVisible =
+                grReqBodyUrlEncoded.IsVisible =
+                grReqBodyFormData.IsVisible =
+                grReqBodyGraphQl.IsVisible = false;
+            }
+            else if (selected == cbiReqBodyModeRaw)
+            {
+                acbReqBodyRawContentType.IsVisible = teReqBodyRawContent.IsVisible = true;
+                grReqBodyFile.IsVisible =
+                grReqBodyUrlEncoded.IsVisible =
+                grReqBodyFormData.IsVisible =
+                grReqBodyGraphQl.IsVisible = false;
+            }
+            else if (selected == cbiReqBodyModeFile)
+            {
+                grReqBodyFile.IsVisible = true;
+                acbReqBodyRawContentType.IsVisible =
+                teReqBodyRawContent.IsVisible =
+                grReqBodyUrlEncoded.IsVisible =
+                grReqBodyFormData.IsVisible =
+                grReqBodyGraphQl.IsVisible = false;
+            }
+            else if (selected == cbiReqBodyModeUrlEncoded)
+            {
+                grReqBodyUrlEncoded.IsVisible = true;
+                acbReqBodyRawContentType.IsVisible =
+                teReqBodyRawContent.IsVisible =
+                grReqBodyFile.IsVisible =
+                grReqBodyFormData.IsVisible =
+                grReqBodyGraphQl.IsVisible = false;
+            }
+            else if (selected == cbiReqBodyModeFormData)
+            {
+                grReqBodyFormData.IsVisible = true;
+                acbReqBodyRawContentType.IsVisible =
+                teReqBodyRawContent.IsVisible =
+                grReqBodyFile.IsVisible =
+                grReqBodyUrlEncoded.IsVisible =
+                grReqBodyGraphQl.IsVisible = false;
+            }
+            else if (selected == cbiReqBodyModeGraphQl)
+            {
+                grReqBodyGraphQl.IsVisible = true;
+                acbReqBodyRawContentType.IsVisible =
+                teReqBodyRawContent.IsVisible =
+                grReqBodyFile.IsVisible =
+                grReqBodyUrlEncoded.IsVisible =
+                grReqBodyFormData.IsVisible = false;
+            }
+        };
+    }
 
     public void OnRequestUrlPointerEnter(object sender, PointerEventArgs e)
     {

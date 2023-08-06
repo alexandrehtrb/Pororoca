@@ -17,7 +17,7 @@ function Run-Pipeline
 	Run-UnitTests -Stopwatch $sw
 	Clean-OutputFolder -Stopwatch $sw
 
-	Generate-PororocaTestRelease -Stopwatch $sw
+	Generate-PororocaTestRelease -Stopwatch $sw -VersionName $versionName
 	foreach ($runtime in $runtimes)
 	{
 		Generate-PororocaDesktopRelease -Stopwatch $sw -VersionName $versionName -Runtime $runtime
@@ -122,7 +122,7 @@ function Run-UnitTests
 
 	Write-Host "Running unit tests..." -ForegroundColor DarkYellow
 	$stopwatch.Restart()
-	dotnet test --configuration Release --nologo --verbosity quiet
+	dotnet test --configuration Release --nologo --verbosity quiet --filter FullyQualifiedName!~Pororoca.Test.Tests
 	$stopwatch.Stop()
 	Write-Host "Solution tests run ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
 }
@@ -133,11 +133,12 @@ function Clean-OutputFolder
         [System.Diagnostics.Stopwatch]$stopwatch
     )
 
-	Write-Host "Deleting 'out' folder..." -ForegroundColor DarkYellow
+	Write-Host "Deleting and creating 'out' folder..." -ForegroundColor DarkYellow
 	$stopwatch.Restart()
-	Remove-Item "./out/" -Recurse -ErrorAction Ignore
+	[void](Remove-Item "./out/" -Recurse -ErrorAction Ignore)
+	[void](mkdir "out")
 	$stopwatch.Stop()
-	Write-Host "Output folder deleted ($($stopwatch.Elapsed.Seconds)s)." -ForegroundColor DarkGreen
+	Write-Host "Output folder cleaned ($($stopwatch.Elapsed.Seconds)s)." -ForegroundColor DarkGreen
 }
 
 #################### Release generation ####################
@@ -151,7 +152,8 @@ function Read-VersionName
 
 function Generate-PororocaTestRelease {
     param (
-        [System.Diagnostics.Stopwatch]$stopwatch
+        [System.Diagnostics.Stopwatch]$stopwatch,
+        [string]$versionName
     )
 
 	Write-Host "Publishing Pororoca.Test library..." -ForegroundColor DarkYellow
@@ -160,6 +162,9 @@ function Generate-PororocaTestRelease {
 		--nologo `
 		--verbosity quiet `
 		--configuration Release
+	
+	Copy-Item -Path "./src/Pororoca.Test/bin/Release/Pororoca.Test.${versionName}.nupkg" `
+	          -Destination "./out/Pororoca.Test.${versionName}.nupkg"
 
 	Write-Host "Package created! ($($stopwatch.Elapsed.Seconds)s)." -ForegroundColor DarkGreen
 }
@@ -303,9 +308,9 @@ function Make-AppFolderIfMacOS
 		[void](mkdir "${outputFolder}/Pororoca.app/Contents")
 		[void](mkdir "${outputFolder}/Pororoca.app/Contents/MacOS")
 		[void](mkdir "${outputFolder}/Pororoca.app/Contents/Resources")
-		Copy-Item -Path "./src/Pororoca.Desktop/Assets/MacOSX/Info.plist" `
+		Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/Info.plist" `
 				  -Destination "${outputFolder}/Pororoca.app/Contents/"
-		Copy-Item -Path "./src/Pororoca.Desktop/Assets/MacOSX/pororoca.icns" `
+		Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/pororoca.icns" `
 				  -Destination "${outputFolder}/Pororoca.app/Contents/Resources/"
 		Get-ChildItem $outputFolder -File | Copy-Item -Destination "${outputFolder}/Pororoca.app/Contents/MacOS/" -Force
 		Get-ChildItem $outputFolder -File | Remove-Item
@@ -394,7 +399,7 @@ function Pack-ReleaseInWindowsInstaller
 	makensis -WX -V2 "/XOutFile ${installerOutFileAbsolutePath}" `
 		"/DSHORT_VERSION=${versionName}" `
 		"/DINPUT_FILES_DIR=${installerFilesDirAbsolutePath}" `
-		.\src\Pororoca.WindowsInstaller\Installer.nsi
+		.\src\Pororoca.Desktop.WindowsInstaller\Installer.nsi
 
 	Remove-Item $installerFilesFolder -Force -Recurse -ErrorAction Ignore
 }

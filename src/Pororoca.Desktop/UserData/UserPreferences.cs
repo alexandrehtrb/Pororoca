@@ -10,6 +10,7 @@ public sealed class UserPreferences
 #nullable disable warnings
     public string Lang { get; set; }
     public string? UpdateReminderLastShownAt { get; set; }
+    public PororocaTheme? Theme { get; set; }
 
     public UserPreferences()
     {
@@ -17,17 +18,18 @@ public sealed class UserPreferences
     }
 #nullable enable warnings
 
-    public UserPreferences(Language lang, DateTime updateReminderLastShownDate)
+    public UserPreferences(Language lang, DateTime updateReminderLastShownDate, PororocaTheme theme)
     {
-        Lang = lang.GetLanguageLCID();
+        Lang = lang.ToLCID();
         UpdateReminderLastShownAt = updateReminderLastShownDate.ToString("yyyy-MM-dd");
+        Theme = theme;
     }
 
     public Language GetLanguage() =>
-        LanguageExtensions.GetLanguageFromLCID(Lang);
+        LanguageExtensions.GetLanguageByLCID(Lang);
 
     public void SetLanguage(Language lang) =>
-        Lang = lang.GetLanguageLCID();
+        Lang = lang.ToLCID();
 
     private DateTime? UpdateReminderLastShownDate
     {

@@ -22,11 +22,47 @@ public class WebSocketConnectionView : UserControl
 
         var exchangedMessagesList = this.FindControl<ListBox>("ExchangedMessagesList")!;
         exchangedMessagesList.SelectionChanged += OnSelectedExchangedMessageChanged;
+
+        SetupSelectedOptionsPanelsVisibility();
     }
 
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
     #region VIEW COMPONENTS EVENTS
+
+    private void SetupSelectedOptionsPanelsVisibility()
+    {
+        var cbWsScrReqOptions = this.FindControl<ComboBox>("cbWsScrReqOptions")!;
+
+        ComboBoxItem cbiWsScrReqOptionHeaders = this.FindControl<ComboBoxItem>("cbiWsScrReqOptionHeaders")!,
+            cbiWsScrReqOptionSubprotocols = this.FindControl<ComboBoxItem>("cbiWsScrReqOptionSubprotocols")!,
+            cbiWsScrReqOptionCompression = this.FindControl<ComboBoxItem>("cbiWsScrReqOptionCompression")!;
+
+        Grid grWsConnReqHeaders = this.FindControl<Grid>("grWsConnReqHeaders")!,
+             grWsConnReqSubprotocols = this.FindControl<Grid>("grWsConnReqSubprotocols")!;
+
+        var spWsConnReqCompression = this.FindControl<StackPanel>("spWsConnReqCompression")!;
+
+        cbWsScrReqOptions.SelectionChanged += (sender, e) =>
+        {
+            object? selected = e.AddedItems.Count > 0 ? e.AddedItems[0] : null;
+            if (selected == cbiWsScrReqOptionHeaders)
+            {
+                grWsConnReqHeaders.IsVisible = true;
+                grWsConnReqSubprotocols.IsVisible = spWsConnReqCompression.IsVisible = false;
+            }
+            else if (selected == cbiWsScrReqOptionSubprotocols)
+            {
+                grWsConnReqSubprotocols.IsVisible = true;
+                grWsConnReqHeaders.IsVisible = spWsConnReqCompression.IsVisible = false;
+            }
+            else if (selected == cbiWsScrReqOptionCompression)
+            {
+                spWsConnReqCompression.IsVisible = true;
+                grWsConnReqHeaders.IsVisible = grWsConnReqSubprotocols.IsVisible = false;
+            }
+        };
+    }
 
     public void OnUrlPointerEnter(object sender, PointerEventArgs e)
     {

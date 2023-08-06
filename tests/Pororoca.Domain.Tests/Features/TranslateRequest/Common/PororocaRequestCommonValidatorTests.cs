@@ -58,8 +58,7 @@ public static class PororocaRequestCommonValidatorTests
         // GIVEN
         static bool mockFileExists(string _) => false;
         PororocaCollection col = new("VarResolver");
-        PororocaRequestAuth? customAuth = new();
-        customAuth.SetBasicAuth("usr", "pwd");
+        var customAuth = PororocaRequestAuth.MakeBasicAuth("usr", "pwd");
 
         // WHEN AND THEN
         Assert.True(CheckClientCertificateFilesAndPassword(col, mockFileExists, customAuth, out string? errorCode));
@@ -75,10 +74,9 @@ public static class PororocaRequestCommonValidatorTests
             { "./cert.p12", false }
         });
         PororocaCollection col = new("VarResolver");
-        col.AddVariable(new(true, "CertPath", "./cert.p12", false));
-        col.AddVariable(new(true, "CertPassword", "pwd", true));
-        PororocaRequestAuth? customAuth = new();
-        customAuth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertPath}}", null, "{{CertPassword}}");
+        col.Variables.Add(new(true, "CertPath", "./cert.p12", false));
+        col.Variables.Add(new(true, "CertPassword", "pwd", true));
+        var customAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertPath}}", null, "{{CertPassword}}");
 
         // WHEN AND THEN
         Assert.False(CheckClientCertificateFilesAndPassword(col, mockFileExists, customAuth, out string? errorCode));
@@ -95,11 +93,10 @@ public static class PororocaRequestCommonValidatorTests
             { "./cert_prv_key.pem", false }
         });
         PororocaCollection col = new("VarResolver");
-        col.AddVariable(new(true, "CertPath", "./cert.crt", false));
-        col.AddVariable(new(true, "CertPrvKeyPath", "./cert_prv_key.pem", false));
-        col.AddVariable(new(true, "CertPassword", "pwd", true));
-        PororocaRequestAuth? customAuth = new();
-        customAuth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertPath}}", "{{CertPrvKeyPath}}", "{{CertPassword}}");
+        col.Variables.Add(new(true, "CertPath", "./cert.crt", false));
+        col.Variables.Add(new(true, "CertPrvKeyPath", "./cert_prv_key.pem", false));
+        col.Variables.Add(new(true, "CertPassword", "pwd", true));
+        var customAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertPath}}", "{{CertPrvKeyPath}}", "{{CertPassword}}");
 
         // WHEN AND THEN
         Assert.False(CheckClientCertificateFilesAndPassword(col, mockFileExists, customAuth, out string? errorCode));
@@ -115,10 +112,9 @@ public static class PororocaRequestCommonValidatorTests
             { "./cert.p12", true }
         });
         PororocaCollection col = new("VarResolver");
-        col.AddVariable(new(true, "CertPath", "./cert.p12", false));
-        col.AddVariable(new(true, "CertPassword", string.Empty, true));
-        PororocaRequestAuth? customAuth = new();
-        customAuth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertPath}}", null, "{{CertPassword}}");
+        col.Variables.Add(new(true, "CertPath", "./cert.p12", false));
+        col.Variables.Add(new(true, "CertPassword", string.Empty, true));
+        var customAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertPath}}", null, "{{CertPassword}}");
 
         // WHEN AND THEN
         Assert.False(CheckClientCertificateFilesAndPassword(col, mockFileExists, customAuth, out string? errorCode));
@@ -134,10 +130,9 @@ public static class PororocaRequestCommonValidatorTests
             { "./cert.p12", true }
         });
         PororocaCollection col = new("VarResolver");
-        col.AddVariable(new(true, "CertPath", "./cert.p12", false));
-        col.AddVariable(new(true, "CertPassword", "pwd", true));
-        PororocaRequestAuth? customAuth = new();
-        customAuth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertPath}}", null, "{{CertPassword}}");
+        col.Variables.Add(new(true, "CertPath", "./cert.p12", false));
+        col.Variables.Add(new(true, "CertPassword", "pwd", true));
+        var customAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertPath}}", null, "{{CertPassword}}");
 
         // WHEN AND THEN
         Assert.True(CheckClientCertificateFilesAndPassword(col, mockFileExists, customAuth, out string? errorCode));
@@ -153,9 +148,8 @@ public static class PororocaRequestCommonValidatorTests
             { "./cert.crt", true }
         });
         PororocaCollection col = new("VarResolver");
-        col.AddVariable(new(true, "CertPath", "./cert.crt", false));
-        PororocaRequestAuth? customAuth = new();
-        customAuth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertPath}}", null, null);
+        col.Variables.Add(new(true, "CertPath", "./cert.crt", false));
+        var customAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertPath}}", null, null);
 
         // WHEN AND THEN
         Assert.True(CheckClientCertificateFilesAndPassword(col, mockFileExists, customAuth, out string? errorCode));
@@ -172,10 +166,9 @@ public static class PororocaRequestCommonValidatorTests
             { "./cert_prv_key.pem", true }
         });
         PororocaCollection col = new("VarResolver");
-        col.AddVariable(new(true, "CertPath", "./cert.crt", false));
-        col.AddVariable(new(true, "CertPrvKeyPath", "./cert_prv_key.pem", false));
-        PororocaRequestAuth? customAuth = new();
-        customAuth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertPath}}", "{{CertPrvKeyPath}}", null);
+        col.Variables.Add(new(true, "CertPath", "./cert.crt", false));
+        col.Variables.Add(new(true, "CertPrvKeyPath", "./cert_prv_key.pem", false));
+        var customAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertPath}}", "{{CertPrvKeyPath}}", null);
 
         // WHEN AND THEN
         Assert.True(CheckClientCertificateFilesAndPassword(col, mockFileExists, customAuth, out string? errorCode));
@@ -191,10 +184,9 @@ public static class PororocaRequestCommonValidatorTests
             { "./cert.crt", true }
         });
         PororocaCollection col = new("VarResolver");
-        col.AddVariable(new(true, "CertPath", "./cert.crt", false));
-        col.AddVariable(new(true, "CertPassword", "pwd", true));
-        PororocaRequestAuth? customAuth = new();
-        customAuth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertPath}}", null, "{{CertPassword}}");
+        col.Variables.Add(new(true, "CertPath", "./cert.crt", false));
+        col.Variables.Add(new(true, "CertPassword", "pwd", true));
+        var customAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertPath}}", null, "{{CertPassword}}");
 
         // WHEN AND THEN
         Assert.True(CheckClientCertificateFilesAndPassword(col, mockFileExists, customAuth, out string? errorCode));
@@ -211,11 +203,10 @@ public static class PororocaRequestCommonValidatorTests
             { "./cert_prv_key.pem", true }
         });
         PororocaCollection col = new("VarResolver");
-        col.AddVariable(new(true, "CertPath", "./cert.crt", false));
-        col.AddVariable(new(true, "CertPrvKeyPath", "./cert_prv_key.pem", false));
-        col.AddVariable(new(true, "CertPassword", "pwd", true));
-        PororocaRequestAuth? customAuth = new();
-        customAuth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertPath}}", "{{CertPrvKeyPath}}", "{{CertPassword}}");
+        col.Variables.Add(new(true, "CertPath", "./cert.crt", false));
+        col.Variables.Add(new(true, "CertPrvKeyPath", "./cert_prv_key.pem", false));
+        col.Variables.Add(new(true, "CertPassword", "pwd", true));
+        var customAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertPath}}", "{{CertPrvKeyPath}}", "{{CertPassword}}");
 
         // WHEN AND THEN
         Assert.True(CheckClientCertificateFilesAndPassword(col, mockFileExists, customAuth, out string? errorCode));

@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Pororoca.Domain.Features.Common;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 
@@ -37,19 +38,9 @@ public sealed class PororocaWebSocketServerMessage : PororocaWebSocketMessage
         if (msgType == PororocaWebSocketMessageType.Text || msgType == PororocaWebSocketMessageType.Close)
         {
             Text = Encoding.UTF8.GetString(Bytes);
-        }
-
-        if (!string.IsNullOrWhiteSpace(Text))
-        {
-            try
-            {
-                JsonSerializer.Deserialize<dynamic>(Text);
-                TextSyntax = PororocaWebSocketMessageRawContentSyntax.Json;
-            }
-            catch
-            {
-                TextSyntax = PororocaWebSocketMessageRawContentSyntax.Other;
-            }
+            TextSyntax = JsonUtils.IsValidJson(Text) ?
+                PororocaWebSocketMessageRawContentSyntax.Json :
+                PororocaWebSocketMessageRawContentSyntax.Other;
         }
     }
 }

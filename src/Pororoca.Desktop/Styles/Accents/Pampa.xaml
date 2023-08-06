@@ -1,0 +1,48 @@
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Pororoca.Desktop">
+  <ResourceDictionary.ThemeDictionaries>
+    <ResourceDictionary x:Key="{x:Static local:PororocaThemeManager.Pampa}">
+      <!-- System colours overrides below -->
+      <Color x:Key="SystemAccentColorDark3">#ebeb47</Color>
+      <Color x:Key="SystemAccentColorDark2">#f0f075</Color>
+      <Color x:Key="SystemAccentColorDark1">#f5f5a3</Color>
+      <Color x:Key="SystemAccentColor">LightGoldenRodYellow</Color>
+      <Color x:Key="SystemAccentColorLight1">White</Color>
+      <Color x:Key="SystemAccentColorLight2">White</Color>
+      <Color x:Key="SystemAccentColorLight3">White</Color>
+      <Color x:Key="SystemErrorTextColor">Red</Color>
+      <!-- Custom colours below -->
+      <Color x:Key="InputBackgroundValidationProblemColor">#99FECADA</Color>
+      <Color x:Key="SystemInvertedAccentColor">CornflowerBlue</Color>
+      <Color x:Key="SystemInvertedAccentColorLight1">#5387f9</Color>
+      <Color x:Key="SystemInvertedAccentColorLight2">#00487C</Color>
+      <Color x:Key="MainWindowMenuColor">#B8B261</Color>
+      <Color x:Key="MainWindowBackgroundColor">PaleGoldenrod</Color>
+      <Color x:Key="MainWindowDarkerBackgroundColor">DarkKhaki</Color>
+      <Color x:Key="MainWindowSidebarColor">DarkKhaki</Color>
+      <Color x:Key="MainWindowSeparatorsColor">DarkKhaki</Color>
+      <Color x:Key="CurrentEnvironmentLabelColor">#2265f7</Color>
+      <Color x:Key="ListBoxBackgroundColor">DarkKhaki</Color>
+      <Color x:Key="ListBoxItemSelectedBackgroundColor">PaleGoldenrod</Color>
+      <Color x:Key="DragAndDropDataGridItemDraggingColor">Black</Color>
+      <Color x:Key="ButtonPrimaryTextColor">Black</Color>
+      <Color x:Key="ButtonPrimaryInvertedTextColor">White</Color>
+      <Color x:Key="WebSocketConnectedColor">CornflowerBlue</Color>
+      <Color x:Key="WebSocketMessageFromClientPrimaryColor">Black</Color>
+      <Color x:Key="WebSocketMessageFromServerPrimaryColor">#2265f7</Color>
+      <Color x:Key="DefaultIconsColor">Black</Color>
+      <Color x:Key="TextEditorBackgroundColor">White</Color>
+      <Color x:Key="TextEditorForegroundColor">Black</Color>
+      <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="Black"/>
+      <SolidColorBrush x:Key="CheckBoxBorderBrushCheckedPointerOver" Color="Black"/>
+      <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPointerOver" Color="Black"/>
+      <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="#7DA4FA"/>
+      <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="#eae395"/>
+      <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#e2d86a"/>
+      <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPressed" Color="#d9cc3f"/>
+      <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="#9dbbfb"/>
+    </ResourceDictionary>
+  </ResourceDictionary.ThemeDictionaries>
+</ResourceDictionary>

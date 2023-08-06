@@ -17,7 +17,7 @@ public static class PororocaCollectionImporter
             // But if importing a collection from saved data, the id should be preserved
             if (pororocaCollection != null && preserveId == false)
             {
-                pororocaCollection.Id = Guid.NewGuid();
+                pororocaCollection = pororocaCollection with { Id = Guid.NewGuid() };
             }
 
             return pororocaCollection != null

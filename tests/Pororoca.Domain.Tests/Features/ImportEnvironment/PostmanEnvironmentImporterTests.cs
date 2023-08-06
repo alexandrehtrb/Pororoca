@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using System.Text;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Postman;

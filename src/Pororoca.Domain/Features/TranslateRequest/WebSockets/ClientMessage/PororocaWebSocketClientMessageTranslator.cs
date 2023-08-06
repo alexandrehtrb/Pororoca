@@ -42,6 +42,7 @@ public static class PororocaWebSocketClientMessageTranslator
     {
         const int fileStreamBufferSize = 4096;
         string resolvedFilePath = varResolver.ReplaceTemplates(wsCliMsg.FileSrcPath);
+        // DO NOT USE "USING" FOR FILESTREAM HERE --> it will be disposed later, by the PororocaWebSocketConnector
         FileStream fs = new(resolvedFilePath, FileMode.Open, FileAccess.Read, FileShare.Read, fileStreamBufferSize, useAsync: true);
         return new(wsCliMsg, fs, null);
     }

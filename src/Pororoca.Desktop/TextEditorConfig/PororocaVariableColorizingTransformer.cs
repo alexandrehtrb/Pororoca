@@ -12,6 +12,11 @@ internal partial class PororocaVariableColorizingTransformer : DocumentColorizin
     [GeneratedRegex("\\{\\{[\\w\\d]+\\}\\}")]
     private static partial Regex GeneratePororocaVariableRegex();
 
+    public IBrush PororocaVariableHighlightBrush { get; set; }
+
+    public PororocaVariableColorizingTransformer(IBrush initialHighlightBrush) =>
+        PororocaVariableHighlightBrush = initialHighlightBrush;
+
     protected override void ColorizeLine(DocumentLine line)
     {
         string lineText = CurrentContext.Document.GetText(line);
@@ -27,7 +32,8 @@ internal partial class PororocaVariableColorizingTransformer : DocumentColorizin
                     line.Offset + capture.Index + capture.Length,
                     visualLine =>
                     {
-                        visualLine.TextRunProperties.SetForegroundBrush(Brushes.Gold);
+                        // TODO: Get variable highlight color from Styles.xaml
+                        visualLine.TextRunProperties.SetForegroundBrush(PororocaVariableHighlightBrush);
                     }
                 );
             }

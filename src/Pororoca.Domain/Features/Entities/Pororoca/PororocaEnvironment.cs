@@ -70,6 +70,6 @@ public sealed class PororocaEnvironment : ICloneable
         new PororocaEnvironment(Guid.NewGuid(), Name, CreatedAt)
         {
             IsCurrent = IsCurrent,
-            Variables = Variables.Select(v => (PororocaVariable)v.Clone()).ToList().AsReadOnly()
+            Variables = Variables.Select(v => v.Copy()).ToList().AsReadOnly()
         };
 }

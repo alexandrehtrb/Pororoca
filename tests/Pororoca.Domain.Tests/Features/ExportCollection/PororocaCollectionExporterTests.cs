@@ -1,4 +1,3 @@
-using System;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Xunit;
@@ -46,9 +45,9 @@ public static class PororocaCollectionExporterTests
         req2.UpdateUrl("https://www.ghi.com.br");
         PororocaCollectionFolder folder1 = new("Folder1");
         folder1.AddRequest(req2);
-        col.AddRequest(req1);
-        col.AddFolder(folder1);
-        col.UpdateVariables(new PororocaVariable[]
+        col.Requests.Add(req1);
+        col.Folders.Add(folder1);
+        col.Variables.AddRange(new PororocaVariable[]
         {
             new(true, "Key1", "Value1", false),
             new(false, "Key2", "Value2", true)
@@ -60,7 +59,7 @@ public static class PororocaCollectionExporterTests
             new(true, "Key3", "Value3", true),
             new(true, "Key4", "Value4", false)
         });
-        col.AddEnvironment(env1);
+        col.Environments.Add(env1);
         return col;
     }
 
@@ -70,17 +69,15 @@ public static class PororocaCollectionExporterTests
         Assert.Equal(testGuid, col.Id);
         Assert.Equal(testName, col.Name);
         Assert.Equal(2, col.Variables.Count);
-        Assert.Equal(1, col.Environments.Count);
-        Assert.Equal(1, col.Folders.Count);
-        Assert.Equal(1, col.Requests.Count);
-        Assert.Equal(1, col.HttpRequests.Count);
+        var env1 = Assert.Single(col.Environments);
+        var folder1 = Assert.Single(col.Folders);
+        Assert.Single(col.Requests);
 
-        var req1 = col.HttpRequests[0];
+        var req1 = Assert.Single(col.HttpRequests);
         Assert.Equal("Req1", req1.Name);
         Assert.Equal("GET", req1.HttpMethod);
         Assert.Equal("http://www.abc.com.br", req1.Url);
 
-        var folder1 = col.Folders[0];
         Assert.Equal("Folder1", folder1.Name);
         Assert.Empty(folder1.Folders);
         Assert.Single(folder1.Requests);
@@ -111,7 +108,6 @@ public static class PororocaCollectionExporterTests
             Assert.Equal("Value2", var2.Value);
         }
 
-        var env1 = col.Environments[0];
         Assert.True(env1.IsCurrent); // Should preserve environment.IsCurrent when exporting it inside of a collection
 
         var var3 = env1.Variables[0];

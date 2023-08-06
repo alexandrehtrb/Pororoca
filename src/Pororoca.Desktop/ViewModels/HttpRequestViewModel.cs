@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Reactive;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.ExportImport;
+using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Common;
@@ -19,16 +20,6 @@ namespace Pororoca.Desktop.ViewModels;
 
 public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 {
-    #region COLLECTION ORGANIZATION
-
-    public ReactiveCommand<Unit, Unit> MoveUpCmd { get; }
-    public ReactiveCommand<Unit, Unit> MoveDownCmd { get; }
-    public ReactiveCommand<Unit, Unit> CopyRequestCmd { get; }
-    public ReactiveCommand<Unit, Unit> RenameRequestCmd { get; }
-    public ReactiveCommand<Unit, Unit> DeleteRequestCmd { get; }
-
-    #endregion
-
     #region REQUEST
 
     private readonly IPororocaRequester requester = PororocaRequester.Singleton;
@@ -51,11 +42,23 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST URL
 
-    [Reactive]
-    public string RequestUrl { get; set; }
+    private string requestUrlField;
+    public string RequestUrl
+    {
+        get => this.requestUrlField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.requestUrlField, value);
+            // clear invalid warnings if user starts typing to fix them
+            if (HasRequestUrlValidationProblem) ClearInvalidRequestWarnings();
+        }
+    }
 
     [Reactive]
     public string ResolvedRequestUrlToolTip { get; set; }
+
+    [Reactive]
+    public bool HasRequestUrlValidationProblem { get; set; }
 
     #endregion
 
@@ -63,11 +66,23 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     public ObservableCollection<string> RequestHttpVersionSelectionOptions { get; }
 
-    [Reactive]
-    public int RequestHttpVersionSelectedIndex { get; set; }
+    private int requestHttpVersionSelectedIndexField;
+    public int RequestHttpVersionSelectedIndex
+    {
+        get => this.requestHttpVersionSelectedIndexField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.requestHttpVersionSelectedIndexField, value);
+            // clear invalid warnings if user starts typing to fix them
+            if (HasRequestHttpVersionValidationProblem) ClearInvalidRequestWarnings();
+        }
+    }
 
     private decimal RequestHttpVersion =>
         AvailableHttpVersionsForHttp[RequestHttpVersionSelectedIndex];
+
+    [Reactive]
+    public bool HasRequestHttpVersionValidationProblem { get; set; }
 
     #endregion
 
@@ -95,37 +110,35 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     [Reactive]
     public int RequestBodyModeSelectedIndex { get; set; }
 
-    [Reactive]
-    public bool IsRequestBodyModeNoneSelected { get; set; }
-
-    private PororocaHttpRequestBodyMode? RequestBodyMode
+    public PororocaHttpRequestBodyMode? RequestBodyMode => RequestBodyModeSelectedIndex switch
     {
-        get
-        {
-            if (IsRequestBodyModeFormDataSelected)
-                return PororocaHttpRequestBodyMode.FormData;
-            if (IsRequestBodyModeUrlEncodedSelected)
-                return PororocaHttpRequestBodyMode.UrlEncoded;
-            if (IsRequestBodyModeFileSelected)
-                return PororocaHttpRequestBodyMode.File;
-            if (IsRequestBodyModeRawSelected)
-                return PororocaHttpRequestBodyMode.Raw;
-            if (IsRequestBodyModeGraphQlSelected)
-                return PororocaHttpRequestBodyMode.GraphQl;
-            else
-                return null;
-        }
-    }
+        0 => null,
+        1 => PororocaHttpRequestBodyMode.Raw,
+        2 => PororocaHttpRequestBodyMode.File,
+        3 => PororocaHttpRequestBodyMode.UrlEncoded,
+        4 => PororocaHttpRequestBodyMode.FormData,
+        5 => PororocaHttpRequestBodyMode.GraphQl,
+        _ => null
+    };
 
     public static ObservableCollection<string> AllMimeTypes { get; } = new(MimeTypesDetector.AllMimeTypes);
 
     #region REQUEST BODY RAW
 
-    [Reactive]
-    public bool IsRequestBodyModeRawSelected { get; set; }
+    private string? requestRawContentTypeField;
+    public string? RequestRawContentType
+    {
+        get => this.requestRawContentTypeField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.requestRawContentTypeField, value);
+            // clear invalid warnings if user starts typing to fix them
+            if (HasRequestRawContentTypeValidationProblem) ClearInvalidRequestWarnings();
+        }
+    }
 
     [Reactive]
-    public string? RequestRawContentType { get; set; }
+    public bool HasRequestRawContentTypeValidationProblem { get; set; }
 
     [Reactive]
     public TextDocument? RequestRawContentTextDocument { get; set; }
@@ -140,23 +153,41 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST BODY FILE
 
-    [Reactive]
-    public bool IsRequestBodyModeFileSelected { get; set; }
+    private string? requestFileContentTypeField;
+    public string? RequestFileContentType
+    {
+        get => this.requestFileContentTypeField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.requestFileContentTypeField, value);
+            // clear invalid warnings if user starts typing to fix them
+            if (HasRequestFileContentTypeValidationProblem) ClearInvalidRequestWarnings();
+        }
+    }
 
     [Reactive]
-    public string? RequestFileContentType { get; set; }
+    public bool HasRequestFileContentTypeValidationProblem { get; set; }
+
+    private string? requestBodyFileSrcPathField;
+    public string? RequestBodyFileSrcPath
+    {
+        get => this.requestBodyFileSrcPathField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.requestBodyFileSrcPathField, value);
+            // clear invalid warnings if user starts typing to fix them
+            if (HasRequestBodyFileSrcPathValidationProblem) ClearInvalidRequestWarnings();
+        }
+    }
 
     [Reactive]
-    public string? RequestBodyFileSrcPath { get; set; }
+    public bool HasRequestBodyFileSrcPathValidationProblem { get; set; }
 
     public ReactiveCommand<Unit, Unit> SearchRequestBodyRawFileCmd { get; }
 
     #endregion
 
     #region REQUEST BODY URL ENCODED
-
-    [Reactive]
-    public bool IsRequestBodyModeUrlEncodedSelected { get; set; }
 
     public ObservableCollection<KeyValueParamViewModel> UrlEncodedParams { get; }
     public ReactiveCommand<Unit, Unit> AddNewUrlEncodedParamCmd { get; }
@@ -165,9 +196,6 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST BODY FORM DATA
 
-    [Reactive]
-    public bool IsRequestBodyModeFormDataSelected { get; set; }
-
     public ObservableCollection<HttpRequestFormDataParamViewModel> FormDataParams { get; }
     public ReactiveCommand<Unit, Unit> AddNewFormDataTextParamCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewFormDataFileParamCmd { get; }
@@ -175,9 +203,6 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #endregion
 
     #region REQUEST BODY GRAPHQL
-
-    [Reactive]
-    public bool IsRequestBodyModeGraphQlSelected { get; set; }
 
     [Reactive]
     public string? RequestBodyGraphQlQuery { get; set; }
@@ -226,13 +251,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     {
         #region COLLECTION ORGANIZATION
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
-
         NameEditableTextBlockViewDataCtx.IsHttpRequest = true;
-        MoveUpCmd = ReactiveCommand.Create(MoveThisUp);
-        MoveDownCmd = ReactiveCommand.Create(MoveThisDown);
-        CopyRequestCmd = ReactiveCommand.Create(Copy);
-        RenameRequestCmd = ReactiveCommand.Create(RenameThis);
-        DeleteRequestCmd = ReactiveCommand.Create(Delete);
         #endregion
 
         #region REQUEST
@@ -246,7 +265,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         int reqMethodSelectionIndex = RequestMethodSelectionOptions.IndexOf(req.HttpMethod);
         RequestMethodSelectedIndex = reqMethodSelectionIndex >= 0 ? reqMethodSelectionIndex : 0;
 
-        ResolvedRequestUrlToolTip = RequestUrl = req.Url;
+        ResolvedRequestUrlToolTip = this.requestUrlField = req.Url;
 
         RequestHttpVersionSelectionOptions = new(AvailableHttpVersionsForHttp.Select(FormatHttpVersionString));
         int reqHttpVersionSelectionIndex = RequestHttpVersionSelectionOptions.IndexOf(FormatHttpVersionString(req.HttpVersion));
@@ -269,27 +288,21 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         {
             case PororocaHttpRequestBodyMode.GraphQl:
                 RequestBodyModeSelectedIndex = 5;
-                IsRequestBodyModeGraphQlSelected = true;
                 break;
             case PororocaHttpRequestBodyMode.FormData:
                 RequestBodyModeSelectedIndex = 4;
-                IsRequestBodyModeFormDataSelected = true;
                 break;
             case PororocaHttpRequestBodyMode.UrlEncoded:
                 RequestBodyModeSelectedIndex = 3;
-                IsRequestBodyModeUrlEncodedSelected = true;
                 break;
             case PororocaHttpRequestBodyMode.File:
                 RequestBodyModeSelectedIndex = 2;
-                IsRequestBodyModeFileSelected = true;
                 break;
             case PororocaHttpRequestBodyMode.Raw:
                 RequestBodyModeSelectedIndex = 1;
-                IsRequestBodyModeRawSelected = true;
                 break;
             default:
                 RequestBodyModeSelectedIndex = 0;
-                IsRequestBodyModeNoneSelected = true;
                 break;
         }
         // RAW
@@ -342,13 +355,13 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #region COLLECTION ORGANIZATION
 
     protected override void CopyThis() =>
-        CollectionsGroupDataCtx.PushToCopy(ToHttpRequest());
+        ClipboardArea.Instance.PushToCopy(ToHttpRequest());
 
     private void OnLanguageChanged()
     {
         if (this.invalidRequestMessageErrorCode != null && IsInvalidRequestMessageVisible)
         {
-            ShowInvalidRequestMessage();
+            ShowInvalidRequestWarnings();
         }
     }
 
@@ -480,19 +493,19 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region SEND OR CANCEL REQUEST
 
-    private void CancelRequest() =>
+    public void CancelRequest() =>
         // CancellationToken will cause a failed PororocaResponse,
         // therefore is not necessary to here call method ShowNotSendingRequestUI()
         this.sendRequestCancellationTokenSourceField!.Cancel();
 
-    private async Task SendRequestAsync()
+    public async Task SendRequestAsync()
     {
-        ClearInvalidRequestMessage();
+        ClearInvalidRequestWarnings();
         var generatedReq = ToHttpRequest();
         if (!this.requester.IsValidRequest(this.variableResolver, generatedReq, out string? errorCode))
         {
             this.invalidRequestMessageErrorCode = errorCode;
-            ShowInvalidRequestMessage();
+            ShowInvalidRequestWarnings();
         }
         else
         {
@@ -503,29 +516,55 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         }
     }
 
-    private void ClearInvalidRequestMessage()
+    private void ClearInvalidRequestWarnings()
     {
         this.invalidRequestMessageErrorCode = null;
         IsInvalidRequestMessageVisible = false;
+
+        HasRequestUrlValidationProblem = false;
+        HasRequestHttpVersionValidationProblem = false;
+        HasRequestRawContentTypeValidationProblem = false;
+        HasRequestFileContentTypeValidationProblem = false;
+        HasRequestBodyFileSrcPathValidationProblem = false;
     }
 
-    private void ShowInvalidRequestMessage()
+    private void ShowInvalidRequestWarnings()
     {
-        InvalidRequestMessage = this.invalidRequestMessageErrorCode switch
+        string? errorCode = this.invalidRequestMessageErrorCode;
+        InvalidRequestMessage = errorCode switch
         {
-            TranslateRequestErrors.ClientCertificateFileNotFound => Localizer.Instance["RequestValidation/ClientCertificateFileNotFound"],
-            TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank => Localizer.Instance["RequestValidation/ClientCertificatePkcs12PasswordCannotBeBlank"],
-            TranslateRequestErrors.ClientCertificatePrivateKeyFileNotFound => Localizer.Instance["RequestValidation/ClientCertificatePrivateKeyFileNotFound"],
-            TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRawOrFile => Localizer.Instance["RequestValidation/ContentTypeCannotBeBlankReqBodyRawOrFile"],
-            TranslateRequestErrors.Http2UnavailableInOSVersion => Localizer.Instance["RequestValidation/Http2Unavailable"],
-            TranslateRequestErrors.Http3UnavailableInOSVersion => Localizer.Instance["RequestValidation/Http3Unavailable"],
-            TranslateRequestErrors.InvalidContentTypeFormData => Localizer.Instance["RequestValidation/InvalidContentTypeFormData"],
-            TranslateRequestErrors.InvalidContentTypeRawOrFile => Localizer.Instance["RequestValidation/InvalidContentTypeRawOrFile"],
-            TranslateRequestErrors.InvalidUrl => Localizer.Instance["RequestValidation/InvalidUrl"],
-            TranslateRequestErrors.ReqBodyFileNotFound => Localizer.Instance["RequestValidation/ReqBodyFileNotFound"],
-            _ => Localizer.Instance["RequestValidation/InvalidUnknownCause"]
+            TranslateRequestErrors.ClientCertificateFileNotFound => Localizer.Instance.RequestValidation.ClientCertificateFileNotFound,
+            TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank => Localizer.Instance.RequestValidation.ClientCertificatePkcs12PasswordCannotBeBlank,
+            TranslateRequestErrors.ClientCertificatePrivateKeyFileNotFound => Localizer.Instance.RequestValidation.ClientCertificatePrivateKeyFileNotFound,
+            TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRaw => Localizer.Instance.RequestValidation.ContentTypeCannotBeBlankReqBodyRawOrFile,
+            TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyFile => Localizer.Instance.RequestValidation.ContentTypeCannotBeBlankReqBodyRawOrFile,
+            TranslateRequestErrors.Http2UnavailableInOSVersion => Localizer.Instance.RequestValidation.Http2Unavailable,
+            TranslateRequestErrors.Http3UnavailableInOSVersion => Localizer.Instance.RequestValidation.Http3Unavailable,
+            TranslateRequestErrors.InvalidContentTypeFormData => Localizer.Instance.RequestValidation.InvalidContentTypeFormData,
+            TranslateRequestErrors.InvalidContentTypeRaw => Localizer.Instance.RequestValidation.InvalidContentTypeRawOrFile,
+            TranslateRequestErrors.InvalidContentTypeFile => Localizer.Instance.RequestValidation.InvalidContentTypeRawOrFile,
+            TranslateRequestErrors.InvalidUrl => Localizer.Instance.RequestValidation.InvalidUrl,
+            TranslateRequestErrors.ReqBodyFileNotFound => Localizer.Instance.RequestValidation.ReqBodyFileNotFound,
+            _ => Localizer.Instance.RequestValidation.InvalidUnknownCause
         };
         IsInvalidRequestMessageVisible = true;
+
+        HasRequestUrlValidationProblem = (errorCode == TranslateRequestErrors.InvalidUrl);
+        HasRequestHttpVersionValidationProblem =
+        (errorCode == TranslateRequestErrors.Http2UnavailableInOSVersion || errorCode == TranslateRequestErrors.Http3UnavailableInOSVersion);
+        HasRequestRawContentTypeValidationProblem = 
+        (errorCode == TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRaw || errorCode == TranslateRequestErrors.InvalidContentTypeRaw);
+        HasRequestFileContentTypeValidationProblem = 
+        (errorCode == TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyFile || errorCode == TranslateRequestErrors.InvalidContentTypeFile);
+        HasRequestBodyFileSrcPathValidationProblem = (errorCode == TranslateRequestErrors.ReqBodyFileNotFound);
+
+        if (HasRequestRawContentTypeValidationProblem
+         || HasRequestFileContentTypeValidationProblem
+         || HasRequestBodyFileSrcPathValidationProblem)
+        {
+            // TODO: Improve this, do not use fixed values to resolve index
+            RequestTabsSelectedIndex = 1;
+        }
     }
 
     private void ShowSendingRequestUI()

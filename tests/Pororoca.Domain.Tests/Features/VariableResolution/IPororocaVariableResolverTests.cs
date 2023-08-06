@@ -12,10 +12,10 @@ public static class IPororocaVariableResolverTests
         // GIVEN
         PororocaCollection col = new(string.Empty);
         IPororocaVariableResolver varResolver = col;
-        col.AddVariable(new(true, "k1", "v1", false));
-        col.AddVariable(new(false, "k2", "v2", false));
-        col.AddVariable(new(true, "k3", "v3", true));
-        col.AddVariable(new(false, "k4", "v4", true));
+        col.Variables.Add(new(true, "k1", "v1", false));
+        col.Variables.Add(new(false, "k2", "v2", false));
+        col.Variables.Add(new(true, "k3", "v3", true));
+        col.Variables.Add(new(false, "k4", "v4", true));
 
         List<PororocaKeyValueParam> kvps = new();
         kvps.Add(new(true, "Key1", "Value1"));
@@ -45,7 +45,7 @@ public static class IPororocaVariableResolverTests
         // GIVEN
         PororocaCollection col = new(string.Empty);
         IPororocaVariableResolver varResolver = col;
-        col.AddVariable(new(true, "k1", "v1", false));
+        col.Variables.Add(new(true, "k1", "v1", false));
 
         List<PororocaKeyValueParam> kvps = new();
         kvps.Add(new(true, "{{k1}}", "ValueK1"));
@@ -68,10 +68,10 @@ public static class IPororocaVariableResolverTests
         // GIVEN
         PororocaCollection col = new(string.Empty);
         IPororocaVariableResolver varResolver = col;
-        col.AddVariable(new(true, "k1", "v1", false));
-        col.AddVariable(new(false, "k2", "v2", false));
-        col.AddVariable(new(true, "k3", "v3", true));
-        col.AddVariable(new(false, "k4", "v4", true));
+        col.Variables.Add(new(true, "k1", "v1", false));
+        col.Variables.Add(new(false, "k2", "v2", false));
+        col.Variables.Add(new(true, "k3", "v3", true));
+        col.Variables.Add(new(false, "k4", "v4", true));
 
         // WHEN
         var resolvedKvps = varResolver.ResolveKeyValueParams(null).ToArray();

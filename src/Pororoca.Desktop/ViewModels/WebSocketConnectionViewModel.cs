@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Security.Authentication;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.ExportImport;
+using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
@@ -29,12 +30,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     public override Action OnAfterItemDeleted => Parent.OnAfterItemDeleted;
     public override Action<CollectionOrganizationItemViewModel> OnRenameSubItemSelected => Parent.OnRenameSubItemSelected;
     public ReactiveCommand<Unit, Unit> AddNewWebSocketClientMessageCmd { get; }
-    public ReactiveCommand<Unit, Unit> PasteToWebSocketConnectionCmd { get; }
-    public ReactiveCommand<Unit, Unit> CopyCmd { get; }
-    public ReactiveCommand<Unit, Unit> RenameCmd { get; }
-    public ReactiveCommand<Unit, Unit> MoveUpCmd { get; }
-    public ReactiveCommand<Unit, Unit> MoveDownCmd { get; }
-    public ReactiveCommand<Unit, Unit> DeleteCmd { get; }
 
     #endregion
 
@@ -103,8 +98,20 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     [Reactive]
     public int SelectedConnectionTabIndex { get; set; }
 
+    private string urlField;
+    public string Url
+    {
+        get => this.urlField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.urlField, value);
+            // clear invalid warnings if user starts typing to fix them
+            if (HasUrlValidationProblem) ClearInvalidConnectionWarnings();
+        }
+    }
+
     [Reactive]
-    public string Url { get; set; }
+    public bool HasUrlValidationProblem { get; set; }
 
     [Reactive]
     public string ResolvedUrlToolTip { get; set; }
@@ -116,8 +123,22 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     #region CONNECTION REQUEST HTTP VERSION
 
     public ObservableCollection<string> HttpVersionSelectionOptions { get; }
+
+    private int httpVersionSelectedIndexField;
+    public int HttpVersionSelectedIndex
+    {
+        get => this.httpVersionSelectedIndexField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.httpVersionSelectedIndexField, value);
+            // clear invalid warnings if user starts typing to fix them
+            if (HasHttpVersionValidationProblem) ClearInvalidConnectionWarnings();
+        }
+    }
+
     [Reactive]
-    public int HttpVersionSelectedIndex { get; set; }
+    public bool HasHttpVersionValidationProblem { get; set; }
+
     private decimal HttpVersion =>
         AvailableHttpVersionsForWebSockets[HttpVersionSelectedIndex];
 
@@ -135,16 +156,18 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             IsInvalidConnectionErrorVisible = value is not null;
             InvalidConnectionError = value switch
             {
-                TranslateRequestErrors.ClientCertificateFileNotFound => Localizer.Instance["RequestValidation/ClientCertificateFileNotFound"],
-                TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank => Localizer.Instance["RequestValidation/ClientCertificatePkcs12PasswordCannotBeBlank"],
-                TranslateRequestErrors.ClientCertificatePrivateKeyFileNotFound => Localizer.Instance["RequestValidation/ClientCertificatePrivateKeyFileNotFound"],
-                TranslateRequestErrors.InvalidUrl => Localizer.Instance["RequestValidation/InvalidUrl"],
-                TranslateRequestErrors.Http2UnavailableInOSVersion => Localizer.Instance["RequestValidation/Http2Unavailable"],
-                TranslateRequestErrors.WebSocketHttpVersionUnavailable => Localizer.Instance["RequestValidation/WebSocketHttpVersionUnavailable"],
-                TranslateRequestErrors.WebSocketCompressionMaxWindowBitsOutOfRange => Localizer.Instance["RequestValidation/WebSocketCompressionMaxWindowBitsOutOfRange"],
-                TranslateRequestErrors.WebSocketUnknownConnectionTranslationError => Localizer.Instance["RequestValidation/WebSocketUnknownConnectionTranslationError"],
-                _ => Localizer.Instance["RequestValidation/WebSocketUnknownConnectionTranslationError"]
+                TranslateRequestErrors.ClientCertificateFileNotFound => Localizer.Instance.RequestValidation.ClientCertificateFileNotFound,
+                TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank => Localizer.Instance.RequestValidation.ClientCertificatePkcs12PasswordCannotBeBlank,
+                TranslateRequestErrors.ClientCertificatePrivateKeyFileNotFound => Localizer.Instance.RequestValidation.ClientCertificatePrivateKeyFileNotFound,
+                TranslateRequestErrors.InvalidUrl => Localizer.Instance.RequestValidation.InvalidUrl,
+                TranslateRequestErrors.Http2UnavailableInOSVersion => Localizer.Instance.RequestValidation.Http2Unavailable,
+                TranslateRequestErrors.WebSocketHttpVersionUnavailable => Localizer.Instance.RequestValidation.WebSocketHttpVersionUnavailable,
+                TranslateRequestErrors.WebSocketCompressionMaxWindowBitsOutOfRange => Localizer.Instance.RequestValidation.WebSocketCompressionMaxWindowBitsOutOfRange,
+                TranslateRequestErrors.WebSocketUnknownConnectionTranslationError => Localizer.Instance.RequestValidation.WebSocketUnknownConnectionTranslationError,
+                _ => Localizer.Instance.RequestValidation.WebSocketUnknownConnectionTranslationError
             };
+            HasUrlValidationProblem = (value == TranslateRequestErrors.InvalidUrl);
+            HasHttpVersionValidationProblem = (value == TranslateRequestErrors.Http2UnavailableInOSVersion);
         }
     }
 
@@ -159,15 +182,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     [Reactive]
     public int ConnectionOptionSelectedIndex { get; set; }
-
-    [Reactive]
-    public bool IsConnectionOptionHeadersSelected { get; set; }
-
-    [Reactive]
-    public bool IsConnectionOptionSubprotocolsSelected { get; set; }
-
-    [Reactive]
-    public bool IsConnectionOptionCompressionSelected { get; set; }
 
     #region CONNECTION OPTION HEADERS
 
@@ -230,10 +244,10 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             IsInvalidClientMessageErrorVisible = value is not null;
             InvalidClientMessageError = value switch
             {
-                TranslateRequestErrors.WebSocketNotConnected => Localizer.Instance["RequestValidation/WebSocketNotConnected"],
-                TranslateRequestErrors.WebSocketClientMessageContentFileNotFound => Localizer.Instance["RequestValidation/WebSocketClientMessageContentFileNotFound"],
-                TranslateRequestErrors.WebSocketUnknownClientMessageTranslationError => Localizer.Instance["RequestValidation/WebSocketUnknownClientMessageTranslationError"],
-                _ => Localizer.Instance["RequestValidation/WebSocketUnknownClientMessageTranslationError"]
+                TranslateRequestErrors.WebSocketNotConnected => Localizer.Instance.RequestValidation.WebSocketNotConnected,
+                TranslateRequestErrors.WebSocketClientMessageContentFileNotFound => Localizer.Instance.RequestValidation.WebSocketClientMessageContentFileNotFound,
+                TranslateRequestErrors.WebSocketUnknownClientMessageTranslationError => Localizer.Instance.RequestValidation.WebSocketUnknownClientMessageTranslationError,
+                _ => Localizer.Instance.RequestValidation.WebSocketUnknownClientMessageTranslationError
             };
         }
     }
@@ -302,12 +316,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
         NameEditableTextBlockViewDataCtx.IsDisconnectedWebSocket = true;
         AddNewWebSocketClientMessageCmd = ReactiveCommand.Create(AddNewWebSocketClientMessage);
-        PasteToWebSocketConnectionCmd = ReactiveCommand.Create(PasteToThis);
-        CopyCmd = ReactiveCommand.Create(Copy);
-        RenameCmd = ReactiveCommand.Create(RenameThis);
-        MoveUpCmd = ReactiveCommand.Create(MoveThisUp);
-        MoveDownCmd = ReactiveCommand.Create(MoveThisDown);
-        DeleteCmd = ReactiveCommand.Create(Delete);
         #endregion
 
         #region CONNECTION
@@ -333,7 +341,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         #endregion
 
         #region CONNECTION REQUEST HTTP VERSION AND URL
-        ResolvedUrlToolTip = Url = ws.Url;
+        ResolvedUrlToolTip = this.urlField = ws.Url;
 
         HttpVersionSelectionOptions = new(AvailableHttpVersionsForWebSockets.Select(FormatHttpVersionString));
         int httpVersionSelectionIndex = HttpVersionSelectionOptions.IndexOf(FormatHttpVersionString(ws.HttpVersion));
@@ -347,9 +355,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         #region CONNECTION OPTIONS
 
         ConnectionOptionSelectedIndex = 0;
-        IsConnectionOptionHeadersSelected = true;
-        IsConnectionOptionSubprotocolsSelected = false;
-        IsConnectionOptionCompressionSelected = false;
 
         #region CONNECTION OPTION HEADERS
 
@@ -418,24 +423,12 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region COLLECTION ORGANIZATION
 
-    public override void RefreshSubItemsAvailableMovements()
-    {
-        for (int x = 0; x < Items.Count; x++)
-        {
-            var colItemVm = Items[x];
-            bool canMoveUp = x > 0;
-            bool canMoveDown = x < Items.Count - 1;
-            colItemVm.CanMoveUp = canMoveUp;
-            colItemVm.CanMoveDown = canMoveDown;
-        }
-    }
-
     protected override void CopyThis() =>
-        CollectionsGroupDataCtx.PushToCopy(ToWebSocketConnection());
+        ClipboardArea.Instance.PushToCopy(ToWebSocketConnection());
 
     public override void PasteToThis()
     {
-        var itemsToPaste = CollectionsGroupDataCtx.FetchCopiesOfWebSocketClientMessages();
+        var itemsToPaste = ClipboardArea.Instance.FetchCopiesOfWebSocketClientMessages();
         foreach (var itemToPaste in itemsToPaste)
         {
             AddWebSocketClientMessage(itemToPaste);
@@ -445,7 +438,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     private void AddNewWebSocketClientMessage()
     {
         PororocaWebSocketClientMessage wsReqMsg = new(PororocaWebSocketMessageType.Text,
-                                                       Localizer.Instance["WebSocketClientMessage/NewMessage"],
+                                                       Localizer.Instance.WebSocketClientMessage.NewMessage,
                                                        PororocaWebSocketClientMessageContentMode.Raw,
                                                        string.Empty,
                                                        PororocaWebSocketMessageRawContentSyntax.Json,
@@ -545,6 +538,16 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region CONNECT / DISCONNECT
 
+    private void ClearInvalidConnectionWarnings()
+    {
+        this.invalidConnectionErrorCodeField = null;
+        IsInvalidConnectionErrorVisible = false;
+        InvalidConnectionError = null;
+
+        HasUrlValidationProblem = false;
+        HasHttpVersionValidationProblem = false;
+    }
+
     private void OnWebSocketConnectionChanged(PororocaWebSocketConnectorState state, Exception? ex)
     {
         IsConnecting = state == PororocaWebSocketConnectorState.Connecting;
@@ -567,7 +570,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     private void OnWebSocketMessageSending(bool isSendingAMessage) =>
         IsSendingAMessage = isSendingAMessage;
 
-    private async Task ConnectAsync()
+    public async Task ConnectAsync()
     {
         var wsConn = ToWebSocketConnection();
         bool disableTlsVerification = ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled;
@@ -593,10 +596,10 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         }
     }
 
-    private void CancelConnect() =>
+    public void CancelConnect() =>
         this.cancelConnectionAttemptTokenSource?.Cancel();
 
-    private Task DisconnectAsync()
+    public Task DisconnectAsync()
     {
         this.cancelDisconnectionAttemptTokenSource = new();
         // This needs to be done in a different thread.
@@ -672,7 +675,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         IsSaveSelectedExchangedMessageToFileVisible = vm.CanBeSavedToFile;
     }
 
-    private async Task SaveSelectedExchangedMessageToFileAsync()
+    public async Task SaveSelectedExchangedMessageToFileAsync()
     {
         static string GenerateDefaultInitialFileName(WebSocketExchangedMessageViewModel vm)
         {

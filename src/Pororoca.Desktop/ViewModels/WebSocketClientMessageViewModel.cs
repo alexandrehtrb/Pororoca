@@ -1,6 +1,7 @@
 using System.Reactive;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.ExportImport;
+using Pororoca.Desktop.HotKeys;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -9,16 +10,6 @@ namespace Pororoca.Desktop.ViewModels;
 
 public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItemViewModel
 {
-    #region COLLECTION ORGANIZATION
-
-    public ReactiveCommand<Unit, Unit> CopyCmd { get; }
-    public ReactiveCommand<Unit, Unit> RenameCmd { get; }
-    public ReactiveCommand<Unit, Unit> MoveUpCmd { get; }
-    public ReactiveCommand<Unit, Unit> MoveDownCmd { get; }
-    public ReactiveCommand<Unit, Unit> DeleteCmd { get; }
-
-    #endregion
-
     #region WEBSOCKET REQUEST MESSAGE
 
     [Reactive]
@@ -29,29 +20,13 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
     [Reactive]
     public int MessageTypeSelectedIndex { get; set; }
 
-    [Reactive]
-    public bool IsMessageTypeTextSelected { get; set; }
-
-    [Reactive]
-    public bool IsMessageTypeBinarySelected { get; set; }
-
-    [Reactive]
-    public bool IsMessageTypeCloseSelected { get; set; }
-
-    private PororocaWebSocketMessageType MessageType
+    public PororocaWebSocketMessageType MessageType => MessageTypeSelectedIndex switch
     {
-        get
-        {
-            if (IsMessageTypeTextSelected)
-                return PororocaWebSocketMessageType.Text;
-            if (IsMessageTypeBinarySelected)
-                return PororocaWebSocketMessageType.Binary;
-            if (IsMessageTypeCloseSelected)
-                return PororocaWebSocketMessageType.Close;
-            else
-                return PororocaWebSocketMessageType.Text;
-        }
-    }
+        0 => PororocaWebSocketMessageType.Text,
+        1 => PororocaWebSocketMessageType.Binary,
+        2 => PororocaWebSocketMessageType.Close,
+        _ => PororocaWebSocketMessageType.Text
+    };
 
     #endregion
 
@@ -60,24 +35,12 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
     [Reactive]
     public int ContentModeSelectedIndex { get; set; }
 
-    [Reactive]
-    public bool IsContentModeRawSelected { get; set; }
-
-    [Reactive]
-    public bool IsContentModeFileSelected { get; set; }
-
-    private PororocaWebSocketClientMessageContentMode ContentMode
+    public PororocaWebSocketClientMessageContentMode ContentMode => ContentModeSelectedIndex switch
     {
-        get
-        {
-            if (IsContentModeRawSelected)
-                return PororocaWebSocketClientMessageContentMode.Raw;
-            if (IsContentModeFileSelected)
-                return PororocaWebSocketClientMessageContentMode.File;
-            else
-                return PororocaWebSocketClientMessageContentMode.Raw;
-        }
-    }
+        0 => PororocaWebSocketClientMessageContentMode.Raw,
+        1 => PororocaWebSocketClientMessageContentMode.File,
+        _ => PororocaWebSocketClientMessageContentMode.Raw
+    };
 
     [Reactive]
     public TextDocument? RawContentTextDocument { get; set; }
@@ -91,24 +54,12 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
     [Reactive]
     public int RawContentSyntaxSelectedIndex { get; set; }
 
-    [Reactive]
-    public bool IsRawContentJsonSyntaxSelected { get; set; }
-
-    [Reactive]
-    public bool IsRawContentOtherSyntaxSelected { get; set; }
-
-    private PororocaWebSocketMessageRawContentSyntax? RawContentSyntax
+    public PororocaWebSocketMessageRawContentSyntax? RawContentSyntax => RawContentSyntaxSelectedIndex switch
     {
-        get
-        {
-            if (IsRawContentJsonSyntaxSelected)
-                return PororocaWebSocketMessageRawContentSyntax.Json;
-            if (IsRawContentOtherSyntaxSelected)
-                return PororocaWebSocketMessageRawContentSyntax.Other;
-            else
-                return null;
-        }
-    }
+        0 => PororocaWebSocketMessageRawContentSyntax.Json,
+        1 => PororocaWebSocketMessageRawContentSyntax.Other,
+        _ => PororocaWebSocketMessageRawContentSyntax.Other
+    };
 
     [Reactive]
     public string? ContentFileSrcPath { get; set; }
@@ -122,68 +73,36 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
     public WebSocketClientMessageViewModel(ICollectionOrganizationItemParentViewModel parentVm,
                                            PororocaWebSocketClientMessage msg) : base(parentVm, msg.Name)
     {
-        #region COLLECTION ORGANIZATION
-
-        CopyCmd = ReactiveCommand.Create(Copy);
-        RenameCmd = ReactiveCommand.Create(RenameThis);
-        MoveUpCmd = ReactiveCommand.Create(MoveThisUp);
-        MoveDownCmd = ReactiveCommand.Create(MoveThisDown);
-        DeleteCmd = ReactiveCommand.Create(Delete);
-
-        #endregion
-
         #region WEBSOCKET REQUEST MESSAGE
 
         DisableCompressionForThisMessage = msg.DisableCompressionForThis;
-        switch (msg.MessageType)
+        MessageTypeSelectedIndex = msg.MessageType switch
         {
+            PororocaWebSocketMessageType.Text => 0,
+            PororocaWebSocketMessageType.Binary => 1,
+            PororocaWebSocketMessageType.Close => 2,
             // TODO: Improve this, do not use fixed values to resolve index
-            default:
-            case PororocaWebSocketMessageType.Text:
-                MessageTypeSelectedIndex = 0;
-                IsMessageTypeTextSelected = true;
-                break;
-            case PororocaWebSocketMessageType.Binary:
-                MessageTypeSelectedIndex = 1;
-                IsMessageTypeBinarySelected = true;
-                break;
-            case PororocaWebSocketMessageType.Close:
-                MessageTypeSelectedIndex = 2;
-                IsMessageTypeCloseSelected = true;
-                break;
-        }
-        switch (msg.ContentMode)
+            _ => 0,
+        };
+        ContentModeSelectedIndex = msg.ContentMode switch
         {
+            PororocaWebSocketClientMessageContentMode.Raw => 0,
+            PororocaWebSocketClientMessageContentMode.File => 1,
             // TODO: Improve this, do not use fixed values to resolve index
-            default:
-            case PororocaWebSocketClientMessageContentMode.Raw:
-                ContentModeSelectedIndex = 0;
-                IsContentModeRawSelected = true;
-                break;
-            case PororocaWebSocketClientMessageContentMode.File:
-                ContentModeSelectedIndex = 1;
-                IsContentModeFileSelected = true;
-                break;
-        }
+            _ => 0,
+        };
 
         // we need to always set RawContent with a value, even if it is null,
         // to initialize with a TextDocument object
         RawContent = msg.RawContent;
 
-        switch (msg.RawContentSyntax)
+        RawContentSyntaxSelectedIndex = msg.RawContentSyntax switch
         {
+            PororocaWebSocketMessageRawContentSyntax.Json => 0,
+            PororocaWebSocketMessageRawContentSyntax.Other => 1,
             // TODO: Improve this, do not use fixed values to resolve index
-            default:
-            case PororocaWebSocketMessageRawContentSyntax.Json:
-                RawContentSyntaxSelectedIndex = 0;
-                IsRawContentJsonSyntaxSelected = true;
-                break;
-            case PororocaWebSocketMessageRawContentSyntax.Other:
-                RawContentSyntaxSelectedIndex = 1;
-                IsRawContentOtherSyntaxSelected = true;
-                break;
-        }
-
+            _ => 0,
+        };
         ContentFileSrcPath = msg.FileSrcPath;
         SearchContentFileCmd = ReactiveCommand.CreateFromTask(SearchContentFileAsync);
 
@@ -193,7 +112,7 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
     #region COLLECTION ORGANIZATION
 
     protected override void CopyThis() =>
-        CollectionsGroupDataCtx.PushToCopy(ToWebSocketClientMessage());
+        ClipboardArea.Instance.PushToCopy(ToWebSocketClientMessage());
 
     public PororocaWebSocketClientMessage ToWebSocketClientMessage()
     {
@@ -210,7 +129,6 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
     }
 
     #endregion
-
 
     #region OTHERS
 

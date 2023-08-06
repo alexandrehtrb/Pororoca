@@ -111,7 +111,7 @@ public static class PororocaHttpRequestValidatorTests
 
         // THEN
         mockedVariableResolver.Verify(x => x.ReplaceTemplates(urlTemplate), Times.Once);
-        Assert.Equal(TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRawOrFile, errorCode);
+        Assert.Equal(TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRaw, errorCode);
     }
 
     [Fact]
@@ -135,11 +135,11 @@ public static class PororocaHttpRequestValidatorTests
 
         // THEN
         mockedVariableResolver.Verify(x => x.ReplaceTemplates(urlTemplate), Times.Once);
-        Assert.Equal(TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRawOrFile, errorCode);
+        Assert.Equal(TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyFile, errorCode);
     }
 
     [Fact]
-    public static void Should_block_request_if_requires_valid_but_has_invalid_content_type()
+    public static void Should_block_request_if_requires_valid_but_has_invalid_raw_content_type()
     {
         // GIVEN
         const string urlTemplate = "{{url}}";
@@ -159,7 +159,31 @@ public static class PororocaHttpRequestValidatorTests
 
         // THEN
         mockedVariableResolver.Verify(x => x.ReplaceTemplates(urlTemplate), Times.Once);
-        Assert.Equal(TranslateRequestErrors.InvalidContentTypeRawOrFile, errorCode);
+        Assert.Equal(TranslateRequestErrors.InvalidContentTypeRaw, errorCode);
+    }
+
+    [Fact]
+    public static void Should_block_request_if_requires_valid_but_has_invalid_file_content_type()
+    {
+        // GIVEN
+        const string urlTemplate = "{{url}}";
+        const string url = "http://www.url.br";
+        var mockedVariableResolver = MockVariableResolver(urlTemplate, url);
+        var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
+        var mockedFileExistsVerifier = MockFileExistsVerifier(true);
+        PororocaHttpRequest req = new();
+        req.UpdateUrl(urlTemplate);
+        req.UpdateHttpVersion(1.1m);
+        var body = new PororocaHttpRequestBody();
+        body.SetFileContent("abc", "flafubal");
+        req.UpdateBody(body);
+
+        // WHEN
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, mockedVariableResolver.Object, req, out string? errorCode));
+
+        // THEN
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates(urlTemplate), Times.Once);
+        Assert.Equal(TranslateRequestErrors.InvalidContentTypeFile, errorCode);
     }
 
     [Fact]
@@ -394,8 +418,7 @@ public static class PororocaHttpRequestValidatorTests
         var mockedVariableResolver = MockVariableResolver("{{CertificateFilePath}}", "./cert.p12");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(false);
-        PororocaRequestAuth auth = new();
-        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "prvkeypwd");
+        var auth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "prvkeypwd");
         PororocaHttpRequest req = new();
         req.UpdateUrl("http://www.pudim.com.br");
         req.UpdateCustomAuth(auth);
@@ -420,8 +443,7 @@ public static class PororocaHttpRequestValidatorTests
             { "./cert.pem", false },
             { "./private_key.key", true }
         });
-        PororocaRequestAuth auth = new();
-        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", "./private_key.key", "prvkeypwd");
+        var auth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", "./private_key.key", "prvkeypwd");
         PororocaHttpRequest req = new();
         req.UpdateUrl("http://www.pudim.com.br");
         req.UpdateCustomAuth(auth);
@@ -447,8 +469,7 @@ public static class PororocaHttpRequestValidatorTests
             { "./cert.pem", true },
             { "./private_key.key", false }
         });
-        PororocaRequestAuth auth = new();
-        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "./cert.pem", "{{PrivateKeyFilePath}}", "prvkeypwd");
+        var auth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "./cert.pem", "{{PrivateKeyFilePath}}", "prvkeypwd");
         PororocaHttpRequest req = new();
         req.UpdateUrl("http://www.pudim.com.br");
         req.UpdateCustomAuth(auth);
@@ -473,8 +494,7 @@ public static class PororocaHttpRequestValidatorTests
         var mockedVariableResolver = MockVariableResolver("{{CertificateFilePath}}", "./cert.p12");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
-        PororocaRequestAuth auth = new();
-        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, filePassword);
+        var auth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, filePassword);
         PororocaHttpRequest req = new();
         req.UpdateUrl("http://www.pudim.com.br");
         req.UpdateCustomAuth(auth);
@@ -499,8 +519,7 @@ public static class PororocaHttpRequestValidatorTests
         });
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
-        PororocaRequestAuth auth = new();
-        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "{{PrivateKeyFilePassword}}");
+        var auth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "{{PrivateKeyFilePassword}}");
         PororocaHttpRequest req = new();
         req.UpdateUrl("http://www.pudim.com.br");
         req.UpdateCustomAuth(auth);
@@ -529,8 +548,7 @@ public static class PororocaHttpRequestValidatorTests
         });
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
-        PororocaRequestAuth auth = new();
-        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", "{{PrivateKeyFilePath}}", "{{PrivateKeyFilePassword}}");
+        var auth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", "{{PrivateKeyFilePath}}", "{{PrivateKeyFilePassword}}");
         PororocaHttpRequest req = new();
         req.UpdateUrl("http://www.pudim.com.br");
         req.UpdateCustomAuth(auth);
@@ -559,8 +577,7 @@ public static class PororocaHttpRequestValidatorTests
         });
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
-        PororocaRequestAuth auth = new();
-        auth.SetClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", null, "{{FilePassword}}");
+        var auth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", null, "{{FilePassword}}");
         PororocaHttpRequest req = new();
         req.UpdateUrl("http://www.pudim.com.br");
         req.UpdateCustomAuth(auth);

@@ -1,4 +1,3 @@
-using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Pororoca.Desktop.ViewModels;
@@ -7,7 +6,7 @@ namespace Pororoca.Desktop;
 
 public class ViewLocator : IDataTemplate
 {
-    public IControl? Build(object? data)
+    public Control? Build(object? data)
     {
         string? name = data?.GetType()?.FullName?.Replace("ViewModel", "View");
         var type = name != null ? Type.GetType(name) : null;

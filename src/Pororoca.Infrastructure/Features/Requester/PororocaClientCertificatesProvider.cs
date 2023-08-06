@@ -1,6 +1,5 @@
 using System.Security.Cryptography.X509Certificates;
 using Pororoca.Domain.Features.Entities.Pororoca;
-using Pororoca.Domain.Features.Requester;
 
 namespace Pororoca.Infrastructure.Features.Requester;
 
