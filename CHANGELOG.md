@@ -19,7 +19,7 @@
 * Visual themes are now available: light, dark, pampa and amazonian night.
 * Default font now is Cabin.
 * Adds russian language by [@RVShershnev](https://github.com/RVShershnev).
-* Red border around inputs when there is an error related to them.
+* Red border and background on inputs when there is an error related to them.
 * A dialog now appears to confirm if you really want to delete an item.
 * Keyboard shortcuts added! They are:
   * F1 - Show help

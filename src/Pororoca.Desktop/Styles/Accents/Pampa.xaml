@@ -14,6 +14,7 @@
       <Color x:Key="SystemAccentColorLight3">White</Color>
       <Color x:Key="SystemErrorTextColor">Red</Color>
       <!-- Custom colours below -->
+      <Color x:Key="InputBackgroundValidationProblemColor">#99FECADA</Color>
       <Color x:Key="SystemInvertedAccentColor">CornflowerBlue</Color>
       <Color x:Key="SystemInvertedAccentColorLight1">#5387f9</Color>
       <Color x:Key="SystemInvertedAccentColorLight2">#00487C</Color>

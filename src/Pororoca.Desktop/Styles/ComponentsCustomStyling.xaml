@@ -70,6 +70,9 @@
     <Setter
         Property="BorderBrush"
         Value="{DynamicResource SystemErrorTextColor}"/>
+    <Setter
+        Property="Background"
+        Value="{DynamicResource InputBackgroundValidationProblemBrush}"/>
   </Style>
 
   <Style Selector="ComboBox.HasValidationProblem">
@@ -79,6 +82,9 @@
     <Setter
         Property="BorderBrush"
         Value="{DynamicResource SystemErrorTextColor}"/>
+    <Setter
+        Property="Background"
+        Value="{DynamicResource InputBackgroundValidationProblemBrush}"/>
   </Style>
 
   <Style Selector="TextBox.HasValidationProblem">
@@ -88,6 +94,9 @@
     <Setter
         Property="BorderBrush"
         Value="{DynamicResource SystemErrorTextColor}"/>
+    <Setter
+        Property="Background"
+        Value="{DynamicResource InputBackgroundValidationProblemBrush}"/>
   </Style>
 
   <Style Selector="TextBox.CodeTextBox">

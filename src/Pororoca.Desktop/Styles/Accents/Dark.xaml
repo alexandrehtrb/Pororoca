@@ -13,6 +13,7 @@
       <Color x:Key="SystemAccentColorLight3">#DB843D</Color>
       <Color x:Key="SystemErrorTextColor">#FF4D4D</Color>
       <!-- Custom colours below -->
+      <Color x:Key="InputBackgroundValidationProblemColor">#66FECADA</Color>
       <Color x:Key="SystemInvertedAccentColor">#38C7AD</Color>
       <Color x:Key="SystemInvertedAccentColorLight1">#88DDCE</Color>
       <Color x:Key="SystemInvertedAccentColorLight2">#98E2D4</Color>

@@ -557,6 +557,14 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         HasRequestFileContentTypeValidationProblem = 
         (errorCode == TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyFile || errorCode == TranslateRequestErrors.InvalidContentTypeFile);
         HasRequestBodyFileSrcPathValidationProblem = (errorCode == TranslateRequestErrors.ReqBodyFileNotFound);
+
+        if (HasRequestRawContentTypeValidationProblem
+         || HasRequestFileContentTypeValidationProblem
+         || HasRequestBodyFileSrcPathValidationProblem)
+        {
+            // TODO: Improve this, do not use fixed values to resolve index
+            RequestTabsSelectedIndex = 1;
+        }
     }
 
     private void ShowSendingRequestUI()
