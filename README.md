@@ -20,7 +20,7 @@ Read the [instructions](https://pororoca.io/docs/installation) and download the 
 * Secret variables.
 * Collections and environments can be exported together in a single file.
 * Full export and import compatibility with Postman.
-* Much lower memory usage - around two times less than Postman.
+* Much lower memory usage - two to three times less than Postman.
 * Automated testing.
 * WebSockets.
 * Fast startup time.
