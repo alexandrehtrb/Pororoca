@@ -111,7 +111,7 @@ public static class PororocaHttpRequestValidatorTests
 
         // THEN
         mockedVariableResolver.Verify(x => x.ReplaceTemplates(urlTemplate), Times.Once);
-        Assert.Equal(TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRawOrFile, errorCode);
+        Assert.Equal(TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRaw, errorCode);
     }
 
     [Fact]
@@ -135,11 +135,11 @@ public static class PororocaHttpRequestValidatorTests
 
         // THEN
         mockedVariableResolver.Verify(x => x.ReplaceTemplates(urlTemplate), Times.Once);
-        Assert.Equal(TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRawOrFile, errorCode);
+        Assert.Equal(TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyFile, errorCode);
     }
 
     [Fact]
-    public static void Should_block_request_if_requires_valid_but_has_invalid_content_type()
+    public static void Should_block_request_if_requires_valid_but_has_invalid_raw_content_type()
     {
         // GIVEN
         const string urlTemplate = "{{url}}";
@@ -159,7 +159,31 @@ public static class PororocaHttpRequestValidatorTests
 
         // THEN
         mockedVariableResolver.Verify(x => x.ReplaceTemplates(urlTemplate), Times.Once);
-        Assert.Equal(TranslateRequestErrors.InvalidContentTypeRawOrFile, errorCode);
+        Assert.Equal(TranslateRequestErrors.InvalidContentTypeRaw, errorCode);
+    }
+
+    [Fact]
+    public static void Should_block_request_if_requires_valid_but_has_invalid_file_content_type()
+    {
+        // GIVEN
+        const string urlTemplate = "{{url}}";
+        const string url = "http://www.url.br";
+        var mockedVariableResolver = MockVariableResolver(urlTemplate, url);
+        var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
+        var mockedFileExistsVerifier = MockFileExistsVerifier(true);
+        PororocaHttpRequest req = new();
+        req.UpdateUrl(urlTemplate);
+        req.UpdateHttpVersion(1.1m);
+        var body = new PororocaHttpRequestBody();
+        body.SetFileContent("abc", "flafubal");
+        req.UpdateBody(body);
+
+        // WHEN
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, mockedVariableResolver.Object, req, out string? errorCode));
+
+        // THEN
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates(urlTemplate), Times.Once);
+        Assert.Equal(TranslateRequestErrors.InvalidContentTypeFile, errorCode);
     }
 
     [Fact]

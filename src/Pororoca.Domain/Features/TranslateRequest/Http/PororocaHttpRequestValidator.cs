@@ -22,12 +22,21 @@ public static class PororocaHttpRequestValidator
     {
         var bodyMode = req.Body?.Mode;
 
-        if (bodyMode == PororocaHttpRequestBodyMode.File || bodyMode == PororocaHttpRequestBodyMode.Raw)
+        if (bodyMode == PororocaHttpRequestBodyMode.Raw)
         {
             bool isBlank = string.IsNullOrWhiteSpace(req.Body?.ContentType);
             bool isInvalid = !IsValidContentType(req.Body!.ContentType);
-            errorCode = isBlank ? TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRawOrFile :
-                        isInvalid ? TranslateRequestErrors.InvalidContentTypeRawOrFile :
+            errorCode = isBlank ? TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRaw :
+                        isInvalid ? TranslateRequestErrors.InvalidContentTypeRaw :
+                        null;
+            return errorCode == null;
+        }
+        else if (bodyMode == PororocaHttpRequestBodyMode.File)
+        {
+            bool isBlank = string.IsNullOrWhiteSpace(req.Body?.ContentType);
+            bool isInvalid = !IsValidContentType(req.Body!.ContentType);
+            errorCode = isBlank ? TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyFile :
+                        isInvalid ? TranslateRequestErrors.InvalidContentTypeFile :
                         null;
             return errorCode == null;
         }

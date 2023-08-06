@@ -63,6 +63,33 @@
         Value="36"/>
   </Style>
 
+  <Style Selector="AutoCompleteBox.HasValidationProblem">
+    <Setter
+        Property="BorderThickness"
+        Value="2"/>
+    <Setter
+        Property="BorderBrush"
+        Value="{DynamicResource SystemErrorTextColor}"/>
+  </Style>
+
+  <Style Selector="ComboBox.HasValidationProblem">
+    <Setter
+        Property="BorderThickness"
+        Value="2"/>
+    <Setter
+        Property="BorderBrush"
+        Value="{DynamicResource SystemErrorTextColor}"/>
+  </Style>
+
+  <Style Selector="TextBox.HasValidationProblem">
+    <Setter
+        Property="BorderThickness"
+        Value="2"/>
+    <Setter
+        Property="BorderBrush"
+        Value="{DynamicResource SystemErrorTextColor}"/>
+  </Style>
+
   <Style Selector="TextBox.CodeTextBox">
     <Setter
         Property="FontFamily"

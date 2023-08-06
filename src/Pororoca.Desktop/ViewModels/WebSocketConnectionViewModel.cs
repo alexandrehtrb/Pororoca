@@ -98,8 +98,20 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     [Reactive]
     public int SelectedConnectionTabIndex { get; set; }
 
+    private string urlField;
+    public string Url
+    {
+        get => this.urlField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.urlField, value);
+            // clear invalid warnings if user starts typing to fix them
+            if (HasUrlValidationProblem) ClearInvalidConnectionWarnings();
+        }
+    }
+
     [Reactive]
-    public string Url { get; set; }
+    public bool HasUrlValidationProblem { get; set; }
 
     [Reactive]
     public string ResolvedUrlToolTip { get; set; }
@@ -111,8 +123,22 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     #region CONNECTION REQUEST HTTP VERSION
 
     public ObservableCollection<string> HttpVersionSelectionOptions { get; }
+
+    private int httpVersionSelectedIndexField;
+    public int HttpVersionSelectedIndex
+    {
+        get => this.httpVersionSelectedIndexField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.httpVersionSelectedIndexField, value);
+            // clear invalid warnings if user starts typing to fix them
+            if (HasHttpVersionValidationProblem) ClearInvalidConnectionWarnings();
+        }
+    }
+
     [Reactive]
-    public int HttpVersionSelectedIndex { get; set; }
+    public bool HasHttpVersionValidationProblem { get; set; }
+
     private decimal HttpVersion =>
         AvailableHttpVersionsForWebSockets[HttpVersionSelectedIndex];
 
@@ -140,6 +166,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
                 TranslateRequestErrors.WebSocketUnknownConnectionTranslationError => Localizer.Instance.RequestValidation.WebSocketUnknownConnectionTranslationError,
                 _ => Localizer.Instance.RequestValidation.WebSocketUnknownConnectionTranslationError
             };
+            HasUrlValidationProblem = (value == TranslateRequestErrors.InvalidUrl);
+            HasHttpVersionValidationProblem = (value == TranslateRequestErrors.Http2UnavailableInOSVersion);
         }
     }
 
@@ -313,7 +341,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         #endregion
 
         #region CONNECTION REQUEST HTTP VERSION AND URL
-        ResolvedUrlToolTip = Url = ws.Url;
+        ResolvedUrlToolTip = this.urlField = ws.Url;
 
         HttpVersionSelectionOptions = new(AvailableHttpVersionsForWebSockets.Select(FormatHttpVersionString));
         int httpVersionSelectionIndex = HttpVersionSelectionOptions.IndexOf(FormatHttpVersionString(ws.HttpVersion));
@@ -509,6 +537,16 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     #endregion
 
     #region CONNECT / DISCONNECT
+
+    private void ClearInvalidConnectionWarnings()
+    {
+        this.invalidConnectionErrorCodeField = null;
+        IsInvalidConnectionErrorVisible = false;
+        InvalidConnectionError = null;
+
+        HasUrlValidationProblem = false;
+        HasHttpVersionValidationProblem = false;
+    }
 
     private void OnWebSocketConnectionChanged(PororocaWebSocketConnectorState state, Exception? ex)
     {

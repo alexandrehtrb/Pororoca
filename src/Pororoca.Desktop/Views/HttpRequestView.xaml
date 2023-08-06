@@ -89,6 +89,7 @@
               VerticalContentAlignment="Center"
               ToolTip.Tip="{Binding ResolvedRequestUrlToolTip}"
               Classes="SingleLine"
+              Classes.HasValidationProblem="{Binding HasRequestUrlValidationProblem}"
               PointerEntered="OnRequestUrlPointerEnter"/>
 
           <TextBlock
@@ -108,7 +109,8 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Stretch"
             SelectedIndex="{Binding RequestHttpVersionSelectedIndex, Mode=TwoWay}"
-            ItemsSource="{Binding RequestHttpVersionSelectionOptions}"/>
+            ItemsSource="{Binding RequestHttpVersionSelectionOptions}"
+            Classes.HasValidationProblem="{Binding HasRequestHttpVersionValidationProblem}"/>
 
         <Grid
             Grid.Column="3"
@@ -340,7 +342,8 @@
                     Watermark="{Binding i18n.HttpRequest.BodyRawContentTypeWatermark}"
                     ItemsSource="{Binding AllMimeTypes}"
                     SelectedItem="{Binding RequestRawContentType, Mode=TwoWay}"
-                    FilterMode="Contains"/>
+                    FilterMode="Contains"
+                    Classes.HasValidationProblem="{Binding HasRequestRawContentTypeValidationProblem}"/>
               </StackPanel>
               <!-- REQUEST BODY RAW -->
               <AvaloniaEdit:TextEditor
@@ -377,7 +380,8 @@
                     Watermark="{Binding i18n.HttpRequest.BodyFileContentTypeWatermark}"
                     Text="{Binding RequestFileContentType}"
                     ItemsSource="{Binding AllMimeTypes}"
-                    FilterMode="Contains"/>
+                    FilterMode="Contains"
+                    Classes.HasValidationProblem="{Binding HasRequestFileContentTypeValidationProblem}"/>
                 <TextBox
                     Grid.Column="0"
                     Grid.Row="1"
@@ -387,6 +391,7 @@
                     HorizontalContentAlignment="Left"
                     VerticalContentAlignment="Center"
                     Classes="SingleLine"
+                    Classes.HasValidationProblem="{Binding HasRequestBodyFileSrcPathValidationProblem}"
                     Text="{Binding RequestBodyFileSrcPath}"/>
                 <Button
                     Grid.Column="0"

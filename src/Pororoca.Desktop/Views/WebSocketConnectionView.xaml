@@ -75,7 +75,8 @@
               VerticalContentAlignment="Center"
               ToolTip.Tip="{Binding ResolvedUrlToolTip}"
               Classes="SingleLine"
-              PointerEntered="OnUrlPointerEnter"/>
+              PointerEntered="OnUrlPointerEnter"
+              Classes.HasValidationProblem="{Binding HasUrlValidationProblem}"/>
 
           <TextBlock
               Margin="12,6,12,0"
@@ -101,7 +102,8 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Stretch"
             SelectedIndex="{Binding HttpVersionSelectedIndex, Mode=TwoWay}"
-            ItemsSource="{Binding HttpVersionSelectionOptions}"/>
+            ItemsSource="{Binding HttpVersionSelectionOptions}"
+            Classes.HasValidationProblem="{Binding HasHttpVersionValidationProblem}"/>
 
         <Button
             Grid.Column="2"
