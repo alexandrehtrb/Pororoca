@@ -364,7 +364,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
         }
         else if (mwvm.IsWebSocketConnectionViewVisible)
         {
-            tbUrl = MainWindow.Instance!.FindControl<HttpRequestView>("wsConnView")?.FindControl<TextBox>("tbUrl");
+            tbUrl = MainWindow.Instance!.FindControl<WebSocketConnectionView>("wsConnView")?.FindControl<TextBox>("tbUrl");
         }
 
         if (tbUrl is not null)
