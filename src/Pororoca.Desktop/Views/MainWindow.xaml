@@ -31,6 +31,8 @@
     <KeyBinding Command="{Binding HotKeys.SaveResponseToFileCmd}" Gesture="Ctrl+S" />
     <KeyBinding Command="{Binding HotKeys.MoveUpCmd}" Gesture="Alt+Up" />
     <KeyBinding Command="{Binding HotKeys.MoveDownCmd}" Gesture="Alt+Down" />
+    <KeyBinding Command="{Binding HotKeys.SwitchToPreviousItemCmd}" Gesture="Ctrl+PageUp" />
+    <KeyBinding Command="{Binding HotKeys.SwitchToNextItemCmd}" Gesture="Ctrl+PageDown" />
   </Window.KeyBindings>
 
   <Panel>

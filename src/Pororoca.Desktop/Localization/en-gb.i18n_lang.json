@@ -77,7 +77,7 @@
     "Environment/VariableValue": "VALUE",
     "Folder/NewFolder": "New folder",
     "HelpDialog/Title": "Help",
-    "HelpDialog/Content": "Keyboard shortcuts\\n\\nF1 - Show help\\nF2 - Rename\\nF4 - Focus on URL\\nF5 - Send request / connect WebSocket\\nF6 - Cancel request / disconnect WebSocket\\nF7 - Set previous environment as active\\nF8 - Set next environment as active\\nCtrl+S - Save response body to file\\n\\nFull documentation on site: https://pororoca.io",
+    "HelpDialog/Content": "Keyboard shortcuts\\n\\nF1 - Show help\\nF2 - Rename\\nF4 - Focus on URL\\nF5 - Send request / connect WebSocket\\nF6 - Cancel request / disconnect WebSocket\\nF7 - Set previous environment as active\\nF8 - Set next environment as active\\nCtrl+S - Save response body to file\\nCtrl+PageUp - Switch to item above in tree\\nCtrl+PageDown - Switch to item below in tree\\n\\nFull documentation on site: https://pororoca.io",
     "HttpRequest/Body": "Body",
     "HttpRequest/BodyFileContentTypeWatermark": "(file content-type)",
     "HttpRequest/BodyFileSearchFile": "Search file…",
