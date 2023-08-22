@@ -8,6 +8,10 @@ on:
         required: true
         default: true
         type: boolean
+      enableDesktopUITesting:
+        required: true
+        default: false
+        type: boolean
       linux-x64:
         required: true
         default: true
@@ -47,18 +51,21 @@ jobs:
     with:
       os: ubuntu-latest
       rid: linux-x64
+      enableUITesting: ${{ inputs.enableDesktopUITesting }}
   osx-x64:
     if: ${{ inputs.osx-x64 }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
     with:
       os: ubuntu-latest
       rid: osx-x64
+      enableUITesting: ${{ inputs.enableDesktopUITesting }}
   osx-arm64:
     if: ${{ inputs.osx-arm64 }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
     with:
       os: ubuntu-latest
       rid: osx-arm64
+      enableUITesting: ${{ inputs.enableDesktopUITesting }}
   win-x64-installer:
     if: ${{ inputs.win-x64-installer }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
@@ -66,6 +73,7 @@ jobs:
       os: windows-latest
       rid: win-x64
       installation: withInstaller
+      enableUITesting: ${{ inputs.enableDesktopUITesting }}
   win-x64-portable:
     if: ${{ inputs.win-x64-portable }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
@@ -73,6 +81,7 @@ jobs:
       os: windows-latest
       rid: win-x64
       installation: portable
+      enableUITesting: ${{ inputs.enableDesktopUITesting }}
   win-x86-installer:
     if: ${{ inputs.win-x86-installer }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
@@ -80,6 +89,7 @@ jobs:
       os: windows-latest
       rid: win-x86
       installation: withInstaller
+      enableUITesting: ${{ inputs.enableDesktopUITesting }}
   win-x86-portable:
     if: ${{ inputs.win-x86-portable }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
@@ -87,3 +97,4 @@ jobs:
       os: windows-latest
       rid: win-x86
       installation: portable
+      enableUITesting: ${{ inputs.enableDesktopUITesting }}

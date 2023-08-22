@@ -129,6 +129,20 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #endregion
 
+    #region UI TESTS
+
+    [Reactive]
+    public bool IsRunUITestsVisible { get; set; } =
+#if DEBUG || UI_TESTS_ENABLED
+        true;
+#else
+        false;
+#endif
+
+    public ReactiveCommand<Unit, Unit> RunUITestsCmd { get; }
+
+    #endregion
+
     public MainWindowViewModel()
     {
         #region COLLECTIONS ORGANIZATION
@@ -157,6 +171,10 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
         #region USER DATA
         LoadUserData();
+        #endregion
+
+        #region UI TESTS
+        RunUITestsCmd = ReactiveCommand.CreateFromTask(RunUITestsAsync);
         #endregion
     }
 
@@ -475,6 +493,33 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
             // just ignore all of them.
         }
     }
+
+    #endregion
+
+    #region UI TESTS
+
+#if DEBUG || UI_TESTS_ENABLED
+    private async Task RunUITestsAsync()
+    {
+
+        string resultsLog = await Pororoca.Desktop.UITesting.UITestsRunner.RunAllTestsAsync();
+
+        Bitmap bitmap = new(AssetLoader.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
+
+        var msgbox = MessageBoxManager.GetMessageBoxStandard(
+            new MessageBoxStandardParams()
+            {
+                ContentTitle = "UI tests results",
+                ContentMessage = resultsLog,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                WindowIcon = new(bitmap),
+                ButtonDefinitions = ButtonEnum.Ok
+            });
+        Dispatcher.UIThread.Post(async () => await msgbox.ShowAsync());
+    }
+#else
+    private Task RunUITestsAsync() => Task.CompletedTask;
+#endif
 
     #endregion
 }

@@ -234,12 +234,14 @@ function Publish-PororocaDesktop
 	$publishSingleFileArg = $(${publishSingleFile}.ToString().ToLower())
 	$isInstallOnWindowsReleaseArg = $(${isInstallOnWindowsRelease}.ToString().ToLower())
 	
+	# set UITestsEnabled to false to hide 'Run UI tests'
 	dotnet publish ./src/Pororoca.Desktop/Pororoca.Desktop.csproj `
 		--verbosity quiet `
 		--nologo `
 		--configuration Release `
 		-p:PublishSingleFile=${publishSingleFileArg} `
 		-p:PublishForInstallOnWindows=${isInstallOnWindowsReleaseArg} `
+		-p:UITestsEnabled=false `
 		--self-contained true `
 		--runtime $runtime `
 		--output $outputFolder

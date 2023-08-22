@@ -21,42 +21,54 @@
 
   <Window.KeyBindings>
     <!-- Keyboard shortcuts are defined in CollectionsGroupView and MainWindow -->
-    <KeyBinding Command="{Binding HotKeys.ShowHelpCmd}" Gesture="F1" />
-    <KeyBinding Command="{Binding HotKeys.RenameCmd}" Gesture="F2" />
-    <KeyBinding Command="{Binding HotKeys.FocusOnUrlCmd}" Gesture="F4" />
-    <KeyBinding Command="{Binding HotKeys.SendRequestOrConnectWebSocketCmd}" Gesture="F5" />
-    <KeyBinding Command="{Binding HotKeys.CancelRequestOrDisconnectWebSocketCmd}" Gesture="F6" />
-    <KeyBinding Command="{Binding HotKeys.CyclePreviousEnvironmentToActiveCmd}" Gesture="F7" />
-    <KeyBinding Command="{Binding HotKeys.CycleNextEnvironmentToActiveCmd}" Gesture="F8" />
-    <KeyBinding Command="{Binding HotKeys.SaveResponseToFileCmd}" Gesture="Ctrl+S" />
-    <KeyBinding Command="{Binding HotKeys.MoveUpCmd}" Gesture="Alt+Up" />
-    <KeyBinding Command="{Binding HotKeys.MoveDownCmd}" Gesture="Alt+Down" />
-    <KeyBinding Command="{Binding HotKeys.SwitchToPreviousItemCmd}" Gesture="Ctrl+PageUp" />
-    <KeyBinding Command="{Binding HotKeys.SwitchToNextItemCmd}" Gesture="Ctrl+PageDown" />
+    <KeyBinding Command="{Binding HotKeys.ShowHelpCmd}" Gesture="F1"/>
+    <KeyBinding Command="{Binding HotKeys.RenameCmd}" Gesture="F2"/>
+    <KeyBinding Command="{Binding HotKeys.FocusOnUrlCmd}" Gesture="F4"/>
+    <KeyBinding Command="{Binding HotKeys.SendRequestOrConnectWebSocketCmd}" Gesture="F5"/>
+    <KeyBinding Command="{Binding HotKeys.CancelRequestOrDisconnectWebSocketCmd}" Gesture="F6"/>
+    <KeyBinding Command="{Binding HotKeys.CyclePreviousEnvironmentToActiveCmd}" Gesture="F7"/>
+    <KeyBinding Command="{Binding HotKeys.CycleNextEnvironmentToActiveCmd}" Gesture="F8"/>
+    <KeyBinding Command="{Binding HotKeys.SaveResponseToFileCmd}" Gesture="Ctrl+S"/>
+    <KeyBinding Command="{Binding HotKeys.MoveUpCmd}" Gesture="Alt+Up"/>
+    <KeyBinding Command="{Binding HotKeys.MoveDownCmd}" Gesture="Alt+Down"/>
+    <KeyBinding Command="{Binding HotKeys.SwitchToPreviousItemCmd}" Gesture="Ctrl+PageUp"/>
+    <KeyBinding Command="{Binding HotKeys.SwitchToNextItemCmd}" Gesture="Ctrl+PageDown"/>
   </Window.KeyBindings>
 
   <Panel>
     <DockPanel
         HorizontalAlignment="Stretch"
         Background="{DynamicResource MainWindowMenuBrush}">
-      <Menu DockPanel.Dock="Top">
-        <MenuItem Header="{Binding i18n.TopMenu.File}">
+      <Menu
+          x:Name="topMenu"
+          DockPanel.Dock="Top">
+        <MenuItem
+            x:Name="topMenuItemFile"
+            Header="{Binding i18n.TopMenu.File}">
           <MenuItem
+              x:Name="topMenuItemFileNewCollection"
               Header="{Binding i18n.TopMenuFile.NewCollection}"
               Command="{Binding AddNewCollectionCmd}"/>
           <Separator/>
           <MenuItem
+              x:Name="topMenuItemFileImportCollection"
               Header="{Binding i18n.TopMenuFile.ImportCollection}"
               Command="{Binding ImportCollectionsCmd}"/>
           <Separator/>
           <MenuItem
+              x:Name="topMenuItemFileExit"
               Header="{Binding i18n.TopMenuFile.Exit}"
               InputGesture="Alt+F4"
               Click="OnCloseMainWindow"/>
         </MenuItem>
-        <MenuItem Header="{Binding i18n.TopMenu.Options}">
-          <MenuItem Header="{Binding i18n.TopMenuOptions.Theme}">
+        <MenuItem
+            x:Name="topMenuItemOptions"
+            Header="{Binding i18n.TopMenu.Options}">
+          <MenuItem
+              x:Name="topMenuItemOptionsTheme"
+              Header="{Binding i18n.TopMenuOptions.Theme}">
             <MenuItem
+                x:Name="topMenuItemOptionsThemeLight"
                 Header="{Binding i18n.TopMenuTheme.Light}"
                 Command="{Binding SwitchToLightThemeCmd}">
               <MenuItem.Icon>
@@ -70,6 +82,7 @@
               </MenuItem.Icon>
             </MenuItem>
             <MenuItem
+                x:Name="topMenuItemOptionsThemeDark"
                 Header="{Binding i18n.TopMenuTheme.Dark}"
                 Command="{Binding SwitchToDarkThemeCmd}">
               <MenuItem.Icon>
@@ -83,6 +96,7 @@
               </MenuItem.Icon>
             </MenuItem>
             <MenuItem
+                x:Name="topMenuItemOptionsThemePampa"
                 Header="{Binding i18n.TopMenuTheme.Pampa}"
                 Command="{Binding SwitchToPampaThemeCmd}">
               <MenuItem.Icon>
@@ -96,6 +110,7 @@
               </MenuItem.Icon>
             </MenuItem>
             <MenuItem
+                x:Name="topMenuItemOptionsThemeAmazonianNight"
                 Header="{Binding i18n.TopMenuTheme.AmazonianNight}"
                 Command="{Binding SwitchToAmazonianNightThemeCmd}">
               <MenuItem.Icon>
@@ -109,8 +124,11 @@
               </MenuItem.Icon>
             </MenuItem>
           </MenuItem>
-          <MenuItem Header="{Binding i18n.TopMenuOptions.Language}">
+          <MenuItem
+              x:Name="topMenuItemOptionsLanguage"
+              Header="{Binding i18n.TopMenuOptions.Language}">
             <MenuItem
+                x:Name="topMenuItemOptionsLanguagePortuguês"
                 Header="{Binding i18n.TopMenuLanguage.Português}"
                 Command="{Binding SelectLanguagePortuguesCmd}">
               <MenuItem.Icon>
@@ -124,6 +142,7 @@
               </MenuItem.Icon>
             </MenuItem>
             <MenuItem
+                x:Name="topMenuItemOptionsLanguageEnglish"
                 Header="{Binding i18n.TopMenuLanguage.English}"
                 Command="{Binding SelectLanguageEnglishCmd}">
               <MenuItem.Icon>
@@ -137,20 +156,22 @@
               </MenuItem.Icon>
             </MenuItem>
             <MenuItem
+                x:Name="topMenuItemOptionsLanguageRussian"
                 Header="{Binding i18n.TopMenuLanguage.Russian}"
                 Command="{Binding SelectLanguageRussianCmd}">
               <MenuItem.Icon>
                 <Image
-                     IsVisible="{Binding IsLanguageRussian}"
-                     Classes="MenuItemCheckMark">
-                    <Image.Source>
-                        <DrawingImage Drawing="{StaticResource IconCheck}"/>
-                    </Image.Source>
+                    IsVisible="{Binding IsLanguageRussian}"
+                    Classes="MenuItemCheckMark">
+                  <Image.Source>
+                    <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                  </Image.Source>
                 </Image>
               </MenuItem.Icon>
             </MenuItem>
           </MenuItem>
           <MenuItem
+              x:Name="topMenuItemOptionsDisableTlsVerification"
               Header="{Binding i18n.TopMenuOptions.DisableTlsVerification}"
               Command="{Binding ToggleSSLVerificationCmd}">
             <MenuItem.Icon>
@@ -165,8 +186,13 @@
           </MenuItem>
         </MenuItem>
         <MenuItem
+            x:Name="topMenuItemHelp"
             Header="{Binding i18n.TopMenu.Help}"
             Command="{Binding HotKeys.ShowHelpCmd}"/>
+        <MenuItem
+            Header="Run UI tests"
+            IsVisible="{Binding IsRunUITestsVisible}"
+            Command="{Binding RunUITestsCmd}"/>
         <!--MenuItem
         Header="{Binding i18n.TopMenu.Contribute}"/-->
       </Menu>
@@ -175,10 +201,13 @@
           DockPanel.Dock="Left"
           Width="240"
           Background="{DynamicResource MainWindowSidebarBrush}">
-        <v:CollectionsGroupView DataContext="{Binding CollectionsGroupViewDataCtx}"/>
+        <v:CollectionsGroupView
+            x:Name="mainWindowCollectionsGroup"
+            DataContext="{Binding CollectionsGroupViewDataCtx}"/>
       </Panel>
 
       <Panel
+          x:Name="mainWindowPanel"
           IsHitTestVisible="True"
           Background="{DynamicResource MainWindowBackgroundBrush}">
         <Grid
@@ -188,43 +217,57 @@
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
               IsVisible="{Binding IsCollectionViewVisible}">
-            <v:CollectionView DataContext="{Binding CollectionViewDataCtx}"/>
+            <v:CollectionView
+                x:Name="collectionView"
+                DataContext="{Binding CollectionViewDataCtx}"/>
           </Grid>
           <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
               IsVisible="{Binding IsCollectionVariablesViewVisible}">
-            <v:CollectionVariablesView DataContext="{Binding CollectionVariablesViewDataCtx}"/>
+            <v:CollectionVariablesView
+                x:Name="collectionVariablesView"
+                DataContext="{Binding CollectionVariablesViewDataCtx}"/>
           </Grid>
           <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
               IsVisible="{Binding IsEnvironmentViewVisible}">
-            <v:EnvironmentView DataContext="{Binding EnvironmentViewDataCtx}"/>
+            <v:EnvironmentView
+                x:Name="environmentView"
+                DataContext="{Binding EnvironmentViewDataCtx}"/>
           </Grid>
           <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
               IsVisible="{Binding IsCollectionFolderViewVisible}">
-            <v:CollectionFolderView DataContext="{Binding CollectionFolderViewDataCtx}"/>
+            <v:CollectionFolderView
+                x:Name="collectionFolderView"
+                DataContext="{Binding CollectionFolderViewDataCtx}"/>
           </Grid>
           <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
               IsVisible="{Binding IsHttpRequestViewVisible}">
-            <v:HttpRequestView x:Name="httpReqView" DataContext="{Binding HttpRequestViewDataCtx}"/>
+            <v:HttpRequestView
+                x:Name="httpReqView"
+                DataContext="{Binding HttpRequestViewDataCtx}"/>
           </Grid>
           <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
               IsVisible="{Binding IsWebSocketConnectionViewVisible}">
-            <v:WebSocketConnectionView x:Name="wsConnView" DataContext="{Binding WebSocketConnectionViewDataCtx}"/>
+            <v:WebSocketConnectionView
+                x:Name="wsConnView"
+                DataContext="{Binding WebSocketConnectionViewDataCtx}"/>
           </Grid>
           <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
               IsVisible="{Binding IsWebSocketClientMessageViewVisible}">
-            <v:WebSocketClientMessageView DataContext="{Binding WebSocketClientMessageViewDataCtx}"/>
+            <v:WebSocketClientMessageView
+                x:Name="wsClientMsgView"
+                DataContext="{Binding WebSocketClientMessageViewDataCtx}"/>
           </Grid>
         </Grid>
       </Panel>
