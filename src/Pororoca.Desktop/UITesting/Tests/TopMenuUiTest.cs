@@ -17,35 +17,35 @@ public sealed class TopMenuUITest : UITest
 
     public override async Task RunAsync()
     {
-        Robot.File.AssertIsVisible(this);
-        Robot.Options.AssertIsVisible(this);
-        Robot.Help.AssertIsVisible(this);
+        AssertIsVisible(Robot.File);
+        AssertIsVisible(Robot.Options);
+        AssertIsVisible(Robot.Help);
 
         await Robot.File.ClickOn();
         // for some reason, this needs to be repeated (???),
         // otherwise the menu item won't expand
         await Robot.File.ClickOn();
-        Robot.File_NewCollection.AssertIsVisible(this);
-        Robot.File_ImportCollection.AssertIsVisible(this);
-        Robot.File_Exit.AssertIsVisible(this);
+        AssertIsVisible(Robot.File_NewCollection);
+        AssertIsVisible(Robot.File_ImportCollection);
+        AssertIsVisible(Robot.File_Exit);
 
         await Robot.Options.ClickOn();
-        Robot.File_Exit.AssertIsHidden(this);
-        Robot.Options_Theme.AssertIsVisible(this);
-        Robot.Options_Language.AssertIsVisible(this);
-        Robot.Options_DisableTlsVerification.AssertIsVisible(this);
+        AssertIsHidden(Robot.File_Exit);
+        AssertIsVisible(Robot.Options_Theme);
+        AssertIsVisible(Robot.Options_Language);
+        AssertIsVisible(Robot.Options_DisableTlsVerification);
 
         await Robot.Options_Theme.ClickOn();
-        Robot.Options_Theme_Light.AssertIsVisible(this);
-        Robot.Options_Theme_Dark.AssertIsVisible(this);
-        Robot.Options_Theme_Pampa.AssertIsVisible(this);
-        Robot.Options_Theme_AmazonianNight.AssertIsVisible(this);
+        AssertIsVisible(Robot.Options_Theme_Light);
+        AssertIsVisible(Robot.Options_Theme_Dark);
+        AssertIsVisible(Robot.Options_Theme_Pampa);
+        AssertIsVisible(Robot.Options_Theme_AmazonianNight);
 
         await Robot.Options_Language.ClickOn();
-        Robot.Options_Theme_Light.AssertIsHidden(this);
-        Robot.Options_Language_English.AssertIsVisible(this);
-        Robot.Options_Language_Português.AssertIsVisible(this);
-        Robot.Options_Language_Russian.AssertIsVisible(this);
+        AssertIsHidden(Robot.Options_Theme_Light);
+        AssertIsVisible(Robot.Options_Language_English);
+        AssertIsVisible(Robot.Options_Language_Português);
+        AssertIsVisible(Robot.Options_Language_Russian);
 
         //await Robot.Help.ClickOn();
     }

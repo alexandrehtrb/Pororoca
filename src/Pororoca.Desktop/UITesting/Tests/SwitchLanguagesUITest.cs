@@ -11,8 +11,8 @@ public sealed class SwitchLanguagesUITest : UITest
 
     public SwitchLanguagesUITest()
     {
-        var content = MainWindow.Instance!.Content;
-        Robot = new(this, (Control)content!);
+        Control content = (Control) MainWindow.Instance!.Content!;
+        Robot = new(this, content);
     }
 
     public override async Task RunAsync()
@@ -26,13 +26,13 @@ public sealed class SwitchLanguagesUITest : UITest
         await Robot.Options_Language.ClickOn();
         await Robot.Options_Language_English.ClickOn();
 
-        Robot.Options_Language_English.AssertHasIconVisible(this);
-        Robot.Options_Language_Português.AssertHasIconHidden(this);
-        Robot.Options_Language_Russian.AssertHasIconHidden(this);
+        AssertHasIconVisible(Robot.Options_Language_English);
+        AssertHasIconHidden(Robot.Options_Language_Português);
+        AssertHasIconHidden(Robot.Options_Language_Russian);
 
-        Robot.File.AssertHasText(this, "File");
-        Robot.Options.AssertHasText(this, "Options");
-        Robot.Help.AssertHasText(this, "Help");
+        AssertHasText(Robot.File, "File");
+        AssertHasText(Robot.Options, "Options");
+        AssertHasText(Robot.Help, "Help");
 
         // português
 
@@ -40,12 +40,12 @@ public sealed class SwitchLanguagesUITest : UITest
         await Robot.Options_Language.ClickOn();
         await Robot.Options_Language_Português.ClickOn();
 
-        Robot.Options_Language_English.AssertHasIconHidden(this);
-        Robot.Options_Language_Português.AssertHasIconVisible(this);
-        Robot.Options_Language_Russian.AssertHasIconHidden(this);
+        AssertHasIconHidden(Robot.Options_Language_English);
+        AssertHasIconVisible(Robot.Options_Language_Português);
+        AssertHasIconHidden(Robot.Options_Language_Russian);
 
-        Robot.File.AssertHasText(this, "Arquivo");
-        Robot.Options.AssertHasText(this, "Opções");
-        Robot.Help.AssertHasText(this, "Ajuda");
+        AssertHasText(Robot.File, "Arquivo");
+        AssertHasText(Robot.Options, "Opções");
+        AssertHasText(Robot.Help, "Ajuda");
     }
 }

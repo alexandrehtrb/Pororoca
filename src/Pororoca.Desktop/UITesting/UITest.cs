@@ -2,7 +2,7 @@ using System.Text;
 
 namespace Pororoca.Desktop.UITesting;
 
-public abstract class UITest
+public abstract partial class UITest
 {
     public string TestName => this.GetType().Name;
     
