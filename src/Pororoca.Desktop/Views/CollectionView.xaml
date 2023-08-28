@@ -24,7 +24,7 @@
         HorizontalAlignment="Stretch"
         VerticalAlignment="Top"
         Margin="0,24,0,0">
-      <v:EditableTextBlockView x:Name="etbName" DataContext="{Binding NameEditableTextBlockViewDataCtx}"/>
+      <controls:EditableTextBlock x:Name="etbName" DataContext="{Binding NameEditableVm}"/>
     </Grid>
 
     <StackPanel

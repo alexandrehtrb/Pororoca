@@ -4,6 +4,7 @@
     xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:v="using:Pororoca.Desktop.Views"
+    xmlns:controls="clr-namespace:Pororoca.Desktop.Controls;assembly=Pororoca.Desktop"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:AvaloniaEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
     xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
@@ -53,7 +54,7 @@
           Margin="24,0,24,0"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Top">
-        <v:EditableTextBlockView DataContext="{Binding NameEditableTextBlockViewDataCtx}"/>
+        <controls:EditableTextBlock DataContext="{Binding NameEditableVm}"/>
       </Grid>
 
       <Grid

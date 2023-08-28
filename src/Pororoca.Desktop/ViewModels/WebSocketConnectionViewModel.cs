@@ -45,8 +45,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         get => this.isConnectedField;
         set
         {
-            NameEditableTextBlockViewDataCtx.IsConnectedWebSocket = value;
-            NameEditableTextBlockViewDataCtx.IsDisconnectedWebSocket = !value;
+            NameEditableVm.IsConnectedWebSocket = value;
+            NameEditableVm.IsDisconnectedWebSocket = !value;
             this.RaiseAndSetIfChanged(ref this.isConnectedField, value);
         }
     }
@@ -314,7 +314,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         #region COLLECTION ORGANIZATION
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
 
-        NameEditableTextBlockViewDataCtx.IsDisconnectedWebSocket = true;
+        NameEditableVm.IsDisconnectedWebSocket = true;
         AddNewWebSocketClientMessageCmd = ReactiveCommand.Create(AddNewWebSocketClientMessage);
         #endregion
 

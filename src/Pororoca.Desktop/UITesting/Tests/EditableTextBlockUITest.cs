@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Pororoca.Desktop.UITesting.Robots;
+using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.UITesting.Tests;
@@ -24,7 +25,7 @@ public sealed class EditableTextBlockUITest : UITest
         TopMenuRobot.File.Close();
         
         var collectionView = RootView.FindControl<CollectionView>("collectionView")!;
-        var etbView = collectionView.FindControl<EditableTextBlockView>("etbName")!;
+        var etbView = collectionView.FindControl<EditableTextBlock>("etbName")!;
         EditableTextBlockRobot robot = new(etbView);
 
         AssertIsVisible(robot.RootView);

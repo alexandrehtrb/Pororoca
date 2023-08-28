@@ -251,7 +251,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     {
         #region COLLECTION ORGANIZATION
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
-        NameEditableTextBlockViewDataCtx.IsHttpRequest = true;
+        NameEditableVm.IsHttpRequest = true;
         #endregion
 
         #region REQUEST

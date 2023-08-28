@@ -50,7 +50,7 @@
           Margin="24,0,24,0"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Top">
-        <v:EditableTextBlockView DataContext="{Binding NameEditableTextBlockViewDataCtx}"/>
+        <controls:EditableTextBlock DataContext="{Binding NameEditableVm}"/>
       </Grid>
 
       <Grid
