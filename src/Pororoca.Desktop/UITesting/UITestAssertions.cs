@@ -3,14 +3,15 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using AvaloniaEdit;
+using Pororoca.Desktop.Controls;
 
 namespace Pororoca.Desktop.UITesting;
 
 public abstract partial class UITest
 {
-    internal void AssertIsHidden(Control control) => Assert(control.IsMeasureValid == false);
+    internal void AssertIsHidden(Control control) => Assert((control.IsMeasureValid && control.IsEffectivelyVisible) == false);
 
-    internal void AssertIsVisible(Control control) => Assert(control.IsMeasureValid == true);
+    internal void AssertIsVisible(Control control) => Assert((control.IsMeasureValid && control.IsEffectivelyVisible) == true);
 
     internal void AssertHasText(TextBlock txtBlock, string txt) => Assert(txtBlock.Text == txt);
 
@@ -24,6 +25,12 @@ public abstract partial class UITest
 
     internal void AssertHasText(MenuItem menuItem, string txt) => Assert(((string)menuItem.Header!) == txt);
 
+    internal void AssertHasText(TreeViewItem tvi, string txt) => Assert(((string)tvi.Header!) == txt);
+
+    internal void AssertHasText(CheckBox cb, string txt) => Assert((string)cb.Content! == txt);
+    
+    internal void AssertHasText(IconButton ib, string txt) => Assert(ib.Text == txt);
+
     internal void AssertHasIconVisible(MenuItem menuItem) => Assert(((Image)menuItem.Icon!).IsVisible == true);
 
     internal void AssertHasIconHidden(MenuItem menuItem) => Assert(((Image)menuItem.Icon!).IsVisible == false);
@@ -32,4 +39,8 @@ public abstract partial class UITest
 
     private static string ToHexString(Color c) =>
         $"#{c.R:X2}{c.G:X2}{c.B:X2}";
+
+    internal void AssertIsChecked(CheckBox cb) => Assert(cb.IsChecked == true);
+
+    internal void AssertIsNotChecked(CheckBox cb) => Assert(cb.IsChecked == false);
 }

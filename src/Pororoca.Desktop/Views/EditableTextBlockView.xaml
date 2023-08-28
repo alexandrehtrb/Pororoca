@@ -31,6 +31,7 @@
           Orientation="Horizontal"
           IsVisible="{Binding !IsEditing}">
         <Image
+            x:Name="imgIconHttp"
             Margin="0,0,12,0"
             IsVisible="{Binding IsHttpRequest}"
             Width="32"
@@ -42,6 +43,7 @@
           </Image.Source>
         </Image>
         <Image
+            x:Name="imgIconDisconnectedWebSocket"
             Margin="0,0,12,0"
             IsVisible="{Binding IsDisconnectedWebSocket}"
             Width="32"
@@ -53,6 +55,7 @@
           </Image.Source>
         </Image>
         <Image
+            x:Name="imgIconConnectedWebSocket"
             Margin="0,0,12,0"
             IsVisible="{Binding IsConnectedWebSocket}"
             Width="32"
@@ -64,6 +67,7 @@
           </Image.Source>
         </Image>
         <TextBlock
+            x:Name="tbText"
             Text="{Binding Txt}"
             FontSize="32"
             FontWeight="Light"
@@ -85,6 +89,7 @@
     </Grid>
 
     <Button
+        x:Name="btEditOrApplyTxt"
         Grid.Column="1"
         Grid.Row="0"
         Width="40"
@@ -98,6 +103,7 @@
         Classes="Primary">
       <Panel>
         <Image
+            x:Name="imgEdit"
             IsVisible="{Binding !IsEditing}"
             Width="16"
             Height="16"
@@ -108,6 +114,7 @@
           </Image.Source>
         </Image>
         <Image
+            x:Name="imgApplyTxt"
             IsVisible="{Binding IsEditing}"
             Width="16"
             Height="16"

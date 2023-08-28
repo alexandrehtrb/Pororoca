@@ -3,16 +3,10 @@ namespace Pororoca.Desktop.UITesting.Robots;
 
 public abstract class BaseRobot
 {
-    protected readonly UITest test;
-    protected readonly Control rootView;
+    public Control RootView { get; }
 
-    protected BaseRobot(UITest test, Control rootView)
-    {
-        this.test = test;
-        this.rootView = rootView;
-    }
+    protected BaseRobot(Control rootView) => RootView = rootView;
 
     protected A? GetChildView<A>(string name) where A : Control =>
-        this.rootView.FindControl<A>(name);
-
+        RootView.FindControl<A>(name);
 }

@@ -281,6 +281,20 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
                 IsWebSocketClientMessageViewVisible = true;
             }
         }
+        else if (selectedItem is EnvironmentsGroupViewModel)
+        {
+            // do nothing
+        }
+        else
+        {
+            IsCollectionViewVisible = false;
+            IsCollectionVariablesViewVisible = false;
+            IsEnvironmentViewVisible = false;
+            IsCollectionFolderViewVisible = false;
+            IsHttpRequestViewVisible = false;
+            IsWebSocketConnectionViewVisible = false;
+            IsWebSocketClientMessageViewVisible = false;
+        }
     }
 
     #endregion
@@ -501,8 +515,15 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 #if DEBUG || UI_TESTS_ENABLED
     private async Task RunUITestsAsync()
     {
+        // making a backup of the items' tree and clearing it before the tests
+        var bkupedItems = CollectionsGroupViewDataCtx.Items.ToList();
+        CollectionsGroupViewDataCtx.Items.Clear();
 
         string resultsLog = await Pororoca.Desktop.UITesting.UITestsRunner.RunAllTestsAsync();
+
+        // restoring the items' tree after the tests
+        foreach (var item in bkupedItems) { CollectionsGroupViewDataCtx.Items.Add(item); }
+        CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
 
         Bitmap bitmap = new(AssetLoader.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
 

@@ -3,6 +3,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using AvaloniaEdit;
+using Pororoca.Desktop.Controls;
 
 namespace Pororoca.Desktop.UITesting;
 
@@ -16,6 +17,12 @@ internal static class UITestActions
         (TreeViewItem?) parentView.ItemsView[index];
 
     internal static async Task ClickOn(this Button control)
+    {
+        control.Command?.Execute(null);
+        await WaitAfterActionAsync();
+    }
+
+    internal static async Task ClickOn(this IconButton control)
     {
         control.Command?.Execute(null);
         await WaitAfterActionAsync();
@@ -36,14 +43,38 @@ internal static class UITestActions
         await WaitAfterActionAsync();
     }
 
-    internal static async Task ClickOn(this TreeViewItem control)
+    internal static async Task ClickOn(this CheckBox cb)
     {
-        RoutedEventArgs args = new(TreeViewItem.TappedEvent);
-        control.RaiseEvent(args);
+        cb.IsChecked = !cb.IsChecked;
         await WaitAfterActionAsync();
     }
 
-    internal static async Task ClearText(this TextBox txtBox, string txt)
+    internal static async Task<TreeViewItem> Select(this TreeView tree, string pathSeparatedBySlashes)
+    {
+        string[] items = pathSeparatedBySlashes.Split('/');
+        TreeViewItem? tempTvi = null;
+        foreach (string item in items)
+        {
+            if (tempTvi is null)
+            {
+                tempTvi = (TreeViewItem) tree.Items.First(i => i is TreeViewItem tvi && ((string)tvi.Header!) == item)!;
+            }
+            else
+            {
+                tempTvi = (TreeViewItem) tempTvi.Items.First(i => i is TreeViewItem tvi && ((string)tvi.Header!) == item)!;
+            }
+
+            if (tempTvi is not null)
+            {
+                tree.SelectedItem = tempTvi;
+                await WaitAfterActionAsync();
+            }
+        }
+
+        return tempTvi!;
+    }
+
+    internal static async Task ClearText(this TextBox txtBox)
     {
         txtBox.Clear();
         await WaitAfterActionAsync();
@@ -58,6 +89,7 @@ internal static class UITestActions
     internal static async Task TypeText(this Control control, string txt)
     {
         TextInputEventArgs args = new();
+        args.RoutedEvent = InputElement.TextInputEvent;
         args.Text = txt;
         control.RaiseEvent(args);
         await WaitAfterActionAsync();

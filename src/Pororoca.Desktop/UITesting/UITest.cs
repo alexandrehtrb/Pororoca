@@ -1,4 +1,6 @@
 using System.Text;
+using Pororoca.Desktop.ViewModels;
+using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.UITesting;
 
@@ -23,7 +25,18 @@ public abstract partial class UITest
         }
     }
 
-    public void Finish() => Successful ??= true;
+    public void Finish()
+    {
+        Successful ??= true;
+        Teardown();
+    }
+
+    protected virtual void Teardown()
+    {
+        var mwvm = ((MainWindowViewModel)MainWindow.Instance!.DataContext!);
+        mwvm.CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
+        mwvm.CollectionsGroupViewDataCtx.Items.Clear();
+    }
 
     public Task Wait(double seconds) => Task.Delay((int)(seconds * 1000));
 

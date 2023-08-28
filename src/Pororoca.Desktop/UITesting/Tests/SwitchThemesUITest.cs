@@ -14,7 +14,7 @@ public sealed class SwitchThemesUITest : UITest
     public SwitchThemesUITest()
     {
         var content = (Control) MainWindow.Instance!.Content!;
-        Robot = new(this, content);
+        Robot = new(content);
         MainWindowPanel = content.FindControl<Panel>("mainWindowPanel")!;
     }
 

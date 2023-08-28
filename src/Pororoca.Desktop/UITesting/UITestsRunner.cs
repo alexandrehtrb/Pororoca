@@ -10,9 +10,11 @@ public static class UITestsRunner
     {
         new TopMenuUITest(),
         new SwitchLanguagesUITest(),
-        new SwitchThemesUITest()
+        new SwitchThemesUITest(),
+        new EditableTextBlockUITest()
         // TODO: Backup all collections before and restore them after the tests
         // TODO: UI tests to be made:
+        // new ItemsTreeUITest()
         // new CollectionUITest() // create collection, rename, add http reqs, ws, envs
         // new CollectionFolderUITest() // create collection folder, rename, add http req and ws
         // new CollectionAndEnvironmentVariablesUITest() // add collection and env variables, check if they are being applied on URL
@@ -46,6 +48,10 @@ public static class UITestsRunner
         // Out of scope of automated UI tests:
         // import and export collections and environments (involve dialogs)
         // help dialogs
+        // context menu actions
+        // cut collection, cut and paste to itself
+        // delete items actions
+        // save responses to file
     });
 
     private static async Task<string> RunTestsAsync(params UITest[] tests)

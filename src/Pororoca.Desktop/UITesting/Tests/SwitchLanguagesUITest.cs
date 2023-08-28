@@ -12,7 +12,7 @@ public sealed class SwitchLanguagesUITest : UITest
     public SwitchLanguagesUITest()
     {
         Control content = (Control) MainWindow.Instance!.Content!;
-        Robot = new(this, content);
+        Robot = new(content);
     }
 
     public override async Task RunAsync()
@@ -47,5 +47,10 @@ public sealed class SwitchLanguagesUITest : UITest
         AssertHasText(Robot.File, "Arquivo");
         AssertHasText(Robot.Options, "Opções");
         AssertHasText(Robot.Help, "Ajuda");
+
+        // finishing the test with english language set
+        await Robot.Options.ClickOn();
+        await Robot.Options_Language.ClickOn();
+        await Robot.Options_Language_English.ClickOn();
     }
 }

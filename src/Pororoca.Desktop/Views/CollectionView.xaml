@@ -24,7 +24,7 @@
         HorizontalAlignment="Stretch"
         VerticalAlignment="Top"
         Margin="0,24,0,0">
-      <v:EditableTextBlockView DataContext="{Binding NameEditableTextBlockViewDataCtx}"/>
+      <v:EditableTextBlockView x:Name="etbName" DataContext="{Binding NameEditableTextBlockViewDataCtx}"/>
     </Grid>
 
     <StackPanel
@@ -33,49 +33,58 @@
         Margin="0,12,0,0">
 
       <controls:IconButton
+          x:Name="btAddFolder"
           Icon="{StaticResource IconAddFolderGeometry}"
           Text="{Binding i18n.Collection.AddFolder}"
           Command="{Binding AddNewFolderCmd}"/>
 
       <controls:IconButton
+          x:Name="btAddHttpReq"
           Icon="{StaticResource IconAddGeometry}"
           Text="{Binding i18n.Collection.AddHttpRequest}"
           Command="{Binding AddNewHttpRequestCmd}"/>
 
       <controls:IconButton
+          x:Name="btAddWebSocket"
           Icon="{StaticResource IconWebsocketGeometry}"
           Text="{Binding i18n.Collection.AddWebSocketConnection}"
           Command="{Binding AddNewWebSocketConnectionCmd}"/>
 
       <controls:IconButton
+          x:Name="btAddEnvironment"
           Icon="{StaticResource IconLeafGeometry}"
           Text="{Binding i18n.Collection.AddEnvironment}"
           Command="{Binding AddNewEnvironmentCmd}"/>
 
       <controls:IconButton
+          x:Name="btImportEnv"
           Icon="{StaticResource IconImportGeometry}"
           Text="{Binding i18n.Collection.ImportEnvironment}"
           Command="{Binding ImportEnvironmentsCmd}"/>
 
       <controls:IconButton
+          x:Name="btExportCollection"
           IsVisible="{Binding !IsOperatingSystemMacOsx}"
           Icon="{StaticResource IconExportGeometry}"
           Text="{Binding i18n.Collection.ExportCollection}"
           Command="{Binding ExportCollectionCmd}"/>
 
       <controls:IconButton
+          x:Name="btExportAsPororocaCollection"
           IsVisible="{Binding IsOperatingSystemMacOsx}"
           Icon="{StaticResource IconExportGeometry}"
           Text="{Binding i18n.Collection.ExportAsPororocaCollection}"
           Command="{Binding ExportAsPororocaCollectionCmd}"/>
 
       <controls:IconButton
+          x:Name="btExportAsPostmanCollection"
           IsVisible="{Binding IsOperatingSystemMacOsx}"
           Icon="{StaticResource IconExportGeometry}"
           Text="{Binding i18n.Collection.ExportAsPostmanCollection}"
           Command="{Binding ExportAsPostmanCollectionCmd}"/>
 
       <CheckBox
+          x:Name="cbIncludeSecretsWhenExporting"
           Content="{Binding i18n.Collection.ExportIncludeSecrets}"
           IsChecked="{Binding IncludeSecretVariables}"/>
     </StackPanel>

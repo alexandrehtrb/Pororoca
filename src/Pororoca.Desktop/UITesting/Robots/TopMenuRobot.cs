@@ -8,7 +8,7 @@ namespace Pororoca.Desktop.UITesting.Robots;
 
 public sealed class TopMenuRobot : BaseRobot
 {
-    public TopMenuRobot(UITest test, Control rootView) : base(test, rootView) { }
+    public TopMenuRobot(Control rootView) : base(rootView) { }
     
     internal MenuItem File => GetChildView<MenuItem>("topMenuItemFile")!;
     internal MenuItem File_NewCollection => GetChildView<MenuItem>("topMenuItemFileNewCollection")!;

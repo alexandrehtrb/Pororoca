@@ -12,7 +12,7 @@ public sealed class TopMenuUITest : UITest
     public TopMenuUITest()
     {
         var content = MainWindow.Instance!.Content;
-        Robot = new(this, (Control)content!);
+        Robot = new((Control)content!);
     }
 
     public override async Task RunAsync()
