@@ -8,16 +8,14 @@ public static class UITestsRunner
 {
     public static Task<string> RunAllTestsAsync() => RunTestsAsync(new UITest[]
     {
-        //new TopMenuUITest(),
-        //new SwitchLanguagesUITest(),
-        //new SwitchThemesUITest(),
-        //new EditableTextBlockUITest(),
-        //new TreeCreateItemsUITest(),
+        new TopMenuUITest(),
+        new SwitchLanguagesUITest(),
+        new SwitchThemesUITest(),
+        new EditableTextBlockUITest(),
+        new CollectionUITest(),
         new TreeCopyAndPasteItemsUITest(),
-        // TODO: Backup all collections before and restore them after the tests
+        new TreeCutAndPasteItemsUITest(),
         // TODO: UI tests to be made:
-        // new ItemsTreeUITest()
-        // new CollectionUITest() // create collection, rename, add http reqs, ws, envs
         // new CollectionFolderUITest() // create collection folder, rename, add http req and ws
         // new CollectionAndEnvironmentVariablesUITest() // add collection and env variables, check if they are being applied on URL
         // // for the test below:

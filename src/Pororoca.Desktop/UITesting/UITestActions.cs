@@ -57,31 +57,38 @@ internal static class UITestActions
         object? tempTvi = null;
         foreach (string item in items)
         {
-            if (tempTvi is null)
+            if (items.ToList().IndexOf(item) == 0)
             {
-                tempTvi = tree.Items.First(i => i is CollectionOrganizationItemViewModel p && p.Name == item)!;
+                tempTvi = tree.Items.FirstOrDefault(i => i is CollectionViewModel p && p.Name == item)!;
+            }
+            else if (tempTvi is null)
+            {
+                return null;
             }
             else if (tempTvi is CollectionOrganizationItemParentViewModel<CollectionOrganizationItemViewModel> pvm1)
             {
                 if (item == "ENVS")
                 {
-                    tempTvi = pvm1.Items.First(i => i is EnvironmentsGroupViewModel egvm)!;
-                    ((EnvironmentsGroupViewModel)tempTvi).IsExpanded = true;
+                    tempTvi = pvm1.Items.FirstOrDefault(i => i is EnvironmentsGroupViewModel egvm)!;
+                    if (tempTvi is EnvironmentsGroupViewModel egvm)
+                    {
+                        egvm.IsExpanded = true;
+                    }
                 }
                 else
                 {
-                    tempTvi = pvm1.Items.First(i => i.Name == item)!;
+                    tempTvi = pvm1.Items.FirstOrDefault(i => i.Name == item)!;
                     pvm1.IsExpanded = true;
                 }
             }
             else if (tempTvi is CollectionOrganizationItemParentViewModel<EnvironmentViewModel> egvm)
             {
-                tempTvi = egvm.Items.First(i => i.Name == item)!;
+                tempTvi = egvm.Items.FirstOrDefault(i => i.Name == item)!;
                 egvm.IsExpanded = true;
             }
             else if (tempTvi is CollectionOrganizationItemParentViewModel<WebSocketClientMessageViewModel> wsvm)
             {
-                tempTvi = wsvm.Items.First(i => i.Name == item)!;
+                tempTvi = wsvm.Items.FirstOrDefault(i => i.Name == item)!;
                 wsvm.IsExpanded = true;
             }
             else
