@@ -1,10 +1,35 @@
 using Avalonia.Controls;
+using Pororoca.Desktop.HotKeys;
+using Pororoca.Desktop.ViewModels;
+using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.UITesting.Robots;
 
 public sealed class ItemsTreeRobot : BaseRobot
 {
-    public ItemsTreeRobot(TreeView rootView) : base(rootView) { }
+    public ItemsTreeRobot(CollectionsGroupView rootView) : base(rootView) { }
     
-    internal TreeView Tree => (TreeView)this.RootView;
+    private TreeView Tree => GetChildView<TreeView>("itemsTree")!;
+
+    internal Task Select(string pathSeparatedBySlashes) => Tree.Select(pathSeparatedBySlashes);
+
+    internal Task SelectMultiple(params string[] pathsSeparatedBySlashes) => Tree.SelectMultiple(pathsSeparatedBySlashes);
+
+    internal async Task Cut()
+    {
+        KeyboardShortcuts.Instance.CutSelectedItems();
+        await UITestActions.WaitAfterActionAsync();
+    }
+
+    internal async Task Copy()
+    {
+        KeyboardShortcuts.Instance.CopySelectedItems();
+        await UITestActions.WaitAfterActionAsync();
+    }
+    
+    internal async Task Paste()
+    {
+        KeyboardShortcuts.Instance.PasteCopiedItems();
+        await UITestActions.WaitAfterActionAsync();
+    }
 }

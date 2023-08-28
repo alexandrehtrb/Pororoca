@@ -12,7 +12,6 @@ using ReactiveUI.Fody.Helpers;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
-using System.Security.Cryptography;
 
 namespace Pororoca.Desktop.HotKeys;
 

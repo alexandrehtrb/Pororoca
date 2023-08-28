@@ -18,11 +18,7 @@ public sealed class EditableTextBlockUITest : UITest
 
     public override async Task RunAsync()
     {
-        await TopMenuRobot.File.ClickOn();
-        // for some reason, this needs to be repeated (???), otherwise the menu item won't expand
-        await TopMenuRobot.File.ClickOn();
-        await TopMenuRobot.File_NewCollection.ClickOn();
-        TopMenuRobot.File.Close();
+        await TopMenuRobot.CreateNewCollection();
         
         var collectionView = RootView.FindControl<CollectionView>("collectionView")!;
         var etbView = collectionView.FindControl<EditableTextBlock>("etbName")!;

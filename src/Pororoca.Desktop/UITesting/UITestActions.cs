@@ -1,9 +1,11 @@
+using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using AvaloniaEdit;
 using Pororoca.Desktop.Controls;
+using Pororoca.Desktop.ViewModels;
 
 namespace Pororoca.Desktop.UITesting;
 
@@ -11,7 +13,7 @@ internal static class UITestActions
 {
     private static readonly TimeSpan defaultWaitingTimeAfterActions = TimeSpan.FromSeconds(0.2);
 
-    private static Task WaitAfterActionAsync() => Task.Delay(defaultWaitingTimeAfterActions);
+    internal static Task WaitAfterActionAsync() => Task.Delay(defaultWaitingTimeAfterActions);
 
     internal static TreeViewItem? GetTreeViewItemViewAtIndex(this TreeView parentView, int index) =>
         (TreeViewItem?) parentView.ItemsView[index];
@@ -49,29 +51,72 @@ internal static class UITestActions
         await WaitAfterActionAsync();
     }
 
-    internal static async Task<TreeViewItem> Select(this TreeView tree, string pathSeparatedBySlashes)
+    internal static object? GetChildView(this TreeView tree, string pathSeparatedBySlashes)
     {
         string[] items = pathSeparatedBySlashes.Split('/');
-        TreeViewItem? tempTvi = null;
+        object? tempTvi = null;
         foreach (string item in items)
         {
             if (tempTvi is null)
             {
-                tempTvi = (TreeViewItem) tree.Items.First(i => i is TreeViewItem tvi && ((string)tvi.Header!) == item)!;
+                tempTvi = tree.Items.First(i => i is CollectionOrganizationItemViewModel p && p.Name == item)!;
+            }
+            else if (tempTvi is CollectionOrganizationItemParentViewModel<CollectionOrganizationItemViewModel> pvm1)
+            {
+                if (item == "ENVS")
+                {
+                    tempTvi = pvm1.Items.First(i => i is EnvironmentsGroupViewModel egvm)!;
+                    ((EnvironmentsGroupViewModel)tempTvi).IsExpanded = true;
+                }
+                else
+                {
+                    tempTvi = pvm1.Items.First(i => i.Name == item)!;
+                    pvm1.IsExpanded = true;
+                }
+            }
+            else if (tempTvi is CollectionOrganizationItemParentViewModel<EnvironmentViewModel> egvm)
+            {
+                tempTvi = egvm.Items.First(i => i.Name == item)!;
+                egvm.IsExpanded = true;
+            }
+            else if (tempTvi is CollectionOrganizationItemParentViewModel<WebSocketClientMessageViewModel> wsvm)
+            {
+                tempTvi = wsvm.Items.First(i => i.Name == item)!;
+                wsvm.IsExpanded = true;
             }
             else
             {
-                tempTvi = (TreeViewItem) tempTvi.Items.First(i => i is TreeViewItem tvi && ((string)tvi.Header!) == item)!;
-            }
-
-            if (tempTvi is not null)
-            {
-                tree.SelectedItem = tempTvi;
-                await WaitAfterActionAsync();
+                return null;
             }
         }
 
         return tempTvi!;
+    }
+
+    internal static async Task<CollectionOrganizationItemViewModel> Select(this TreeView tree, string pathSeparatedBySlashes)
+    {
+        object tvi = tree.GetChildView(pathSeparatedBySlashes)!;
+        tree.SelectedItem = tvi;
+        await WaitAfterActionAsync();
+        return (CollectionOrganizationItemViewModel)tvi;
+    }
+
+    internal static async Task<List<CollectionOrganizationItemViewModel>> SelectMultiple(this TreeView tree, params string[] pathsSeparatedBySlashes)
+    {
+        List<CollectionOrganizationItemViewModel> items = new();
+        tree.SelectedItem = null;
+        foreach (string pathSeparatedBySlashes in pathsSeparatedBySlashes)
+        {
+            var item = (CollectionOrganizationItemViewModel)(await tree.Select(pathSeparatedBySlashes)); 
+            items.Add(item);
+        }        
+        tree.SelectedItems.Clear();
+        foreach (var item in items)
+        {
+            tree.SelectedItems.Add(item);
+        }
+        await WaitAfterActionAsync();
+        return items;
     }
 
     internal static async Task ClearText(this TextBox txtBox)
@@ -98,6 +143,9 @@ internal static class UITestActions
     internal static async Task PressKey(this Control control, Key key, KeyModifiers keyModifiers = KeyModifiers.None)
     {
         KeyEventArgs args = new() { Key = key, KeyModifiers = keyModifiers };
+        args.RoutedEvent = InputElement.KeyDownEvent;
+        control.RaiseEvent(args);
+        args.RoutedEvent = InputElement.KeyUpEvent;
         control.RaiseEvent(args);
         await WaitAfterActionAsync();
     }

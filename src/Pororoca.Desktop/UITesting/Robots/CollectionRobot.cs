@@ -4,10 +4,10 @@ using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.UITesting.Robots;
 
-public sealed class CollectionRobot : BaseRobot
+public sealed class CollectionRobot : BaseNamedRobot
 {
-    public CollectionRobot(CollectionView rootView) : base(rootView) { }
-    
+    public CollectionRobot(CollectionView rootView) : base(rootView){}
+
     internal IconButton AddFolder => GetChildView<IconButton>("btAddFolder")!;
     internal IconButton AddHttpReq => GetChildView<IconButton>("btAddHttpReq")!;
     internal IconButton AddWebSocket => GetChildView<IconButton>("btAddWebSocket")!;

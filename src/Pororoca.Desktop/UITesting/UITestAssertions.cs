@@ -4,6 +4,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using AvaloniaEdit;
 using Pororoca.Desktop.Controls;
+using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.UITesting;
 
@@ -43,4 +44,18 @@ public abstract partial class UITest
     internal void AssertIsChecked(CheckBox cb) => Assert(cb.IsChecked == true);
 
     internal void AssertIsNotChecked(CheckBox cb) => Assert(cb.IsChecked == false);
+
+    internal void AssertTreeItemExists(CollectionsGroupView cgv, string itemPathSeparatedBySlashes)
+    {
+        var treeView = cgv.FindControl<TreeView>("itemsTree")!;
+        var item = treeView.GetChildView(itemPathSeparatedBySlashes);
+        Assert(item is not null);
+    }
+
+    internal void AssertTreeItemNotExists(CollectionsGroupView cgv, string itemPathSeparatedBySlashes)
+    {
+        var treeView = cgv.FindControl<TreeView>("itemsTree")!;
+        var item = treeView.GetChildView(itemPathSeparatedBySlashes);
+        Assert(item is null);
+    }
 }

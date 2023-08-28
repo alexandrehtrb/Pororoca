@@ -32,7 +32,7 @@
         Grid.Row="0"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Top">
-      <controls:EditableTextBlock DataContext="{Binding NameEditableVm}"/>
+      <controls:EditableTextBlock x:Name="etbName" DataContext="{Binding NameEditableVm}"/>
     </Grid>
 
     <Grid

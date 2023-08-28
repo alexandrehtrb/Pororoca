@@ -26,4 +26,13 @@ public sealed class TopMenuRobot : BaseRobot
     internal MenuItem Options_Language_Russian => GetChildView<MenuItem>("topMenuItemOptionsLanguageRussian")!;
     internal MenuItem Options_DisableTlsVerification => GetChildView<MenuItem>("topMenuItemOptionsDisableTlsVerification")!;
     internal MenuItem Help => GetChildView<MenuItem>("topMenuItemHelp")!;
+
+    internal async Task CreateNewCollection()
+    {
+        await File.ClickOn();
+        // for some reason, this needs to be repeated (???), otherwise the menu item won't expand
+        await File.ClickOn();
+        await File_NewCollection.ClickOn();
+        File.Close();
+    }
 }

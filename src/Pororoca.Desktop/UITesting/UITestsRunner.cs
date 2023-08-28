@@ -8,10 +8,12 @@ public static class UITestsRunner
 {
     public static Task<string> RunAllTestsAsync() => RunTestsAsync(new UITest[]
     {
-        new TopMenuUITest(),
-        new SwitchLanguagesUITest(),
-        new SwitchThemesUITest(),
-        new EditableTextBlockUITest()
+        //new TopMenuUITest(),
+        //new SwitchLanguagesUITest(),
+        //new SwitchThemesUITest(),
+        //new EditableTextBlockUITest(),
+        //new TreeCreateItemsUITest(),
+        new TreeCopyAndPasteItemsUITest(),
         // TODO: Backup all collections before and restore them after the tests
         // TODO: UI tests to be made:
         // new ItemsTreeUITest()

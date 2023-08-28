@@ -50,7 +50,7 @@
           Margin="24,0,24,0"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Top">
-        <controls:EditableTextBlock DataContext="{Binding NameEditableVm}"/>
+        <controls:EditableTextBlock x:Name="etbName" DataContext="{Binding NameEditableVm}"/>
       </Grid>
 
       <Grid
@@ -605,6 +605,7 @@
           <Grid ColumnDefinitions="Auto, *, Auto">
 
             <Button
+                x:Name="btAddWsCliMsg"
                 Grid.Column="0"
                 Grid.Row="0"
                 Height="40"

@@ -54,7 +54,7 @@
           Margin="24,0,24,0"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Top">
-        <controls:EditableTextBlock DataContext="{Binding NameEditableVm}"/>
+        <controls:EditableTextBlock x:Name="etbName" DataContext="{Binding NameEditableVm}"/>
       </Grid>
 
       <Grid
