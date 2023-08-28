@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.Views;
@@ -14,7 +15,17 @@ public abstract partial class UITest
 
     private readonly StringBuilder logAppender;
 
-    public UITest() => this.logAppender = new();
+    private readonly Stopwatch stopwatch;
+
+    public int TotalElapsedSeconds => (int) this.stopwatch.Elapsed.TotalSeconds;
+
+    public TimeSpan ElapsedTime => this.stopwatch.Elapsed;
+
+    public UITest()
+    {
+        this.logAppender = new();
+        this.stopwatch = new();
+    }
 
     public void Assert(bool condition)
     {
@@ -25,9 +36,16 @@ public abstract partial class UITest
         }
     }
 
+    public void Start()
+    {
+        Successful = null;
+        this.stopwatch.Start();
+    }
+
     public void Finish()
     {
         Successful ??= true;
+        this.stopwatch.Stop();
         Teardown();
     }
 

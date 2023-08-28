@@ -33,6 +33,7 @@
     <KeyBinding Command="{Binding HotKeys.MoveDownCmd}" Gesture="Alt+Down"/>
     <KeyBinding Command="{Binding HotKeys.SwitchToPreviousItemCmd}" Gesture="Ctrl+PageUp"/>
     <KeyBinding Command="{Binding HotKeys.SwitchToNextItemCmd}" Gesture="Ctrl+PageDown"/>
+    <KeyBinding Command="{Binding RunUITestsCmd}" Gesture="F12"/>
   </Window.KeyBindings>
 
   <Panel>
@@ -190,7 +191,7 @@
             Header="{Binding i18n.TopMenu.Help}"
             Command="{Binding HotKeys.ShowHelpCmd}"/>
         <MenuItem
-            Header="Run UI tests"
+            Header="Run UI tests (F12)"
             IsVisible="{Binding IsRunUITestsVisible}"
             Command="{Binding RunUITestsCmd}"/>
         <!--MenuItem

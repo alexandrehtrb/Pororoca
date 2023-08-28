@@ -9,7 +9,7 @@ namespace Pororoca.Desktop.UITesting;
 
 internal static class UITestActions
 {
-    private static readonly TimeSpan defaultWaitingTimeAfterActions = TimeSpan.FromSeconds(0.25);
+    private static readonly TimeSpan defaultWaitingTimeAfterActions = TimeSpan.FromSeconds(0.2);
 
     private static Task WaitAfterActionAsync() => Task.Delay(defaultWaitingTimeAfterActions);
 
