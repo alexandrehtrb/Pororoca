@@ -158,5 +158,28 @@ public sealed class TreeCopyAndPasteItemsUITest : UITest
         await TreeRobot.Paste();
         AssertTreeItemExists(CollectionsGroup, "COL1/WS1/WS1_MSG1");
         AssertTreeItemExists(CollectionsGroup, "COL1/WS1/WS2_MSG1");
+
+        // copying and pasting while keeping the same selection should cause duplication (http)
+        await TreeRobot.Select("COL1/HTTP1");
+        await TreeRobot.Copy();
+        await HttpRobot.Name.Edit("HTTP0");
+        await TreeRobot.Paste();
+        AssertTreeItemExists(CollectionsGroup, "COL1/HTTP0");
+        AssertTreeItemExists(CollectionsGroup, "COL1/HTTP1");
+
+        // copying and pasting while keeping the same selection should cause duplication (ws)
+        await TreeRobot.Select("COL1/WS1");
+        await TreeRobot.Copy();
+        await WsRobot.Name.Edit("WS0");
+        await TreeRobot.Paste();
+        AssertTreeItemExists(CollectionsGroup, "COL1/WS0");
+        AssertTreeItemExists(CollectionsGroup, "COL1/WS0/WS1_MSG1");
+        AssertTreeItemExists(CollectionsGroup, "COL1/WS0/WS2_MSG1");
+        AssertTreeItemExists(CollectionsGroup, "COL1/WS1");
+        AssertTreeItemExists(CollectionsGroup, "COL1/WS1/WS1_MSG1");
+        AssertTreeItemExists(CollectionsGroup, "COL1/WS1/WS2_MSG1");
+
+        // copying and pasting while keeping the same selection (dir)
+        // causes its copy to be pasted inside the original dir
     }
 }
