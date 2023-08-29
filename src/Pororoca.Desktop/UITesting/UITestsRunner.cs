@@ -12,11 +12,10 @@ public static class UITestsRunner
         new SwitchLanguagesUITest(),
         new SwitchThemesUITest(),
         new EditableTextBlockUITest(),
-        new CollectionUITest(),
+        new CollectionAndCollectionFolderUITest(),
         new TreeCopyAndPasteItemsUITest(),
         new TreeCutAndPasteItemsUITest(),
         // TODO: UI tests to be made:
-        // new CollectionFolderUITest() // create collection folder, rename, add http req and ws
         // new CollectionAndEnvironmentVariablesUITest() // add collection and env variables, check if they are being applied on URL
         // // for the test below:
         // // - if Windows 7, check if HTTP/2 is blocked
@@ -46,6 +45,7 @@ public static class UITestsRunner
         // new WebSocketConnectionAndClientMessagesUITest(version)
         // new WebSocketConversationUITest(version)
         // Out of scope of automated UI tests:
+        // some keybindings
         // import and export collections and environments (involve dialogs)
         // help dialogs
         // context menu actions
