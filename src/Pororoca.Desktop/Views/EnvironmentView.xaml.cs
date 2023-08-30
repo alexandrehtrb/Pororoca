@@ -1,9 +1,8 @@
-using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
 namespace Pororoca.Desktop.Views;
 
-public class EnvironmentView : UserControl
+public class EnvironmentView : BaseVariablesListView
 {
     public EnvironmentView() => InitializeComponent();
 

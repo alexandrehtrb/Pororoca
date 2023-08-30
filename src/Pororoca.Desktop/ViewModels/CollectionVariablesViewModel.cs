@@ -1,29 +1,13 @@
-using System.Collections.ObjectModel;
-using System.Reactive;
 using Pororoca.Domain.Features.Entities.Pororoca;
-using ReactiveUI;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class CollectionVariablesViewModel : CollectionOrganizationItemViewModel
+public sealed class CollectionVariablesViewModel : BaseVariablesListViewModel
 {
-    #region COLLECTION VARIABLES
-
-    public ObservableCollection<VariableViewModel> Variables { get; }
-    public ReactiveCommand<Unit, Unit> AddNewVariableCmd { get; }
-
-    #endregion
 
     public CollectionVariablesViewModel(ICollectionOrganizationItemParentViewModel parentVm,
-                                        PororocaCollection col) : base(parentVm, col.Name)
+                                        PororocaCollection col) : base(parentVm, col.Name, col.Variables)
     {
-        AddNewVariableCmd = ReactiveCommand.Create(AddNewVariable);
-
-        Variables = new();
-        foreach (var v in col.Variables)
-        {
-            Variables.Add(new(Variables, v));
-        }
     }
 
     #region COLLECTION ORGANIZATION
@@ -34,9 +18,6 @@ public sealed class CollectionVariablesViewModel : CollectionOrganizationItemVie
     #endregion
 
     #region COLLECTION VARIABLES
-
-    private void AddNewVariable() =>
-        Variables.Add(new(Variables, true, string.Empty, string.Empty, false));
 
     public IEnumerable<PororocaVariable> ToVariables() =>
         Variables.Select(v => v.ToVariable());
