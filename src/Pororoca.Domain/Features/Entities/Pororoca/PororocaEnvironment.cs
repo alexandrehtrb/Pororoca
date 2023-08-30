@@ -17,7 +17,7 @@ public sealed class PororocaEnvironment : ICloneable
     public bool IsCurrent { get; set; }
 
     [JsonInclude]
-    public IReadOnlyList<PororocaVariable> Variables { get; private set; }
+    public List<PororocaVariable> Variables { get; private set; }
 
 #nullable disable warnings
     public PororocaEnvironment()
@@ -35,7 +35,7 @@ public sealed class PororocaEnvironment : ICloneable
         Id = id;
         Name = name;
         CreatedAt = createdAt;
-        Variables = new List<PororocaVariable>().AsReadOnly();
+        Variables = new List<PororocaVariable>();
         IsCurrent = false;
     }
 
@@ -43,20 +43,20 @@ public sealed class PororocaEnvironment : ICloneable
         Name = name;
 
     public void UpdateVariables(IEnumerable<PororocaVariable> vars) =>
-        Variables = vars.ToList().AsReadOnly();
+        Variables = vars.ToList();
 
     public void AddVariable(PororocaVariable variable)
     {
         List<PororocaVariable> newList = new(Variables);
         newList.Add(variable);
-        Variables = newList.AsReadOnly();
+        Variables = newList;
     }
 
     public void RemoveVariable(string variableKey)
     {
         List<PororocaVariable> newList = new(Variables);
         newList.RemoveAll(i => i.Key == variableKey);
-        Variables = newList.AsReadOnly();
+        Variables = newList;
     }
 
     public PororocaEnvironment ClonePreservingId()
@@ -70,6 +70,6 @@ public sealed class PororocaEnvironment : ICloneable
         new PororocaEnvironment(Guid.NewGuid(), Name, CreatedAt)
         {
             IsCurrent = IsCurrent,
-            Variables = Variables.Select(v => v.Copy()).ToList().AsReadOnly()
+            Variables = Variables.Select(v => v.Copy()).ToList()
         };
 }

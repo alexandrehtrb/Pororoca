@@ -105,7 +105,15 @@
         Margin="0,12,0,0"
         AutoGenerateColumns="False"
         ItemsSource="{Binding Variables}"
+        SelectionChanged="OnSelectedVariablesChanged"
         CanUserResizeColumns="True">
+        <DataGrid.KeyBindings>
+          <KeyBinding Command="{Binding CutSelectedVariablesCmd}" Gesture="Ctrl+X" />
+          <KeyBinding Command="{Binding CopySelectedVariablesCmd}" Gesture="Ctrl+C" />
+          <KeyBinding Command="{Binding PasteVariablesCmd}" Gesture="Ctrl+V" />
+          <KeyBinding Command="{Binding DuplicateSelectedVariablesCmd}" Gesture="Ctrl+D" />
+          <KeyBinding Command="{Binding DeleteSelectedVariablesCmd}" Gesture="Delete" />
+        </DataGrid.KeyBindings>
       <DataGrid.Columns>
         <DataGridCheckBoxColumn
             Width="*"
