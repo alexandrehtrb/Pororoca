@@ -70,6 +70,12 @@ public class HttpRequestView : UserControl
         UpdateVmSelectedItems(tableVm, e);
     }
 
+    public void OnSelectedFormDataParamsChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var tableVm = ((HttpRequestViewModel)DataContext!).FormDataParamsTableVm;
+        UpdateVmSelectedItems(tableVm, e);
+    }
+
     private void SetupSelectedOptionsPanelsVisibility()
     {
         var cbReqBodyMode = this.FindControl<ComboBox>("cbReqBodyMode")!;

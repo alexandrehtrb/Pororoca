@@ -195,9 +195,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST BODY FORM DATA
 
-    public ObservableCollection<HttpRequestFormDataParamViewModel> FormDataParams { get; }
-    public ReactiveCommand<Unit, Unit> AddNewFormDataTextParamCmd { get; }
-    public ReactiveCommand<Unit, Unit> AddNewFormDataFileParamCmd { get; }
+    public FormDataParamsDataGridViewModel FormDataParamsTableVm { get; }    
 
     #endregion
 
@@ -306,16 +304,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         // URL ENCODED
         UrlEncodedParamsTableVm = new(req.Body?.UrlEncodedValues);
         // FORM DATA
-        FormDataParams = new();
-        if (req.Body?.FormDataValues is not null)
-        {
-            foreach (var v in req.Body.FormDataValues)
-            {
-                FormDataParams.Add(new(FormDataParams, v));
-            }
-        }
-        AddNewFormDataTextParamCmd = ReactiveCommand.Create(AddNewFormDataTextParam);
-        AddNewFormDataFileParamCmd = ReactiveCommand.CreateFromTask(AddNewFormDataFileParam);
+        FormDataParamsTableVm = new(req.Body?.FormDataValues);
         // GRAPHQL
         RequestBodyGraphQlQuery = req.Body?.GraphQlValues?.Query;
         RequestBodyGraphQlVariables = req.Body?.GraphQlValues?.Variables;
@@ -398,25 +387,6 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST BODY FORM DATA
 
-    private void AddNewFormDataTextParam()
-    {
-        var p = PororocaHttpRequestFormDataParam.MakeTextParam(true, string.Empty, string.Empty, MimeTypesDetector.DefaultMimeTypeForText);
-        FormDataParams.Add(new(FormDataParams, p));
-    }
-
-    private async Task AddNewFormDataFileParam()
-    {
-        string? fileSrcPath = await SearchFileWithDialogAsync();
-        if (fileSrcPath != null)
-        {
-            MimeTypesDetector.TryFindMimeTypeForFile(fileSrcPath, out string? mimeType);
-            mimeType ??= MimeTypesDetector.DefaultMimeTypeForBinary;
-
-            var p = PororocaHttpRequestFormDataParam.MakeFileParam(true, string.Empty, fileSrcPath, mimeType);
-            FormDataParams.Add(new(FormDataParams, p));
-        }
-    }
-
     #endregion
 
     #region CONVERT VIEW INPUTS TO REQUEST ENTITY
@@ -430,7 +400,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
                 body.SetGraphQlContent(RequestBodyGraphQlQuery, RequestBodyGraphQlVariables);
                 break;
             case PororocaHttpRequestBodyMode.FormData:
-                body.SetFormDataContent(FormDataParams.Select(p => p.ToFormDataParam()));
+                body.SetFormDataContent(FormDataParamsTableVm.Items.Select(p => p.ToFormDataParam()));
                 break;
             case PororocaHttpRequestBodyMode.UrlEncoded:
                 body.SetUrlEncodedContent(UrlEncodedParamsTableVm.Items.Select(p => p.ToKeyValueParam()));

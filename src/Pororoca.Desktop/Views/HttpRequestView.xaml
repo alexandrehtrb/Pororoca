@@ -528,12 +528,12 @@
                   <Button
                       Content="{Binding i18n.HttpRequest.BodyFormDataTextParamAdd}"
                       Margin="0,0,3,0"
-                      Command="{Binding AddNewFormDataTextParamCmd}"
+                      Command="{Binding FormDataParamsTableVm.AddNewFormDataTextParamCmd}"
                       Classes="Primary"/>
                   <Button
                       Content="{Binding i18n.HttpRequest.BodyFormDataFileParamAdd}"
                       Margin="3,0,0,0"
-                      Command="{Binding AddNewFormDataFileParamCmd}"
+                      Command="{Binding FormDataParamsTableVm.AddNewFormDataFileParamCmd}"
                       Classes="Primary"/>
                 </StackPanel>
                 <DataGrid
@@ -541,8 +541,16 @@
                     Grid.Row="1"
                     Margin="-12,24,-12,0"
                     AutoGenerateColumns="False"
-                    ItemsSource="{Binding FormDataParams}"
+                    ItemsSource="{Binding FormDataParamsTableVm.Items}"
+                    SelectionChanged="OnSelectedFormDataParamsChanged"
                     CanUserResizeColumns="True">
+                  <DataGrid.KeyBindings>
+                    <KeyBinding Command="{Binding FormDataParamsTableVm.CutSelectedCmd}" Gesture="Ctrl+X" />
+                    <KeyBinding Command="{Binding FormDataParamsTableVm.CopySelectedCmd}" Gesture="Ctrl+C" />
+                    <KeyBinding Command="{Binding FormDataParamsTableVm.PasteCmd}" Gesture="Ctrl+V" />
+                    <KeyBinding Command="{Binding FormDataParamsTableVm.DuplicateSelectedCmd}" Gesture="Ctrl+D" />
+                    <KeyBinding Command="{Binding FormDataParamsTableVm.DeleteSelectedCmd}" Gesture="Delete" />
+                  </DataGrid.KeyBindings>
                   <i:Interaction.Behaviors>
                     <i:BehaviorCollection>
                       <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropFormDataParamViewModelHandler}"/>
