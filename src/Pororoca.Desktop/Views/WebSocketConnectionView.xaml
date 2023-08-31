@@ -265,7 +265,7 @@
                     Padding="2"
                     Margin="12,0,0,0"
                     Classes="Primary"
-                    Command="{Binding AddNewConnectionRequestHeaderCmd}">
+                    Command="{Binding ConnectionRequestHeadersTableVm.AddNewCmd}">
                   <Button.Content>
                     <Image
                         VerticalAlignment="Center"
@@ -284,8 +284,16 @@
                     Margin="0,12,0,0"
                     VerticalAlignment="Stretch"
                     AutoGenerateColumns="False"
-                    ItemsSource="{Binding ConnectionRequestHeaders}"
+                    ItemsSource="{Binding ConnectionRequestHeadersTableVm.Items}"
+                    SelectionChanged="OnSelectedConnectionRequestHeadersChanged"
                     CanUserResizeColumns="True">
+                    <DataGrid.KeyBindings>
+                      <KeyBinding Command="{Binding ConnectionRequestHeadersTableVm.CutSelectedCmd}" Gesture="Ctrl+X" />
+                      <KeyBinding Command="{Binding ConnectionRequestHeadersTableVm.CopySelectedCmd}" Gesture="Ctrl+C" />
+                      <KeyBinding Command="{Binding ConnectionRequestHeadersTableVm.PasteCmd}" Gesture="Ctrl+V" />
+                      <KeyBinding Command="{Binding ConnectionRequestHeadersTableVm.DuplicateSelectedCmd}" Gesture="Ctrl+D" />
+                      <KeyBinding Command="{Binding ConnectionRequestHeadersTableVm.DeleteSelectedCmd}" Gesture="Delete" />
+                    </DataGrid.KeyBindings>
                   <i:Interaction.Behaviors>
                     <i:BehaviorCollection>
                       <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}"/>
@@ -355,7 +363,7 @@
                     Padding="2"
                     Margin="12,0,0,0"
                     Classes="Primary"
-                    Command="{Binding AddNewSubprotocolCmd}">
+                    Command="{Binding SubprotocolsTableVm.AddNewCmd}">
                   <Button.Content>
                     <Image
                         VerticalAlignment="Center"
@@ -374,8 +382,16 @@
                     Margin="0,12,0,0"
                     VerticalAlignment="Stretch"
                     AutoGenerateColumns="False"
-                    ItemsSource="{Binding Subprotocols}"
+                    ItemsSource="{Binding SubprotocolsTableVm.Items}"
+                    SelectionChanged="OnSelectedSubprotocolsChanged"
                     CanUserResizeColumns="True">
+                    <DataGrid.KeyBindings>
+                      <KeyBinding Command="{Binding SubprotocolsTableVm.CutSelectedCmd}" Gesture="Ctrl+X" />
+                      <KeyBinding Command="{Binding SubprotocolsTableVm.CopySelectedCmd}" Gesture="Ctrl+C" />
+                      <KeyBinding Command="{Binding SubprotocolsTableVm.PasteCmd}" Gesture="Ctrl+V" />
+                      <KeyBinding Command="{Binding SubprotocolsTableVm.DuplicateSelectedCmd}" Gesture="Ctrl+D" />
+                      <KeyBinding Command="{Binding SubprotocolsTableVm.DeleteSelectedCmd}" Gesture="Delete" />
+                    </DataGrid.KeyBindings>
                   <i:Interaction.Behaviors>
                     <i:BehaviorCollection>
                       <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}"/>

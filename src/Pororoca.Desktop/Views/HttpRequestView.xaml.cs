@@ -5,6 +5,7 @@ using AvaloniaEdit;
 using Pororoca.Desktop.TextEditorConfig;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using static Pororoca.Desktop.Views.DataGridSelectionUpdater;
 
 namespace Pororoca.Desktop.Views;
 
@@ -56,6 +57,18 @@ public class HttpRequestView : UserControl
     #endregion
 
     #region VIEW COMPONENTS EVENTS
+
+    public void OnSelectedHeadersChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var tableVm = ((HttpRequestViewModel)DataContext!).RequestHeadersTableVm;
+        UpdateVmSelectedItems(tableVm, e);
+    }
+
+    public void OnSelectedUrlEncodedParamsChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var tableVm = ((HttpRequestViewModel)DataContext!).UrlEncodedParamsTableVm;
+        UpdateVmSelectedItems(tableVm, e);
+    }
 
     private void SetupSelectedOptionsPanelsVisibility()
     {

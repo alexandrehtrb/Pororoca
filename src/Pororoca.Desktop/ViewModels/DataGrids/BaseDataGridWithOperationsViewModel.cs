@@ -23,7 +23,7 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
     public ReactiveCommand<Unit, Unit> DuplicateSelectedCmd { get; }
     public ReactiveCommand<Unit, Unit> DeleteSelectedCmd { get; }
 
-    public BaseDataGridWithOperationsViewModel(List<D> initialValues)
+    protected BaseDataGridWithOperationsViewModel(List<D>? initialValues = null)
     {
         AddNewCmd = ReactiveCommand.Create(AddNew);
         CutSelectedCmd = ReactiveCommand.Create(() => CutOrCopySelected(false));
@@ -34,7 +34,7 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
 
         Items = new();
         SelectedItems = new();
-        foreach (var v in initialValues)
+        foreach (var v in (initialValues ?? new()))
         {
             Items.Add(ToVm(v));
         }

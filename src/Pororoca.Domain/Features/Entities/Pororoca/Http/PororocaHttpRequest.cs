@@ -14,7 +14,7 @@ public sealed class PororocaHttpRequest : PororocaRequest
     public string Url { get; private set; }
 
     [JsonInclude]
-    public IReadOnlyList<PororocaKeyValueParam>? Headers { get; private set; }
+    public List<PororocaKeyValueParam>? Headers { get; private set; }
 
     [JsonInclude]
     public PororocaHttpRequestBody? Body { get; private set; }
@@ -49,7 +49,7 @@ public sealed class PororocaHttpRequest : PororocaRequest
         HttpVersion = httpVersion;
 
     public void UpdateHeaders(IEnumerable<PororocaKeyValueParam>? headers) =>
-        Headers = headers?.ToList()?.AsReadOnly();
+        Headers = headers?.ToList();
 
     public void UpdateCustomAuth(PororocaRequestAuth? auth) =>
         CustomAuth = auth;
@@ -64,7 +64,7 @@ public sealed class PororocaHttpRequest : PororocaRequest
         HttpMethod = httpMethod;
         Url = url;
         CustomAuth = customAuth;
-        Headers = headers?.ToList()?.AsReadOnly();
+        Headers = headers?.ToList();
         Body = body;
     }
 
@@ -75,7 +75,7 @@ public sealed class PororocaHttpRequest : PororocaRequest
             HttpMethod = HttpMethod,
             Url = Url,
             CustomAuth = CustomAuth?.Copy(),
-            Headers = Headers?.Select(h => h.Copy())?.ToList()?.AsReadOnly(),
+            Headers = Headers?.Select(h => h.Copy())?.ToList(),
             Body = (PororocaHttpRequestBody?)Body?.Clone()
         };
 }

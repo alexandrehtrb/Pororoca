@@ -215,7 +215,7 @@
                   Padding="2"
                   Margin="12,0,0,0"
                   Classes="Primary"
-                  Command="{Binding AddNewRequestHeaderCmd}">
+                  Command="{Binding RequestHeadersTableVm.AddNewCmd}">
                 <Button.Content>
                   <Image
                       VerticalAlignment="Center"
@@ -234,8 +234,16 @@
                   Margin="0,12,0,0"
                   VerticalAlignment="Stretch"
                   AutoGenerateColumns="False"
-                  ItemsSource="{Binding RequestHeaders}"
+                  ItemsSource="{Binding RequestHeadersTableVm.Items}"
+                  SelectionChanged="OnSelectedHeadersChanged"
                   CanUserResizeColumns="True">
+                  <DataGrid.KeyBindings>
+                    <KeyBinding Command="{Binding RequestHeadersTableVm.CutSelectedCmd}" Gesture="Ctrl+X" />
+                    <KeyBinding Command="{Binding RequestHeadersTableVm.CopySelectedCmd}" Gesture="Ctrl+C" />
+                    <KeyBinding Command="{Binding RequestHeadersTableVm.PasteCmd}" Gesture="Ctrl+V" />
+                    <KeyBinding Command="{Binding RequestHeadersTableVm.DuplicateSelectedCmd}" Gesture="Ctrl+D" />
+                    <KeyBinding Command="{Binding RequestHeadersTableVm.DeleteSelectedCmd}" Gesture="Delete" />
+                  </DataGrid.KeyBindings>
                 <i:Interaction.Behaviors>
                   <i:BehaviorCollection>
                     <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}"/>
@@ -424,7 +432,7 @@
                     VerticalContentAlignment="Center"
                     Padding="2"
                     Classes="Primary"
-                    Command="{Binding AddNewUrlEncodedParamCmd}">
+                    Command="{Binding UrlEncodedParamsTableVm.AddNewCmd}">
                   <Button.Content>
                     <Image
                         VerticalAlignment="Center"
@@ -442,8 +450,16 @@
                     Grid.Row="1"
                     Margin="-12,12,-12,0"
                     AutoGenerateColumns="False"
-                    ItemsSource="{Binding UrlEncodedParams}"
+                    ItemsSource="{Binding UrlEncodedParamsTableVm.Items}"
+                    SelectionChanged="OnSelectedUrlEncodedParamsChanged"
                     CanUserResizeColumns="True">
+                    <DataGrid.KeyBindings>
+                      <KeyBinding Command="{Binding UrlEncodedParamsTableVm.CutSelectedCmd}" Gesture="Ctrl+X" />
+                      <KeyBinding Command="{Binding UrlEncodedParamsTableVm.CopySelectedCmd}" Gesture="Ctrl+C" />
+                      <KeyBinding Command="{Binding UrlEncodedParamsTableVm.PasteCmd}" Gesture="Ctrl+V" />
+                      <KeyBinding Command="{Binding UrlEncodedParamsTableVm.DuplicateSelectedCmd}" Gesture="Ctrl+D" />
+                      <KeyBinding Command="{Binding UrlEncodedParamsTableVm.DeleteSelectedCmd}" Gesture="Delete" />
+                    </DataGrid.KeyBindings>
                   <i:Interaction.Behaviors>
                     <i:BehaviorCollection>
                       <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}"/>

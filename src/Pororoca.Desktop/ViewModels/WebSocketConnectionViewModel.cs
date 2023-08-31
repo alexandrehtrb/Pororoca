@@ -7,6 +7,7 @@ using AvaloniaEdit.Document;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
+using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.Requester;
@@ -185,15 +186,13 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region CONNECTION OPTION HEADERS
 
-    public ObservableCollection<KeyValueParamViewModel> ConnectionRequestHeaders { get; }
-    public ReactiveCommand<Unit, Unit> AddNewConnectionRequestHeaderCmd { get; }
+    public KeyValueParamsDataGridViewModel ConnectionRequestHeadersTableVm { get; }
 
     #endregion
 
     #region CONNECTION OPTION SUBPROTOCOLS
 
-    public ObservableCollection<KeyValueParamViewModel> Subprotocols { get; }
-    public ReactiveCommand<Unit, Unit> AddNewSubprotocolCmd { get; }
+    public KeyValueParamsDataGridViewModel SubprotocolsTableVm { get; }
 
     #endregion
 
@@ -358,29 +357,13 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
         #region CONNECTION OPTION HEADERS
 
-        ConnectionRequestHeaders = new();
-        if (ws.Headers is not null)
-        {
-            foreach (var h in ws.Headers)
-            {
-                ConnectionRequestHeaders.Add(new(ConnectionRequestHeaders, h));
-            }
-        }
-        AddNewConnectionRequestHeaderCmd = ReactiveCommand.Create(AddNewConnectionRequestHeader);
+        ConnectionRequestHeadersTableVm = new(ws.Headers);
 
         #endregion
 
         #region CONNECTION OPTION SUBPROTOCOLS
 
-        Subprotocols = new();
-        if (ws.Subprotocols is not null)
-        {
-            foreach (var s in ws.Subprotocols)
-            {
-                Subprotocols.Add(new(Subprotocols, s));
-            }
-        }
-        AddNewSubprotocolCmd = ReactiveCommand.Create(AddNewSubprotocol);
+        SubprotocolsTableVm = new(ws.Subprotocols);
 
         #endregion
 
@@ -493,15 +476,9 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region CONNECTION REQUEST HEADERS
 
-    private void AddNewConnectionRequestHeader() =>
-        ConnectionRequestHeaders.Add(new(ConnectionRequestHeaders, true, string.Empty, string.Empty));
-
     #endregion
 
     #region CONNECTION OPTION SUBPROTOCOLS
-
-    private void AddNewSubprotocol() =>
-        Subprotocols.Add(new(Subprotocols, true, string.Empty, string.Empty));
 
     #endregion
 
@@ -528,9 +505,9 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         ws.HttpVersion = HttpVersion;
         ws.Url = Url;
         ws.CustomAuth = RequestAuthDataCtx.ToCustomAuth();
-        ws.Headers = ConnectionRequestHeaders.Count == 0 ? null : ConnectionRequestHeaders.Select(h => h.ToKeyValueParam()).ToList();
+        ws.Headers = ConnectionRequestHeadersTableVm.Items.Count == 0 ? null : ConnectionRequestHeadersTableVm.Items.Select(h => h.ToKeyValueParam()).ToList();
         ws.ClientMessages = Items.Count == 0 ? null : Items.Select(i => i.ToWebSocketClientMessage()).ToList();
-        ws.Subprotocols = Subprotocols.Count == 0 ? null : Subprotocols.Select(s => s.ToKeyValueParam()).ToList();
+        ws.Subprotocols = SubprotocolsTableVm.Items.Count == 0 ? null : SubprotocolsTableVm.Items.Select(s => s.ToKeyValueParam()).ToList();
         ws.CompressionOptions = WrapCompressionOptionsFromInputs();
     }
 
