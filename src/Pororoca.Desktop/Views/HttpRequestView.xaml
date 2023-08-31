@@ -235,7 +235,7 @@
                   VerticalAlignment="Stretch"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding RequestHeadersTableVm.Items}"
-                  SelectionChanged="OnSelectedHeadersChanged"
+                  SelectionChanged="OnSelectedRequestHeadersChanged"
                   CanUserResizeColumns="True">
                   <DataGrid.KeyBindings>
                     <KeyBinding Command="{Binding RequestHeadersTableVm.CutSelectedCmd}" Gesture="Ctrl+X" />
@@ -709,8 +709,12 @@
                 Margin="-12,12,-12,12"
                 VerticalAlignment="Stretch"
                 AutoGenerateColumns="False"
-                ItemsSource="{Binding ResponseDataCtx.ResponseHeadersAndTrailers}"
+                ItemsSource="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.Items}"
+                SelectionChanged="OnSelectedResponseHeadersAndTrailersChanged"
                 CanUserResizeColumns="True">
+              <DataGrid.KeyBindings>
+                <KeyBinding Command="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.CopySelectedCmd}" Gesture="Ctrl+C" />
+              </DataGrid.KeyBindings>
               <i:Interaction.Behaviors>
                 <i:BehaviorCollection>
                   <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}"/>

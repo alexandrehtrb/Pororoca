@@ -58,7 +58,7 @@ public class HttpRequestView : UserControl
 
     #region VIEW COMPONENTS EVENTS
 
-    public void OnSelectedHeadersChanged(object sender, SelectionChangedEventArgs e)
+    public void OnSelectedRequestHeadersChanged(object sender, SelectionChangedEventArgs e)
     {
         var tableVm = ((HttpRequestViewModel)DataContext!).RequestHeadersTableVm;
         UpdateVmSelectedItems(tableVm, e);
@@ -73,6 +73,12 @@ public class HttpRequestView : UserControl
     public void OnSelectedFormDataParamsChanged(object sender, SelectionChangedEventArgs e)
     {
         var tableVm = ((HttpRequestViewModel)DataContext!).FormDataParamsTableVm;
+        UpdateVmSelectedItems(tableVm, e);
+    }
+
+    public void OnSelectedResponseHeadersAndTrailersChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var tableVm = ((HttpRequestViewModel)DataContext!).ResponseDataCtx.ResponseHeadersAndTrailersTableVm;
         UpdateVmSelectedItems(tableVm, e);
     }
 

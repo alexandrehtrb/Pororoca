@@ -5,7 +5,7 @@ using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace Pororoca.Desktop.ViewModels;
+namespace Pororoca.Desktop.ViewModels.DataGrids;
 
 public sealed class HttpRequestFormDataParamViewModel : ViewModelBase
 {
