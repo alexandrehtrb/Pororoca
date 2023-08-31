@@ -52,7 +52,7 @@
         Padding="2"
         Margin="0,36,0,0"
         Classes="Primary"
-        Command="{Binding AddNewVariableCmd}">
+        Command="{Binding VariablesTableVm.AddNewCmd}">
 
 
       <Image
@@ -71,15 +71,15 @@
         Grid.Row="2"
         Margin="0,12,0,0"
         AutoGenerateColumns="False"
-        ItemsSource="{Binding Variables}"
+        ItemsSource="{Binding VariablesTableVm.Items}"
         SelectionChanged="OnSelectedVariablesChanged"
         CanUserResizeColumns="True">
         <DataGrid.KeyBindings>
-          <KeyBinding Command="{Binding CutSelectedVariablesCmd}" Gesture="Ctrl+X" />
-          <KeyBinding Command="{Binding CopySelectedVariablesCmd}" Gesture="Ctrl+C" />
-          <KeyBinding Command="{Binding PasteVariablesCmd}" Gesture="Ctrl+V" />
-          <KeyBinding Command="{Binding DuplicateSelectedVariablesCmd}" Gesture="Ctrl+D" />
-          <KeyBinding Command="{Binding DeleteSelectedVariablesCmd}" Gesture="Delete" />
+          <KeyBinding Command="{Binding VariablesTableVm.CutSelectedCmd}" Gesture="Ctrl+X" />
+          <KeyBinding Command="{Binding VariablesTableVm.CopySelectedCmd}" Gesture="Ctrl+C" />
+          <KeyBinding Command="{Binding VariablesTableVm.PasteCmd}" Gesture="Ctrl+V" />
+          <KeyBinding Command="{Binding VariablesTableVm.DuplicateSelectedCmd}" Gesture="Ctrl+D" />
+          <KeyBinding Command="{Binding VariablesTableVm.DeleteSelectedCmd}" Gesture="Delete" />
         </DataGrid.KeyBindings>
       <DataGrid.Columns>
         <DataGridCheckBoxColumn
