@@ -85,7 +85,7 @@ public sealed class PororocaHttpRequestBody : ICloneable
             RawContent = RawContent,
             FileSrcPath = FileSrcPath,
             UrlEncodedValues = UrlEncodedValues?.Select(u => u.Copy())?.ToList()?.AsReadOnly(),
-            FormDataValues = FormDataValues?.Select(f => (PororocaHttpRequestFormDataParam)f.Clone())?.ToList()?.AsReadOnly(),
+            FormDataValues = FormDataValues?.Select(f => f.Copy())?.ToList()?.AsReadOnly(),
             GraphQlValues = GraphQlValues?.Copy()
         };
 }

@@ -232,7 +232,7 @@ public static class PostmanCollectionV21Importer
 
     private static PororocaHttpRequestFormDataParam ConvertToPororocaHttpFormDataParam(PostmanRequestBodyFormDataParam f)
     {
-        PororocaHttpRequestFormDataParam p = new(IsEnabledInPostman(f.Disabled), f.Key);
+        PororocaHttpRequestFormDataParam p = new();
         if (f.Type == PostmanRequestBodyFormDataParamType.File)
         {
             string? fileSrcPath = null;
@@ -252,11 +252,11 @@ public static class PostmanCollectionV21Importer
                     fileSrcPath = je.Deserialize<string>();
                 }
             }
-            p.SetFileValue(fileSrcPath ?? string.Empty, f.ContentType ?? string.Empty);
+            return PororocaHttpRequestFormDataParam.MakeFileParam(IsEnabledInPostman(f.Disabled), f.Key, fileSrcPath ?? string.Empty, f.ContentType ?? string.Empty);
         }
         else if (f.Type == PostmanRequestBodyFormDataParamType.Text)
         {
-            p.SetTextValue(f.Value ?? string.Empty, f.ContentType ?? string.Empty);
+            return PororocaHttpRequestFormDataParam.MakeTextParam(IsEnabledInPostman(f.Disabled), f.Key, f.Value ?? string.Empty, f.ContentType ?? string.Empty);
         }
         return p;
     }

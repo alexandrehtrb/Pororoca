@@ -423,8 +423,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     private void AddNewFormDataTextParam()
     {
-        PororocaHttpRequestFormDataParam p = new(true, string.Empty);
-        p.SetTextValue(string.Empty, MimeTypesDetector.DefaultMimeTypeForText);
+        var p = PororocaHttpRequestFormDataParam.MakeTextParam(true, string.Empty, string.Empty, MimeTypesDetector.DefaultMimeTypeForText);
         FormDataParams.Add(new(FormDataParams, p));
     }
 
@@ -436,8 +435,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
             MimeTypesDetector.TryFindMimeTypeForFile(fileSrcPath, out string? mimeType);
             mimeType ??= MimeTypesDetector.DefaultMimeTypeForBinary;
 
-            PororocaHttpRequestFormDataParam p = new(true, string.Empty);
-            p.SetFileValue(fileSrcPath, mimeType);
+            var p = PororocaHttpRequestFormDataParam.MakeFileParam(true, string.Empty, fileSrcPath, mimeType);
             FormDataParams.Add(new(FormDataParams, p));
         }
     }
