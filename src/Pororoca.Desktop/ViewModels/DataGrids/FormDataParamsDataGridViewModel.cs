@@ -9,7 +9,7 @@ namespace Pororoca.Desktop.ViewModels.DataGrids;
 
 public sealed class FormDataParamsDataGridViewModel : BaseDataGridWithOperationsViewModel<HttpRequestFormDataParamViewModel, PororocaHttpRequestFormDataParam>
 {
-    protected override SimpleClipboardArea<PororocaHttpRequestFormDataParam> InnerClipboardArea =>
+    public override SimpleClipboardArea<PororocaHttpRequestFormDataParam> InnerClipboardArea =>
         FormDataParamsClipboardArea.Instance;
 
     public ReactiveCommand<Unit, Unit> AddNewFormDataTextParamCmd { get; }

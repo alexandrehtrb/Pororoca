@@ -10,27 +10,27 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
     where VM : notnull
     where D : notnull, new()
 {
-    protected abstract SimpleClipboardArea<D> InnerClipboardArea { get; }
+    public abstract SimpleClipboardArea<D> InnerClipboardArea { get; }
 
     public ObservableCollection<VM> Items { get; }
 
     public ConcurrentDictionary<VM, bool> SelectedItems { get; }
 
     public ReactiveCommand<Unit, Unit> AddNewCmd { get; }
-    public ReactiveCommand<Unit, Unit> CutSelectedCmd { get; }
-    public ReactiveCommand<Unit, Unit> CopySelectedCmd { get; }
+    public ReactiveCommand<Unit, Unit> CutCmd { get; }
+    public ReactiveCommand<Unit, Unit> CopyCmd { get; }
     public ReactiveCommand<Unit, Unit> PasteCmd { get; }
-    public ReactiveCommand<Unit, Unit> DuplicateSelectedCmd { get; }
-    public ReactiveCommand<Unit, Unit> DeleteSelectedCmd { get; }
+    public ReactiveCommand<Unit, Unit> DuplicateCmd { get; }
+    public ReactiveCommand<Unit, Unit> DeleteCmd { get; }
 
     protected BaseDataGridWithOperationsViewModel(List<D>? initialValues = null)
     {
         AddNewCmd = ReactiveCommand.Create(AddNew);
-        CutSelectedCmd = ReactiveCommand.Create(() => CutOrCopySelected(false));
-        CopySelectedCmd = ReactiveCommand.Create(() => CutOrCopySelected(true));
+        CutCmd = ReactiveCommand.Create(() => CutOrCopySelected(false));
+        CopyCmd = ReactiveCommand.Create(() => CutOrCopySelected(true));
         PasteCmd = ReactiveCommand.Create(Paste);
-        DuplicateSelectedCmd = ReactiveCommand.Create(DuplicateSelected);
-        DeleteSelectedCmd = ReactiveCommand.Create(DeleteSelected);
+        DuplicateCmd = ReactiveCommand.Create(DuplicateSelected);
+        DeleteCmd = ReactiveCommand.Create(DeleteSelected);
 
         Items = new();
         SelectedItems = new();

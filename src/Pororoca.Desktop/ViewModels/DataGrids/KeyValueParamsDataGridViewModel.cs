@@ -5,7 +5,7 @@ namespace Pororoca.Desktop.ViewModels.DataGrids;
 
 public sealed class KeyValueParamsDataGridViewModel : BaseDataGridWithOperationsViewModel<KeyValueParamViewModel, PororocaKeyValueParam>
 {
-    protected override SimpleClipboardArea<PororocaKeyValueParam> InnerClipboardArea =>
+    public override SimpleClipboardArea<PororocaKeyValueParam> InnerClipboardArea =>
         KeyValueParamsClipboardArea.Instance;
 
     public KeyValueParamsDataGridViewModel(List<PororocaKeyValueParam>? initialValues = null) : base(initialValues)

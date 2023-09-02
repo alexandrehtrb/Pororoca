@@ -5,7 +5,7 @@ namespace Pororoca.Desktop.ViewModels.DataGrids;
 
 public sealed class VariablesDataGridViewModel : BaseDataGridWithOperationsViewModel<VariableViewModel, PororocaVariable>
 {
-    protected override SimpleClipboardArea<PororocaVariable> InnerClipboardArea =>
+    public override SimpleClipboardArea<PororocaVariable> InnerClipboardArea =>
         VariablesClipboardArea.Instance;
 
     public VariablesDataGridViewModel(List<PororocaVariable> initialValues) : base(initialValues)

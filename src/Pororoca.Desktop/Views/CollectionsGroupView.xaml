@@ -70,46 +70,46 @@
           <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.NewFolder}"
+                  Header="{Binding i18n.ContextMenu.NewFolder}"
                   Command="{Binding AddNewFolderCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.NewHttpRequest}"
+                  Header="{Binding i18n.ContextMenu.NewHttpRequest}"
                   Command="{Binding AddNewHttpRequestCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.NewWebSocketConnection}"
+                  Header="{Binding i18n.ContextMenu.NewWebSocketConnection}"
                   Command="{Binding AddNewWebSocketConnectionCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Duplicate}"
+                  Header="{Binding i18n.ContextMenu.Duplicate}"
                   Command="{Binding HotKeys.DuplicateCmd}"
                   InputGesture="Ctrl+D"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Paste}"
+                  Header="{Binding i18n.ContextMenu.Paste}"
                   Command="{Binding HotKeys.PasteCmd}"
                   InputGesture="Ctrl+V"
                   IsEnabled="{Binding ClipboardArea.CanPasteCollectionFolderOrRequest}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Rename}"
+                  Header="{Binding i18n.ContextMenu.Rename}"
                   Command="{Binding HotKeys.RenameCmd}"
                   InputGesture="F2"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.MoveUp}"
+                  Header="{Binding i18n.ContextMenu.MoveUp}"
                   Command="{Binding HotKeys.MoveUpCmd}"
                   InputGesture="Alt+Up"
                   IsEnabled="{Binding CanMoveUp}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.MoveDown}"
+                  Header="{Binding i18n.ContextMenu.MoveDown}"
                   Command="{Binding HotKeys.MoveDownCmd}"
                   InputGesture="Alt+Down"
                   IsEnabled="{Binding CanMoveDown}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Delete}"
+                  Header="{Binding i18n.ContextMenu.Delete}"
                   Command="{Binding HotKeys.DeleteCmd}"
                   InputGesture="Delete"/>
             </ContextMenu>
@@ -123,49 +123,49 @@
           <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.NewFolder}"
+                  Header="{Binding i18n.ContextMenu.NewFolder}"
                   Command="{Binding AddNewFolderCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.NewHttpRequest}"
+                  Header="{Binding i18n.ContextMenu.NewHttpRequest}"
                   Command="{Binding AddNewHttpRequestCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.NewWebSocketConnection}"
+                  Header="{Binding i18n.ContextMenu.NewWebSocketConnection}"
                   Command="{Binding AddNewWebSocketConnectionCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Cut}"
+                  Header="{Binding i18n.ContextMenu.Cut}"
                   Command="{Binding HotKeys.CutCmd}"
                   InputGesture="Ctrl+X"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Copy}"
+                  Header="{Binding i18n.ContextMenu.Copy}"
                   Command="{Binding HotKeys.CopyCmd}"
                   InputGesture="Ctrl+C"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Paste}"
+                  Header="{Binding i18n.ContextMenu.Paste}"
                   Command="{Binding HotKeys.PasteCmd}"
                   InputGesture="Ctrl+V"
                   IsEnabled="{Binding ClipboardArea.CanPasteCollectionFolderOrRequest}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Rename}"
+                  Header="{Binding i18n.ContextMenu.Rename}"
                   Command="{Binding HotKeys.RenameCmd}"
                   InputGesture="F2"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.MoveUp}"
+                  Header="{Binding i18n.ContextMenu.MoveUp}"
                   Command="{Binding HotKeys.MoveUpCmd}"
                   InputGesture="Alt+Up"
                   IsEnabled="{Binding CanMoveUp}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.MoveDown}"
+                  Header="{Binding i18n.ContextMenu.MoveDown}"
                   Command="{Binding HotKeys.MoveDownCmd}"
                   InputGesture="Alt+Down"
                   IsEnabled="{Binding CanMoveDown}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Delete}"
+                  Header="{Binding i18n.ContextMenu.Delete}"
                   Command="{Binding HotKeys.DeleteCmd}"
                   InputGesture="Delete"/>
             </ContextMenu>
@@ -179,16 +179,16 @@
           <StackPanel.ContextMenu>
             <ContextMenu>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.NewEnvironment}"
+                  Header="{Binding i18n.ContextMenu.NewEnvironment}"
                   Command="{Binding AddNewEnvironmentCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Paste}"
+                  Header="{Binding i18n.ContextMenu.Paste}"
                   Command="{Binding HotKeys.PasteCmd}"
                   InputGesture="Ctrl+V"
                   IsEnabled="{Binding ClipboardArea.CanPasteEnvironment}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.ImportEnvironment}"
+                  Header="{Binding i18n.ContextMenu.ImportEnvironment}"
                   Command="{Binding ImportEnvironmentsCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
             </ContextMenu>
@@ -204,32 +204,32 @@
           <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Cut}"
+                  Header="{Binding i18n.ContextMenu.Cut}"
                   Command="{Binding HotKeys.CutCmd}"
                   InputGesture="Ctrl+X"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Copy}"
+                  Header="{Binding i18n.ContextMenu.Copy}"
                   Command="{Binding HotKeys.CopyCmd}"
                   InputGesture="Ctrl+C"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Rename}"
+                  Header="{Binding i18n.ContextMenu.Rename}"
                   Command="{Binding HotKeys.RenameCmd}"
                   InputGesture="F2"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.MoveUp}"
+                  Header="{Binding i18n.ContextMenu.MoveUp}"
                   Command="{Binding HotKeys.MoveUpCmd}"
                   InputGesture="Alt+Up"
                   IsEnabled="{Binding CanMoveUp}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.MoveDown}"
+                  Header="{Binding i18n.ContextMenu.MoveDown}"
                   Command="{Binding HotKeys.MoveDownCmd}"
                   InputGesture="Alt+Down"
                   IsEnabled="{Binding CanMoveDown}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Delete}"
+                  Header="{Binding i18n.ContextMenu.Delete}"
                   Command="{Binding HotKeys.DeleteCmd}"
                   InputGesture="Delete"/>
             </ContextMenu>
@@ -243,41 +243,41 @@
           <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.NewWebSocketClientMessage}"
+                  Header="{Binding i18n.ContextMenu.NewWebSocketClientMessage}"
                   Command="{Binding AddNewWebSocketClientMessageCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Cut}"
+                  Header="{Binding i18n.ContextMenu.Cut}"
                   Command="{Binding HotKeys.CutCmd}"
                   InputGesture="Ctrl+X"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Copy}"
+                  Header="{Binding i18n.ContextMenu.Copy}"
                   Command="{Binding HotKeys.CopyCmd}"
                   InputGesture="Ctrl+C"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Paste}"
+                  Header="{Binding i18n.ContextMenu.Paste}"
                   Command="{Binding HotKeys.PasteCmd}"
                   InputGesture="Ctrl+V"
                   IsEnabled="{Binding ClipboardArea.CanPasteWebSocketClientMessage}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Rename}"
+                  Header="{Binding i18n.ContextMenu.Rename}"
                   Command="{Binding HotKeys.RenameCmd}"
                   InputGesture="F2"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.MoveUp}"
+                  Header="{Binding i18n.ContextMenu.MoveUp}"
                   Command="{Binding HotKeys.MoveUpCmd}"
                   InputGesture="Alt+Up"
                   IsEnabled="{Binding CanMoveUp}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.MoveDown}"
+                  Header="{Binding i18n.ContextMenu.MoveDown}"
                   Command="{Binding HotKeys.MoveDownCmd}"
                   InputGesture="Alt+Down"
                   IsEnabled="{Binding CanMoveDown}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Delete}"
+                  Header="{Binding i18n.ContextMenu.Delete}"
                   Command="{Binding HotKeys.DeleteCmd}"
                   InputGesture="Delete"/>
             </ContextMenu>
@@ -289,32 +289,32 @@
           <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Cut}"
+                  Header="{Binding i18n.ContextMenu.Cut}"
                   Command="{Binding HotKeys.CutCmd}"
                   InputGesture="Ctrl+X"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Copy}"
+                  Header="{Binding i18n.ContextMenu.Copy}"
                   Command="{Binding HotKeys.CopyCmd}"
                   InputGesture="Ctrl+C"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Rename}"
+                  Header="{Binding i18n.ContextMenu.Rename}"
                   Command="{Binding HotKeys.RenameCmd}"
                   InputGesture="F2"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.MoveUp}"
+                  Header="{Binding i18n.ContextMenu.MoveUp}"
                   Command="{Binding HotKeys.MoveUpCmd}"
                   InputGesture="Alt+Up"
                   IsEnabled="{Binding CanMoveUp}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.MoveDown}"
+                  Header="{Binding i18n.ContextMenu.MoveDown}"
                   Command="{Binding HotKeys.MoveDownCmd}"
                   InputGesture="Alt+Down"
                   IsEnabled="{Binding CanMoveDown}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Delete}"
+                  Header="{Binding i18n.ContextMenu.Delete}"
                   Command="{Binding HotKeys.DeleteCmd}"
                   InputGesture="Delete"/>
             </ContextMenu>
@@ -326,37 +326,37 @@
           <StackPanel.ContextMenu>
             <ContextMenu>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.SetAsCurrentEnvironment}"
+                  Header="{Binding i18n.ContextMenu.SetAsCurrentEnvironment}"
                   Command="{Binding SetAsCurrentEnvironmentCmd}"
                   IsEnabled="{Binding !IsCurrentEnvironment}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Cut}"
+                  Header="{Binding i18n.ContextMenu.Cut}"
                   Command="{Binding HotKeys.CutCmd}"
                   InputGesture="Ctrl+X"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Copy}"
+                  Header="{Binding i18n.ContextMenu.Copy}"
                   Command="{Binding HotKeys.CopyCmd}"
                   InputGesture="Ctrl+C"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Rename}"
+                  Header="{Binding i18n.ContextMenu.Rename}"
                   Command="{Binding HotKeys.RenameCmd}"
                   InputGesture="F2"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.MoveUp}"
+                  Header="{Binding i18n.ContextMenu.MoveUp}"
                   Command="{Binding HotKeys.MoveUpCmd}"
                   InputGesture="Alt+Up"
                   IsEnabled="{Binding CanMoveUp}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.MoveDown}"
+                  Header="{Binding i18n.ContextMenu.MoveDown}"
                   Command="{Binding HotKeys.MoveDownCmd}"
                   InputGesture="Alt+Down"
                   IsEnabled="{Binding CanMoveDown}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.CollectionsGroupContextMenu.Delete}"
+                  Header="{Binding i18n.ContextMenu.Delete}"
                   InputGesture="Delete"
                   Command="{Binding HotKeys.DeleteCmd}"/>
             </ContextMenu>
