@@ -52,7 +52,11 @@ public static class PororocaThemeManager
         {
             var textEditorThemeName = MapTextEditorTheme(theme);
             var textEditorTheme = TextEditorConfiguration.DefaultRegistryOptions!.Value!.LoadTheme(textEditorThemeName);
-            TextEditorConfiguration.TextMateInstallations.ForEach(tmi => tmi.SetTheme(textEditorTheme));
+            TextEditorConfiguration.TextMateInstallations.ForEach(tmi => 
+            {
+                tmi.Item1.TextArea.TextView.LinkTextForegroundBrush = MapLinkColourForEditorTheme(theme);
+                tmi.Item2.SetTheme(textEditorTheme);
+            });
         }
 
         currentThemeField = theme;
@@ -74,5 +78,15 @@ public static class PororocaThemeManager
             PororocaTheme.Dark => ThemeName.DarkPlus,
             PororocaTheme.AmazonianNight => ThemeName.DarkPlus,
             _ => ThemeName.DarkPlus
+        };
+
+    public static IImmutableSolidColorBrush MapLinkColourForEditorTheme(PororocaTheme theme) =>
+        theme switch
+        {
+            PororocaTheme.Light => Brushes.DarkBlue,
+            PororocaTheme.Pampa => Brushes.DarkBlue,
+            PororocaTheme.Dark => Brushes.LightBlue,
+            PororocaTheme.AmazonianNight => Brushes.LightBlue,
+            _ => Brushes.LightBlue
         };
 }

@@ -10,7 +10,7 @@ namespace Pororoca.Desktop.TextEditorConfig;
 internal static class TextEditorConfiguration
 {
     public static readonly Lazy<CustomTextMateRegistryOptions> DefaultRegistryOptions = new(LoadDefaultRegistryOptions);
-    public static readonly List<TextMate.Installation> TextMateInstallations = new();
+    public static readonly List<(TextEditor, TextMate.Installation)> TextMateInstallations = new();
     public static readonly List<PororocaVariableColorizingTransformer> PororocaVariableHighlightingTransformers = new();
 
     private static CustomTextMateRegistryOptions LoadDefaultRegistryOptions()
@@ -34,10 +34,11 @@ internal static class TextEditorConfiguration
             }
         };
         editor.Options.ShowBoxForControlCharacters = true;
-        editor.Options.EnableEmailHyperlinks = false;
-        editor.Options.EnableHyperlinks = false;
+        editor.Options.EnableEmailHyperlinks = true;
+        editor.Options.EnableHyperlinks = true;
         editor.TextArea.IndentationStrategy = new AvaloniaEdit.Indentation.DefaultIndentationStrategy();
         editor.TextArea.RightClickMovesCaret = true;
+        editor.TextArea.TextView.LinkTextForegroundBrush = PororocaThemeManager.MapLinkColourForEditorTheme(PororocaThemeManager.CurrentTheme);
 
         var textMateInstallation = editor.InstallTextMate(DefaultRegistryOptions.Value!);
         // the line below must be added only after the TextMate installation above
@@ -62,7 +63,7 @@ internal static class TextEditorConfiguration
                 editor.FontSize = editor.FontSize > 1 ? editor.FontSize - 1 : 1;
         }, RoutingStrategies.Bubble, true);
 
-        TextMateInstallations.Add(textMateInstallation);
+        TextMateInstallations.Add((editor, textMateInstallation));
         return textMateInstallation;
     }
 }
