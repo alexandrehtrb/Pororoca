@@ -25,7 +25,7 @@ public partial class MainWindow : Window
     protected override void OnClosed(EventArgs e)
     {
         base.OnClosed(e);
-        TextEditorConfiguration.TextMateInstallations.ForEach(i => i.Dispose());
+        TextEditorConfiguration.TextMateInstallations.ForEach(i => i.Item2.Dispose());
     }
 
     public void OnCloseMainWindow(object sender, RoutedEventArgs e) =>

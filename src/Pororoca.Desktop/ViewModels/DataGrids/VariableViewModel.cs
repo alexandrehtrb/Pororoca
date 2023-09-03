@@ -4,7 +4,7 @@ using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace Pororoca.Desktop.ViewModels;
+namespace Pororoca.Desktop.ViewModels.DataGrids;
 
 public class VariableViewModel : ViewModelBase
 {

@@ -5,6 +5,7 @@ using AvaloniaEdit.Document;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
+using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
@@ -100,8 +101,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST HEADERS
 
-    public ObservableCollection<KeyValueParamViewModel> RequestHeaders { get; }
-    public ReactiveCommand<Unit, Unit> AddNewRequestHeaderCmd { get; }
+    public KeyValueParamsDataGridViewModel RequestHeadersTableVm { get; }
 
     #endregion
 
@@ -189,16 +189,13 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST BODY URL ENCODED
 
-    public ObservableCollection<KeyValueParamViewModel> UrlEncodedParams { get; }
-    public ReactiveCommand<Unit, Unit> AddNewUrlEncodedParamCmd { get; }
+    public KeyValueParamsDataGridViewModel UrlEncodedParamsTableVm { get; }
 
     #endregion
 
     #region REQUEST BODY FORM DATA
 
-    public ObservableCollection<HttpRequestFormDataParamViewModel> FormDataParams { get; }
-    public ReactiveCommand<Unit, Unit> AddNewFormDataTextParamCmd { get; }
-    public ReactiveCommand<Unit, Unit> AddNewFormDataFileParamCmd { get; }
+    public FormDataParamsDataGridViewModel FormDataParamsTableVm { get; }    
 
     #endregion
 
@@ -271,15 +268,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         int reqHttpVersionSelectionIndex = RequestHttpVersionSelectionOptions.IndexOf(FormatHttpVersionString(req.HttpVersion));
         RequestHttpVersionSelectedIndex = reqHttpVersionSelectionIndex >= 0 ? reqHttpVersionSelectionIndex : 0;
 
-        RequestHeaders = new();
-        if (req.Headers is not null)
-        {
-            foreach (var h in req.Headers)
-            {
-                RequestHeaders.Add(new(RequestHeaders, h));
-            }
-        }
-        AddNewRequestHeaderCmd = ReactiveCommand.Create(AddNewHeader);
+        RequestHeadersTableVm = new(req.Headers);
         #endregion
 
         #region REQUEST BODY
@@ -313,26 +302,9 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         RequestBodyFileSrcPath = req.Body?.FileSrcPath;
         SearchRequestBodyRawFileCmd = ReactiveCommand.CreateFromTask(SearchRequestBodyRawFilePathAsync);
         // URL ENCODED
-        UrlEncodedParams = new();
-        if (req.Body?.UrlEncodedValues is not null)
-        {
-            foreach (var v in req.Body.UrlEncodedValues)
-            {
-                UrlEncodedParams.Add(new(UrlEncodedParams, v));
-            }
-        }
-        AddNewUrlEncodedParamCmd = ReactiveCommand.Create(AddNewUrlEncodedParam);
+        UrlEncodedParamsTableVm = new(req.Body?.UrlEncodedValues);
         // FORM DATA
-        FormDataParams = new();
-        if (req.Body?.FormDataValues is not null)
-        {
-            foreach (var v in req.Body.FormDataValues)
-            {
-                FormDataParams.Add(new(FormDataParams, v));
-            }
-        }
-        AddNewFormDataTextParamCmd = ReactiveCommand.Create(AddNewFormDataTextParam);
-        AddNewFormDataFileParamCmd = ReactiveCommand.CreateFromTask(AddNewFormDataFileParam);
+        FormDataParamsTableVm = new(req.Body?.FormDataValues);
         // GRAPHQL
         RequestBodyGraphQlQuery = req.Body?.GraphQlValues?.Query;
         RequestBodyGraphQlVariables = req.Body?.GraphQlValues?.Variables;
@@ -386,9 +358,6 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST HEADERS
 
-    private void AddNewHeader() =>
-        RequestHeaders.Add(new(RequestHeaders, true, string.Empty, string.Empty));
-
     #endregion
 
     #region REQUEST BODY FILE
@@ -414,33 +383,9 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST BODY URL ENCODED
 
-    private void AddNewUrlEncodedParam() =>
-        UrlEncodedParams.Add(new(UrlEncodedParams, true, string.Empty, string.Empty));
-
     #endregion
 
     #region REQUEST BODY FORM DATA
-
-    private void AddNewFormDataTextParam()
-    {
-        PororocaHttpRequestFormDataParam p = new(true, string.Empty);
-        p.SetTextValue(string.Empty, MimeTypesDetector.DefaultMimeTypeForText);
-        FormDataParams.Add(new(FormDataParams, p));
-    }
-
-    private async Task AddNewFormDataFileParam()
-    {
-        string? fileSrcPath = await SearchFileWithDialogAsync();
-        if (fileSrcPath != null)
-        {
-            MimeTypesDetector.TryFindMimeTypeForFile(fileSrcPath, out string? mimeType);
-            mimeType ??= MimeTypesDetector.DefaultMimeTypeForBinary;
-
-            PororocaHttpRequestFormDataParam p = new(true, string.Empty);
-            p.SetFileValue(fileSrcPath, mimeType);
-            FormDataParams.Add(new(FormDataParams, p));
-        }
-    }
 
     #endregion
 
@@ -455,10 +400,10 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
                 body.SetGraphQlContent(RequestBodyGraphQlQuery, RequestBodyGraphQlVariables);
                 break;
             case PororocaHttpRequestBodyMode.FormData:
-                body.SetFormDataContent(FormDataParams.Select(p => p.ToFormDataParam()));
+                body.SetFormDataContent(FormDataParamsTableVm.Items.Select(p => p.ToFormDataParam()));
                 break;
             case PororocaHttpRequestBodyMode.UrlEncoded:
-                body.SetUrlEncodedContent(UrlEncodedParams.Select(p => p.ToKeyValueParam()));
+                body.SetUrlEncodedContent(UrlEncodedParamsTableVm.Items.Select(p => p.ToKeyValueParam()));
                 break;
             case PororocaHttpRequestBodyMode.File:
                 body.SetFileContent(RequestBodyFileSrcPath ?? string.Empty, RequestFileContentType ?? string.Empty);
@@ -486,7 +431,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
             httpMethod: RequestMethod.ToString(),
             url: RequestUrl,
             customAuth: RequestAuthDataCtx.ToCustomAuth(),
-            headers: RequestHeaders.Count == 0 ? null : RequestHeaders.Select(h => h.ToKeyValueParam()),
+            headers: RequestHeadersTableVm.Items.Count == 0 ? null : RequestHeadersTableVm.Items.Select(h => h.ToKeyValueParam()),
             body: WrapRequestBodyFromInputs());
 
     #endregion

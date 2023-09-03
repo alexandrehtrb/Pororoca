@@ -216,7 +216,7 @@
                   Padding="2"
                   Margin="12,0,0,0"
                   Classes="Primary"
-                  Command="{Binding AddNewRequestHeaderCmd}">
+                  Command="{Binding RequestHeadersTableVm.AddNewCmd}">
                 <Button.Content>
                   <Image
                       VerticalAlignment="Center"
@@ -235,8 +235,37 @@
                   Margin="0,12,0,0"
                   VerticalAlignment="Stretch"
                   AutoGenerateColumns="False"
-                  ItemsSource="{Binding RequestHeaders}"
+                  ItemsSource="{Binding RequestHeadersTableVm.Items}"
+                  SelectionChanged="OnSelectedRequestHeadersChanged"
                   CanUserResizeColumns="True">
+                  <DataGrid.KeyBindings>
+                    <KeyBinding Command="{Binding RequestHeadersTableVm.CutCmd}" Gesture="Ctrl+X" />
+                    <KeyBinding Command="{Binding RequestHeadersTableVm.CopyCmd}" Gesture="Ctrl+C" />
+                    <KeyBinding Command="{Binding RequestHeadersTableVm.PasteCmd}" Gesture="Ctrl+V" />
+                    <KeyBinding Command="{Binding RequestHeadersTableVm.DuplicateCmd}" Gesture="Ctrl+D" />
+                    <KeyBinding Command="{Binding RequestHeadersTableVm.DeleteCmd}" Gesture="Delete" />
+                  </DataGrid.KeyBindings>
+                  <DataGrid.ContextMenu>
+                    <ContextMenu>
+                      <MenuItem
+                            Header="{Binding i18n.ContextMenu.Cut}"
+                            Command="{Binding RequestHeadersTableVm.CutCmd}"
+                            InputGesture="Ctrl+X"/>
+                        <MenuItem
+                            Header="{Binding i18n.ContextMenu.Copy}"
+                            Command="{Binding RequestHeadersTableVm.CopyCmd}"
+                            InputGesture="Ctrl+C"/>
+                        <MenuItem
+                            Header="{Binding i18n.ContextMenu.Paste}"
+                            Command="{Binding RequestHeadersTableVm.PasteCmd}"
+                            InputGesture="Ctrl+V"
+                            IsEnabled="{Binding RequestHeadersTableVm.InnerClipboardArea.CanPaste}"/>
+                        <MenuItem
+                            Header="{Binding i18n.ContextMenu.Delete}"
+                            Command="{Binding RequestHeadersTableVm.DeleteCmd}"
+                            InputGesture="Delete"/>
+                    </ContextMenu>
+                  </DataGrid.ContextMenu>
                 <i:Interaction.Behaviors>
                   <i:BehaviorCollection>
                     <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}"/>
@@ -425,7 +454,7 @@
                     VerticalContentAlignment="Center"
                     Padding="2"
                     Classes="Primary"
-                    Command="{Binding AddNewUrlEncodedParamCmd}">
+                    Command="{Binding UrlEncodedParamsTableVm.AddNewCmd}">
                   <Button.Content>
                     <Image
                         VerticalAlignment="Center"
@@ -443,8 +472,37 @@
                     Grid.Row="1"
                     Margin="-12,12,-12,0"
                     AutoGenerateColumns="False"
-                    ItemsSource="{Binding UrlEncodedParams}"
+                    ItemsSource="{Binding UrlEncodedParamsTableVm.Items}"
+                    SelectionChanged="OnSelectedUrlEncodedParamsChanged"
                     CanUserResizeColumns="True">
+                    <DataGrid.KeyBindings>
+                      <KeyBinding Command="{Binding UrlEncodedParamsTableVm.CutCmd}" Gesture="Ctrl+X" />
+                      <KeyBinding Command="{Binding UrlEncodedParamsTableVm.CopyCmd}" Gesture="Ctrl+C" />
+                      <KeyBinding Command="{Binding UrlEncodedParamsTableVm.PasteCmd}" Gesture="Ctrl+V" />
+                      <KeyBinding Command="{Binding UrlEncodedParamsTableVm.DuplicateCmd}" Gesture="Ctrl+D" />
+                      <KeyBinding Command="{Binding UrlEncodedParamsTableVm.DeleteCmd}" Gesture="Delete" />
+                    </DataGrid.KeyBindings>
+                    <DataGrid.ContextMenu>
+                      <ContextMenu>
+                        <MenuItem
+                              Header="{Binding i18n.ContextMenu.Cut}"
+                              Command="{Binding UrlEncodedParamsTableVm.CutCmd}"
+                              InputGesture="Ctrl+X"/>
+                          <MenuItem
+                              Header="{Binding i18n.ContextMenu.Copy}"
+                              Command="{Binding UrlEncodedParamsTableVm.CopyCmd}"
+                              InputGesture="Ctrl+C"/>
+                          <MenuItem
+                              Header="{Binding i18n.ContextMenu.Paste}"
+                              Command="{Binding UrlEncodedParamsTableVm.PasteCmd}"
+                              InputGesture="Ctrl+V"
+                              IsEnabled="{Binding UrlEncodedParamsTableVm.InnerClipboardArea.CanPaste}"/>
+                          <MenuItem
+                              Header="{Binding i18n.ContextMenu.Delete}"
+                              Command="{Binding UrlEncodedParamsTableVm.DeleteCmd}"
+                              InputGesture="Delete"/>
+                      </ContextMenu>
+                    </DataGrid.ContextMenu>
                   <i:Interaction.Behaviors>
                     <i:BehaviorCollection>
                       <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}"/>
@@ -513,12 +571,12 @@
                   <Button
                       Content="{Binding i18n.HttpRequest.BodyFormDataTextParamAdd}"
                       Margin="0,0,3,0"
-                      Command="{Binding AddNewFormDataTextParamCmd}"
+                      Command="{Binding FormDataParamsTableVm.AddNewFormDataTextParamCmd}"
                       Classes="Primary"/>
                   <Button
                       Content="{Binding i18n.HttpRequest.BodyFormDataFileParamAdd}"
                       Margin="3,0,0,0"
-                      Command="{Binding AddNewFormDataFileParamCmd}"
+                      Command="{Binding FormDataParamsTableVm.AddNewFormDataFileParamCmd}"
                       Classes="Primary"/>
                 </StackPanel>
                 <DataGrid
@@ -526,8 +584,37 @@
                     Grid.Row="1"
                     Margin="-12,24,-12,0"
                     AutoGenerateColumns="False"
-                    ItemsSource="{Binding FormDataParams}"
+                    ItemsSource="{Binding FormDataParamsTableVm.Items}"
+                    SelectionChanged="OnSelectedFormDataParamsChanged"
                     CanUserResizeColumns="True">
+                  <DataGrid.KeyBindings>
+                    <KeyBinding Command="{Binding FormDataParamsTableVm.CutCmd}" Gesture="Ctrl+X" />
+                    <KeyBinding Command="{Binding FormDataParamsTableVm.CopyCmd}" Gesture="Ctrl+C" />
+                    <KeyBinding Command="{Binding FormDataParamsTableVm.PasteCmd}" Gesture="Ctrl+V" />
+                    <KeyBinding Command="{Binding FormDataParamsTableVm.DuplicateCmd}" Gesture="Ctrl+D" />
+                    <KeyBinding Command="{Binding FormDataParamsTableVm.DeleteCmd}" Gesture="Delete" />
+                  </DataGrid.KeyBindings>
+                  <DataGrid.ContextMenu>
+                    <ContextMenu>
+                      <MenuItem
+                            Header="{Binding i18n.ContextMenu.Cut}"
+                            Command="{Binding FormDataParamsTableVm.CutCmd}"
+                            InputGesture="Ctrl+X"/>
+                        <MenuItem
+                            Header="{Binding i18n.ContextMenu.Copy}"
+                            Command="{Binding FormDataParamsTableVm.CopyCmd}"
+                            InputGesture="Ctrl+C"/>
+                        <MenuItem
+                            Header="{Binding i18n.ContextMenu.Paste}"
+                            Command="{Binding FormDataParamsTableVm.PasteCmd}"
+                            InputGesture="Ctrl+V"
+                            IsEnabled="{Binding FormDataParamsTableVm.InnerClipboardArea.CanPaste}"/>
+                        <MenuItem
+                            Header="{Binding i18n.ContextMenu.Delete}"
+                            Command="{Binding FormDataParamsTableVm.DeleteCmd}"
+                            InputGesture="Delete"/>
+                    </ContextMenu>
+                  </DataGrid.ContextMenu>
                   <i:Interaction.Behaviors>
                     <i:BehaviorCollection>
                       <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropFormDataParamViewModelHandler}"/>
@@ -686,8 +773,20 @@
                 Margin="-12,12,-12,12"
                 VerticalAlignment="Stretch"
                 AutoGenerateColumns="False"
-                ItemsSource="{Binding ResponseDataCtx.ResponseHeadersAndTrailers}"
+                ItemsSource="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.Items}"
+                SelectionChanged="OnSelectedResponseHeadersAndTrailersChanged"
                 CanUserResizeColumns="True">
+              <DataGrid.KeyBindings>
+                <KeyBinding Command="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.CopyCmd}" Gesture="Ctrl+C" />
+              </DataGrid.KeyBindings>
+              <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem
+                        Header="{Binding i18n.ContextMenu.Copy}"
+                        Command="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.CopyCmd}"
+                        InputGesture="Ctrl+C"/>
+                </ContextMenu>
+              </DataGrid.ContextMenu>
               <i:Interaction.Behaviors>
                 <i:BehaviorCollection>
                   <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}"/>

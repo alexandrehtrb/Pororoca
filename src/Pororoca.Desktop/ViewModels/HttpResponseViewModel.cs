@@ -1,9 +1,9 @@
-using System.Collections.ObjectModel;
 using System.Net;
 using System.Reactive;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
+using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using ReactiveUI;
@@ -25,7 +25,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
     [Reactive]
     public int ResponseTabsSelectedIndex { get; set; }
 
-    public ObservableCollection<KeyValueParamViewModel> ResponseHeadersAndTrailers { get; }
+    public KeyValueParamsDataGridViewModel ResponseHeadersAndTrailersTableVm { get; }
 
     [Reactive]
     public TextDocument? ResponseRawContentTextDocument { get; set; }
@@ -51,7 +51,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
 
     public HttpResponseViewModel()
     {
-        ResponseHeadersAndTrailers = new();
+        ResponseHeadersAndTrailersTableVm = new();
         SaveResponseBodyToFileCmd = ReactiveCommand.CreateFromTask(SaveResponseBodyToFileAsync);
         DisableTlsVerificationCmd = ReactiveCommand.Create(DisableTlsVerification);
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
@@ -148,19 +148,20 @@ public sealed class HttpResponseViewModel : ViewModelBase
 
     private void UpdateHeadersAndTrailers(IEnumerable<KeyValuePair<string, string>>? resHeaders, IEnumerable<KeyValuePair<string, string>>? resTrailers)
     {
-        ResponseHeadersAndTrailers.Clear();
+        var tableItems = ResponseHeadersAndTrailersTableVm.Items;
+        tableItems.Clear();
         if (resHeaders != null)
         {
             foreach (var kvp in resHeaders)
             {
-                ResponseHeadersAndTrailers.Add(new(ResponseHeadersAndTrailers, true, kvp.Key, kvp.Value));
+                tableItems.Add(new(tableItems, true, kvp.Key, kvp.Value));
             }
         }
         if (resTrailers != null)
         {
             foreach (var kvp in resTrailers)
             {
-                ResponseHeadersAndTrailers.Add(new(ResponseHeadersAndTrailers, true, kvp.Key, kvp.Value));
+                tableItems.Add(new(tableItems, true, kvp.Key, kvp.Value));
             }
         }
     }

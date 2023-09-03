@@ -5,7 +5,7 @@ using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace Pororoca.Desktop.ViewModels;
+namespace Pororoca.Desktop.ViewModels.DataGrids;
 
 public sealed class HttpRequestFormDataParamViewModel : ViewModelBase
 {
@@ -48,15 +48,11 @@ public sealed class HttpRequestFormDataParamViewModel : ViewModelBase
     {
         if (ParamType == PororocaHttpRequestFormDataParamType.File)
         {
-            PororocaHttpRequestFormDataParam p = new(Enabled, Key);
-            p.SetFileValue(Value, ContentType);
-            return p;
+            return PororocaHttpRequestFormDataParam.MakeFileParam(Enabled, Key, Value, ContentType);
         }
         else
         {
-            PororocaHttpRequestFormDataParam p = new(Enabled, Key);
-            p.SetTextValue(Value, ContentType);
-            return p;
+            return PororocaHttpRequestFormDataParam.MakeTextParam(Enabled, Key, Value, ContentType);
         }
     }
 
