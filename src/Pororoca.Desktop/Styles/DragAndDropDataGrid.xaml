@@ -16,7 +16,7 @@
         x:TypeArguments="vm:KeyValueParamViewModel"/>
     <b:DataGridDragAndDropBehavior
         x:Key="DataGridDragAndDropFormDataParamViewModelHandler"
-        x:TypeArguments="vm:HttpRequestFormDataParamViewModel"/>
+        x:TypeArguments="vm:FormDataParamViewModel"/>
   </Styles.Resources>
 
   <Style Selector="DataGrid.dragging-up DataGridRow.dragging">

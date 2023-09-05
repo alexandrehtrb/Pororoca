@@ -163,7 +163,7 @@
     "RequestAuth/PrivateKeyFilePathWatermark": "(caminho da chave privada aqui)",
     "RequestValidation/ClientCertificateFileNotFound": "Arquivo de certificado de cliente não encontrado.",
     "RequestValidation/ClientCertificatePkcs12PasswordCannotBeBlank": "Certificado de cliente PKCS#12 precisa de senha.",
-    "RequestValidation/ClientCertificatePrivateKeyFileNotFound": "Arquivo de chave privada de certificado de cliente não encontrado.",
+    "RequestValidation/ClientCertificatePemPrivateKeyFileNotFound": "Arquivo de chave privada de certificado de cliente não encontrado.",
     "RequestValidation/ContentTypeCannotBeBlankReqBodyRawOrFile": "O corpo de requisição requer um Content-Type.",
     "RequestValidation/Http2Unavailable": "No Windows, suporte ao HTTP/2 requer Windows 10 ou superior.",
     "RequestValidation/Http3Unavailable": "HTTP/3 só está disponível para Linux ou Windows 11 e superior.",

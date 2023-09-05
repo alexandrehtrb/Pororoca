@@ -480,7 +480,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         {
             TranslateRequestErrors.ClientCertificateFileNotFound => Localizer.Instance.RequestValidation.ClientCertificateFileNotFound,
             TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank => Localizer.Instance.RequestValidation.ClientCertificatePkcs12PasswordCannotBeBlank,
-            TranslateRequestErrors.ClientCertificatePrivateKeyFileNotFound => Localizer.Instance.RequestValidation.ClientCertificatePrivateKeyFileNotFound,
+            TranslateRequestErrors.ClientCertificatePemPrivateKeyFileNotFound => Localizer.Instance.RequestValidation.ClientCertificatePemPrivateKeyFileNotFound,
             TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRaw => Localizer.Instance.RequestValidation.ContentTypeCannotBeBlankReqBodyRawOrFile,
             TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyFile => Localizer.Instance.RequestValidation.ContentTypeCannotBeBlankReqBodyRawOrFile,
             TranslateRequestErrors.Http2UnavailableInOSVersion => Localizer.Instance.RequestValidation.Http2Unavailable,

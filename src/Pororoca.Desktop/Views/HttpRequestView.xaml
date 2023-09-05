@@ -64,6 +64,7 @@
           ColumnDefinitions="Auto, *, Auto, Auto">
 
         <ComboBox
+            Name="cbHttpMethod"
             Grid.Column="0"
             Grid.Row="0"
             Width="120"
@@ -94,6 +95,7 @@
               PointerEntered="OnRequestUrlPointerEnter"/>
 
           <TextBlock
+              Name="tbErrorMsg"
               Margin="12,6,12,0"
               Classes="ErrorMessage"
               Text="{Binding InvalidRequestMessage}"
@@ -102,6 +104,7 @@
         </StackPanel>
 
         <ComboBox
+            Name="cbHttpVersion"
             Grid.Column="2"
             Grid.Row="0"
             Width="120"
@@ -122,6 +125,7 @@
             VerticalAlignment="Stretch">
 
           <Button
+              Name="btSendRequest"
               Height="40"
               Width="104"
               HorizontalContentAlignment="Center"
@@ -133,6 +137,7 @@
               Classes="Primary"/>
 
           <Button
+              Name="btCancelRequest"
               Height="40"
               Width="104"
               HorizontalContentAlignment="Center"
@@ -186,13 +191,14 @@
             Classes="SectionTitle"
             Text="{Binding i18n.HttpRequest.SectionTitle}"/>
         <TabControl
+            Name="tabControlReq"
             Grid.Column="0"
             Grid.Row="1"
             Margin="12,24,12,12"
             TabStripPlacement="Top"
             SelectedIndex="{Binding RequestTabsSelectedIndex}">
           <!-- REQUEST HEADERS -->
-          <TabItem>
+          <TabItem Name="tabItemReqHeaders">
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
@@ -207,6 +213,7 @@
                 <RowDefinition Height="*"/>
               </Grid.RowDefinitions>
               <Button
+                  Name="btReqHeaderAdd"
                   Grid.Column="0"
                   Grid.Row="0"
                   Height="24"
@@ -230,6 +237,7 @@
                 </Button.Content>
               </Button>
               <DataGrid
+                  Name="dgReqHeaders"
                   Grid.Column="0"
                   Grid.Row="1"
                   Margin="0,12,0,0"
@@ -314,7 +322,7 @@
             </Grid>
           </TabItem>
           <!-- REQUEST BODY -->
-          <TabItem>
+          <TabItem Name="tabItemReqBody">
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
@@ -401,6 +409,7 @@
                   <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <AutoCompleteBox
+                    Name="acbReqBodyFileContentType"
                     Grid.Column="0"
                     Grid.Row="0"
                     Height="36"
@@ -413,6 +422,7 @@
                     FilterMode="Contains"
                     Classes.HasValidationProblem="{Binding HasRequestFileContentTypeValidationProblem}"/>
                 <TextBox
+                    Name="tbReqBodyFileSrcPath"
                     Grid.Column="0"
                     Grid.Row="1"
                     Margin="0,12,0,0"
@@ -424,6 +434,7 @@
                     Classes.HasValidationProblem="{Binding HasRequestBodyFileSrcPathValidationProblem}"
                     Text="{Binding RequestBodyFileSrcPath}"/>
                 <Button
+                    Name="btReqBodyFileSearch"
                     Grid.Column="0"
                     Grid.Row="2"
                     Content="{Binding i18n.HttpRequest.BodyFileSearchFile}"
@@ -446,6 +457,7 @@
                   <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Button
+                    Name="btReqBodyUrlEncodedAddParam"
                     Grid.Column="0"
                     Grid.Row="0"
                     Height="24"
@@ -468,6 +480,7 @@
                   </Button.Content>
                 </Button>
                 <DataGrid
+                    Name="dgReqBodyUrlEncodedParams"
                     Grid.Column="0"
                     Grid.Row="1"
                     Margin="-12,12,-12,0"
@@ -569,17 +582,20 @@
                     Orientation="Horizontal"
                     Margin="0,8,0,0">
                   <Button
+                      Name="btReqBodyFormDataAddTextParam"
                       Content="{Binding i18n.HttpRequest.BodyFormDataTextParamAdd}"
                       Margin="0,0,3,0"
                       Command="{Binding FormDataParamsTableVm.AddNewFormDataTextParamCmd}"
                       Classes="Primary"/>
                   <Button
+                      Name="btReqBodyFormDataAddFileParam"
                       Content="{Binding i18n.HttpRequest.BodyFormDataFileParamAdd}"
                       Margin="3,0,0,0"
                       Command="{Binding FormDataParamsTableVm.AddNewFormDataFileParamCmd}"
                       Classes="Primary"/>
                 </StackPanel>
                 <DataGrid
+                    Name="dgReqBodyFormDataParams"
                     Grid.Column="0"
                     Grid.Row="1"
                     Margin="-12,24,-12,0"
@@ -696,6 +712,7 @@
                   <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <TextBox
+                    Name="tbReqBodyGraphQlQuery"
                     Grid.Column="0"
                     Grid.Row="0"
                     Watermark="{Binding i18n.HttpRequest.BodyGraphQlQueryWatermark}"
@@ -710,6 +727,7 @@
                     VerticalAlignment="Stretch"
                     Classes="Separator"/>
                 <TextBox
+                    Name="tbReqBodyGraphQlVariables"
                     Grid.Column="2"
                     Grid.Row="0"
                     Watermark="{Binding i18n.HttpRequest.BodyGraphQlVariablesWatermark}"
@@ -720,13 +738,13 @@
             </Grid>
           </TabItem>
           <!-- REQUEST CUSTOM AUTH -->
-          <TabItem>
+          <TabItem Name="tabItemReqAuth">
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
                   Text="{Binding i18n.HttpRequest.CustomAuth}"/>
             </TabItem.Header>
-            <v:RequestAuthView DataContext="{Binding RequestAuthDataCtx}"/>
+            <v:RequestAuthView x:Name="reqAuthView" DataContext="{Binding RequestAuthDataCtx}"/>
           </TabItem>
         </TabControl>
       </Grid>
@@ -750,12 +768,14 @@
           <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock
+            Name="tbResTitle"
             Grid.Column="0"
             Grid.Row="0"
             Margin="12,28,12,0"
             Classes="SectionTitle"
             Text="{Binding ResponseDataCtx.ResponseStatusCodeElapsedTimeTitle}"/>
         <TabControl
+            Name="tabControlRes"
             Grid.Column="0"
             Grid.Row="1"
             Margin="12,24,12,12"
@@ -763,13 +783,14 @@
             VerticalAlignment="Stretch"
             SelectedIndex="{Binding ResponseDataCtx.ResponseTabsSelectedIndex}">
           <!-- RESPONSE HEADERS AND TRAILERS -->
-          <TabItem>
+          <TabItem Name="tabItemResHeaders">
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
                   Text="{Binding i18n.HttpResponse.Headers}"/>
             </TabItem.Header>
             <DataGrid
+                Name="dgResHeaders"
                 Margin="-12,12,-12,12"
                 VerticalAlignment="Stretch"
                 AutoGenerateColumns="False"
@@ -811,7 +832,7 @@
             </DataGrid>
           </TabItem>
           <!-- RESPONSE BODY -->
-          <TabItem>
+          <TabItem Name="tabItemResBody">
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
@@ -844,6 +865,7 @@
                   Orientation="Horizontal"
                   Margin="0,12,0,0">
                 <Button
+                    Name="btResBodySaveToFile"
                     Content="{Binding i18n.HttpResponse.BodySaveToFile}"
                     ToolTip.Tip="{Binding i18n.HttpResponse.BodySaveToFileToolTip}"
                     ToolTip.Placement="Top"
@@ -852,6 +874,7 @@
                     Command="{Binding ResponseDataCtx.SaveResponseBodyToFileCmd}"
                     Classes="Primary"/>
                 <Button
+                    Name="btResDisableTlsVerification"
                     Content="{Binding i18n.HttpResponse.DisableTlsVerification}"
                     Margin="6,0,0,12"
                     IsVisible="{Binding ResponseDataCtx.IsDisableTlsVerificationVisible}"
@@ -864,6 +887,7 @@
         </TabControl>
         <!-- RESPONSE PROGRESS BAR -->
         <ProgressBar
+            Name="pbResProgressBar"
             Grid.Column="0"
             Grid.Row="2"
             IsIndeterminate="True"

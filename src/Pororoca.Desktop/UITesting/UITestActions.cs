@@ -127,6 +127,34 @@ internal static class UITestActions
         return items;
     }
 
+    internal static async Task Select(this ComboBox cb, string item)
+    {
+        cb.IsDropDownOpen = true;
+        cb.SelectedIndex = cb.Items.IndexOf(cb.Items.First(x => x is string s && s == item));
+        cb.IsDropDownOpen = false;
+        await WaitAfterActionAsync();
+    }
+
+    internal static async Task Select(this ComboBox cb, ComboBoxItem item)
+    {
+        cb.IsDropDownOpen = true;
+        cb.SelectedIndex = cb.Items.IndexOf(item);
+        cb.IsDropDownOpen = false;
+        await WaitAfterActionAsync();
+    }
+
+    internal static async Task Select(this AutoCompleteBox acb, string? item)
+    {
+        acb.SelectedItem = item;
+        await WaitAfterActionAsync();
+    }
+
+    internal static async Task Select(this TabControl tc, TabItem ti)
+    {
+        tc.SelectedItem = ti;
+        await WaitAfterActionAsync();
+    }
+
     internal static async Task ClearText(this TextBox txtBox)
     {
         txtBox.Clear();
@@ -146,6 +174,18 @@ internal static class UITestActions
         args.Text = txt;
         control.RaiseEvent(args);
         await WaitAfterActionAsync();
+    }
+
+    internal static async Task ClearAndTypeText(this TextBox txtBox, string newTxt)
+    {
+        await txtBox.ClearText();
+        await txtBox.TypeText(newTxt);
+    }
+
+    internal static async Task ClearAndTypeText(this TextEditor editor, string newTxt)
+    {
+        await editor.ClearText();
+        await editor.TypeText(newTxt);
     }
 
     internal static async Task PressKey(this Control control, Key key, KeyModifiers keyModifiers = KeyModifiers.None)

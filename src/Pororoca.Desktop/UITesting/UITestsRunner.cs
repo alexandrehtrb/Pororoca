@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Text;
 using Pororoca.Desktop.UITesting.Tests;
 
@@ -15,6 +14,7 @@ public static class UITestsRunner
         new CollectionAndCollectionFolderUITest(),
         new TreeCopyAndPasteItemsUITest(),
         new TreeCutAndPasteItemsUITest(),
+        new HttpRequestValidationsUITest(),
         // TODO: UI tests to be made:
         // new CollectionAndEnvironmentVariablesUITest() // add collection and env variables, check if they are being applied on URL
         // // for the test below:

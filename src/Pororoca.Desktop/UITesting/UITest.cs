@@ -44,7 +44,7 @@ public abstract partial class UITest
 
     public void Finish()
     {
-        Successful ??= true;
+        Successful = Successful is null;
         this.stopwatch.Stop();
         Teardown();
     }

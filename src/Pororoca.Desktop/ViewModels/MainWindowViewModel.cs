@@ -516,14 +516,17 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     private async Task RunUITestsAsync()
     {
         // making a backup of the items' tree and clearing it before the tests
+        var bkupedLang = Localizer.Instance.CurrentLanguage;
         var bkupedItems = CollectionsGroupViewDataCtx.Items.ToList();
         CollectionsGroupViewDataCtx.Items.Clear();
+        SelectLanguage(Language.English);
 
         string resultsLog = await Pororoca.Desktop.UITesting.UITestsRunner.RunAllTestsAsync();
 
         // restoring the items' tree after the tests
         foreach (var item in bkupedItems) { CollectionsGroupViewDataCtx.Items.Add(item); }
         CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
+        SelectLanguage(bkupedLang);
 
         Bitmap bitmap = new(AssetLoader.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
 

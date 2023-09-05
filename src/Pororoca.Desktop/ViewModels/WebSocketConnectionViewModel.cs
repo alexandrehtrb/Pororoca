@@ -159,7 +159,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             {
                 TranslateRequestErrors.ClientCertificateFileNotFound => Localizer.Instance.RequestValidation.ClientCertificateFileNotFound,
                 TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank => Localizer.Instance.RequestValidation.ClientCertificatePkcs12PasswordCannotBeBlank,
-                TranslateRequestErrors.ClientCertificatePrivateKeyFileNotFound => Localizer.Instance.RequestValidation.ClientCertificatePrivateKeyFileNotFound,
+                TranslateRequestErrors.ClientCertificatePemPrivateKeyFileNotFound => Localizer.Instance.RequestValidation.ClientCertificatePemPrivateKeyFileNotFound,
                 TranslateRequestErrors.InvalidUrl => Localizer.Instance.RequestValidation.InvalidUrl,
                 TranslateRequestErrors.Http2UnavailableInOSVersion => Localizer.Instance.RequestValidation.Http2Unavailable,
                 TranslateRequestErrors.WebSocketHttpVersionUnavailable => Localizer.Instance.RequestValidation.WebSocketHttpVersionUnavailable,

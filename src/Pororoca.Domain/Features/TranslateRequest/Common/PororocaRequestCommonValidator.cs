@@ -37,7 +37,7 @@ internal static class PororocaRequestCommonValidator
             }
             else if (customAuth.ClientCertificate.Type == PororocaRequestAuthClientCertificateType.Pem && prvKeyFileSpecified && !prvKeyFileExists)
             {
-                errorCode = TranslateRequestErrors.ClientCertificatePrivateKeyFileNotFound;
+                errorCode = TranslateRequestErrors.ClientCertificatePemPrivateKeyFileNotFound;
                 return false;
             }
             else if (customAuth.ClientCertificate.Type == PororocaRequestAuthClientCertificateType.Pkcs12 && filePasswordIsBlank)

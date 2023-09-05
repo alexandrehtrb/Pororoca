@@ -7,9 +7,9 @@ using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels.DataGrids;
 
-public sealed class HttpRequestFormDataParamViewModel : ViewModelBase
+public sealed class FormDataParamViewModel : ViewModelBase
 {
-    private readonly ObservableCollection<HttpRequestFormDataParamViewModel> parentCollection;
+    private readonly ObservableCollection<FormDataParamViewModel> parentCollection;
 
     public PororocaHttpRequestFormDataParamType ParamType { get; init; }
 
@@ -30,7 +30,7 @@ public sealed class HttpRequestFormDataParamViewModel : ViewModelBase
 
     public ReactiveCommand<Unit, Unit> RemoveParamCmd { get; }
 
-    public HttpRequestFormDataParamViewModel(ObservableCollection<HttpRequestFormDataParamViewModel> parentCollection, PororocaHttpRequestFormDataParam p)
+    public FormDataParamViewModel(ObservableCollection<FormDataParamViewModel> parentCollection, PororocaHttpRequestFormDataParam p)
     {
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
 

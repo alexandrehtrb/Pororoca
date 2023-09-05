@@ -4,7 +4,7 @@ public static class TranslateRequestErrors
 {
     public const string ClientCertificateFileNotFound = "TranslateRequest_ClientCertificateFileNotFound";
     public const string ClientCertificatePkcs12PasswordCannotBeBlank = "TranslateRequest_ClientCertificatePkcs12PasswordCannotBeBlank";
-    public const string ClientCertificatePrivateKeyFileNotFound = "TranslateRequest_ClientCertificatePrivateKeyFileNotFound";
+    public const string ClientCertificatePemPrivateKeyFileNotFound = "TranslateRequest_ClientCertificatePemPrivateKeyFileNotFound";
     public const string ContentTypeCannotBeBlankReqBodyRaw = "TranslateRequest_ContentTypeCannotBeBlankReqBodyRaw";
     public const string ContentTypeCannotBeBlankReqBodyFile = "TranslateRequest_ContentTypeCannotBeBlankReqBodyFile";
     public const string Http2UnavailableInOSVersion = "TranslateRequest_Http2UnavailableInOSVersion";

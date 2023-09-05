@@ -163,7 +163,7 @@
   "RequestAuth/PemImportPrivateKeyFileDialogTitle":"Импорт закрытого ключа в PEM формат",
   "RequestValidation/ClientCertificateFileNotFound": "Файл сертификата клиента не найден.",
   "RequestValidation/ClientCertificatePkcs12PasswordCannotBeBlank": "PKCS#12 для клиентских сертификатов требуется пароль.",
-  "RequestValidation/ClientCertificatePrivateKeyFileNotFound": "Файл закрытого ключа клиентского сертификата не найден.",
+  "RequestValidation/ClientCertificatePemPrivateKeyFileNotFound": "Файл закрытого ключа клиентского сертификата не найден.",
   "RequestValidation/ContentTypeCannotBeBlankReqBodyRawOrFile": "В теле запроса требуется Content-Type.",
   "RequestValidation/Http2Unavailable": "В Windows для поддержки HTTP/2 требуется Windows 10 или более поздней версии.",
   "RequestValidation/Http3Unavailable": "HTTP/3 доступен только для Linux или Windows 11 и более поздних версий.",

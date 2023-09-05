@@ -14,6 +14,10 @@ public abstract partial class UITest
 
     internal void AssertIsVisible(Control control) => Assert((control.IsMeasureValid && control.IsEffectivelyVisible) == true);
 
+    internal void AssertHasStyleClass(Control control, string className) => Assert(control.Classes.Contains(className));
+    
+    internal void AssertDoesntHaveStyleClass(Control control, string className) => Assert(control.Classes.Contains(className) == false);
+
     internal void AssertHasText(TextBlock txtBlock, string txt) => Assert(txtBlock.Text == txt);
 
     internal void AssertHasText(AutoCompleteBox txtBox, string txt) => Assert(txtBox.Text == txt);

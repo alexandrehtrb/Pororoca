@@ -163,7 +163,7 @@
 	"RequestAuth/PrivateKeyFilePathWatermark",
 	"RequestValidation/ClientCertificateFileNotFound",
 	"RequestValidation/ClientCertificatePkcs12PasswordCannotBeBlank",
-	"RequestValidation/ClientCertificatePrivateKeyFileNotFound",
+	"RequestValidation/ClientCertificatePemPrivateKeyFileNotFound",
 	"RequestValidation/ContentTypeCannotBeBlankReqBodyRawOrFile",
 	"RequestValidation/Http2Unavailable",
 	"RequestValidation/Http3Unavailable",
