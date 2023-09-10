@@ -172,12 +172,12 @@
             </MenuItem>
           </MenuItem>
           <MenuItem
-              x:Name="topMenuItemOptionsDisableTlsVerification"
-              Header="{Binding i18n.TopMenuOptions.DisableTlsVerification}"
+              x:Name="topMenuItemOptionsEnableTlsVerification"
+              Header="{Binding i18n.TopMenuOptions.EnableTlsVerification}"
               Command="{Binding ToggleSSLVerificationCmd}">
             <MenuItem.Icon>
               <Image
-                  IsVisible="{Binding IsSslVerificationDisabled}"
+                  IsVisible="{Binding !IsSslVerificationDisabled}"
                   Classes="MenuItemCheckMark">
                 <Image.Source>
                   <DrawingImage Drawing="{StaticResource IconCheck}"/>

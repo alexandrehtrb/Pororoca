@@ -53,7 +53,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
     {
         ResponseHeadersAndTrailersTableVm = new();
         SaveResponseBodyToFileCmd = ReactiveCommand.CreateFromTask(SaveResponseBodyToFileAsync);
-        DisableTlsVerificationCmd = ReactiveCommand.Create(DisableTlsVerification);
+        DisableTlsVerificationCmd = ReactiveCommand.Create(EnableTlsVerification);
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
 
         UpdateWithResponse(this.res);
@@ -100,7 +100,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
         }
     }
 
-    private void DisableTlsVerification()
+    private void EnableTlsVerification()
     {
         ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled = true;
         IsDisableTlsVerificationVisible = false;

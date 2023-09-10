@@ -1,9 +1,8 @@
-using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Media;
 using AvaloniaEdit;
+using AvaloniaEdit.Document;
 using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.ViewModels;
 
@@ -75,6 +74,11 @@ internal static class UITestActions
                     {
                         egvm.IsExpanded = true;
                     }
+                }
+                else if (item == "VARS")
+                {
+                    pvm1.IsExpanded = true;
+                    tempTvi = pvm1.Items.FirstOrDefault(i => i is CollectionVariablesViewModel)!;
                 }
                 else
                 {
@@ -167,12 +171,18 @@ internal static class UITestActions
         await WaitAfterActionAsync();
     }
 
-    internal static async Task TypeText(this Control control, string txt)
+    internal static async Task TypeText(this TextBox control, string txt)
     {
         TextInputEventArgs args = new();
         args.RoutedEvent = InputElement.TextInputEvent;
         args.Text = txt;
         control.RaiseEvent(args);
+        await WaitAfterActionAsync();
+    }
+
+    internal static async Task TypeText(this TextEditor editor, string txt)
+    {
+        editor.Document.Insert(editor.Document.TextLength, txt);
         await WaitAfterActionAsync();
     }
 

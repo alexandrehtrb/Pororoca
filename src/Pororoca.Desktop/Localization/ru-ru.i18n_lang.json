@@ -188,7 +188,7 @@
   "TopMenuLanguage/English": "Английский", 
   "TopMenuLanguage/Português": "Португальский",
   "TopMenuLanguage/Russian": "Русский",
-  "TopMenuOptions/DisableTlsVerification": "Отключить TLS проверку",
+  "TopMenuOptions/EnableTlsVerification": "Включить TLS проверку",
   "TopMenuOptions/Language": "Язык",
   "TopMenuOptions/Theme": "Тема",
   "TopMenuTheme/AmazonianNight": "Amazonian night",

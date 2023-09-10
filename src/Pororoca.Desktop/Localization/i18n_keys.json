@@ -191,7 +191,7 @@
 	"TopMenuLanguage/English",
 	"TopMenuLanguage/Português",
     "TopMenuLanguage/Russian",
-	"TopMenuOptions/DisableTlsVerification",
+	"TopMenuOptions/EnableTlsVerification",
 	"TopMenuOptions/Language",
 	"TopMenuOptions/Theme",
 	"TopMenuTheme/AmazonianNight",

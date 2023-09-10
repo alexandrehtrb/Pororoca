@@ -191,7 +191,7 @@
     "TopMenuLanguage/English": "English",
     "TopMenuLanguage/Português": "Português",
     "TopMenuLanguage/Russian": "Russian",
-    "TopMenuOptions/DisableTlsVerification": "Desabilitar verificação de TLS",
+    "TopMenuOptions/EnableTlsVerification": "Habilitar verificação de TLS",
     "TopMenuOptions/Language": "Idioma",
     "TopMenuOptions/Theme": "Tema",
     "TopMenuTheme/AmazonianNight": "Noite amazônica",

@@ -33,7 +33,7 @@ public sealed class TopMenuUITest : UITest
         AssertIsHidden(Robot.File_Exit);
         AssertIsVisible(Robot.Options_Theme);
         AssertIsVisible(Robot.Options_Language);
-        AssertIsVisible(Robot.Options_DisableTlsVerification);
+        AssertIsVisible(Robot.Options_EnableTlsVerification);
 
         await Robot.Options_Theme.ClickOn();
         AssertIsVisible(Robot.Options_Theme_Light);

@@ -6,6 +6,7 @@ using Pororoca.Desktop.UserData;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Common;
+using Pororoca.Domain.Features.Entities.Pororoca.Http;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
@@ -188,7 +189,7 @@ public sealed class HttpRequestValidationsUITest : UITest
     private async Task TestFormDataValidation()
     {
         // invalid or blank content-type
-        await HttpRobot.SelectFormDataBody();
+        await HttpRobot.SelectFormDataBody(Array.Empty<PororocaHttpRequestFormDataParam>());
         await HttpRobot.ReqBodyFormDataAddTextParam.ClickOn();
         var paramVm = HttpRobot.ReqBodyFormDataParams.ItemsSource.Cast<FormDataParamViewModel>().First();
         
@@ -214,16 +215,14 @@ public sealed class HttpRequestValidationsUITest : UITest
     private async Task TestClientCertificatePkcs12Validation()
     {
         // file not found
-        await HttpRobot.TabControlReq.Select(HttpRobot.TabReqAuth);
-        await HttpRobot.Auth.SelectPkcs12CertificateAuth("K:\\FILES\\cert.p12", string.Empty);
+        await HttpRobot.SelectPkcs12CertificateAuth("K:\\FILES\\cert.p12", string.Empty);
         await HttpRobot.Send.ClickOn();
         AssertIsVisible(HttpRobot.ErrorMsg);
         AssertHasText(HttpRobot.ErrorMsg, "Client certificate file not found.");
         // TODO: AssertIsVisible(HttpRobot.Auth.RootView); // input field should be visible
         // password cannot be blank
-        await HttpRobot.TabControlReq.Select(HttpRobot.TabReqAuth);
         string certFilePath = GetTestFilePath("ClientCertificates", "badssl.com-client.p12");
-        await HttpRobot.Auth.SelectPkcs12CertificateAuth(certFilePath, string.Empty);
+        await HttpRobot.SelectPkcs12CertificateAuth(certFilePath, string.Empty);
         await HttpRobot.Send.ClickOn();
         AssertIsVisible(HttpRobot.ErrorMsg);
         AssertHasText(HttpRobot.ErrorMsg, "PKCS#12 client certificates need a password.");
@@ -233,8 +232,7 @@ public sealed class HttpRequestValidationsUITest : UITest
     private async Task TestClientCertificatePemValidation()
     {
         // certificate file not found
-        await HttpRobot.TabControlReq.Select(HttpRobot.TabReqAuth);
-        await HttpRobot.Auth.SelectPemCertificateAuth("K:\\FILES\\cert.pem", string.Empty, string.Empty);
+        await HttpRobot.SelectPemCertificateAuth("K:\\FILES\\cert.pem", string.Empty, string.Empty);
         await HttpRobot.Send.ClickOn();
         AssertIsVisible(HttpRobot.ErrorMsg);
         AssertHasText(HttpRobot.ErrorMsg, "Client certificate file not found.");
@@ -244,7 +242,7 @@ public sealed class HttpRequestValidationsUITest : UITest
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqAuth);
         string certFilePath = GetTestFilePath("ClientCertificates", "badssl.com-client-certificate-without-private-key.pem");
         string prvKeyFilePath = GetTestFilePath("ClientCertificates", "dgjsdjkg.key");
-        await HttpRobot.Auth.SelectPemCertificateAuth(certFilePath, prvKeyFilePath, string.Empty);
+        await HttpRobot.SelectPemCertificateAuth(certFilePath, prvKeyFilePath, string.Empty);
         await HttpRobot.Send.ClickOn();
         AssertIsVisible(HttpRobot.ErrorMsg);
         AssertHasText(HttpRobot.ErrorMsg, "Client certificate private key file not found.");

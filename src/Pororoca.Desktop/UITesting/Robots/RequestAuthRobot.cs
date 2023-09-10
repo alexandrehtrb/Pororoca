@@ -25,36 +25,4 @@ public sealed class RequestAuthRobot : BaseRobot
     internal TextBox ClientCertificatePemCertificateFilePath => GetChildView<TextBox>("tbClientCertificatePemCertificateFilePath")!;
     internal TextBox ClientCertificatePemPrivateKeyFilePath => GetChildView<TextBox>("tbClientCertificatePemPrivateKeyFilePath")!;
     internal TextBox ClientCertificatePemPrivateKeyPassword => GetChildView<TextBox>("tbClientCertificatePemPrivateKeyPassword")!;
-
-    internal Task SelectNoAuth() => AuthType.Select(AuthTypeOptionNone);
-
-    internal async Task SelectBasicAuth(string login, string password)
-    {
-        await AuthType.Select(AuthTypeOptionBasic);
-        await BasicAuthLogin.ClearAndTypeText(login);
-        await BasicAuthPassword.ClearAndTypeText(password);
-    }
-
-    internal async Task SelectBearerAuth(string token)
-    {
-        await AuthType.Select(AuthTypeOptionBearer);
-        await BearerAuthToken.ClearAndTypeText(token);
-    }
-
-    internal async Task SelectPkcs12CertificateAuth(string certFilePath, string certPassword)
-    {
-        await AuthType.Select(AuthTypeOptionClientCertificate);
-        await ClientCertificateType.Select(ClientCertificateTypeOptionPkcs12);
-        await ClientCertificatePkcs12FilePath.ClearAndTypeText(certFilePath);
-        await ClientCertificatePkcs12FilePassword.ClearAndTypeText(certPassword);
-    }
-
-    internal async Task SelectPemCertificateAuth(string certFilePath, string prvKeyFilePath, string prvKeyPassword)
-    {
-        await AuthType.Select(AuthTypeOptionClientCertificate);
-        await ClientCertificateType.Select(ClientCertificateTypeOptionPem);
-        await ClientCertificatePemCertificateFilePath.ClearAndTypeText(certFilePath);
-        await ClientCertificatePemPrivateKeyFilePath.ClearAndTypeText(prvKeyFilePath);
-        await ClientCertificatePemPrivateKeyPassword.ClearAndTypeText(prvKeyPassword);
-    }
 }

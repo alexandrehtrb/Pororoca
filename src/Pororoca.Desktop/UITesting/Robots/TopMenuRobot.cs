@@ -24,7 +24,7 @@ public sealed class TopMenuRobot : BaseRobot
     internal MenuItem Options_Language_Português => GetChildView<MenuItem>("topMenuItemOptionsLanguagePortuguês")!;
     internal MenuItem Options_Language_English => GetChildView<MenuItem>("topMenuItemOptionsLanguageEnglish")!;
     internal MenuItem Options_Language_Russian => GetChildView<MenuItem>("topMenuItemOptionsLanguageRussian")!;
-    internal MenuItem Options_DisableTlsVerification => GetChildView<MenuItem>("topMenuItemOptionsDisableTlsVerification")!;
+    internal MenuItem Options_EnableTlsVerification => GetChildView<MenuItem>("topMenuItemOptionsEnableTlsVerification")!;
     internal MenuItem Help => GetChildView<MenuItem>("topMenuItemHelp")!;
 
     internal async Task CreateNewCollection()
@@ -34,5 +34,17 @@ public sealed class TopMenuRobot : BaseRobot
         await File.ClickOn();
         await File_NewCollection.ClickOn();
         File.Close();
+    }
+
+    internal async Task SwitchTlsVerification(bool enable)
+    {
+        bool isTlsVerificationEnabled = ((Image)Options_EnableTlsVerification.Icon!).IsVisible;
+        Options.Open();
+        await UITestActions.WaitAfterActionAsync();
+        if (enable ^ isTlsVerificationEnabled)
+        {
+            await Options_EnableTlsVerification.ClickOn();
+        }
+        Options.Close();
     }
 }
