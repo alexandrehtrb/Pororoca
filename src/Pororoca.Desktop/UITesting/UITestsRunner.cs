@@ -14,6 +14,7 @@ public static class UITestsRunner
         new CollectionAndCollectionFolderUITest(),
         new TreeCopyAndPasteItemsUITest(),
         new TreeCutAndPasteItemsUITest(),
+        new TreeDeleteItemsUITest(),
         new HttpRequestValidationsUITest(),
         new HttpRequestsUITest(),
         // TODO: UI tests to be made:

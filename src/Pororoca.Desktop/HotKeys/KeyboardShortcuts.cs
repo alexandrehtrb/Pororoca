@@ -353,10 +353,13 @@ public sealed class KeyboardShortcuts : ViewModelBase
             var buttonResult = await msgbox.ShowAsync();
             if (buttonResult == ButtonResult.Ok)
             {
-                DeleteMultiple(SelectedItems);
+                DeleteSelectedItems();
             }
         });
     }
+
+    internal void DeleteSelectedItems() =>
+        DeleteMultiple(SelectedItems);
 
     private void DeleteMultiple(ICollection<CollectionOrganizationItemViewModel> itemsToDelete) =>
         itemsToDelete

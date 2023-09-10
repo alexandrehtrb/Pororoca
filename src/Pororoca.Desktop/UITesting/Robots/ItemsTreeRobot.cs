@@ -1,6 +1,5 @@
 using Avalonia.Controls;
 using Pororoca.Desktop.HotKeys;
-using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.UITesting.Robots;
@@ -30,6 +29,12 @@ public sealed class ItemsTreeRobot : BaseRobot
     internal async Task Paste()
     {
         KeyboardShortcuts.Instance.PasteCopiedItems();
+        await UITestActions.WaitAfterActionAsync();
+    }
+
+    internal async Task Delete()
+    {
+        KeyboardShortcuts.Instance.DeleteSelectedItems();
         await UITestActions.WaitAfterActionAsync();
     }
 }
