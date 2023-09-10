@@ -8,7 +8,7 @@ public sealed partial class HttpRequestsUITest : UITest
     {
         await HttpRobot.HttpMethod.Select("POST");
         await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/post/urlencoded");
-        await HttpRobot.SelectUrlEncodedBody(new PororocaKeyValueParam[]
+        await HttpRobot.SetUrlEncodedBody(new PororocaKeyValueParam[]
         {
             new(true, "a", "xyz"),
             new(true, "b", "123"),

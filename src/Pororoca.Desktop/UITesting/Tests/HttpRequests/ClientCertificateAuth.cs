@@ -6,8 +6,8 @@ public sealed partial class HttpRequestsUITest : UITest
     {
         await HttpRobot.HttpMethod.Select("GET");
         await HttpRobot.Url.ClearAndTypeText("{{BadSslClientCertTestsUrl}}");
-        await HttpRobot.SelectEmptyBody();
-        await HttpRobot.SelectPkcs12CertificateAuth("{{ClientCertificatesDir}}/badssl.com-client.p12", "{{BadSslClientCertFilePassword}}");
+        await HttpRobot.SetEmptyBody();
+        await HttpRobot.SetPkcs12CertificateAuth("{{ClientCertificatesDir}}/badssl.com-client.p12", "{{BadSslClientCertFilePassword}}");
         await HttpRobot.ClickOnSendAndWaitForResponse();
         await Wait(3);
 
@@ -43,8 +43,8 @@ public sealed partial class HttpRequestsUITest : UITest
     {
         await HttpRobot.HttpMethod.Select("GET");
         await HttpRobot.Url.ClearAndTypeText("{{BadSslClientCertTestsUrl}}");
-        await HttpRobot.SelectEmptyBody();
-        await HttpRobot.SelectPemCertificateAuth(certFilePath, privateKeyFilePath, privateKeyPassword);
+        await HttpRobot.SetEmptyBody();
+        await HttpRobot.SetPemCertificateAuth(certFilePath, privateKeyFilePath, privateKeyPassword);
         await HttpRobot.ClickOnSendAndWaitForResponse();
         await Wait(2);
 

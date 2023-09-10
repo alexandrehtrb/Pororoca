@@ -15,7 +15,7 @@ public sealed partial class HttpRequestsUITest : UITest
     {
         await HttpRobot.HttpMethod.Select("POST");
         await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/post/none");
-        await HttpRobot.SelectEmptyBody();
+        await HttpRobot.SetEmptyBody();
         await HttpRobot.ClickOnSendAndWaitForResponse();
 
         AssertContainsText(HttpRobot.ResTitle, "Response: 204 NoContent");

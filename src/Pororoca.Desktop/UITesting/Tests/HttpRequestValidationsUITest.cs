@@ -120,7 +120,7 @@ public sealed class HttpRequestValidationsUITest : UITest
     private async Task TestRawBodyValidation()
     {
         // blank content-type
-        await HttpRobot.SelectRawBody(null, string.Empty);
+        await HttpRobot.SetRawBody(null, string.Empty);
         AssertIsHidden(HttpRobot.ErrorMsg);
         AssertDoesntHaveStyleClass(HttpRobot.ReqBodyRawContentType, "HasValidationProblem");
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqHeaders);
@@ -131,7 +131,7 @@ public sealed class HttpRequestValidationsUITest : UITest
         AssertIsVisible(HttpRobot.ReqBodyRawContentType); // input field should be visible
 
         // invalid content-type
-        await HttpRobot.SelectRawBody("gdgagadg", string.Empty);
+        await HttpRobot.SetRawBody("gdgagadg", string.Empty);
         AssertIsHidden(HttpRobot.ErrorMsg);
         AssertDoesntHaveStyleClass(HttpRobot.ReqBodyRawContentType, "HasValidationProblem");
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqHeaders);
@@ -141,7 +141,7 @@ public sealed class HttpRequestValidationsUITest : UITest
         AssertHasStyleClass(HttpRobot.ReqBodyRawContentType, "HasValidationProblem");
         AssertIsVisible(HttpRobot.ReqBodyRawContentType); // input field should be visible
 
-        await HttpRobot.SelectRawBody("application/json", string.Empty);
+        await HttpRobot.SetRawBody("application/json", string.Empty);
         AssertIsHidden(HttpRobot.ErrorMsg);
         AssertDoesntHaveStyleClass(HttpRobot.ReqBodyRawContentType, "HasValidationProblem");
     }
@@ -149,7 +149,7 @@ public sealed class HttpRequestValidationsUITest : UITest
     private async Task TestFileBodyValidation()
     {
         // blank content-type
-        await HttpRobot.SelectFileBody(null, string.Empty);
+        await HttpRobot.SetFileBody(null, string.Empty);
         AssertIsHidden(HttpRobot.ErrorMsg);
         AssertDoesntHaveStyleClass(HttpRobot.ReqBodyFileContentType, "HasValidationProblem");
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqHeaders);
@@ -160,7 +160,7 @@ public sealed class HttpRequestValidationsUITest : UITest
         AssertIsVisible(HttpRobot.ReqBodyFileContentType); // input field should be visible
 
         // invalid content-type
-        await HttpRobot.SelectFileBody("gdgagadg", string.Empty);
+        await HttpRobot.SetFileBody("gdgagadg", string.Empty);
         AssertIsHidden(HttpRobot.ErrorMsg);
         AssertDoesntHaveStyleClass(HttpRobot.ReqBodyFileContentType, "HasValidationProblem");
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqHeaders);
@@ -171,7 +171,7 @@ public sealed class HttpRequestValidationsUITest : UITest
         AssertIsVisible(HttpRobot.ReqBodyFileContentType); // input field should be visible
 
         // file not found
-        await HttpRobot.SelectFileBody("application/json", "K:\\FILES\\file.json");
+        await HttpRobot.SetFileBody("application/json", "K:\\FILES\\file.json");
         AssertIsHidden(HttpRobot.ErrorMsg);
         AssertDoesntHaveStyleClass(HttpRobot.ReqBodyFileSrcPath, "HasValidationProblem");
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqHeaders);
@@ -181,7 +181,7 @@ public sealed class HttpRequestValidationsUITest : UITest
         AssertHasStyleClass(HttpRobot.ReqBodyFileSrcPath, "HasValidationProblem");
         AssertIsVisible(HttpRobot.ReqBodyFileSrcPath); // input field should be visible
 
-        await HttpRobot.SelectFileBody("application/json", string.Empty);
+        await HttpRobot.SetFileBody("application/json", string.Empty);
         AssertIsHidden(HttpRobot.ErrorMsg);
         AssertDoesntHaveStyleClass(HttpRobot.ReqBodyFileSrcPath, "HasValidationProblem");
     }
@@ -189,7 +189,7 @@ public sealed class HttpRequestValidationsUITest : UITest
     private async Task TestFormDataValidation()
     {
         // invalid or blank content-type
-        await HttpRobot.SelectFormDataBody(Array.Empty<PororocaHttpRequestFormDataParam>());
+        await HttpRobot.SetFormDataBody(Array.Empty<PororocaHttpRequestFormDataParam>());
         await HttpRobot.ReqBodyFormDataAddTextParam.ClickOn();
         var paramVm = HttpRobot.ReqBodyFormDataParams.ItemsSource.Cast<FormDataParamViewModel>().First();
         
@@ -209,20 +209,20 @@ public sealed class HttpRequestValidationsUITest : UITest
         AssertHasText(HttpRobot.ErrorMsg, "One of the Form Data parameters has an invalid Content-Type.");
         // TODO: AssertIsVisible(HttpRobot.ReqBodyFormDataParams); // input field should be visible
 
-        await HttpRobot.SelectEmptyBody();
+        await HttpRobot.SetEmptyBody();
     }
 
     private async Task TestClientCertificatePkcs12Validation()
     {
         // file not found
-        await HttpRobot.SelectPkcs12CertificateAuth("K:\\FILES\\cert.p12", string.Empty);
+        await HttpRobot.SetPkcs12CertificateAuth("K:\\FILES\\cert.p12", string.Empty);
         await HttpRobot.Send.ClickOn();
         AssertIsVisible(HttpRobot.ErrorMsg);
         AssertHasText(HttpRobot.ErrorMsg, "Client certificate file not found.");
         // TODO: AssertIsVisible(HttpRobot.Auth.RootView); // input field should be visible
         // password cannot be blank
         string certFilePath = GetTestFilePath("ClientCertificates", "badssl.com-client.p12");
-        await HttpRobot.SelectPkcs12CertificateAuth(certFilePath, string.Empty);
+        await HttpRobot.SetPkcs12CertificateAuth(certFilePath, string.Empty);
         await HttpRobot.Send.ClickOn();
         AssertIsVisible(HttpRobot.ErrorMsg);
         AssertHasText(HttpRobot.ErrorMsg, "PKCS#12 client certificates need a password.");
@@ -232,7 +232,7 @@ public sealed class HttpRequestValidationsUITest : UITest
     private async Task TestClientCertificatePemValidation()
     {
         // certificate file not found
-        await HttpRobot.SelectPemCertificateAuth("K:\\FILES\\cert.pem", string.Empty, string.Empty);
+        await HttpRobot.SetPemCertificateAuth("K:\\FILES\\cert.pem", string.Empty, string.Empty);
         await HttpRobot.Send.ClickOn();
         AssertIsVisible(HttpRobot.ErrorMsg);
         AssertHasText(HttpRobot.ErrorMsg, "Client certificate file not found.");
@@ -242,7 +242,7 @@ public sealed class HttpRequestValidationsUITest : UITest
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqAuth);
         string certFilePath = GetTestFilePath("ClientCertificates", "badssl.com-client-certificate-without-private-key.pem");
         string prvKeyFilePath = GetTestFilePath("ClientCertificates", "dgjsdjkg.key");
-        await HttpRobot.SelectPemCertificateAuth(certFilePath, prvKeyFilePath, string.Empty);
+        await HttpRobot.SetPemCertificateAuth(certFilePath, prvKeyFilePath, string.Empty);
         await HttpRobot.Send.ClickOn();
         AssertIsVisible(HttpRobot.ErrorMsg);
         AssertHasText(HttpRobot.ErrorMsg, "Client certificate private key file not found.");

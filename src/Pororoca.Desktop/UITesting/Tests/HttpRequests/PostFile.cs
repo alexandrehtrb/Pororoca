@@ -15,7 +15,7 @@ public sealed partial class HttpRequestsUITest : UITest
     {
         await HttpRobot.HttpMethod.Select("POST");
         await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/post/file");
-        await HttpRobot.SelectFileBody("image/jpeg", "{{TestFilesDir}}/homem_aranha.jpg");
+        await HttpRobot.SetFileBody("image/jpeg", "{{TestFilesDir}}/homem_aranha.jpg");
         await HttpRobot.ClickOnSendAndWaitForResponse();
 
         AssertContainsText(HttpRobot.ResTitle, "Response: 200 OK");

@@ -15,7 +15,7 @@ public sealed partial class HttpRequestsUITest : UITest
     {
         await HttpRobot.HttpMethod.Select("POST");
         await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/post/txt");
-        await HttpRobot.SelectRawBody("text/xml", "<XML><MyValue>{{SpecialValue1}}</MyValue></XML>");
+        await HttpRobot.SetRawBody("text/xml", "<XML><MyValue>{{SpecialValue1}}</MyValue></XML>");
         await HttpRobot.ClickOnSendAndWaitForResponse();
 
         AssertContainsText(HttpRobot.ResTitle, "Response: 200 OK");

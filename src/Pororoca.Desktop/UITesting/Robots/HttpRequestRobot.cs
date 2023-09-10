@@ -2,6 +2,7 @@ using System.Globalization;
 using Avalonia.Controls;
 using AvaloniaEdit;
 using Pororoca.Desktop.ViewModels;
+using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
@@ -56,6 +57,11 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal Button ResDisableTlsVerification => GetChildView<Button>("btResDisableTlsVerification")!;
     internal ProgressBar ResProgressBar => GetChildView<ProgressBar>("pbResProgressBar")!;
 
+    internal KeyValueParamsDataGridViewModel ReqHeadersVm => ((HttpRequestViewModel)RootView!.DataContext!).RequestHeadersTableVm;
+    internal KeyValueParamsDataGridViewModel UrlEncodedParamsVm => ((HttpRequestViewModel)RootView!.DataContext!).UrlEncodedParamsTableVm;
+    internal FormDataParamsDataGridViewModel FormDataParamsVm => ((HttpRequestViewModel)RootView!.DataContext!).FormDataParamsTableVm;
+    internal KeyValueParamsDataGridViewModel ResHeadersVm => ((HttpRequestViewModel)RootView!.DataContext!).ResponseDataCtx.ResponseHeadersAndTrailersTableVm;
+
     internal Task SelectHttpVersion(decimal version)
     {
         string ver = version switch
@@ -80,13 +86,54 @@ public sealed class HttpRequestRobot : BaseNamedRobot
         await UITestActions.WaitAfterActionAsync();
     }
 
-    internal async Task SelectEmptyBody()
+    internal async Task EditRequestHeaderAt(int index, bool enabled, string key, string value)
+    {
+        var vms = ReqHeadersVm.Items;
+        var h = vms.ElementAt(index);
+        h.Enabled = enabled;
+        h.Key = key;
+        h.Value = value;
+        await UITestActions.WaitAfterActionAsync();
+    }
+
+    internal async Task SelectRequestHeaders(params KeyValueParamViewModel[] headersVms)
+    {
+        ReqHeaders.SelectedItems.Clear();
+        foreach (var h in headersVms) ReqHeaders.SelectedItems.Add(h);
+        await UITestActions.WaitAfterActionAsync();
+    }
+
+    internal async Task CutSelectedRequestHeaders()
+    {
+        ReqHeadersVm.CutOrCopySelected(false);
+        await UITestActions.WaitAfterActionAsync();
+    }
+
+    internal async Task CopySelectedRequestHeaders()
+    {
+        ReqHeadersVm.CutOrCopySelected(true);
+        await UITestActions.WaitAfterActionAsync();
+    }
+
+    internal async Task PasteRequestHeaders()
+    {
+        ReqHeadersVm.Paste();
+        await UITestActions.WaitAfterActionAsync();
+    }
+
+    internal async Task DeleteSelectedRequestHeaders()
+    {
+        ReqHeadersVm.DeleteSelected();
+        await UITestActions.WaitAfterActionAsync();
+    }
+
+    internal async Task SetEmptyBody()
     {
         await TabControlReq.Select(TabReqBody);
         await ReqBodyMode.Select(ReqBodyModeOptionNone);
     }
 
-    internal async Task SelectRawBody(string? contentType, string content)
+    internal async Task SetRawBody(string? contentType, string content)
     {
         await TabControlReq.Select(TabReqBody);
         await ReqBodyMode.Select(ReqBodyModeOptionRaw);
@@ -94,7 +141,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
         await ReqBodyRawContent.ClearAndTypeText(content);
     }
 
-    internal async Task SelectFileBody(string? contentType, string fileSrcPath)
+    internal async Task SetFileBody(string? contentType, string fileSrcPath)
     {
         await TabControlReq.Select(TabReqBody);
         await ReqBodyMode.Select(ReqBodyModeOptionFile);
@@ -102,7 +149,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
         await ReqBodyFileSrcPath.ClearAndTypeText(fileSrcPath);
     }
 
-    internal async Task SelectUrlEncodedBody(IEnumerable<PororocaKeyValueParam> urlEncodedParams)
+    internal async Task SetUrlEncodedBody(IEnumerable<PororocaKeyValueParam> urlEncodedParams)
     {
         await TabControlReq.Select(TabReqBody);
         await ReqBodyMode.Select(ReqBodyModeOptionUrlEncoded);
@@ -115,7 +162,48 @@ public sealed class HttpRequestRobot : BaseNamedRobot
         await UITestActions.WaitAfterActionAsync();
     }
 
-    internal async Task SelectFormDataBody(IEnumerable<PororocaHttpRequestFormDataParam> formDataParams)
+    internal async Task EditUrlEncodedParamAt(int index, bool enabled, string key, string value)
+    {
+        var vms = UrlEncodedParamsVm.Items;
+        var v = vms.ElementAt(index);
+        v.Enabled = enabled;
+        v.Key = key;
+        v.Value = value;
+        await UITestActions.WaitAfterActionAsync();
+    }
+
+    internal async Task SelectUrlEncodedParams(params KeyValueParamViewModel[] vms)
+    {
+        ReqBodyUrlEncodedParams.SelectedItems.Clear();
+        foreach (var h in vms) ReqBodyUrlEncodedParams.SelectedItems.Add(h);
+        await UITestActions.WaitAfterActionAsync();
+    }
+
+    internal async Task CutSelectedUrlEncodedParams()
+    {
+        UrlEncodedParamsVm.CutOrCopySelected(false);
+        await UITestActions.WaitAfterActionAsync();
+    }
+
+    internal async Task CopySelectedUrlEncodedParams()
+    {
+        UrlEncodedParamsVm.CutOrCopySelected(true);
+        await UITestActions.WaitAfterActionAsync();
+    }
+
+    internal async Task PasteUrlEncodedParams()
+    {
+        UrlEncodedParamsVm.Paste();
+        await UITestActions.WaitAfterActionAsync();
+    }
+
+    internal async Task DeleteSelectedUrlEncodedParams()
+    {
+        UrlEncodedParamsVm.DeleteSelected();
+        await UITestActions.WaitAfterActionAsync();
+    }
+
+    internal async Task SetFormDataBody(IEnumerable<PororocaHttpRequestFormDataParam> formDataParams)
     {
         await TabControlReq.Select(TabReqBody);
         await ReqBodyMode.Select(ReqBodyModeOptionFormData);
@@ -128,7 +216,38 @@ public sealed class HttpRequestRobot : BaseNamedRobot
         await UITestActions.WaitAfterActionAsync();
     }
 
-    internal async Task SelectGraphQlBody()
+    internal async Task SelectFormDataParams(params FormDataParamViewModel[] vms)
+    {
+        ReqBodyFormDataParams.SelectedItems.Clear();
+        foreach (var h in vms) ReqBodyFormDataParams.SelectedItems.Add(h);
+        await UITestActions.WaitAfterActionAsync();
+    }
+
+    internal async Task CutSelectedFormDataParams()
+    {
+        FormDataParamsVm.CutOrCopySelected(false);
+        await UITestActions.WaitAfterActionAsync();
+    }
+
+    internal async Task CopySelectedFormDataParams()
+    {
+        FormDataParamsVm.CutOrCopySelected(true);
+        await UITestActions.WaitAfterActionAsync();
+    }
+
+    internal async Task PasteFormDataParams()
+    {
+        FormDataParamsVm.Paste();
+        await UITestActions.WaitAfterActionAsync();
+    }
+
+    internal async Task DeleteSelectedFormDataParams()
+    {
+        FormDataParamsVm.DeleteSelected();
+        await UITestActions.WaitAfterActionAsync();
+    }
+
+    internal async Task SetGraphQlBody()
     {
         await TabControlReq.Select(TabReqBody);
         await ReqBodyMode.Select(ReqBodyModeOptionGraphQl);
@@ -148,13 +267,13 @@ public sealed class HttpRequestRobot : BaseNamedRobot
         while (!cts.IsCancellationRequested && vm.IsRequesting);
     }
 
-    internal async Task SelectNoAuth()
+    internal async Task SetNoAuth()
     {
         await TabControlReq.Select(TabReqAuth);
         await Auth.AuthType.Select(Auth.AuthTypeOptionNone);
     }
 
-    internal async Task SelectBasicAuth(string login, string password)
+    internal async Task SetBasicAuth(string login, string password)
     {
         await TabControlReq.Select(TabReqAuth);
         await Auth.AuthType.Select(Auth.AuthTypeOptionBasic);
@@ -162,14 +281,14 @@ public sealed class HttpRequestRobot : BaseNamedRobot
         await Auth.BasicAuthPassword.ClearAndTypeText(password);
     }
 
-    internal async Task SelectBearerAuth(string token)
+    internal async Task SetBearerAuth(string token)
     {
         await TabControlReq.Select(TabReqAuth);
         await Auth.AuthType.Select(Auth.AuthTypeOptionBearer);
         await Auth.BearerAuthToken.ClearAndTypeText(token);
     }
 
-    internal async Task SelectPkcs12CertificateAuth(string certFilePath, string certPassword)
+    internal async Task SetPkcs12CertificateAuth(string certFilePath, string certPassword)
     {
         await TabControlReq.Select(TabReqAuth);
         await Auth.AuthType.Select(Auth.AuthTypeOptionClientCertificate);
@@ -178,7 +297,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
         await Auth.ClientCertificatePkcs12FilePassword.ClearAndTypeText(certPassword);
     }
 
-    internal async Task SelectPemCertificateAuth(string certFilePath, string prvKeyFilePath, string prvKeyPassword)
+    internal async Task SetPemCertificateAuth(string certFilePath, string prvKeyFilePath, string prvKeyPassword)
     {
         await TabControlReq.Select(TabReqAuth);
         await Auth.AuthType.Select(Auth.AuthTypeOptionClientCertificate);
@@ -186,5 +305,18 @@ public sealed class HttpRequestRobot : BaseNamedRobot
         await Auth.ClientCertificatePemCertificateFilePath.ClearAndTypeText(certFilePath);
         await Auth.ClientCertificatePemPrivateKeyFilePath.ClearAndTypeText(prvKeyFilePath);
         await Auth.ClientCertificatePemPrivateKeyPassword.ClearAndTypeText(prvKeyPassword);
+    }
+
+    internal async Task SelectResponseHeaders(params KeyValueParamViewModel[] headersVms)
+    {
+        ResHeaders.SelectedItems.Clear();
+        foreach (var h in headersVms) ResHeaders.SelectedItems.Add(h);
+        await UITestActions.WaitAfterActionAsync();
+    }
+
+    internal async Task CopySelectedResponseHeaders()
+    {
+        ResHeadersVm.CutOrCopySelected(true);
+        await UITestActions.WaitAfterActionAsync();
     }
 }

@@ -14,6 +14,8 @@ public sealed class EnvironmentRobot : BaseNamedRobot, IVariablesEditorRobot
     internal Button AddVariable => GetChildView<Button>("btAddVariable")!;
     public DataGrid Variables => GetChildView<DataGrid>("dgVariables")!;
 
+    internal VariablesDataGridViewModel VariablesVm => ((EnvironmentViewModel)RootView!.DataContext!).VariablesTableVm;
+
     public Task SetVariables(IEnumerable<VariableViewModel> vars)
     {
         var vm = (EnvironmentViewModel)RootView!.DataContext!;
@@ -22,4 +24,15 @@ public sealed class EnvironmentRobot : BaseNamedRobot, IVariablesEditorRobot
 
     public Task EditVariableAt(int index, bool enabled, string key, string value, bool isSecret = false) =>
         IVariablesEditorRobot.EditVariableAt(Variables, index, enabled, key, value, isSecret);
+
+    public Task SelectVariables(params VariableViewModel[] vars) =>
+        IVariablesEditorRobot.SelectVariables(Variables, vars);
+
+    public Task CutSelectedVariables() => IVariablesEditorRobot.CutSelectedVariables(VariablesVm);
+
+    public Task CopySelectedVariables() => IVariablesEditorRobot.CopySelectedVariables(VariablesVm);
+
+    public Task PasteVariables() => IVariablesEditorRobot.PasteVariables(VariablesVm);
+
+    public Task DeleteSelectedVariables() => IVariablesEditorRobot.DeleteSelectedVariables(VariablesVm);
 }

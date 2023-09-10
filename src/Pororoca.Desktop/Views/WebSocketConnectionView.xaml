@@ -279,6 +279,7 @@
                   </Button.Content>
                 </Button>
                 <DataGrid
+                    Name="dgWsConnectionReqHeaders"
                     Grid.Column="0"
                     Grid.Row="1"
                     Margin="0,12,0,0"

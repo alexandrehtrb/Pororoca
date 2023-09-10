@@ -8,7 +8,7 @@ public sealed partial class HttpRequestsUITest : UITest
     {
         await HttpRobot.HttpMethod.Select("GET");
         await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/get/headers");
-        await HttpRobot.SelectEmptyBody();
+        await HttpRobot.SetEmptyBody();
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqHeaders);
         await HttpRobot.SetRequestHeaders(new PororocaKeyValueParam[]
         {

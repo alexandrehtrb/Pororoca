@@ -6,8 +6,8 @@ public sealed partial class HttpRequestsUITest : UITest
     {
         await HttpRobot.HttpMethod.Select("GET");
         await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/auth");
-        await HttpRobot.SelectEmptyBody();
-        await HttpRobot.SelectBasicAuth("{{BasicAuthLogin}}", "{{BasicAuthPassword}}");
+        await HttpRobot.SetEmptyBody();
+        await HttpRobot.SetBasicAuth("{{BasicAuthLogin}}", "{{BasicAuthPassword}}");
         await HttpRobot.ClickOnSendAndWaitForResponse();
 
         AssertContainsText(HttpRobot.ResTitle, "Response: 200 OK");

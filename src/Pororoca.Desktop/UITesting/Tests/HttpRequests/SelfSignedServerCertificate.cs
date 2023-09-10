@@ -11,7 +11,7 @@ public sealed partial class HttpRequestsUITest : UITest
 
         await HttpRobot.HttpMethod.Select("GET");
         await HttpRobot.Url.ClearAndTypeText("{{BadSslSelfSignedTestsUrl}}");
-        await HttpRobot.SelectEmptyBody();
+        await HttpRobot.SetEmptyBody();
         await HttpRobot.ClickOnSendAndWaitForResponse();
         await Wait(5);
 

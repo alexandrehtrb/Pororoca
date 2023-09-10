@@ -17,10 +17,11 @@ public static class UITestsRunner
         new TreeDeleteItemsUITest(),
         new HttpRequestValidationsUITest(),
         new HttpRequestsUITest(),
+        new VariablesCutCopyPasteDeleteUITest(),
+        new HeadersCutCopyPasteDeleteUITest(),
+        new UrlEncodedParamsCutCopyPasteDeleteUITest(),
+        new FormDataParamsCutCopyPasteDeleteUITest(),
         // TODO: UI tests to be made:
-        // new HeadersCutCopyPasteUITest(),
-        // new VariablesCutCopyPasteUITest(),
-        // new FormDataParamsCutCopyPasteUITest(),
         // foreach (var version in new[] { 1.0m, 2.0m })
         // new WebSocketConnectionAndClientMessagesUITest(version)
         // new WebSocketConversationUITest(version)
@@ -29,8 +30,8 @@ public static class UITestsRunner
         // import and export collections and environments (involve dialogs)
         // help dialogs
         // context menu actions
+        // form data add text and file params buttons
         // cut collection, cut and paste to itself
-        // delete items actions
         // save responses to file
     });
 

@@ -47,7 +47,7 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
     private void AddNew() =>
         Items.Add(ToVm(new D()));
 
-    private void CutOrCopySelected(bool falseIfCutTrueIfCopy)
+    internal void CutOrCopySelected(bool falseIfCutTrueIfCopy)
     {
         if (SelectedItems is not null && SelectedItems.Count > 0)
         {
@@ -65,7 +65,7 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
         }
     }
 
-    private void Paste()
+    internal void Paste()
     {
         if (InnerClipboardArea.CanPaste)
         {
@@ -92,7 +92,7 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
         }
     }
 
-    private void DeleteSelected()
+    internal void DeleteSelected()
     {
         if (SelectedItems is not null && SelectedItems.Count > 0)
         {
