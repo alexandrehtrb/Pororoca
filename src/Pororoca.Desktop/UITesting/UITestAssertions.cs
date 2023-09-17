@@ -26,6 +26,8 @@ public abstract partial class UITest
     
     internal void AssertHasText(TextEditor txtEditor, string txt) => Assert(txtEditor.Document.Text == txt);
 
+    internal void AssertHasText(ComboBox cb, string txt) => Assert(cb.SelectedItem is string s && s == txt);
+
     internal void AssertHasText(ComboBoxItem cbItem, string txt) => Assert(((string)cbItem.Content!) == txt);
 
     internal void AssertHasText(MenuItem menuItem, string txt) => Assert(((string)menuItem.Header!) == txt);
@@ -45,6 +47,8 @@ public abstract partial class UITest
     internal void AssertHasIconVisible(MenuItem menuItem) => Assert(((Image)menuItem.Icon!).IsVisible == true);
 
     internal void AssertHasIconHidden(MenuItem menuItem) => Assert(((Image)menuItem.Icon!).IsVisible == false);
+    
+    internal void AssertSelection(ComboBox cb, ComboBoxItem cbi) => Assert(cb.SelectedItem == cbi);
     
     internal void AssertBackgroundColor(Panel panel, string hexColor) => Assert(panel.Background is SolidColorBrush scb && ToHexString(scb.Color) == hexColor);
 

@@ -515,6 +515,12 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 #if DEBUG || UI_TESTS_ENABLED
     private async Task RunUITestsAsync()
     {
+        /*
+        IMPORTANT:
+        To run the UI tests, run Pororoca.TestServer in localhost and 
+        have the TestFiles directory inside the PororocaUserData folder.        
+        */
+
         // making a backup of the items' tree and clearing it before the tests
         var bkupedLang = Localizer.Instance.CurrentLanguage;
         var bkupedItems = CollectionsGroupViewDataCtx.Items.ToList();

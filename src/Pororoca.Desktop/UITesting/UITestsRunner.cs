@@ -23,12 +23,11 @@ public static class UITestsRunner
         new FormDataParamsCutCopyPasteDeleteUITest(),
         new WebSocketsValidationsUITest(),
         new WebSocketsUITest(),
+        new ExportAndImportUITest(),
         // TODO: UI tests to be made:
-        // check import and export JSON collections with environments
         // Out of scope of automated UI tests:
         // some keybindings
-        // import and export collections and environments (involve dialogs)
-        // help dialogs
+        // all dialogs
         // context menu actions
         // form data add text and file params buttons
         // cut collection, cut and paste to itself

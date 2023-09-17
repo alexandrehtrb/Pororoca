@@ -39,7 +39,7 @@ public sealed class WebSocketConnectionRobot : BaseNamedRobot
     internal TextBlock IsWsConnected => GetChildView<TextBlock>("tbIsWsConnected")!;
     internal TextBlock MessageToSendError => GetChildView<TextBlock>("tbMessageToSendError")!;
 
-    internal Task SelectHttpVersion(decimal version)
+    internal Task SetHttpVersion(decimal version)
     {
         string ver = version switch
         {

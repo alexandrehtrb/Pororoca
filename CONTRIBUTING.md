@@ -38,8 +38,4 @@ Remember to fork this repo and develop your code starting from the `develop` bra
 
 ## Is there anything else I can contribute with?
 
-Yes! Currently, we need help with:
-
-* UI testing, preferrably using [Appium](https://github.com/AvaloniaUI/Avalonia/tree/master/tests/Avalonia.IntegrationTests.Appium). (there are no automated UI tests yet)
-* Migration to .NET 8
-* NativeAOT for Pororoca.Desktop
+Yes! Check the GitHub issues track.

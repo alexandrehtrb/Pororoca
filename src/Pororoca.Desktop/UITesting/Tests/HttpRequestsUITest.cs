@@ -72,7 +72,7 @@ public sealed partial class HttpRequestsUITest : UITest
         foreach (decimal version in this.httpVersionsToTest)
         {
             AppendToLog($"Selecting HTTP version {version}.");
-            await HttpRobot.SelectHttpVersion(version);
+            await HttpRobot.SetHttpVersion(version);
 
             await TestGetTextResponse();
             await TestGetJsonResponse();
@@ -96,7 +96,7 @@ public sealed partial class HttpRequestsUITest : UITest
         }
 
         // badssl.com uses only HTTP/1.1
-        await HttpRobot.SelectHttpVersion(1.1m);
+        await HttpRobot.SetHttpVersion(1.1m);
         try
         {
             AppendToLog("Running self-signed and client certificates tests (HTTP/1.1 only).");

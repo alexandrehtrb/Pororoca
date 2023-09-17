@@ -11,7 +11,7 @@ namespace Pororoca.Desktop.UITesting.Robots;
 
 public sealed class HttpRequestRobot : BaseNamedRobot
 {
-    private RequestAuthRobot Auth { get; }
+    internal RequestAuthRobot Auth { get; }
 
     public HttpRequestRobot(HttpRequestView rootView) : base(rootView) =>
         Auth = new(GetChildView<RequestAuthView>("reqAuthView")!);
@@ -62,7 +62,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal FormDataParamsDataGridViewModel FormDataParamsVm => ((HttpRequestViewModel)RootView!.DataContext!).FormDataParamsTableVm;
     internal KeyValueParamsDataGridViewModel ResHeadersVm => ((HttpRequestViewModel)RootView!.DataContext!).ResponseDataCtx.ResponseHeadersAndTrailersTableVm;
 
-    internal Task SelectHttpVersion(decimal version)
+    internal Task SetHttpVersion(decimal version)
     {
         string ver = version switch
         {
@@ -247,10 +247,12 @@ public sealed class HttpRequestRobot : BaseNamedRobot
         await UITestActions.WaitAfterActionAsync();
     }
 
-    internal async Task SetGraphQlBody()
+    internal async Task SetGraphQlBody(string query, string variables)
     {
         await TabControlReq.Select(TabReqBody);
         await ReqBodyMode.Select(ReqBodyModeOptionGraphQl);
+        await ReqBodyGraphQlQuery.ClearAndTypeText(query);
+        await ReqBodyGraphQlVariables.ClearAndTypeText(variables);
     }
 
     internal async Task ClickOnSendAndWaitForResponse()

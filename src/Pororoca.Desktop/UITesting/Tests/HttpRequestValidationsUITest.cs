@@ -90,7 +90,7 @@ public sealed class HttpRequestValidationsUITest : UITest
     {
         if (!AvailablePororocaRequestSelectionOptions.IsHttpVersionAvailableInOS(2.0m, out _))
         {
-            await HttpRobot.SelectHttpVersion(2.0m);
+            await HttpRobot.SetHttpVersion(2.0m);
             AssertIsHidden(HttpRobot.ErrorMsg);
             AssertDoesntHaveStyleClass(HttpRobot.HttpVersion, "HasValidationProblem");
             await HttpRobot.Url.ClearAndTypeText(TestUrl);
@@ -102,7 +102,7 @@ public sealed class HttpRequestValidationsUITest : UITest
 
         if (!AvailablePororocaRequestSelectionOptions.IsHttpVersionAvailableInOS(3.0m, out _))
         {
-            await HttpRobot.SelectHttpVersion(3.0m);
+            await HttpRobot.SetHttpVersion(3.0m);
             AssertIsHidden(HttpRobot.ErrorMsg);
             AssertDoesntHaveStyleClass(HttpRobot.HttpVersion, "HasValidationProblem");
             await HttpRobot.Url.ClearAndTypeText(TestUrl);
@@ -112,7 +112,7 @@ public sealed class HttpRequestValidationsUITest : UITest
             AssertHasStyleClass(HttpRobot.HttpVersion, "HasValidationProblem");
         }
 
-        await HttpRobot.SelectHttpVersion(1.1m);
+        await HttpRobot.SetHttpVersion(1.1m);
         AssertIsHidden(HttpRobot.ErrorMsg);
         AssertDoesntHaveStyleClass(HttpRobot.HttpVersion, "HasValidationProblem");
     }

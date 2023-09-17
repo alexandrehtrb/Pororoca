@@ -79,7 +79,7 @@ public sealed partial class WebSocketsUITest : UITest
         foreach (decimal version in this.httpVersionsToTest)
         {
             AppendToLog($"Selecting HTTP version {version}.");
-            await WsRobot.SelectHttpVersion(version);
+            await WsRobot.SetHttpVersion(version);
             if (version == 1.1m)
             {
                 await WsRobot.Url.ClearAndTypeText("{{BaseUrlWs}}/{{WsHttp1Endpoint}}");

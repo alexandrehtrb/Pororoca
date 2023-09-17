@@ -84,7 +84,7 @@ public sealed partial class WebSocketsValidationsUITest : UITest
     {
         if (!AvailablePororocaRequestSelectionOptions.IsHttpVersionAvailableInOS(2.0m, out _))
         {
-            await WsRobot.SelectHttpVersion(2.0m);
+            await WsRobot.SetHttpVersion(2.0m);
             AssertIsHidden(WsRobot.ErrorMsg);
             AssertDoesntHaveStyleClass(WsRobot.HttpVersion, "HasValidationProblem");
             await WsRobot.Url.ClearAndTypeText("{{BaseUrlWs}}/{{WsHttp2Endpoint}}");
@@ -94,7 +94,7 @@ public sealed partial class WebSocketsValidationsUITest : UITest
             AssertHasStyleClass(WsRobot.HttpVersion, "HasValidationProblem");
         }
 
-        await WsRobot.SelectHttpVersion(1.1m);
+        await WsRobot.SetHttpVersion(1.1m);
         AssertIsHidden(WsRobot.ErrorMsg);
         AssertDoesntHaveStyleClass(WsRobot.HttpVersion, "HasValidationProblem");
     }
