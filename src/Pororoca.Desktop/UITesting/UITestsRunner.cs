@@ -21,10 +21,10 @@ public static class UITestsRunner
         new HeadersCutCopyPasteDeleteUITest(),
         new UrlEncodedParamsCutCopyPasteDeleteUITest(),
         new FormDataParamsCutCopyPasteDeleteUITest(),
+        new WebSocketsValidationsUITest(),
+        new WebSocketsUITest(),
         // TODO: UI tests to be made:
-        // foreach (var version in new[] { 1.0m, 2.0m })
-        // new WebSocketConnectionAndClientMessagesUITest(version)
-        // new WebSocketConversationUITest(version)
+        // check import and export JSON collections with environments
         // Out of scope of automated UI tests:
         // some keybindings
         // import and export collections and environments (involve dialogs)

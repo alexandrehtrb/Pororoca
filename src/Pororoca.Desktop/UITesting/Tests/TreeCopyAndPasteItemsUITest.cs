@@ -53,7 +53,7 @@ public sealed class TreeCopyAndPasteItemsUITest : UITest
         await WsRobot.Name.Edit("WS1");
 
         await TreeRobot.Select("COL1/WS1");
-        await WsRobot.AddWsClientMsg.ClickOn();
+        await WsRobot.AddClientMessage.ClickOn();
         await WsMsgRobot.Name.Edit("WS1_MSG1");        
         
         // copy those items

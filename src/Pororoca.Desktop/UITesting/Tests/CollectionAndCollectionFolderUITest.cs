@@ -62,7 +62,7 @@ public sealed class CollectionAndCollectionFolderUITest : UITest
         await WsRobot.Name.Edit("WS1");
 
         await TreeRobot.Select("COL1/WS1");
-        await WsRobot.AddWsClientMsg.ClickOn();
+        await WsRobot.AddClientMessage.ClickOn();
         AssertIsVisible(WsMsgRobot.RootView);
         await WsMsgRobot.Name.Edit("WS_MSG1");
 
@@ -93,7 +93,7 @@ public sealed class CollectionAndCollectionFolderUITest : UITest
         await WsRobot.Name.Edit("WS_1");
 
         await TreeRobot.Select("COL1/DIR1/DIR1_1/WS_1");
-        await WsRobot.AddWsClientMsg.ClickOn();
+        await WsRobot.AddClientMessage.ClickOn();
         AssertIsVisible(WsMsgRobot.RootView);
         await WsMsgRobot.Name.Edit("WS_1_MSG1");
         

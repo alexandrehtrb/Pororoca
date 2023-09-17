@@ -24,7 +24,7 @@ public abstract partial class UITest
 
     internal void AssertHasText(TextBox txtBox, string txt) => Assert(txtBox.Text == txt);
     
-    internal void AssertHasText(TextEditor txtEditor, string txt) => Assert(txtEditor.Text == txt);
+    internal void AssertHasText(TextEditor txtEditor, string txt) => Assert(txtEditor.Document.Text == txt);
 
     internal void AssertHasText(ComboBoxItem cbItem, string txt) => Assert(((string)cbItem.Content!) == txt);
 
@@ -37,6 +37,8 @@ public abstract partial class UITest
     internal void AssertHasText(IconButton ib, string txt) => Assert(ib.Text == txt);
 
     internal void AssertContainsText(TextEditor txtEditor, string txt) => Assert(txtEditor.Document.Text.Contains(txt));
+    
+    internal void AssertContainsText(TextBox txtBox, string txt) => Assert(txtBox.Text?.Contains(txt) == true);
     
     internal void AssertContainsText(TextBlock txtBlock, string txt) => Assert(txtBlock.Text?.Contains(txt) == true);
 

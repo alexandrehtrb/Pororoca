@@ -56,6 +56,7 @@
           Orientation="Horizontal">
 
         <CheckBox
+            Name="chkbDisableCompressionForThisMessage"
             Content="{Binding i18n.WebSocketClientMessage.DisableCompressionForThisMessage}"
             IsChecked="{Binding DisableCompressionForThisMessage}"/>
 
@@ -69,15 +70,16 @@
       </StackPanel>
 
       <ComboBox
+          Name="cbMessageType"
           Grid.Column="0"
           Grid.Row="1"
           Height="40"
           Width="240"
           Margin="0,12,0,0"
           SelectedIndex="{Binding MessageTypeSelectedIndex, Mode=TwoWay}">
-        <ComboBoxItem Content="{Binding i18n.WebSocketClientMessage.MessageTypeText}"/>
-        <ComboBoxItem Content="{Binding i18n.WebSocketClientMessage.MessageTypeBinary}"/>
-        <ComboBoxItem Content="{Binding i18n.WebSocketClientMessage.MessageTypeClose}"/>
+        <ComboBoxItem Name="cbiMessageTypeText" Content="{Binding i18n.WebSocketClientMessage.MessageTypeText}"/>
+        <ComboBoxItem Name="cbiMessageTypeBinary" Content="{Binding i18n.WebSocketClientMessage.MessageTypeBinary}"/>
+        <ComboBoxItem Name="cbiMessageTypeClose" Content="{Binding i18n.WebSocketClientMessage.MessageTypeClose}"/>
       </ComboBox>
 
       <StackPanel
@@ -87,30 +89,29 @@
           Orientation="Horizontal">
 
         <ComboBox
-            x:Name="cbWsCliMsgContentMode"
+            x:Name="cbContentMode"
             Height="36"
             Width="120"
             SelectedIndex="{Binding ContentModeSelectedIndex, Mode=TwoWay}">
           <ComboBoxItem
-              x:Name="cbiWsCliMsgContentModeRaw"
+              x:Name="cbiContentModeRaw"
               Content="{Binding i18n.WebSocketClientMessage.ContentModeRaw}"/>
           <ComboBoxItem
-              x:Name="cbiWsCliMsgContentModeFile"
+              x:Name="cbiContentModeFile"
               Content="{Binding i18n.WebSocketClientMessage.ContentModeFile}"/>
         </ComboBox>
 
         <ComboBox
-            x:Name="cbWsCliMsgContentRawSyntax"
-            Name="RawContentSyntaxSelector"
+            x:Name="cbContentRawSyntax"
             Height="36"
             Width="120"
             Margin="12,0,0,0"
             SelectedIndex="{Binding RawContentSyntaxSelectedIndex, Mode=TwoWay}">
           <ComboBoxItem
-              x:Name="cbiWsCliMsgContentRawSyntaxJson"
+              x:Name="cbiContentRawSyntaxJson"
               Content="{Binding i18n.WebSocketClientMessage.RawContentJsonSyntax}"/>
           <ComboBoxItem
-              x:Name="cbiWsCliMsgContentRawSyntaxOther"
+              x:Name="cbiContentRawSyntaxOther"
               Content="{Binding i18n.WebSocketClientMessage.RawContentOtherSyntax}"/>
         </ComboBox>
 
@@ -122,7 +123,7 @@
 
 
       <AvaloniaEdit:TextEditor
-          x:Name="teWsCliMsgContentRaw"
+          x:Name="teContentRaw"
           Grid.Column="0"
           Grid.Row="3"
           HorizontalAlignment="Stretch"
@@ -142,6 +143,7 @@
           Orientation="Vertical">
 
         <TextBox
+            Name="tbContentFileSrcPath"
             HorizontalContentAlignment="Left"
             VerticalContentAlignment="Center"
             Watermark="{Binding i18n.WebSocketClientMessage.ContentFileSrcPathWatermark}"

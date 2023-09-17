@@ -134,7 +134,11 @@ internal static class UITestActions
     internal static async Task Select(this ComboBox cb, string item)
     {
         cb.IsDropDownOpen = true;
-        cb.SelectedIndex = cb.Items.IndexOf(cb.Items.First(x => x is string s && s == item));
+        cb.SelectedIndex = cb.Items.IndexOf(
+            cb.Items.First(x => 
+                (x is string s && s == item)
+             || (x is CollectionOrganizationItemViewModel vm && vm.Name == item)
+            ));
         cb.IsDropDownOpen = false;
         await WaitAfterActionAsync();
     }

@@ -53,7 +53,7 @@ public sealed class TreeCutAndPasteItemsUITest : UITest
         await WsRobot.Name.Edit("WS1");
 
         await TreeRobot.Select("COL1/WS1");
-        await WsRobot.AddWsClientMsg.ClickOn();
+        await WsRobot.AddClientMessage.ClickOn();
         await WsMsgRobot.Name.Edit("WS1_MSG1");        
         
         // copy those items
@@ -153,7 +153,7 @@ public sealed class TreeCutAndPasteItemsUITest : UITest
         await TreeRobot.Select("COL1");
         await ColRobot.AddWebSocket.ClickOn();
         await WsRobot.Name.Edit("WS1");
-        await WsRobot.AddWsClientMsg.ClickOn();
+        await WsRobot.AddClientMessage.ClickOn();
         await WsMsgRobot.Name.Edit("WS1_MSG1");
         await TreeRobot.Select("COL1/WS1/WS1_MSG1");
         await TreeRobot.Cut();
