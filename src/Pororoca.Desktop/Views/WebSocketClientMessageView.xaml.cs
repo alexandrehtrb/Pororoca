@@ -15,7 +15,7 @@ public class WebSocketClientMessageView : UserControl
     {
         InitializeComponent();
 
-        var rawContentTextEditor = this.FindControl<TextEditor>("teWsCliMsgContentRaw");
+        var rawContentTextEditor = this.FindControl<TextEditor>("teContentRaw");
         this.rawContentEditorTextMateInstallation = TextEditorConfiguration.Setup(rawContentTextEditor!, true);
 
         // This is for testing syntax colour themes
@@ -33,41 +33,41 @@ public class WebSocketClientMessageView : UserControl
 
     private void SetupSelectedOptionsPanelsVisibility()
     {
-        ComboBox cbWsCliMsgContentMode = this.FindControl<ComboBox>("cbWsCliMsgContentMode")!,
-            cbWsCliMsgContentRawSyntax = this.FindControl<ComboBox>("cbWsCliMsgContentRawSyntax")!;
+        ComboBox cbContentMode = this.FindControl<ComboBox>("cbContentMode")!,
+            cbContentRawSyntax = this.FindControl<ComboBox>("cbContentRawSyntax")!;
 
-        ComboBoxItem cbiWsCliMsgContentModeRaw = this.FindControl<ComboBoxItem>("cbiWsCliMsgContentModeRaw")!,
-                    cbiWsCliMsgContentModeFile = this.FindControl<ComboBoxItem>("cbiWsCliMsgContentModeFile")!,
-                    cbiWsCliMsgContentRawSyntaxJson = this.FindControl<ComboBoxItem>("cbiWsCliMsgContentRawSyntaxJson")!,
-                    cbiWsCliMsgContentRawSyntaxOther = this.FindControl<ComboBoxItem>("cbiWsCliMsgContentRawSyntaxOther")!;
+        ComboBoxItem cbiContentModeRaw = this.FindControl<ComboBoxItem>("cbiContentModeRaw")!,
+                    cbiContentModeFile = this.FindControl<ComboBoxItem>("cbiContentModeFile")!,
+                    cbiContentRawSyntaxJson = this.FindControl<ComboBoxItem>("cbiContentRawSyntaxJson")!,
+                    cbiContentRawSyntaxOther = this.FindControl<ComboBoxItem>("cbiContentRawSyntaxOther")!;
 
-        var teWsCliMsgContentRaw = this.FindControl<TextEditor>("teWsCliMsgContentRaw")!;
+        var teContentRaw = this.FindControl<TextEditor>("teContentRaw")!;
 
         var spWsCliMsgContentFile = this.FindControl<StackPanel>("spWsCliMsgContentFile")!;
 
-        cbWsCliMsgContentMode.SelectionChanged += (sender, e) =>
+        cbContentMode.SelectionChanged += (sender, e) =>
         {
             object? selected = e.AddedItems.Count > 0 ? e.AddedItems[0] : null;
-            if (selected == cbiWsCliMsgContentModeRaw)
+            if (selected == cbiContentModeRaw)
             {
-                cbWsCliMsgContentRawSyntax.IsVisible = teWsCliMsgContentRaw.IsVisible = true;
+                cbContentRawSyntax.IsVisible = teContentRaw.IsVisible = true;
                 spWsCliMsgContentFile.IsVisible = false;
             }
-            else if (selected == cbiWsCliMsgContentModeFile)
+            else if (selected == cbiContentModeFile)
             {
-                cbWsCliMsgContentRawSyntax.IsVisible = teWsCliMsgContentRaw.IsVisible = false;
+                cbContentRawSyntax.IsVisible = teContentRaw.IsVisible = false;
                 spWsCliMsgContentFile.IsVisible = true;
             }
         };
 
-        cbWsCliMsgContentRawSyntax.SelectionChanged += (sender, e) =>
+        cbContentRawSyntax.SelectionChanged += (sender, e) =>
         {
             object? selected = e.AddedItems.Count > 0 ? e.AddedItems[0] : null;
-            if (selected == cbiWsCliMsgContentRawSyntaxJson)
+            if (selected == cbiContentRawSyntaxJson)
             {
                 ApplySelectedRawContentSyntax(MimeTypesDetector.DefaultMimeTypeForJson);
             }
-            else if (selected == cbiWsCliMsgContentRawSyntaxOther)
+            else if (selected == cbiContentRawSyntaxOther)
             {
                 ApplySelectedRawContentSyntax(null);
             }

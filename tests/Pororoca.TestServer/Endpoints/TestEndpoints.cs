@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
 
@@ -21,6 +22,7 @@ public static class TestEndpoints
         // HttpContext as a parameter makes some endpoints hidden in Swagger (?)
         app.MapPost("test/post/none", TestPostNone);
         app.MapPost("test/post/json", TestPostJson);
+        app.MapPost("test/post/txt", TestPostTxt);
         app.MapPost("test/post/problemdetails", TestPostProblemDetails);
         app.MapPost("test/post/file", TestPostFile);
         app.MapPost("test/post/urlencoded", TestPostUrlEncoded);
@@ -47,8 +49,14 @@ public static class TestEndpoints
         return Results.File(File.OpenRead(testFilePath), "text/plain", fileName);
     }
 
-    private static IResult TestGetHeaders(HttpContext httpCtx) =>
-        Results.Ok(httpCtx.Request.Headers.ToDictionary(hdr => hdr.Key, hdr => hdr.Value));
+    private static IResult TestGetHeaders(HttpContext httpCtx)
+    {
+        foreach (var reqHeader in httpCtx.Request.Headers)
+        {
+            httpCtx.Response.Headers.Add($"MIRRORED-{reqHeader.Key}", reqHeader.Value);
+        }
+        return Results.NoContent();
+    }
 
     private static async Task TestGetTrailers(HttpResponse httpRes)
     {
@@ -72,6 +80,18 @@ public static class TestEndpoints
 
     private static IResult TestPostJson(dynamic obj) =>
         Results.Ok(obj);
+
+    private static async Task<IResult> TestPostTxt(HttpRequest req)
+    {
+        string? contentType = req.ContentType;
+        using MemoryStream ms = new();
+        await req.Body.CopyToAsync(ms);
+        ms.Seek(0, SeekOrigin.Begin);
+        using StreamReader sr = new(ms, Encoding.UTF8);
+        string body = await sr.ReadToEndAsync();
+
+        return Results.Text(body, contentType, Encoding.UTF8);
+    }
 
     private static IResult TestPostProblemDetails() =>
         Results.ValidationProblem(title: "Validation problem title",

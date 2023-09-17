@@ -25,7 +25,7 @@ public abstract class CollectionOrganizationItemViewModel : ViewModelBase, IColl
     public bool CanMoveDown { get; set; }
 
     [Reactive]
-    public EditableTextBlockViewModel NameEditableTextBlockViewDataCtx { get; set; }
+    public EditableTextBlockViewModel NameEditableVm { get; set; }
 
     [Reactive]
     public string Name { get; set; }
@@ -40,14 +40,14 @@ public abstract class CollectionOrganizationItemViewModel : ViewModelBase, IColl
 
     public void RenameThis()
     {
-        if (NameEditableTextBlockViewDataCtx.IsEditing == false)
+        if (NameEditableVm.IsEditing == false)
         {
-            NameEditableTextBlockViewDataCtx.IsEditing = true;
+            NameEditableVm.IsEditing = true;
             Parent.OnRenameSubItemSelected(this);
         }
         else
         {
-            NameEditableTextBlockViewDataCtx.EditOrApplyTxtChange();
+            NameEditableVm.EditOrApplyTxtChange();
         }
     }
 
@@ -66,7 +66,7 @@ public abstract class CollectionOrganizationItemViewModel : ViewModelBase, IColl
     protected CollectionOrganizationItemViewModel(ICollectionOrganizationItemParentViewModel parentVm, string name)
     {
         Parent = parentVm;
-        NameEditableTextBlockViewDataCtx = new(name, OnNameUpdated);
+        NameEditableVm = new(name, OnNameUpdated);
         Name = name;
     }
 }

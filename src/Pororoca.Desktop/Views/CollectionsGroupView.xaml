@@ -13,6 +13,7 @@
     FontSize="14">
 
   <TreeView
+      x:Name="itemsTree"
       Classes="sidebar"
       Margin="0 40 0 20"
       ItemsSource="{Binding Items}"

@@ -12,6 +12,9 @@ on:
       installation:
         required: false
         type: string
+      enableUITesting:
+        required: true
+        type: boolean
 
 jobs:
   generatePororocaDesktop:
@@ -23,6 +26,7 @@ jobs:
       PUBLISH_SINGLE_FILE: ${{ startsWith(inputs.rid, 'win') }}
       RID: ${{ inputs.rid }}
       WINDOWS_INSTALLER_RELEASE: ${{ startsWith(inputs.rid, 'win') && inputs.installation == 'withInstaller' }}
+      ENABLE_UI_TESTING: ${{ inputs.enableUITesting }}
       
     steps:
     - name: Checkout
@@ -78,6 +82,7 @@ jobs:
         --configuration Release `
         -p:PublishSingleFile=${env:PUBLISH_SINGLE_FILE} `
         -p:PublishForInstallOnWindows=${env:WINDOWS_INSTALLER_RELEASE} `
+        -p:UITestsEnabled=${env:ENABLE_UI_TESTING} `
         --self-contained true `
         --runtime ${env:RID} `
         --output ${env:OUTPUT_FOLDER};

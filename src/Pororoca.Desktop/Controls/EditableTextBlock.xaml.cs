@@ -3,11 +3,11 @@ using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Pororoca.Desktop.ViewModels;
 
-namespace Pororoca.Desktop.Views;
+namespace Pororoca.Desktop.Controls;
 
-public class EditableTextBlockView : UserControl
+public class EditableTextBlock : UserControl
 {
-    public EditableTextBlockView() => InitializeComponent();
+    public EditableTextBlock() => InitializeComponent();
 
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 

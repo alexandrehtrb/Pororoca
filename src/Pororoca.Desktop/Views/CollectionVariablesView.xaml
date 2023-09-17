@@ -43,6 +43,7 @@
         TextWrapping="Wrap"/>
 
     <Button
+        Name="btAddVariable"
         Grid.Column="0"
         Grid.Row="1"
         Height="24"
@@ -67,6 +68,7 @@
     </Button>
 
     <DataGrid
+        Name="dgVariables"
         Grid.Column="0"
         Grid.Row="2"
         Margin="0,12,0,0"

@@ -161,7 +161,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
         return false;
     }
 
-    private void CutSelectedItems()
+    public void CutSelectedItems()
     {
         // IMPORTANT: needs to be a new list, not just a reference
         // IMPORTANT: Collections can not be marked for cut deletion (after pasting), 
@@ -177,7 +177,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
         PushSelectedItemsToClipboardArea();
     }
 
-    private void CopySelectedItems()
+    public void CopySelectedItems()
     {
         // we must clear items marked for cut if it's just a copy
         if (AreAnyCollectionsBeingCopiedOrCut())
@@ -217,6 +217,9 @@ public sealed class KeyboardShortcuts : ViewModelBase
         var wssToCopy = SelectedItems
                          .Where(i => i is WebSocketConnectionViewModel wsVm && !HasAnyParentAlsoSelected(wsVm))
                          .Select(wsVm => (ICloneable)((WebSocketConnectionViewModel)wsVm).ToWebSocketConnection());
+        var wsMsgsToCopy = SelectedItems
+                           .Where(i => i is WebSocketClientMessageViewModel wsMsgVm && !HasAnyParentAlsoSelected(wsMsgVm))
+                           .Select(wsMsgVm => (ICloneable)((WebSocketClientMessageViewModel)wsMsgVm).ToWebSocketClientMessage());
         var foldersToCopy = SelectedItems
                             .Where(i => i is CollectionFolderViewModel folderVm && !HasAnyParentAlsoSelected(folderVm))
                             .Select(f => (ICloneable)((CollectionFolderViewModel)f).ToCollectionFolder());
@@ -224,7 +227,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
                          .Where(i => i is EnvironmentViewModel)
                          .Select(e => (ICloneable)((EnvironmentViewModel)e).ToEnvironment());
 
-        var itemsToCopy = reqsToCopy.Concat(wssToCopy).Concat(foldersToCopy).Concat(envsToCopy).ToArray();
+        var itemsToCopy = reqsToCopy.Concat(wssToCopy).Concat(wsMsgsToCopy).Concat(foldersToCopy).Concat(envsToCopy).ToArray();
 
         ClipboardArea.Instance.PushToCopy(itemsToCopy);
     }
@@ -233,7 +236,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
 
     #region PASTE
 
-    private void PasteCopiedItems()
+    public void PasteCopiedItems()
     {
         if (ClipboardArea.ItemsMarkedForCut?.Any(x => x == SelectedItem) == true)
         {
@@ -350,10 +353,13 @@ public sealed class KeyboardShortcuts : ViewModelBase
             var buttonResult = await msgbox.ShowAsync();
             if (buttonResult == ButtonResult.Ok)
             {
-                DeleteMultiple(SelectedItems);
+                DeleteSelectedItems();
             }
         });
     }
+
+    internal void DeleteSelectedItems() =>
+        DeleteMultiple(SelectedItems);
 
     private void DeleteMultiple(ICollection<CollectionOrganizationItemViewModel> itemsToDelete) =>
         itemsToDelete

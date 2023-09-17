@@ -46,8 +46,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         get => this.isConnectedField;
         set
         {
-            NameEditableTextBlockViewDataCtx.IsConnectedWebSocket = value;
-            NameEditableTextBlockViewDataCtx.IsDisconnectedWebSocket = !value;
+            NameEditableVm.IsConnectedWebSocket = value;
+            NameEditableVm.IsDisconnectedWebSocket = !value;
             this.RaiseAndSetIfChanged(ref this.isConnectedField, value);
         }
     }
@@ -159,7 +159,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             {
                 TranslateRequestErrors.ClientCertificateFileNotFound => Localizer.Instance.RequestValidation.ClientCertificateFileNotFound,
                 TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank => Localizer.Instance.RequestValidation.ClientCertificatePkcs12PasswordCannotBeBlank,
-                TranslateRequestErrors.ClientCertificatePrivateKeyFileNotFound => Localizer.Instance.RequestValidation.ClientCertificatePrivateKeyFileNotFound,
+                TranslateRequestErrors.ClientCertificatePemPrivateKeyFileNotFound => Localizer.Instance.RequestValidation.ClientCertificatePemPrivateKeyFileNotFound,
                 TranslateRequestErrors.InvalidUrl => Localizer.Instance.RequestValidation.InvalidUrl,
                 TranslateRequestErrors.Http2UnavailableInOSVersion => Localizer.Instance.RequestValidation.Http2Unavailable,
                 TranslateRequestErrors.WebSocketHttpVersionUnavailable => Localizer.Instance.RequestValidation.WebSocketHttpVersionUnavailable,
@@ -313,7 +313,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         #region COLLECTION ORGANIZATION
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
 
-        NameEditableTextBlockViewDataCtx.IsDisconnectedWebSocket = true;
+        NameEditableVm.IsDisconnectedWebSocket = true;
         AddNewWebSocketClientMessageCmd = ReactiveCommand.Create(AddNewWebSocketClientMessage);
         #endregion
 
@@ -335,7 +335,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         CancelConnectCmd = ReactiveCommand.Create(CancelConnect);
         DisconnectCmd = ReactiveCommand.CreateFromTask(DisconnectAsync);
         CancelDisconnectCmd = ReactiveCommand.Create(CancelDisconnect);
-        DisableTlsVerificationCmd = ReactiveCommand.Create(DisableTlsVerification);
+        DisableTlsVerificationCmd = ReactiveCommand.Create(EnableTlsVerification);
 
         #endregion
 
@@ -589,7 +589,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     private void CancelDisconnect() =>
         this.cancelDisconnectionAttemptTokenSource?.Cancel();
 
-    private void DisableTlsVerification()
+    private void EnableTlsVerification()
     {
         ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled = true;
         IsDisableTlsVerificationVisible = false;

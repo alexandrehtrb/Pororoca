@@ -7,7 +7,7 @@ using ReactiveUI;
 
 namespace Pororoca.Desktop.ViewModels.DataGrids;
 
-public sealed class FormDataParamsDataGridViewModel : BaseDataGridWithOperationsViewModel<HttpRequestFormDataParamViewModel, PororocaHttpRequestFormDataParam>
+public sealed class FormDataParamsDataGridViewModel : BaseDataGridWithOperationsViewModel<FormDataParamViewModel, PororocaHttpRequestFormDataParam>
 {
     public override SimpleClipboardArea<PororocaHttpRequestFormDataParam> InnerClipboardArea =>
         FormDataParamsClipboardArea.Instance;
@@ -21,10 +21,10 @@ public sealed class FormDataParamsDataGridViewModel : BaseDataGridWithOperations
         AddNewFormDataFileParamCmd = ReactiveCommand.CreateFromTask(AddNewFormDataFileParam);
     }
 
-    protected override HttpRequestFormDataParamViewModel ToVm(PororocaHttpRequestFormDataParam domainObj) =>
+    protected override FormDataParamViewModel ToVm(PororocaHttpRequestFormDataParam domainObj) =>
         new(Items, domainObj);
 
-    protected override PororocaHttpRequestFormDataParam ToDomain(HttpRequestFormDataParamViewModel viewModel) =>
+    protected override PororocaHttpRequestFormDataParam ToDomain(FormDataParamViewModel viewModel) =>
         viewModel.ToFormDataParam();
 
     protected override PororocaHttpRequestFormDataParam MakeCopy(PororocaHttpRequestFormDataParam domainObj) =>

@@ -71,6 +71,23 @@ public static class PororocaRequestCommonTranslatorTests
         Assert.Null(uri);
     }
 
+    [Theory]
+    [InlineData("ftp://192.168.0.1")]
+    [InlineData("smtp://user:port@host:25")]
+    public static void Should_return_error_and_not_make_uri_if_url_is_not_http_or_websocket(string unresolvedUrl)
+    {
+        // GIVEN
+        PororocaCollection col = new(string.Empty);
+
+        // WHEN
+        bool valid = TryResolveRequestUri(col, unresolvedUrl, out var uri, out string? errorCode);
+
+        // THEN
+        Assert.False(valid);
+        Assert.Equal(TranslateRequestErrors.InvalidUrl, errorCode);
+        Assert.Null(uri);
+    }
+
     #endregion
 
     #region HTTP VERSION
