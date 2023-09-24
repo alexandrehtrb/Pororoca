@@ -45,6 +45,7 @@ public static class MimeTypesDetectorTests
     [InlineData("text/json")]
     [InlineData("application/json")]
     [InlineData("application/json; charset=utf-8")]
+    [InlineData("application/dns-json; charset=utf-8")]
     [InlineData("application/problem+json; charset=utf-8")]
     [InlineData("application/vnd.oracle.adf.batch+json")]
     public static void Should_detect_json_content_when_content_type_is_json(string contentType) =>
@@ -61,8 +62,13 @@ public static class MimeTypesDetectorTests
     [InlineData("text/plain")]
     [InlineData("application/json")]
     [InlineData("application/problem+json")]
+    [InlineData("application/dns-json; charset=utf-8")]
     [InlineData("application/vnd.oracle.adf.batch+json")]
+    [InlineData("application/vnd.google-earth.kml+xml")]
+    [InlineData("text/csv;charset=windows-1252")]
     [InlineData("text/xml")]
+    [InlineData("text/html; charset=UTF-16LE")]
+    [InlineData("image/svg+xml")]
     public static void Should_detect_text_content_when_content_type_is_text(string contentType) =>
         Assert.True(MimeTypesDetector.IsTextContent(contentType));
 
