@@ -77,7 +77,7 @@
     "Environment/VariableValue": "VALOR",
     "Folder/NewFolder": "Nova pasta",
     "HelpDialog/Title": "Ajuda",
-    "HelpDialog/Content": "Atalhos do teclado\\n\\nF1 - Mostrar a ajuda\\nF2 - Renomear\\nF4 - Focar na URL\\nF5 - Enviar requisição / conectar WebSocket\\nF6 - Cancelar requisição / desconectar WebSocket\\nF7 - Ativar ambiente anterior\\nF8 - Ativar próximo ambiente\\nCtrl+S - Salvar corpo da resposta a arquivo\\nCtrl+PageUp - Alternar para item acima na árvore\\nCtrl+PageDown - Alternar para item abaixo na árvore\\n\\nDocumentação completa em: https://pororoca.io",
+    "HelpDialog/Content": "Atalhos do teclado\\n\\nF1 - Mostrar a ajuda\\nF2 - Renomear\\nF4 - Focar na URL\\nF5 - Enviar requisição / conectar WebSocket\\nF6 - Cancelar requisição / desconectar WebSocket\\nF7 - Ativar ambiente anterior\\nF8 - Ativar próximo ambiente\\nCtrl+S - Salvar corpo da resposta a arquivo\\nCtrl+PageUp - Alternar para item acima na árvore\\nCtrl+PageDown - Alternar para item abaixo na árvore\\nCtrl+Shift+S - Salvar tudo\\n\\nDocumentação completa em: https://pororoca.io",
     "HttpRequest/Body": "Corpo",
     "HttpRequest/BodyFileContentTypeWatermark": "(content-type do arquivo)",
     "HttpRequest/BodyFileSearchFile": "Procurar arquivo…",

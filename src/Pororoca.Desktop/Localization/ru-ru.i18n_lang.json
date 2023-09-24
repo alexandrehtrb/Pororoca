@@ -77,7 +77,7 @@
   "Environment/VariableValue": "ЗНАЧЕНИЕ",
   "Folder/NewFolder": "Новая папка",
   "HelpDialog/Title": "Ажуда",
-  "HelpDialog/Content": "Горячие клавиши\\n\\nF1 - Показать справку\\nF2 - Переименовать\\nF4 - Сосредоточиться на URL-адресе\\nF5 - Отправить запрос / подключить WebSocket\\nF6 - Отменить запрос / отключить WebSocket\\nF7 - Установить предыдущую среду как активную\\nF8 - Установить следующую среду как активную\\nCtrl+S - Сохранить тело ответа в файл\\nCtrl+PageUp - Переключиться на элемент выше в дереве\\nCtrl+PageDown - Переключитесь на элемент ниже в дереве\\n\\nПолная документация на сайте: https://pororoca.io",
+  "HelpDialog/Content": "Горячие клавиши\\n\\nF1 - Показать справку\\nF2 - Переименовать\\nF4 - Сосредоточиться на URL-адресе\\nF5 - Отправить запрос / подключить WebSocket\\nF6 - Отменить запрос / отключить WebSocket\\nF7 - Установить предыдущую среду как активную\\nF8 - Установить следующую среду как активную\\nCtrl+S - Сохранить тело ответа в файл\\nCtrl+PageUp - Переключиться на элемент выше в дереве\\nCtrl+PageDown - Переключитесь на элемент ниже в дереве\\nCtrl+Shift+S - Сохранить все\\n\\nПолная документация на сайте: https://pororoca.io",
   "HttpRequest/Body": "Body",
   "HttpRequest/BodyFileContentTypeWatermark": "(файл content-type)",
   "HttpRequest/BodyFileSearchFile": "Найти файл…",
