@@ -1310,8 +1310,10 @@ public static class MimeTypesDetector
     public static bool IsJsonContent(string contentType) =>
         contentType.Contains("json");
 
-    public static bool IsTextContent(string contentType) =>
-         // This should cover most text content types
+    public static bool IsTextContent(string? contentType) =>
+        // This should cover most text content types
+        // Optimistic behavior, considering that if content type is not present, then probably is text
+        contentType is null ||
         textMimeTypesIndicators.Any(mt =>
             contentType.Contains(mt, StringComparison.InvariantCultureIgnoreCase));
 }

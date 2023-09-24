@@ -59,6 +59,7 @@ public static class MimeTypesDetectorTests
         Assert.False(MimeTypesDetector.IsJsonContent(contentType));
 
     [Theory]
+    [InlineData(null)]
     [InlineData("text/plain")]
     [InlineData("application/json")]
     [InlineData("application/problem+json")]
@@ -69,7 +70,7 @@ public static class MimeTypesDetectorTests
     [InlineData("text/xml")]
     [InlineData("text/html; charset=UTF-16LE")]
     [InlineData("image/svg+xml")]
-    public static void Should_detect_text_content_when_content_type_is_text(string contentType) =>
+    public static void Should_detect_text_content_when_content_type_is_text(string? contentType) =>
         Assert.True(MimeTypesDetector.IsTextContent(contentType));
 
     [Theory]
