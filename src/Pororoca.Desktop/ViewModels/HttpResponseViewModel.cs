@@ -17,6 +17,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
     private static readonly TimeSpan oneSecond = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan oneMinute = TimeSpan.FromMinutes(1);
     private PororocaHttpResponse? res;
+    private string? environmentUsedForRequest;
     private readonly CollectionViewModel colVm;
     private readonly HttpRequestViewModel parentHttpRequestVm;
 
@@ -72,7 +73,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
         {
             var receivedAtDt = this.res.ReceivedAt.DateTime;
             string reqName = this.parentHttpRequestVm.Name;
-            string? envName = this.colVm.GetCurrentEnvironment()?.Name;
+            string? envName = this.environmentUsedForRequest;
             string envLabel = envName is not null ? $"-{envName}-" : "-";
             return $"{reqName}{envLabel}response-{receivedAtDt:yyyyMMdd-HHmmss}.{fileExtensionWithoutDot}";
         }
@@ -117,7 +118,13 @@ public sealed class HttpResponseViewModel : ViewModelBase
     {
         if (res != null && res.Successful)
         {
-            this.res = res;
+            if (this.res != res)
+            {
+                this.res = res;
+                // this is because the user might change the environment after the response was received,
+                // and we need to preserve the name of the environment used for the request
+                this.environmentUsedForRequest = this.colVm.GetCurrentEnvironment()?.Name;
+            }
             ResponseStatusCodeElapsedTimeTitle = FormatSuccessfulResponseTitle(res.ElapsedTime, (HttpStatusCode)res.StatusCode!);
             UpdateHeadersAndTrailers(res.Headers, res.Trailers);
             // response content type needs to be always set first, because when the content is updated,
