@@ -16,7 +16,7 @@
     <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
     <PublishReadyToRun>True</PublishReadyToRun>
     <ApplicationIcon>Assets/pororoca_icon.ico</ApplicationIcon>
-    <Version>2.2.0</Version>
+    <Version>2.3.0</Version>
     <FileVersion>$(Version)</FileVersion>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <Copyright>AlexandreHTRB</Copyright>
