@@ -65,7 +65,6 @@
           <MenuItem
               Header="{Binding i18n.TopMenuFile.SaveAll}"
               InputGesture="Ctrl+Shift+S"
-              
               Command="{Binding SaveAllCmd}"/>
           <Separator/>
           <MenuItem
@@ -200,8 +199,15 @@
         </MenuItem>
         <MenuItem
             x:Name="topMenuItemHelp"
-            Header="{Binding i18n.TopMenu.Help}"
+            Header="{Binding i18n.TopMenu.Help}">
+          <MenuItem
+            Header="{Binding i18n.TopMenuHelp.ViewKeyboardShortcuts}"
             Command="{Binding HotKeys.ShowHelpCmd}"/>
+          <Separator/>
+          <MenuItem
+            Header="{Binding VersionName}"
+            IsEnabled="False"/>
+        </MenuItem>
         <MenuItem
             Header="{Binding i18n.TopMenu.RunUITests}"
             IsVisible="{Binding IsRunUITestsVisible}"

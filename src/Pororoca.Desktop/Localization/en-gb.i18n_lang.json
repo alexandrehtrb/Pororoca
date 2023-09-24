@@ -201,6 +201,7 @@
     "TopMenuTheme/Dark": "Dark",
     "TopMenuTheme/Light": "Light",
     "TopMenuTheme/Pampa": "Pampa",
+    "TopMenuHelp/ViewKeyboardShortcuts": "View keyboard shortcuts",
     "UpdateReminder/DialogCancel": "I'll check later",
     "UpdateReminder/DialogGoToSite": "Go to site",
     "UpdateReminder/DialogMessage": "Remember to periodically check for updates!",

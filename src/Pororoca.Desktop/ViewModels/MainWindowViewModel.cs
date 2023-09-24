@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Reactive;
+using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
@@ -148,6 +149,13 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #endregion
 
+    #region VERSION NAME
+
+    [Reactive]
+    public string VersionName { get; set; }
+
+    #endregion
+
     public MainWindowViewModel()
     {
         #region COLLECTIONS ORGANIZATION
@@ -182,6 +190,10 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
         #region UI TESTS
         RunUITestsCmd = ReactiveCommand.CreateFromTask(RunUITestsAsync);
+        #endregion
+
+        #region VERSION NAME
+        VersionName = "v" + Assembly.GetExecutingAssembly().GetName().Version?.ToString(3);
         #endregion
     }
 
