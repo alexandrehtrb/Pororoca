@@ -320,7 +320,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         #endregion
 
         #region RESPONSE
-        ResponseDataCtx = new();
+        ResponseDataCtx = new(this);
         #endregion
     }
 

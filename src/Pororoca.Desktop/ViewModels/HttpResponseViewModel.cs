@@ -17,6 +17,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
     private static readonly TimeSpan oneSecond = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan oneMinute = TimeSpan.FromMinutes(1);
     private PororocaHttpResponse? res;
+    private readonly HttpRequestViewModel parentHttpRequestVm;
 
     [Reactive]
     public string? ResponseStatusCodeElapsedTimeTitle { get; set; }
@@ -49,8 +50,9 @@ public sealed class HttpResponseViewModel : ViewModelBase
 
     public ReactiveCommand<Unit, Unit> DisableTlsVerificationCmd { get; }
 
-    public HttpResponseViewModel()
+    public HttpResponseViewModel(HttpRequestViewModel reqVm)
     {
+        this.parentHttpRequestVm = reqVm;
         ResponseHeadersAndTrailersTableVm = new();
         SaveResponseBodyToFileCmd = ReactiveCommand.CreateFromTask(SaveResponseBodyToFileAsync);
         DisableTlsVerificationCmd = ReactiveCommand.Create(EnableTlsVerification);
@@ -67,7 +69,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
         string GenerateDefaultInitialFileName(string fileExtensionWithoutDot)
         {
             var receivedAtDt = this.res.ReceivedAt.DateTime;
-            return $"response-{receivedAtDt:yyyyMMdd-HHmmss}.{fileExtensionWithoutDot}";
+            return $"{this.parentHttpRequestVm.Name}-response-{receivedAtDt:yyyyMMdd-HHmmss}.{fileExtensionWithoutDot}";
         }
 
         if (this.res != null && this.res.HasBody)
