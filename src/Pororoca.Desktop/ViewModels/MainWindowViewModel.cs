@@ -30,6 +30,11 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     public ReactiveCommand<Unit, Unit> AddNewCollectionCmd { get; }
     public ReactiveCommand<Unit, Unit> ImportCollectionsCmd { get; }
 
+    [Reactive]
+    public bool IsSavedLabelVisible { get; set; }
+
+    public ReactiveCommand<Unit, Unit> SaveAllCmd { get; }
+
     #endregion
 
     #region SCREENS
@@ -149,6 +154,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         CollectionsGroupViewDataCtx = new(this, OnCollectionsGroupItemSelected);
         ImportCollectionsCmd = ReactiveCommand.CreateFromTask(ImportCollectionsAsync);
         AddNewCollectionCmd = ReactiveCommand.Create(AddNewCollection);
+        IsSavedLabelVisible = false;
+        SaveAllCmd = ReactiveCommand.CreateFromTask(SaveAllAsync);
         #endregion
 
         #region LANGUAGE
@@ -350,6 +357,14 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     private Task ImportCollectionsAsync() =>
         FileExporterImporter.ImportCollectionsAsync(this);
+
+    private async Task SaveAllAsync()
+    {        
+        SaveUserData();
+        IsSavedLabelVisible = true;
+        await Task.Delay(3000);
+        IsSavedLabelVisible = false;
+    }
 
     #endregion
 
