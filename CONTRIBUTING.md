@@ -16,6 +16,10 @@ Remember to fork this repo and develop your code starting from the `develop` bra
 
 5) (OPTIONAL) Add a README for your language.
 
+6) (OPTIONAL) Add your language to the Windows installer: `src/Pororoca.Desktop.WindowsInstaller/Installer.nsi`.
+
+7) If you want to translate the documentation to your language, open an issue on GitHub and I will concede access to the documentation website repo.
+
 6) Done!
 
 ## I want to make my own colour theme
