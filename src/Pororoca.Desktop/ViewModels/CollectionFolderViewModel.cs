@@ -24,13 +24,13 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
 
     #region COLLECTION FOLDER
 
-    private readonly IPororocaVariableResolver variableResolver;
+    private readonly CollectionViewModel variableResolver;
     public override ObservableCollection<CollectionOrganizationItemViewModel> Items { get; }
 
     #endregion
 
     public CollectionFolderViewModel(ICollectionOrganizationItemParentViewModel parentVm,
-                                     IPororocaVariableResolver variableResolver,
+                                     CollectionViewModel variableResolver,
                                      PororocaCollectionFolder folder) : base(parentVm, folder.Name)
     {
         #region COLLECTION ORGANIZATION

@@ -17,6 +17,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
     private static readonly TimeSpan oneSecond = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan oneMinute = TimeSpan.FromMinutes(1);
     private PororocaHttpResponse? res;
+    private readonly CollectionViewModel colVm;
     private readonly HttpRequestViewModel parentHttpRequestVm;
 
     [Reactive]
@@ -50,8 +51,9 @@ public sealed class HttpResponseViewModel : ViewModelBase
 
     public ReactiveCommand<Unit, Unit> DisableTlsVerificationCmd { get; }
 
-    public HttpResponseViewModel(HttpRequestViewModel reqVm)
+    public HttpResponseViewModel(CollectionViewModel colVm, HttpRequestViewModel reqVm)
     {
+        this.colVm = colVm;
         this.parentHttpRequestVm = reqVm;
         ResponseHeadersAndTrailersTableVm = new();
         SaveResponseBodyToFileCmd = ReactiveCommand.CreateFromTask(SaveResponseBodyToFileAsync);
@@ -69,7 +71,10 @@ public sealed class HttpResponseViewModel : ViewModelBase
         string GenerateDefaultInitialFileName(string fileExtensionWithoutDot)
         {
             var receivedAtDt = this.res.ReceivedAt.DateTime;
-            return $"{this.parentHttpRequestVm.Name}-response-{receivedAtDt:yyyyMMdd-HHmmss}.{fileExtensionWithoutDot}";
+            string reqName = this.parentHttpRequestVm.Name;
+            string? envName = this.colVm.GetCurrentEnvironment()?.Name;
+            string envLabel = envName is not null ? $"-{envName}-" : "-";
+            return $"{reqName}{envLabel}response-{receivedAtDt:yyyyMMdd-HHmmss}.{fileExtensionWithoutDot}";
         }
 
         if (this.res != null && this.res.HasBody)

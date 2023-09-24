@@ -24,7 +24,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #region REQUEST
 
     private readonly IPororocaRequester requester = PororocaRequester.Singleton;
-    private readonly IPororocaVariableResolver variableResolver;
+    private readonly CollectionViewModel variableResolver;
 
     // To preserve the state of the last shown request tab
     [Reactive]
@@ -243,7 +243,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #endregion
 
     public HttpRequestViewModel(ICollectionOrganizationItemParentViewModel parentVm,
-                                IPororocaVariableResolver variableResolver,
+                                CollectionViewModel variableResolver,
                                 PororocaHttpRequest req) : base(parentVm, req.Name)
     {
         #region COLLECTION ORGANIZATION
@@ -320,7 +320,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         #endregion
 
         #region RESPONSE
-        ResponseDataCtx = new(this);
+        ResponseDataCtx = new(this.variableResolver, this);
         #endregion
     }
 
