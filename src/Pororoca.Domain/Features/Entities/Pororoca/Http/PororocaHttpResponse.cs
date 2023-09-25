@@ -45,15 +45,8 @@ public sealed class PororocaHttpResponse
         }
     }
 
-    public bool CanDisplayTextBody
-    {
-        get
-        {
-            string? contentType = ContentType;
-            // Optimistic behavior, considering that if content type is not present, then probably is text
-            return contentType == null || MimeTypesDetector.IsTextContent(contentType);
-        }
-    }
+    public bool CanDisplayTextBody =>
+        MimeTypesDetector.IsTextContent(ContentType);
 
     public string? GetBodyAsText(string? nonUtf8BodyMessageToShow = null)
     {

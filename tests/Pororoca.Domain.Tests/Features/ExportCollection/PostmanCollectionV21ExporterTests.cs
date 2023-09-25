@@ -179,14 +179,10 @@ public static class PostmanCollectionV21ExporterTests
     {
         // GIVEN
         PororocaHttpRequestBody reqBody = new();
-        PororocaHttpRequestFormDataParam p1t = new(true, "Key1Text");
-        p1t.SetTextValue("Value1Text", "text/plain");
-        PororocaHttpRequestFormDataParam p2t = new(false, "Key2Text");
-        p2t.SetTextValue("Value2Text", "application/json; charset=utf-8");
-        PororocaHttpRequestFormDataParam p1f = new(true, "Key1File");
-        p1f.SetFileValue(@"C:\Pasta1\arq.txt", "text/plain");
-        PororocaHttpRequestFormDataParam p2f = new(false, "Key2File");
-        p2f.SetFileValue(@"C:\Pasta1\arq2.jpg", "image/jpeg");
+        var p1t = PororocaHttpRequestFormDataParam.MakeTextParam(true, "Key1Text", "Value1Text", "text/plain");
+        var p2t = PororocaHttpRequestFormDataParam.MakeTextParam(false, "Key2Text", "Value2Text", "application/json; charset=utf-8");
+        var p1f = PororocaHttpRequestFormDataParam.MakeFileParam(true, "Key1File", @"C:\Pasta1\arq.txt", "text/plain");
+        var p2f = PororocaHttpRequestFormDataParam.MakeFileParam(false, "Key2File", @"C:\Pasta1\arq2.jpg", "image/jpeg");
         reqBody.SetFormDataContent(new[] { p1t, p2t, p1f, p2f });
 
         // WHEN

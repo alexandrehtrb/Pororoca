@@ -1,7 +1,7 @@
-using System.Collections.ObjectModel;
 using System.Reactive;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
+using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -25,13 +25,14 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
     private readonly Action<EnvironmentViewModel> onEnvironmentSetAsCurrent;
 
     [Reactive]
+    public VariablesDataGridViewModel VariablesTableVm { get; set; }
+    
+    [Reactive]
     public bool IsCurrentEnvironment { get; set; }
 
     [Reactive]
     public bool IncludeSecretVariables { get; set; }
 
-    public ObservableCollection<VariableViewModel> Variables { get; }
-    public ReactiveCommand<Unit, Unit> AddNewVariableCmd { get; }
     public ReactiveCommand<Unit, Unit> SetAsCurrentEnvironmentCmd { get; }
 
     #endregion
@@ -65,14 +66,8 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
         this.envId = env.Id;
         this.envCreatedAt = env.CreatedAt;
         this.onEnvironmentSetAsCurrent = onEnvironmentSetAsCurrent;
-
-        Variables = new();
-        foreach (var v in env.Variables)
-        {
-            Variables.Add(new(Variables, v));
-        }
+        VariablesTableVm = new(env.Variables);
         IsCurrentEnvironment = env.IsCurrent;
-        AddNewVariableCmd = ReactiveCommand.Create(AddNewVariable);
         SetAsCurrentEnvironmentCmd = ReactiveCommand.Create(SetAsCurrentEnvironment);
         #endregion
     }
@@ -117,9 +112,6 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
     private void SetAsCurrentEnvironment() =>
         this.onEnvironmentSetAsCurrent(this);
 
-    private void AddNewVariable() =>
-        Variables.Add(new(Variables, true, string.Empty, string.Empty, false));
-
     public PororocaEnvironment ToEnvironment()
     {
         PororocaEnvironment newEnv = new(this.envId, Name, this.envCreatedAt);
@@ -130,7 +122,7 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
     private void UpdateEnvironmentWithInputs(PororocaEnvironment environment)
     {
         environment.IsCurrent = IsCurrentEnvironment;
-        environment.UpdateVariables(Variables.Select(v => v.ToVariable()));
+        environment.UpdateVariables(VariablesTableVm.Items.Select(v => v.ToVariable()));
     }
 
     #endregion

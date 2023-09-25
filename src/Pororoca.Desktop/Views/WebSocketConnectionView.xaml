@@ -50,7 +50,7 @@
           Margin="24,0,24,0"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Top">
-        <v:EditableTextBlockView DataContext="{Binding NameEditableTextBlockViewDataCtx}"/>
+        <controls:EditableTextBlock x:Name="etbName" DataContext="{Binding NameEditableVm}"/>
       </Grid>
 
       <Grid
@@ -79,12 +79,14 @@
               Classes.HasValidationProblem="{Binding HasUrlValidationProblem}"/>
 
           <TextBlock
+              Name="tbErrorMsg"
               Margin="12,6,12,0"
               Classes="ErrorMessage"
               Text="{Binding InvalidConnectionError}"
               IsVisible="{Binding IsInvalidConnectionErrorVisible}"/>
 
           <TextBlock
+              Name="tbIsWsConnected"
               Margin="12,6,12,0"
               FontSize="14"
               Foreground="{DynamicResource WebSocketConnectedBrush}"
@@ -94,6 +96,7 @@
         </StackPanel>
 
         <ComboBox
+            Name="cbHttpVersion"
             Grid.Column="1"
             Grid.Row="0"
             Width="120"
@@ -106,6 +109,7 @@
             Classes.HasValidationProblem="{Binding HasHttpVersionValidationProblem}"/>
 
         <Button
+            Name="btConnect"
             Grid.Column="2"
             Grid.Row="0"
             Height="40"
@@ -134,6 +138,7 @@
             Classes="Primary"/>
 
         <Button
+            Name="btDisconnect"
             Grid.Column="2"
             Grid.Row="0"
             Height="40"
@@ -201,13 +206,14 @@
             Classes="SectionTitle"
             Text="{Binding i18n.WebSocketConnection.SectionTitle}"/>
         <TabControl
+            Name="tabControlConnectionRequest"
             Grid.Column="0"
             Grid.Row="1"
             Margin="12,24,12,12"
             TabStripPlacement="Top"
             SelectedIndex="{Binding SelectedConnectionTabIndex}">
           <!-- CONNECTION OPTIONS -->
-          <TabItem>
+          <TabItem Name="tabItemConnectionRequestOptions">
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
@@ -256,6 +262,7 @@
                   <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Button
+                    Name="btAddConnectionRequestHeader"
                     Grid.Column="0"
                     Grid.Row="0"
                     Height="24"
@@ -265,7 +272,7 @@
                     Padding="2"
                     Margin="12,0,0,0"
                     Classes="Primary"
-                    Command="{Binding AddNewConnectionRequestHeaderCmd}">
+                    Command="{Binding ConnectionRequestHeadersTableVm.AddNewCmd}">
                   <Button.Content>
                     <Image
                         VerticalAlignment="Center"
@@ -279,13 +286,43 @@
                   </Button.Content>
                 </Button>
                 <DataGrid
+                    Name="dgWsConnectionReqHeaders"
                     Grid.Column="0"
                     Grid.Row="1"
                     Margin="0,12,0,0"
                     VerticalAlignment="Stretch"
                     AutoGenerateColumns="False"
-                    ItemsSource="{Binding ConnectionRequestHeaders}"
+                    ItemsSource="{Binding ConnectionRequestHeadersTableVm.Items}"
+                    SelectionChanged="OnSelectedConnectionRequestHeadersChanged"
                     CanUserResizeColumns="True">
+                    <DataGrid.KeyBindings>
+                      <KeyBinding Command="{Binding ConnectionRequestHeadersTableVm.CutCmd}" Gesture="Ctrl+X" />
+                      <KeyBinding Command="{Binding ConnectionRequestHeadersTableVm.CopyCmd}" Gesture="Ctrl+C" />
+                      <KeyBinding Command="{Binding ConnectionRequestHeadersTableVm.PasteCmd}" Gesture="Ctrl+V" />
+                      <KeyBinding Command="{Binding ConnectionRequestHeadersTableVm.DuplicateCmd}" Gesture="Ctrl+D" />
+                      <KeyBinding Command="{Binding ConnectionRequestHeadersTableVm.DeleteCmd}" Gesture="Delete" />
+                    </DataGrid.KeyBindings>
+                    <DataGrid.ContextMenu>
+                      <ContextMenu>
+                        <MenuItem
+                              Header="{Binding i18n.ContextMenu.Cut}"
+                              Command="{Binding ConnectionRequestHeadersTableVm.CutCmd}"
+                              InputGesture="Ctrl+X"/>
+                          <MenuItem
+                              Header="{Binding i18n.ContextMenu.Copy}"
+                              Command="{Binding ConnectionRequestHeadersTableVm.CopyCmd}"
+                              InputGesture="Ctrl+C"/>
+                          <MenuItem
+                              Header="{Binding i18n.ContextMenu.Paste}"
+                              Command="{Binding ConnectionRequestHeadersTableVm.PasteCmd}"
+                              InputGesture="Ctrl+V"
+                              IsEnabled="{Binding ConnectionRequestHeadersTableVm.InnerClipboardArea.CanPaste}"/>
+                          <MenuItem
+                              Header="{Binding i18n.ContextMenu.Delete}"
+                              Command="{Binding ConnectionRequestHeadersTableVm.DeleteCmd}"
+                              InputGesture="Delete"/>
+                      </ContextMenu>
+                    </DataGrid.ContextMenu>
                   <i:Interaction.Behaviors>
                     <i:BehaviorCollection>
                       <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}"/>
@@ -346,6 +383,7 @@
                   <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Button
+                    Name="btAddSubprotocol"
                     Grid.Column="0"
                     Grid.Row="0"
                     Height="24"
@@ -355,7 +393,7 @@
                     Padding="2"
                     Margin="12,0,0,0"
                     Classes="Primary"
-                    Command="{Binding AddNewSubprotocolCmd}">
+                    Command="{Binding SubprotocolsTableVm.AddNewCmd}">
                   <Button.Content>
                     <Image
                         VerticalAlignment="Center"
@@ -369,13 +407,43 @@
                   </Button.Content>
                 </Button>
                 <DataGrid
+                    Name="dbSubprotocols"
                     Grid.Column="0"
                     Grid.Row="1"
                     Margin="0,12,0,0"
                     VerticalAlignment="Stretch"
                     AutoGenerateColumns="False"
-                    ItemsSource="{Binding Subprotocols}"
+                    ItemsSource="{Binding SubprotocolsTableVm.Items}"
+                    SelectionChanged="OnSelectedSubprotocolsChanged"
                     CanUserResizeColumns="True">
+                    <DataGrid.KeyBindings>
+                      <KeyBinding Command="{Binding SubprotocolsTableVm.CutCmd}" Gesture="Ctrl+X" />
+                      <KeyBinding Command="{Binding SubprotocolsTableVm.CopyCmd}" Gesture="Ctrl+C" />
+                      <KeyBinding Command="{Binding SubprotocolsTableVm.PasteCmd}" Gesture="Ctrl+V" />
+                      <KeyBinding Command="{Binding SubprotocolsTableVm.DuplicateCmd}" Gesture="Ctrl+D" />
+                      <KeyBinding Command="{Binding SubprotocolsTableVm.DeleteCmd}" Gesture="Delete" />
+                    </DataGrid.KeyBindings>
+                    <DataGrid.ContextMenu>
+                      <ContextMenu>
+                        <MenuItem
+                              Header="{Binding i18n.ContextMenu.Cut}"
+                              Command="{Binding SubprotocolsTableVm.CutCmd}"
+                              InputGesture="Ctrl+X"/>
+                          <MenuItem
+                              Header="{Binding i18n.ContextMenu.Copy}"
+                              Command="{Binding SubprotocolsTableVm.CopyCmd}"
+                              InputGesture="Ctrl+C"/>
+                          <MenuItem
+                              Header="{Binding i18n.ContextMenu.Paste}"
+                              Command="{Binding SubprotocolsTableVm.PasteCmd}"
+                              InputGesture="Ctrl+V"
+                              IsEnabled="{Binding SubprotocolsTableVm.InnerClipboardArea.CanPaste}"/>
+                          <MenuItem
+                              Header="{Binding i18n.ContextMenu.Delete}"
+                              Command="{Binding SubprotocolsTableVm.DeleteCmd}"
+                              InputGesture="Delete"/>
+                      </ContextMenu>
+                    </DataGrid.ContextMenu>
                   <i:Interaction.Behaviors>
                     <i:BehaviorCollection>
                       <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}"/>
@@ -482,7 +550,7 @@
             </Grid>
           </TabItem>
           <!-- CONNECTION REQUEST AUTH -->
-          <TabItem>
+          <TabItem Name="tabItemConnectionRequestAuth">
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
@@ -491,7 +559,7 @@
             <v:RequestAuthView DataContext="{Binding RequestAuthDataCtx}"/>
           </TabItem>
           <!-- CONNECTION EXCEPTION -->
-          <TabItem>
+          <TabItem Name="tabItemConnectionRequestException">
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
@@ -500,6 +568,7 @@
             <Grid RowDefinitions="*, Auto">
               <!-- AcceptsReturn="True" allows for horizontal scrollbar -->
               <TextBox
+                  Name="tbConnectionException"
                   Grid.Column="0"
                   Grid.Row="0"
                   Margin="0,12,0,12"
@@ -510,6 +579,7 @@
                   Classes="CodeTextBox"
                   Text="{Binding ConnectionExceptionContent}"/>
               <Button
+                  Name="btDisableTlsVerification"
                   Grid.Column="0"
                   Grid.Row="1"
                   Content="{Binding i18n.HttpResponse.DisableTlsVerification}"
@@ -605,6 +675,7 @@
           <Grid ColumnDefinitions="Auto, *, Auto">
 
             <Button
+                x:Name="btAddWsCliMsg"
                 Grid.Column="0"
                 Grid.Row="0"
                 Height="40"
@@ -629,6 +700,7 @@
             </Button>
 
             <ComboBox
+                Name="cbWsMsgToSend"
                 Grid.Column="1"
                 Grid.Row="0"
                 Height="40"
@@ -643,6 +715,7 @@
             </ComboBox>
 
             <Button
+                Name="btSendMessage"
                 Grid.Column="2"
                 Grid.Row="0"
                 Height="40"
@@ -663,6 +736,7 @@
               IsVisible="{Binding IsSendingAMessage}"/>
 
           <TextBlock
+              Name="tbMessageToSendError"
               Margin="12,6,12,0"
               Classes="ErrorMessage"
               Text="{Binding InvalidClientMessageError}"
@@ -691,6 +765,7 @@
             Text="{Binding i18n.WebSocketExchangedMessageDetail.SectionTitle}"/>
 
         <TextBox
+            Name="tbMessageDetailType"
             Grid.Column="0"
             Grid.Row="1"
             Margin="12,24,12,6"

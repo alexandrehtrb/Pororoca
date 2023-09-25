@@ -1,29 +1,18 @@
-using System.Collections.ObjectModel;
-using System.Reactive;
+using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Domain.Features.Entities.Pororoca;
-using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
 
 public sealed class CollectionVariablesViewModel : CollectionOrganizationItemViewModel
 {
-    #region COLLECTION VARIABLES
-
-    public ObservableCollection<VariableViewModel> Variables { get; }
-    public ReactiveCommand<Unit, Unit> AddNewVariableCmd { get; }
-
-    #endregion
+    [Reactive]
+    public VariablesDataGridViewModel VariablesTableVm { get; set; }
 
     public CollectionVariablesViewModel(ICollectionOrganizationItemParentViewModel parentVm,
                                         PororocaCollection col) : base(parentVm, col.Name)
     {
-        AddNewVariableCmd = ReactiveCommand.Create(AddNewVariable);
-
-        Variables = new();
-        foreach (var v in col.Variables)
-        {
-            Variables.Add(new(Variables, v));
-        }
+        VariablesTableVm = new(col.Variables);
     }
 
     #region COLLECTION ORGANIZATION
@@ -35,11 +24,8 @@ public sealed class CollectionVariablesViewModel : CollectionOrganizationItemVie
 
     #region COLLECTION VARIABLES
 
-    private void AddNewVariable() =>
-        Variables.Add(new(Variables, true, string.Empty, string.Empty, false));
-
     public IEnumerable<PororocaVariable> ToVariables() =>
-        Variables.Select(v => v.ToVariable());
+        VariablesTableVm.Items.Select(v => v.ToVariable());
 
     #endregion
 }

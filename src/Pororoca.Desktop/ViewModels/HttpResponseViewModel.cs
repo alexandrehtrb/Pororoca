@@ -1,9 +1,9 @@
-using System.Collections.ObjectModel;
 using System.Net;
 using System.Reactive;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
+using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using ReactiveUI;
@@ -17,6 +17,9 @@ public sealed class HttpResponseViewModel : ViewModelBase
     private static readonly TimeSpan oneSecond = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan oneMinute = TimeSpan.FromMinutes(1);
     private PororocaHttpResponse? res;
+    private string? environmentUsedForRequest;
+    private readonly CollectionViewModel colVm;
+    private readonly HttpRequestViewModel parentHttpRequestVm;
 
     [Reactive]
     public string? ResponseStatusCodeElapsedTimeTitle { get; set; }
@@ -25,7 +28,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
     [Reactive]
     public int ResponseTabsSelectedIndex { get; set; }
 
-    public ObservableCollection<KeyValueParamViewModel> ResponseHeadersAndTrailers { get; }
+    public KeyValueParamsDataGridViewModel ResponseHeadersAndTrailersTableVm { get; }
 
     [Reactive]
     public TextDocument? ResponseRawContentTextDocument { get; set; }
@@ -49,11 +52,13 @@ public sealed class HttpResponseViewModel : ViewModelBase
 
     public ReactiveCommand<Unit, Unit> DisableTlsVerificationCmd { get; }
 
-    public HttpResponseViewModel()
+    public HttpResponseViewModel(CollectionViewModel colVm, HttpRequestViewModel reqVm)
     {
-        ResponseHeadersAndTrailers = new();
+        this.colVm = colVm;
+        this.parentHttpRequestVm = reqVm;
+        ResponseHeadersAndTrailersTableVm = new();
         SaveResponseBodyToFileCmd = ReactiveCommand.CreateFromTask(SaveResponseBodyToFileAsync);
-        DisableTlsVerificationCmd = ReactiveCommand.Create(DisableTlsVerification);
+        DisableTlsVerificationCmd = ReactiveCommand.Create(EnableTlsVerification);
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
 
         UpdateWithResponse(this.res);
@@ -67,7 +72,10 @@ public sealed class HttpResponseViewModel : ViewModelBase
         string GenerateDefaultInitialFileName(string fileExtensionWithoutDot)
         {
             var receivedAtDt = this.res.ReceivedAt.DateTime;
-            return $"response-{receivedAtDt:yyyyMMdd-HHmmss}.{fileExtensionWithoutDot}";
+            string reqName = this.parentHttpRequestVm.Name;
+            string? envName = this.environmentUsedForRequest;
+            string envLabel = envName is not null ? $"-{envName}-" : "-";
+            return $"{reqName}{envLabel}response-{receivedAtDt:yyyyMMdd-HHmmss}.{fileExtensionWithoutDot}";
         }
 
         if (this.res != null && this.res.HasBody)
@@ -100,7 +108,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
         }
     }
 
-    private void DisableTlsVerification()
+    private void EnableTlsVerification()
     {
         ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled = true;
         IsDisableTlsVerificationVisible = false;
@@ -110,7 +118,13 @@ public sealed class HttpResponseViewModel : ViewModelBase
     {
         if (res != null && res.Successful)
         {
-            this.res = res;
+            if (this.res != res)
+            {
+                this.res = res;
+                // this is because the user might change the environment after the response was received,
+                // and we need to preserve the name of the environment used for the request
+                this.environmentUsedForRequest = this.colVm.GetCurrentEnvironment()?.Name;
+            }
             ResponseStatusCodeElapsedTimeTitle = FormatSuccessfulResponseTitle(res.ElapsedTime, (HttpStatusCode)res.StatusCode!);
             UpdateHeadersAndTrailers(res.Headers, res.Trailers);
             // response content type needs to be always set first, because when the content is updated,
@@ -148,19 +162,20 @@ public sealed class HttpResponseViewModel : ViewModelBase
 
     private void UpdateHeadersAndTrailers(IEnumerable<KeyValuePair<string, string>>? resHeaders, IEnumerable<KeyValuePair<string, string>>? resTrailers)
     {
-        ResponseHeadersAndTrailers.Clear();
+        var tableItems = ResponseHeadersAndTrailersTableVm.Items;
+        tableItems.Clear();
         if (resHeaders != null)
         {
             foreach (var kvp in resHeaders)
             {
-                ResponseHeadersAndTrailers.Add(new(ResponseHeadersAndTrailers, true, kvp.Key, kvp.Value));
+                tableItems.Add(new(tableItems, true, kvp.Key, kvp.Value));
             }
         }
         if (resTrailers != null)
         {
             foreach (var kvp in resTrailers)
             {
-                ResponseHeadersAndTrailers.Add(new(ResponseHeadersAndTrailers, true, kvp.Key, kvp.Value));
+                tableItems.Add(new(tableItems, true, kvp.Key, kvp.Value));
             }
         }
     }

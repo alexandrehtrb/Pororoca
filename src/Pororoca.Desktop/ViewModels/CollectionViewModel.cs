@@ -250,9 +250,7 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
         else
         {
             var collectionVariables = ((CollectionVariablesViewModel)Items.First(i => i is CollectionVariablesViewModel)).ToVariables();
-            IEnumerable<PororocaVariable>? environmentVariables = ((EnvironmentsGroupViewModel)Items.First(i => i is EnvironmentsGroupViewModel))
-                                                                  .Items
-                                                                  .FirstOrDefault(evm => evm.IsCurrentEnvironment)
+            IEnumerable<PororocaVariable>? environmentVariables = GetCurrentEnvironment()
                                                                   ?.ToEnvironment()
                                                                   ?.Variables;
             IEnumerable<PororocaVariable> effectiveVariables = PororocaVariablesMerger.MergeVariables(collectionVariables, environmentVariables);
@@ -265,6 +263,10 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
             return resolvedStr;
         }
     }
+
+    public EnvironmentViewModel? GetCurrentEnvironment() =>
+        ((EnvironmentsGroupViewModel)Items.First(i => i is EnvironmentsGroupViewModel))
+        .Items.FirstOrDefault(evm => evm.IsCurrentEnvironment);
 
     #endregion
 }

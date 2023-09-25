@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Text;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.VariableResolution;
@@ -6,13 +7,23 @@ namespace Pororoca.Domain.Features.TranslateRequest.Common;
 
 public static class PororocaRequestCommonTranslator
 {
+    private static readonly ImmutableList<string> acceptedUriSchemes = ImmutableList.Create<string>(
+        Uri.UriSchemeHttp,
+        Uri.UriSchemeHttps,
+        Uri.UriSchemeWs,
+        Uri.UriSchemeWss
+    );
+
     #region REQUEST URL
 
     public static bool TryResolveRequestUri(IPororocaVariableResolver variableResolver, string rawUrl, out Uri? uri, out string? errorCode)
     {
         string? resolvedRawUri = variableResolver.ReplaceTemplates(rawUrl);
-        bool success = Uri.TryCreate(resolvedRawUri, UriKind.Absolute, out uri);
+        bool validUri = Uri.TryCreate(resolvedRawUri, UriKind.Absolute, out var parsedUri);
+        bool validScheme = validUri && acceptedUriSchemes.Contains(parsedUri!.Scheme);
+        bool success = validUri && validScheme;
         errorCode = success ? null : TranslateRequestErrors.InvalidUrl;
+        uri = success ? parsedUri : null;
         return success;
     }
 

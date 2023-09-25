@@ -224,17 +224,12 @@ public static class PororocaHttpRequestTranslatorTests
             { "Content-Language", "pt-BR" }
         };
 
-        PororocaHttpRequestFormDataParam p1 = new(true, "key1");
-        p1.SetTextValue("oi", "text/plain");
-        PororocaHttpRequestFormDataParam p2 = new(true, "key1");
-        p2.SetTextValue("oi2", "text/plain");
-        PororocaHttpRequestFormDataParam p3 = new(false, "key2");
-        p3.SetTextValue("oi2", "text/plain");
-        PororocaHttpRequestFormDataParam p4 = new(true, "{{keyX}}");
-        p4.SetTextValue("{{keyXvalue}}", "application/json");
+        var p1 = PororocaHttpRequestFormDataParam.MakeTextParam(true, "key1", "oi", "text/plain");
+        var p2 = PororocaHttpRequestFormDataParam.MakeTextParam(true, "key1", "oi2", "text/plain");
+        var p3 = PororocaHttpRequestFormDataParam.MakeTextParam(false, "key2", "oi2", "text/plain");
+        var p4 = PororocaHttpRequestFormDataParam.MakeTextParam(true, "{{keyX}}", "{{keyXvalue}}", "application/json");
         string testFilePath = GetTestFilePath(fileName);
-        PororocaHttpRequestFormDataParam p5 = new(true, "key4");
-        p5.SetFileValue(testFilePath.Replace("testfilecontent2.json", "{{MyFileName}}"), "application/json");
+        var p5 = PororocaHttpRequestFormDataParam.MakeFileParam(true, "key4", testFilePath.Replace("testfilecontent2.json", "{{MyFileName}}"), "application/json");
 
         var formDataParams = new[] { p1, p2, p3, p4, p5 };
 

@@ -244,8 +244,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateUrl(urlTemplate);
         req.UpdateHttpVersion(1.1m);
         var body = new PororocaHttpRequestBody();
-        PororocaHttpRequestFormDataParam p1 = new(true, "p1");
-        p1.SetTextValue("oi", "text/plem");
+        var p1 = PororocaHttpRequestFormDataParam.MakeTextParam(true, "p1", "oi", "text/plem");
         body.SetFormDataContent(new[] { p1 });
         req.UpdateBody(body);
 
@@ -270,8 +269,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateUrl(urlTemplate);
         req.UpdateHttpVersion(1.1m);
         var body = new PororocaHttpRequestBody();
-        PororocaHttpRequestFormDataParam p1 = new(false, "p1");
-        p1.SetTextValue("oi", "text/plem");
+        var p1 = PororocaHttpRequestFormDataParam.MakeTextParam(false, "p1", "oi", "text/plem");
         body.SetFormDataContent(new[] { p1 });
         req.UpdateBody(body);
 
@@ -370,8 +368,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateUrl(urlTemplate);
         req.UpdateHttpVersion(1.1m);
         var body = new PororocaHttpRequestBody();
-        PororocaHttpRequestFormDataParam p1 = new(true, "p1");
-        p1.SetFileValue("Ç://Uindous/sistem31/a.txt", "text/plain");
+        var p1 = PororocaHttpRequestFormDataParam.MakeFileParam(true, "p1", "Ç://Uindous/sistem31/a.txt", "text/plain");
         body.SetFormDataContent(new[] { p1 });
         req.UpdateBody(body);
 
@@ -396,8 +393,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateUrl(urlTemplate);
         req.UpdateHttpVersion(1.1m);
         var body = new PororocaHttpRequestBody();
-        PororocaHttpRequestFormDataParam p1 = new(false, "p1");
-        p1.SetFileValue("Ç://Uindous/sistem31/a.txt", "text/plain");
+        var p1 = PororocaHttpRequestFormDataParam.MakeFileParam(false, "p1", "Ç://Uindous/sistem31/a.txt", "text/plain");
         body.SetFormDataContent(new[] { p1 });
         req.UpdateBody(body);
 
@@ -481,7 +477,7 @@ public static class PororocaHttpRequestValidatorTests
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("./cert.pem"), Times.Once);
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{PrivateKeyFilePath}}"), Times.Once);
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("prvkeypwd"), Times.Once);
-        Assert.Equal(TranslateRequestErrors.ClientCertificatePrivateKeyFileNotFound, errorCode);
+        Assert.Equal(TranslateRequestErrors.ClientCertificatePemPrivateKeyFileNotFound, errorCode);
     }
 
     [Theory]

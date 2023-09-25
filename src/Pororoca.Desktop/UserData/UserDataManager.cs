@@ -154,7 +154,7 @@ public static class UserDataManager
         return Path.Combine(rootPath, userDataFolderName, fileName);
     }
 
-    private static DirectoryInfo GetUserDataFolder() =>
+    internal static DirectoryInfo GetUserDataFolder() =>
         /*
             For debugging, the PororocaUserData folder should be located inside the Pororoca.Desktop directory:
                 "Pororoca.Desktop\bin\Debug\net7.0\win-x64\"

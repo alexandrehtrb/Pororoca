@@ -1,5 +1,6 @@
 # Changelog
 
+* [2.3.0](#230-2023-09-26)
 * [2.2.0](#220-2023-08-07)
 * [2.1.0](#210-2023-04-24)
 * [2.0.1](#201-2023-02-26)
@@ -11,6 +12,32 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [2.3.0](https://github.com/alexandrehtrb/Pororoca/tree/2.3.0) (2023-09-26)
+
+### Features
+
+* Cut, copy, paste, delete actions in all tables: variables, headers, URL encoded and Form Data params.
+* Hyperlinks are now coloured in text editors and ctrl + clicking on them opens the browser or email.
+* The suggested file name when saving a response body now includes the names of the request and the environment used.
+* Version name visible in Help menu item.
+* Keyboard shortcuts added! They are:
+  * Ctrl+Shift+S - Save all
+  * Ctrl+PageUp - Switch to item above in tree
+  * Ctrl+PageDown - Switch to item below in tree
+
+### Bug Fixes
+
+* Fixed bug of not being able to copy WebSocket client messages in tree.
+* Improved detection of textual Content-Types, so they can be viewed in response body text editor. MIME types like `application/vnd.oracle.adf.batch+json`, `application/vnd.google-earth.kml+xml` and `image/svg+xml` are now considered text.
+
+### Refactors
+
+* Transformed PororocaHttpRequestFormDataParam into record.
+
+### Tests
+
+* Added UI tests! To enable them, the compilation must be on DEBUG or have the preprocessor flag UI_TESTS_VERSION. To run them, copy the TestFiles folder into your PororocaUserData and have the TestServer running along.
 
 ## [2.2.0](https://github.com/alexandrehtrb/Pororoca/tree/2.2.0) (2023-08-07)
 

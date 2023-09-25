@@ -206,7 +206,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("./cert.pem"), Times.Once);
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{PrivateKeyFilePath}}"), Times.Once);
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("prvkeypwd"), Times.Once);
-        Assert.Equal(TranslateRequestErrors.ClientCertificatePrivateKeyFileNotFound, errorCode);
+        Assert.Equal(TranslateRequestErrors.ClientCertificatePemPrivateKeyFileNotFound, errorCode);
     }
 
     [Theory]

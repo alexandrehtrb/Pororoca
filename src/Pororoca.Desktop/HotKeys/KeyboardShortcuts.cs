@@ -29,6 +29,8 @@ public sealed class KeyboardShortcuts : ViewModelBase
     public ReactiveCommand<Unit, Unit> DuplicateCmd { get; }
     public ReactiveCommand<Unit, Unit> MoveUpCmd { get; }
     public ReactiveCommand<Unit, Unit> MoveDownCmd { get; }
+    public ReactiveCommand<Unit, Unit> SwitchToPreviousItemCmd { get; }
+    public ReactiveCommand<Unit, Unit> SwitchToNextItemCmd { get; }
     public ReactiveCommand<Unit, Unit> ShowHelpCmd { get; }
     public ReactiveCommand<Unit, Unit> RenameCmd { get; }
     public ReactiveCommand<Unit, Unit> SendRequestOrConnectWebSocketCmd { get; }
@@ -51,6 +53,65 @@ public sealed class KeyboardShortcuts : ViewModelBase
 
     private ObservableCollection<CollectionOrganizationItemViewModel> SelectedItems =>
         CollectionsGroupVm.CollectionGroupSelectedItems;
+    
+    private List<CollectionOrganizationItemViewModel> GetItemsTreeLinearized()
+    {
+        static List<CollectionOrganizationItemViewModel> GetSubItemsLinearized(CollectionOrganizationItemViewModel parentVm)
+        {
+            List<CollectionOrganizationItemViewModel> linearizedItems = new();
+            if (parentVm is CollectionsGroupViewModel d)
+            {
+                linearizedItems.Add(d);
+                linearizedItems.AddRange(d.Items.SelectMany(x => GetSubItemsLinearized(x)));
+            }
+            else if (parentVm is CollectionViewModel a)
+            {
+                linearizedItems.Add(a);
+                linearizedItems.Add(a.Items[0]);// collection variables
+                linearizedItems.AddRange(((EnvironmentsGroupViewModel)a.Items[1]).Items);// collection environments
+                
+                // small optimization
+                for (int i = 2; i < a.Items.Count; i++)
+                {
+                    var subItem = a.Items[i];
+                    if (subItem is HttpRequestViewModel)
+                    {
+                        linearizedItems.Add(subItem);
+                    }
+                    else
+                    {
+                        linearizedItems.AddRange(GetSubItemsLinearized(subItem));
+                    }
+                }
+            }
+            else if (parentVm is CollectionFolderViewModel e)
+            {
+                linearizedItems.Add(e);
+                if (e.Items.All(x => x is HttpRequestViewModel))
+                {
+                    // small optimization
+                    linearizedItems.AddRange(e.Items);
+                }
+                else
+                {
+                    linearizedItems.AddRange(e.Items.SelectMany(x => GetSubItemsLinearized(x)));
+                }
+            }
+            else if (parentVm is WebSocketConnectionViewModel c)
+            {
+                linearizedItems.Add(c);
+                linearizedItems.AddRange(c.Items); // all subitems are ws client msgs
+            }
+            else
+            {
+                linearizedItems.Add(parentVm);
+            }
+
+            return linearizedItems;
+        }
+
+        return GetSubItemsLinearized(CollectionsGroupVm);
+    }
 
     #endregion
 
@@ -65,6 +126,8 @@ public sealed class KeyboardShortcuts : ViewModelBase
         // Moving items up and down is not great yet
         MoveUpCmd = ReactiveCommand.Create(MoveSelectedItemUp);
         MoveDownCmd = ReactiveCommand.Create(MoveSelectedItemDown);
+        SwitchToPreviousItemCmd = ReactiveCommand.Create(SwitchToPreviousItem);
+        SwitchToNextItemCmd = ReactiveCommand.Create(SwitchToNextItem);
         ShowHelpCmd = ReactiveCommand.Create(ShowHelpDialog);
         RenameCmd = ReactiveCommand.Create(RenameSelectedItem);
         FocusOnUrlCmd = ReactiveCommand.Create(FocusOnUrl);
@@ -98,7 +161,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
         return false;
     }
 
-    private void CutSelectedItems()
+    public void CutSelectedItems()
     {
         // IMPORTANT: needs to be a new list, not just a reference
         // IMPORTANT: Collections can not be marked for cut deletion (after pasting), 
@@ -114,7 +177,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
         PushSelectedItemsToClipboardArea();
     }
 
-    private void CopySelectedItems()
+    public void CopySelectedItems()
     {
         // we must clear items marked for cut if it's just a copy
         if (AreAnyCollectionsBeingCopiedOrCut())
@@ -154,6 +217,9 @@ public sealed class KeyboardShortcuts : ViewModelBase
         var wssToCopy = SelectedItems
                          .Where(i => i is WebSocketConnectionViewModel wsVm && !HasAnyParentAlsoSelected(wsVm))
                          .Select(wsVm => (ICloneable)((WebSocketConnectionViewModel)wsVm).ToWebSocketConnection());
+        var wsMsgsToCopy = SelectedItems
+                           .Where(i => i is WebSocketClientMessageViewModel wsMsgVm && !HasAnyParentAlsoSelected(wsMsgVm))
+                           .Select(wsMsgVm => (ICloneable)((WebSocketClientMessageViewModel)wsMsgVm).ToWebSocketClientMessage());
         var foldersToCopy = SelectedItems
                             .Where(i => i is CollectionFolderViewModel folderVm && !HasAnyParentAlsoSelected(folderVm))
                             .Select(f => (ICloneable)((CollectionFolderViewModel)f).ToCollectionFolder());
@@ -161,7 +227,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
                          .Where(i => i is EnvironmentViewModel)
                          .Select(e => (ICloneable)((EnvironmentViewModel)e).ToEnvironment());
 
-        var itemsToCopy = reqsToCopy.Concat(wssToCopy).Concat(foldersToCopy).Concat(envsToCopy).ToArray();
+        var itemsToCopy = reqsToCopy.Concat(wssToCopy).Concat(wsMsgsToCopy).Concat(foldersToCopy).Concat(envsToCopy).ToArray();
 
         ClipboardArea.Instance.PushToCopy(itemsToCopy);
     }
@@ -170,7 +236,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
 
     #region PASTE
 
-    private void PasteCopiedItems()
+    public void PasteCopiedItems()
     {
         if (ClipboardArea.ItemsMarkedForCut?.Any(x => x == SelectedItem) == true)
         {
@@ -287,10 +353,13 @@ public sealed class KeyboardShortcuts : ViewModelBase
             var buttonResult = await msgbox.ShowAsync();
             if (buttonResult == ButtonResult.Ok)
             {
-                DeleteMultiple(SelectedItems);
+                DeleteSelectedItems();
             }
         });
     }
+
+    internal void DeleteSelectedItems() =>
+        DeleteMultiple(SelectedItems);
 
     private void DeleteMultiple(ICollection<CollectionOrganizationItemViewModel> itemsToDelete) =>
         itemsToDelete
@@ -323,6 +392,63 @@ public sealed class KeyboardShortcuts : ViewModelBase
     private void MoveSelectedItemUp() => SelectedItem?.MoveThisUp();
 
     private void MoveSelectedItemDown() => SelectedItem?.MoveThisDown();
+
+    #endregion
+
+    #region SWITCH ITEMS PREVIOUS AND NEXT
+
+    private void SwitchToPreviousItem() => SwitchSelectedItem(false);
+
+    private void SwitchToNextItem() => SwitchSelectedItem(true);
+
+    private void SwitchSelectedItem(bool falseIfPreviousTrueIfNext)
+    {
+        var linearizedItems = GetItemsTreeLinearized();
+        if (SelectedItem is not null)
+        {
+            int currentIndex = linearizedItems.IndexOf(SelectedItem);
+            if (currentIndex != -1)
+            {
+                int indexToSwitchTo;
+                if (falseIfPreviousTrueIfNext)
+                {
+                    indexToSwitchTo = currentIndex < (linearizedItems.Count - 1) ? (currentIndex + 1) : (linearizedItems.Count - 1);
+                }
+                else
+                {
+                    indexToSwitchTo = currentIndex > 0 ? (currentIndex - 1) : 0;
+                }
+                var itemToSwitchTo = linearizedItems[indexToSwitchTo];
+                CollectionsGroupVm.CollectionGroupSelectedItem = itemToSwitchTo;
+                ExpandAncestorsOfItem(itemToSwitchTo);
+            }
+        }
+    }
+
+    private void ExpandAncestorsOfItem(CollectionOrganizationItemViewModel itemVm)
+    {
+        var ancestor = itemVm.Parent;
+        do
+        {
+            if (ancestor is CollectionOrganizationItemParentViewModel<CollectionOrganizationItemViewModel> a)
+            {
+                a.IsExpanded = true;
+            }
+            else if (ancestor is EnvironmentsGroupViewModel b)
+            {
+                b.IsExpanded = true;
+            }
+            else if (ancestor is WebSocketConnectionViewModel c)
+            {
+                c.IsExpanded = true;
+            }
+
+            if (ancestor is CollectionOrganizationItemViewModel x)
+            {
+                ancestor = x.Parent;
+            }
+        } while (ancestor is not MainWindowViewModel);
+    }
 
     #endregion
 

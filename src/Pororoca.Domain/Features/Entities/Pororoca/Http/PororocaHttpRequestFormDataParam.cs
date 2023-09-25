@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace Pororoca.Domain.Features.Entities.Pororoca.Http;
 
 public enum PororocaHttpRequestFormDataParamType
@@ -8,63 +6,32 @@ public enum PororocaHttpRequestFormDataParamType
     File
 }
 
-public sealed class PororocaHttpRequestFormDataParam : ICloneable
-{
-    public bool Enabled { get; set; }
+public sealed record PororocaHttpRequestFormDataParam(
+    bool Enabled,
+    PororocaHttpRequestFormDataParamType Type,
+    string Key,
+    string? TextValue,
+    string ContentType,
+    string? FileSrcPath
+) {
+    // Parameterless constructor for JSON deserialization
+    public PororocaHttpRequestFormDataParam() : this(true, PororocaHttpRequestFormDataParamType.Text, string.Empty, string.Empty, string.Empty, null) { }
 
-    [JsonInclude]
-    public PororocaHttpRequestFormDataParamType Type { get; private set; }
+    public PororocaHttpRequestFormDataParam Copy() => this with { };
 
-    [JsonInclude]
-    public string Key { get; init; }
+    public static PororocaHttpRequestFormDataParam MakeTextParam(bool enabled, string key, string textValue, string contentType) => new(
+        enabled,
+        PororocaHttpRequestFormDataParamType.Text,
+        key,
+        textValue,
+        contentType,
+        null);
 
-    [JsonInclude]
-    public string? TextValue { get; private set; }
-
-    [JsonInclude]
-    public string ContentType { get; private set; }
-
-    [JsonInclude]
-    public string? FileSrcPath { get; private set; }
-
-#nullable disable warnings
-    public PororocaHttpRequestFormDataParam() : this(true, string.Empty)
-    {
-        // Parameterless constructor for JSON deserialization
-    }
-#nullable restore warnings
-
-    public PororocaHttpRequestFormDataParam(bool enabled, string key)
-    {
-        Enabled = enabled;
-        Type = PororocaHttpRequestFormDataParamType.Text;
-        Key = key;
-        TextValue = null;
-        ContentType = string.Empty;
-    }
-
-    public void SetTextValue(string textValue, string contentType)
-    {
-        Type = PororocaHttpRequestFormDataParamType.Text;
-        TextValue = textValue;
-        ContentType = contentType;
-    }
-
-    public void SetFileValue(string fileSrcPath, string contentType)
-    {
-        Type = PororocaHttpRequestFormDataParamType.File;
-        FileSrcPath = fileSrcPath;
-        ContentType = contentType;
-    }
-
-    public object Clone() =>
-        new PororocaHttpRequestFormDataParam()
-        {
-            Enabled = Enabled,
-            Type = Type,
-            Key = Key,
-            TextValue = TextValue,
-            ContentType = ContentType,
-            FileSrcPath = FileSrcPath
-        };
+    public static PororocaHttpRequestFormDataParam MakeFileParam(bool enabled, string key, string fileSrcPath, string contentType) => new(
+        enabled,
+        PororocaHttpRequestFormDataParamType.File,
+        key,
+        null,
+        contentType,
+        fileSrcPath);
 }

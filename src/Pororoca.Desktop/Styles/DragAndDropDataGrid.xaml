@@ -1,7 +1,7 @@
 <Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
+    xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels.DataGrids;assembly=Pororoca.Desktop"
     xmlns:b="clr-namespace:Pororoca.Desktop.Behaviors;assembly=Pororoca.Desktop"
     xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
     xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
@@ -16,7 +16,7 @@
         x:TypeArguments="vm:KeyValueParamViewModel"/>
     <b:DataGridDragAndDropBehavior
         x:Key="DataGridDragAndDropFormDataParamViewModelHandler"
-        x:TypeArguments="vm:HttpRequestFormDataParamViewModel"/>
+        x:TypeArguments="vm:FormDataParamViewModel"/>
   </Styles.Resources>
 
   <Style Selector="DataGrid.dragging-up DataGridRow.dragging">

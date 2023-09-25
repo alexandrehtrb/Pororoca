@@ -74,6 +74,7 @@
         Grid.Row="1"
         Margin="0,12,0,0">
       <TextBox
+          Name="tbBasicAuthLogin"
           Width="200"
           HorizontalAlignment="Left"
           VerticalContentAlignment="Center"
@@ -81,6 +82,7 @@
           Classes="SingleLine"
           Text="{Binding BasicAuthLogin}"/>
       <TextBox
+          Name="tbBasicAuthPassword"
           Width="200"
           Margin="0,12,0,0"
           HorizontalAlignment="Left"
@@ -96,6 +98,7 @@
         Grid.Row="1"
         Margin="0,12,0,0">
       <TextBox
+          Name="tbBearerAuthToken"
           Width="200"
           HorizontalAlignment="Left"
           VerticalContentAlignment="Center"
@@ -122,6 +125,7 @@
           Grid.Column="0"
           Grid.Row="0">
         <TextBox
+            Name="tbClientCertificatePkcs12FilePath"
             Width="240"
             Watermark="{Binding i18n.RequestAuth.CertificateFilePathWatermark}"
             HorizontalAlignment="Left"
@@ -129,6 +133,7 @@
             Classes="SingleLine"
             Text="{Binding ClientCertificateAuthPkcs12CertificateFilePath}"/>
         <TextBox
+            Name="tbClientCertificatePkcs12FilePassword"
             Width="240"
             Margin="0,12,0,0"
             Watermark="{Binding i18n.RequestAuth.FilePasswordWatermark}"
@@ -148,6 +153,7 @@
           Grid.Column="0"
           Grid.Row="0">
         <TextBox
+            Name="tbClientCertificatePemCertificateFilePath"
             Width="240"
             Watermark="{Binding i18n.RequestAuth.CertificateFilePathWatermark}"
             HorizontalAlignment="Left"
@@ -155,6 +161,7 @@
             Classes="SingleLine"
             Text="{Binding ClientCertificateAuthPemCertificateFilePath}"/>
         <TextBox
+            Name="tbClientCertificatePemPrivateKeyFilePath"
             Width="240"
             Margin="0,12,0,0"
             Watermark="{Binding i18n.RequestAuth.PrivateKeyFilePathWatermark}"
@@ -163,6 +170,7 @@
             Classes="SingleLine"
             Text="{Binding ClientCertificateAuthPemPrivateKeyFilePath}"/>
         <TextBox
+            Name="tbClientCertificatePemPrivateKeyPassword"
             Width="240"
             Margin="0,12,0,0"
             Watermark="{Binding i18n.RequestAuth.FilePasswordWatermark}"

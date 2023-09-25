@@ -13,7 +13,7 @@ public static class MimeTypesDetector
     public const string DefaultMimeTypeForJavascript = "application/javascript";
     public const string DefaultMimeTypeForBinary = "application/octet-stream";
 
-    private static readonly string[] textMimeTypes;
+    private static readonly string[] textMimeTypesIndicators;
 
     private static readonly List<KeyValuePair<string, string>> mappings;
 
@@ -21,7 +21,7 @@ public static class MimeTypesDetector
 
     static MimeTypesDetector()
     {
-        textMimeTypes = GetTextMimeTypes();
+        textMimeTypesIndicators = GetTextMimeTypesIndicators();
         mappings = BuildMappings();
         AllMimeTypes = mappings.DistinctBy(kv => kv.Value)
                                .Select(kv => kv.Value)
@@ -32,19 +32,16 @@ public static class MimeTypesDetector
         AllMimeTypes.Add(DefaultMimeTypeForDnsMessage);
     }
 
-    private static string[] GetTextMimeTypes() => new[]
+    private static string[] GetTextMimeTypesIndicators() => new[]
     {
-        DefaultMimeTypeForJson,
-        DefaultMimeTypeForProblemJson,
-        DefaultMimeTypeForProblemXml,
-        DefaultMimeTypeForDnsJson,
-        DefaultMimeTypeForText,
-        DefaultMimeTypeForHtml,
-        DefaultMimeTypeForXml,
-        DefaultMimeTypeForJavascript,
-        "text/css",
-        "text/csv",
-        "application/xml"
+        "json",
+        "text",
+        "xml",
+        "html",
+        "javascript",
+        "ecmascript",
+        "css",
+        "csv"
     };
 
     /*
@@ -220,7 +217,6 @@ public static class MimeTypesDetector
             new("cpt", "application/x-cpt"),
             new("crd", "application/x-mscardfile"), // Microsoft Information Card
             new("crl", "application/pkcs-crl"),
-            new("crl", "application/pkix-crl"),
             new("crl", "application/pkix-crl"), // Internet Public Key Infrastructure - Certificate Revocation Lists
             new("crt", "application/pkix-cert"),
             new("crt", "application/x-x509-ca-cert"),
@@ -232,7 +228,6 @@ public static class MimeTypesDetector
             new("csml", "chemical/x-csml"), // Chemical Style Markup Language
             new("csp", "application/vnd.commonspace"), // Sixth Floor Media - CommonSpace
             new("css", "application/x-pointplus"),
-            new("css", "text/css"),
             new("css", "text/css"), // Cascading Style Sheets (CSS)
             new("csv", "text/csv"), // Comma-Seperated Values
             new("cu", "application/cu-seeme"), // CU-SeeMe
@@ -1315,8 +1310,10 @@ public static class MimeTypesDetector
     public static bool IsJsonContent(string contentType) =>
         contentType.Contains("json");
 
-    public static bool IsTextContent(string contentType) =>
-        textMimeTypes.Any(mt =>
-            contentType.Contains(mt, StringComparison.InvariantCultureIgnoreCase)
-        ); // This should cover most text content types
+    public static bool IsTextContent(string? contentType) =>
+        // This should cover most text content types
+        // Optimistic behavior, considering that if content type is not present, then probably is text
+        contentType is null ||
+        textMimeTypesIndicators.Any(mt =>
+            contentType.Contains(mt, StringComparison.InvariantCultureIgnoreCase));
 }

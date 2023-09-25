@@ -16,6 +16,10 @@ Remember to fork this repo and develop your code starting from the `develop` bra
 
 5) (OPTIONAL) Add a README for your language.
 
+6) (OPTIONAL) Add your language to the Windows installer: `src/Pororoca.Desktop.WindowsInstaller/Installer.nsi`.
+
+7) If you want to translate the documentation to your language, open an issue on GitHub and I will concede access to the documentation website repo.
+
 6) Done!
 
 ## I want to make my own colour theme
@@ -38,8 +42,4 @@ Remember to fork this repo and develop your code starting from the `develop` bra
 
 ## Is there anything else I can contribute with?
 
-Yes! Currently, we need help with:
-
-* UI testing, preferrably using [Appium](https://github.com/AvaloniaUI/Avalonia/tree/master/tests/Avalonia.IntegrationTests.Appium). (there are no automated UI tests yet)
-* Migration to .NET 8
-* NativeAOT for Pororoca.Desktop
+Yes! Check the GitHub issues track.

@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Reactive;
+using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
@@ -29,6 +30,11 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     public ReactiveCommand<Unit, Unit> AddNewCollectionCmd { get; }
     public ReactiveCommand<Unit, Unit> ImportCollectionsCmd { get; }
+
+    [Reactive]
+    public bool IsSavedLabelVisible { get; set; }
+
+    public ReactiveCommand<Unit, Unit> SaveAllCmd { get; }
 
     #endregion
 
@@ -129,12 +135,35 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #endregion
 
+    #region UI TESTS
+
+    [Reactive]
+    public bool IsRunUITestsVisible { get; set; } =
+#if DEBUG || UI_TESTS_ENABLED
+        true;
+#else
+        false;
+#endif
+
+    public ReactiveCommand<Unit, Unit> RunUITestsCmd { get; }
+
+    #endregion
+
+    #region VERSION NAME
+
+    [Reactive]
+    public string VersionName { get; set; }
+
+    #endregion
+
     public MainWindowViewModel()
     {
         #region COLLECTIONS ORGANIZATION
         CollectionsGroupViewDataCtx = new(this, OnCollectionsGroupItemSelected);
         ImportCollectionsCmd = ReactiveCommand.CreateFromTask(ImportCollectionsAsync);
         AddNewCollectionCmd = ReactiveCommand.Create(AddNewCollection);
+        IsSavedLabelVisible = false;
+        SaveAllCmd = ReactiveCommand.CreateFromTask(SaveAllAsync);
         #endregion
 
         #region LANGUAGE
@@ -157,6 +186,14 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
         #region USER DATA
         LoadUserData();
+        #endregion
+
+        #region UI TESTS
+        RunUITestsCmd = ReactiveCommand.CreateFromTask(RunUITestsAsync);
+        #endregion
+
+        #region VERSION NAME
+        VersionName = "v" + Assembly.GetExecutingAssembly().GetName().Version?.ToString(3);
         #endregion
     }
 
@@ -263,6 +300,20 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
                 IsWebSocketClientMessageViewVisible = true;
             }
         }
+        else if (selectedItem is EnvironmentsGroupViewModel)
+        {
+            // do nothing
+        }
+        else
+        {
+            IsCollectionViewVisible = false;
+            IsCollectionVariablesViewVisible = false;
+            IsEnvironmentViewVisible = false;
+            IsCollectionFolderViewVisible = false;
+            IsHttpRequestViewVisible = false;
+            IsWebSocketConnectionViewVisible = false;
+            IsWebSocketClientMessageViewVisible = false;
+        }
     }
 
     #endregion
@@ -318,6 +369,14 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     private Task ImportCollectionsAsync() =>
         FileExporterImporter.ImportCollectionsAsync(this);
+
+    private async Task SaveAllAsync()
+    {        
+        SaveUserData();
+        IsSavedLabelVisible = true;
+        await Task.Delay(3000);
+        IsSavedLabelVisible = false;
+    }
 
     #endregion
 
@@ -475,6 +534,49 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
             // just ignore all of them.
         }
     }
+
+    #endregion
+
+    #region UI TESTS
+
+#if DEBUG || UI_TESTS_ENABLED
+    private async Task RunUITestsAsync()
+    {
+        /*
+        IMPORTANT:
+        To run the UI tests, run Pororoca.TestServer in localhost and 
+        have the TestFiles directory inside the PororocaUserData folder.        
+        */
+
+        // making a backup of the items' tree and clearing it before the tests
+        var bkupedLang = Localizer.Instance.CurrentLanguage;
+        var bkupedItems = CollectionsGroupViewDataCtx.Items.ToList();
+        CollectionsGroupViewDataCtx.Items.Clear();
+        SelectLanguage(Language.English);
+
+        string resultsLog = await Pororoca.Desktop.UITesting.UITestsRunner.RunAllTestsAsync();
+
+        // restoring the items' tree after the tests
+        foreach (var item in bkupedItems) { CollectionsGroupViewDataCtx.Items.Add(item); }
+        CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
+        SelectLanguage(bkupedLang);
+
+        Bitmap bitmap = new(AssetLoader.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
+
+        var msgbox = MessageBoxManager.GetMessageBoxStandard(
+            new MessageBoxStandardParams()
+            {
+                ContentTitle = "UI tests results",
+                ContentMessage = resultsLog,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                WindowIcon = new(bitmap),
+                ButtonDefinitions = ButtonEnum.Ok
+            });
+        Dispatcher.UIThread.Post(async () => await msgbox.ShowAsync());
+    }
+#else
+    private Task RunUITestsAsync() => Task.CompletedTask;
+#endif
 
     #endregion
 }

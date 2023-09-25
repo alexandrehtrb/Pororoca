@@ -43,6 +43,7 @@
         TextWrapping="Wrap"/>
 
     <Button
+        Name="btAddVariable"
         Grid.Column="0"
         Grid.Row="1"
         Height="24"
@@ -52,7 +53,7 @@
         Padding="2"
         Margin="0,36,0,0"
         Classes="Primary"
-        Command="{Binding AddNewVariableCmd}">
+        Command="{Binding VariablesTableVm.AddNewCmd}">
 
 
       <Image
@@ -67,12 +68,42 @@
     </Button>
 
     <DataGrid
+        Name="dgVariables"
         Grid.Column="0"
         Grid.Row="2"
         Margin="0,12,0,0"
         AutoGenerateColumns="False"
-        ItemsSource="{Binding Variables}"
+        ItemsSource="{Binding VariablesTableVm.Items}"
+        SelectionChanged="OnSelectedVariablesChanged"
         CanUserResizeColumns="True">
+        <DataGrid.KeyBindings>
+          <KeyBinding Command="{Binding VariablesTableVm.CutCmd}" Gesture="Ctrl+X" />
+          <KeyBinding Command="{Binding VariablesTableVm.CopyCmd}" Gesture="Ctrl+C" />
+          <KeyBinding Command="{Binding VariablesTableVm.PasteCmd}" Gesture="Ctrl+V" />
+          <KeyBinding Command="{Binding VariablesTableVm.DuplicateCmd}" Gesture="Ctrl+D" />
+          <KeyBinding Command="{Binding VariablesTableVm.DeleteCmd}" Gesture="Delete" />
+        </DataGrid.KeyBindings>
+        <DataGrid.ContextMenu>
+          <ContextMenu>
+            <MenuItem
+                  Header="{Binding i18n.ContextMenu.Cut}"
+                  Command="{Binding VariablesTableVm.CutCmd}"
+                  InputGesture="Ctrl+X"/>
+              <MenuItem
+                  Header="{Binding i18n.ContextMenu.Copy}"
+                  Command="{Binding VariablesTableVm.CopyCmd}"
+                  InputGesture="Ctrl+C"/>
+              <MenuItem
+                  Header="{Binding i18n.ContextMenu.Paste}"
+                  Command="{Binding VariablesTableVm.PasteCmd}"
+                  InputGesture="Ctrl+V"
+                  IsEnabled="{Binding VariablesTableVm.InnerClipboardArea.CanPaste}"/>
+              <MenuItem
+                  Header="{Binding i18n.ContextMenu.Delete}"
+                  Command="{Binding VariablesTableVm.DeleteCmd}"
+                  InputGesture="Delete"/>
+          </ContextMenu>
+        </DataGrid.ContextMenu>
       <DataGrid.Columns>
         <DataGridCheckBoxColumn
             Width="*"
