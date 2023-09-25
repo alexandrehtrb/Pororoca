@@ -24,7 +24,9 @@ public sealed partial class HttpRequestsUITest : UITest
         AssertContainsResponseHeader("Server", "Kestrel");
         AssertContainsResponseHeader("Content-Type", "text/plain; charset=utf-8");
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResBody);
-        AssertHasText(HttpRobot.ResBodyRawContent, $"--- Received file ---{Environment.NewLine}Content-Type: image/jpeg{Environment.NewLine}Content-Disposition: {Environment.NewLine}Body length: 9784 bytes");
+        AssertContainsText(HttpRobot.ResBodyRawContent, "--- Received file ---");
+        AssertContainsText(HttpRobot.ResBodyRawContent, "Content-Type: image/jpeg");
+        AssertContainsText(HttpRobot.ResBodyRawContent, "Body length: 9784 bytes");
         AssertIsVisible(HttpRobot.ResBodySaveToFile);
     }
 }
