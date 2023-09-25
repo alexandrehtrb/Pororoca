@@ -11,11 +11,8 @@ using Pororoca.Domain.Features.Entities.Pororoca.Http;
 namespace Pororoca.Desktop.UITesting.Tests;
 
 public sealed class HttpRequestValidationsUITest : UITest
-{
-    private static readonly (string Key, string BaseUrl) TestServer =
-        ("BaseUrl", "https://localhost:5001");
-    
-    private const string TestUrl = "{{BaseUrl}}/test/get/json";
+{    
+    private const string TestValidUrl = "https://localhost:5001";
 
     private Control RootView { get; }
     private TopMenuRobot TopMenuRobot { get; }
@@ -81,7 +78,7 @@ public sealed class HttpRequestValidationsUITest : UITest
         // variable resolving will be checked in other tests
         await TestBadUrl("{{MyDomain}}");
         
-        await HttpRobot.Url.ClearAndTypeText(TestServer.BaseUrl);
+        await HttpRobot.Url.ClearAndTypeText(TestValidUrl);
         AssertIsHidden(HttpRobot.ErrorMsg);
         AssertDoesntHaveStyleClass(HttpRobot.Url, "HasValidationProblem");
     }
@@ -93,7 +90,7 @@ public sealed class HttpRequestValidationsUITest : UITest
             await HttpRobot.SetHttpVersion(2.0m);
             AssertIsHidden(HttpRobot.ErrorMsg);
             AssertDoesntHaveStyleClass(HttpRobot.HttpVersion, "HasValidationProblem");
-            await HttpRobot.Url.ClearAndTypeText(TestUrl);
+            await HttpRobot.Url.ClearAndTypeText(TestValidUrl);
             await HttpRobot.Send.ClickOn();
             AssertIsVisible(HttpRobot.ErrorMsg);
             AssertHasText(HttpRobot.ErrorMsg, "On Windows, support for HTTP/2 requires Windows 10 or greater.");
@@ -105,7 +102,7 @@ public sealed class HttpRequestValidationsUITest : UITest
             await HttpRobot.SetHttpVersion(3.0m);
             AssertIsHidden(HttpRobot.ErrorMsg);
             AssertDoesntHaveStyleClass(HttpRobot.HttpVersion, "HasValidationProblem");
-            await HttpRobot.Url.ClearAndTypeText(TestUrl);
+            await HttpRobot.Url.ClearAndTypeText(TestValidUrl);
             await HttpRobot.Send.ClickOn();
             AssertIsVisible(HttpRobot.ErrorMsg);
             AssertHasText(HttpRobot.ErrorMsg, "HTTP/3 is only available for Linux or Windows 11 and greater.");
