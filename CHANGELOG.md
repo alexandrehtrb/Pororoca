@@ -15,6 +15,10 @@
 
 ## [2.3.0](https://github.com/alexandrehtrb/Pororoca/tree/2.3.0) (2023-09-26)
 
+### Important!
+
+If you are using Pororoca Desktop on Linux, please use msquic version 2.1.8 to make HTTP/3 requests.
+
 ### Features
 
 * Cut, copy, paste, delete actions in all tables: variables, headers, URL encoded and Form Data params.
