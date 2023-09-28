@@ -110,13 +110,13 @@
         ItemsSource="{Binding VariablesTableVm.Items}"
         SelectionChanged="OnSelectedVariablesChanged"
         CanUserResizeColumns="True">
-        <DataGrid.KeyBindings>
+        <!--DataGrid.KeyBindings>
           <KeyBinding Command="{Binding VariablesTableVm.CutCmd}" Gesture="Ctrl+X" />
           <KeyBinding Command="{Binding VariablesTableVm.CopyCmd}" Gesture="Ctrl+C" />
           <KeyBinding Command="{Binding VariablesTableVm.PasteCmd}" Gesture="Ctrl+V" />
           <KeyBinding Command="{Binding VariablesTableVm.DuplicateCmd}" Gesture="Ctrl+D" />
           <KeyBinding Command="{Binding VariablesTableVm.DeleteCmd}" Gesture="Delete" />
-        </DataGrid.KeyBindings>
+        </DataGrid.KeyBindings-->
         <DataGrid.ContextMenu>
           <ContextMenu>
             <MenuItem

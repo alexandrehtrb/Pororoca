@@ -1,5 +1,6 @@
 # Changelog
 
+* [2.3.1](#231-2023-09-28)
 * [2.3.0](#230-2023-09-26)
 * [2.2.0](#220-2023-08-07)
 * [2.1.0](#210-2023-04-24)
@@ -12,6 +13,12 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [2.3.1](https://github.com/alexandrehtrb/Pororoca/tree/2.3.1) (2023-09-28)
+
+### HotFix
+
+* Disables cut, copy, paste and delete keybindings in tables (headers, variables, URL encoded and Form Data params) due to conflict with cells' texts actions. Those operations are still available by using the mouse right-click.
 
 ## [2.3.0](https://github.com/alexandrehtrb/Pororoca/tree/2.3.0) (2023-09-26)
 
