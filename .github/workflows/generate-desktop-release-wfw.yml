@@ -37,7 +37,7 @@ jobs:
     - name: Install .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 7.0.x
+        dotnet-version: 7.0.306
 
     - name: Install NSIS (Windows installer version only)
       if: ${{ env.WINDOWS_INSTALLER_RELEASE == 'true' }}

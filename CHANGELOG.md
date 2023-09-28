@@ -22,6 +22,10 @@
 
 ## [2.3.0](https://github.com/alexandrehtrb/Pororoca/tree/2.3.0) (2023-09-26)
 
+### Important!
+
+If you are using Pororoca Desktop on Linux, please use msquic version 2.1.8 to make HTTP/3 requests.
+
 ### Features
 
 * Cut, copy, paste, delete actions in all tables: variables, headers, URL encoded and Form Data params.
@@ -45,6 +49,10 @@
 ### Tests
 
 * Added UI tests! To enable them, the compilation must be on DEBUG or have the preprocessor flag UI_TESTS_VERSION. To run them, copy the TestFiles folder into your PororocaUserData and have the TestServer running along.
+
+### Others
+
+* Added global.json to fixate .NET SDK version (7.0.401 caused problems with HTTP/3 on Linux).
 
 ## [2.2.0](https://github.com/alexandrehtrb/Pororoca/tree/2.2.0) (2023-08-07)
 
