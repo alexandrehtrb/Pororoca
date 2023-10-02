@@ -104,4 +104,7 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
             }
         }
     }
+
+    internal D[] ConvertItemsToDomain() =>
+        Items.Select(ToDomain).ToArray();
 }

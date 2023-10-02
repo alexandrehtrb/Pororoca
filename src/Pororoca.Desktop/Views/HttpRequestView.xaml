@@ -884,6 +884,117 @@
 
             </Grid>
           </TabItem>
+          <!-- RESPONSE CAPTURE -->
+          <TabItem Name="tabItemResCapture">
+            <TabItem.Header>
+              <TextBlock
+                  Classes="TabItemHeader"
+                  Text="{Binding i18n.HttpResponse.Capture}"/>
+            </TabItem.Header>
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+              </Grid.RowDefinitions>
+              <StackPanel
+                  Grid.Column="0"
+                  Grid.Row="0"
+                  Orientation="Horizontal"
+                  Margin="0,8,0,0">
+                <Button
+                    Name="btResCaptureAddHeaderCapture"
+                    Content="{Binding i18n.HttpResponse.CaptureAddHeaderCapture}"
+                    Margin="0,0,3,0"
+                    Command="{Binding ResCapturesTableVm.AddNewHeaderCaptureCmd}"
+                    Classes="Primary"/>
+                <Button
+                    Name="btResCaptureAddBodyCapture"
+                    Content="{Binding i18n.HttpResponse.CaptureAddBodyCapture}"
+                    Margin="3,0,0,0"
+                    Command="{Binding ResCapturesTableVm.AddNewBodyCaptureCmd}"
+                    Classes="Primary"/>
+              </StackPanel>
+            <DataGrid
+                Grid.Column="0"
+                Grid.Row="1"
+                Name="dgResCaptures"
+                Margin="-12,12,-12,12"
+                VerticalAlignment="Stretch"
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding ResCapturesTableVm.Items}"
+                SelectionChanged="OnSelectedResponseCapturesChanged"
+                CanUserResizeColumns="True">
+              <!--DataGrid.KeyBindings>
+                <KeyBinding Command="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.CopyCmd}" Gesture="Ctrl+C" />
+              </DataGrid.KeyBindings-->
+              <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem
+                        Header="{Binding i18n.ContextMenu.Copy}"
+                        Command="{Binding ResCapturesTableVm.CopyCmd}"
+                        InputGesture="Ctrl+C"/>
+                </ContextMenu>
+              </DataGrid.ContextMenu>
+              <!--i:Interaction.Behaviors>
+                <i:BehaviorCollection>
+                  <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}"/>
+                </i:BehaviorCollection>
+              </i:Interaction.Behaviors-->
+              <DataGrid.Columns>
+                <DataGridTextColumn
+                    Width="0.3*"
+                    Binding="{Binding TargetVariable}">
+                  <DataGridTextColumn.Header>
+                    <TextBlock Text="{Binding i18n.HttpResponse.CaptureTargetVariable}"/>
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="0.2*"
+                    Binding="{Binding Type}"
+                    IsReadOnly="True">
+                  <DataGridTextColumn.Header>
+                    <TextBlock Text="{Binding i18n.HttpResponse.CaptureType}"/>
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="0.5*"
+                    Binding="{Binding HeaderNameOrBodyPath}">
+                  <DataGridTextColumn.Header>
+                    <TextBlock Text="{Binding i18n.HttpResponse.CaptureHeaderNameOrBodyPath}"/>
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn
+                        Width="0.12*"
+                        Header="">
+                      <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                          <Button
+                              Command="{Binding RemoveCaptureCmd}"
+                              VerticalAlignment="Center"
+                              HorizontalAlignment="Center"
+                              HorizontalContentAlignment="Center"
+                              VerticalContentAlignment="Center"
+                              Classes="Trash">
+                          </Button>
+                        </DataTemplate>
+                      </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+              </DataGrid.Columns>
+            </DataGrid>
+            <TextBlock
+                Grid.Column="0"
+                Grid.Row="2"
+                TextWrapping="Wrap"
+                FontSize="12"
+                HorizontalAlignment="Stretch"
+                Margin="0,24,0,24"
+                Text="{Binding i18n.HttpResponse.CaptureTip}"/>
+            </Grid>
+          </TabItem>
         </TabControl>
         <!-- RESPONSE PROGRESS BAR -->
         <ProgressBar

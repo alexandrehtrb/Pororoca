@@ -122,7 +122,8 @@ public static class PostmanCollectionV21Importer
             // When Postman req auth is null, the request uses collection scoped auth
             customAuth: request.Auth != null ? ConvertToPororocaAuth(request.Auth) : collectionScopedAuth?.Copy(),
             headers: headers,
-            body: ConvertToPororocaHttpRequestBody(request.Body, contentTypeHeaderValue));
+            body: ConvertToPororocaHttpRequestBody(request.Body, contentTypeHeaderValue),
+            captures: null);
         return myReq;
     }
 

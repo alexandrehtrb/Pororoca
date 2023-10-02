@@ -240,6 +240,12 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     [Reactive]
     public HttpResponseViewModel ResponseDataCtx { get; set; }
 
+    #region RESPONSE CAPTURES
+
+    public HttpResponseCapturesDataGridViewModel ResCapturesTableVm { get; }
+
+    #endregion
+
     #endregion
 
     public HttpRequestViewModel(ICollectionOrganizationItemParentViewModel parentVm,
@@ -321,6 +327,9 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
         #region RESPONSE
         ResponseDataCtx = new(this.variableResolver, this);
+        #region RESPONSE CAPTURES
+        ResCapturesTableVm = new(req.ResponseCaptures);
+        #endregion
         #endregion
     }
 
@@ -431,8 +440,9 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
             httpMethod: RequestMethod.ToString(),
             url: RequestUrl,
             customAuth: RequestAuthDataCtx.ToCustomAuth(),
-            headers: RequestHeadersTableVm.Items.Count == 0 ? null : RequestHeadersTableVm.Items.Select(h => h.ToKeyValueParam()),
-            body: WrapRequestBodyFromInputs());
+            headers: RequestHeadersTableVm.Items.Count == 0 ? null : RequestHeadersTableVm.ConvertItemsToDomain(),
+            body: WrapRequestBodyFromInputs(),
+            captures: ResCapturesTableVm.Items.Count == 0 ? null : ResCapturesTableVm.ConvertItemsToDomain());
 
     #endregion
 

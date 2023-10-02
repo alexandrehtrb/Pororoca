@@ -5,7 +5,9 @@ using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
+using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using Pororoca.Domain.Features.VariableCapture;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using static Pororoca.Domain.Features.Common.MimeTypesDetector;
@@ -136,6 +138,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
                                  string.Format(Localizer.Instance.HttpResponse.BodyContentBinaryNotShown, res.GetBodyAsBinary()!.Length);
             IsSaveResponseBodyToFileVisible = res.HasBody;
             IsDisableTlsVerificationVisible = false;
+            CaptureResponseValues();
         }
         else if (res != null && !res.WasCancelled) // Not success, but also not cancelled. If cancelled, do nothing.
         {
@@ -176,6 +179,62 @@ public sealed class HttpResponseViewModel : ViewModelBase
             foreach (var kvp in resTrailers)
             {
                 tableItems.Add(new(tableItems, true, kvp.Key, kvp.Value));
+            }
+        }
+    }
+
+    private void CaptureResponseValues()
+    {
+        string? GetCaptureValue(PororocaHttpResponseValueCapture capture)
+        {
+            if (capture.Type == PororocaHttpResponseValueCaptureType.Header)
+            {
+                return this.res?.Headers?.FirstOrDefault(x => x.Key == capture.HeaderName).Value;
+            }
+            else if (capture.Type == PororocaHttpResponseValueCaptureType.Body)
+            {
+                bool isJsonBody = IsJsonContent(this.res?.ContentType ?? string.Empty);
+                bool isXmlBody = IsXmlContent(this.res?.ContentType ?? string.Empty);
+                if (isJsonBody)
+                {
+                    return PororocaResponseValueCapturer.CaptureJsonValue(capture.Path!, this.res!.GetBodyAsText()!);
+                }
+                else if (isXmlBody)
+                {
+                    return PororocaResponseValueCapturer.CaptureXmlValue(capture.Path!, this.res!.GetBodyAsText()!);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        var egvm = (EnvironmentsGroupViewModel)this.colVm.Items.First(i => i is EnvironmentsGroupViewModel);
+        var env = egvm.Items.FirstOrDefault(e => e.Name == this.environmentUsedForRequest);
+        if (env is not null)
+        {
+            var captures = this.parentHttpRequestVm.ResCapturesTableVm.ConvertItemsToDomain();
+            foreach (var capture in captures)
+            {
+                var envVar = env.VariablesTableVm.Items.FirstOrDefault(v => v.Key == capture.TargetVariable);
+                string? captureValue = GetCaptureValue(capture);
+                if (captureValue is not null)
+                {
+                    if (envVar is null)
+                    {
+                        envVar = new(env.VariablesTableVm.Items, new(true, capture.TargetVariable, captureValue, true));
+                        env.VariablesTableVm.Items.Add(envVar);
+                    }
+                    else
+                    {
+                        envVar.Value = captureValue;
+                    }
+                }
             }
         }
     }

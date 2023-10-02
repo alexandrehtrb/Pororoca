@@ -82,6 +82,12 @@ public class HttpRequestView : UserControl
         UpdateVmSelectedItems(tableVm, e);
     }
 
+    public void OnSelectedResponseCapturesChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var tableVm = ((HttpRequestViewModel)DataContext!).ResCapturesTableVm;
+        UpdateVmSelectedItems(tableVm, e);
+    }
+
     private void SetupSelectedOptionsPanelsVisibility()
     {
         var cbReqBodyMode = this.FindControl<ComboBox>("cbReqBodyMode")!;
