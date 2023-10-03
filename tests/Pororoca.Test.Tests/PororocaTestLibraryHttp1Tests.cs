@@ -59,14 +59,11 @@ public class PororocaTestLibraryHttp1Tests
         var res = await this.pororocaTest.SendHttpRequestAsync("Get headers");
 
         Assert.NotNull(res);
-        Assert.Equal(HttpStatusCode.OK, res.StatusCode);
-        Assert.Equal("application/json; charset=utf-8", res.ContentType);
+        Assert.Equal(HttpStatusCode.NoContent, res.StatusCode);
 
-        var bodyListedHeaders = res.GetJsonBodyAs<Dictionary<string, string[]>>();
-        Assert.True(bodyListedHeaders!.TryGetValue("Header1", out string[]? hdr1Values));
-        Assert.Contains("oi", hdr1Values);
-        Assert.True(bodyListedHeaders!.TryGetValue("Header2", out string[]? hdr2Values));
-        Assert.Contains("ciao", hdr2Values);
+        Assert.NotNull(res.Headers);
+        Assert.Contains(new("MIRRORED-Header1", "oi"), res.Headers);
+        Assert.Contains(new("MIRRORED-Header2", "ciao"), res.Headers);
     }
 
     [Fact]

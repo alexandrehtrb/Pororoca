@@ -1,4 +1,5 @@
 using System.Text;
+using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
@@ -6,6 +7,7 @@ using Pororoca.Domain.Features.ImportCollection;
 using Pororoca.Domain.Features.Requester;
 using Pororoca.Domain.Features.TranslateRequest.Http;
 using Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection;
+using Pororoca.Domain.Features.VariableCapture;
 using Pororoca.Infrastructure.Features.Requester;
 
 namespace Pororoca.Test;
@@ -61,6 +63,9 @@ public sealed class PororocaTest
         return this;
     }
 
+    public string? GetCollectionVariable(string key) =>
+        Collection.Variables.FirstOrDefault(v => v.Key == key)?.Value;
+
     public void SetCollectionVariable(string key, string? value)
     {
         var variable = Collection.Variables.FirstOrDefault(v => v.Key == key);
@@ -74,6 +79,14 @@ public sealed class PororocaTest
         {
             Collection.Variables.Add(new(true, key, value, false));
         }
+    }
+
+    public string? GetEnvironmentVariable(string environmentName, string key)
+    {
+        var env = Collection.Environments.FirstOrDefault(e => e.Name == environmentName)
+            ?? throw new Exception($"Error: Environment with the name '{environmentName}' was not found.");
+        
+        return env.Variables.FirstOrDefault(v => v.Key == key)?.Value;
     }
 
     public void SetEnvironmentVariable(string environmentName, string key, string? value)
@@ -191,7 +204,7 @@ public sealed class PororocaTest
         }
     }
 
-    public Task<PororocaHttpResponse> SendHttpRequestAsync(PororocaHttpRequest req, CancellationToken cancellationToken = default)
+    public async Task<PororocaHttpResponse> SendHttpRequestAsync(PororocaHttpRequest req, CancellationToken cancellationToken = default)
     {
         if (!PororocaHttpRequestValidator.IsValidRequest(Collection,
                                                          req,
@@ -202,7 +215,9 @@ public sealed class PororocaTest
         else
         {
             IPororocaRequester requester = PororocaRequester.Singleton;
-            return requester.RequestAsync(Collection, req, !ShouldCheckTlsCertificate, cancellationToken);
+            var res = await requester.RequestAsync(Collection, req, !ShouldCheckTlsCertificate, cancellationToken);
+            CaptureResponseValues(req, res);
+            return res;
         }
     }
 
@@ -250,5 +265,60 @@ public sealed class PororocaTest
         }
     }
 
+    private void CaptureResponseValues(PororocaHttpRequest req, PororocaHttpResponse res)
+    {
+        string? CaptureValue(PororocaHttpResponseValueCapture capture)
+        {
+            if (capture.Type == PororocaHttpResponseValueCaptureType.Header)
+            {
+                return res.Headers?.FirstOrDefault(x => x.Key == capture.HeaderName).Value;
+            }
+            else if (capture.Type == PororocaHttpResponseValueCaptureType.Body)
+            {
+                bool isJsonBody = MimeTypesDetector.IsJsonContent(res.ContentType ?? string.Empty);
+                bool isXmlBody = MimeTypesDetector.IsXmlContent(res.ContentType ?? string.Empty);
+                if (isJsonBody)
+                {
+                    return PororocaResponseValueCapturer.CaptureJsonValue(capture.Path!, res.GetBodyAsText()!);
+                }
+                else if (isXmlBody)
+                {
+                    return PororocaResponseValueCapturer.CaptureXmlValue(capture.Path!, res.GetBodyAsText()!);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
 
+        var env = Collection.Environments.FirstOrDefault(e => e.IsCurrent);
+        if (env is not null)
+        {
+            var captures = req.ResponseCaptures ?? new();
+            foreach (var capture in captures)
+            {
+                var envVar = env.Variables.FirstOrDefault(v => v.Key == capture.TargetVariable);
+                string? capturedValue = CaptureValue(capture);
+                if (capturedValue is not null)
+                {
+                    if (envVar is null)
+                    {
+                        envVar = new(true, capture.TargetVariable, capturedValue, true);
+                        env.Variables.Add(envVar);
+                    }
+                    else
+                    {
+                        var newEnvVar = envVar with { Value = capturedValue };
+                        env.Variables.Remove(envVar);
+                        env.Variables.Add(newEnvVar);
+                    }
+                }
+            }
+        }
+    }
 }
