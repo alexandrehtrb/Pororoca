@@ -49,6 +49,18 @@ public static partial class PororocaResponseValueCapturerTests
                   <price>39.95</price>
               </book>
           </bookstore>";
+    
+    private const string testXmlObjWithNamespaces =
+        @"<env:Envelope xmlns:env=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:wsa=""http://www.w3.org/2005/08/addressing"">
+              <env:Body>
+                  <xsi:response xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
+                      <wsa:MyVal1>Alexandre</wsa:MyVal1>
+                      <xsi:Value>
+                          <wsa:MyVal2>123987456</wsa:MyVal2>
+                      </xsi:Value>
+                  </xsi:response>
+              </env:Body>
+          </env:Envelope>";
 
     [Theory]
     [InlineData("Alexandre", "$", testJsonStr)]
@@ -77,9 +89,12 @@ public static partial class PororocaResponseValueCapturerTests
         Assert.Equal(expectedCapture, CaptureJsonValue(path, json));
 
     [Theory]
+    [InlineData("ABC", "/a", "<a>ABC</a>")]
     [InlineData("ENG", "/SessionInfo/Language", testXmlSimpleObj)]
     [InlineData("1", "/SessionInfo/Version", testXmlSimpleObj)]
     [InlineData("Giada De Laurentiis", "/bookstore/book[1]/author", testXmlComplexObj)]
+    [InlineData("Alexandre", "/env:Envelope/env:Body/xsi:response/wsa:MyVal1", testXmlObjWithNamespaces)]
+    [InlineData("123987456", "/env:Envelope/env:Body/xsi:response/xsi:Value/wsa:MyVal2", testXmlObjWithNamespaces)]
     public static void TestXmlValueCapture(string expectedCapture, string xpath, string xml) =>
         Assert.Equal(expectedCapture, CaptureXmlValue(xpath, xml));
 }

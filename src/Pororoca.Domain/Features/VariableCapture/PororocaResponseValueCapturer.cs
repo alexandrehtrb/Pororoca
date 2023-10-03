@@ -7,9 +7,13 @@ namespace Pororoca.Domain.Features.VariableCapture;
 public static partial class PororocaResponseValueCapturer
 {
     private static readonly Regex arrayElementRegex = GenerateArrayElementRegex();
+    private static readonly Regex xmlNamespacesRegex = GenerateXmlNamespacesRegex();
 
     [GeneratedRegex("\\[(\\d+)\\]")]
     private static partial Regex GenerateArrayElementRegex();
+
+    [GeneratedRegex("xmlns:(?<Prefix>\\w+)=\"(?<Url>[\\w\\d:\\/\\.\\-_]+)\"")]
+    private static partial Regex GenerateXmlNamespacesRegex();
 
     public static string? CaptureXmlValue(string xpath, string xml)
     {
@@ -17,13 +21,30 @@ public static partial class PororocaResponseValueCapturer
         {
             XmlDocument doc = new();
             doc.LoadXml(xml);
-            var node = doc.SelectSingleNode(xpath);
+            XmlNamespaceManager nsm = new(doc.NameTable);
+            var namespaces = GetXmlNamespaces(xml);
+            foreach ((string prefix, string url) in namespaces)
+            {
+                nsm.AddNamespace(prefix, url);
+            }
+            var node = doc.SelectSingleNode(xpath, nsm);
             return node?.InnerText;
         }
         catch
         {
             return null;
         }
+    }
+
+    private static (string Prefix, string Url)[] GetXmlNamespaces(string xml)
+    {
+        var matches = xmlNamespacesRegex.Matches(xml);
+        return matches.Select(m => 
+        {
+            string prefix = m.Groups["Prefix"].Value;
+            string url = m.Groups["Url"].Value;
+            return (prefix, url);
+        }).ToArray();
     }
 
     public static string? CaptureJsonValue(string path, string json)
