@@ -35,6 +35,7 @@
       <Color x:Key="DefaultIconsColor">Black</Color>
       <Color x:Key="TextEditorBackgroundColor">White</Color>
       <Color x:Key="TextEditorForegroundColor">Black</Color>
+      <Color x:Key="ResponseCapturedValueTextColor">#00487C</Color>
       <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="Black"/>
       <SolidColorBrush x:Key="CheckBoxBorderBrushCheckedPointerOver" Color="Black"/>
       <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPointerOver" Color="Black"/>

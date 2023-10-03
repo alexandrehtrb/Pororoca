@@ -35,6 +35,7 @@
       <Color x:Key="DefaultIconsColor">White</Color>
       <Color x:Key="TextEditorBackgroundColor">#1E1E1E</Color>
       <Color x:Key="TextEditorForegroundColor">#D4D4D4</Color>
+      <Color x:Key="ResponseCapturedValueTextColor">#38C7AD</Color>
     </ResourceDictionary>
   </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

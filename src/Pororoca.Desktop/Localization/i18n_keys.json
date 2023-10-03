@@ -146,6 +146,7 @@
 	"HttpResponse/CaptureTypeHeader",
 	"HttpResponse/CaptureTypeBody",
 	"HttpResponse/CaptureHeaderNameOrBodyPath",
+	"HttpResponse/CaptureCapturedValue",
 	"HttpResponse/CaptureTip",
 	"RequestAuth/AuthModeBasic",
 	"RequestAuth/AuthModeBasicLoginWatermark",

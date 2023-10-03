@@ -146,6 +146,7 @@
     "HttpResponse/CaptureTypeHeader": "Header",
     "HttpResponse/CaptureTypeBody": "Body",
     "HttpResponse/CaptureHeaderNameOrBodyPath": "HEADER NAME / BODY PATH",
+    "HttpResponse/CaptureCapturedValue": "VALUE",
     "HttpResponse/CaptureTip": "Tip: For JSON value capture: $.myProp[0].myProp2 ($ means root, [0] means array element). For XML value capture, use XPath syntax. Captured values are saved as variables of the active environment.",
     "RequestAuth/AuthModeBasic": "Basic",
     "RequestAuth/AuthModeBasicLoginWatermark": "(basic auth login)",

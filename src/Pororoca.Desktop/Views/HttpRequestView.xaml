@@ -931,14 +931,14 @@
               <!--DataGrid.KeyBindings>
                 <KeyBinding Command="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.CopyCmd}" Gesture="Ctrl+C" />
               </DataGrid.KeyBindings-->
-              <DataGrid.ContextMenu>
+              <!--DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem
                         Header="{Binding i18n.ContextMenu.Copy}"
                         Command="{Binding ResCapturesTableVm.CopyCmd}"
                         InputGesture="Ctrl+C"/>
                 </ContextMenu>
-              </DataGrid.ContextMenu>
+              </DataGrid.ContextMenu-->
               <!--i:Interaction.Behaviors>
                 <i:BehaviorCollection>
                   <idd:ContextDropBehavior Handler="{StaticResource DataGridDragAndDropKeyValueParamViewModelHandler}"/>
@@ -946,14 +946,14 @@
               </i:Interaction.Behaviors-->
               <DataGrid.Columns>
                 <DataGridTextColumn
-                    Width="0.3*"
+                    Width="0.25*"
                     Binding="{Binding TargetVariable}">
                   <DataGridTextColumn.Header>
                     <TextBlock Text="{Binding i18n.HttpResponse.CaptureTargetVariable}"/>
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="0.2*"
+                    Width="0.15*"
                     Binding="{Binding Type}"
                     IsReadOnly="True">
                   <DataGridTextColumn.Header>
@@ -961,28 +961,37 @@
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="0.5*"
+                    Width="0.30*"
                     Binding="{Binding HeaderNameOrBodyPath}">
                   <DataGridTextColumn.Header>
                     <TextBlock Text="{Binding i18n.HttpResponse.CaptureHeaderNameOrBodyPath}"/>
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="0.22*"
+                    Binding="{Binding CapturedValue}"
+                    Foreground="{DynamicResource ResponseCapturedValueTextBrush}">
+                    <!-- TODO: Set text colour using Classes and ComponentsCustomStyling.xaml -->
+                  <DataGridTextColumn.Header>
+                    <TextBlock Text="{Binding i18n.HttpResponse.CaptureCapturedValue}"/>
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
                 <DataGridTemplateColumn
-                        Width="0.12*"
-                        Header="">
-                      <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                          <Button
-                              Command="{Binding RemoveCaptureCmd}"
-                              VerticalAlignment="Center"
-                              HorizontalAlignment="Center"
-                              HorizontalContentAlignment="Center"
-                              VerticalContentAlignment="Center"
-                              Classes="Trash">
-                          </Button>
-                        </DataTemplate>
-                      </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    Width="0.08*"
+                    Header="">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <Button
+                          Command="{Binding RemoveCaptureCmd}"
+                          VerticalAlignment="Center"
+                          HorizontalAlignment="Center"
+                          HorizontalContentAlignment="Center"
+                          VerticalContentAlignment="Center"
+                          Classes="Trash">
+                      </Button>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
               </DataGrid.Columns>
             </DataGrid>
             <TextBlock

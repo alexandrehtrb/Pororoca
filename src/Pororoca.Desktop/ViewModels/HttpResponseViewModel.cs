@@ -185,23 +185,23 @@ public sealed class HttpResponseViewModel : ViewModelBase
 
     private void CaptureResponseValues()
     {
-        string? GetCaptureValue(PororocaHttpResponseValueCapture capture)
+        string? CaptureValue(HttpResponseCaptureViewModel capture)
         {
-            if (capture.Type == PororocaHttpResponseValueCaptureType.Header)
+            if (capture.CaptureType == PororocaHttpResponseValueCaptureType.Header)
             {
-                return this.res?.Headers?.FirstOrDefault(x => x.Key == capture.HeaderName).Value;
+                return this.res?.Headers?.FirstOrDefault(x => x.Key == capture.HeaderNameOrBodyPath).Value;
             }
-            else if (capture.Type == PororocaHttpResponseValueCaptureType.Body)
+            else if (capture.CaptureType == PororocaHttpResponseValueCaptureType.Body)
             {
                 bool isJsonBody = IsJsonContent(this.res?.ContentType ?? string.Empty);
                 bool isXmlBody = IsXmlContent(this.res?.ContentType ?? string.Empty);
                 if (isJsonBody)
                 {
-                    return PororocaResponseValueCapturer.CaptureJsonValue(capture.Path!, this.res!.GetBodyAsText()!);
+                    return PororocaResponseValueCapturer.CaptureJsonValue(capture.HeaderNameOrBodyPath!, this.res!.GetBodyAsText()!);
                 }
                 else if (isXmlBody)
                 {
-                    return PororocaResponseValueCapturer.CaptureXmlValue(capture.Path!, this.res!.GetBodyAsText()!);
+                    return PororocaResponseValueCapturer.CaptureXmlValue(capture.HeaderNameOrBodyPath!, this.res!.GetBodyAsText()!);
                 }
                 else
                 {
@@ -218,21 +218,22 @@ public sealed class HttpResponseViewModel : ViewModelBase
         var env = egvm.Items.FirstOrDefault(e => e.Name == this.environmentUsedForRequest);
         if (env is not null)
         {
-            var captures = this.parentHttpRequestVm.ResCapturesTableVm.ConvertItemsToDomain();
+            var captures = this.parentHttpRequestVm.ResCapturesTableVm.Items;
             foreach (var capture in captures)
             {
                 var envVar = env.VariablesTableVm.Items.FirstOrDefault(v => v.Key == capture.TargetVariable);
-                string? captureValue = GetCaptureValue(capture);
-                if (captureValue is not null)
+                string? capturedValue = CaptureValue(capture);
+                if (capturedValue is not null)
                 {
+                    capture.CapturedValue = capturedValue;
                     if (envVar is null)
                     {
-                        envVar = new(env.VariablesTableVm.Items, new(true, capture.TargetVariable, captureValue, true));
+                        envVar = new(env.VariablesTableVm.Items, new(true, capture.TargetVariable, capturedValue, true));
                         env.VariablesTableVm.Items.Add(envVar);
                     }
                     else
                     {
-                        envVar.Value = captureValue;
+                        envVar.Value = capturedValue;
                     }
                 }
             }

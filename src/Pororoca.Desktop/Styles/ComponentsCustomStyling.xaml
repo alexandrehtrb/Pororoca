@@ -165,6 +165,12 @@
         Value="{DynamicResource SystemErrorTextColor}"/>
   </Style>
 
+  <Style Selector="TextBlock.ResponseCapturedValue">
+    <Setter
+        Property="Foreground"
+        Value="{DynamicResource ResponseCapturedValueTextBrush}"/>
+  </Style>
+
   <Style Selector="DataGridColumnHeader">
     <Setter
         Property="Background"

@@ -22,6 +22,9 @@ public sealed class HttpResponseCaptureViewModel : ViewModelBase
     [Reactive]
     public string HeaderNameOrBodyPath { get; set; }
 
+    [Reactive]
+    public string? CapturedValue { get; set; }
+
     public ReactiveCommand<Unit, Unit> RemoveCaptureCmd { get; }
 
     public HttpResponseCaptureViewModel(ObservableCollection<HttpResponseCaptureViewModel> parentCollection, PororocaHttpResponseValueCapture c)
