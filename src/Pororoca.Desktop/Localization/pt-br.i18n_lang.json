@@ -147,7 +147,7 @@
     "HttpResponse/CaptureTypeBody": "Corpo",
     "HttpResponse/CaptureHeaderNameOrBodyPath": "CABEÇALHO / CAMINHO NO CORPO",
     "HttpResponse/CaptureCapturedValue": "VALOR",
-    "HttpResponse/CaptureTip": "Dica: Para captura de valor JSON: $.myProp[0].myProp2 ($ significa raíz, [0] significa elemento de lista). Para captura de valor XML, use a sintaxe XPath. Os valores capturados são salvos como variáveis do ambiente ativo.",
+    "HttpResponse/CaptureTip": "Dica: Para captura de valor JSON: $.myProp[0].myProp2 ($ significa raíz, [0] significa elemento de lista). Para captura de valor XML, use a sintaxe XPath 1.0. Os valores capturados são salvos como variáveis do ambiente ativo.",
     "RequestAuth/AuthModeBasic": "Basic",
     "RequestAuth/AuthModeBasicLoginWatermark": "(basic auth login)",
     "RequestAuth/AuthModeBasicPasswordWatermark": "(basic auth senha)",
