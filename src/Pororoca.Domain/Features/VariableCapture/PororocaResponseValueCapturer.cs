@@ -44,7 +44,7 @@ public static partial class PororocaResponseValueCapturer
             string prefix = m.Groups["Prefix"].Value;
             string url = m.Groups["Url"].Value;
             return (prefix, url);
-        }).ToArray();
+        }).Distinct().ToArray();
     }
 
     public static string? CaptureJsonValue(string path, string json)
