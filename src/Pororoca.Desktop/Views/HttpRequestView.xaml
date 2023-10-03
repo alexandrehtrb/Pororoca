@@ -898,7 +898,6 @@
               <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
               </Grid.RowDefinitions>
               <StackPanel
                   Grid.Column="0"
@@ -914,9 +913,18 @@
                 <Button
                     Name="btResCaptureAddBodyCapture"
                     Content="{Binding i18n.HttpResponse.CaptureAddBodyCapture}"
-                    Margin="3,0,0,0"
+                    Margin="3,0,3,0"
                     Command="{Binding ResCapturesTableVm.AddNewBodyCaptureCmd}"
                     Classes="Primary"/>
+                <TextBlock
+                    TextWrapping="Wrap"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    VerticalAlignment="Center"
+                    Margin="6,0,0,0"
+                    Text="(?)"
+                    ToolTip.Tip="{Binding i18n.HttpResponse.CaptureTip}"/>
+                <!-- Adding a TextBlock Tip at the end of the Grid causes the separator GridSplitter to "jam" while resizing -->
               </StackPanel>
             <DataGrid
                 Grid.Column="0"
@@ -994,14 +1002,6 @@
                 </DataGridTemplateColumn>
               </DataGrid.Columns>
             </DataGrid>
-            <TextBlock
-                Grid.Column="0"
-                Grid.Row="2"
-                TextWrapping="Wrap"
-                FontSize="12"
-                HorizontalAlignment="Stretch"
-                Margin="0,24,0,24"
-                Text="{Binding i18n.HttpResponse.CaptureTip}"/>
             </Grid>
           </TabItem>
         </TabControl>
