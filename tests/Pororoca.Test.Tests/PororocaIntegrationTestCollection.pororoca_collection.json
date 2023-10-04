@@ -542,6 +542,27 @@
     },
     {
       "requestType": "http",
+      "name": "Capture header value",
+      "httpVersion": 1.1,
+      "httpMethod": "GET",
+      "url": "{{BaseUrl}}/test/get/headers",
+      "headers": [
+        {
+          "enabled": true,
+          "key": "Header1",
+          "value": "oi"
+        }
+      ],
+      "responseCaptures": [
+        {
+          "type": "header",
+          "targetVariable": "CapturedHeaderValue",
+          "headerName": "MIRRORED-Header1"
+        }
+      ]
+    },
+    {
+      "requestType": "http",
       "name": "Capture JSON value",
       "httpVersion": 1.1,
       "httpMethod": "GET",
