@@ -17,7 +17,6 @@ public static class UITestsRunner
         new TreeDeleteItemsUITest(),
         new HttpRequestValidationsUITest(),
         new HttpRequestsUITest(),
-        // TODO: new HttpResponseCapturesUITest(),
         //new VariablesCutCopyPasteDeleteUITest(),
         //new HeadersCutCopyPasteDeleteUITest(),
         //new UrlEncodedParamsCutCopyPasteDeleteUITest(),

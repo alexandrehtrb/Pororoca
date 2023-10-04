@@ -87,6 +87,9 @@ public sealed partial class HttpRequestsUITest : UITest
             await TestPostFormDataBody();
             await TestBasicAuth();
             await TestBearerAuth();
+            await TestCaptureResponseHeader();
+            await TestCaptureResponseJsonBody();
+            await TestCaptureResponseXmlBody();
         }
 
         if (OperatingSystem.IsLinux())

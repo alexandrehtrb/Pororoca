@@ -52,7 +52,11 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal TabItem TabResHeaders => GetChildView<TabItem>("tabItemResHeaders")!;
     internal DataGrid ResHeaders => GetChildView<DataGrid>("dgResHeaders")!;
     internal TabItem TabResBody => GetChildView<TabItem>("tabItemResBody")!;
+    internal DataGrid ResCaptures => GetChildView<DataGrid>("dgResCaptures")!;
+    internal TabItem TabResCapture => GetChildView<TabItem>("tabItemResCapture")!;
     internal TextEditor ResBodyRawContent => GetChildView<TextEditor>("ResponseBodyRawContentEditor")!;
+    internal Button ResAddCaptureHeader => GetChildView<Button>("btResCaptureAddHeaderCapture")!;
+    internal Button ResAddCaptureBody => GetChildView<Button>("btResCaptureAddBodyCapture")!;
     internal Button ResBodySaveToFile => GetChildView<Button>("btResBodySaveToFile")!;
     internal Button ResDisableTlsVerification => GetChildView<Button>("btResDisableTlsVerification")!;
     internal ProgressBar ResProgressBar => GetChildView<ProgressBar>("pbResProgressBar")!;
@@ -61,6 +65,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal KeyValueParamsDataGridViewModel UrlEncodedParamsVm => ((HttpRequestViewModel)RootView!.DataContext!).UrlEncodedParamsTableVm;
     internal FormDataParamsDataGridViewModel FormDataParamsVm => ((HttpRequestViewModel)RootView!.DataContext!).FormDataParamsTableVm;
     internal KeyValueParamsDataGridViewModel ResHeadersVm => ((HttpRequestViewModel)RootView!.DataContext!).ResponseDataCtx.ResponseHeadersAndTrailersTableVm;
+    internal HttpResponseCapturesDataGridViewModel ResCapturesVm => ((HttpRequestViewModel)RootView!.DataContext!).ResCapturesTableVm;
 
     internal Task SetHttpVersion(decimal version)
     {
@@ -267,6 +272,15 @@ public sealed class HttpRequestRobot : BaseNamedRobot
             await Task.Delay(750);
         }
         while (!cts.IsCancellationRequested && vm.IsRequesting);
+    }
+
+    internal async Task EditResponseCaptureAt(int index, string targetVar, string headerNameOrBodyPath)
+    {
+        var vms = ResCapturesVm.Items;
+        var v = vms.ElementAt(index);
+        v.TargetVariable = targetVar;
+        v.HeaderNameOrBodyPath = headerNameOrBodyPath;
+        await UITestActions.WaitAfterActionAsync();
     }
 
     internal async Task SetNoAuth()
