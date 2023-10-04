@@ -189,7 +189,8 @@ public sealed class HttpResponseViewModel : ViewModelBase
         {
             if (capture.CaptureType == PororocaHttpResponseValueCaptureType.Header)
             {
-                return this.res?.Headers?.FirstOrDefault(x => x.Key == capture.HeaderNameOrBodyPath).Value;
+                // HTTP/2 lower-cases all header names, hence, we need to compare header names ignoring case
+                return this.res?.Headers?.FirstOrDefault(x => x.Key.Equals(capture.HeaderNameOrBodyPath, StringComparison.InvariantCultureIgnoreCase)).Value;
             }
             else if (capture.CaptureType == PororocaHttpResponseValueCaptureType.Body)
             {

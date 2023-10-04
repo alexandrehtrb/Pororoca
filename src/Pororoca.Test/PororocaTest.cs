@@ -271,7 +271,8 @@ public sealed class PororocaTest
         {
             if (capture.Type == PororocaHttpResponseValueCaptureType.Header)
             {
-                return res.Headers?.FirstOrDefault(x => x.Key == capture.HeaderName).Value;
+                // HTTP/2 lower-cases all header names, hence, we need to compare header names ignoring case
+                return res.Headers?.FirstOrDefault(x => x.Key.Equals(capture.HeaderName, StringComparison.InvariantCultureIgnoreCase)).Value;
             }
             else if (capture.Type == PororocaHttpResponseValueCaptureType.Body)
             {
