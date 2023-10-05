@@ -16,7 +16,8 @@ public sealed class RequestAuthViewModel : ViewModelBase
     private PororocaRequestAuthMode? AuthMode =>
         AuthModeSelectedIndex switch
         { // TODO: Improve this, do not use fixed integers to resolve mode
-            3 => PororocaRequestAuthMode.ClientCertificate,
+            4 => PororocaRequestAuthMode.ClientCertificate,
+            3 => PororocaRequestAuthMode.Windows,
             2 => PororocaRequestAuthMode.Bearer,
             1 => PororocaRequestAuthMode.Basic,
             _ => null
@@ -83,6 +84,22 @@ public sealed class RequestAuthViewModel : ViewModelBase
 
     #endregion
 
+    #region REQUEST AUTH WINDOWS
+
+    [Reactive]
+    public bool WindowsAuthUseCurrentUser { get; set; }
+
+    [Reactive]
+    public string? WindowsAuthLogin { get; set; }
+
+    [Reactive]
+    public string? WindowsAuthPassword { get; set; }
+
+    [Reactive]
+    public string? WindowsAuthDomain { get; set; }
+
+    #endregion
+
     #endregion
 
     public RequestAuthViewModel(PororocaRequestAuth? customAuth)
@@ -92,12 +109,17 @@ public sealed class RequestAuthViewModel : ViewModelBase
         {
             PororocaRequestAuthMode.Basic => 1,
             PororocaRequestAuthMode.Bearer => 2,
-            PororocaRequestAuthMode.ClientCertificate => 3,
+            PororocaRequestAuthMode.Windows => 3,
+            PororocaRequestAuthMode.ClientCertificate => 4,
             _ => 0,
         };
         BasicAuthLogin = customAuth?.BasicAuthLogin;
         BasicAuthPassword = customAuth?.BasicAuthPassword;
         BearerAuthToken = customAuth?.BearerToken;
+        WindowsAuthUseCurrentUser = customAuth?.Windows?.UseCurrentUser ?? false;
+        WindowsAuthLogin = customAuth?.Windows?.Login;
+        WindowsAuthPassword = customAuth?.Windows?.Password;
+        WindowsAuthDomain = customAuth?.Windows?.Domain;
 
         #region REQUEST AUTH CLIENT CERTIFICATE
         switch (customAuth?.ClientCertificate?.Type)
@@ -173,6 +195,8 @@ public sealed class RequestAuthViewModel : ViewModelBase
                 {
                     return null;
                 }
+            case PororocaRequestAuthMode.Windows:
+                return PororocaRequestAuth.MakeWindowsAuth(WindowsAuthUseCurrentUser, WindowsAuthLogin, WindowsAuthPassword, WindowsAuthDomain);
             case PororocaRequestAuthMode.Bearer:
                 return PororocaRequestAuth.MakeBearerAuth(BearerAuthToken ?? string.Empty);
             case PororocaRequestAuthMode.Basic:

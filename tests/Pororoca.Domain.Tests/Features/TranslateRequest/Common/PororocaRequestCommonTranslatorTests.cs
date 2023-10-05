@@ -377,4 +377,44 @@ public static class PororocaRequestCommonTranslatorTests
     }
 
     #endregion
+
+    #region WINDOWS AUTHENTICATION
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public static void Should_resolve_windows_authentication_values(bool useCurrentUser)
+    {
+        // GIVEN
+        PororocaCollection col = new("VarResolver");
+        col.Variables.Add(new(true, "win_login", "alexandre123", false));
+        col.Variables.Add(new(true, "win_pwd", "my_pwd", false));
+        col.Variables.Add(new(true, "win_domain", "alexandre.mydomain.net", false));
+
+        var reqAuth = PororocaRequestAuth.MakeWindowsAuth(useCurrentUser, "{{win_login}}", "{{win_pwd}}", "{{win_domain}}");
+
+        PororocaHttpRequest req = new();
+        req.UpdateCustomAuth(reqAuth);
+
+        // WHEN
+        var resolvedWinAuth = ResolveWindowsAuth(col, reqAuth.Windows!);
+
+        // THEN
+        Assert.NotNull(resolvedWinAuth);
+        Assert.Equal(useCurrentUser, resolvedWinAuth!.UseCurrentUser);
+        if (useCurrentUser == true)
+        {
+            Assert.Null(resolvedWinAuth.Login);
+            Assert.Null(resolvedWinAuth.Password);
+            Assert.Null(resolvedWinAuth.Domain);
+        }
+        else
+        {
+            Assert.Equal("alexandre123", resolvedWinAuth.Login);
+            Assert.Equal("my_pwd", resolvedWinAuth.Password);
+            Assert.Equal("alexandre.mydomain.net", resolvedWinAuth.Domain);
+        }
+    }
+
+    #endregion
 }

@@ -42,6 +42,9 @@
         <ComboBoxItem
             x:Name="cbiReqAuthBearer"
             Content="{Binding i18n.RequestAuth.AuthModeBearer}"/>
+        <ComboBoxItem
+            x:Name="cbiReqAuthWindows"
+            Content="{Binding i18n.RequestAuth.AuthModeWindows}"/>
         <!-- Mode=TwoWay in IsSelected below is required, otherwise, layout will disappear when changing between different requests -->
         <ComboBoxItem
             x:Name="cbiReqAuthClientCertificate"
@@ -105,6 +108,47 @@
           Watermark="{Binding i18n.RequestAuth.AuthModeBearerTokenWatermark}"
           Classes="SingleLine"
           Text="{Binding BearerAuthToken}"/>
+    </StackPanel>
+    <!-- WINDOWS AUTH-->
+    <StackPanel
+        x:Name="spReqAuthWindows"
+        Grid.Column="0"
+        Grid.Row="1"
+        Margin="0,12,0,0">
+      <CheckBox
+          Name="chkbWindowsAuthUseCurrentUser"
+          Content="{Binding i18n.RequestAuth.AuthModeWindowsUseCurrentUser}"
+          IsChecked="{Binding WindowsAuthUseCurrentUser}"/>
+      <TextBox
+          Name="tbWindowsAuthLogin"
+          Width="200"
+          Margin="0,12,0,0"
+          HorizontalAlignment="Left"
+          VerticalContentAlignment="Center"
+          Watermark="{Binding i18n.RequestAuth.AuthModeWindowsLoginWatermark}"
+          Classes="SingleLine"
+          IsVisible="{Binding !WindowsAuthUseCurrentUser}"
+          Text="{Binding WindowsAuthLogin}"/>
+      <TextBox
+          Name="tbWindowsAuthPassword"
+          Width="200"
+          Margin="0,12,0,0"
+          HorizontalAlignment="Left"
+          VerticalContentAlignment="Center"
+          Watermark="{Binding i18n.RequestAuth.AuthModeWindowsPasswordWatermark}"
+          Classes="SingleLine"
+          IsVisible="{Binding !WindowsAuthUseCurrentUser}"
+          Text="{Binding WindowsAuthPassword}"/>
+      <TextBox
+          Name="tbWindowsAuthDomain"
+          Width="200"
+          Margin="0,12,0,0"
+          HorizontalAlignment="Left"
+          VerticalContentAlignment="Center"
+          Watermark="{Binding i18n.RequestAuth.AuthModeWindowsDomainWatermark}"
+          Classes="SingleLine"
+          IsVisible="{Binding !WindowsAuthUseCurrentUser}"
+          Text="{Binding WindowsAuthDomain}"/>
     </StackPanel>
     <!-- CLIENT CERTIFICATE AUTH -->
     <Grid

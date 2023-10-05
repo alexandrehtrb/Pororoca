@@ -15,9 +15,11 @@ public class RequestAuthView : UserControl
 
     private void SetupSelectedOptionsPanelsVisibility()
     {
+        // TODO: Remove this code, it's horrible
         ComboBoxItem cbiReqAuthNone = this.FindControl<ComboBoxItem>("cbiReqAuthNone")!,
             cbiReqAuthBasic = this.FindControl<ComboBoxItem>("cbiReqAuthBasic")!,
             cbiReqAuthBearer = this.FindControl<ComboBoxItem>("cbiReqAuthBearer")!,
+            cbiReqAuthWindows = this.FindControl<ComboBoxItem>("cbiReqAuthWindows")!,
             cbiReqAuthClientCertificate = this.FindControl<ComboBoxItem>("cbiReqAuthClientCertificate")!,
             cbiReqAuthClientCertificateNone = this.FindControl<ComboBoxItem>("cbiReqAuthClientCertificateNone")!,
             cbiReqAuthClientCertificatePkcs12 = this.FindControl<ComboBoxItem>("cbiReqAuthClientCertificatePkcs12")!,
@@ -25,6 +27,7 @@ public class RequestAuthView : UserControl
 
         StackPanel spReqAuthBasic = this.FindControl<StackPanel>("spReqAuthBasic")!,
             spReqAuthBearer = this.FindControl<StackPanel>("spReqAuthBearer")!,
+            spReqAuthWindows = this.FindControl<StackPanel>("spReqAuthWindows")!,
             spReqAuthClientCertificatePkcs12 = this.FindControl<StackPanel>("spReqAuthClientCertificatePkcs12")!,
             spReqAuthClientCertificatePem = this.FindControl<StackPanel>("spReqAuthClientCertificatePem")!;
 
@@ -40,6 +43,7 @@ public class RequestAuthView : UserControl
             {
                 spReqAuthBasic.IsVisible =
                 spReqAuthBearer.IsVisible =
+                spReqAuthWindows.IsVisible =
                 grReqAuthClientCertificate.IsVisible =
                 cbReqAuthClientCertificateType.IsVisible = false;
             }
@@ -47,6 +51,7 @@ public class RequestAuthView : UserControl
             {
                 spReqAuthBasic.IsVisible = true;
                 spReqAuthBearer.IsVisible =
+                spReqAuthWindows.IsVisible =
                 grReqAuthClientCertificate.IsVisible =
                 cbReqAuthClientCertificateType.IsVisible = false;
             }
@@ -54,6 +59,15 @@ public class RequestAuthView : UserControl
             {
                 spReqAuthBearer.IsVisible = true;
                 spReqAuthBasic.IsVisible =
+                spReqAuthWindows.IsVisible =
+                grReqAuthClientCertificate.IsVisible =
+                cbReqAuthClientCertificateType.IsVisible = false;
+            }
+            else if (selected == cbiReqAuthWindows)
+            {
+                spReqAuthWindows.IsVisible = true;
+                spReqAuthBasic.IsVisible =
+                spReqAuthBearer.IsVisible =
                 grReqAuthClientCertificate.IsVisible =
                 cbReqAuthClientCertificateType.IsVisible = false;
             }
@@ -62,7 +76,8 @@ public class RequestAuthView : UserControl
                 grReqAuthClientCertificate.IsVisible =
                 cbReqAuthClientCertificateType.IsVisible = true;
                 spReqAuthBasic.IsVisible =
-                spReqAuthBearer.IsVisible = false;
+                spReqAuthBearer.IsVisible = 
+                spReqAuthWindows.IsVisible =false;
             }
         };
 

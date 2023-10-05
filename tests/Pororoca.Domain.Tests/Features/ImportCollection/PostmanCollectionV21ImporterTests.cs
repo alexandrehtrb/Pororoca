@@ -373,6 +373,38 @@ public static class PostmanCollectionV21ImporterTests
         Assert.Equal("tkn", reqAuth.BearerToken);
     }
 
+    [Fact]
+    public static void Should_convert_postman_req_ntlm_auth_to_pororoca_req_auth_correctly()
+    {
+        // GIVEN
+        PostmanAuth? postmanAuth = new()
+        {
+            Type = PostmanAuthType.ntlm,
+            Ntlm = new PostmanVariable[]
+            {
+                new() { Key = "username", Value = "usr", Type = "string" },
+                new() { Key = "password", Value = "pwd", Type = "string" },
+                new() { Key = "domain", Value = "dom", Type = "string" }
+            }
+        };
+
+        // WHEN
+        var reqAuth = ConvertToPororocaAuth(postmanAuth);
+
+        // THEN
+        Assert.NotNull(reqAuth);
+        Assert.Equal(PororocaRequestAuthMode.Windows, reqAuth!.Mode);
+        Assert.Null(reqAuth.BasicAuthLogin);
+        Assert.Null(reqAuth.BasicAuthPassword);
+        Assert.Null(reqAuth.BearerToken);
+        Assert.Null(reqAuth.ClientCertificate);
+        Assert.NotNull(reqAuth.Windows);
+        Assert.False(reqAuth.Windows.UseCurrentUser);
+        Assert.Equal("usr", reqAuth.Windows.Login);
+        Assert.Equal("pwd", reqAuth.Windows.Password);
+        Assert.Equal("dom", reqAuth.Windows.Domain);
+    }
+
     #endregion
 
     #region REQUEST

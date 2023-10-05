@@ -104,7 +104,8 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal async Task SelectRequestHeaders(params KeyValueParamViewModel[] headersVms)
     {
         ReqHeaders.SelectedItems.Clear();
-        foreach (var h in headersVms) ReqHeaders.SelectedItems.Add(h);
+        foreach (var h in headersVms)
+            ReqHeaders.SelectedItems.Add(h);
         await UITestActions.WaitAfterActionAsync();
     }
 
@@ -180,7 +181,8 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal async Task SelectUrlEncodedParams(params KeyValueParamViewModel[] vms)
     {
         ReqBodyUrlEncodedParams.SelectedItems.Clear();
-        foreach (var h in vms) ReqBodyUrlEncodedParams.SelectedItems.Add(h);
+        foreach (var h in vms)
+            ReqBodyUrlEncodedParams.SelectedItems.Add(h);
         await UITestActions.WaitAfterActionAsync();
     }
 
@@ -224,7 +226,8 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal async Task SelectFormDataParams(params FormDataParamViewModel[] vms)
     {
         ReqBodyFormDataParams.SelectedItems.Clear();
-        foreach (var h in vms) ReqBodyFormDataParams.SelectedItems.Add(h);
+        foreach (var h in vms)
+            ReqBodyFormDataParams.SelectedItems.Add(h);
         await UITestActions.WaitAfterActionAsync();
     }
 
@@ -304,6 +307,29 @@ public sealed class HttpRequestRobot : BaseNamedRobot
         await Auth.BearerAuthToken.ClearAndTypeText(token);
     }
 
+    internal async Task SetWindowsAuthCurrentUser()
+    {
+        await TabControlReq.Select(TabReqAuth);
+        await Auth.AuthType.Select(Auth.AuthTypeOptionWindows);
+        if (Auth.WindowsAuthUseCurrentUser.IsChecked != true)
+        {
+            await Auth.WindowsAuthUseCurrentUser.ClickOn();
+        }
+    }
+
+    internal async Task SetWindowsAuthOtherUser(string login, string password, string domain)
+    {
+        await TabControlReq.Select(TabReqAuth);
+        await Auth.AuthType.Select(Auth.AuthTypeOptionWindows);
+        if (Auth.WindowsAuthUseCurrentUser.IsChecked == true)
+        {
+            await Auth.WindowsAuthUseCurrentUser.ClickOn();
+        }
+        await Auth.WindowsAuthLogin.ClearAndTypeText(login!);
+        await Auth.WindowsAuthPassword.ClearAndTypeText(password!);
+        await Auth.WindowsAuthDomain.ClearAndTypeText(domain!);
+    }
+
     internal async Task SetPkcs12CertificateAuth(string certFilePath, string certPassword)
     {
         await TabControlReq.Select(TabReqAuth);
@@ -326,7 +352,8 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal async Task SelectResponseHeaders(params KeyValueParamViewModel[] headersVms)
     {
         ResHeaders.SelectedItems.Clear();
-        foreach (var h in headersVms) ResHeaders.SelectedItems.Add(h);
+        foreach (var h in headersVms)
+            ResHeaders.SelectedItems.Add(h);
         await UITestActions.WaitAfterActionAsync();
     }
 

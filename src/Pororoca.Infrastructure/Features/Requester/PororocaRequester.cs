@@ -33,8 +33,8 @@ public sealed class PororocaRequester : IPororocaRequester
             }
             else
             {
-                var resolvedClientCert = GetResolvedClientCertificate(reqMsg!);
-                var httpClient = PororocaHttpClientProvider.Singleton.Provide(disableSslVerification, resolvedClientCert);
+                var resolvedAuth = GetResolvedAuth(reqMsg!);
+                var httpClient = PororocaHttpClientProvider.Singleton.Provide(disableSslVerification, resolvedAuth);
 
                 resMsg = await httpClient.SendAsync(reqMsg!, cancellationToken);
                 reqMsg?.Dispose();
@@ -53,12 +53,12 @@ public sealed class PororocaRequester : IPororocaRequester
     public bool IsValidRequest(IPororocaVariableResolver variableResolver, PororocaHttpRequest req, out string? errorCode) =>
         PororocaHttpRequestValidator.IsValidRequest(variableResolver, req, out errorCode);
 
-    private static PororocaRequestAuthClientCertificate? GetResolvedClientCertificate(HttpRequestMessage reqMsg)
+    private static PororocaRequestAuth? GetResolvedAuth(HttpRequestMessage reqMsg)
     {
-        object? clientCertificateObj = reqMsg.Options.FirstOrDefault(o => o.Key == PororocaHttpRequestTranslator.ClientCertificateOptionsKey).Value;
-        if (clientCertificateObj is PororocaRequestAuthClientCertificate resolvedCert)
+        object? obj = reqMsg.Options.FirstOrDefault(o => o.Key == PororocaHttpRequestTranslator.AuthOptionsKey).Value;
+        if (obj is PororocaRequestAuth resolvedAuth)
         {
-            return resolvedCert;
+            return resolvedAuth;
         }
         else
         {

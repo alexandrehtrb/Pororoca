@@ -18,9 +18,9 @@ public sealed class PororocaHttpClientProvider : IPororocaHttpClientProvider
     {
     }
 
-    public HttpClient Provide(bool disableSslVerification, PororocaRequestAuthClientCertificate? resolvedClientCert)
+    public HttpClient Provide(bool disableSslVerification, PororocaRequestAuth? resolvedAuth)
     {
-        PororocaHttpClientHolder holder = new(disableSslVerification, resolvedClientCert);
+        PororocaHttpClientHolder holder = new(disableSslVerification, resolvedAuth);
         var cachedHolder = cachedHolders.FirstOrDefault(h => h.Equals(holder));
 
         if (cachedHolder != null)
@@ -29,16 +29,16 @@ public sealed class PororocaHttpClientProvider : IPororocaHttpClientProvider
         }
         else
         {
-            var newClient = MakeHttpClient(disableSslVerification, resolvedClientCert);
+            var newClient = MakeHttpClient(disableSslVerification, resolvedAuth);
             holder.KeepClient(newClient);
-            holder.SetName($"client{cachedHolders.Count + 1}");
+            holder.Name = $"client{cachedHolders.Count + 1}";
             cachedHolders.Add(holder);
 
             return newClient;
         }
     }
 
-    private static HttpClient MakeHttpClient(bool disableSslVerification, PororocaRequestAuthClientCertificate? resolvedCert)
+    private static HttpClient MakeHttpClient(bool disableSslVerification, PororocaRequestAuth? resolvedAuth)
     {
         /*
         https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-requests?view=aspnetcore-5.0#alternatives-to-ihttpclientfactory-1
@@ -51,7 +51,8 @@ public sealed class PororocaHttpClientProvider : IPororocaHttpClientProvider
             AutomaticDecompression = DecompressionMethods.All
         };
         SetupTlsServerCertificateCheck(httpHandler, disableSslVerification);
-        SetupTlsClientCertificateIfSelected(httpHandler, resolvedCert);
+        SetupTlsClientCertificateIfSelected(httpHandler, resolvedAuth?.ClientCertificate);
+        SetupWindowsAuthenticationIfSelected(httpHandler, resolvedAuth?.Windows);
 
         HttpClient httpClient = new(httpHandler, disposeHandler: false)
         {
@@ -78,6 +79,26 @@ public sealed class PororocaHttpClientProvider : IPororocaHttpClientProvider
             httpHandler.SslOptions.ClientCertificates.Add(cert);
             //httpHandler.SslOptions.LocalCertificateSelectionCallback =
             //    (sender, targetHost, localCertificates, remoteCertificate, acceptableIssuers) => cert;
+        }
+    }
+
+    private static void SetupWindowsAuthenticationIfSelected(SocketsHttpHandler httpHandler, PororocaRequestAuthWindows? resolvedWindowsAuth)
+    {
+        // https://learn.microsoft.com/en-us/dotnet/framework/network-programming/ntlm-and-kerberos-authentication
+        // "The negotiate authentication module determines whether the remote server 
+        // is using NTLM or Kerberos authentication, and sends the appropriate response."
+        // https://stackoverflow.com/questions/2528743/defaultnetworkcredentials-or-defaultcredentials
+        if (resolvedWindowsAuth != null)
+        {
+            httpHandler.PreAuthenticate = true;
+            if (resolvedWindowsAuth.UseCurrentUser)
+            {
+                httpHandler.Credentials = CredentialCache.DefaultNetworkCredentials;
+            }
+            else
+            {
+                httpHandler.Credentials = new NetworkCredential(resolvedWindowsAuth.Login, resolvedWindowsAuth.Password, resolvedWindowsAuth.Domain);
+            }
         }
     }
 }

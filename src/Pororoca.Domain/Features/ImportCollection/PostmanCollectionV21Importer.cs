@@ -74,6 +74,9 @@ public static class PostmanCollectionV21Importer
             case PostmanAuthType.bearer:
                 string bearerToken = auth.ReadBearerAuthValue();
                 return PororocaRequestAuth.MakeBearerAuth(bearerToken);
+            case PostmanAuthType.ntlm:
+                var (login, pwd, dom, _) = auth.ReadNtlmAuthValues();
+                return PororocaRequestAuth.MakeWindowsAuth(false, login, pwd, dom);
             case PostmanAuthType.noauth:
             default:
                 return null;

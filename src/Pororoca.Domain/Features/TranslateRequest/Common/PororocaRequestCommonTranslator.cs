@@ -102,6 +102,31 @@ public static class PororocaRequestCommonTranslator
 
     #endregion
 
+    #region AUTH
+
+    internal static PororocaRequestAuth? ResolveRequestAuth(IPororocaVariableResolver variableResolver, PororocaRequestAuth? auth)
+    {
+        if (auth is null)
+            return null;
+
+        var resolvedClientCert = ResolveClientCertificate(variableResolver, auth.ClientCertificate);
+        var resolvedWindowsAuth = ResolveWindowsAuth(variableResolver, auth.Windows);
+
+        if (resolvedClientCert is null && resolvedWindowsAuth is null)
+            return null;
+
+        // not bothering with resolving Basic and Bearer here,
+        // they are not relevant for HttpClient configuration
+        return new()
+        {
+            Mode = auth.Mode,
+            Windows = resolvedWindowsAuth,
+            ClientCertificate = resolvedClientCert
+        };
+    }
+
+    #endregion
+
     #region CLIENT CERTIFICATES
 
     internal static PororocaRequestAuthClientCertificate? ResolveClientCertificate(IPororocaVariableResolver variableResolver, PororocaRequestAuthClientCertificate? unresolvedClientCertificate)
@@ -123,6 +148,22 @@ public static class PororocaRequestCommonTranslator
             PrivateKeyFilePath: nulledPrivateKeyFilePath,
             FilePassword: nulledFilePassword
         );
+    }
+
+    #endregion
+
+    #region WINDOWS AUTHENTICATION
+
+    internal static PororocaRequestAuthWindows? ResolveWindowsAuth(IPororocaVariableResolver variableResolver, PororocaRequestAuthWindows? unresolvedWinAuth)
+    {
+        if (unresolvedWinAuth is null)
+            return null;
+        else if (unresolvedWinAuth.UseCurrentUser)
+            return new(true, null, null, null);
+        else return new(UseCurrentUser: false,
+                        Login: variableResolver.ReplaceTemplates(unresolvedWinAuth.Login),
+                        Password: variableResolver.ReplaceTemplates(unresolvedWinAuth.Password),
+                        Domain: variableResolver.ReplaceTemplates(unresolvedWinAuth.Domain));
     }
 
     #endregion

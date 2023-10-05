@@ -11,6 +11,7 @@ public sealed class RequestAuthRobot : BaseRobot
     internal ComboBoxItem AuthTypeOptionNone => GetChildView<ComboBoxItem>("cbiReqAuthNone")!;
     internal ComboBoxItem AuthTypeOptionBasic => GetChildView<ComboBoxItem>("cbiReqAuthBasic")!;
     internal ComboBoxItem AuthTypeOptionBearer => GetChildView<ComboBoxItem>("cbiReqAuthBearer")!;
+    internal ComboBoxItem AuthTypeOptionWindows => GetChildView<ComboBoxItem>("cbiReqAuthWindows")!;
     internal ComboBoxItem AuthTypeOptionClientCertificate => GetChildView<ComboBoxItem>("cbiReqAuthClientCertificate")!;
     internal ComboBox ClientCertificateType => GetChildView<ComboBox>("cbReqAuthClientCertificateType")!;
     internal ComboBoxItem ClientCertificateTypeOptionNone => GetChildView<ComboBoxItem>("cbiReqAuthClientCertificateNone")!;
@@ -20,6 +21,10 @@ public sealed class RequestAuthRobot : BaseRobot
     internal TextBox BasicAuthLogin => GetChildView<TextBox>("tbBasicAuthLogin")!;
     internal TextBox BasicAuthPassword => GetChildView<TextBox>("tbBasicAuthPassword")!;
     internal TextBox BearerAuthToken => GetChildView<TextBox>("tbBearerAuthToken")!;
+    internal CheckBox WindowsAuthUseCurrentUser => GetChildView<CheckBox>("chkbWindowsAuthUseCurrentUser")!;
+    internal TextBox WindowsAuthLogin => GetChildView<TextBox>("tbWindowsAuthLogin")!;
+    internal TextBox WindowsAuthPassword => GetChildView<TextBox>("tbWindowsAuthPassword")!;
+    internal TextBox WindowsAuthDomain => GetChildView<TextBox>("tbWindowsAuthDomain")!;
     internal TextBox ClientCertificatePkcs12FilePath => GetChildView<TextBox>("tbClientCertificatePkcs12FilePath")!;
     internal TextBox ClientCertificatePkcs12FilePassword => GetChildView<TextBox>("tbClientCertificatePkcs12FilePassword")!;
     internal TextBox ClientCertificatePemCertificateFilePath => GetChildView<TextBox>("tbClientCertificatePemCertificateFilePath")!;

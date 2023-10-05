@@ -12,7 +12,7 @@ namespace Pororoca.Domain.Features.TranslateRequest.Http;
 
 public static class PororocaHttpRequestTranslator
 {
-    public const string ClientCertificateOptionsKey = nameof(ClientCertificateOptionsKey);
+    public const string AuthOptionsKey = nameof(AuthOptionsKey);
 
     #region TRANSLATE REQUEST
 
@@ -43,7 +43,7 @@ public static class PororocaHttpRequestTranslator
                     reqMsg.Headers.TryAddWithoutValidation(header.Key, header.Value);
                 }
 
-                IncludeClientCertificateIfSet(variableResolver, req, reqMsg);
+                IncludeAuthInOptions(variableResolver, req, reqMsg);
 
                 return true;
             }
@@ -58,16 +58,15 @@ public static class PororocaHttpRequestTranslator
 
     #endregion
 
-    #region CLIENT CERTIFICATES
+    #region AUTH
 
-    private static void IncludeClientCertificateIfSet(IPororocaVariableResolver variableResolver, PororocaHttpRequest req, HttpRequestMessage reqMsg)
+    private static void IncludeAuthInOptions(IPororocaVariableResolver variableResolver, PororocaHttpRequest req, HttpRequestMessage reqMsg)
     {
-        if (req.CustomAuth?.Mode == PororocaRequestAuthMode.ClientCertificate
-         && req.CustomAuth?.ClientCertificate != null)
-        {
-            var resolvedClientCert = ResolveClientCertificate(variableResolver, req.CustomAuth!.ClientCertificate!);
+        var resolvedAuth = ResolveRequestAuth(variableResolver, req.CustomAuth);
 
-            reqMsg.Options.TryAdd(ClientCertificateOptionsKey, resolvedClientCert);
+        if (resolvedAuth is not null)
+        {
+            reqMsg.Options.TryAdd(AuthOptionsKey, resolvedAuth);
         }
     }
 
