@@ -34,7 +34,7 @@ Confira a [documentação](https://pororoca.io/pt/docs/) para saber mais.
 
 HTTP/3 usa o protocolo de transporte QUIC e há algumas preocupações de privacidade quanto a este. Isso não é um problema para comunicações em redes internas e para a maioria das aplicações de negócios, contudo. Há um [artigo](https://svs.informatik.uni-hamburg.de/publications/2019/2019-02-26-Sy-PET_Symposium-A_QUIC_Look_at_Web_Tracking.pdf) interessante sobre isso que vale a pena ler.
 
-## Política de dados
+## Política de proteção de dados
 
 O Pororoca não sincroniza dados de usuário, como preferências, coleções, ambientes, informações da máquina ou telemetria, a qualquer servidor remoto. Preferências de usuário e coleções são salvas em arquivo na máquina local.
 
