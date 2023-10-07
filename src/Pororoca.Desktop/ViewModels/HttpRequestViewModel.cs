@@ -317,7 +317,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         #endregion
 
         #region REQUEST AUTH
-        RequestAuthDataCtx = new(req.CustomAuth);
+        RequestAuthDataCtx = new(req.CustomAuth, this.ClearInvalidRequestWarnings);
         #endregion
 
         #region SEND OR CANCEL REQUEST
@@ -365,10 +365,6 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #endregion
 
-    #region REQUEST HEADERS
-
-    #endregion
-
     #region REQUEST BODY FILE
 
     private async Task SearchRequestBodyRawFilePathAsync()
@@ -387,14 +383,6 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
             }
         }
     }
-
-    #endregion
-
-    #region REQUEST BODY URL ENCODED
-
-    #endregion
-
-    #region REQUEST BODY FORM DATA
 
     #endregion
 
@@ -481,6 +469,8 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         HasRequestRawContentTypeValidationProblem = false;
         HasRequestFileContentTypeValidationProblem = false;
         HasRequestBodyFileSrcPathValidationProblem = false;
+
+        RequestAuthDataCtx.ClearRequestAuthValidationWarnings();
     }
 
     private void ShowInvalidRequestWarnings()
@@ -488,7 +478,8 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         string? errorCode = this.invalidRequestMessageErrorCode;
         InvalidRequestMessage = errorCode switch
         {
-            TranslateRequestErrors.ClientCertificateFileNotFound => Localizer.Instance.RequestValidation.ClientCertificateFileNotFound,
+            TranslateRequestErrors.ClientCertificatePkcs12CertificateFileNotFound => Localizer.Instance.RequestValidation.ClientCertificateFileNotFound,
+            TranslateRequestErrors.ClientCertificatePemCertificateFileNotFound => Localizer.Instance.RequestValidation.ClientCertificateFileNotFound,
             TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank => Localizer.Instance.RequestValidation.ClientCertificatePkcs12PasswordCannotBeBlank,
             TranslateRequestErrors.ClientCertificatePemPrivateKeyFileNotFound => Localizer.Instance.RequestValidation.ClientCertificatePemPrivateKeyFileNotFound,
             TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRaw => Localizer.Instance.RequestValidation.ContentTypeCannotBeBlankReqBodyRawOrFile,
@@ -500,6 +491,9 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
             TranslateRequestErrors.InvalidContentTypeFile => Localizer.Instance.RequestValidation.InvalidContentTypeRawOrFile,
             TranslateRequestErrors.InvalidUrl => Localizer.Instance.RequestValidation.InvalidUrl,
             TranslateRequestErrors.ReqBodyFileNotFound => Localizer.Instance.RequestValidation.ReqBodyFileNotFound,
+            TranslateRequestErrors.WindowsAuthLoginCannotBeBlank => Localizer.Instance.RequestValidation.WindowsAuthLoginCannotBeBlank,
+            TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank => Localizer.Instance.RequestValidation.WindowsAuthPasswordCannotBeBlank,
+            TranslateRequestErrors.WindowsAuthDomainCannotBeBlank => Localizer.Instance.RequestValidation.WindowsAuthDomainCannotBeBlank,
             _ => Localizer.Instance.RequestValidation.InvalidUnknownCause
         };
         IsInvalidRequestMessageVisible = true;
@@ -519,6 +513,25 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         {
             // TODO: Improve this, do not use fixed values to resolve index
             RequestTabsSelectedIndex = 1;
+        }
+
+        RequestAuthDataCtx.HasWindowsAuthLoginProblem = errorCode == TranslateRequestErrors.WindowsAuthLoginCannotBeBlank;
+        RequestAuthDataCtx.HasWindowsAuthPasswordProblem = errorCode == TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank;
+        RequestAuthDataCtx.HasWindowsAuthDomainProblem = errorCode == TranslateRequestErrors.WindowsAuthDomainCannotBeBlank;
+
+        RequestAuthDataCtx.HasClientCertificateAuthPkcs12CertificateFilePathProblem = 
+        (errorCode == TranslateRequestErrors.ClientCertificatePkcs12CertificateFileNotFound);
+        RequestAuthDataCtx.HasClientCertificateAuthPkcs12FilePasswordProblem =
+        (errorCode == TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank);
+        RequestAuthDataCtx.HasClientCertificateAuthPemCertificateFilePathProblem =
+        (errorCode == TranslateRequestErrors.ClientCertificatePemCertificateFileNotFound);
+        RequestAuthDataCtx.HasClientCertificateAuthPemPrivateKeyFilePathProblem =
+        (errorCode == TranslateRequestErrors.ClientCertificatePemPrivateKeyFileNotFound);
+
+        if (RequestAuthDataCtx.HasValidationProblem)
+        {
+            // TODO: Improve this, do not use fixed values to resolve index
+            RequestTabsSelectedIndex = 2;
         }
     }
 

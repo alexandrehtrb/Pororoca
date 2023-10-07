@@ -15,15 +15,15 @@ public static class UITestsRunner
         //new TreeCopyAndPasteItemsUITest(),
         //new TreeCutAndPasteItemsUITest(),
         //new TreeDeleteItemsUITest(),
-        //new HttpRequestValidationsUITest(),
+        new HttpRequestValidationsUITest(),
         //new HttpRequestsUITest(),
         //new VariablesCutCopyPasteDeleteUITest(),
         //new HeadersCutCopyPasteDeleteUITest(),
         //new UrlEncodedParamsCutCopyPasteDeleteUITest(),
         //new FormDataParamsCutCopyPasteDeleteUITest(),
-        //new WebSocketsValidationsUITest(),
+        new WebSocketsValidationsUITest(),
         //new WebSocketsUITest(),
-        new ExportAndImportUITest(),
+        //new ExportAndImportUITest(),
         // TODO: UI tests to be made:
         // Out of scope of automated UI tests:
         // some keybindings

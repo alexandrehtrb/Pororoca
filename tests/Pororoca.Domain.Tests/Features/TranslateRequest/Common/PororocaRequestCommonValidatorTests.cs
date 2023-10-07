@@ -36,7 +36,6 @@ public static class PororocaRequestCommonValidatorTests
 
     #endregion
 
-
     #region CLIENT CERTIFICATES
 
     [Fact]
@@ -211,6 +210,67 @@ public static class PororocaRequestCommonValidatorTests
         // WHEN AND THEN
         Assert.True(CheckClientCertificateFilesAndPassword(col, mockFileExists, customAuth, out string? errorCode));
         Assert.Null(errorCode);
+    }
+
+    #endregion
+
+    #region WINDOWS AUTH
+
+    [Fact]
+    public static void Should_allow_windows_auth_with_current_user()
+    {
+        // GIVEN
+        PororocaCollection col = new("VarResolver");
+        var customAuth = PororocaRequestAuth.MakeWindowsAuth(true, null, null, null);
+
+        // WHEN AND THEN
+        Assert.True(CheckWindowsAuthParams(col, customAuth, out string? errorCode));
+        Assert.Null(errorCode);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("  ")]
+    public static void Should_reject_windows_auth_with_other_user_blank_login(string resolvedLogin)
+    {
+        // GIVEN
+        PororocaCollection col = new("VarResolver");
+        col.Variables.Add(new(true, "win_login", resolvedLogin, false));
+        var customAuth = PororocaRequestAuth.MakeWindowsAuth(false, "{{win_login}}", "win_pwd", "win_domain");
+
+        // WHEN AND THEN
+        Assert.False(CheckWindowsAuthParams(col, customAuth, out string? errorCode));
+        Assert.Equal(TranslateRequestErrors.WindowsAuthLoginCannotBeBlank, errorCode);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("  ")]
+    public static void Should_reject_windows_auth_with_other_user_blank_password(string resolvedPwd)
+    {
+        // GIVEN
+        PororocaCollection col = new("VarResolver");
+        col.Variables.Add(new(true, "win_pwd", resolvedPwd, false));
+        var customAuth = PororocaRequestAuth.MakeWindowsAuth(false, "win_login", "{{win_pwd}}", "win_domain");
+
+        // WHEN AND THEN
+        Assert.False(CheckWindowsAuthParams(col, customAuth, out string? errorCode));
+        Assert.Equal(TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank, errorCode);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("  ")]
+    public static void Should_reject_windows_auth_with_other_user_blank_domain(string resolvedDomain)
+    {
+        // GIVEN
+        PororocaCollection col = new("VarResolver");
+        col.Variables.Add(new(true, "win_domain", resolvedDomain, false));
+        var customAuth = PororocaRequestAuth.MakeWindowsAuth(false, "win_login", "win_pwd", "{{win_domain}}");
+
+        // WHEN AND THEN
+        Assert.False(CheckWindowsAuthParams(col, customAuth, out string? errorCode));
+        Assert.Equal(TranslateRequestErrors.WindowsAuthDomainCannotBeBlank, errorCode);
     }
 
     #endregion

@@ -10,8 +10,19 @@ public sealed class RequestAuthViewModel : ViewModelBase
 {
     #region REQUEST AUTH
 
-    [Reactive]
-    public int AuthModeSelectedIndex { get; set; }
+    private readonly Action clearInvalidWarningsCallback;
+
+    private int authModeSelectedIndexField;
+    public int AuthModeSelectedIndex
+    {
+        get => this.authModeSelectedIndexField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.authModeSelectedIndexField, value);
+            // clear invalid warnings if user starts typing to fix them
+            if (HasValidationProblem) this.clearInvalidWarningsCallback();
+        }
+    }
 
     private PororocaRequestAuthMode? AuthMode =>
         AuthModeSelectedIndex switch
@@ -55,11 +66,35 @@ public sealed class RequestAuthViewModel : ViewModelBase
 
     #region REQUEST AUTH CLIENT CERTIFICATE PKCS12
 
-    [Reactive]
-    public string? ClientCertificateAuthPkcs12CertificateFilePath { get; set; }
+    private string? clientCertificateAuthPkcs12CertificateFilePathField;
+    public string? ClientCertificateAuthPkcs12CertificateFilePath
+    {
+        get => this.clientCertificateAuthPkcs12CertificateFilePathField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.clientCertificateAuthPkcs12CertificateFilePathField, value);
+            // clear invalid warnings if user starts typing to fix them
+            if (HasClientCertificateAuthPkcs12CertificateFilePathProblem) this.clearInvalidWarningsCallback();
+        }
+    }
+
+    private string? clientCertificateAuthPkcs12FilePasswordField;
+    public string? ClientCertificateAuthPkcs12FilePassword
+    {
+        get => this.clientCertificateAuthPkcs12FilePasswordField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.clientCertificateAuthPkcs12FilePasswordField, value);
+            // clear invalid warnings if user starts typing to fix them
+            if (HasClientCertificateAuthPkcs12FilePasswordProblem) this.clearInvalidWarningsCallback();
+        }
+    }
 
     [Reactive]
-    public string? ClientCertificateAuthPkcs12FilePassword { get; set; }
+    public bool HasClientCertificateAuthPkcs12CertificateFilePathProblem { get; set; }
+
+    [Reactive]
+    public bool HasClientCertificateAuthPkcs12FilePasswordProblem { get; set; }
 
     public ReactiveCommand<Unit, Unit> SearchClientCertificatePkcs12FileCmd { get; }
 
@@ -67,11 +102,35 @@ public sealed class RequestAuthViewModel : ViewModelBase
 
     #region REQUEST AUTH CLIENT CERTIFICATE PEM
 
-    [Reactive]
-    public string? ClientCertificateAuthPemCertificateFilePath { get; set; }
+    private string? clientCertificateAuthPemCertificateFilePathField;
+    public string? ClientCertificateAuthPemCertificateFilePath
+    {
+        get => this.clientCertificateAuthPemCertificateFilePathField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.clientCertificateAuthPemCertificateFilePathField, value);
+            // clear invalid warnings if user starts typing to fix them
+            if (HasClientCertificateAuthPemCertificateFilePathProblem) this.clearInvalidWarningsCallback();
+        }
+    }
+
+    private string? clientCertificateAuthPemPrivateKeyFilePathField;
+    public string? ClientCertificateAuthPemPrivateKeyFilePath
+    {
+        get => this.clientCertificateAuthPemPrivateKeyFilePathField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.clientCertificateAuthPemPrivateKeyFilePathField, value);
+            // clear invalid warnings if user starts typing to fix them
+            if (HasClientCertificateAuthPemPrivateKeyFilePathProblem) this.clearInvalidWarningsCallback();
+        }
+    }
 
     [Reactive]
-    public string? ClientCertificateAuthPemPrivateKeyFilePath { get; set; }
+    public bool HasClientCertificateAuthPemCertificateFilePathProblem { get; set; }
+
+    [Reactive]
+    public bool HasClientCertificateAuthPemPrivateKeyFilePathProblem { get; set; }
 
     [Reactive]
     public string? ClientCertificateAuthPemFilePassword { get; set; }
@@ -86,24 +145,79 @@ public sealed class RequestAuthViewModel : ViewModelBase
 
     #region REQUEST AUTH WINDOWS
 
-    [Reactive]
-    public bool WindowsAuthUseCurrentUser { get; set; }
-
-    [Reactive]
-    public string? WindowsAuthLogin { get; set; }
-
-    [Reactive]
-    public string? WindowsAuthPassword { get; set; }
-
-    [Reactive]
-    public string? WindowsAuthDomain { get; set; }
-
-    #endregion
-
-    #endregion
-
-    public RequestAuthViewModel(PororocaRequestAuth? customAuth)
+    private bool windowsAuthUseCurrentUserField;
+    public bool WindowsAuthUseCurrentUser
     {
+        get => this.windowsAuthUseCurrentUserField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.windowsAuthUseCurrentUserField, value);
+            // clear invalid warnings if user starts typing to fix them
+            if (HasWindowsAuthLoginProblem || HasWindowsAuthPasswordProblem || HasWindowsAuthDomainProblem) this.clearInvalidWarningsCallback();
+        }
+    }
+
+    private string? windowsAuthLoginField;
+    public string? WindowsAuthLogin
+    {
+        get => this.windowsAuthLoginField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.windowsAuthLoginField, value);
+            // clear invalid warnings if user starts typing to fix them
+            if (HasWindowsAuthLoginProblem) this.clearInvalidWarningsCallback();
+        }
+    }
+
+    private string? windowsAuthPasswordField;
+    public string? WindowsAuthPassword
+    {
+        get => this.windowsAuthPasswordField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.windowsAuthPasswordField, value);
+            // clear invalid warnings if user starts typing to fix them
+            if (HasWindowsAuthPasswordProblem) this.clearInvalidWarningsCallback();
+        }
+    }
+
+    private string? windowsAuthDomainField;
+    public string? WindowsAuthDomain
+    {
+        get => this.windowsAuthDomainField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.windowsAuthDomainField, value);
+            // clear invalid warnings if user starts typing to fix them
+            if (HasWindowsAuthDomainProblem) this.clearInvalidWarningsCallback();
+        }
+    }
+
+    [Reactive]
+    public bool HasWindowsAuthLoginProblem { get; set; }
+
+    [Reactive]
+    public bool HasWindowsAuthPasswordProblem { get; set; }
+
+    [Reactive]
+    public bool HasWindowsAuthDomainProblem { get; set; }
+
+    #endregion
+
+    public bool HasValidationProblem =>
+        HasWindowsAuthLoginProblem
+     || HasWindowsAuthPasswordProblem
+     || HasWindowsAuthDomainProblem
+     || HasClientCertificateAuthPkcs12CertificateFilePathProblem
+     || HasClientCertificateAuthPkcs12FilePasswordProblem
+     || HasClientCertificateAuthPemCertificateFilePathProblem
+     || HasClientCertificateAuthPemPrivateKeyFilePathProblem;
+
+    #endregion
+
+    public RequestAuthViewModel(PororocaRequestAuth? customAuth, Action clearInvalidWarningsCallback)
+    {
+        this.clearInvalidWarningsCallback = clearInvalidWarningsCallback;
         // TODO: Improve this, do not use fixed values to resolve index
         AuthModeSelectedIndex = (customAuth?.Mode) switch
         {
@@ -143,6 +257,15 @@ public sealed class RequestAuthViewModel : ViewModelBase
         SearchClientCertificatePemCertFileCmd = ReactiveCommand.CreateFromTask(SearchClientCertificatePemCertFileAsync);
         SearchClientCertificatePemPrivateKeyFileCmd = ReactiveCommand.CreateFromTask(SearchClientCertificatePemPrivateKeyFileAsync);
     }
+
+    public void ClearRequestAuthValidationWarnings() =>
+        HasWindowsAuthLoginProblem =
+        HasWindowsAuthPasswordProblem =
+        HasWindowsAuthDomainProblem =
+        HasClientCertificateAuthPkcs12CertificateFilePathProblem =
+        HasClientCertificateAuthPkcs12FilePasswordProblem =
+        HasClientCertificateAuthPemCertificateFilePathProblem =
+        HasClientCertificateAuthPemPrivateKeyFilePathProblem = false;
 
     #region REQUEST BODY AUTH CLIENT CERTIFICATE
 

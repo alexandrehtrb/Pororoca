@@ -157,7 +157,11 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             IsInvalidConnectionErrorVisible = value is not null;
             InvalidConnectionError = value switch
             {
-                TranslateRequestErrors.ClientCertificateFileNotFound => Localizer.Instance.RequestValidation.ClientCertificateFileNotFound,
+                TranslateRequestErrors.WindowsAuthLoginCannotBeBlank => Localizer.Instance.RequestValidation.WindowsAuthLoginCannotBeBlank,
+                TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank => Localizer.Instance.RequestValidation.WindowsAuthPasswordCannotBeBlank,
+                TranslateRequestErrors.WindowsAuthDomainCannotBeBlank => Localizer.Instance.RequestValidation.WindowsAuthDomainCannotBeBlank,
+                TranslateRequestErrors.ClientCertificatePkcs12CertificateFileNotFound => Localizer.Instance.RequestValidation.ClientCertificateFileNotFound,
+                TranslateRequestErrors.ClientCertificatePemCertificateFileNotFound => Localizer.Instance.RequestValidation.ClientCertificateFileNotFound,
                 TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank => Localizer.Instance.RequestValidation.ClientCertificatePkcs12PasswordCannotBeBlank,
                 TranslateRequestErrors.ClientCertificatePemPrivateKeyFileNotFound => Localizer.Instance.RequestValidation.ClientCertificatePemPrivateKeyFileNotFound,
                 TranslateRequestErrors.InvalidUrl => Localizer.Instance.RequestValidation.InvalidUrl,
@@ -169,6 +173,25 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             };
             HasUrlValidationProblem = (value == TranslateRequestErrors.InvalidUrl);
             HasHttpVersionValidationProblem = (value == TranslateRequestErrors.Http2UnavailableInOSVersion);
+
+            RequestAuthDataCtx.HasWindowsAuthLoginProblem = value == TranslateRequestErrors.WindowsAuthLoginCannotBeBlank;
+            RequestAuthDataCtx.HasWindowsAuthPasswordProblem = value == TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank;
+            RequestAuthDataCtx.HasWindowsAuthDomainProblem = value == TranslateRequestErrors.WindowsAuthDomainCannotBeBlank;
+
+            RequestAuthDataCtx.HasClientCertificateAuthPkcs12CertificateFilePathProblem = 
+            (value == TranslateRequestErrors.ClientCertificatePkcs12CertificateFileNotFound);
+            RequestAuthDataCtx.HasClientCertificateAuthPkcs12FilePasswordProblem =
+            (value == TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank);
+            RequestAuthDataCtx.HasClientCertificateAuthPemCertificateFilePathProblem =
+            (value == TranslateRequestErrors.ClientCertificatePemCertificateFileNotFound);
+            RequestAuthDataCtx.HasClientCertificateAuthPemPrivateKeyFilePathProblem =
+            (value == TranslateRequestErrors.ClientCertificatePemPrivateKeyFileNotFound);
+
+            if (RequestAuthDataCtx.HasValidationProblem)
+            {
+                // TODO: Improve this, do not use fixed values to resolve index
+                SelectedConnectionTabIndex = 1;
+            }
         }
     }
 
@@ -348,7 +371,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         #endregion
 
         #region CONNECTION REQUEST AUTH
-        RequestAuthDataCtx = new(ws.CustomAuth);
+        RequestAuthDataCtx = new(ws.CustomAuth, this.ClearInvalidConnectionWarnings);
         #endregion
 
         #region CONNECTION OPTIONS
@@ -523,6 +546,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
         HasUrlValidationProblem = false;
         HasHttpVersionValidationProblem = false;
+
+        RequestAuthDataCtx.ClearRequestAuthValidationWarnings();
     }
 
     private void OnWebSocketConnectionChanged(PororocaWebSocketConnectorState state, Exception? ex)

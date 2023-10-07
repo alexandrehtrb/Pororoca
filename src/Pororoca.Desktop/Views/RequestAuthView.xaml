@@ -127,6 +127,7 @@
           VerticalContentAlignment="Center"
           Watermark="{Binding i18n.RequestAuth.AuthModeWindowsLoginWatermark}"
           Classes="SingleLine"
+          Classes.HasValidationProblem="{Binding HasWindowsAuthLoginProblem}"
           IsVisible="{Binding !WindowsAuthUseCurrentUser}"
           Text="{Binding WindowsAuthLogin}"/>
       <TextBox
@@ -137,6 +138,7 @@
           VerticalContentAlignment="Center"
           Watermark="{Binding i18n.RequestAuth.AuthModeWindowsPasswordWatermark}"
           Classes="SingleLine"
+          Classes.HasValidationProblem="{Binding HasWindowsAuthPasswordProblem}"
           IsVisible="{Binding !WindowsAuthUseCurrentUser}"
           Text="{Binding WindowsAuthPassword}"/>
       <TextBox
@@ -147,6 +149,7 @@
           VerticalContentAlignment="Center"
           Watermark="{Binding i18n.RequestAuth.AuthModeWindowsDomainWatermark}"
           Classes="SingleLine"
+          Classes.HasValidationProblem="{Binding HasWindowsAuthDomainProblem}"
           IsVisible="{Binding !WindowsAuthUseCurrentUser}"
           Text="{Binding WindowsAuthDomain}"/>
     </StackPanel>
@@ -175,6 +178,7 @@
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
             Classes="SingleLine"
+            Classes.HasValidationProblem="{Binding HasClientCertificateAuthPkcs12CertificateFilePathProblem}"
             Text="{Binding ClientCertificateAuthPkcs12CertificateFilePath}"/>
         <TextBox
             Name="tbClientCertificatePkcs12FilePassword"
@@ -184,6 +188,7 @@
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
             Classes="SingleLine"
+            Classes.HasValidationProblem="{Binding HasClientCertificateAuthPkcs12FilePasswordProblem}"
             Text="{Binding ClientCertificateAuthPkcs12FilePassword}"/>
         <Button
             Margin="0,12,0,0"
@@ -203,6 +208,7 @@
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
             Classes="SingleLine"
+            Classes.HasValidationProblem="{Binding HasClientCertificateAuthPemCertificateFilePathProblem}"
             Text="{Binding ClientCertificateAuthPemCertificateFilePath}"/>
         <TextBox
             Name="tbClientCertificatePemPrivateKeyFilePath"
@@ -212,6 +218,7 @@
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
             Classes="SingleLine"
+            Classes.HasValidationProblem="{Binding HasClientCertificateAuthPemPrivateKeyFilePathProblem}"
             Text="{Binding ClientCertificateAuthPemPrivateKeyFilePath}"/>
         <TextBox
             Name="tbClientCertificatePemPrivateKeyPassword"

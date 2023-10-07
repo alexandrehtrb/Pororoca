@@ -16,7 +16,7 @@ public static class PororocaHttpRequestValidator
         && httpVersionOSVerifier(req.HttpVersion, out errorCode)
         && HasValidContentTypeForReqBody(req, out errorCode)
         && CheckReqBodyFileExists(variableResolver, req, fileExistsVerifier, out errorCode)
-        && CheckClientCertificateFilesAndPassword(variableResolver, fileExistsVerifier, req.CustomAuth, out errorCode);
+        && ValidateAuthParams(variableResolver, fileExistsVerifier, req.CustomAuth, out errorCode);
 
     private static bool HasValidContentTypeForReqBody(PororocaHttpRequest req, out string? errorCode)
     {

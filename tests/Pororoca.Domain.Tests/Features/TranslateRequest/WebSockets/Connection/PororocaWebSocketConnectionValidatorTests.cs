@@ -318,6 +318,32 @@ public static class PororocaWebSocketConnectionValidatorTests
 
     #endregion
 
+    #region IS VALID WINDOWS AUTH
+
+    [Fact]
+    public static void Should_reject_ws_with_invalid_windows_auth()
+    {
+        // GIVEN
+        var mockedVariableResolver = MockVariableResolver("{{win_pwd}}", "");
+        var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
+        var mockedFileExistsVerifier = MockFileExistsVerifier(false);
+        var auth = PororocaRequestAuth.MakeWindowsAuth(false, "win_login", "{{win_pwd}}", "win_domain");
+        PororocaWebSocketConnection ws = new();
+        ws.Url = "ws://www.pudim.com.br";
+        ws.CustomAuth = auth;
+
+        // WHEN
+        Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, mockedVariableResolver.Object, ws, out var resolvedUri, out string? errorCode));
+
+        // THEN
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("win_login"), Times.Once);
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{win_pwd}}"), Times.Once);
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("win_domain"), Times.Never);
+        Assert.Equal(TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank, errorCode);
+    }
+
+    #endregion
+
     #region ARE VALID WEBSOCKET COMPRESSION OPTIONS
 
     [Fact]
