@@ -38,7 +38,8 @@ public interface IPororocaVariableResolver
         }
         else
         {
-            IEnumerable<PororocaVariable>? currentEnvironmentVariables = GetCurrentEnvironment()?.Variables;
+            var currentEnv = Environments.FirstOrDefault(e => e.IsCurrent);
+            IEnumerable<PororocaVariable>? currentEnvironmentVariables = currentEnv?.Variables;
             IEnumerable<PororocaVariable> effectiveVariables = MergeVariables(Variables, currentEnvironmentVariables);
             string resolvedStr = strToReplaceTemplatedVariables!;
             foreach (var v in effectiveVariables)
