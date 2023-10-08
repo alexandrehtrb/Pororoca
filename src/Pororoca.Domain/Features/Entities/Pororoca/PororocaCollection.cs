@@ -43,26 +43,6 @@ public sealed record PororocaCollection
     // Parameterless constructor for JSON deserialization
     public PororocaCollection() : this(string.Empty) { }
 
-    public string ReplaceTemplates(string? strToReplaceTemplatedVariables)
-    {
-        if (string.IsNullOrWhiteSpace(strToReplaceTemplatedVariables))
-        {
-            return strToReplaceTemplatedVariables ?? string.Empty;
-        }
-        else
-        {
-            IEnumerable<PororocaVariable>? currentEnvironmentVariables = Environments.FirstOrDefault(e => e.IsCurrent)?.Variables;
-            IEnumerable<PororocaVariable> effectiveVariables = PororocaVariablesMerger.MergeVariables(Variables, currentEnvironmentVariables);
-            string resolvedStr = strToReplaceTemplatedVariables!;
-            foreach (var v in effectiveVariables)
-            {
-                string variableTemplate = VariableTemplateBeginToken + v.Key + VariableTemplateEndToken;
-                resolvedStr = resolvedStr.Replace(variableTemplate, v.Value ?? variableTemplate);
-            }
-            return resolvedStr;
-        }
-    }
-
     public PororocaCollection Copy(bool preserveIds) => this with
     {
         Id = preserveIds ? Id : Guid.NewGuid(),

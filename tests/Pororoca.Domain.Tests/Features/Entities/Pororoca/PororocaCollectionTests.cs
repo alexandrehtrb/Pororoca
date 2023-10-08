@@ -1,4 +1,5 @@
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.VariableResolution;
 using Xunit;
 
 namespace Pororoca.Domain.Tests.Features.Entities.Pororoca;
@@ -15,7 +16,7 @@ public static class PororocaCollectionTests
         var col = CreateTestCollection();
 
         // WHEN
-        string resolvedStr = col.ReplaceTemplates(strToReplaceTemplates);
+        string resolvedStr = ((IPororocaVariableResolver)col).ReplaceTemplates(strToReplaceTemplates);
 
         // THEN
         if (strToReplaceTemplates != null)
@@ -39,7 +40,7 @@ public static class PororocaCollectionTests
         col.Environments.AddRange(Array.Empty<PororocaEnvironment>());
 
         // WHEN
-        string resolvedStr = col.ReplaceTemplates(strToReplaceTemplates);
+        string resolvedStr = ((IPororocaVariableResolver)col).ReplaceTemplates(strToReplaceTemplates);
 
         // THEN
         Assert.Equal(expectedResult, resolvedStr);
@@ -58,7 +59,7 @@ public static class PororocaCollectionTests
         }
 
         // WHEN
-        string resolvedStr = col.ReplaceTemplates(strToReplaceTemplates);
+        string resolvedStr = ((IPororocaVariableResolver)col).ReplaceTemplates(strToReplaceTemplates);
 
         // THEN
         Assert.Equal(expectedResult, resolvedStr);
@@ -77,7 +78,7 @@ public static class PororocaCollectionTests
         col.Environments.First(e => e.Name == "MyEnvironment2").IsCurrent = false;
 
         // WHEN
-        string resolvedStr = col.ReplaceTemplates(strToReplaceTemplates);
+        string resolvedStr = ((IPororocaVariableResolver)col).ReplaceTemplates(strToReplaceTemplates);
 
         // THEN
         // Should use only enabled vars

@@ -351,7 +351,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #region REQUEST HTTP METHOD, HTTP VERSION AND URL
 
     public void UpdateResolvedRequestUrlToolTip() =>
-        ResolvedRequestUrlToolTip = this.variableResolver.ReplaceTemplates(RequestUrl);
+        ResolvedRequestUrlToolTip = ((IPororocaVariableResolver)this.variableResolver).ReplaceTemplates(RequestUrl);
 
     private static string FormatHttpVersionString(decimal httpVersion) =>
         httpVersion switch

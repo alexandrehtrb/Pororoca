@@ -41,6 +41,14 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
 
     public override ObservableCollection<CollectionOrganizationItemViewModel> Items { get; }
 
+    public List<PororocaVariable> Variables =>
+        ((CollectionVariablesViewModel)Items.First(x => x is CollectionVariablesViewModel))
+        .ToVariables().ToList(); // collection variables
+
+    public List<PororocaEnvironment> Environments =>
+        ((EnvironmentsGroupViewModel)Items.First(x => x is EnvironmentsGroupViewModel))
+        .ToEnvironments().ToList(); // collection environments
+
     #endregion
 
     #region OTHERS
@@ -224,8 +232,6 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
 
     public PororocaCollection ToCollection()
     {
-        var variables = ((CollectionVariablesViewModel)Items.First(i => i is CollectionVariablesViewModel)).ToVariables().ToList();
-        var envs = ((EnvironmentsGroupViewModel)Items.First(i => i is EnvironmentsGroupViewModel)).ToEnvironments().ToList();
         var folders = Items.Where(i => i is CollectionFolderViewModel).Cast<CollectionFolderViewModel>().Select(x => x.ToCollectionFolder()).ToList();
         var reqs = Items.Where(i => i is HttpRequestViewModel || i is WebSocketConnectionViewModel)
                         .Select(i =>
@@ -238,30 +244,7 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
                                 throw new InvalidDataException();
                         }).ToList();
 
-        return new PororocaCollection(this.colId, Name, this.colCreatedAt, variables, envs, folders, reqs);
-    }
-
-    public string ReplaceTemplates(string? strToReplaceTemplatedVariables)
-    {
-        if (string.IsNullOrEmpty(strToReplaceTemplatedVariables))
-        {
-            return string.Empty;
-        }
-        else
-        {
-            var collectionVariables = ((CollectionVariablesViewModel)Items.First(i => i is CollectionVariablesViewModel)).ToVariables();
-            IEnumerable<PororocaVariable>? environmentVariables = GetCurrentEnvironment()
-                                                                  ?.ToEnvironment()
-                                                                  ?.Variables;
-            IEnumerable<PororocaVariable> effectiveVariables = PororocaVariablesMerger.MergeVariables(collectionVariables, environmentVariables);
-            string resolvedStr = strToReplaceTemplatedVariables!;
-            foreach (var v in effectiveVariables)
-            {
-                string variableTemplate = VariableTemplateBeginToken + v.Key + VariableTemplateEndToken;
-                resolvedStr = resolvedStr.Replace(variableTemplate, v.Value ?? string.Empty);
-            }
-            return resolvedStr;
-        }
+        return new PororocaCollection(this.colId, Name, this.colCreatedAt, Variables, Environments, folders, reqs);
     }
 
     public EnvironmentViewModel? GetCurrentEnvironment() =>
