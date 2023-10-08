@@ -267,36 +267,6 @@ public sealed class PororocaTest
 
     private void CaptureResponseValues(PororocaHttpRequest req, PororocaHttpResponse res)
     {
-        string? CaptureValue(PororocaHttpResponseValueCapture capture)
-        {
-            if (capture.Type == PororocaHttpResponseValueCaptureType.Header)
-            {
-                // HTTP/2 lower-cases all header names, hence, we need to compare header names ignoring case
-                return res.Headers?.FirstOrDefault(x => x.Key.Equals(capture.HeaderName, StringComparison.InvariantCultureIgnoreCase)).Value;
-            }
-            else if (capture.Type == PororocaHttpResponseValueCaptureType.Body)
-            {
-                bool isJsonBody = MimeTypesDetector.IsJsonContent(res.ContentType ?? string.Empty);
-                bool isXmlBody = MimeTypesDetector.IsXmlContent(res.ContentType ?? string.Empty);
-                if (isJsonBody)
-                {
-                    return PororocaResponseValueCapturer.CaptureJsonValue(capture.Path!, res.GetBodyAsText()!);
-                }
-                else if (isXmlBody)
-                {
-                    return PororocaResponseValueCapturer.CaptureXmlValue(capture.Path!, res.GetBodyAsText()!);
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            else
-            {
-                return null;
-            }
-        }
-
         var env = Collection.Environments.FirstOrDefault(e => e.IsCurrent);
         if (env is not null)
         {
@@ -304,7 +274,7 @@ public sealed class PororocaTest
             foreach (var capture in captures)
             {
                 var envVar = env.Variables.FirstOrDefault(v => v.Key == capture.TargetVariable);
-                string? capturedValue = CaptureValue(capture);
+                string? capturedValue = res.CaptureValue(capture);
                 if (capturedValue is not null)
                 {
                     if (envVar is null)

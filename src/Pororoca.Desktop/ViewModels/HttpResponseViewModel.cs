@@ -138,7 +138,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
                                  string.Format(Localizer.Instance.HttpResponse.BodyContentBinaryNotShown, res.GetBodyAsBinary()!.Length);
             IsSaveResponseBodyToFileVisible = res.HasBody;
             IsDisableTlsVerificationVisible = false;
-            CaptureResponseValues();
+            CaptureResponseValues(res);
         }
         else if (res != null && !res.WasCancelled) // Not success, but also not cancelled. If cancelled, do nothing.
         {
@@ -183,38 +183,8 @@ public sealed class HttpResponseViewModel : ViewModelBase
         }
     }
 
-    private void CaptureResponseValues()
+    private void CaptureResponseValues(PororocaHttpResponse res)
     {
-        string? CaptureValue(HttpResponseCaptureViewModel capture)
-        {
-            if (capture.CaptureType == PororocaHttpResponseValueCaptureType.Header)
-            {
-                // HTTP/2 lower-cases all header names, hence, we need to compare header names ignoring case
-                return this.res?.Headers?.FirstOrDefault(x => x.Key.Equals(capture.HeaderNameOrBodyPath, StringComparison.InvariantCultureIgnoreCase)).Value;
-            }
-            else if (capture.CaptureType == PororocaHttpResponseValueCaptureType.Body)
-            {
-                bool isJsonBody = IsJsonContent(this.res?.ContentType ?? string.Empty);
-                bool isXmlBody = IsXmlContent(this.res?.ContentType ?? string.Empty);
-                if (isJsonBody)
-                {
-                    return PororocaResponseValueCapturer.CaptureJsonValue(capture.HeaderNameOrBodyPath!, this.res!.GetBodyAsText()!);
-                }
-                else if (isXmlBody)
-                {
-                    return PororocaResponseValueCapturer.CaptureXmlValue(capture.HeaderNameOrBodyPath!, this.res!.GetBodyAsText()!);
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            else
-            {
-                return null;
-            }
-        }
-
         var egvm = (EnvironmentsGroupViewModel)this.colVm.Items.First(i => i is EnvironmentsGroupViewModel);
         var env = egvm.Items.FirstOrDefault(e => e.Name == this.environmentUsedForRequest);
         if (env is not null)
@@ -223,7 +193,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
             foreach (var capture in captures)
             {
                 var envVar = env.VariablesTableVm.Items.FirstOrDefault(v => v.Key == capture.TargetVariable);
-                string? capturedValue = CaptureValue(capture);
+                string? capturedValue = res?.CaptureValue(capture.ToResponseCapture());
                 if (capturedValue is not null)
                 {
                     capture.CapturedValue = capturedValue;

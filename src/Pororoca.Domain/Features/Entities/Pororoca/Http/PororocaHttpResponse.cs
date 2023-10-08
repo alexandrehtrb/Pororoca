@@ -4,6 +4,7 @@ using System.Security.Authentication;
 using System.Text;
 using System.Text.Json;
 using Pororoca.Domain.Features.Common;
+using Pororoca.Domain.Features.VariableCapture;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca.Http;
@@ -126,6 +127,36 @@ public sealed class PororocaHttpResponse
             }
         }
         return null;
+    }
+
+    public string? CaptureValue(PororocaHttpResponseValueCapture capture)
+    {
+        if (capture.Type == PororocaHttpResponseValueCaptureType.Header)
+        {
+            // HTTP/2 lower-cases all header names, hence, we need to compare header names ignoring case
+            return Headers?.FirstOrDefault(x => x.Key.Equals(capture.HeaderName, StringComparison.InvariantCultureIgnoreCase)).Value;
+        }
+        else if (capture.Type == PororocaHttpResponseValueCaptureType.Body)
+        {
+            bool isJsonBody = MimeTypesDetector.IsJsonContent(ContentType ?? string.Empty);
+            bool isXmlBody = MimeTypesDetector.IsXmlContent(ContentType ?? string.Empty);
+            if (isJsonBody)
+            {
+                return PororocaResponseValueCapturer.CaptureJsonValue(capture.Path!, GetBodyAsText()!);
+            }
+            else if (isXmlBody)
+            {
+                return PororocaResponseValueCapturer.CaptureXmlValue(capture.Path!, GetBodyAsText()!);
+            }
+            else
+            {
+                return null;
+            }
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public static async Task<PororocaHttpResponse> SuccessfulAsync(TimeSpan elapsedTime, HttpResponseMessage responseMessage)

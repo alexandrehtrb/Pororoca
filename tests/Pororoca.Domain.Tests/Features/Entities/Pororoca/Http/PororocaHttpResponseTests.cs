@@ -246,6 +246,48 @@ public static class PororocaHttpResponseTests
         Assert.Null(res.GetContentDispositionFileName());
     }
 
+    [Fact]
+    public static async Task Should_capture_response_header_correctly()
+    {
+        // GIVEN
+        var resMsg = CreateTestHttpResponseMessage("oi", "text/plain", null);
+        PororocaHttpResponseValueCapture capture = new(PororocaHttpResponseValueCaptureType.Header, "MyVar", "Header1", null);
+
+        // WHEN
+        var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
+
+        // THEN
+        Assert.Equal("Value1", res.CaptureValue(capture));
+    }
+
+    [Fact]
+    public static async Task Should_capture_response_body_json_correctly()
+    {
+        // GIVEN
+        var resMsg = CreateTestHttpResponseMessage("{\"id\":1}", "text/json", null);
+        PororocaHttpResponseValueCapture capture = new(PororocaHttpResponseValueCaptureType.Body, "MyVar", null, "$.id");
+
+        // WHEN
+        var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
+
+        // THEN
+        Assert.Equal("1", res.CaptureValue(capture));
+    }
+
+    [Fact]
+    public static async Task Should_capture_response_body_xml_correctly()
+    {
+        // GIVEN
+        var resMsg = CreateTestHttpResponseMessage("<A><B>100</B></A>", "application/xml", null);
+        PororocaHttpResponseValueCapture capture = new(PororocaHttpResponseValueCaptureType.Body, "MyVar", null, "/A/B");
+
+        // WHEN
+        var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
+
+        // THEN
+        Assert.Equal("100", res.CaptureValue(capture));
+    }
+
     private static HttpResponseMessage CreateTestHttpResponseMessage(string? body, string? contentType, string? contentDisposition)
     {
         ByteArrayContent? content = null;
