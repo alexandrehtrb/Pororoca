@@ -24,7 +24,7 @@ public class PororocaTestLibraryClientCertificatesTests
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.BadRequest, res.StatusCode);
         Assert.Equal("text/html", res.ContentType);
-        Assert.Contains("No required SSL certificate was sent", res.GetBodyAsText());
+        Assert.Contains("No required SSL certificate was sent", res.GetBodyAsPrettyText());
     }
 
     [Theory]
@@ -40,7 +40,7 @@ public class PororocaTestLibraryClientCertificatesTests
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
         Assert.Equal("text/html", res.ContentType);
-        Assert.Contains("client-authenticated</a> TLS handshake", res.GetBodyAsText());
+        Assert.Contains("client-authenticated</a> TLS handshake", res.GetBodyAsPrettyText());
     }
 
     private static string GetTestCollectionFilePath()

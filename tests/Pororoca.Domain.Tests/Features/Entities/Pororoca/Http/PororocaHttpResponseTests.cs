@@ -162,7 +162,7 @@ public static class PororocaHttpResponseTests
         var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
-        Assert.Null(res.GetBodyAsText(null));
+        Assert.Null(res.GetBodyAsPrettyText(null));
     }
 
     [Fact]
@@ -175,7 +175,7 @@ public static class PororocaHttpResponseTests
         var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
-        Assert.Equal("oi", res.GetBodyAsText(null));
+        Assert.Equal("oi", res.GetBodyAsPrettyText(null));
     }
 
     [Fact]
@@ -188,7 +188,20 @@ public static class PororocaHttpResponseTests
         var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
 
         // THEN
-        Assert.Equal("{" + Environment.NewLine + "  \"id\": 1" + Environment.NewLine + "}", res.GetBodyAsText(null));
+        Assert.Equal("{" + Environment.NewLine + "  \"id\": 1" + Environment.NewLine + "}", res.GetBodyAsPrettyText(null));
+    }
+
+    [Fact]
+    public static async Task If_xml_text_body_then_body_as_text_should_be_pretty_printed()
+    {
+        // GIVEN
+        var resMsg = CreateTestHttpResponseMessage("<A><B>qwerty</B></A>", "text/xml", null);
+
+        // WHEN
+        var res = await PororocaHttpResponse.SuccessfulAsync(testElapsedTime, resMsg);
+
+        // THEN
+        Assert.Equal("<A>" + Environment.NewLine + "  <B>qwerty</B>" + Environment.NewLine + "</A>", res.GetBodyAsPrettyText(null));
     }
 
     [Theory]

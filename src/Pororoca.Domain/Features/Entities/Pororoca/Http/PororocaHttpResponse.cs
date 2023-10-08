@@ -3,6 +3,8 @@ using System.Net.Http.Headers;
 using System.Security.Authentication;
 using System.Text;
 using System.Text.Json;
+using System.Xml;
+using System.Xml.Linq;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.VariableCapture;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
@@ -49,7 +51,7 @@ public sealed class PororocaHttpResponse
     public bool CanDisplayTextBody =>
         MimeTypesDetector.IsTextContent(ContentType);
 
-    public string? GetBodyAsText(string? nonUtf8BodyMessageToShow = null)
+    public string? GetBodyAsString(string? nonUtf8BodyMessageToShow = null)
     {
         if (this.binaryBody == null || this.binaryBody.Length == 0)
         {
@@ -59,25 +61,7 @@ public sealed class PororocaHttpResponse
         {
             try
             {
-                string bodyStr = Encoding.UTF8.GetString(this.binaryBody);
-                string? contentType = ContentType;
-                if (contentType == null || !MimeTypesDetector.IsJsonContent(contentType))
-                {
-                    return bodyStr;
-                }
-                else
-                {
-                    try
-                    {
-                        dynamic? jsonObj = JsonSerializer.Deserialize<dynamic>(bodyStr);
-                        string prettyPrintJson = JsonSerializer.Serialize(jsonObj, options: ViewJsonResponseOptions);
-                        return prettyPrintJson;
-                    }
-                    catch
-                    {
-                        return bodyStr;
-                    }
-                }
+                return Encoding.UTF8.GetString(this.binaryBody);
             }
             catch
             {
@@ -97,6 +81,56 @@ public sealed class PororocaHttpResponse
                     return null;
                 }
             }
+        }
+    }
+
+    public string? GetBodyAsPrettyText(string? nonUtf8BodyMessageToShow = null)
+    {
+        string? bodyStr = GetBodyAsString(nonUtf8BodyMessageToShow);
+        if (bodyStr is null)
+        {
+            return null;
+        }
+
+        try
+        {
+            string? contentType = ContentType;
+            if (contentType == null)
+            {
+                return bodyStr;
+            }
+            else if (MimeTypesDetector.IsJsonContent(contentType))
+            {
+                try
+                {
+                    dynamic? jsonObj = JsonSerializer.Deserialize<dynamic>(bodyStr);
+                    string prettyPrintJson = JsonSerializer.Serialize(jsonObj, options: ViewJsonResponseOptions);
+                    return prettyPrintJson;
+                }
+                catch
+                {
+                    return bodyStr;
+                }
+            }
+            else if (MimeTypesDetector.IsXmlContent(contentType))
+            {
+                try
+                {
+                    return PrettifyXml(bodyStr);
+                }
+                catch
+                {
+                    return bodyStr;
+                }
+            }
+            else
+            {
+                return bodyStr;
+            }
+        }
+        catch
+        {
+            return bodyStr;
         }
     }
 
@@ -142,11 +176,11 @@ public sealed class PororocaHttpResponse
             bool isXmlBody = MimeTypesDetector.IsXmlContent(ContentType ?? string.Empty);
             if (isJsonBody)
             {
-                return PororocaResponseValueCapturer.CaptureJsonValue(capture.Path!, GetBodyAsText()!);
+                return PororocaResponseValueCapturer.CaptureJsonValue(capture.Path!, GetBodyAsString() ?? string.Empty);
             }
             else if (isXmlBody)
             {
-                return PororocaResponseValueCapturer.CaptureXmlValue(capture.Path!, GetBodyAsText()!);
+                return PororocaResponseValueCapturer.CaptureXmlValue(capture.Path!, GetBodyAsString() ?? string.Empty);
             }
             else
             {
@@ -157,6 +191,49 @@ public sealed class PororocaHttpResponse
         {
             return null;
         }
+    }
+
+    private static string PrettifyXml(string xml)
+    {
+        string result = xml;
+
+        using MemoryStream mStream = new();
+        using XmlTextWriter writer = new(mStream, Encoding.Unicode);
+        XmlDocument document = new();
+
+        try
+        {
+            // Load the XmlDocument with the XML.
+            document.LoadXml(xml);
+
+            writer.Formatting = Formatting.Indented;
+
+            // Write the XML into a formatting XmlTextWriter
+            document.WriteContentTo(writer);
+            writer.Flush();
+            mStream.Flush();
+
+            // Have to rewind the MemoryStream in order to read
+            // its contents.
+            mStream.Position = 0;
+
+            // Read MemoryStream contents into a StreamReader.
+            using StreamReader sReader = new(mStream);
+
+            // Extract the text from the StreamReader.
+            string formattedXml = sReader.ReadToEnd();
+
+            result = formattedXml;
+        }
+        catch (XmlException)
+        {
+            // Handle the exception
+        }
+
+        mStream.Close();
+        writer.Close();
+
+        return result;
     }
 
     public static async Task<PororocaHttpResponse> SuccessfulAsync(TimeSpan elapsedTime, HttpResponseMessage responseMessage)
