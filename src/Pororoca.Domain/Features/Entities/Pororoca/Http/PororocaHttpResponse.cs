@@ -198,7 +198,7 @@ public sealed class PororocaHttpResponse
         string result = xml;
 
         using MemoryStream mStream = new();
-        using XmlTextWriter writer = new(mStream, Encoding.Unicode);
+        using XmlTextWriter writer = new(mStream, Encoding.UTF8);
         XmlDocument document = new();
 
         try
