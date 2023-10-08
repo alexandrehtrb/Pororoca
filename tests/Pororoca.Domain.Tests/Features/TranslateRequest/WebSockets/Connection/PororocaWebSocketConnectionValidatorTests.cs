@@ -154,7 +154,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         // THEN
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{CertificateFilePath}}"), Times.Once);
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("prvkeypwd"), Times.Once);
-        Assert.Equal(TranslateRequestErrors.ClientCertificateFileNotFound, errorCode);
+        Assert.Equal(TranslateRequestErrors.ClientCertificatePkcs12CertificateFileNotFound, errorCode);
     }
 
     [Fact]
@@ -180,7 +180,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{CertificateFilePath}}"), Times.Once);
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("./private_key.key"), Times.Once);
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("prvkeypwd"), Times.Once);
-        Assert.Equal(TranslateRequestErrors.ClientCertificateFileNotFound, errorCode);
+        Assert.Equal(TranslateRequestErrors.ClientCertificatePemCertificateFileNotFound, errorCode);
     }
 
     [Fact]

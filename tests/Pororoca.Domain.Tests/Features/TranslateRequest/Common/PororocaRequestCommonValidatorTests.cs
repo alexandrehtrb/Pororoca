@@ -79,7 +79,7 @@ public static class PororocaRequestCommonValidatorTests
 
         // WHEN AND THEN
         Assert.False(CheckClientCertificateFilesAndPassword(col, mockFileExists, customAuth, out string? errorCode));
-        Assert.Equal(TranslateRequestErrors.ClientCertificateFileNotFound, errorCode);
+        Assert.Equal(TranslateRequestErrors.ClientCertificatePkcs12CertificateFileNotFound, errorCode);
     }
 
     [Fact]
