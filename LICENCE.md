@@ -16,9 +16,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-## **Important: included additional licence terms**
+## **Important additional licence terms**
 
-* **7c)** It is prohibited misrepresentation of the origin of that material.
+* *It is prohibited misrepresentation of the origin of that material.*
 
 You cannot distribute any unmodified copy of this software claiming as if it was your work;
 you must always preserve and make visible the origin of this software and the 
@@ -31,6 +31,19 @@ You must also include proper identification of the origin of this software and t
 people who created and contributed to it, 
 if the source code of this software was the basis for your modified version.
 
+* *It is prohibited to make a derivative work that has server-syncing capabilities.* (updated 2023-10-08)
+
+We at Pororoca intend to make a paid, closed-source version that allows server-syncing, 
+such that users can save and manage their collections remotely. This paid version will 
+hopefully provide us means to finance our operations.
+
+For that to happen, we do not allow open-source and/or paid derivative versions of Pororoca 
+made by third-parties, that includes this kind of features.
+
+You are allowed to develop your own derivative version of Pororoca that has server-syncing 
+capabilities, with the restrictions of being closed-source, not shared with the community, 
+and not for commercial purposes. You can make this derivative version for your own private use, 
+for example, for yourself or for your company.
 
 GNU General Public License
 ==========================
