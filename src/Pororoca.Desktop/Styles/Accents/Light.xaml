@@ -22,7 +22,7 @@
       <Color x:Key="MainWindowDarkerBackgroundColor">Silver</Color>
       <Color x:Key="MainWindowSidebarColor">Silver</Color>
       <Color x:Key="MainWindowSeparatorsColor">Silver</Color>
-      <Color x:Key="CurrentEnvironmentLabelColor">#550527</Color>
+      <Color x:Key="CurrentEnvironmentLabelColor">#a90a4c</Color>
       <Color x:Key="ListBoxBackgroundColor">Silver</Color>
       <Color x:Key="ListBoxItemSelectedBackgroundColor">Gainsboro</Color>
       <Color x:Key="DragAndDropDataGridItemDraggingColor">Black</Color>
