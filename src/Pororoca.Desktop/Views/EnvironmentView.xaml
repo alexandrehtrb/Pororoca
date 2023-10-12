@@ -89,6 +89,7 @@
         Padding="2"
         Margin="0,36,0,0"
         Classes="Primary"
+        ToolTip.Tip="{Binding i18n.Environment.AddVariable}"
         Command="{Binding VariablesTableVm.AddNewCmd}">
       <Image
           VerticalAlignment="Center"

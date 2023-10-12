@@ -272,6 +272,7 @@
                     Padding="2"
                     Margin="12,0,0,0"
                     Classes="Secondary"
+                    ToolTip.Tip="{Binding i18n.WebSocketConnection.ConnectionRequestHeaderAdd}"
                     Command="{Binding ConnectionRequestHeadersTableVm.AddNewCmd}">
                   <Button.Content>
                     <Image
@@ -393,6 +394,7 @@
                     Padding="2"
                     Margin="12,0,0,0"
                     Classes="Secondary"
+                    ToolTip.Tip="{Binding i18n.WebSocketConnection.ConnectionRequestSubprotocolAdd}"
                     Command="{Binding SubprotocolsTableVm.AddNewCmd}">
                   <Button.Content>
                     <Image
@@ -685,6 +687,7 @@
                 Padding="2"
                 Margin="0,0,12,0"
                 Classes="Primary"
+                ToolTip.Tip="{Binding i18n.WebSocketClientMessage.NewMessage}"
                 Command="{Binding AddNewWebSocketClientMessageCmd}">
               <Button.Content>
                 <Image

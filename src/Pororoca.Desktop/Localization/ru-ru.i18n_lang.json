@@ -247,7 +247,7 @@
   "WebSocketConnection/ConnectionRequestHeaderRemove": "Удалить",
   "WebSocketConnection/ConnectionRequestSubprotocolEnabled": "ВКЛЮЧЕН",
   "WebSocketConnection/ConnectionRequestSubprotocolName": "ИМЯ",
-  "WebSocketConnection/ConnectionRequestSubprotocolAdd": "Добавить",
+  "WebSocketConnection/ConnectionRequestSubprotocolAdd": "Добавить подпротокол",
   "WebSocketConnection/ConnectionRequestSubprotocolRemove": "Удалить",
   "WebSocketConnection/EnableCompression": "Включить сжатие",
   "WebSocketConnection/CompressionClientContextTakeover": "Захват клиентского контекста",

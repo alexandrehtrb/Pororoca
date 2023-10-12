@@ -256,7 +256,7 @@
     "WebSocketConnection/ConnectionRequestHeaderRemove": "Remover",
     "WebSocketConnection/ConnectionRequestHeaderValue": "VALOR",
     "WebSocketConnection/ConnectionRequestOptions": "Opções",
-    "WebSocketConnection/ConnectionRequestSubprotocolAdd": "Adicionar",
+    "WebSocketConnection/ConnectionRequestSubprotocolAdd": "Adicionar subprotocolo",
     "WebSocketConnection/ConnectionRequestSubprotocolEnabled": "HABILITADO",
     "WebSocketConnection/ConnectionRequestSubprotocolName": "NOME",
     "WebSocketConnection/ConnectionRequestSubprotocolRemove": "Remover",
