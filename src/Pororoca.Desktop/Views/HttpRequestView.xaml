@@ -222,7 +222,7 @@
                   VerticalContentAlignment="Center"
                   Padding="2"
                   Margin="12,0,0,0"
-                  Classes="Primary"
+                  Classes="Secondary"
                   Command="{Binding RequestHeadersTableVm.AddNewCmd}">
                 <Button.Content>
                   <Image
@@ -440,7 +440,7 @@
                     Content="{Binding i18n.HttpRequest.BodyFileSearchFile}"
                     Margin="0,12,0,0"
                     Command="{Binding SearchRequestBodyRawFileCmd}"
-                    Classes="Primary"/>
+                    Classes="Secondary"/>
               </Grid>
               <!-- REQUEST BODY URL ENCODED -->
               <Grid
@@ -465,7 +465,7 @@
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
                     Padding="2"
-                    Classes="Primary"
+                    Classes="Secondary"
                     Command="{Binding UrlEncodedParamsTableVm.AddNewCmd}">
                   <Button.Content>
                     <Image
@@ -586,13 +586,13 @@
                       Content="{Binding i18n.HttpRequest.BodyFormDataTextParamAdd}"
                       Margin="0,0,3,0"
                       Command="{Binding FormDataParamsTableVm.AddNewFormDataTextParamCmd}"
-                      Classes="Primary"/>
+                      Classes="Secondary"/>
                   <Button
                       Name="btReqBodyFormDataAddFileParam"
                       Content="{Binding i18n.HttpRequest.BodyFormDataFileParamAdd}"
                       Margin="3,0,0,0"
                       Command="{Binding FormDataParamsTableVm.AddNewFormDataFileParamCmd}"
-                      Classes="Primary"/>
+                      Classes="Secondary"/>
                 </StackPanel>
                 <DataGrid
                     Name="dgReqBodyFormDataParams"
@@ -872,7 +872,7 @@
                     Margin="0,0,6,12"
                     IsVisible="{Binding ResponseDataCtx.IsSaveResponseBodyToFileVisible}"
                     Command="{Binding ResponseDataCtx.SaveResponseBodyToFileCmd}"
-                    Classes="Primary"/>
+                    Classes="Secondary"/>
                 <Button
                     Name="btResDisableTlsVerification"
                     Content="{Binding i18n.HttpResponse.DisableTlsVerification}"
@@ -909,13 +909,13 @@
                     Content="{Binding i18n.HttpResponse.CaptureAddHeaderCapture}"
                     Margin="0,0,3,0"
                     Command="{Binding ResCapturesTableVm.AddNewHeaderCaptureCmd}"
-                    Classes="Primary"/>
+                    Classes="Secondary"/>
                 <Button
                     Name="btResCaptureAddBodyCapture"
                     Content="{Binding i18n.HttpResponse.CaptureAddBodyCapture}"
                     Margin="3,0,3,0"
                     Command="{Binding ResCapturesTableVm.AddNewBodyCaptureCmd}"
-                    Classes="Primary"/>
+                    Classes="Secondary"/>
                 <TextBlock
                     TextWrapping="Wrap"
                     FontSize="16"

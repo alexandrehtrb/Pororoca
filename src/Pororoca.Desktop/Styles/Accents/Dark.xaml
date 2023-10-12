@@ -4,13 +4,13 @@
   <ResourceDictionary.ThemeDictionaries>
     <ResourceDictionary x:Key="Dark">
       <!-- System colours overrides below -->
-      <Color x:Key="SystemAccentColorDark3">#2B1808</Color>
-      <Color x:Key="SystemAccentColorDark2">#562F10</Color>
-      <Color x:Key="SystemAccentColorDark1">#814718</Color>
-      <Color x:Key="SystemAccentColor">#A55B1E</Color>
-      <Color x:Key="SystemAccentColorLight1">#C26B24</Color>
-      <Color x:Key="SystemAccentColorLight2">#D77728</Color>
-      <Color x:Key="SystemAccentColorLight3">#DB843D</Color>
+      <Color x:Key="SystemAccentColorDark3">Black</Color>
+      <Color x:Key="SystemAccentColorDark2">Black</Color>
+      <Color x:Key="SystemAccentColorDark1">#2B1808</Color>
+      <Color x:Key="SystemAccentColor">#562F10</Color>
+      <Color x:Key="SystemAccentColorLight1">#814718</Color>
+      <Color x:Key="SystemAccentColorLight2">#A55B1E</Color>
+      <Color x:Key="SystemAccentColorLight3">#C26B24</Color>
       <Color x:Key="SystemErrorTextColor">#FF4D4D</Color>
       <!-- Custom colours below -->
       <Color x:Key="InputBackgroundValidationProblemColor">#66FECADA</Color>
@@ -26,8 +26,10 @@
       <Color x:Key="ListBoxBackgroundColor">Black</Color>
       <Color x:Key="ListBoxItemSelectedBackgroundColor">#080808</Color>
       <Color x:Key="DragAndDropDataGridItemDraggingColor">White</Color>
-      <Color x:Key="ButtonPrimaryTextColor">White</Color>
-      <Color x:Key="ButtonPrimaryInvertedTextColor">Black</Color>
+      
+      <Color x:Key="ButtonSecondaryBackgroundColor">#2B1808</Color>
+      <Color x:Key="ButtonSecondaryHighlightBackgroundColor">#562F10</Color>
+
       <Color x:Key="WebSocketConnectedColor">#38C7AD</Color>
       <Color x:Key="WebSocketMessageFromClientPrimaryColor">#D77728</Color>
       <Color x:Key="WebSocketMessageFromServerPrimaryColor">#88DDCE</Color>

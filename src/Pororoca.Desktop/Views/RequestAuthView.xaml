@@ -194,7 +194,7 @@
             Margin="0,12,0,0"
             Content="{Binding i18n.RequestAuth.Pkcs12SearchFile}"
             Command="{Binding SearchClientCertificatePkcs12FileCmd}"
-            Classes="Primary"/>
+            Classes="Secondary"/>
       </StackPanel>
       <!-- CLIENT CERTIFICATE AUTH PEM -->
       <StackPanel
@@ -236,12 +236,12 @@
               Content="{Binding i18n.RequestAuth.PemSearchCertFile}"
               Margin="0,0,6,0"
               Command="{Binding SearchClientCertificatePemCertFileCmd}"
-              Classes="Primary"/>
+              Classes="Secondary"/>
           <Button
               Content="{Binding i18n.RequestAuth.PemSearchPrivateKeyFile}"
               Margin="6,0,0,0"
               Command="{Binding SearchClientCertificatePemPrivateKeyFileCmd}"
-              Classes="Primary"/>
+              Classes="Secondary"/>
         </StackPanel>
         <TextBlock
             TextWrapping="Wrap"
