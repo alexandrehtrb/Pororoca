@@ -1,5 +1,6 @@
 # Changelog
 
+* [2.4.0](#240-2023-10-13)
 * [2.3.1](#231-2023-09-28)
 * [2.3.0](#230-2023-09-26)
 * [2.2.0](#220-2023-08-07)
@@ -13,6 +14,30 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [2.4.0](https://github.com/alexandrehtrb/Pororoca/tree/2.4.0) (2023-10-13)
+
+### Important!
+
+* If you are using Pororoca Desktop on Linux, please update msquic to version 2.2.3 to make HTTP/3 requests.
+* Our license has been [updated](https://github.com/alexandrehtrb/Pororoca/commit/b9e08ec356e929bcd978a29e2d1aaa0311ba7fc6).
+
+### Features
+
+* You can now capture response values into variables!
+* Windows authentication (NTLM / Kerberos).
+* XML response bodies are now indented and prettified.
+* Client certificate auth fields now become red when there is validation problem with them.
+* UI has been renovated for better focus and distinction between primary and secondary actions.
+* Tooltips now appear in some buttons, such as add request headers, add variables and add WebSocket client message.
+
+### Refactors
+
+* Variable resolution logic centralised into IPororocaVariableResolver.
+
+### Others
+
+* Raised .NET SDK version to 7.0.402.
 
 ## [2.3.1](https://github.com/alexandrehtrb/Pororoca/tree/2.3.1) (2023-09-28)
 
