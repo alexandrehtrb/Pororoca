@@ -7,23 +7,23 @@ public static class UITestsRunner
 {
     public static Task<string> RunAllTestsAsync() => RunTestsAsync(new UITest[]
     {
-        //new TopMenuUITest(),
-        //new SwitchLanguagesUITest(),
-        //new SwitchThemesUITest(),
-        //new EditableTextBlockUITest(),
-        //new CollectionAndCollectionFolderUITest(),
-        //new TreeCopyAndPasteItemsUITest(),
-        //new TreeCutAndPasteItemsUITest(),
-        //new TreeDeleteItemsUITest(),
+        new TopMenuUITest(),
+        new SwitchLanguagesUITest(),
+        new SwitchThemesUITest(),
+        new EditableTextBlockUITest(),
+        new CollectionAndCollectionFolderUITest(),
+        new TreeCopyAndPasteItemsUITest(),
+        new TreeCutAndPasteItemsUITest(),
+        new TreeDeleteItemsUITest(),
         new HttpRequestValidationsUITest(),
-        //new HttpRequestsUITest(),
-        //new VariablesCutCopyPasteDeleteUITest(),
-        //new HeadersCutCopyPasteDeleteUITest(),
-        //new UrlEncodedParamsCutCopyPasteDeleteUITest(),
-        //new FormDataParamsCutCopyPasteDeleteUITest(),
+        new HttpRequestsUITest(),
+        new VariablesCutCopyPasteDeleteUITest(),
+        new HeadersCutCopyPasteDeleteUITest(),
+        new UrlEncodedParamsCutCopyPasteDeleteUITest(),
+        new FormDataParamsCutCopyPasteDeleteUITest(),
         new WebSocketsValidationsUITest(),
-        //new WebSocketsUITest(),
-        //new ExportAndImportUITest(),
+        new WebSocketsUITest(),
+        new ExportAndImportUITest(),
         // TODO: UI tests to be made:
         // Out of scope of automated UI tests:
         // some keybindings
