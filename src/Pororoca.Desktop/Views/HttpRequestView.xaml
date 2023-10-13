@@ -874,7 +874,7 @@
                     Margin="0,0,6,12"
                     IsVisible="{Binding ResponseDataCtx.IsSaveResponseBodyToFileVisible}"
                     Command="{Binding ResponseDataCtx.SaveResponseBodyToFileCmd}"
-                    Classes="Secondary"/>
+                    Classes="Primary"/>
                 <Button
                     Name="btResDisableTlsVerification"
                     Content="{Binding i18n.HttpResponse.DisableTlsVerification}"

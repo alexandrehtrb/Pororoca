@@ -798,7 +798,7 @@
             Margin="12,0,12,24"
             IsVisible="{Binding IsSaveSelectedExchangedMessageToFileVisible}"
             Command="{Binding SaveSelectedExchangedMessageToFileCmd}"
-            Classes="Secondary"/>
+            Classes="Primary"/>
       </Grid>
     </Grid>
   </Grid>
