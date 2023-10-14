@@ -15,8 +15,29 @@ public static partial class PororocaResponseValueCapturer
     [GeneratedRegex("xmlns:(?<Prefix>\\w+)=\"(?<Url>[\\w\\d:\\/\\.\\-_]+)\"")]
     private static partial Regex GenerateXmlNamespacesRegex();
 
-    public static string? CaptureXmlValue(string xpath, string xml)
+    public static string? CaptureXmlValue(string xpath, XmlDocument? doc, XmlNamespaceManager? nsm)
     {
+        if (doc is null || nsm is null)
+        {
+            return null;
+        }
+
+        try
+        {
+            var node = doc.SelectSingleNode(xpath, nsm);
+            return node?.InnerText;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    internal static (XmlDocument?, XmlNamespaceManager?) LoadXmlDocumentAndNamespaceManager(string xml)
+    {
+        if (string.IsNullOrWhiteSpace(xml))
+            return (null, null);
+
         try
         {
             XmlDocument doc = new();
@@ -27,19 +48,18 @@ public static partial class PororocaResponseValueCapturer
             {
                 nsm.AddNamespace(prefix, url);
             }
-            var node = doc.SelectSingleNode(xpath, nsm);
-            return node?.InnerText;
+            return (doc, nsm);
         }
         catch
         {
-            return null;
+            return (null, null);
         }
     }
 
     private static (string Prefix, string Url)[] GetXmlNamespaces(string xml)
     {
         var matches = xmlNamespacesRegex.Matches(xml);
-        return matches.Select(m => 
+        return matches.Select(m =>
         {
             string prefix = m.Groups["Prefix"].Value;
             string url = m.Groups["Url"].Value;

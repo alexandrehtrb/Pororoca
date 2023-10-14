@@ -176,11 +176,16 @@ public sealed class PororocaHttpResponse
             bool isXmlBody = MimeTypesDetector.IsXmlContent(ContentType ?? string.Empty);
             if (isJsonBody)
             {
-                return PororocaResponseValueCapturer.CaptureJsonValue(capture.Path!, GetBodyAsString() ?? string.Empty);
+                string body = GetBodyAsString() ?? string.Empty;
+                return PororocaResponseValueCapturer.CaptureJsonValue(capture.Path!, body);
             }
             else if (isXmlBody)
             {
-                return PororocaResponseValueCapturer.CaptureXmlValue(capture.Path!, GetBodyAsString() ?? string.Empty);
+                string body = GetBodyAsString() ?? string.Empty;
+                // holding the doc and nsm here to spare processing 
+                // of reading and parsing XML document and namespaces
+                var (doc, nsm) = PororocaResponseValueCapturer.LoadXmlDocumentAndNamespaceManager(body);
+                return PororocaResponseValueCapturer.CaptureXmlValue(capture.Path!, doc, nsm);
             }
             else
             {

@@ -1,3 +1,4 @@
+using Pororoca.Domain.Features.VariableCapture;
 using Xunit;
 using static Pororoca.Domain.Features.VariableCapture.PororocaResponseValueCapturer;
 
@@ -95,6 +96,9 @@ public static partial class PororocaResponseValueCapturerTests
     [InlineData("Giada De Laurentiis", "/bookstore/book[1]/author", testXmlComplexObj)]
     [InlineData("Alexandre", "/env:Envelope/env:Body/xsi:response/wsa:MyVal1", testXmlObjWithNamespaces)]
     [InlineData("123987456", "/env:Envelope/env:Body/xsi:response/xsi:Value/wsa:MyVal2", testXmlObjWithNamespaces)]
-    public static void TestXmlValueCapture(string expectedCapture, string xpath, string xml) =>
-        Assert.Equal(expectedCapture, CaptureXmlValue(xpath, xml));
+    public static void TestXmlValueCapture(string expectedCapture, string xpath, string xml)
+    {
+        var (doc, nsm) = LoadXmlDocumentAndNamespaceManager(xml);
+        Assert.Equal(expectedCapture, CaptureXmlValue(xpath, doc, nsm));
+    }
 }
