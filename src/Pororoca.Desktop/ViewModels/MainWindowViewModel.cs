@@ -40,47 +40,21 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #region SCREENS
 
-    [Reactive]
-    public bool IsCollectionViewVisible { get; set; }
+    public PageHolder<CollectionViewModel> CollectionView { get; }
 
-    [Reactive]
-    public CollectionViewModel? CollectionViewDataCtx { get; set; }
+    public PageHolder<CollectionVariablesViewModel> CollectionVariablesView { get; }
 
-    [Reactive]
-    public bool IsCollectionVariablesViewVisible { get; set; }
+    public PageHolder<EnvironmentViewModel> EnvironmentView { get; }
 
-    [Reactive]
-    public CollectionVariablesViewModel? CollectionVariablesViewDataCtx { get; set; }
+    public PageHolder<CollectionFolderViewModel> CollectionFolderView { get; }
 
-    [Reactive]
-    public bool IsEnvironmentViewVisible { get; set; }
+    public PageHolder<HttpRequestViewModel> HttpRequestView { get; }
 
-    [Reactive]
-    public EnvironmentViewModel? EnvironmentViewDataCtx { get; set; }
+    public PageHolder<WebSocketConnectionViewModel> WebSocketConnectionView { get; }
 
-    [Reactive]
-    public bool IsCollectionFolderViewVisible { get; set; }
+    public PageHolder<WebSocketClientMessageViewModel> WebSocketClientMessageView { get; }
 
-    [Reactive]
-    public CollectionFolderViewModel? CollectionFolderViewDataCtx { get; set; }
-
-    [Reactive]
-    public bool IsHttpRequestViewVisible { get; set; }
-
-    [Reactive]
-    public HttpRequestViewModel? HttpRequestViewDataCtx { get; set; }
-
-    [Reactive]
-    public bool IsWebSocketConnectionViewVisible { get; set; }
-
-    [Reactive]
-    public WebSocketConnectionViewModel? WebSocketConnectionViewDataCtx { get; set; }
-
-    [Reactive]
-    public bool IsWebSocketClientMessageViewVisible { get; set; }
-
-    [Reactive]
-    public WebSocketClientMessageViewModel? WebSocketClientMessageViewDataCtx { get; set; }
+    private readonly List<PageHolder> pages;
 
     #endregion
 
@@ -166,6 +140,17 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         SaveAllCmd = ReactiveCommand.CreateFromTask(SaveAllAsync);
         #endregion
 
+        #region SCREENS
+        this.pages = new();
+        this.pages.Add(CollectionView = new());
+        this.pages.Add(CollectionVariablesView = new());
+        this.pages.Add(EnvironmentView = new());
+        this.pages.Add(CollectionFolderView = new());
+        this.pages.Add(HttpRequestView = new());
+        this.pages.Add(WebSocketConnectionView = new());
+        this.pages.Add(WebSocketClientMessageView = new());
+        #endregion
+
         #region LANGUAGE
         SelectLanguagePortuguesCmd = ReactiveCommand.Create(() => SelectLanguage(Language.Portuguese));
         SelectLanguageEnglishCmd = ReactiveCommand.Create(() => SelectLanguage(Language.English));
@@ -201,118 +186,20 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     private void OnCollectionsGroupItemSelected(ViewModelBase? selectedItem)
     {
-        if (selectedItem is CollectionViewModel colVm)
+        var currentPage = this.pages.FirstOrDefault(p => p.Visible);
+        var nextPage = this.pages.FirstOrDefault(p => p.PageType == selectedItem?.GetType());
+        if (nextPage is not null)
         {
-            CollectionViewDataCtx = colVm;
-            if (!IsCollectionViewVisible)
+            nextPage.SetVM(selectedItem);
+            if (currentPage is not null)
             {
-                // TODO: Use a tuple with (enum, ref bool variable) instead of many bools
-                IsCollectionViewVisible = true;
-                IsCollectionVariablesViewVisible = false;
-                IsEnvironmentViewVisible = false;
-                IsCollectionFolderViewVisible = false;
-                IsHttpRequestViewVisible = false;
-                IsWebSocketConnectionViewVisible = false;
-                IsWebSocketClientMessageViewVisible = false;
+                currentPage.Visible = false;
             }
-        }
-        else if (selectedItem is CollectionVariablesViewModel colVarsVm)
-        {
-            CollectionVariablesViewDataCtx = colVarsVm;
-            if (!IsCollectionVariablesViewVisible)
-            {
-                IsCollectionViewVisible = false;
-                IsCollectionVariablesViewVisible = true;
-                IsEnvironmentViewVisible = false;
-                IsCollectionFolderViewVisible = false;
-                IsHttpRequestViewVisible = false;
-                IsWebSocketConnectionViewVisible = false;
-                IsWebSocketClientMessageViewVisible = false;
-            }
-        }
-        else if (selectedItem is EnvironmentViewModel envVm)
-        {
-            EnvironmentViewDataCtx = envVm;
-            if (!IsEnvironmentViewVisible)
-            {
-                IsCollectionViewVisible = false;
-                IsCollectionVariablesViewVisible = false;
-                IsEnvironmentViewVisible = true;
-                IsCollectionFolderViewVisible = false;
-                IsHttpRequestViewVisible = false;
-                IsWebSocketConnectionViewVisible = false;
-                IsWebSocketClientMessageViewVisible = false;
-            }
-        }
-        else if (selectedItem is CollectionFolderViewModel folderVm)
-        {
-            CollectionFolderViewDataCtx = folderVm;
-            if (!IsCollectionFolderViewVisible)
-            {
-                IsCollectionViewVisible = false;
-                IsCollectionVariablesViewVisible = false;
-                IsEnvironmentViewVisible = false;
-                IsCollectionFolderViewVisible = true;
-                IsHttpRequestViewVisible = false;
-                IsWebSocketConnectionViewVisible = false;
-                IsWebSocketClientMessageViewVisible = false;
-            }
-        }
-        else if (selectedItem is HttpRequestViewModel reqVm)
-        {
-            HttpRequestViewDataCtx = reqVm;
-            if (!IsHttpRequestViewVisible)
-            {
-                IsCollectionViewVisible = false;
-                IsCollectionVariablesViewVisible = false;
-                IsEnvironmentViewVisible = false;
-                IsCollectionFolderViewVisible = false;
-                IsHttpRequestViewVisible = true;
-                IsWebSocketConnectionViewVisible = false;
-                IsWebSocketClientMessageViewVisible = false;
-            }
-        }
-        else if (selectedItem is WebSocketConnectionViewModel wsVm)
-        {
-            WebSocketConnectionViewDataCtx = wsVm;
-            if (!IsWebSocketConnectionViewVisible)
-            {
-                IsCollectionViewVisible = false;
-                IsCollectionVariablesViewVisible = false;
-                IsEnvironmentViewVisible = false;
-                IsCollectionFolderViewVisible = false;
-                IsHttpRequestViewVisible = false;
-                IsWebSocketConnectionViewVisible = true;
-                IsWebSocketClientMessageViewVisible = false;
-            }
-        }
-        else if (selectedItem is WebSocketClientMessageViewModel wsReqVm)
-        {
-            WebSocketClientMessageViewDataCtx = wsReqVm;
-            if (!IsWebSocketClientMessageViewVisible)
-            {
-                IsCollectionViewVisible = false;
-                IsCollectionVariablesViewVisible = false;
-                IsEnvironmentViewVisible = false;
-                IsCollectionFolderViewVisible = false;
-                IsHttpRequestViewVisible = false;
-                IsWebSocketConnectionViewVisible = false;
-                IsWebSocketClientMessageViewVisible = true;
-            }
-        }
-        else if (selectedItem is EnvironmentsGroupViewModel)
-        {
-            // do nothing
+            nextPage.Visible = true;
         }
         else
         {
-            IsCollectionViewVisible = false;
-            IsCollectionVariablesViewVisible = false;
-            IsEnvironmentViewVisible = false;
-            IsCollectionFolderViewVisible = false;
-            IsHttpRequestViewVisible = false;
-            IsWebSocketConnectionViewVisible = false;
-            IsWebSocketClientMessageViewVisible = false;
+            this.pages.ForEach(p => p.Visible = false);
         }
     }
 
@@ -356,22 +243,14 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         onAfterItemDeleted();
     }
 
-    private void onAfterItemDeleted()
-    {
-        IsCollectionViewVisible = false;
-        IsCollectionVariablesViewVisible = false;
-        IsEnvironmentViewVisible = false;
-        IsCollectionFolderViewVisible = false;
-        IsHttpRequestViewVisible = false;
-        IsWebSocketConnectionViewVisible = false;
-        IsWebSocketClientMessageViewVisible = false;
-    }
+    private void onAfterItemDeleted() =>
+        this.pages.ForEach(p => p.Visible = false);
 
     private Task ImportCollectionsAsync() =>
         FileExporterImporter.ImportCollectionsAsync(this);
 
     private async Task SaveAllAsync()
-    {        
+    {
         SaveUserData();
         IsSavedLabelVisible = true;
         await Task.Delay(3000);

@@ -484,11 +484,11 @@ public sealed class KeyboardShortcuts : ViewModelBase
     {
         var mwvm = MainWindowVm;
         TextBox? tbUrl = null;
-        if (mwvm.IsHttpRequestViewVisible)
+        if (mwvm.HttpRequestView.Visible)
         {
             tbUrl = MainWindow.Instance!.FindControl<HttpRequestView>("httpReqView")?.FindControl<TextBox>("tbUrl");
         }
-        else if (mwvm.IsWebSocketConnectionViewVisible)
+        else if (mwvm.WebSocketConnectionView.Visible)
         {
             tbUrl = MainWindow.Instance!.FindControl<WebSocketConnectionView>("wsConnView")?.FindControl<TextBox>("tbUrl");
         }
@@ -507,18 +507,18 @@ public sealed class KeyboardShortcuts : ViewModelBase
     internal void SendRequestOrConnectWebSocket()
     {
         var mwvm = MainWindowVm;
-        if (mwvm.IsHttpRequestViewVisible && mwvm.HttpRequestViewDataCtx?.IsRequesting == false)
+        if (mwvm.HttpRequestView.Visible && mwvm.HttpRequestView.VM?.IsRequesting == false)
         {
             // This needs to be done via Dispatcher.UIThread.Post() instead of Task.Run
             // because it happens on UI thread. Task.Run also causes a weird bug 
             // that CancellationTokenSource becomes null, even after sending the request.
-            Dispatcher.UIThread.Post(async () => await mwvm.HttpRequestViewDataCtx.SendRequestAsync());
+            Dispatcher.UIThread.Post(async () => await mwvm.HttpRequestView.VM.SendRequestAsync());
         }
-        else if (mwvm.IsWebSocketConnectionViewVisible
-              && mwvm.WebSocketConnectionViewDataCtx?.IsConnected == false
-              && mwvm.WebSocketConnectionViewDataCtx?.IsConnecting == false)
+        else if (mwvm.WebSocketConnectionView.Visible
+              && mwvm.WebSocketConnectionView.VM?.IsConnected == false
+              && mwvm.WebSocketConnectionView.VM?.IsConnecting == false)
         {
-            Dispatcher.UIThread.Post(async () => await mwvm.WebSocketConnectionViewDataCtx.ConnectAsync());
+            Dispatcher.UIThread.Post(async () => await mwvm.WebSocketConnectionView.VM.ConnectAsync());
         }
     }
 
@@ -529,19 +529,19 @@ public sealed class KeyboardShortcuts : ViewModelBase
     internal void CancelRequestOrDisconnectWebSocket()
     {
         var mwvm = MainWindowVm;
-        if (mwvm.IsHttpRequestViewVisible && mwvm.HttpRequestViewDataCtx?.IsRequesting == true)
+        if (mwvm.HttpRequestView.Visible && mwvm.HttpRequestView.VM?.IsRequesting == true)
         {
-            mwvm.HttpRequestViewDataCtx.CancelRequest();
+            mwvm.HttpRequestView.VM.CancelRequest();
         }
-        else if (mwvm.IsWebSocketConnectionViewVisible)
+        else if (mwvm.WebSocketConnectionView.Visible)
         {
-            if (mwvm.WebSocketConnectionViewDataCtx?.IsConnected == true)
+            if (mwvm.WebSocketConnectionView.VM?.IsConnected == true)
             {
-                Dispatcher.UIThread.Post(async () => await mwvm.WebSocketConnectionViewDataCtx.DisconnectAsync());
+                Dispatcher.UIThread.Post(async () => await mwvm.WebSocketConnectionView.VM.DisconnectAsync());
             }
-            else if (mwvm.WebSocketConnectionViewDataCtx?.IsConnecting == true)
+            else if (mwvm.WebSocketConnectionView.VM?.IsConnecting == true)
             {
-                mwvm.WebSocketConnectionViewDataCtx.CancelConnect();
+                mwvm.WebSocketConnectionView.VM.CancelConnect();
             }
         }
     }
@@ -576,13 +576,13 @@ public sealed class KeyboardShortcuts : ViewModelBase
     internal void SaveResponseToFile()
     {
         var mwvm = MainWindowVm;
-        if (mwvm.IsHttpRequestViewVisible && mwvm.HttpRequestViewDataCtx?.ResponseDataCtx?.IsSaveResponseBodyToFileVisible == true)
+        if (mwvm.HttpRequestView.Visible && mwvm.HttpRequestView.VM?.ResponseDataCtx?.IsSaveResponseBodyToFileVisible == true)
         {
-            Dispatcher.UIThread.Post(async () => await mwvm.HttpRequestViewDataCtx.ResponseDataCtx.SaveResponseBodyToFileAsync());
+            Dispatcher.UIThread.Post(async () => await mwvm.HttpRequestView.VM.ResponseDataCtx.SaveResponseBodyToFileAsync());
         }
-        else if (mwvm.IsWebSocketConnectionViewVisible && mwvm.WebSocketConnectionViewDataCtx?.IsSaveSelectedExchangedMessageToFileVisible == true)
+        else if (mwvm.WebSocketConnectionView.Visible && mwvm.WebSocketConnectionView.VM?.IsSaveSelectedExchangedMessageToFileVisible == true)
         {
-            Dispatcher.UIThread.Post(async () => await mwvm.WebSocketConnectionViewDataCtx.SaveSelectedExchangedMessageToFileAsync());
+            Dispatcher.UIThread.Post(async () => await mwvm.WebSocketConnectionView.VM.SaveSelectedExchangedMessageToFileAsync());
         }
     }
 

@@ -239,58 +239,58 @@
           <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
-              IsVisible="{Binding IsCollectionViewVisible}">
+              IsVisible="{Binding CollectionView.Visible}">
             <v:CollectionView
                 x:Name="collectionView"
-                DataContext="{Binding CollectionViewDataCtx}"/>
+                DataContext="{Binding CollectionView.VM}"/>
           </Grid>
           <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
-              IsVisible="{Binding IsCollectionVariablesViewVisible}">
+              IsVisible="{Binding CollectionVariablesView.Visible}">
             <v:CollectionVariablesView
                 x:Name="collectionVariablesView"
-                DataContext="{Binding CollectionVariablesViewDataCtx}"/>
+                DataContext="{Binding CollectionVariablesView.VM}"/>
           </Grid>
           <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
-              IsVisible="{Binding IsEnvironmentViewVisible}">
+              IsVisible="{Binding EnvironmentView.Visible}">
             <v:EnvironmentView
                 x:Name="environmentView"
-                DataContext="{Binding EnvironmentViewDataCtx}"/>
+                DataContext="{Binding EnvironmentView.VM}"/>
           </Grid>
           <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
-              IsVisible="{Binding IsCollectionFolderViewVisible}">
+              IsVisible="{Binding CollectionFolderView.Visible}">
             <v:CollectionFolderView
                 x:Name="collectionFolderView"
-                DataContext="{Binding CollectionFolderViewDataCtx}"/>
+                DataContext="{Binding CollectionFolderView.VM}"/>
           </Grid>
           <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
-              IsVisible="{Binding IsHttpRequestViewVisible}">
+              IsVisible="{Binding HttpRequestView.Visible}">
             <v:HttpRequestView
                 x:Name="httpReqView"
-                DataContext="{Binding HttpRequestViewDataCtx}"/>
+                DataContext="{Binding HttpRequestView.VM}"/>
           </Grid>
           <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
-              IsVisible="{Binding IsWebSocketConnectionViewVisible}">
+              IsVisible="{Binding WebSocketConnectionView.Visible}">
             <v:WebSocketConnectionView
                 x:Name="wsConnView"
-                DataContext="{Binding WebSocketConnectionViewDataCtx}"/>
+                DataContext="{Binding WebSocketConnectionView.VM}"/>
           </Grid>
           <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
-              IsVisible="{Binding IsWebSocketClientMessageViewVisible}">
+              IsVisible="{Binding WebSocketClientMessageView.Visible}">
             <v:WebSocketClientMessageView
                 x:Name="wsClientMsgView"
-                DataContext="{Binding WebSocketClientMessageViewDataCtx}"/>
+                DataContext="{Binding WebSocketClientMessageView.VM}"/>
           </Grid>
         </Grid>
       </Panel>
