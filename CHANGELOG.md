@@ -19,21 +19,24 @@
 
 ### Important!
 
-* If you are using Pororoca Desktop on Linux, please update msquic to version 2.2.3 to make HTTP/3 requests.
+* If you are using Pororoca Desktop on Linux, please update msquic to version 2.2.2+ to make HTTP/3 requests.
 * Our license has been [updated](https://github.com/alexandrehtrb/Pororoca/commit/b9e08ec356e929bcd978a29e2d1aaa0311ba7fc6).
+* We also added a data protection policy in our README.
 
 ### Features
 
 * You can now capture response values into variables!
+* Collection-scoped authentication, including when importing from Postman.
 * Windows authentication (NTLM / Kerberos).
 * XML response bodies are now indented and prettified.
 * Client certificate auth fields now become red when there is validation problem with them.
-* UI has been renovated for better focus and distinction between primary and secondary actions.
+* UI now has better focus and distinction between primary and secondary actions.
 * Tooltips now appear in some buttons, such as add request headers, add variables and add WebSocket client message.
 
 ### Refactors
 
 * Variable resolution logic centralised into IPororocaVariableResolver.
+* Logic for switching panels with ComboBoxes has been refactored to use Avalonia custom converters.
 
 ### Others
 
