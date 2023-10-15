@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Reactive;
 using AvaloniaEdit.Document;
+using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
@@ -110,16 +111,8 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     [Reactive]
     public int RequestBodyModeSelectedIndex { get; set; }
 
-    public PororocaHttpRequestBodyMode? RequestBodyMode => RequestBodyModeSelectedIndex switch
-    {
-        0 => null,
-        1 => PororocaHttpRequestBodyMode.Raw,
-        2 => PororocaHttpRequestBodyMode.File,
-        3 => PororocaHttpRequestBodyMode.UrlEncoded,
-        4 => PororocaHttpRequestBodyMode.FormData,
-        5 => PororocaHttpRequestBodyMode.GraphQl,
-        _ => null
-    };
+    public PororocaHttpRequestBodyMode? RequestBodyMode =>
+        HttpRequestBodyModeMapping.MapIndexToEnum(RequestBodyModeSelectedIndex);
 
     public static ObservableCollection<string> AllMimeTypes { get; } = new(MimeTypesDetector.AllMimeTypes);
 
@@ -279,27 +272,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
         #region REQUEST BODY
         // TODO: Improve this, do not use fixed values to resolve index
-        switch (req.Body?.Mode)
-        {
-            case PororocaHttpRequestBodyMode.GraphQl:
-                RequestBodyModeSelectedIndex = 5;
-                break;
-            case PororocaHttpRequestBodyMode.FormData:
-                RequestBodyModeSelectedIndex = 4;
-                break;
-            case PororocaHttpRequestBodyMode.UrlEncoded:
-                RequestBodyModeSelectedIndex = 3;
-                break;
-            case PororocaHttpRequestBodyMode.File:
-                RequestBodyModeSelectedIndex = 2;
-                break;
-            case PororocaHttpRequestBodyMode.Raw:
-                RequestBodyModeSelectedIndex = 1;
-                break;
-            default:
-                RequestBodyModeSelectedIndex = 0;
-                break;
-        }
+        RequestBodyModeSelectedIndex = HttpRequestBodyModeMapping.MapEnumToIndex(req.Body?.Mode);
         // RAW
         RequestRawContentType = req.Body?.ContentType;
         RequestRawContent = req.Body?.RawContent;
