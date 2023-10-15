@@ -189,6 +189,11 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     private void OnCollectionsGroupItemSelected(ViewModelBase? selectedItem)
     {
+        if (selectedItem is EnvironmentsGroupViewModel)
+        {
+            return; // do nothing
+        }
+
         var currentPage = this.pages.FirstOrDefault(p => p.Visible);
         var nextPage = this.pages.FirstOrDefault(p => p.PageType == selectedItem?.GetType());
         if (nextPage is not null)
