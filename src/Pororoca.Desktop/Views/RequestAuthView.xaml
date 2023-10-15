@@ -4,6 +4,7 @@
     xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:conv="clr-namespace:Pororoca.Desktop.Converters;assembly=Pororoca.Desktop"
     mc:Ignorable="d"
     d:DesignWidth="1350"
     d:DesignHeight="700"
@@ -11,6 +12,11 @@
     x:CompileBindings="True"
     x:DataType="vm:RequestAuthViewModel"
     FontSize="14">
+
+  <UserControl.Resources>
+      <conv:AuthModeMatchConverter x:Key="authModeMatch"/>
+      <conv:ClientCertificateTypeMatchConverter x:Key="clientCertificateTypeMatch"/>
+  </UserControl.Resources>
 
   <Grid Margin="0,12,0,0">
     <Grid.ColumnDefinitions>
@@ -57,7 +63,11 @@
           Width="110"
           HorizontalAlignment="Left"
           VerticalAlignment="Stretch"
-          SelectedIndex="{Binding ClientCertificateTypeSelectedIndex}">
+          SelectedIndex="{Binding ClientCertificateTypeSelectedIndex}"
+          IsVisible="{Binding AuthModeSelectedIndex, 
+                      Mode=OneWay,
+                      Converter={StaticResource authModeMatch}, 
+                      ConverterParameter=ClientCertificate}">
         <ComboBoxItem
             x:Name="cbiReqAuthClientCertificateNone"
             Content="{Binding i18n.RequestAuth.ClientCertificateTypeNone}"/>
@@ -75,7 +85,11 @@
         x:Name="spReqAuthBasic"
         Grid.Column="0"
         Grid.Row="1"
-        Margin="0,12,0,0">
+        Margin="0,12,0,0"
+        IsVisible="{Binding AuthModeSelectedIndex, 
+                    Mode=OneWay,
+                    Converter={StaticResource authModeMatch}, 
+                    ConverterParameter=Basic}">
       <TextBox
           Name="tbBasicAuthLogin"
           Width="200"
@@ -99,7 +113,11 @@
         x:Name="spReqAuthBearer"
         Grid.Column="0"
         Grid.Row="1"
-        Margin="0,12,0,0">
+        Margin="0,12,0,0"
+        IsVisible="{Binding AuthModeSelectedIndex, 
+                    Mode=OneWay,
+                    Converter={StaticResource authModeMatch}, 
+                    ConverterParameter=Bearer}">
       <TextBox
           Name="tbBearerAuthToken"
           Width="200"
@@ -114,7 +132,11 @@
         x:Name="spReqAuthWindows"
         Grid.Column="0"
         Grid.Row="1"
-        Margin="0,12,0,0">
+        Margin="0,12,0,0"
+        IsVisible="{Binding AuthModeSelectedIndex, 
+                    Mode=OneWay,
+                    Converter={StaticResource authModeMatch}, 
+                    ConverterParameter=Windows}">
       <CheckBox
           Name="chkbWindowsAuthUseCurrentUser"
           Content="{Binding i18n.RequestAuth.AuthModeWindowsUseCurrentUser}"
@@ -158,7 +180,11 @@
         x:Name="grReqAuthClientCertificate"
         Grid.Column="0"
         Grid.Row="1"
-        Margin="0,12,0,0">
+        Margin="0,12,0,0"
+        IsVisible="{Binding AuthModeSelectedIndex, 
+                    Mode=OneWay,
+                    Converter={StaticResource authModeMatch}, 
+                    ConverterParameter=ClientCertificate}">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
@@ -170,7 +196,11 @@
       <StackPanel
           x:Name="spReqAuthClientCertificatePkcs12"
           Grid.Column="0"
-          Grid.Row="0">
+          Grid.Row="0"
+          IsVisible="{Binding ClientCertificateTypeSelectedIndex, 
+                      Mode=OneWay,
+                      Converter={StaticResource clientCertificateTypeMatch}, 
+                      ConverterParameter=Pkcs12}">
         <TextBox
             Name="tbClientCertificatePkcs12FilePath"
             Width="240"
@@ -200,7 +230,11 @@
       <StackPanel
           x:Name="spReqAuthClientCertificatePem"
           Grid.Column="0"
-          Grid.Row="0">
+          Grid.Row="0"
+          IsVisible="{Binding ClientCertificateTypeSelectedIndex, 
+                      Mode=OneWay,
+                      Converter={StaticResource clientCertificateTypeMatch}, 
+                      ConverterParameter=Pem}">
         <TextBox
             Name="tbClientCertificatePemCertificateFilePath"
             Width="240"

@@ -1,4 +1,5 @@
 using System.Reactive;
+using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
@@ -25,14 +26,7 @@ public sealed class RequestAuthViewModel : ViewModelBase
     }
 
     private PororocaRequestAuthMode? AuthMode =>
-        AuthModeSelectedIndex switch
-        { // TODO: Improve this, do not use fixed integers to resolve mode
-            4 => PororocaRequestAuthMode.ClientCertificate,
-            3 => PororocaRequestAuthMode.Windows,
-            2 => PororocaRequestAuthMode.Bearer,
-            1 => PororocaRequestAuthMode.Basic,
-            _ => null
-        };
+        AuthModeMapping.MapIndexToEnum(AuthModeSelectedIndex);
 
     #region REQUEST AUTH BASIC
 
@@ -57,12 +51,7 @@ public sealed class RequestAuthViewModel : ViewModelBase
     public int ClientCertificateTypeSelectedIndex { get; set; }
 
     private PororocaRequestAuthClientCertificateType? ClientCertificateType =>
-        ClientCertificateTypeSelectedIndex switch
-        { // TODO: Improve this, do not use fixed integers to resolve mode
-            2 => PororocaRequestAuthClientCertificateType.Pem,
-            1 => PororocaRequestAuthClientCertificateType.Pkcs12,
-            _ => null
-        };
+        ClientCertificateTypeMapping.MapIndexToEnum(ClientCertificateTypeSelectedIndex);
 
     #region REQUEST AUTH CLIENT CERTIFICATE PKCS12
 
@@ -218,15 +207,7 @@ public sealed class RequestAuthViewModel : ViewModelBase
     public RequestAuthViewModel(PororocaRequestAuth? customAuth, Action clearInvalidWarningsCallback)
     {
         this.clearInvalidWarningsCallback = clearInvalidWarningsCallback;
-        // TODO: Improve this, do not use fixed values to resolve index
-        AuthModeSelectedIndex = (customAuth?.Mode) switch
-        {
-            PororocaRequestAuthMode.Basic => 1,
-            PororocaRequestAuthMode.Bearer => 2,
-            PororocaRequestAuthMode.Windows => 3,
-            PororocaRequestAuthMode.ClientCertificate => 4,
-            _ => 0,
-        };
+        AuthModeSelectedIndex = AuthModeMapping.MapEnumToIndex(customAuth?.Mode);
         BasicAuthLogin = customAuth?.BasicAuthLogin;
         BasicAuthPassword = customAuth?.BasicAuthPassword;
         BearerAuthToken = customAuth?.BearerToken;
@@ -236,21 +217,19 @@ public sealed class RequestAuthViewModel : ViewModelBase
         WindowsAuthDomain = customAuth?.Windows?.Domain;
 
         #region REQUEST AUTH CLIENT CERTIFICATE
+        ClientCertificateTypeSelectedIndex = ClientCertificateTypeMapping.MapEnumToIndex(customAuth?.ClientCertificate?.Type);
         switch (customAuth?.ClientCertificate?.Type)
         {
             case PororocaRequestAuthClientCertificateType.Pkcs12:
                 ClientCertificateAuthPkcs12CertificateFilePath = customAuth.ClientCertificate!.CertificateFilePath!;
                 ClientCertificateAuthPkcs12FilePassword = customAuth.ClientCertificate!.FilePassword;
-                ClientCertificateTypeSelectedIndex = 1;
                 break;
             case PororocaRequestAuthClientCertificateType.Pem:
                 ClientCertificateAuthPemCertificateFilePath = customAuth.ClientCertificate!.CertificateFilePath!;
                 ClientCertificateAuthPemPrivateKeyFilePath = customAuth.ClientCertificate!.PrivateKeyFilePath!;
                 ClientCertificateAuthPemFilePassword = customAuth.ClientCertificate!.FilePassword;
-                ClientCertificateTypeSelectedIndex = 2;
                 break;
             default:
-                ClientCertificateTypeSelectedIndex = 0;
                 break;
         }
         SearchClientCertificatePkcs12FileCmd = ReactiveCommand.CreateFromTask(SearchClientCertificatePkcs12FileAsync);
