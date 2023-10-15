@@ -9,6 +9,7 @@ using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Common;
+using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Requester;
 using Pororoca.Domain.Features.TranslateRequest;
@@ -290,7 +291,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         #endregion
 
         #region REQUEST AUTH
-        RequestAuthDataCtx = new(req.CustomAuth, this.ClearInvalidRequestWarnings);
+        RequestAuthDataCtx = new(req.CustomAuth, true, this.ClearInvalidRequestWarnings);
         #endregion
 
         #region SEND OR CANCEL REQUEST
@@ -487,6 +488,10 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
             // TODO: Improve this, do not use fixed values to resolve index
             RequestTabsSelectedIndex = 1;
         }
+
+        // do not colourize errors and switch tab if problem is in collection-scoped auth
+        if (RequestAuthDataCtx.AuthMode == PororocaRequestAuthMode.InheritFromCollection)
+            return;
 
         RequestAuthDataCtx.HasWindowsAuthLoginProblem = errorCode == TranslateRequestErrors.WindowsAuthLoginCannotBeBlank;
         RequestAuthDataCtx.HasWindowsAuthPasswordProblem = errorCode == TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank;

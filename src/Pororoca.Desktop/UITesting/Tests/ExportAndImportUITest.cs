@@ -48,6 +48,7 @@ public sealed class ExportAndImportUITest : UITest
     private ItemsTreeRobot TreeRobot { get; }
     private CollectionRobot ColRobot { get; }
     private CollectionVariablesRobot ColVarsRobot { get; }
+    private CollectionScopedAuthRobot ColAuthRobot { get; }
     private CollectionFolderRobot DirRobot { get; }
     private EnvironmentRobot EnvRobot { get; }
     private HttpRequestRobot HttpRobot { get; }
@@ -62,6 +63,7 @@ public sealed class ExportAndImportUITest : UITest
         TreeRobot = new(CollectionsGroup);
         ColRobot = new(RootView.FindControl<CollectionView>("collectionView")!);
         ColVarsRobot = new(RootView.FindControl<CollectionVariablesView>("collectionVariablesView")!);
+        ColAuthRobot = new(RootView.FindControl<CollectionScopedAuthView>("collectionScopedAuthView")!);
         DirRobot = new(RootView.FindControl<CollectionFolderView>("collectionFolderView")!);
         EnvRobot = new(RootView.FindControl<EnvironmentView>("environmentView")!);
         HttpRobot = new(RootView.FindControl<HttpRequestView>("httpReqView")!);
@@ -85,6 +87,9 @@ public sealed class ExportAndImportUITest : UITest
         await ColRobot.Name.Edit("COL1");
         await TreeRobot.Select("COL1/VARS");
         await ColVarsRobot.SetVariables(defaultColVars);
+
+        await TreeRobot.Select("COL1/AUTH");
+        await ColAuthRobot.Auth.SetBearerAuth("token");
 
         await TreeRobot.Select("COL1");
         await ColRobot.AddEnvironment.ClickOn();
@@ -122,8 +127,6 @@ public sealed class ExportAndImportUITest : UITest
         await HttpRobot.SetHttpVersion(1.1m);
         await HttpRobot.SetEmptyBody();
         await HttpRobot.SetWindowsAuthOtherUser("{{WindowsAuthLogin}}", "{{WindowsAuthPassword}}", "{{WindowsAuthDomain}}");
-
-await Wait(5);
 
         await TreeRobot.Select("COL1/DIR1");
         await DirRobot.AddHttpReq.ClickOn();
@@ -243,6 +246,7 @@ await Wait(5);
         */
 
         AssertTreeItemExists(CollectionsGroup, "COL1");
+        AssertTreeItemExists(CollectionsGroup, "COL1/AUTH");
         AssertTreeItemExists(CollectionsGroup, "COL1/ENVS/ENV1");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/HTTPNONEBASICAUTH");
@@ -281,6 +285,7 @@ await Wait(5);
     private async Task AssertCollectionReimportedSuccessfully()
     {
         AssertTreeItemExists(CollectionsGroup, "COL1");
+        AssertTreeItemExists(CollectionsGroup, "COL1/AUTH");
         AssertTreeItemExists(CollectionsGroup, "COL1/ENVS/ENV1");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/HTTPNONEBASICAUTH");
@@ -301,6 +306,14 @@ await Wait(5);
 
         await TreeRobot.Select("COL1");
         AssertIsVisible(ColRobot.RootView);
+
+        await TreeRobot.Select("COL1/AUTH");
+        AssertIsVisible(ColAuthRobot.RootView);
+        AssertSelection(ColAuthRobot.Auth.AuthType, ColAuthRobot.Auth.AuthTypeOptionBearer);
+        AssertIsVisible(ColAuthRobot.Auth.BearerAuthToken);
+        AssertHasText(ColAuthRobot.Auth.BearerAuthToken, "token");
+        AssertIsHidden(ColAuthRobot.Auth.BasicAuthLogin);
+        AssertIsHidden(ColAuthRobot.Auth.ClientCertificateType);
 
         await TreeRobot.Select("COL1/VARS");
         AssertIsVisible(ColVarsRobot.RootView);

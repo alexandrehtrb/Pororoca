@@ -4,6 +4,7 @@ namespace Pororoca.Domain.Features.Entities.Pororoca;
 
 public enum PororocaRequestAuthMode
 {
+    InheritFromCollection,
     Basic,
     Bearer,
     Windows, // Windows authentication / NTLM / Kerberos
@@ -22,6 +23,9 @@ public sealed record PororocaRequestAuth
 {
     // Parameterless constructor for JSON deserialization
     public PororocaRequestAuth() : this(PororocaRequestAuthMode.Basic, null, null, null, null, null) { }
+    
+    public static readonly PororocaRequestAuth InheritedFromCollection =
+        new(PororocaRequestAuthMode.InheritFromCollection, null, null, null, null, null);
 
     public static PororocaRequestAuth MakeBasicAuth(string basicAuthLogin, string basicAuthPassword) => new(
         PororocaRequestAuthMode.Basic,

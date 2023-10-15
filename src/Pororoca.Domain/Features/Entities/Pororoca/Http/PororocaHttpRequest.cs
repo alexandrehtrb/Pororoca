@@ -37,6 +37,10 @@ public sealed class PororocaHttpRequest : PororocaRequest
         HttpVersion = 1.1m;
         HttpMethod = "GET";
         Url = string.Empty;
+        // we can't specify InheritFromCollection here because when there is no auth,
+        // CustomAuth should be null, and the JSON deserialization (which uses this constructor)
+        // does not replace the InheritFromCollection value with null
+        // also, it's safer to leave "no auth" as the default auth.
         CustomAuth = null;
         Headers = null;
         Body = null;

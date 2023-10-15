@@ -44,6 +44,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     public PageHolder<CollectionVariablesViewModel> CollectionVariablesView { get; }
 
+    public PageHolder<CollectionScopedAuthViewModel> CollectionScopedAuthView { get; }
+
     public PageHolder<EnvironmentViewModel> EnvironmentView { get; }
 
     public PageHolder<CollectionFolderViewModel> CollectionFolderView { get; }
@@ -144,6 +146,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         this.pages = new();
         this.pages.Add(CollectionView = new());
         this.pages.Add(CollectionVariablesView = new());
+        this.pages.Add(CollectionScopedAuthView = new());
         this.pages.Add(EnvironmentView = new());
         this.pages.Add(CollectionFolderView = new());
         this.pages.Add(HttpRequestView = new());

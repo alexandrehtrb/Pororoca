@@ -45,6 +45,10 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
         ((CollectionVariablesViewModel)Items.First(x => x is CollectionVariablesViewModel))
         .ToVariables().ToList(); // collection variables
 
+    public PororocaRequestAuth? CollectionScopedAuth =>
+        ((CollectionScopedAuthViewModel)Items.First(x => x is CollectionScopedAuthViewModel))
+        .AuthVm.ToCustomAuth();
+
     public List<PororocaEnvironment> Environments =>
         ((EnvironmentsGroupViewModel)Items.First(x => x is EnvironmentsGroupViewModel))
         .ToEnvironments().ToList(); // collection environments
@@ -86,6 +90,7 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
         Items = new()
         {
             new CollectionVariablesViewModel(this, col),
+            new CollectionScopedAuthViewModel(this, col),
             new EnvironmentsGroupViewModel(this, col.Environments)
         };
         foreach (var folder in col.Folders)
@@ -107,23 +112,24 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
 
     public override void RefreshSubItemsAvailableMovements()
     {
+        const int numberOfFixedItems = 3; // variables, auth, environments
         for (int x = 0; x < Items.Count; x++)
         {
             var colItemVm = Items[x];
             int indexOfLastSubfolder = Items.GetLastIndexOf<CollectionFolderViewModel>();
-            if (colItemVm is CollectionVariablesViewModel || colItemVm is EnvironmentsGroupViewModel)
+            if (colItemVm is CollectionVariablesViewModel|| colItemVm is CollectionScopedAuthViewModel || colItemVm is EnvironmentsGroupViewModel)
             {
                 // Variables and Environments must remain at their positions
                 colItemVm.CanMoveUp = colItemVm.CanMoveDown = false;
             }
             else if (colItemVm is CollectionFolderViewModel)
             {
-                colItemVm.CanMoveUp = x > 2;
+                colItemVm.CanMoveUp = x > numberOfFixedItems;
                 colItemVm.CanMoveDown = x < indexOfLastSubfolder;
             }
             else // http requests and websockets
             {
-                colItemVm.CanMoveUp = x > (indexOfLastSubfolder == -1 ? 2 : (indexOfLastSubfolder + 1));
+                colItemVm.CanMoveUp = x > (indexOfLastSubfolder == -1 ? numberOfFixedItems : (indexOfLastSubfolder + 1));
                 colItemVm.CanMoveDown = x < Items.Count - 1;
             }
         }
@@ -244,7 +250,7 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
                                 throw new InvalidDataException();
                         }).ToList();
 
-        return new PororocaCollection(this.colId, Name, this.colCreatedAt, Variables, Environments, folders, reqs);
+        return new PororocaCollection(this.colId, Name, this.colCreatedAt, Variables, CollectionScopedAuth, Environments, folders, reqs);
     }
 
     public EnvironmentViewModel? GetCurrentEnvironment() =>

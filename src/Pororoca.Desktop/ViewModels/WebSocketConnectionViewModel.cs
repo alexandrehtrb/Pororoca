@@ -9,6 +9,7 @@ using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
+using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.Requester;
 using Pororoca.Domain.Features.TranslateRequest;
@@ -173,6 +174,10 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             };
             HasUrlValidationProblem = (value == TranslateRequestErrors.InvalidUrl);
             HasHttpVersionValidationProblem = (value == TranslateRequestErrors.Http2UnavailableInOSVersion);
+
+            // do not colourize errors and switch tab if problem is in collection-scoped auth
+            if (RequestAuthDataCtx.AuthMode == PororocaRequestAuthMode.InheritFromCollection)
+                return;
 
             RequestAuthDataCtx.HasWindowsAuthLoginProblem = value == TranslateRequestErrors.WindowsAuthLoginCannotBeBlank;
             RequestAuthDataCtx.HasWindowsAuthPasswordProblem = value == TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank;
@@ -371,7 +376,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         #endregion
 
         #region CONNECTION REQUEST AUTH
-        RequestAuthDataCtx = new(ws.CustomAuth, this.ClearInvalidConnectionWarnings);
+        RequestAuthDataCtx = new(ws.CustomAuth, true, this.ClearInvalidConnectionWarnings);
         #endregion
 
         #region CONNECTION OPTIONS

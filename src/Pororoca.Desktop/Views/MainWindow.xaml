@@ -255,6 +255,14 @@
           <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
+              IsVisible="{Binding CollectionScopedAuthView.Visible}">
+            <v:CollectionScopedAuthView
+                x:Name="collectionScopedAuthView"
+                DataContext="{Binding CollectionScopedAuthView.VM}"/>
+          </Grid>
+          <Grid
+              VerticalAlignment="Stretch"
+              HorizontalAlignment="Stretch"
               IsVisible="{Binding EnvironmentView.Visible}">
             <v:EnvironmentView
                 x:Name="environmentView"

@@ -43,6 +43,10 @@
             x:Name="cbiReqAuthNone"
             Content="{Binding i18n.RequestAuth.AuthModeNone}"/>
         <ComboBoxItem
+            x:Name="cbiReqAuthInheritFromCollection"
+            Content="{Binding i18n.RequestAuth.AuthModeInheritFromCollection}"
+            IsEnabled="{Binding IsInheritFromCollectionOptionEnabled}"/>
+        <ComboBoxItem
             x:Name="cbiReqAuthBasic"
             Content="{Binding i18n.RequestAuth.AuthModeBasic}"/>
         <ComboBoxItem

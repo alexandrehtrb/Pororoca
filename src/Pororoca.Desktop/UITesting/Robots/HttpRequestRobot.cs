@@ -292,61 +292,46 @@ public sealed class HttpRequestRobot : BaseNamedRobot
         await Auth.AuthType.Select(Auth.AuthTypeOptionNone);
     }
 
+    internal async Task SetInheritFromCollectionAuth()
+    {
+        await TabControlReq.Select(TabReqAuth);
+        await Auth.AuthType.Select(Auth.AuthTypeOptionInheritFromCollection);
+    }
+
     internal async Task SetBasicAuth(string login, string password)
     {
         await TabControlReq.Select(TabReqAuth);
-        await Auth.AuthType.Select(Auth.AuthTypeOptionBasic);
-        await Auth.BasicAuthLogin.ClearAndTypeText(login);
-        await Auth.BasicAuthPassword.ClearAndTypeText(password);
+        await Auth.SetBasicAuth(login, password);
     }
 
     internal async Task SetBearerAuth(string token)
     {
         await TabControlReq.Select(TabReqAuth);
-        await Auth.AuthType.Select(Auth.AuthTypeOptionBearer);
-        await Auth.BearerAuthToken.ClearAndTypeText(token);
+        await Auth.SetBearerAuth(token);
     }
 
     internal async Task SetWindowsAuthCurrentUser()
     {
         await TabControlReq.Select(TabReqAuth);
-        await Auth.AuthType.Select(Auth.AuthTypeOptionWindows);
-        if (Auth.WindowsAuthUseCurrentUser.IsChecked != true)
-        {
-            await Auth.WindowsAuthUseCurrentUser.ClickOn();
-        }
+        await Auth.SetWindowsAuthCurrentUser();
     }
 
     internal async Task SetWindowsAuthOtherUser(string login, string password, string domain)
     {
         await TabControlReq.Select(TabReqAuth);
-        await Auth.AuthType.Select(Auth.AuthTypeOptionWindows);
-        if (Auth.WindowsAuthUseCurrentUser.IsChecked == true)
-        {
-            await Auth.WindowsAuthUseCurrentUser.ClickOn();
-        }
-        await Auth.WindowsAuthLogin.ClearAndTypeText(login!);
-        await Auth.WindowsAuthPassword.ClearAndTypeText(password!);
-        await Auth.WindowsAuthDomain.ClearAndTypeText(domain!);
+        await Auth.SetWindowsAuthOtherUser(login, password, domain);
     }
 
     internal async Task SetPkcs12CertificateAuth(string certFilePath, string certPassword)
     {
         await TabControlReq.Select(TabReqAuth);
-        await Auth.AuthType.Select(Auth.AuthTypeOptionClientCertificate);
-        await Auth.ClientCertificateType.Select(Auth.ClientCertificateTypeOptionPkcs12);
-        await Auth.ClientCertificatePkcs12FilePath.ClearAndTypeText(certFilePath);
-        await Auth.ClientCertificatePkcs12FilePassword.ClearAndTypeText(certPassword);
+        await Auth.SetPkcs12CertificateAuth(certFilePath, certPassword);
     }
 
     internal async Task SetPemCertificateAuth(string certFilePath, string prvKeyFilePath, string prvKeyPassword)
     {
         await TabControlReq.Select(TabReqAuth);
-        await Auth.AuthType.Select(Auth.AuthTypeOptionClientCertificate);
-        await Auth.ClientCertificateType.Select(Auth.ClientCertificateTypeOptionPem);
-        await Auth.ClientCertificatePemCertificateFilePath.ClearAndTypeText(certFilePath);
-        await Auth.ClientCertificatePemPrivateKeyFilePath.ClearAndTypeText(prvKeyFilePath);
-        await Auth.ClientCertificatePemPrivateKeyPassword.ClearAndTypeText(prvKeyPassword);
+        await Auth.SetPemCertificateAuth(certFilePath, prvKeyFilePath, prvKeyPassword);
     }
 
     internal async Task SelectResponseHeaders(params KeyValueParamViewModel[] headersVms)

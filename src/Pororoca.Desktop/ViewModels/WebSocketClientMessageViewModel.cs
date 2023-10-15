@@ -88,7 +88,7 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
             msgType: MessageType,
             name: Name,
             contentMode: ContentMode,
-            rawContent: RawContent,
+            rawContent: ContentMode == PororocaWebSocketClientMessageContentMode.Raw ? RawContent : null,
             rawContentSyntax: ContentMode == PororocaWebSocketClientMessageContentMode.Raw ? RawContentSyntax : null,
             fileSrcPath: ContentFileSrcPath,
             disableCompressionForThis: DisableCompressionForThisMessage);

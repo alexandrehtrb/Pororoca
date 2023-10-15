@@ -80,6 +80,11 @@ internal static class UITestActions
                     pvm1.IsExpanded = true;
                     tempTvi = pvm1.Items.FirstOrDefault(i => i is CollectionVariablesViewModel)!;
                 }
+                else if (item == "AUTH")
+                {
+                    pvm1.IsExpanded = true;
+                    tempTvi = pvm1.Items.FirstOrDefault(i => i is CollectionScopedAuthViewModel)!;
+                }
                 else
                 {
                     tempTvi = pvm1.Items.FirstOrDefault(i => i.Name == item)!;

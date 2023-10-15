@@ -25,8 +25,10 @@ public sealed class RequestAuthViewModel : ViewModelBase
         }
     }
 
-    private PororocaRequestAuthMode? AuthMode =>
+    internal PororocaRequestAuthMode? AuthMode =>
         AuthModeMapping.MapIndexToEnum(AuthModeSelectedIndex);
+
+    public bool IsInheritFromCollectionOptionEnabled { get; }
 
     #region REQUEST AUTH BASIC
 
@@ -204,10 +206,11 @@ public sealed class RequestAuthViewModel : ViewModelBase
 
     #endregion
 
-    public RequestAuthViewModel(PororocaRequestAuth? customAuth, Action clearInvalidWarningsCallback)
+    public RequestAuthViewModel(PororocaRequestAuth? customAuth, bool isInheritFromCollectionOptionEnabled, Action clearInvalidWarningsCallback)
     {
         this.clearInvalidWarningsCallback = clearInvalidWarningsCallback;
         AuthModeSelectedIndex = AuthModeMapping.MapEnumToIndex(customAuth?.Mode);
+        IsInheritFromCollectionOptionEnabled = isInheritFromCollectionOptionEnabled;
         BasicAuthLogin = customAuth?.BasicAuthLogin;
         BasicAuthPassword = customAuth?.BasicAuthPassword;
         BearerAuthToken = customAuth?.BearerToken;
@@ -303,6 +306,8 @@ public sealed class RequestAuthViewModel : ViewModelBase
                 return PororocaRequestAuth.MakeBearerAuth(BearerAuthToken ?? string.Empty);
             case PororocaRequestAuthMode.Basic:
                 return PororocaRequestAuth.MakeBasicAuth(BasicAuthLogin ?? string.Empty, BasicAuthPassword ?? string.Empty);
+            case PororocaRequestAuthMode.InheritFromCollection:
+                return PororocaRequestAuth.InheritedFromCollection;
             default:
                 return null;
         }

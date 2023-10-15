@@ -36,11 +36,15 @@ public static class PostmanCollectionV21Importer
         {
             // Always generating new id, in case user imports the same collection twice
             // This is to avoid overwriting when saving user collections
-            PororocaCollection myCol = new(Guid.NewGuid(), postmanCollection.Info.Name, DateTimeOffset.Now);
             var collectionScopedAuth = ConvertToPororocaAuth(postmanCollection.Auth);
+            PororocaCollection myCol = new(Guid.NewGuid(), postmanCollection.Info.Name, DateTimeOffset.Now)
+            {
+                // if collection-scoped auth exists, then use it and inherit it in requests
+                CollectionScopedAuth = collectionScopedAuth
+            };
             foreach (var item in postmanCollection.Items)
             {
-                var convertedItem = ConvertToPororocaCollectionItem(item, collectionScopedAuth);
+                var convertedItem = ConvertToPororocaCollectionItem(item);
                 if (convertedItem is PororocaCollectionFolder folder)
                     myCol.Folders.Add(folder);
                 else if (convertedItem is PororocaHttpRequest request)
@@ -86,11 +90,11 @@ public static class PostmanCollectionV21Importer
     private static PororocaVariable ConvertToPororocaVariable(PostmanVariable v) =>
         new(IsEnabledInPostman(v.Disabled), v.Key, v.Value, false);
 
-    private static PororocaCollectionItem ConvertToPororocaCollectionItem(PostmanCollectionItem item, PororocaRequestAuth? collectionScopedAuth)
+    private static PororocaCollectionItem ConvertToPororocaCollectionItem(PostmanCollectionItem item)
     {
         if (item.Request != null)
         {
-            return ConvertToPororocaHttpRequest(item.Name, item.Request, collectionScopedAuth);
+            return ConvertToPororocaHttpRequest(item.Name, item.Request);
         }
         else
         {
@@ -99,7 +103,7 @@ public static class PostmanCollectionV21Importer
             {
                 foreach (var subItem in item.Items)
                 {
-                    var convertedSubItem = ConvertToPororocaCollectionItem(subItem, collectionScopedAuth);
+                    var convertedSubItem = ConvertToPororocaCollectionItem(subItem);
                     if (convertedSubItem is PororocaCollectionFolder subFolder)
                         folder.AddFolder(subFolder);
                     else if (convertedSubItem is PororocaHttpRequest subRequest)
@@ -110,7 +114,7 @@ public static class PostmanCollectionV21Importer
         }
     }
 
-    internal static PororocaHttpRequest ConvertToPororocaHttpRequest(string name, PostmanRequest request, PororocaRequestAuth? collectionScopedAuth)
+    internal static PororocaHttpRequest ConvertToPororocaHttpRequest(string name, PostmanRequest request)
     {
         const decimal defaultHttpVersion = 1.1m;
         PororocaHttpRequest myReq = new();
@@ -123,7 +127,7 @@ public static class PostmanCollectionV21Importer
             httpMethod: request.Method,
             url: ReadPostmanRequestUrl(request.Url),
             // When Postman req auth is null, the request uses collection scoped auth
-            customAuth: request.Auth != null ? ConvertToPororocaAuth(request.Auth) : collectionScopedAuth?.Copy(),
+            customAuth: request.Auth != null ? ConvertToPororocaAuth(request.Auth) : PororocaRequestAuth.InheritedFromCollection,
             headers: headers,
             body: ConvertToPororocaHttpRequestBody(request.Body, contentTypeHeaderValue),
             captures: null);
