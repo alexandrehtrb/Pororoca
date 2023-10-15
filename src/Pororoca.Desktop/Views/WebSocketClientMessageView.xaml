@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:AvaloniaEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
     xmlns:controls="clr-namespace:Pororoca.Desktop.Controls;assembly=Pororoca.Desktop"
+    xmlns:conv="clr-namespace:Pororoca.Desktop.Converters;assembly=Pororoca.Desktop"
     mc:Ignorable="d"
     d:DesignWidth="1350"
     d:DesignHeight="700"
@@ -14,6 +15,12 @@
     x:CompileBindings="True"
     x:DataType="vm:WebSocketClientMessageViewModel"
     FontSize="14">
+
+  <UserControl.Resources>
+    <!--conv:WebSocketMessageTypeMatchConverter x:Key="messageTypeMatch"/-->
+    <conv:WebSocketClientMessageContentModeMatchConverter x:Key="contentModeMatch"/>
+    <!--conv:WebSocketMessageRawContentSyntaxMatchConverter x:Key="rawContentSyntaxMatch"/-->
+  </UserControl.Resources>
 
   <Grid
       HorizontalAlignment="Stretch"
@@ -106,7 +113,11 @@
             Height="36"
             Width="120"
             Margin="12,0,0,0"
-            SelectedIndex="{Binding RawContentSyntaxSelectedIndex, Mode=TwoWay}">
+            SelectedIndex="{Binding RawContentSyntaxSelectedIndex, Mode=TwoWay}"
+            IsVisible="{Binding ContentModeSelectedIndex, 
+                        Mode=OneWay,
+                        Converter={StaticResource contentModeMatch}, 
+                        ConverterParameter=Raw}">
           <ComboBoxItem
               x:Name="cbiContentRawSyntaxJson"
               Content="{Binding i18n.WebSocketClientMessage.RawContentJsonSyntax}"/>
@@ -130,7 +141,11 @@
           VerticalAlignment="Stretch"
           Margin="0,12,0,0"
           IsReadOnly="False"
-          Document="{Binding RawContentTextDocument}"/>
+          Document="{Binding RawContentTextDocument}"
+          IsVisible="{Binding ContentModeSelectedIndex, 
+                      Mode=OneWay,
+                      Converter={StaticResource contentModeMatch}, 
+                      ConverterParameter=Raw}"/>
 
       <StackPanel
           x:Name="spWsCliMsgContentFile"
@@ -140,7 +155,11 @@
           Width="200"
           HorizontalAlignment="Left"
           VerticalAlignment="Stretch"
-          Orientation="Vertical">
+          Orientation="Vertical"
+          IsVisible="{Binding ContentModeSelectedIndex, 
+                      Mode=OneWay,
+                      Converter={StaticResource contentModeMatch}, 
+                      ConverterParameter=File}">
 
         <TextBox
             Name="tbContentFileSrcPath"

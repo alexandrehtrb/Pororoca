@@ -1,5 +1,6 @@
 using System.Reactive;
 using AvaloniaEdit.Document;
+using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
@@ -20,13 +21,8 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
     [Reactive]
     public int MessageTypeSelectedIndex { get; set; }
 
-    public PororocaWebSocketMessageType MessageType => MessageTypeSelectedIndex switch
-    {
-        0 => PororocaWebSocketMessageType.Text,
-        1 => PororocaWebSocketMessageType.Binary,
-        2 => PororocaWebSocketMessageType.Close,
-        _ => PororocaWebSocketMessageType.Text
-    };
+    public PororocaWebSocketMessageType MessageType =>
+        WebSocketMessageTypeMapping.MapIndexToEnum(MessageTypeSelectedIndex);
 
     #endregion
 
@@ -35,12 +31,8 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
     [Reactive]
     public int ContentModeSelectedIndex { get; set; }
 
-    public PororocaWebSocketClientMessageContentMode ContentMode => ContentModeSelectedIndex switch
-    {
-        0 => PororocaWebSocketClientMessageContentMode.Raw,
-        1 => PororocaWebSocketClientMessageContentMode.File,
-        _ => PororocaWebSocketClientMessageContentMode.Raw
-    };
+    public PororocaWebSocketClientMessageContentMode ContentMode =>
+        WebSocketClientMessageContentModeMapping.MapIndexToEnum(ContentModeSelectedIndex);
 
     [Reactive]
     public TextDocument? RawContentTextDocument { get; set; }
@@ -54,12 +46,8 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
     [Reactive]
     public int RawContentSyntaxSelectedIndex { get; set; }
 
-    public PororocaWebSocketMessageRawContentSyntax? RawContentSyntax => RawContentSyntaxSelectedIndex switch
-    {
-        0 => PororocaWebSocketMessageRawContentSyntax.Json,
-        1 => PororocaWebSocketMessageRawContentSyntax.Other,
-        _ => PororocaWebSocketMessageRawContentSyntax.Other
-    };
+    public PororocaWebSocketMessageRawContentSyntax? RawContentSyntax =>
+        WebSocketMessageRawContentSyntaxMapping.MapIndexToEnum(RawContentSyntaxSelectedIndex);
 
     [Reactive]
     public string? ContentFileSrcPath { get; set; }
@@ -76,33 +64,13 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
         #region WEBSOCKET REQUEST MESSAGE
 
         DisableCompressionForThisMessage = msg.DisableCompressionForThis;
-        MessageTypeSelectedIndex = msg.MessageType switch
-        {
-            PororocaWebSocketMessageType.Text => 0,
-            PororocaWebSocketMessageType.Binary => 1,
-            PororocaWebSocketMessageType.Close => 2,
-            // TODO: Improve this, do not use fixed values to resolve index
-            _ => 0,
-        };
-        ContentModeSelectedIndex = msg.ContentMode switch
-        {
-            PororocaWebSocketClientMessageContentMode.Raw => 0,
-            PororocaWebSocketClientMessageContentMode.File => 1,
-            // TODO: Improve this, do not use fixed values to resolve index
-            _ => 0,
-        };
+        MessageTypeSelectedIndex = WebSocketMessageTypeMapping.MapEnumToIndex(msg.MessageType);
+        ContentModeSelectedIndex = WebSocketClientMessageContentModeMapping.MapEnumToIndex(msg.ContentMode);
 
         // we need to always set RawContent with a value, even if it is null,
         // to initialize with a TextDocument object
         RawContent = msg.RawContent;
-
-        RawContentSyntaxSelectedIndex = msg.RawContentSyntax switch
-        {
-            PororocaWebSocketMessageRawContentSyntax.Json => 0,
-            PororocaWebSocketMessageRawContentSyntax.Other => 1,
-            // TODO: Improve this, do not use fixed values to resolve index
-            _ => 0,
-        };
+        RawContentSyntaxSelectedIndex = WebSocketMessageRawContentSyntaxMapping.MapEnumToIndex(msg.RawContentSyntax);
         ContentFileSrcPath = msg.FileSrcPath;
         SearchContentFileCmd = ReactiveCommand.CreateFromTask(SearchContentFileAsync);
 
@@ -121,7 +89,7 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
             name: Name,
             contentMode: ContentMode,
             rawContent: RawContent,
-            rawContentSyntax: RawContentSyntax,
+            rawContentSyntax: ContentMode == PororocaWebSocketClientMessageContentMode.Raw ? RawContentSyntax : null,
             fileSrcPath: ContentFileSrcPath,
             disableCompressionForThis: DisableCompressionForThisMessage);
 
