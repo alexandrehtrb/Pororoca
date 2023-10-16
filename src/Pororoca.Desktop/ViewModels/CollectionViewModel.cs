@@ -167,10 +167,11 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
 
     public void AddFolder(PororocaCollectionFolder folderToAdd, bool showItemInScreen = false)
     {
+        const int numberOfFixedItems = 3; // variables, auth, environments
         CollectionFolderViewModel folderToAddVm = new(this, this, folderToAdd);
 
         int indexOfLastFolder = Items.GetLastIndexOf<CollectionFolderViewModel>();
-        int indexToInsertAt = indexOfLastFolder == -1 ? 2 : (indexOfLastFolder + 1);
+        int indexToInsertAt = indexOfLastFolder == -1 ? numberOfFixedItems : (indexOfLastFolder + 1);
         Items.Insert(indexToInsertAt, folderToAddVm);
 
         IsExpanded = true;
