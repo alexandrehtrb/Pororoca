@@ -30,8 +30,6 @@ public class HttpRequestView : UserControl
         var httpResRawBodyEditor = this.FindControl<TextEditor>("ResponseBodyRawContentEditor")!;
         this.httpResRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(httpResRawBodyEditor!, false);
         httpResRawBodyEditor.DocumentChanged += OnResponseRawBodyEditorDocumentChanged;
-
-        SetupSelectedOptionsPanelsVisibility();
     }
 
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
@@ -82,82 +80,10 @@ public class HttpRequestView : UserControl
         UpdateVmSelectedItems(tableVm, e);
     }
 
-    private void SetupSelectedOptionsPanelsVisibility()
+    public void OnSelectedResponseCapturesChanged(object sender, SelectionChangedEventArgs e)
     {
-        var cbReqBodyMode = this.FindControl<ComboBox>("cbReqBodyMode")!;
-
-        ComboBoxItem cbiReqBodyModeNone = this.FindControl<ComboBoxItem>("cbiReqBodyModeNone")!,
-            cbiReqBodyModeRaw = this.FindControl<ComboBoxItem>("cbiReqBodyModeRaw")!,
-            cbiReqBodyModeFile = this.FindControl<ComboBoxItem>("cbiReqBodyModeFile")!,
-            cbiReqBodyModeUrlEncoded = this.FindControl<ComboBoxItem>("cbiReqBodyModeUrlEncoded")!,
-            cbiReqBodyModeFormData = this.FindControl<ComboBoxItem>("cbiReqBodyModeFormData")!,
-            cbiReqBodyModeGraphQl = this.FindControl<ComboBoxItem>("cbiReqBodyModeGraphQl")!;
-
-        Grid grReqBodyFile = this.FindControl<Grid>("grReqBodyFile")!,
-             grReqBodyUrlEncoded = this.FindControl<Grid>("grReqBodyUrlEncoded")!,
-             grReqBodyFormData = this.FindControl<Grid>("grReqBodyFormData")!,
-             grReqBodyGraphQl = this.FindControl<Grid>("grReqBodyGraphQl")!;
-
-        var acbReqBodyRawContentType = this.FindControl<AutoCompleteBox>("acbReqBodyRawContentType")!;
-        var teReqBodyRawContent = this.FindControl<TextEditor>("teReqBodyRawContent")!;
-
-        cbReqBodyMode.SelectionChanged += (sender, e) =>
-        {
-            object? selected = e.AddedItems.Count > 0 ? e.AddedItems[0] : null;
-            if (selected == cbiReqBodyModeNone)
-            {
-                acbReqBodyRawContentType.IsVisible =
-                teReqBodyRawContent.IsVisible =
-                grReqBodyFile.IsVisible =
-                grReqBodyUrlEncoded.IsVisible =
-                grReqBodyFormData.IsVisible =
-                grReqBodyGraphQl.IsVisible = false;
-            }
-            else if (selected == cbiReqBodyModeRaw)
-            {
-                acbReqBodyRawContentType.IsVisible = teReqBodyRawContent.IsVisible = true;
-                grReqBodyFile.IsVisible =
-                grReqBodyUrlEncoded.IsVisible =
-                grReqBodyFormData.IsVisible =
-                grReqBodyGraphQl.IsVisible = false;
-            }
-            else if (selected == cbiReqBodyModeFile)
-            {
-                grReqBodyFile.IsVisible = true;
-                acbReqBodyRawContentType.IsVisible =
-                teReqBodyRawContent.IsVisible =
-                grReqBodyUrlEncoded.IsVisible =
-                grReqBodyFormData.IsVisible =
-                grReqBodyGraphQl.IsVisible = false;
-            }
-            else if (selected == cbiReqBodyModeUrlEncoded)
-            {
-                grReqBodyUrlEncoded.IsVisible = true;
-                acbReqBodyRawContentType.IsVisible =
-                teReqBodyRawContent.IsVisible =
-                grReqBodyFile.IsVisible =
-                grReqBodyFormData.IsVisible =
-                grReqBodyGraphQl.IsVisible = false;
-            }
-            else if (selected == cbiReqBodyModeFormData)
-            {
-                grReqBodyFormData.IsVisible = true;
-                acbReqBodyRawContentType.IsVisible =
-                teReqBodyRawContent.IsVisible =
-                grReqBodyFile.IsVisible =
-                grReqBodyUrlEncoded.IsVisible =
-                grReqBodyGraphQl.IsVisible = false;
-            }
-            else if (selected == cbiReqBodyModeGraphQl)
-            {
-                grReqBodyGraphQl.IsVisible = true;
-                acbReqBodyRawContentType.IsVisible =
-                teReqBodyRawContent.IsVisible =
-                grReqBodyFile.IsVisible =
-                grReqBodyUrlEncoded.IsVisible =
-                grReqBodyFormData.IsVisible = false;
-            }
-        };
+        var tableVm = ((HttpRequestViewModel)DataContext!).ResCapturesTableVm;
+        UpdateVmSelectedItems(tableVm, e);
     }
 
     public void OnRequestUrlPointerEnter(object sender, PointerEventArgs e)

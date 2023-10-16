@@ -49,7 +49,10 @@
     <SolidColorBrush x:Key="MainWindowDarkerBackgroundBrush" Color="{DynamicResource MainWindowDarkerBackgroundColor}"/>
     <SolidColorBrush x:Key="MainWindowSidebarBrush" Color="{DynamicResource MainWindowSidebarColor}"/>
     <SolidColorBrush x:Key="MainWindowSeparatorsBrush" Color="{DynamicResource MainWindowSeparatorsColor}"/>
-    <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrush" Color="{DynamicResource SystemBaseHighColor}"/>
+    <SolidColorBrush x:Key="MainWindowSidebarTabItemForegroundBrush" Color="{DynamicResource SystemBaseMediumHighColor}"/>
+    <SolidColorBrush x:Key="MainWindowSidebarTabItemHoverForegroundBrush" Color="{DynamicResource SystemBaseHighColor}"/>
+    <SolidColorBrush x:Key="MainWindowSidebarTabItemSelectedForegroundBrush" Color="{DynamicResource SystemBaseHighColor}"/>
+    <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrush" Color="{DynamicResource SystemBaseMediumHighColor}"/>
     <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked" Color="{DynamicResource SystemBaseHighColor}"/>
     <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPointerOver" Color="{DynamicResource SystemBaseHighColor}"/>
     <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPressed" Color="{DynamicResource SystemBaseLowColor}"/>
@@ -57,26 +60,24 @@
     <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="{DynamicResource SystemAccentColor}"/>
     <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver" Color="{DynamicResource SystemAccentColorLight1}"/>
     <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPressed" Color="{DynamicResource SystemAccentColorDark1}"/>
-    <SolidColorBrush x:Key="TreeViewItemBackgroundSelected" Color="{DynamicResource SystemAccentColorDark1}"/>
-    <SolidColorBrush x:Key="TreeViewItemBackgroundSelectedPointerOver" Color="{DynamicResource SystemAccentColor}"/>
+    <SolidColorBrush x:Key="TreeViewItemBackgroundSelected" Color="{DynamicResource SystemAccentColor}"/>
+    <SolidColorBrush x:Key="TreeViewItemBackgroundSelectedPointerOver" Color="{DynamicResource SystemAccentColorLight1}"/>
     <SolidColorBrush x:Key="ListBoxBackgroundBrush" Color="{DynamicResource ListBoxBackgroundColor}"/>
     <SolidColorBrush x:Key="ListBoxItemSelectedBackgroundBrush" Color="{DynamicResource ListBoxItemSelectedBackgroundColor}"/>
     <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="{DynamicResource SystemAccentColorLight1}"/>
     <SolidColorBrush x:Key="DragAndDropDataGridItemDraggingBrush" Color="{DynamicResource DragAndDropDataGridItemDraggingColor}"/>
     <SolidColorBrush x:Key="ButtonPrimaryBackgroundBrush" Color="{DynamicResource SystemAccentColor}"/>
-    <SolidColorBrush x:Key="ButtonPrimaryTextBrush" Color="{DynamicResource ButtonPrimaryTextColor}"/>
+    <SolidColorBrush x:Key="ButtonPrimaryTextBrush" Color="{DynamicResource SystemBaseHighColor}"/>
     <SolidColorBrush x:Key="ButtonPrimaryHighlightBackgroundBrush" Color="{DynamicResource SystemAccentColorLight1}"/>
-    <SolidColorBrush x:Key="ButtonPrimaryHighlightTextBrush" Color="{DynamicResource ButtonPrimaryTextColor}"/>
+    <SolidColorBrush x:Key="ButtonPrimaryHighlightTextBrush" Color="{DynamicResource SystemBaseHighColor}"/>
     <SolidColorBrush x:Key="ButtonPrimaryInvertedBackgroundBrush" Color="{DynamicResource SystemInvertedAccentColor}"/>
-    <SolidColorBrush x:Key="ButtonPrimaryInvertedTextBrush" Color="{DynamicResource ButtonPrimaryInvertedTextColor}"/>
+    <SolidColorBrush x:Key="ButtonPrimaryInvertedTextBrush" Color="{DynamicResource SystemAltHighColor}"/>
     <SolidColorBrush x:Key="ButtonPrimaryInvertedHighlightBackgroundBrush" Color="{DynamicResource SystemInvertedAccentColorLight2}"/>
-    <SolidColorBrush x:Key="ButtonPrimaryInvertedHighlightTextBrush" Color="{DynamicResource ButtonPrimaryInvertedTextColor}"/>
-    <SolidColorBrush x:Key="ButtonSecondaryBackgroundBrush" Color="Transparent"/>
-    <SolidColorBrush x:Key="ButtonSecondaryBorderBrush" Color="{DynamicResource SystemAccentColorLight2}"/>
-    <SolidColorBrush x:Key="ButtonSecondaryTextBrush" Color="{DynamicResource SystemAccentColorLight2}"/>
-    <SolidColorBrush x:Key="ButtonSecondaryHighlightBackgroundBrush" Color="Transparent"/>
-    <SolidColorBrush x:Key="ButtonSecondaryHighlightBorderBrush" Color="{DynamicResource SystemAccentColorLight3}"/>
-    <SolidColorBrush x:Key="ButtonSecondaryHighlightTextBrush" Color="{DynamicResource SystemAccentColorLight3}"/>
+    <SolidColorBrush x:Key="ButtonPrimaryInvertedHighlightTextBrush" Color="{DynamicResource SystemAltHighColor}"/>
+    <SolidColorBrush x:Key="ButtonSecondaryBackgroundBrush" Color="{DynamicResource ButtonSecondaryBackgroundColor}"/>
+    <SolidColorBrush x:Key="ButtonSecondaryTextBrush" Color="{DynamicResource SystemBaseMediumHighColor}"/>
+    <SolidColorBrush x:Key="ButtonSecondaryHighlightBackgroundBrush" Color="{DynamicResource ButtonSecondaryHighlightBackgroundColor}"/>
+    <SolidColorBrush x:Key="ButtonSecondaryHighlightTextBrush" Color="{DynamicResource SystemBaseHighColor}"/>
     <SolidColorBrush x:Key="WebSocketMessageFromClientPrimaryBrush" Color="{DynamicResource WebSocketMessageFromClientPrimaryColor}"/>
     <SolidColorBrush x:Key="WebSocketMessageFromClientSecondaryBrush" Color="{DynamicResource SystemBaseHighColor}"/>
     <SolidColorBrush x:Key="WebSocketMessageFromServerPrimaryBrush" Color="{DynamicResource WebSocketMessageFromServerPrimaryColor}"/>
@@ -86,6 +87,7 @@
     <SolidColorBrush x:Key="TextEditorBackgroundBrush" Color="{DynamicResource TextEditorBackgroundColor}"/>
     <SolidColorBrush x:Key="TextEditorForegroundBrush" Color="{DynamicResource TextEditorForegroundColor}"/>
     <SolidColorBrush x:Key="InputBackgroundValidationProblemBrush" Color="{DynamicResource InputBackgroundValidationProblemColor}"/>
+    <SolidColorBrush x:Key="ResponseCapturedValueTextBrush" Color="{DynamicResource ResponseCapturedValueTextColor}"/>
     <!-- TODO: Configurar tema do editor de texto e cor de variável Pororoca através de styles -->
     <!--Color x:Key="TextEditorPororocaVariableHighlightForeground">Gold</Color-->
     <!--clr:String x:Key="TextEditorTheme">DarkPlus</clr:String-->

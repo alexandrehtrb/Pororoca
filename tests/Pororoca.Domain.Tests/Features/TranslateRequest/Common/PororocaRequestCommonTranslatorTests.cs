@@ -296,6 +296,103 @@ public static class PororocaRequestCommonTranslatorTests
         Assert.Equal("Bearer tkn", contentHeaders["Authorization"]);
     }
 
+    [Fact]
+    public static void Should_resolve_non_content_headers_with_custom_inherited_from_collection_auth_correctly()
+    {
+        // GIVEN
+        PororocaCollection col = new("VarResolver")
+        {
+            CollectionScopedAuth = PororocaRequestAuth.MakeBearerAuth("{{BearerToken}}")
+        };
+        col.Variables.Add(new(true, "CookieHeader", "Cookie", false));
+        col.Variables.Add(new(true, "TestCookie2", "cookie2", false));
+        col.Variables.Add(new(true, "BearerToken", "tkn", false));
+
+        var headers = new PororocaKeyValueParam[]
+        {
+            new(true, "Content-Type", "application/json"),
+            new(true, "Content-Language", "pt-BR"),
+            new(true, "If-Modified-Since", "2021-10-03"),
+            new(false, "{{CookieHeader}}", "{{TestCookie1}}"),
+            new(true, "{{CookieHeader}}", "{{TestCookie2}}"),
+            new(true, "{{CookieHeader}}", "{{TestCookie3}}")
+        };
+
+        var reqAuth = PororocaRequestAuth.InheritedFromCollection;
+
+        // WHEN
+        var contentHeaders = ResolveNonContentHeaders(col, headers, reqAuth);
+
+        // THEN
+        Assert.Equal(3, contentHeaders.Count);
+        Assert.True(contentHeaders.ContainsKey("If-Modified-Since"));
+        Assert.Equal("2021-10-03", contentHeaders["If-Modified-Since"]);
+        Assert.True(contentHeaders.ContainsKey("Cookie"));
+        Assert.Equal("cookie2", contentHeaders["Cookie"]);
+        Assert.True(contentHeaders.ContainsKey("Authorization"));
+        Assert.Equal("Bearer tkn", contentHeaders["Authorization"]);
+    }
+
+    #endregion
+
+    #region AUTH
+
+    [Fact]
+    public static void Should_use_no_auth_if_specified()
+    {
+        // GIVEN
+        PororocaCollection col = new("VarResolver");
+        // WHEN
+        var resolvedAuth = ResolveRequestAuth(col, reqAuth: null);
+        // THEN
+        Assert.Null(resolvedAuth);
+    }
+
+    [Fact]
+    public static void Should_use_request_custom_auth_if_specified()
+    {
+        // GIVEN
+        PororocaCollection col = new("VarResolver");
+        col.Variables.Add(new(true, "CertificateFilePath", "./cert.p12", false));
+        col.Variables.Add(new(true, "PrivateKeyFilePassword", "my_pwd", false));
+
+        var reqAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "{{PrivateKeyFilePassword}}");
+
+        // WHEN
+        var resolvedAuth = ResolveRequestAuth(col, reqAuth);
+
+        // THEN
+        Assert.NotNull(resolvedAuth);
+        Assert.Equal(PororocaRequestAuthMode.ClientCertificate, resolvedAuth!.Mode);
+        Assert.Equal(PororocaRequestAuthClientCertificateType.Pkcs12, resolvedAuth.ClientCertificate!.Type);
+        Assert.Equal("./cert.p12", resolvedAuth.ClientCertificate.CertificateFilePath);
+        Assert.Null(resolvedAuth.ClientCertificate.PrivateKeyFilePath);
+        Assert.Equal("my_pwd", resolvedAuth.ClientCertificate.FilePassword);
+    }
+
+    [Fact]
+    public static void Should_use_collection_scoped_auth_if_specified()
+    {
+        // GIVEN
+        PororocaCollection col = new("VarResolver")
+        {
+            CollectionScopedAuth = PororocaRequestAuth.MakeWindowsAuth(false, "{{win_login}}", "{{win_pwd}}", "{{win_domain}}")
+        };
+        col.Variables.Add(new(true, "win_login", "alexandre123", false));
+        col.Variables.Add(new(true, "win_pwd", "my_pwd", false));
+        col.Variables.Add(new(true, "win_domain", "alexandre.mydomain.net", false));
+
+        // WHEN
+        var resolvedAuth = ResolveRequestAuth(col, PororocaRequestAuth.InheritedFromCollection);
+
+        // THEN
+        Assert.NotNull(resolvedAuth);
+        Assert.Equal(PororocaRequestAuthMode.Windows, resolvedAuth!.Mode);
+        Assert.Equal("alexandre123", resolvedAuth!.Windows!.Login);
+        Assert.Equal("my_pwd", resolvedAuth!.Windows!.Password);
+        Assert.Equal("alexandre.mydomain.net", resolvedAuth!.Windows!.Domain);
+    }
+
     #endregion
 
     #region CLIENT CERTIFICATES
@@ -374,6 +471,46 @@ public static class PororocaRequestCommonTranslatorTests
         Assert.Equal("./cert.pem", resolvedCert.CertificateFilePath);
         Assert.Null(resolvedCert.PrivateKeyFilePath);
         Assert.Equal("my_pwd", resolvedCert.FilePassword);
+    }
+
+    #endregion
+
+    #region WINDOWS AUTHENTICATION
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public static void Should_resolve_windows_authentication_values(bool useCurrentUser)
+    {
+        // GIVEN
+        PororocaCollection col = new("VarResolver");
+        col.Variables.Add(new(true, "win_login", "alexandre123", false));
+        col.Variables.Add(new(true, "win_pwd", "my_pwd", false));
+        col.Variables.Add(new(true, "win_domain", "alexandre.mydomain.net", false));
+
+        var reqAuth = PororocaRequestAuth.MakeWindowsAuth(useCurrentUser, "{{win_login}}", "{{win_pwd}}", "{{win_domain}}");
+
+        PororocaHttpRequest req = new();
+        req.UpdateCustomAuth(reqAuth);
+
+        // WHEN
+        var resolvedWinAuth = ResolveWindowsAuth(col, reqAuth.Windows!);
+
+        // THEN
+        Assert.NotNull(resolvedWinAuth);
+        Assert.Equal(useCurrentUser, resolvedWinAuth!.UseCurrentUser);
+        if (useCurrentUser == true)
+        {
+            Assert.Null(resolvedWinAuth.Login);
+            Assert.Null(resolvedWinAuth.Password);
+            Assert.Null(resolvedWinAuth.Domain);
+        }
+        else
+        {
+            Assert.Equal("alexandre123", resolvedWinAuth.Login);
+            Assert.Equal("my_pwd", resolvedWinAuth.Password);
+            Assert.Equal("alexandre.mydomain.net", resolvedWinAuth.Domain);
+        }
     }
 
     #endregion

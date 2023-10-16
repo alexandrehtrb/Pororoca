@@ -4,5 +4,5 @@ namespace Pororoca.Domain.Features.Requester;
 
 public interface IPororocaHttpClientProvider
 {
-    HttpClient Provide(bool disableSslVerification, PororocaRequestAuthClientCertificate? resolvedCert);
+    HttpClient Provide(bool disableSslVerification, PororocaRequestAuth? resolvedAuth);
 }

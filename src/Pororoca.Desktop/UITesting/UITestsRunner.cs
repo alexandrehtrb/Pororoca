@@ -17,13 +17,14 @@ public static class UITestsRunner
         new TreeDeleteItemsUITest(),
         new HttpRequestValidationsUITest(),
         new HttpRequestsUITest(),
-        //new VariablesCutCopyPasteDeleteUITest(),
-        //new HeadersCutCopyPasteDeleteUITest(),
-        //new UrlEncodedParamsCutCopyPasteDeleteUITest(),
-        //new FormDataParamsCutCopyPasteDeleteUITest(),
+        new VariablesCutCopyPasteDeleteUITest(),
+        new HeadersCutCopyPasteDeleteUITest(),
+        new UrlEncodedParamsCutCopyPasteDeleteUITest(),
+        new FormDataParamsCutCopyPasteDeleteUITest(),
         new WebSocketsValidationsUITest(),
         new WebSocketsUITest(),
         new ExportAndImportUITest(),
+        new CollectionScopedAuthUITest()
         // TODO: UI tests to be made:
         // Out of scope of automated UI tests:
         // some keybindings

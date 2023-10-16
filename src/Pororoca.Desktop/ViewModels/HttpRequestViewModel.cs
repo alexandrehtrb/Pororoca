@@ -2,12 +2,14 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Reactive;
 using AvaloniaEdit.Document;
+using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Common;
+using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Requester;
 using Pororoca.Domain.Features.TranslateRequest;
@@ -110,16 +112,8 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     [Reactive]
     public int RequestBodyModeSelectedIndex { get; set; }
 
-    public PororocaHttpRequestBodyMode? RequestBodyMode => RequestBodyModeSelectedIndex switch
-    {
-        0 => null,
-        1 => PororocaHttpRequestBodyMode.Raw,
-        2 => PororocaHttpRequestBodyMode.File,
-        3 => PororocaHttpRequestBodyMode.UrlEncoded,
-        4 => PororocaHttpRequestBodyMode.FormData,
-        5 => PororocaHttpRequestBodyMode.GraphQl,
-        _ => null
-    };
+    public PororocaHttpRequestBodyMode? RequestBodyMode =>
+        HttpRequestBodyModeMapping.MapIndexToEnum(RequestBodyModeSelectedIndex);
 
     public static ObservableCollection<string> AllMimeTypes { get; } = new(MimeTypesDetector.AllMimeTypes);
 
@@ -240,6 +234,12 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     [Reactive]
     public HttpResponseViewModel ResponseDataCtx { get; set; }
 
+    #region RESPONSE CAPTURES
+
+    public HttpResponseCapturesDataGridViewModel ResCapturesTableVm { get; }
+
+    #endregion
+
     #endregion
 
     public HttpRequestViewModel(ICollectionOrganizationItemParentViewModel parentVm,
@@ -273,27 +273,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
         #region REQUEST BODY
         // TODO: Improve this, do not use fixed values to resolve index
-        switch (req.Body?.Mode)
-        {
-            case PororocaHttpRequestBodyMode.GraphQl:
-                RequestBodyModeSelectedIndex = 5;
-                break;
-            case PororocaHttpRequestBodyMode.FormData:
-                RequestBodyModeSelectedIndex = 4;
-                break;
-            case PororocaHttpRequestBodyMode.UrlEncoded:
-                RequestBodyModeSelectedIndex = 3;
-                break;
-            case PororocaHttpRequestBodyMode.File:
-                RequestBodyModeSelectedIndex = 2;
-                break;
-            case PororocaHttpRequestBodyMode.Raw:
-                RequestBodyModeSelectedIndex = 1;
-                break;
-            default:
-                RequestBodyModeSelectedIndex = 0;
-                break;
-        }
+        RequestBodyModeSelectedIndex = HttpRequestBodyModeMapping.MapEnumToIndex(req.Body?.Mode);
         // RAW
         RequestRawContentType = req.Body?.ContentType;
         RequestRawContent = req.Body?.RawContent;
@@ -311,7 +291,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         #endregion
 
         #region REQUEST AUTH
-        RequestAuthDataCtx = new(req.CustomAuth);
+        RequestAuthDataCtx = new(req.CustomAuth, true, this.ClearInvalidRequestWarnings);
         #endregion
 
         #region SEND OR CANCEL REQUEST
@@ -321,6 +301,9 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
         #region RESPONSE
         ResponseDataCtx = new(this.variableResolver, this);
+        #region RESPONSE CAPTURES
+        ResCapturesTableVm = new(req.ResponseCaptures);
+        #endregion
         #endregion
     }
 
@@ -342,7 +325,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #region REQUEST HTTP METHOD, HTTP VERSION AND URL
 
     public void UpdateResolvedRequestUrlToolTip() =>
-        ResolvedRequestUrlToolTip = this.variableResolver.ReplaceTemplates(RequestUrl);
+        ResolvedRequestUrlToolTip = ((IPororocaVariableResolver)this.variableResolver).ReplaceTemplates(RequestUrl);
 
     private static string FormatHttpVersionString(decimal httpVersion) =>
         httpVersion switch
@@ -353,10 +336,6 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
             3.0m => "HTTP/3",
             _ => string.Format(CultureInfo.InvariantCulture, "HTTP/{0:0.0}", httpVersion)
         };
-
-    #endregion
-
-    #region REQUEST HEADERS
 
     #endregion
 
@@ -378,14 +357,6 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
             }
         }
     }
-
-    #endregion
-
-    #region REQUEST BODY URL ENCODED
-
-    #endregion
-
-    #region REQUEST BODY FORM DATA
 
     #endregion
 
@@ -431,8 +402,9 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
             httpMethod: RequestMethod.ToString(),
             url: RequestUrl,
             customAuth: RequestAuthDataCtx.ToCustomAuth(),
-            headers: RequestHeadersTableVm.Items.Count == 0 ? null : RequestHeadersTableVm.Items.Select(h => h.ToKeyValueParam()),
-            body: WrapRequestBodyFromInputs());
+            headers: RequestHeadersTableVm.Items.Count == 0 ? null : RequestHeadersTableVm.ConvertItemsToDomain(),
+            body: WrapRequestBodyFromInputs(),
+            captures: ResCapturesTableVm.Items.Count == 0 ? null : ResCapturesTableVm.ConvertItemsToDomain());
 
     #endregion
 
@@ -471,6 +443,8 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         HasRequestRawContentTypeValidationProblem = false;
         HasRequestFileContentTypeValidationProblem = false;
         HasRequestBodyFileSrcPathValidationProblem = false;
+
+        RequestAuthDataCtx.ClearRequestAuthValidationWarnings();
     }
 
     private void ShowInvalidRequestWarnings()
@@ -478,7 +452,8 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         string? errorCode = this.invalidRequestMessageErrorCode;
         InvalidRequestMessage = errorCode switch
         {
-            TranslateRequestErrors.ClientCertificateFileNotFound => Localizer.Instance.RequestValidation.ClientCertificateFileNotFound,
+            TranslateRequestErrors.ClientCertificatePkcs12CertificateFileNotFound => Localizer.Instance.RequestValidation.ClientCertificateFileNotFound,
+            TranslateRequestErrors.ClientCertificatePemCertificateFileNotFound => Localizer.Instance.RequestValidation.ClientCertificateFileNotFound,
             TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank => Localizer.Instance.RequestValidation.ClientCertificatePkcs12PasswordCannotBeBlank,
             TranslateRequestErrors.ClientCertificatePemPrivateKeyFileNotFound => Localizer.Instance.RequestValidation.ClientCertificatePemPrivateKeyFileNotFound,
             TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRaw => Localizer.Instance.RequestValidation.ContentTypeCannotBeBlankReqBodyRawOrFile,
@@ -490,6 +465,9 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
             TranslateRequestErrors.InvalidContentTypeFile => Localizer.Instance.RequestValidation.InvalidContentTypeRawOrFile,
             TranslateRequestErrors.InvalidUrl => Localizer.Instance.RequestValidation.InvalidUrl,
             TranslateRequestErrors.ReqBodyFileNotFound => Localizer.Instance.RequestValidation.ReqBodyFileNotFound,
+            TranslateRequestErrors.WindowsAuthLoginCannotBeBlank => Localizer.Instance.RequestValidation.WindowsAuthLoginCannotBeBlank,
+            TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank => Localizer.Instance.RequestValidation.WindowsAuthPasswordCannotBeBlank,
+            TranslateRequestErrors.WindowsAuthDomainCannotBeBlank => Localizer.Instance.RequestValidation.WindowsAuthDomainCannotBeBlank,
             _ => Localizer.Instance.RequestValidation.InvalidUnknownCause
         };
         IsInvalidRequestMessageVisible = true;
@@ -509,6 +487,29 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         {
             // TODO: Improve this, do not use fixed values to resolve index
             RequestTabsSelectedIndex = 1;
+        }
+
+        // do not colourize errors and switch tab if problem is in collection-scoped auth
+        if (RequestAuthDataCtx.AuthMode == PororocaRequestAuthMode.InheritFromCollection)
+            return;
+
+        RequestAuthDataCtx.HasWindowsAuthLoginProblem = errorCode == TranslateRequestErrors.WindowsAuthLoginCannotBeBlank;
+        RequestAuthDataCtx.HasWindowsAuthPasswordProblem = errorCode == TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank;
+        RequestAuthDataCtx.HasWindowsAuthDomainProblem = errorCode == TranslateRequestErrors.WindowsAuthDomainCannotBeBlank;
+
+        RequestAuthDataCtx.HasClientCertificateAuthPkcs12CertificateFilePathProblem = 
+        (errorCode == TranslateRequestErrors.ClientCertificatePkcs12CertificateFileNotFound);
+        RequestAuthDataCtx.HasClientCertificateAuthPkcs12FilePasswordProblem =
+        (errorCode == TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank);
+        RequestAuthDataCtx.HasClientCertificateAuthPemCertificateFilePathProblem =
+        (errorCode == TranslateRequestErrors.ClientCertificatePemCertificateFileNotFound);
+        RequestAuthDataCtx.HasClientCertificateAuthPemPrivateKeyFilePathProblem =
+        (errorCode == TranslateRequestErrors.ClientCertificatePemPrivateKeyFileNotFound);
+
+        if (RequestAuthDataCtx.HasValidationProblem)
+        {
+            // TODO: Improve this, do not use fixed values to resolve index
+            RequestTabsSelectedIndex = 2;
         }
     }
 

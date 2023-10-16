@@ -25,6 +25,7 @@ public sealed partial class HttpRequestsUITest : UITest
         await AssertTopMenuTlsVerification(false);
         
         await HttpRobot.ClickOnSendAndWaitForResponse();
+        await Wait(5);
         AssertIsHidden(HttpRobot.ResDisableTlsVerification);
         AssertContainsText(HttpRobot.ResBodyRawContent, "<html>");
         AssertContainsText(HttpRobot.ResTitle, "Response: 200 OK");

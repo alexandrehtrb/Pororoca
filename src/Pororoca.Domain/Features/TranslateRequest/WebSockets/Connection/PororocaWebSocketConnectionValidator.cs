@@ -14,7 +14,7 @@ public static class PororocaWebSocketConnectionValidator
     internal static bool IsValidConnection(HttpVersionAvailableVerifier httpVersionOSVerifier, FileExistsVerifier fileExistsVerifier, IPororocaVariableResolver varResolver, PororocaWebSocketConnection wsConn, out Uri? resolvedUri, out string? errorCode) =>
         TryResolveRequestUri(varResolver, wsConn.Url, out resolvedUri, out errorCode)
         && httpVersionOSVerifier(wsConn.HttpVersion, out errorCode)
-        && CheckClientCertificateFilesAndPassword(varResolver, fileExistsVerifier, wsConn.CustomAuth, out errorCode)
+        && ValidateAuthParams(varResolver, fileExistsVerifier, wsConn.CustomAuth, out errorCode)
         && CheckWebSocketCompressionOptions(wsConn.CompressionOptions, out errorCode);
 
     private static bool CheckWebSocketCompressionOptions(PororocaWebSocketCompressionOptions? compressionOptions, out string? errorCode)

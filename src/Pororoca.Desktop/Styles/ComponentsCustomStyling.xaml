@@ -165,6 +165,12 @@
         Value="{DynamicResource SystemErrorTextColor}"/>
   </Style>
 
+  <Style Selector="TextBlock.ResponseCapturedValue">
+    <Setter
+        Property="Foreground"
+        Value="{DynamicResource ResponseCapturedValueTextBrush}"/>
+  </Style>
+
   <Style Selector="DataGridColumnHeader">
     <Setter
         Property="Background"
@@ -238,12 +244,6 @@
     <Setter
         Property="Foreground"
         Value="{DynamicResource ButtonSecondaryTextBrush}"/>
-    <Setter
-        Property="BorderThickness"
-        Value="2"/>
-    <Setter
-        Property="BorderBrush"
-        Value="{DynamicResource ButtonSecondaryBorderBrush}"/>
   </Style>
 
   <Style Selector="Button.Secondary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
@@ -253,12 +253,6 @@
     <Setter
         Property="Button.Foreground"
         Value="{DynamicResource ButtonSecondaryHighlightTextBrush}"/>
-    <Setter
-        Property="BorderThickness"
-        Value="2"/>
-    <Setter
-        Property="BorderBrush"
-        Value="{DynamicResource ButtonSecondaryHighlightBorderBrush}"/>
   </Style>
 
   <Style Selector="Button.Trash">

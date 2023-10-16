@@ -22,6 +22,9 @@ public sealed class PororocaHttpRequest : PororocaRequest
     [JsonInclude]
     public PororocaRequestAuth? CustomAuth { get; private set; }
 
+    [JsonInclude]
+    public List<PororocaHttpResponseValueCapture>? ResponseCaptures { get; private set; }
+
 #nullable disable warnings
     public PororocaHttpRequest() : this(string.Empty)
     {
@@ -34,6 +37,10 @@ public sealed class PororocaHttpRequest : PororocaRequest
         HttpVersion = 1.1m;
         HttpMethod = "GET";
         Url = string.Empty;
+        // we can't specify InheritFromCollection here because when there is no auth,
+        // CustomAuth should be null, and the JSON deserialization (which uses this constructor)
+        // does not replace the InheritFromCollection value with null
+        // also, it's safer to leave "no auth" as the default auth.
         CustomAuth = null;
         Headers = null;
         Body = null;
@@ -56,8 +63,11 @@ public sealed class PororocaHttpRequest : PororocaRequest
 
     public void UpdateBody(PororocaHttpRequestBody? body) =>
         Body = body;
+    
+    public void UpdateResponseCaptures(List<PororocaHttpResponseValueCapture>? captures) =>
+        ResponseCaptures = captures;
 
-    public void Update(string name, decimal httpVersion, string httpMethod, string url, PororocaRequestAuth? customAuth, IEnumerable<PororocaKeyValueParam>? headers, PororocaHttpRequestBody? body)
+    public void Update(string name, decimal httpVersion, string httpMethod, string url, PororocaRequestAuth? customAuth, IEnumerable<PororocaKeyValueParam>? headers, PororocaHttpRequestBody? body, IEnumerable<PororocaHttpResponseValueCapture>? captures)
     {
         Name = name;
         HttpVersion = httpVersion;
@@ -66,6 +76,7 @@ public sealed class PororocaHttpRequest : PororocaRequest
         CustomAuth = customAuth;
         Headers = headers?.ToList();
         Body = body;
+        ResponseCaptures = captures?.ToList();
     }
 
     public override object Clone() =>
@@ -76,6 +87,7 @@ public sealed class PororocaHttpRequest : PororocaRequest
             Url = Url,
             CustomAuth = CustomAuth?.Copy(),
             Headers = Headers?.Select(h => h.Copy())?.ToList(),
-            Body = (PororocaHttpRequestBody?)Body?.Clone()
+            Body = (PororocaHttpRequestBody?)Body?.Clone(),
+            ResponseCaptures = ResponseCaptures?.Select(c => c.Copy())?.ToList()
         };
 }

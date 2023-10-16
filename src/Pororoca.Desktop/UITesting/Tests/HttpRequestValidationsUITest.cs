@@ -54,6 +54,7 @@ public sealed class HttpRequestValidationsUITest : UITest
         create TestFiles/ClientCertificates folder inside PororocaUserData folder 
         and paste test cert files.
         */
+        await TestWindowsAuthValidation();
         await TestClientCertificatePkcs12Validation();
         await TestClientCertificatePemValidation();
     }
@@ -216,14 +217,21 @@ public sealed class HttpRequestValidationsUITest : UITest
         await HttpRobot.Send.ClickOn();
         AssertIsVisible(HttpRobot.ErrorMsg);
         AssertHasText(HttpRobot.ErrorMsg, "Client certificate file not found.");
-        // TODO: AssertIsVisible(HttpRobot.Auth.RootView); // input field should be visible
+        AssertIsVisible(HttpRobot.Auth.ClientCertificatePkcs12FilePath);
+        AssertHasStyleClass(HttpRobot.Auth.ClientCertificatePkcs12FilePath, "HasValidationProblem");
+        AssertDoesntHaveStyleClass(HttpRobot.Auth.ClientCertificatePkcs12FilePassword, "HasValidationProblem");
         // password cannot be blank
         string certFilePath = GetTestFilePath("ClientCertificates", "badssl.com-client.p12");
         await HttpRobot.SetPkcs12CertificateAuth(certFilePath, string.Empty);
         await HttpRobot.Send.ClickOn();
         AssertIsVisible(HttpRobot.ErrorMsg);
         AssertHasText(HttpRobot.ErrorMsg, "PKCS#12 client certificates need a password.");
-        // TODO: AssertIsVisible(HttpRobot.Auth.RootView); // input field should be visible
+        AssertIsVisible(HttpRobot.Auth.ClientCertificatePkcs12FilePassword);
+        AssertHasStyleClass(HttpRobot.Auth.ClientCertificatePkcs12FilePassword, "HasValidationProblem");
+        AssertDoesntHaveStyleClass(HttpRobot.Auth.ClientCertificatePkcs12FilePath, "HasValidationProblem");
+
+        await HttpRobot.SetNoAuth();
+        AssertIsHidden(HttpRobot.ErrorMsg);
     }
 
     private async Task TestClientCertificatePemValidation()
@@ -233,7 +241,9 @@ public sealed class HttpRequestValidationsUITest : UITest
         await HttpRobot.Send.ClickOn();
         AssertIsVisible(HttpRobot.ErrorMsg);
         AssertHasText(HttpRobot.ErrorMsg, "Client certificate file not found.");
-        // TODO: AssertIsVisible(HttpRobot.Auth.RootView); // input field should be visible
+        AssertIsVisible(HttpRobot.Auth.ClientCertificatePemCertificateFilePath);
+        AssertHasStyleClass(HttpRobot.Auth.ClientCertificatePemCertificateFilePath, "HasValidationProblem");
+        AssertDoesntHaveStyleClass(HttpRobot.Auth.ClientCertificatePemPrivateKeyFilePath, "HasValidationProblem");
 
         // private key file specified, but not found
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqAuth);
@@ -243,7 +253,51 @@ public sealed class HttpRequestValidationsUITest : UITest
         await HttpRobot.Send.ClickOn();
         AssertIsVisible(HttpRobot.ErrorMsg);
         AssertHasText(HttpRobot.ErrorMsg, "Client certificate private key file not found.");
-        // TODO: AssertIsVisible(HttpRobot.Auth.RootView); // input field should be visible
+        AssertIsVisible(HttpRobot.Auth.ClientCertificatePemPrivateKeyFilePath);
+        AssertHasStyleClass(HttpRobot.Auth.ClientCertificatePemPrivateKeyFilePath, "HasValidationProblem");
+        AssertDoesntHaveStyleClass(HttpRobot.Auth.ClientCertificatePemCertificateFilePath, "HasValidationProblem");
+
+        await HttpRobot.SetNoAuth();
+        AssertIsHidden(HttpRobot.ErrorMsg);
+    }
+
+    private async Task TestWindowsAuthValidation()
+    {
+        // windows login blank
+        await HttpRobot.SetWindowsAuthOtherUser(string.Empty, "pwd", "domain");
+        await HttpRobot.Send.ClickOn();
+        AssertIsVisible(HttpRobot.ErrorMsg);
+        AssertHasText(HttpRobot.ErrorMsg, "The login for Windows authentication cannot be blank.");
+        AssertIsVisible(HttpRobot.Auth.WindowsAuthLogin);
+        AssertHasStyleClass(HttpRobot.Auth.WindowsAuthLogin, "HasValidationProblem");
+        AssertDoesntHaveStyleClass(HttpRobot.Auth.WindowsAuthPassword, "HasValidationProblem");
+        AssertDoesntHaveStyleClass(HttpRobot.Auth.WindowsAuthDomain, "HasValidationProblem");
+
+        // windows password blank
+        await HttpRobot.SetWindowsAuthOtherUser("usr", string.Empty, "domain");
+        await HttpRobot.Send.ClickOn();
+        AssertIsVisible(HttpRobot.ErrorMsg);
+        AssertHasText(HttpRobot.ErrorMsg, "The password for Windows authentication cannot be blank.");
+        AssertIsVisible(HttpRobot.Auth.WindowsAuthPassword);
+        AssertDoesntHaveStyleClass(HttpRobot.Auth.WindowsAuthLogin, "HasValidationProblem");
+        AssertHasStyleClass(HttpRobot.Auth.WindowsAuthPassword, "HasValidationProblem");
+        AssertDoesntHaveStyleClass(HttpRobot.Auth.WindowsAuthDomain, "HasValidationProblem");
+
+        // windows domain blank
+        await HttpRobot.SetWindowsAuthOtherUser("usr", "pwd", string.Empty);
+        await HttpRobot.Send.ClickOn();
+        AssertIsVisible(HttpRobot.ErrorMsg);
+        AssertHasText(HttpRobot.ErrorMsg, "The domain for Windows authentication cannot be blank.");
+        AssertIsVisible(HttpRobot.Auth.WindowsAuthDomain);
+        AssertDoesntHaveStyleClass(HttpRobot.Auth.WindowsAuthLogin, "HasValidationProblem");
+        AssertDoesntHaveStyleClass(HttpRobot.Auth.WindowsAuthPassword, "HasValidationProblem");
+        AssertHasStyleClass(HttpRobot.Auth.WindowsAuthDomain, "HasValidationProblem");
+
+        await HttpRobot.SetWindowsAuthCurrentUser();
+        AssertIsHidden(HttpRobot.ErrorMsg);
+        
+        await HttpRobot.SetNoAuth();
+        AssertIsHidden(HttpRobot.ErrorMsg);
     }
 
     private static string GetTestFilePath(string subFolder, string fileName)

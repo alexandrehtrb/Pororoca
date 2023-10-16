@@ -1,6 +1,6 @@
 ﻿{
   "schema": "Pororoca/1",
-  "id": "4e5f6194-6c15-45e8-a31b-2bf229ebb9ec",
+  "id": "846255a2-2387-4d4a-b129-78a806aeb52d",
   "name": "PororocaIntegrationTestCollection",
   "createdAt": "2022-10-19T22:10:05.3839027-03:00",
   "variables": [
@@ -326,6 +326,7 @@
               "name": "Hello",
               "contentMode": "raw",
               "rawContent": "Hello",
+              "rawContentSyntax": "json",
               "disableCompressionForThis": false,
               "direction": "fromClient",
               "messageType": "text"
@@ -334,6 +335,7 @@
               "name": "SpiderMan",
               "contentMode": "file",
               "rawContent": "",
+              "rawContentSyntax": "json",
               "fileSrcPath": "{{TestFilesDir}}/homem_aranha.jpg",
               "disableCompressionForThis": false,
               "direction": "fromClient",
@@ -343,6 +345,7 @@
               "name": "Bye",
               "contentMode": "raw",
               "rawContent": "{{WebSocketBye}}",
+              "rawContentSyntax": "json",
               "disableCompressionForThis": false,
               "direction": "fromClient",
               "messageType": "close"
@@ -359,6 +362,7 @@
               "name": "Hello",
               "contentMode": "raw",
               "rawContent": "Hello",
+              "rawContentSyntax": "json",
               "disableCompressionForThis": false,
               "direction": "fromClient",
               "messageType": "text"
@@ -367,6 +371,7 @@
               "name": "SpiderMan",
               "contentMode": "file",
               "rawContent": "",
+              "rawContentSyntax": "json",
               "fileSrcPath": "{{TestFilesDir}}/homem_aranha.jpg",
               "disableCompressionForThis": false,
               "direction": "fromClient",
@@ -376,6 +381,7 @@
               "name": "Bye",
               "contentMode": "raw",
               "rawContent": "{{WebSocketBye}}",
+              "rawContentSyntax": "json",
               "disableCompressionForThis": false,
               "direction": "fromClient",
               "messageType": "close"
@@ -533,6 +539,55 @@
           }
         ]
       }
+    },
+    {
+      "requestType": "http",
+      "name": "Capture header value",
+      "httpVersion": 1.1,
+      "httpMethod": "GET",
+      "url": "{{BaseUrl}}/test/get/headers",
+      "headers": [
+        {
+          "enabled": true,
+          "key": "Header1",
+          "value": "oi"
+        }
+      ],
+      "responseCaptures": [
+        {
+          "type": "header",
+          "targetVariable": "CapturedHeaderValue",
+          "headerName": "MIRRORED-Header1"
+        }
+      ]
+    },
+    {
+      "requestType": "http",
+      "name": "Capture JSON value",
+      "httpVersion": 1.1,
+      "httpMethod": "GET",
+      "url": "{{BaseUrl}}/test/get/json",
+      "responseCaptures": [
+        {
+          "type": "body",
+          "targetVariable": "CapturedJSONValue",
+          "path": "$.id"
+        }
+      ]
+    },
+    {
+      "requestType": "http",
+      "name": "Capture XML value",
+      "httpVersion": 1.1,
+      "httpMethod": "GET",
+      "url": "{{BaseUrl}}/test/get/xml",
+      "responseCaptures": [
+        {
+          "type": "body",
+          "targetVariable": "CapturedXMLValue",
+          "path": "/env:Envelope/env:Body/xsi:response/xsi:Value/wsa:MyVal2"
+        }
+      ]
     }
   ]
 }

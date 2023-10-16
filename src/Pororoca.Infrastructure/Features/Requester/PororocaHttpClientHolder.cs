@@ -3,33 +3,15 @@ using Pororoca.Domain.Features.Entities.Pororoca;
 
 namespace Pororoca.Infrastructure.Features.Requester;
 
-internal sealed class PororocaHttpClientHolder : IEquatable<PororocaHttpClientHolder>
+internal sealed record ClientCertificateUniqueness(
+    string? ClientCertificateFileHash,
+    string? ClientCertificatePrivateKeyFileHash,
+    string? ClientCertificateFilePassword)
 {
-    public string? Name { get; private set; }
-
-    public bool DisableSslVerification { get; }
-
-    private string? ClientCertificateFileHash { get; }
-
-    private string? ClientCertificatePrivateKeyFileHash { get; }
-
-    public string? ClientCertificateFilePassword { get; }
-
-    public HttpClient? Client { get; private set; }
-
-    internal PororocaHttpClientHolder(bool disableSslVerification, PororocaRequestAuthClientCertificate? resolvedCert)
-    {
-        DisableSslVerification = disableSslVerification;
-        ClientCertificateFileHash = GetFileSha512Hash(resolvedCert?.CertificateFilePath);
-        ClientCertificatePrivateKeyFileHash = GetFileSha512Hash(resolvedCert?.PrivateKeyFilePath);
-        ClientCertificateFilePassword = resolvedCert?.FilePassword;
-    }
-
-    internal void KeepClient(HttpClient client) =>
-        Client = client;
-
-    internal void SetName(string name) =>
-        Name = name;
+    internal ClientCertificateUniqueness(PororocaRequestAuthClientCertificate? resolvedCert)
+        : this(GetFileSha512Hash(resolvedCert?.CertificateFilePath),
+               GetFileSha512Hash(resolvedCert?.PrivateKeyFilePath),
+               resolvedCert?.FilePassword){}
 
     private static string? GetFileSha512Hash(string? filePath)
     {
@@ -45,6 +27,29 @@ internal sealed class PororocaHttpClientHolder : IEquatable<PororocaHttpClientHo
             return BitConverter.ToString(sha512.ComputeHash(fileStream)).Replace("-", string.Empty).ToLowerInvariant();
         }
     }
+}
+
+internal sealed class PororocaHttpClientHolder : IEquatable<PororocaHttpClientHolder>
+{
+    internal string? Name { get; set; }
+
+    private bool DisableSslVerification { get; }
+
+    private ClientCertificateUniqueness? ClientCertificate { get; }
+
+    private PororocaRequestAuthWindows? WindowsAuth { get; }
+
+    public HttpClient? Client { get; private set; }
+
+    internal PororocaHttpClientHolder(bool disableSslVerification, PororocaRequestAuth? resolvedAuth)
+    {
+        DisableSslVerification = disableSslVerification;
+        ClientCertificate = resolvedAuth?.ClientCertificate is not null ? new(resolvedAuth?.ClientCertificate) : null;
+        WindowsAuth = resolvedAuth?.Windows;
+    }
+
+    internal void KeepClient(HttpClient client) =>
+        Client = client;    
 
     public override bool Equals(object? obj) =>
         obj is PororocaHttpClientHolder other
@@ -53,11 +58,9 @@ internal sealed class PororocaHttpClientHolder : IEquatable<PororocaHttpClientHo
     public bool Equals(PororocaHttpClientHolder? other) =>
         other != null
         && DisableSslVerification == other.DisableSslVerification
-        && ClientCertificateFileHash == other.ClientCertificateFileHash
-        && ClientCertificatePrivateKeyFileHash == other.ClientCertificatePrivateKeyFileHash
-        && ClientCertificateFilePassword == other.ClientCertificateFilePassword;
-
+        && ClientCertificate == other.ClientCertificate
+        && WindowsAuth == other.WindowsAuth;
 
     public override int GetHashCode() =>
-        HashCode.Combine(DisableSslVerification, ClientCertificateFileHash, ClientCertificatePrivateKeyFileHash, ClientCertificateFilePassword);
+        HashCode.Combine(DisableSslVerification, ClientCertificate, WindowsAuth);
 }

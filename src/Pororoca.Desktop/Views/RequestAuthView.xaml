@@ -4,6 +4,7 @@
     xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:conv="clr-namespace:Pororoca.Desktop.Converters;assembly=Pororoca.Desktop"
     mc:Ignorable="d"
     d:DesignWidth="1350"
     d:DesignHeight="700"
@@ -11,6 +12,11 @@
     x:CompileBindings="True"
     x:DataType="vm:RequestAuthViewModel"
     FontSize="14">
+
+  <UserControl.Resources>
+      <conv:AuthModeMatchConverter x:Key="authModeMatch"/>
+      <conv:ClientCertificateTypeMatchConverter x:Key="clientCertificateTypeMatch"/>
+  </UserControl.Resources>
 
   <Grid Margin="0,12,0,0">
     <Grid.ColumnDefinitions>
@@ -37,11 +43,18 @@
             x:Name="cbiReqAuthNone"
             Content="{Binding i18n.RequestAuth.AuthModeNone}"/>
         <ComboBoxItem
+            x:Name="cbiReqAuthInheritFromCollection"
+            Content="{Binding i18n.RequestAuth.AuthModeInheritFromCollection}"
+            IsEnabled="{Binding IsInheritFromCollectionOptionEnabled}"/>
+        <ComboBoxItem
             x:Name="cbiReqAuthBasic"
             Content="{Binding i18n.RequestAuth.AuthModeBasic}"/>
         <ComboBoxItem
             x:Name="cbiReqAuthBearer"
             Content="{Binding i18n.RequestAuth.AuthModeBearer}"/>
+        <ComboBoxItem
+            x:Name="cbiReqAuthWindows"
+            Content="{Binding i18n.RequestAuth.AuthModeWindows}"/>
         <!-- Mode=TwoWay in IsSelected below is required, otherwise, layout will disappear when changing between different requests -->
         <ComboBoxItem
             x:Name="cbiReqAuthClientCertificate"
@@ -54,7 +67,11 @@
           Width="110"
           HorizontalAlignment="Left"
           VerticalAlignment="Stretch"
-          SelectedIndex="{Binding ClientCertificateTypeSelectedIndex}">
+          SelectedIndex="{Binding ClientCertificateTypeSelectedIndex}"
+          IsVisible="{Binding AuthModeSelectedIndex, 
+                      Mode=OneWay,
+                      Converter={StaticResource authModeMatch}, 
+                      ConverterParameter=ClientCertificate}">
         <ComboBoxItem
             x:Name="cbiReqAuthClientCertificateNone"
             Content="{Binding i18n.RequestAuth.ClientCertificateTypeNone}"/>
@@ -72,7 +89,11 @@
         x:Name="spReqAuthBasic"
         Grid.Column="0"
         Grid.Row="1"
-        Margin="0,12,0,0">
+        Margin="0,12,0,0"
+        IsVisible="{Binding AuthModeSelectedIndex, 
+                    Mode=OneWay,
+                    Converter={StaticResource authModeMatch}, 
+                    ConverterParameter=Basic}">
       <TextBox
           Name="tbBasicAuthLogin"
           Width="200"
@@ -96,7 +117,11 @@
         x:Name="spReqAuthBearer"
         Grid.Column="0"
         Grid.Row="1"
-        Margin="0,12,0,0">
+        Margin="0,12,0,0"
+        IsVisible="{Binding AuthModeSelectedIndex, 
+                    Mode=OneWay,
+                    Converter={StaticResource authModeMatch}, 
+                    ConverterParameter=Bearer}">
       <TextBox
           Name="tbBearerAuthToken"
           Width="200"
@@ -106,12 +131,64 @@
           Classes="SingleLine"
           Text="{Binding BearerAuthToken}"/>
     </StackPanel>
+    <!-- WINDOWS AUTH-->
+    <StackPanel
+        x:Name="spReqAuthWindows"
+        Grid.Column="0"
+        Grid.Row="1"
+        Margin="0,12,0,0"
+        IsVisible="{Binding AuthModeSelectedIndex, 
+                    Mode=OneWay,
+                    Converter={StaticResource authModeMatch}, 
+                    ConverterParameter=Windows}">
+      <CheckBox
+          Name="chkbWindowsAuthUseCurrentUser"
+          Content="{Binding i18n.RequestAuth.AuthModeWindowsUseCurrentUser}"
+          IsChecked="{Binding WindowsAuthUseCurrentUser}"/>
+      <TextBox
+          Name="tbWindowsAuthLogin"
+          Width="200"
+          Margin="0,12,0,0"
+          HorizontalAlignment="Left"
+          VerticalContentAlignment="Center"
+          Watermark="{Binding i18n.RequestAuth.AuthModeWindowsLoginWatermark}"
+          Classes="SingleLine"
+          Classes.HasValidationProblem="{Binding HasWindowsAuthLoginProblem}"
+          IsVisible="{Binding !WindowsAuthUseCurrentUser}"
+          Text="{Binding WindowsAuthLogin}"/>
+      <TextBox
+          Name="tbWindowsAuthPassword"
+          Width="200"
+          Margin="0,12,0,0"
+          HorizontalAlignment="Left"
+          VerticalContentAlignment="Center"
+          Watermark="{Binding i18n.RequestAuth.AuthModeWindowsPasswordWatermark}"
+          Classes="SingleLine"
+          Classes.HasValidationProblem="{Binding HasWindowsAuthPasswordProblem}"
+          IsVisible="{Binding !WindowsAuthUseCurrentUser}"
+          Text="{Binding WindowsAuthPassword}"/>
+      <TextBox
+          Name="tbWindowsAuthDomain"
+          Width="200"
+          Margin="0,12,0,0"
+          HorizontalAlignment="Left"
+          VerticalContentAlignment="Center"
+          Watermark="{Binding i18n.RequestAuth.AuthModeWindowsDomainWatermark}"
+          Classes="SingleLine"
+          Classes.HasValidationProblem="{Binding HasWindowsAuthDomainProblem}"
+          IsVisible="{Binding !WindowsAuthUseCurrentUser}"
+          Text="{Binding WindowsAuthDomain}"/>
+    </StackPanel>
     <!-- CLIENT CERTIFICATE AUTH -->
     <Grid
         x:Name="grReqAuthClientCertificate"
         Grid.Column="0"
         Grid.Row="1"
-        Margin="0,12,0,0">
+        Margin="0,12,0,0"
+        IsVisible="{Binding AuthModeSelectedIndex, 
+                    Mode=OneWay,
+                    Converter={StaticResource authModeMatch}, 
+                    ConverterParameter=ClientCertificate}">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
@@ -123,7 +200,11 @@
       <StackPanel
           x:Name="spReqAuthClientCertificatePkcs12"
           Grid.Column="0"
-          Grid.Row="0">
+          Grid.Row="0"
+          IsVisible="{Binding ClientCertificateTypeSelectedIndex, 
+                      Mode=OneWay,
+                      Converter={StaticResource clientCertificateTypeMatch}, 
+                      ConverterParameter=Pkcs12}">
         <TextBox
             Name="tbClientCertificatePkcs12FilePath"
             Width="240"
@@ -131,6 +212,7 @@
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
             Classes="SingleLine"
+            Classes.HasValidationProblem="{Binding HasClientCertificateAuthPkcs12CertificateFilePathProblem}"
             Text="{Binding ClientCertificateAuthPkcs12CertificateFilePath}"/>
         <TextBox
             Name="tbClientCertificatePkcs12FilePassword"
@@ -140,18 +222,23 @@
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
             Classes="SingleLine"
+            Classes.HasValidationProblem="{Binding HasClientCertificateAuthPkcs12FilePasswordProblem}"
             Text="{Binding ClientCertificateAuthPkcs12FilePassword}"/>
         <Button
             Margin="0,12,0,0"
             Content="{Binding i18n.RequestAuth.Pkcs12SearchFile}"
             Command="{Binding SearchClientCertificatePkcs12FileCmd}"
-            Classes="Primary"/>
+            Classes="Secondary"/>
       </StackPanel>
       <!-- CLIENT CERTIFICATE AUTH PEM -->
       <StackPanel
           x:Name="spReqAuthClientCertificatePem"
           Grid.Column="0"
-          Grid.Row="0">
+          Grid.Row="0"
+          IsVisible="{Binding ClientCertificateTypeSelectedIndex, 
+                      Mode=OneWay,
+                      Converter={StaticResource clientCertificateTypeMatch}, 
+                      ConverterParameter=Pem}">
         <TextBox
             Name="tbClientCertificatePemCertificateFilePath"
             Width="240"
@@ -159,6 +246,7 @@
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
             Classes="SingleLine"
+            Classes.HasValidationProblem="{Binding HasClientCertificateAuthPemCertificateFilePathProblem}"
             Text="{Binding ClientCertificateAuthPemCertificateFilePath}"/>
         <TextBox
             Name="tbClientCertificatePemPrivateKeyFilePath"
@@ -168,6 +256,7 @@
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
             Classes="SingleLine"
+            Classes.HasValidationProblem="{Binding HasClientCertificateAuthPemPrivateKeyFilePathProblem}"
             Text="{Binding ClientCertificateAuthPemPrivateKeyFilePath}"/>
         <TextBox
             Name="tbClientCertificatePemPrivateKeyPassword"
@@ -185,12 +274,12 @@
               Content="{Binding i18n.RequestAuth.PemSearchCertFile}"
               Margin="0,0,6,0"
               Command="{Binding SearchClientCertificatePemCertFileCmd}"
-              Classes="Primary"/>
+              Classes="Secondary"/>
           <Button
               Content="{Binding i18n.RequestAuth.PemSearchPrivateKeyFile}"
               Margin="6,0,0,0"
               Command="{Binding SearchClientCertificatePemPrivateKeyFileCmd}"
-              Classes="Primary"/>
+              Classes="Secondary"/>
         </StackPanel>
         <TextBlock
             TextWrapping="Wrap"

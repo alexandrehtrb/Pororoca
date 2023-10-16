@@ -2,7 +2,8 @@ namespace Pororoca.Domain.Features.TranslateRequest;
 
 public static class TranslateRequestErrors
 {
-    public const string ClientCertificateFileNotFound = "TranslateRequest_ClientCertificateFileNotFound";
+    public const string ClientCertificatePkcs12CertificateFileNotFound = "TranslateRequest_ClientCertificatePkcs12CertificateFileNotFound";
+    public const string ClientCertificatePemCertificateFileNotFound = "TranslateRequest_ClientCertificatePemCertificateFileNotFound";
     public const string ClientCertificatePkcs12PasswordCannotBeBlank = "TranslateRequest_ClientCertificatePkcs12PasswordCannotBeBlank";
     public const string ClientCertificatePemPrivateKeyFileNotFound = "TranslateRequest_ClientCertificatePemPrivateKeyFileNotFound";
     public const string ContentTypeCannotBeBlankReqBodyRaw = "TranslateRequest_ContentTypeCannotBeBlankReqBodyRaw";
@@ -21,4 +22,7 @@ public static class TranslateRequestErrors
     public const string WebSocketNotConnected = "TranslateRequest_WebSocketNotConnected";
     public const string WebSocketClientMessageContentFileNotFound = "TranslateRequest_WebSocketClientMessageContentFileNotFound";
     public const string WebSocketUnknownClientMessageTranslationError = "TranslateRequest_WebSocketUnknownClientMessageTranslationError";
+    public const string WindowsAuthLoginCannotBeBlank = "TranslateRequest_WindowsAuthLoginCannotBeBlank";
+    public const string WindowsAuthPasswordCannotBeBlank = "TranslateRequest_WindowsAuthPasswordCannotBeBlank";
+    public const string WindowsAuthDomainCannotBeBlank = "TranslateRequest_WindowsAuthDomainCannotBeBlank";
 }

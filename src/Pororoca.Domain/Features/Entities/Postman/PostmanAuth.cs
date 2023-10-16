@@ -29,6 +29,8 @@ internal class PostmanAuth
 
     public object? Bearer { get; set; }
 
+    public object? Ntlm { get; set; }
+
     public (string basicAuthLogin, string basicAuthPwd) ReadBasicAuthValues()
     {
         static (string, string) ParseFromVariableArray(PostmanVariable[] arr) =>
@@ -81,6 +83,35 @@ internal class PostmanAuth
 
         return string.Empty;
     }
+
+    public (string login, string password, string domain, string workstation) ReadNtlmAuthValues()
+    {
+        static (string, string, string, string) ParseFromVariableArray(PostmanVariable[] arr) =>
+            (arr.FirstOrDefault(p => p.Key == "username")?.Value ?? string.Empty,
+             arr.FirstOrDefault(p => p.Key == "password")?.Value ?? string.Empty,
+             arr.FirstOrDefault(p => p.Key == "domain")?.Value ?? string.Empty,
+             arr.FirstOrDefault(p => p.Key == "workstation")?.Value ?? string.Empty);
+
+        if (Ntlm is JsonElement je)
+        {
+            if (je.ValueKind == JsonValueKind.Object)
+            {
+                var ntlm = je.Deserialize<PostmanAuthNtlm>(options: ExporterImporterJsonOptions);
+                return (ntlm.Username ?? string.Empty, ntlm.Password ?? string.Empty, ntlm.Domain ?? string.Empty, ntlm.Workstation ?? string.Empty);
+            }
+            else if (je.ValueKind == JsonValueKind.Array)
+            {
+                var vars = je.Deserialize<PostmanVariable[]>();
+                return ParseFromVariableArray(vars);
+            }
+        }
+        else if (Ntlm is PostmanVariable[] arr)
+        {
+            return ParseFromVariableArray(arr);
+        }
+
+        return (string.Empty, string.Empty, string.Empty, string.Empty);
+    }
 }
 
 internal class PostmanAuthBasic
@@ -92,6 +123,14 @@ internal class PostmanAuthBasic
 internal class PostmanAuthBearer
 {
     public string? Token { get; set; }
+}
+
+internal class PostmanAuthNtlm
+{
+    public string? Username { get; set; }
+    public string? Password { get; set; }
+    public string? Domain { get; set; }
+    public string? Workstation { get; set; }
 }
 
 #nullable enable warnings

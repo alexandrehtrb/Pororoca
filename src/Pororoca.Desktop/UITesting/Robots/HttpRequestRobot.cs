@@ -52,7 +52,11 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal TabItem TabResHeaders => GetChildView<TabItem>("tabItemResHeaders")!;
     internal DataGrid ResHeaders => GetChildView<DataGrid>("dgResHeaders")!;
     internal TabItem TabResBody => GetChildView<TabItem>("tabItemResBody")!;
+    internal DataGrid ResCaptures => GetChildView<DataGrid>("dgResCaptures")!;
+    internal TabItem TabResCapture => GetChildView<TabItem>("tabItemResCapture")!;
     internal TextEditor ResBodyRawContent => GetChildView<TextEditor>("ResponseBodyRawContentEditor")!;
+    internal Button ResAddCaptureHeader => GetChildView<Button>("btResCaptureAddHeaderCapture")!;
+    internal Button ResAddCaptureBody => GetChildView<Button>("btResCaptureAddBodyCapture")!;
     internal Button ResBodySaveToFile => GetChildView<Button>("btResBodySaveToFile")!;
     internal Button ResDisableTlsVerification => GetChildView<Button>("btResDisableTlsVerification")!;
     internal ProgressBar ResProgressBar => GetChildView<ProgressBar>("pbResProgressBar")!;
@@ -61,6 +65,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal KeyValueParamsDataGridViewModel UrlEncodedParamsVm => ((HttpRequestViewModel)RootView!.DataContext!).UrlEncodedParamsTableVm;
     internal FormDataParamsDataGridViewModel FormDataParamsVm => ((HttpRequestViewModel)RootView!.DataContext!).FormDataParamsTableVm;
     internal KeyValueParamsDataGridViewModel ResHeadersVm => ((HttpRequestViewModel)RootView!.DataContext!).ResponseDataCtx.ResponseHeadersAndTrailersTableVm;
+    internal HttpResponseCapturesDataGridViewModel ResCapturesVm => ((HttpRequestViewModel)RootView!.DataContext!).ResCapturesTableVm;
 
     internal Task SetHttpVersion(decimal version)
     {
@@ -99,7 +104,8 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal async Task SelectRequestHeaders(params KeyValueParamViewModel[] headersVms)
     {
         ReqHeaders.SelectedItems.Clear();
-        foreach (var h in headersVms) ReqHeaders.SelectedItems.Add(h);
+        foreach (var h in headersVms)
+            ReqHeaders.SelectedItems.Add(h);
         await UITestActions.WaitAfterActionAsync();
     }
 
@@ -175,7 +181,8 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal async Task SelectUrlEncodedParams(params KeyValueParamViewModel[] vms)
     {
         ReqBodyUrlEncodedParams.SelectedItems.Clear();
-        foreach (var h in vms) ReqBodyUrlEncodedParams.SelectedItems.Add(h);
+        foreach (var h in vms)
+            ReqBodyUrlEncodedParams.SelectedItems.Add(h);
         await UITestActions.WaitAfterActionAsync();
     }
 
@@ -219,7 +226,8 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal async Task SelectFormDataParams(params FormDataParamViewModel[] vms)
     {
         ReqBodyFormDataParams.SelectedItems.Clear();
-        foreach (var h in vms) ReqBodyFormDataParams.SelectedItems.Add(h);
+        foreach (var h in vms)
+            ReqBodyFormDataParams.SelectedItems.Add(h);
         await UITestActions.WaitAfterActionAsync();
     }
 
@@ -269,50 +277,68 @@ public sealed class HttpRequestRobot : BaseNamedRobot
         while (!cts.IsCancellationRequested && vm.IsRequesting);
     }
 
+    internal async Task EditResponseCaptureAt(int index, string targetVar, string headerNameOrBodyPath)
+    {
+        var vms = ResCapturesVm.Items;
+        var v = vms.ElementAt(index);
+        v.TargetVariable = targetVar;
+        v.HeaderNameOrBodyPath = headerNameOrBodyPath;
+        await UITestActions.WaitAfterActionAsync();
+    }
+
     internal async Task SetNoAuth()
     {
         await TabControlReq.Select(TabReqAuth);
         await Auth.AuthType.Select(Auth.AuthTypeOptionNone);
     }
 
+    internal async Task SetInheritFromCollectionAuth()
+    {
+        await TabControlReq.Select(TabReqAuth);
+        await Auth.AuthType.Select(Auth.AuthTypeOptionInheritFromCollection);
+    }
+
     internal async Task SetBasicAuth(string login, string password)
     {
         await TabControlReq.Select(TabReqAuth);
-        await Auth.AuthType.Select(Auth.AuthTypeOptionBasic);
-        await Auth.BasicAuthLogin.ClearAndTypeText(login);
-        await Auth.BasicAuthPassword.ClearAndTypeText(password);
+        await Auth.SetBasicAuth(login, password);
     }
 
     internal async Task SetBearerAuth(string token)
     {
         await TabControlReq.Select(TabReqAuth);
-        await Auth.AuthType.Select(Auth.AuthTypeOptionBearer);
-        await Auth.BearerAuthToken.ClearAndTypeText(token);
+        await Auth.SetBearerAuth(token);
+    }
+
+    internal async Task SetWindowsAuthCurrentUser()
+    {
+        await TabControlReq.Select(TabReqAuth);
+        await Auth.SetWindowsAuthCurrentUser();
+    }
+
+    internal async Task SetWindowsAuthOtherUser(string login, string password, string domain)
+    {
+        await TabControlReq.Select(TabReqAuth);
+        await Auth.SetWindowsAuthOtherUser(login, password, domain);
     }
 
     internal async Task SetPkcs12CertificateAuth(string certFilePath, string certPassword)
     {
         await TabControlReq.Select(TabReqAuth);
-        await Auth.AuthType.Select(Auth.AuthTypeOptionClientCertificate);
-        await Auth.ClientCertificateType.Select(Auth.ClientCertificateTypeOptionPkcs12);
-        await Auth.ClientCertificatePkcs12FilePath.ClearAndTypeText(certFilePath);
-        await Auth.ClientCertificatePkcs12FilePassword.ClearAndTypeText(certPassword);
+        await Auth.SetPkcs12CertificateAuth(certFilePath, certPassword);
     }
 
     internal async Task SetPemCertificateAuth(string certFilePath, string prvKeyFilePath, string prvKeyPassword)
     {
         await TabControlReq.Select(TabReqAuth);
-        await Auth.AuthType.Select(Auth.AuthTypeOptionClientCertificate);
-        await Auth.ClientCertificateType.Select(Auth.ClientCertificateTypeOptionPem);
-        await Auth.ClientCertificatePemCertificateFilePath.ClearAndTypeText(certFilePath);
-        await Auth.ClientCertificatePemPrivateKeyFilePath.ClearAndTypeText(prvKeyFilePath);
-        await Auth.ClientCertificatePemPrivateKeyPassword.ClearAndTypeText(prvKeyPassword);
+        await Auth.SetPemCertificateAuth(certFilePath, prvKeyFilePath, prvKeyPassword);
     }
 
     internal async Task SelectResponseHeaders(params KeyValueParamViewModel[] headersVms)
     {
         ResHeaders.SelectedItems.Clear();
-        foreach (var h in headersVms) ResHeaders.SelectedItems.Add(h);
+        foreach (var h in headersVms)
+            ResHeaders.SelectedItems.Add(h);
         await UITestActions.WaitAfterActionAsync();
     }
 

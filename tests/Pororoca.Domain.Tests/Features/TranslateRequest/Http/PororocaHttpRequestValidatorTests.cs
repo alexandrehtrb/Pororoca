@@ -425,7 +425,7 @@ public static class PororocaHttpRequestValidatorTests
         // THEN
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{CertificateFilePath}}"), Times.Once);
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("prvkeypwd"), Times.Once);
-        Assert.Equal(TranslateRequestErrors.ClientCertificateFileNotFound, errorCode);
+        Assert.Equal(TranslateRequestErrors.ClientCertificatePkcs12CertificateFileNotFound, errorCode);
     }
 
     [Fact]
@@ -451,7 +451,7 @@ public static class PororocaHttpRequestValidatorTests
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{CertificateFilePath}}"), Times.Once);
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("./private_key.key"), Times.Once);
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("prvkeypwd"), Times.Once);
-        Assert.Equal(TranslateRequestErrors.ClientCertificateFileNotFound, errorCode);
+        Assert.Equal(TranslateRequestErrors.ClientCertificatePemCertificateFileNotFound, errorCode);
     }
 
     [Fact]
@@ -585,6 +585,32 @@ public static class PororocaHttpRequestValidatorTests
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{CertificateFilePath}}"), Times.Once);
         mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{FilePassword}}"), Times.Once);
         Assert.Null(errorCode);
+    }
+
+    #endregion
+
+    #region IS VALID WINDOWS AUTH
+
+    [Fact]
+    public static void Should_reject_req_with_invalid_windows_auth()
+    {
+        // GIVEN
+        var mockedVariableResolver = MockVariableResolver("{{win_pwd}}", "");
+        var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
+        var mockedFileExistsVerifier = MockFileExistsVerifier(false);
+        var auth = PororocaRequestAuth.MakeWindowsAuth(false, "win_login", "{{win_pwd}}", "win_domain");
+        PororocaHttpRequest req = new();
+        req.UpdateUrl("http://www.pudim.com.br");
+        req.UpdateCustomAuth(auth);
+
+        // WHEN
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, mockedVariableResolver.Object, req, out string? errorCode));
+
+        // THEN
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("win_login"), Times.Once);
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{win_pwd}}"), Times.Once);
+        mockedVariableResolver.Verify(x => x.ReplaceTemplates("win_domain"), Times.Never);
+        Assert.Equal(TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank, errorCode);
     }
 
     #endregion

@@ -42,8 +42,8 @@ public static class PororocaWebSocketConnectionTranslator
         {
             try
             {
-                var resolvedClientCert = ResolveClientCertificate(varResolver, wsConn.CustomAuth?.ClientCertificate);
-                var httpCli = httpClientProvider.Provide(disableTlsVerification, resolvedClientCert);
+                var resolvedAuth = ResolveRequestAuth(varResolver, wsConn.CustomAuth);
+                var httpCli = httpClientProvider.Provide(disableTlsVerification, resolvedAuth);
 
                 var wsCli = new ClientWebSocket();
                 SetHttpVersion(wsConn, wsCli);

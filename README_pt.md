@@ -34,6 +34,10 @@ Confira a [documentação](https://pororoca.io/pt/docs/) para saber mais.
 
 HTTP/3 usa o protocolo de transporte QUIC e há algumas preocupações de privacidade quanto a este. Isso não é um problema para comunicações em redes internas e para a maioria das aplicações de negócios, contudo. Há um [artigo](https://svs.informatik.uni-hamburg.de/publications/2019/2019-02-26-Sy-PET_Symposium-A_QUIC_Look_at_Web_Tracking.pdf) interessante sobre isso que vale a pena ler.
 
+## Política de proteção de dados
+
+O Pororoca não sincroniza dados de usuário, como preferências, coleções, ambientes, informações da máquina ou telemetria, a qualquer servidor remoto. Preferências de usuário e coleções são salvas em arquivo na máquina local.
+
 ## Design
 
 Logo e arte criados por [Anderson Martins](https://www.behance.net/am-dsgn).
@@ -50,8 +54,11 @@ Entre em contato se desejar suporte mais avançado, customizações especiais ou
 
 Você também pode contribuir com doações em dinheiro.
 
-Chave PIX: alexandrehtrb@outlook.com
-
 | ![DoeComPIX](./misc/pix_botao_doacao.png) | [![DoeComPayPal](./misc/paypal_donation_button.png)](https://www.paypal.com/donate/?hosted_button_id=NUADRWF3WNYQ2) |
 |--|--|
 | [Ver QR Code](./misc/pix_doacao_qr_code.png) | [Ver QR Code](./misc/paypal_donation_qr_code.png) |
+
+## Contato
+
+* Criador: Alexandre H. T. R. Bonfitto
+* E-mail: alexandrehtrb@outlook.com

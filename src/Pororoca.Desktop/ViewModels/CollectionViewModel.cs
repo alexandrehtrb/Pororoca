@@ -41,6 +41,18 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
 
     public override ObservableCollection<CollectionOrganizationItemViewModel> Items { get; }
 
+    public List<PororocaVariable> Variables =>
+        ((CollectionVariablesViewModel)Items.First(x => x is CollectionVariablesViewModel))
+        .ToVariables().ToList(); // collection variables
+
+    public PororocaRequestAuth? CollectionScopedAuth =>
+        ((CollectionScopedAuthViewModel)Items.First(x => x is CollectionScopedAuthViewModel))
+        .AuthVm.ToCustomAuth();
+
+    public List<PororocaEnvironment> Environments =>
+        ((EnvironmentsGroupViewModel)Items.First(x => x is EnvironmentsGroupViewModel))
+        .ToEnvironments().ToList(); // collection environments
+
     #endregion
 
     #region OTHERS
@@ -78,6 +90,7 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
         Items = new()
         {
             new CollectionVariablesViewModel(this, col),
+            new CollectionScopedAuthViewModel(this, col),
             new EnvironmentsGroupViewModel(this, col.Environments)
         };
         foreach (var folder in col.Folders)
@@ -99,23 +112,24 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
 
     public override void RefreshSubItemsAvailableMovements()
     {
+        const int numberOfFixedItems = 3; // variables, auth, environments
         for (int x = 0; x < Items.Count; x++)
         {
             var colItemVm = Items[x];
             int indexOfLastSubfolder = Items.GetLastIndexOf<CollectionFolderViewModel>();
-            if (colItemVm is CollectionVariablesViewModel || colItemVm is EnvironmentsGroupViewModel)
+            if (colItemVm is CollectionVariablesViewModel|| colItemVm is CollectionScopedAuthViewModel || colItemVm is EnvironmentsGroupViewModel)
             {
                 // Variables and Environments must remain at their positions
                 colItemVm.CanMoveUp = colItemVm.CanMoveDown = false;
             }
             else if (colItemVm is CollectionFolderViewModel)
             {
-                colItemVm.CanMoveUp = x > 2;
+                colItemVm.CanMoveUp = x > numberOfFixedItems;
                 colItemVm.CanMoveDown = x < indexOfLastSubfolder;
             }
             else // http requests and websockets
             {
-                colItemVm.CanMoveUp = x > (indexOfLastSubfolder == -1 ? 2 : (indexOfLastSubfolder + 1));
+                colItemVm.CanMoveUp = x > (indexOfLastSubfolder == -1 ? numberOfFixedItems : (indexOfLastSubfolder + 1));
                 colItemVm.CanMoveDown = x < Items.Count - 1;
             }
         }
@@ -224,8 +238,6 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
 
     public PororocaCollection ToCollection()
     {
-        var variables = ((CollectionVariablesViewModel)Items.First(i => i is CollectionVariablesViewModel)).ToVariables().ToList();
-        var envs = ((EnvironmentsGroupViewModel)Items.First(i => i is EnvironmentsGroupViewModel)).ToEnvironments().ToList();
         var folders = Items.Where(i => i is CollectionFolderViewModel).Cast<CollectionFolderViewModel>().Select(x => x.ToCollectionFolder()).ToList();
         var reqs = Items.Where(i => i is HttpRequestViewModel || i is WebSocketConnectionViewModel)
                         .Select(i =>
@@ -238,30 +250,7 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
                                 throw new InvalidDataException();
                         }).ToList();
 
-        return new PororocaCollection(this.colId, Name, this.colCreatedAt, variables, envs, folders, reqs);
-    }
-
-    public string ReplaceTemplates(string? strToReplaceTemplatedVariables)
-    {
-        if (string.IsNullOrEmpty(strToReplaceTemplatedVariables))
-        {
-            return string.Empty;
-        }
-        else
-        {
-            var collectionVariables = ((CollectionVariablesViewModel)Items.First(i => i is CollectionVariablesViewModel)).ToVariables();
-            IEnumerable<PororocaVariable>? environmentVariables = GetCurrentEnvironment()
-                                                                  ?.ToEnvironment()
-                                                                  ?.Variables;
-            IEnumerable<PororocaVariable> effectiveVariables = PororocaVariablesMerger.MergeVariables(collectionVariables, environmentVariables);
-            string resolvedStr = strToReplaceTemplatedVariables!;
-            foreach (var v in effectiveVariables)
-            {
-                string variableTemplate = VariableTemplateBeginToken + v.Key + VariableTemplateEndToken;
-                resolvedStr = resolvedStr.Replace(variableTemplate, v.Value ?? string.Empty);
-            }
-            return resolvedStr;
-        }
+        return new PororocaCollection(this.colId, Name, this.colCreatedAt, Variables, CollectionScopedAuth, Environments, folders, reqs);
     }
 
     public EnvironmentViewModel? GetCurrentEnvironment() =>

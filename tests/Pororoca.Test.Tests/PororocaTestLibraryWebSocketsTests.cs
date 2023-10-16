@@ -36,6 +36,7 @@ public class PororocaTestLibraryWebSocketsTests
         Assert.Equal(PororocaWebSocketConnectorState.Disconnected, ws.State);
         // THEN
         // The server should reply with a closing message
+        await Task.Delay(200);
         Assert.Single(ws.ExchangedMessages);
 
         var srvMsg = Assert.IsType<PororocaWebSocketServerMessage>(ws.ExchangedMessages[0]);

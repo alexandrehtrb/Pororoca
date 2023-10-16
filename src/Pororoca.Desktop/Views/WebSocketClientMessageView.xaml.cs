@@ -1,8 +1,10 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using AvaloniaEdit;
+using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.TextEditorConfig;
 using Pororoca.Domain.Features.Common;
+using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 
 namespace Pororoca.Desktop.Views;
 
@@ -18,63 +20,17 @@ public class WebSocketClientMessageView : UserControl
         var rawContentTextEditor = this.FindControl<TextEditor>("teContentRaw");
         this.rawContentEditorTextMateInstallation = TextEditorConfiguration.Setup(rawContentTextEditor!, true);
 
+        var rawContentSyntaxSelector = this.FindControl<ComboBox>("cbContentRawSyntax")!;
+        rawContentSyntaxSelector.SelectionChanged += OnRawContentSyntaxChanged;
+
         // This is for testing syntax colour themes
         /*this.syntaxThemeCombo = this.FindControl<ComboBox>("RawContentThemeSelector");
         this.syntaxThemeCombo.Items = Enum.GetNames(typeof(ThemeName));
         this.syntaxThemeCombo.SelectedItem = ThemeName.DarkPlus;
         this.syntaxThemeCombo.SelectionChanged += SyntaxThemeCombo_SelectionChanged;*/
-
-        SetupSelectedOptionsPanelsVisibility();
     }
 
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
-
-    #region PANELS VISIBILITY CONTROL
-
-    private void SetupSelectedOptionsPanelsVisibility()
-    {
-        ComboBox cbContentMode = this.FindControl<ComboBox>("cbContentMode")!,
-            cbContentRawSyntax = this.FindControl<ComboBox>("cbContentRawSyntax")!;
-
-        ComboBoxItem cbiContentModeRaw = this.FindControl<ComboBoxItem>("cbiContentModeRaw")!,
-                    cbiContentModeFile = this.FindControl<ComboBoxItem>("cbiContentModeFile")!,
-                    cbiContentRawSyntaxJson = this.FindControl<ComboBoxItem>("cbiContentRawSyntaxJson")!,
-                    cbiContentRawSyntaxOther = this.FindControl<ComboBoxItem>("cbiContentRawSyntaxOther")!;
-
-        var teContentRaw = this.FindControl<TextEditor>("teContentRaw")!;
-
-        var spWsCliMsgContentFile = this.FindControl<StackPanel>("spWsCliMsgContentFile")!;
-
-        cbContentMode.SelectionChanged += (sender, e) =>
-        {
-            object? selected = e.AddedItems.Count > 0 ? e.AddedItems[0] : null;
-            if (selected == cbiContentModeRaw)
-            {
-                cbContentRawSyntax.IsVisible = teContentRaw.IsVisible = true;
-                spWsCliMsgContentFile.IsVisible = false;
-            }
-            else if (selected == cbiContentModeFile)
-            {
-                cbContentRawSyntax.IsVisible = teContentRaw.IsVisible = false;
-                spWsCliMsgContentFile.IsVisible = true;
-            }
-        };
-
-        cbContentRawSyntax.SelectionChanged += (sender, e) =>
-        {
-            object? selected = e.AddedItems.Count > 0 ? e.AddedItems[0] : null;
-            if (selected == cbiContentRawSyntaxJson)
-            {
-                ApplySelectedRawContentSyntax(MimeTypesDetector.DefaultMimeTypeForJson);
-            }
-            else if (selected == cbiContentRawSyntaxOther)
-            {
-                ApplySelectedRawContentSyntax(null);
-            }
-        };
-    }
-
-    #endregion
 
     #region VIEW COMPONENTS EVENTS
 
@@ -91,8 +47,25 @@ public class WebSocketClientMessageView : UserControl
 
     #region HELPERS
 
-    private void ApplySelectedRawContentSyntax(string? contentType) =>
+    private void OnRawContentSyntaxChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (e.AddedItems is not null && e.AddedItems.Count > 0)
+        {
+            int i = ((ComboBox)e.Source!).SelectedIndex;
+            var selectedSyntax = WebSocketMessageRawContentSyntaxMapping.MapIndexToEnum(i);
+            ApplySelectedRawContentSyntax(selectedSyntax);
+        }
+    }
+
+    private void ApplySelectedRawContentSyntax(PororocaWebSocketMessageRawContentSyntax? syntax)
+    {
+        string? contentType = syntax switch
+        {
+            PororocaWebSocketMessageRawContentSyntax.Json => MimeTypesDetector.DefaultMimeTypeForJson,
+            _ => null
+        };
         this.rawContentEditorTextMateInstallation.SetEditorSyntax(ref this.currentRawContentSyntaxLangId, contentType);
+    }
 
     #endregion
 }

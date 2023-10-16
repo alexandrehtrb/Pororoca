@@ -48,6 +48,7 @@ public sealed class ExportAndImportUITest : UITest
     private ItemsTreeRobot TreeRobot { get; }
     private CollectionRobot ColRobot { get; }
     private CollectionVariablesRobot ColVarsRobot { get; }
+    private CollectionScopedAuthRobot ColAuthRobot { get; }
     private CollectionFolderRobot DirRobot { get; }
     private EnvironmentRobot EnvRobot { get; }
     private HttpRequestRobot HttpRobot { get; }
@@ -62,6 +63,7 @@ public sealed class ExportAndImportUITest : UITest
         TreeRobot = new(CollectionsGroup);
         ColRobot = new(RootView.FindControl<CollectionView>("collectionView")!);
         ColVarsRobot = new(RootView.FindControl<CollectionVariablesView>("collectionVariablesView")!);
+        ColAuthRobot = new(RootView.FindControl<CollectionScopedAuthView>("collectionScopedAuthView")!);
         DirRobot = new(RootView.FindControl<CollectionFolderView>("collectionFolderView")!);
         EnvRobot = new(RootView.FindControl<EnvironmentView>("environmentView")!);
         HttpRobot = new(RootView.FindControl<HttpRequestView>("httpReqView")!);
@@ -85,6 +87,9 @@ public sealed class ExportAndImportUITest : UITest
         await ColRobot.Name.Edit("COL1");
         await TreeRobot.Select("COL1/VARS");
         await ColVarsRobot.SetVariables(defaultColVars);
+
+        await TreeRobot.Select("COL1/AUTH");
+        await ColAuthRobot.Auth.SetBearerAuth("token");
 
         await TreeRobot.Select("COL1");
         await ColRobot.AddEnvironment.ClickOn();
@@ -113,6 +118,15 @@ public sealed class ExportAndImportUITest : UITest
         await HttpRobot.SetHttpVersion(1.1m);
         await HttpRobot.SetEmptyBody();
         await HttpRobot.SetBearerAuth("{{BearerAuthToken}}");
+
+        await TreeRobot.Select("COL1/DIR1");
+        await DirRobot.AddHttpReq.ClickOn();
+        await HttpRobot.Name.Edit("HTTPNONEWINDOWSAUTH");
+        await HttpRobot.HttpMethod.Select("GET");
+        await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/auth");
+        await HttpRobot.SetHttpVersion(1.1m);
+        await HttpRobot.SetEmptyBody();
+        await HttpRobot.SetWindowsAuthOtherUser("{{WindowsAuthLogin}}", "{{WindowsAuthPassword}}", "{{WindowsAuthDomain}}");
 
         await TreeRobot.Select("COL1/DIR1");
         await DirRobot.AddHttpReq.ClickOn();
@@ -224,6 +238,7 @@ public sealed class ExportAndImportUITest : UITest
                         WSMSGFILE
                 HTTPNONEBASICAUTH
                 HTTPNONEBEARERAUTH
+                HTTPNONEWINDOWSAUTH
                 HTTPNONEPKCS12AUTH
                 HTTPFORMDATA
                 HTTPGRAPHQL
@@ -231,10 +246,12 @@ public sealed class ExportAndImportUITest : UITest
         */
 
         AssertTreeItemExists(CollectionsGroup, "COL1");
+        AssertTreeItemExists(CollectionsGroup, "COL1/AUTH");
         AssertTreeItemExists(CollectionsGroup, "COL1/ENVS/ENV1");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/HTTPNONEBASICAUTH");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/HTTPNONEBEARERAUTH");
+        AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/HTTPNONEWINDOWSAUTH");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/HTTPNONEPKCS12AUTH");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/HTTPFORMDATA");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/HTTPGRAPHQL");
@@ -268,10 +285,12 @@ public sealed class ExportAndImportUITest : UITest
     private async Task AssertCollectionReimportedSuccessfully()
     {
         AssertTreeItemExists(CollectionsGroup, "COL1");
+        AssertTreeItemExists(CollectionsGroup, "COL1/AUTH");
         AssertTreeItemExists(CollectionsGroup, "COL1/ENVS/ENV1");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/HTTPNONEBASICAUTH");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/HTTPNONEBEARERAUTH");
+        AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/HTTPNONEWINDOWSAUTH");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/HTTPNONEPKCS12AUTH");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/HTTPFORMDATA");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/HTTPGRAPHQL");
@@ -287,6 +306,14 @@ public sealed class ExportAndImportUITest : UITest
 
         await TreeRobot.Select("COL1");
         AssertIsVisible(ColRobot.RootView);
+
+        await TreeRobot.Select("COL1/AUTH");
+        AssertIsVisible(ColAuthRobot.RootView);
+        AssertSelection(ColAuthRobot.Auth.AuthType, ColAuthRobot.Auth.AuthTypeOptionBearer);
+        AssertIsVisible(ColAuthRobot.Auth.BearerAuthToken);
+        AssertHasText(ColAuthRobot.Auth.BearerAuthToken, "token");
+        AssertIsHidden(ColAuthRobot.Auth.BasicAuthLogin);
+        AssertIsHidden(ColAuthRobot.Auth.ClientCertificateType);
 
         await TreeRobot.Select("COL1/VARS");
         AssertIsVisible(ColVarsRobot.RootView);
@@ -316,6 +343,8 @@ public sealed class ExportAndImportUITest : UITest
         AssertIsVisible(HttpRobot.Auth.BasicAuthPassword);
         AssertHasText(HttpRobot.Auth.BasicAuthLogin, "{{BasicAuthLogin}}");
         AssertHasText(HttpRobot.Auth.BasicAuthPassword, "{{BasicAuthPassword}}");
+        AssertIsHidden(HttpRobot.Auth.BearerAuthToken);
+        AssertIsHidden(HttpRobot.Auth.ClientCertificateType);
 
         await TreeRobot.Select("COL1/DIR1/HTTPNONEBEARERAUTH");
         AssertIsVisible(HttpRobot.RootView);
@@ -328,6 +357,24 @@ public sealed class ExportAndImportUITest : UITest
         AssertSelection(HttpRobot.Auth.AuthType, HttpRobot.Auth.AuthTypeOptionBearer);
         AssertIsVisible(HttpRobot.Auth.BearerAuthToken);
         AssertHasText(HttpRobot.Auth.BearerAuthToken, "{{BearerAuthToken}}");
+        AssertIsHidden(HttpRobot.Auth.BasicAuthLogin);
+        AssertIsHidden(HttpRobot.Auth.ClientCertificateType);
+
+        await TreeRobot.Select("COL1/DIR1/HTTPNONEWINDOWSAUTH");
+        AssertIsVisible(HttpRobot.RootView);
+        AssertHasText(HttpRobot.HttpMethod, "GET");
+        AssertHasText(HttpRobot.Url, "{{BaseUrl}}/test/auth");
+        AssertHasText(HttpRobot.HttpVersion, "HTTP/1.1");
+        await HttpRobot.TabControlReq.Select(HttpRobot.TabReqBody);
+        AssertSelection(HttpRobot.ReqBodyMode, HttpRobot.ReqBodyModeOptionNone);
+        await HttpRobot.TabControlReq.Select(HttpRobot.TabReqAuth);
+        AssertSelection(HttpRobot.Auth.AuthType, HttpRobot.Auth.AuthTypeOptionWindows);
+        AssertIsHidden(HttpRobot.Auth.BasicAuthLogin);
+        AssertIsHidden(HttpRobot.Auth.BearerAuthToken);
+        AssertIsNotChecked(HttpRobot.Auth.WindowsAuthUseCurrentUser);
+        AssertHasText(HttpRobot.Auth.WindowsAuthLogin, "{{WindowsAuthLogin}}");
+        AssertHasText(HttpRobot.Auth.WindowsAuthPassword, "{{WindowsAuthPassword}}");
+        AssertHasText(HttpRobot.Auth.WindowsAuthDomain, "{{WindowsAuthDomain}}");
 
         await TreeRobot.Select("COL1/DIR1/HTTPNONEPKCS12AUTH");
         AssertIsVisible(HttpRobot.RootView);
@@ -343,6 +390,9 @@ public sealed class ExportAndImportUITest : UITest
         AssertIsVisible(HttpRobot.Auth.ClientCertificatePkcs12FilePassword);
         AssertHasText(HttpRobot.Auth.ClientCertificatePkcs12FilePath, "{{ClientCertificatesDir}}/badssl.com-client.p12");
         AssertHasText(HttpRobot.Auth.ClientCertificatePkcs12FilePassword, "{{BadSslClientCertFilePassword}}");
+        AssertIsHidden(HttpRobot.Auth.BasicAuthLogin);
+        AssertIsHidden(HttpRobot.Auth.BearerAuthToken);
+        AssertIsHidden(HttpRobot.Auth.WindowsAuthUseCurrentUser);
 
         await TreeRobot.Select("COL1/DIR1/HTTPFORMDATA");
         AssertIsVisible(HttpRobot.RootView);

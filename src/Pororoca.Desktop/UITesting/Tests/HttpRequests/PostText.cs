@@ -25,7 +25,7 @@ public sealed partial class HttpRequestsUITest : UITest
         AssertContainsResponseHeader("Content-Type", "text/xml; charset=utf-8");
         AssertContainsResponseHeader("Content-Length", "40");
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResBody);
-        AssertHasText(HttpRobot.ResBodyRawContent, "<XML><MyValue>Tailândia</MyValue></XML>");
+        AssertHasText(HttpRobot.ResBodyRawContent, "<XML>" + Environment.NewLine + "  <MyValue>Tailândia</MyValue>" + Environment.NewLine + "</XML>");
         AssertIsVisible(HttpRobot.ResBodySaveToFile);
     }
 }

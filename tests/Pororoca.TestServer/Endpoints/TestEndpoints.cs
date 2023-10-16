@@ -11,6 +11,7 @@ public static class TestEndpoints
     public static WebApplication MapTestEndpoints(this WebApplication app)
     {
         app.MapGet("test/get/json", TestGetJson);
+        app.MapGet("test/get/xml", TestGetXml);
         app.MapGet("test/get/img", TestGetImg);
         app.MapGet("test/get/txt", TestGetTxt);
         app.MapGet("test/get/headers", TestGetHeaders);
@@ -34,6 +35,22 @@ public static class TestEndpoints
 
     private static IResult TestGetJson() =>
         Results.Ok(new { id = 1 });
+
+    private static IResult TestGetXml()
+    {
+        const string xml =
+        @"<env:Envelope xmlns:env=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:wsa=""http://www.w3.org/2005/08/addressing"">
+              <env:Body>
+                  <xsi:response xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
+                      <wsa:MyVal1>Alexandre</wsa:MyVal1>
+                      <xsi:Value>
+                          <wsa:MyVal2>123987456</wsa:MyVal2>
+                      </xsi:Value>
+                  </xsi:response>
+              </env:Body>
+          </env:Envelope>";
+        return Results.Text(xml, "text/xml", Encoding.UTF8);
+    }
 
     private static IResult TestGetImg()
     {

@@ -100,7 +100,7 @@
         VerticalContentAlignment="Center"
         HorizontalAlignment="Left"
         VerticalAlignment="Stretch"
-        Classes="Primary">
+        Classes="Secondary">
       <Panel>
         <Image
             x:Name="imgEdit"

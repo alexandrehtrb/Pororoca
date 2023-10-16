@@ -379,6 +379,9 @@
       <DataTemplate DataType="{x:Type vm:CollectionVariablesViewModel}">
         <TextBlock Text="{Binding i18n.CollectionsGroup.Variables}"/>
       </DataTemplate>
+      <DataTemplate DataType="{x:Type vm:CollectionScopedAuthViewModel}">
+        <TextBlock Text="{Binding i18n.CollectionsGroup.CollectionScopedAuth}"/>
+      </DataTemplate>
 
     </TreeView.DataTemplates>
 

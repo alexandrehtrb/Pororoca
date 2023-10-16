@@ -34,6 +34,10 @@ Pororoca - это инструмент тестирования HTTP, вдохн
 
 HTTP/3 использует транспортный протокол QUIC и по этому поводу есть некоторые опасения по поводу конфиденциальности. Однако это может не представлять проблемы при внутренней сетевой коммуникации и для большинства бизнес-приложений. Об этом есть интересная статья [здесь](https://svs.informatik.uni-hamburg.de/publications/2019/2019-02-26-Sy-PET_Symposium-A_QUIC_Look_at_Web_Tracking.pdf).
 
+## Политика защиты данных
+
+Pororoca не синхронизирует пользовательские данные, такие как настройки, коллекции, среды, информацию о компьютере или телеметрию, с каким-либо удаленным сервером. Пользовательские настройки и коллекции сохраняются в виде файлов на компьютере пользователя.
+
 ## Дизайн
 
 Логотип и художественное оформление созданны [Anderson Martins](https://www.behance.net/am-dsgn).
@@ -50,8 +54,11 @@ HTTP/3 использует транспортный протокол QUIC и п
 
 Вы также можете внести свой вклад денежными пожертвованиями.
 
-Chave PIX: alexandrehtrb@outlook.com
-
 | ![DonateWithPix](./misc/pix_botao_doacao.png) | [![DonateWithPayPal](./misc/paypal_donation_button.png)](https://www.paypal.com/donate/?hosted_button_id=NUADRWF3WNYQ2) |
 |--|--|
 | [View QR Code](./misc/pix_doacao_qr_code.png) | [View QR Code](./misc/paypal_donation_qr_code.png) |
+
+## Контактная информация
+
+* Создатель: Alexandre H. T. R. Bonfitto
+* E-mail: alexandrehtrb@outlook.com

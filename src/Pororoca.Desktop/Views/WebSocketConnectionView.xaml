@@ -6,6 +6,7 @@
     xmlns:v="using:Pororoca.Desktop.Views"
     xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
     xmlns:controls="clr-namespace:Pororoca.Desktop.Controls;assembly=Pororoca.Desktop"
+    xmlns:conv="clr-namespace:Pororoca.Desktop.Converters;assembly=Pororoca.Desktop"
     xmlns:AvaloniaEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
     xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
     xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
@@ -18,6 +19,10 @@
     d:DesignWidth="1350"
     d:DesignHeight="700"
     FontSize="14">
+
+  <UserControl.Resources>
+    <conv:WebSocketConnectionOptionMatchConverter x:Key="connectionOptionMatch"/>
+  </UserControl.Resources>
 
   <UserControl.Styles>
     <Style Selector="TabItem">
@@ -253,7 +258,11 @@
                   x:Name="grWsConnReqHeaders"
                   Grid.Column="0"
                   Grid.Row="1"
-                  Margin="-12,12,-12,12">
+                  Margin="-12,12,-12,12"
+                  IsVisible="{Binding ConnectionOptionSelectedIndex, 
+                              Mode=OneWay,
+                              Converter={StaticResource connectionOptionMatch}, 
+                              ConverterParameter=Headers}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
@@ -271,7 +280,8 @@
                     VerticalContentAlignment="Center"
                     Padding="2"
                     Margin="12,0,0,0"
-                    Classes="Primary"
+                    Classes="Secondary"
+                    ToolTip.Tip="{Binding i18n.WebSocketConnection.ConnectionRequestHeaderAdd}"
                     Command="{Binding ConnectionRequestHeadersTableVm.AddNewCmd}">
                   <Button.Content>
                     <Image
@@ -374,7 +384,11 @@
                   x:Name="grWsConnReqSubprotocols"
                   Grid.Column="0"
                   Grid.Row="1"
-                  Margin="-12,12,-12,12">
+                  Margin="-12,12,-12,12"
+                  IsVisible="{Binding ConnectionOptionSelectedIndex, 
+                              Mode=OneWay,
+                              Converter={StaticResource connectionOptionMatch}, 
+                              ConverterParameter=Subprotocols}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
@@ -392,7 +406,8 @@
                     VerticalContentAlignment="Center"
                     Padding="2"
                     Margin="12,0,0,0"
-                    Classes="Primary"
+                    Classes="Secondary"
+                    ToolTip.Tip="{Binding i18n.WebSocketConnection.ConnectionRequestSubprotocolAdd}"
                     Command="{Binding SubprotocolsTableVm.AddNewCmd}">
                   <Button.Content>
                     <Image
@@ -488,7 +503,11 @@
                   x:Name="spWsConnReqCompression"
                   Grid.Column="0"
                   Grid.Row="1"
-                  Margin="0,12,0,12">
+                  Margin="0,12,0,12"
+                  IsVisible="{Binding ConnectionOptionSelectedIndex, 
+                              Mode=OneWay,
+                              Converter={StaticResource connectionOptionMatch}, 
+                              ConverterParameter=Compression}">
                 <CheckBox
                     x:Name="cbWsConnReqCompressionEnable"
                     Content="{Binding i18n.WebSocketConnection.EnableCompression}"
@@ -685,6 +704,7 @@
                 Padding="2"
                 Margin="0,0,12,0"
                 Classes="Primary"
+                ToolTip.Tip="{Binding i18n.WebSocketClientMessage.NewMessage}"
                 Command="{Binding AddNewWebSocketClientMessageCmd}">
               <Button.Content>
                 <Image

@@ -50,7 +50,7 @@ public class PororocaTestLibraryHttp1Tests
         Assert.Equal("text/plain", res.ContentType);
         int expectedLength = OperatingSystem.IsWindows() ? 462 : 448; // because of \r\n instead of \n
         Assert.Equal(expectedLength, res.GetBodyAsBinary()?.Length);
-        Assert.Contains("Cross-Stitch Pattern", res.GetBodyAsText());
+        Assert.Contains("Cross-Stitch Pattern", res.GetBodyAsPrettyText());
     }
 
     [Fact]
@@ -59,14 +59,11 @@ public class PororocaTestLibraryHttp1Tests
         var res = await this.pororocaTest.SendHttpRequestAsync("Get headers");
 
         Assert.NotNull(res);
-        Assert.Equal(HttpStatusCode.OK, res.StatusCode);
-        Assert.Equal("application/json; charset=utf-8", res.ContentType);
+        Assert.Equal(HttpStatusCode.NoContent, res.StatusCode);
 
-        var bodyListedHeaders = res.GetJsonBodyAs<Dictionary<string, string[]>>();
-        Assert.True(bodyListedHeaders!.TryGetValue("Header1", out string[]? hdr1Values));
-        Assert.Contains("oi", hdr1Values);
-        Assert.True(bodyListedHeaders!.TryGetValue("Header2", out string[]? hdr2Values));
-        Assert.Contains("ciao", hdr2Values);
+        Assert.NotNull(res.Headers);
+        Assert.Contains(new("MIRRORED-Header1", "oi"), res.Headers);
+        Assert.Contains(new("MIRRORED-Header2", "ciao"), res.Headers);
     }
 
     [Fact]
@@ -103,7 +100,7 @@ public class PororocaTestLibraryHttp1Tests
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
         Assert.Equal("text/plain; charset=utf-8", res.ContentType);
 
-        string? bodyText = res.GetBodyAsText();
+        string? bodyText = res.GetBodyAsPrettyText();
         Assert.Contains("application/x-www-form-urlencoded", bodyText);
         Assert.Contains("a=xyz&b=123&c=true&myIdSecret=789", bodyText);
 
@@ -117,7 +114,7 @@ public class PororocaTestLibraryHttp1Tests
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
         Assert.Equal("text/plain; charset=utf-8", res.ContentType);
 
-        bodyText = res.GetBodyAsText();
+        bodyText = res.GetBodyAsPrettyText();
         Assert.Contains("application/x-www-form-urlencoded", bodyText);
         Assert.Contains("a=xyz&b=123&c=true&myIdSecret=999", bodyText);
     }
@@ -131,7 +128,7 @@ public class PororocaTestLibraryHttp1Tests
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
         Assert.Equal("text/plain; charset=utf-8", res.ContentType);
 
-        string? bodyText = res.GetBodyAsText();
+        string? bodyText = res.GetBodyAsPrettyText();
         Assert.Contains("Content-Disposition: form-data; name=a", bodyText);
         Assert.Contains("Body: xyz", bodyText);
         Assert.Contains("Content-Disposition: form-data; name=b", bodyText);
@@ -149,7 +146,7 @@ public class PororocaTestLibraryHttp1Tests
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
         Assert.Equal("text/plain; charset=utf-8", res.ContentType);
 
-        string? bodyText = res.GetBodyAsText();
+        string? bodyText = res.GetBodyAsPrettyText();
         Assert.Contains("Basic dXNyOnB3ZA==", bodyText);
     }
 
@@ -162,7 +159,7 @@ public class PororocaTestLibraryHttp1Tests
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
         Assert.Equal("text/plain; charset=utf-8", res.ContentType);
 
-        string? bodyText = res.GetBodyAsText();
+        string? bodyText = res.GetBodyAsPrettyText();
         Assert.Contains("Bearer token_local", bodyText);
 
         // lets change {{BearerAuthToken}} to another value using PororocaTest
@@ -179,7 +176,7 @@ public class PororocaTestLibraryHttp1Tests
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
         Assert.Equal("text/plain; charset=utf-8", res.ContentType);
 
-        bodyText = res.GetBodyAsText();
+        bodyText = res.GetBodyAsPrettyText();
         Assert.Contains("Bearer token_development", bodyText);
     }
 

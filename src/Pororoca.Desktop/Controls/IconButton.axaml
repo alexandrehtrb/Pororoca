@@ -11,7 +11,7 @@
       <Setter Property="Template">
         <ControlTemplate>
           <Button
-              Classes="Primary"
+              Classes="Secondary"
               Command="{TemplateBinding Command}">
             <Button.Content>
               <StackPanel

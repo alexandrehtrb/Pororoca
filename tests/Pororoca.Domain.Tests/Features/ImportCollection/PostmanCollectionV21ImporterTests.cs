@@ -373,6 +373,38 @@ public static class PostmanCollectionV21ImporterTests
         Assert.Equal("tkn", reqAuth.BearerToken);
     }
 
+    [Fact]
+    public static void Should_convert_postman_req_ntlm_auth_to_pororoca_req_auth_correctly()
+    {
+        // GIVEN
+        PostmanAuth? postmanAuth = new()
+        {
+            Type = PostmanAuthType.ntlm,
+            Ntlm = new PostmanVariable[]
+            {
+                new() { Key = "username", Value = "usr", Type = "string" },
+                new() { Key = "password", Value = "pwd", Type = "string" },
+                new() { Key = "domain", Value = "dom", Type = "string" }
+            }
+        };
+
+        // WHEN
+        var reqAuth = ConvertToPororocaAuth(postmanAuth);
+
+        // THEN
+        Assert.NotNull(reqAuth);
+        Assert.Equal(PororocaRequestAuthMode.Windows, reqAuth!.Mode);
+        Assert.Null(reqAuth.BasicAuthLogin);
+        Assert.Null(reqAuth.BasicAuthPassword);
+        Assert.Null(reqAuth.BearerToken);
+        Assert.Null(reqAuth.ClientCertificate);
+        Assert.NotNull(reqAuth.Windows);
+        Assert.False(reqAuth.Windows.UseCurrentUser);
+        Assert.Equal("usr", reqAuth.Windows.Login);
+        Assert.Equal("pwd", reqAuth.Windows.Password);
+        Assert.Equal("dom", reqAuth.Windows.Domain);
+    }
+
     #endregion
 
     #region REQUEST
@@ -408,12 +440,11 @@ public static class PostmanCollectionV21ImporterTests
     public static void Should_convert_postman_req_with_no_inherited_auth_to_pororoca_req_correctly()
     {
         // GIVEN
-        PororocaRequestAuth? collectionScopedAuth = null;
         string reqName = "MyRequest";
         var postmanRequest = CreateTestRequestWithAuth();
 
         // WHEN
-        var req = ConvertToPororocaHttpRequest(reqName, postmanRequest, collectionScopedAuth);
+        var req = ConvertToPororocaHttpRequest(reqName, postmanRequest);
 
         // THEN
         Assert.NotNull(req);
@@ -445,13 +476,12 @@ public static class PostmanCollectionV21ImporterTests
     public static void Should_convert_postman_req_with_inherited_auth_to_pororoca_req_correctly()
     {
         // GIVEN
-        var collectionScopedAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
         string reqName = "MyRequest";
         var postmanRequest = CreateTestRequestWithAuth();
         postmanRequest.Auth = null;
 
         // WHEN
-        var req = ConvertToPororocaHttpRequest(reqName, postmanRequest, collectionScopedAuth);
+        var req = ConvertToPororocaHttpRequest(reqName, postmanRequest);
 
         // THEN
         Assert.NotNull(req);
@@ -460,8 +490,8 @@ public static class PostmanCollectionV21ImporterTests
         Assert.Equal("POST", req.HttpMethod);
         Assert.Equal("http://www.abc.com.br", req.Url);
 
-        Assert.Equal(PororocaRequestAuthMode.Bearer, req.CustomAuth!.Mode);
-        Assert.Equal("tkn", req.CustomAuth.BearerToken);
+        Assert.Equal(PororocaRequestAuth.InheritedFromCollection, req.CustomAuth);
+        Assert.Equal(PororocaRequestAuthMode.InheritFromCollection, req.CustomAuth!.Mode);
 
         Assert.Equal(2, req.Headers!.Count);
         var hdr1 = req.Headers[0];
@@ -567,15 +597,13 @@ public static class PostmanCollectionV21ImporterTests
         Assert.Equal("Req1", req1.Name);
         Assert.Equal("GET", req1.HttpMethod);
         Assert.Equal("http://www.abc.com.br", req1.Url);
-        Assert.Equal(PororocaRequestAuthMode.Bearer, req1.CustomAuth!.Mode);
-        Assert.Equal("tkn", req1.CustomAuth.BearerToken);
+        Assert.Equal(PororocaRequestAuth.InheritedFromCollection, req1.CustomAuth);
 
         var req2 = pororocaCollection.HttpRequests[0];
         Assert.Equal("Req2", req2.Name);
         Assert.Equal("GET", req2.HttpMethod);
         Assert.Equal("http://www.def.com.br", req2.Url);
-        Assert.Equal(PororocaRequestAuthMode.Bearer, req2.CustomAuth!.Mode);
-        Assert.Equal("tkn", req2.CustomAuth.BearerToken);
+        Assert.Equal(PororocaRequestAuth.InheritedFromCollection, req2.CustomAuth);
 
         Assert.Equal(2, pororocaCollection.Variables.Count);
         var var1 = pororocaCollection.Variables[0];

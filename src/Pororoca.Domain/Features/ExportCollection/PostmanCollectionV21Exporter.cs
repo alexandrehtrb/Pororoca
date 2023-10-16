@@ -31,7 +31,8 @@ public static class PostmanCollectionV21Exporter
                               Value = shouldHideSecrets && v.IsSecret ? string.Empty : v.Value,
                               Disabled = v.Enabled ? null : true
                           })
-                          .ToArray()
+                          .ToArray(),
+            Auth = ConvertToPostmanAuth(col.CollectionScopedAuth)
         };
 
     internal static PostmanAuth ConvertToPostmanAuth(PororocaRequestAuth? auth)
