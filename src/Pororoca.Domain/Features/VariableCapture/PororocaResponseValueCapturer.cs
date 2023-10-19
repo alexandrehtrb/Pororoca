@@ -82,11 +82,11 @@ public static partial class PororocaResponseValueCapturer
 
     public static string? CaptureJsonValue(string path, string json)
     {
-        string[] subpaths = path.Split('.');
-        var jsonNode = JsonNode.Parse(json);
-
         try
         {
+            string[] subpaths = path.Split('.');
+            var jsonNode = JsonNode.Parse(json);
+            
             foreach (string subpath in subpaths)
             {
                 if (IsArrayElementSubpath(subpath, out string? elementName, out int? index1, out int? index2))

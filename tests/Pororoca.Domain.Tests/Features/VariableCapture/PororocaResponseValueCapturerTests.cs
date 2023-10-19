@@ -64,6 +64,7 @@ public static partial class PororocaResponseValueCapturerTests
           </env:Envelope>";
 
     [Theory]
+    [InlineData(null, "$.id", "Some string that is not a JSON")]
     [InlineData("Alexandre", "$", testJsonStr)]
     [InlineData("1", "$.myObj.id", testJsonObj)]
     [InlineData("Alexandre", "$.myObj.myObj2.name", testJsonObj)]
