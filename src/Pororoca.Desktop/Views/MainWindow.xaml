@@ -181,6 +181,20 @@
                 </Image>
               </MenuItem.Icon>
             </MenuItem>
+            <MenuItem
+                x:Name="topMenuItemOptionsLanguageItalian"
+                Header="{Binding i18n.TopMenuLanguage.Italian}"
+                Command="{Binding SelectLanguageItalianCmd}">
+              <MenuItem.Icon>
+                <Image
+                    IsVisible="{Binding IsLanguageItalian}"
+                    Classes="MenuItemCheckMark">
+                  <Image.Source>
+                    <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                  </Image.Source>
+                </Image>
+              </MenuItem.Icon>
+            </MenuItem>
           </MenuItem>
           <MenuItem
               x:Name="topMenuItemOptionsEnableTlsVerification"
