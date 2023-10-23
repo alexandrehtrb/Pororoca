@@ -52,7 +52,7 @@ public static class PororocaWebSocketConnectionTranslator
                 var wsCli = new ClientWebSocket();
                 SetHttpVersion(wsConn, wsCli);
                 SetConnectionRequestHeaders(varResolver, effectiveVars, wsConn, wsCli);
-                SetSubprotocols(varResolver, effectiveVars, wsConn, wsCli);
+                SetSubprotocols(effectiveVars, wsConn, wsCli);
                 SetCompressionOptions(wsConn, wsCli);
 
                 wsAndHttpCli = (wsCli, httpCli);
@@ -82,9 +82,9 @@ public static class PororocaWebSocketConnectionTranslator
         }
     }
 
-    private static void SetSubprotocols(IPororocaVariableResolver varResolver, IEnumerable<PororocaVariable> effectiveVars, PororocaWebSocketConnection wsConn, ClientWebSocket wsCli)
+    private static void SetSubprotocols(IEnumerable<PororocaVariable> effectiveVars, PororocaWebSocketConnection wsConn, ClientWebSocket wsCli)
     {
-        var subprotocols = varResolver.ResolveKeyValueParams(wsConn.Subprotocols, effectiveVars).Select(kv => kv.Key);
+        var subprotocols = IPororocaVariableResolver.ResolveKeyValueParams(wsConn.Subprotocols, effectiveVars).Select(kv => kv.Key);
         foreach (string subprotocol in subprotocols)
         {
             wsCli.Options.AddSubProtocol(subprotocol);

@@ -13,11 +13,11 @@ public static class PororocaHttpRequestValidator
         IsValidRequest(IsHttpVersionAvailableInOS, File.Exists, variableResolver, effectiveVars, req, out errorCode);
 
     internal static bool IsValidRequest(HttpVersionAvailableVerifier httpVersionOSVerifier, FileExistsVerifier fileExistsVerifier, IPororocaVariableResolver variableResolver, IEnumerable<PororocaVariable> effectiveVars, PororocaHttpRequest req, out string? errorCode) =>
-        TryResolveRequestUri(variableResolver, effectiveVars, req.Url, out _, out errorCode)
+        TryResolveRequestUri(effectiveVars, req.Url, out _, out errorCode)
         && httpVersionOSVerifier(req.HttpVersion, out errorCode)
         && HasValidContentTypeForReqBody(req, out errorCode)
-        && CheckReqBodyFileExists(variableResolver, effectiveVars, req, fileExistsVerifier, out errorCode)
-        && ValidateAuthParams(variableResolver, effectiveVars, fileExistsVerifier, req.CustomAuth, out errorCode);
+        && CheckReqBodyFileExists(effectiveVars, req, fileExistsVerifier, out errorCode)
+        && ValidateAuthParams(effectiveVars, fileExistsVerifier, req.CustomAuth, out errorCode);
 
     private static bool HasValidContentTypeForReqBody(PororocaHttpRequest req, out string? errorCode)
     {
@@ -54,13 +54,13 @@ public static class PororocaHttpRequestValidator
         }
     }
 
-    private static bool CheckReqBodyFileExists(IPororocaVariableResolver varResolver, IEnumerable<PororocaVariable> effectiveVars, PororocaHttpRequest req, FileExistsVerifier fileExistsVerifier, out string? errorCode)
+    private static bool CheckReqBodyFileExists(IEnumerable<PororocaVariable> effectiveVars, PororocaHttpRequest req, FileExistsVerifier fileExistsVerifier, out string? errorCode)
     {
         var bodyMode = req.Body?.Mode;
 
         if (bodyMode == PororocaHttpRequestBodyMode.File)
         {
-            string resolvedFilePath = varResolver.ReplaceTemplates(req.Body!.FileSrcPath!, effectiveVars);
+            string resolvedFilePath = IPororocaVariableResolver.ReplaceTemplates(req.Body!.FileSrcPath!, effectiveVars);
             bool fileFound = fileExistsVerifier.Invoke(resolvedFilePath);
             errorCode = fileFound ? null : TranslateRequestErrors.ReqBodyFileNotFound;
             return errorCode == null;
@@ -71,7 +71,7 @@ public static class PororocaHttpRequestValidator
             {
                 if (fd.Enabled && fd.Type == PororocaHttpRequestFormDataParamType.File)
                 {
-                    string resolvedFilePath = varResolver.ReplaceTemplates(fd.FileSrcPath!, effectiveVars);
+                    string resolvedFilePath = IPororocaVariableResolver.ReplaceTemplates(fd.FileSrcPath!, effectiveVars);
                     if (!fileExistsVerifier.Invoke(resolvedFilePath))
                     {
                         errorCode = TranslateRequestErrors.ReqBodyFileNotFound;

@@ -488,7 +488,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     #region REQUEST HTTP METHOD, HTTP VERSION AND URL
 
     public void UpdateResolvedUrlToolTip() =>
-        ResolvedUrlToolTip = this.varResolver.ReplaceTemplates(Url, this.varResolver.GetEffectiveVariables());
+        ResolvedUrlToolTip = IPororocaVariableResolver.ReplaceTemplates(Url, this.varResolver.GetEffectiveVariables());
 
     private static string FormatHttpVersionString(decimal httpVersion) =>
         httpVersion switch
@@ -640,11 +640,11 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         {
             var msg = Items[MessageToSendSelectedIndex].ToWebSocketClientMessage();
             var effectiveVars = this.varResolver.GetEffectiveVariables();
-            if (!IsValidClientMessage(this.varResolver, effectiveVars, msg, out string? validationErrorCode))
+            if (!IsValidClientMessage(effectiveVars, msg, out string? validationErrorCode))
             {
                 InvalidClientMessageErrorCode = validationErrorCode;
             }
-            else if (!TryTranslateClientMessage(this.varResolver, effectiveVars, msg, out var resolvedMsgToSend, out string? translationErrorCode))
+            else if (!TryTranslateClientMessage(effectiveVars, msg, out var resolvedMsgToSend, out string? translationErrorCode))
             {
                 InvalidClientMessageErrorCode = translationErrorCode;
             }

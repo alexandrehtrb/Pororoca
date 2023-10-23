@@ -51,7 +51,7 @@ public static class PororocaRequestCommonValidatorTests
         PororocaRequestAuth? customAuth = null;
 
         // WHEN AND THEN
-        Assert.True(CheckClientCertificateFilesAndPassword(col, col.GetEffectiveVariables(), mockFileExists, customAuth, out string? errorCode));
+        Assert.True(CheckClientCertificateFilesAndPassword(col.GetEffectiveVariables(), mockFileExists, customAuth, out string? errorCode));
         Assert.Null(errorCode);
     }
 
@@ -64,7 +64,7 @@ public static class PororocaRequestCommonValidatorTests
         var customAuth = PororocaRequestAuth.MakeBasicAuth("usr", "pwd");
 
         // WHEN AND THEN
-        Assert.True(CheckClientCertificateFilesAndPassword(col, col.GetEffectiveVariables(), mockFileExists, customAuth, out string? errorCode));
+        Assert.True(CheckClientCertificateFilesAndPassword(col.GetEffectiveVariables(), mockFileExists, customAuth, out string? errorCode));
         Assert.Null(errorCode);
     }
 
@@ -82,7 +82,7 @@ public static class PororocaRequestCommonValidatorTests
         var customAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertPath}}", null, "{{CertPassword}}");
 
         // WHEN AND THEN
-        Assert.False(CheckClientCertificateFilesAndPassword(col, col.GetEffectiveVariables(), mockFileExists, customAuth, out string? errorCode));
+        Assert.False(CheckClientCertificateFilesAndPassword(col.GetEffectiveVariables(), mockFileExists, customAuth, out string? errorCode));
         Assert.Equal(TranslateRequestErrors.ClientCertificatePkcs12CertificateFileNotFound, errorCode);
     }
 
@@ -102,7 +102,7 @@ public static class PororocaRequestCommonValidatorTests
         var customAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertPath}}", "{{CertPrvKeyPath}}", "{{CertPassword}}");
 
         // WHEN AND THEN
-        Assert.False(CheckClientCertificateFilesAndPassword(col, col.GetEffectiveVariables(), mockFileExists, customAuth, out string? errorCode));
+        Assert.False(CheckClientCertificateFilesAndPassword(col.GetEffectiveVariables(), mockFileExists, customAuth, out string? errorCode));
         Assert.Equal(TranslateRequestErrors.ClientCertificatePemPrivateKeyFileNotFound, errorCode);
     }
 
@@ -120,7 +120,7 @@ public static class PororocaRequestCommonValidatorTests
         var customAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertPath}}", null, "{{CertPassword}}");
 
         // WHEN AND THEN
-        Assert.False(CheckClientCertificateFilesAndPassword(col, col.GetEffectiveVariables(), mockFileExists, customAuth, out string? errorCode));
+        Assert.False(CheckClientCertificateFilesAndPassword(col.GetEffectiveVariables(), mockFileExists, customAuth, out string? errorCode));
         Assert.Equal(TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank, errorCode);
     }
 
@@ -138,7 +138,7 @@ public static class PororocaRequestCommonValidatorTests
         var customAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertPath}}", null, "{{CertPassword}}");
 
         // WHEN AND THEN
-        Assert.True(CheckClientCertificateFilesAndPassword(col, col.GetEffectiveVariables(), mockFileExists, customAuth, out string? errorCode));
+        Assert.True(CheckClientCertificateFilesAndPassword(col.GetEffectiveVariables(), mockFileExists, customAuth, out string? errorCode));
         Assert.Null(errorCode);
     }
 
@@ -155,7 +155,7 @@ public static class PororocaRequestCommonValidatorTests
         var customAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertPath}}", null, null);
 
         // WHEN AND THEN
-        Assert.True(CheckClientCertificateFilesAndPassword(col, col.GetEffectiveVariables(), mockFileExists, customAuth, out string? errorCode));
+        Assert.True(CheckClientCertificateFilesAndPassword(col.GetEffectiveVariables(), mockFileExists, customAuth, out string? errorCode));
         Assert.Null(errorCode);
     }
 
@@ -174,7 +174,7 @@ public static class PororocaRequestCommonValidatorTests
         var customAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertPath}}", "{{CertPrvKeyPath}}", null);
 
         // WHEN AND THEN
-        Assert.True(CheckClientCertificateFilesAndPassword(col, col.GetEffectiveVariables(), mockFileExists, customAuth, out string? errorCode));
+        Assert.True(CheckClientCertificateFilesAndPassword(col.GetEffectiveVariables(), mockFileExists, customAuth, out string? errorCode));
         Assert.Null(errorCode);
     }
 
@@ -192,7 +192,7 @@ public static class PororocaRequestCommonValidatorTests
         var customAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertPath}}", null, "{{CertPassword}}");
 
         // WHEN AND THEN
-        Assert.True(CheckClientCertificateFilesAndPassword(col, col.GetEffectiveVariables(), mockFileExists, customAuth, out string? errorCode));
+        Assert.True(CheckClientCertificateFilesAndPassword(col.GetEffectiveVariables(), mockFileExists, customAuth, out string? errorCode));
         Assert.Null(errorCode);
     }
 
@@ -212,7 +212,7 @@ public static class PororocaRequestCommonValidatorTests
         var customAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertPath}}", "{{CertPrvKeyPath}}", "{{CertPassword}}");
 
         // WHEN AND THEN
-        Assert.True(CheckClientCertificateFilesAndPassword(col, col.GetEffectiveVariables(), mockFileExists, customAuth, out string? errorCode));
+        Assert.True(CheckClientCertificateFilesAndPassword(col.GetEffectiveVariables(), mockFileExists, customAuth, out string? errorCode));
         Assert.Null(errorCode);
     }
 
@@ -228,7 +228,7 @@ public static class PororocaRequestCommonValidatorTests
         var customAuth = PororocaRequestAuth.MakeWindowsAuth(true, null, null, null);
 
         // WHEN AND THEN
-        Assert.True(CheckWindowsAuthParams(col, col.GetEffectiveVariables(), customAuth, out string? errorCode));
+        Assert.True(CheckWindowsAuthParams(col.GetEffectiveVariables(), customAuth, out string? errorCode));
         Assert.Null(errorCode);
     }
 
@@ -243,7 +243,7 @@ public static class PororocaRequestCommonValidatorTests
         var customAuth = PororocaRequestAuth.MakeWindowsAuth(false, "{{win_login}}", "win_pwd", "win_domain");
 
         // WHEN AND THEN
-        Assert.False(CheckWindowsAuthParams(col, col.GetEffectiveVariables(), customAuth, out string? errorCode));
+        Assert.False(CheckWindowsAuthParams(col.GetEffectiveVariables(), customAuth, out string? errorCode));
         Assert.Equal(TranslateRequestErrors.WindowsAuthLoginCannotBeBlank, errorCode);
     }
 
@@ -258,7 +258,7 @@ public static class PororocaRequestCommonValidatorTests
         var customAuth = PororocaRequestAuth.MakeWindowsAuth(false, "win_login", "{{win_pwd}}", "win_domain");
 
         // WHEN AND THEN
-        Assert.False(CheckWindowsAuthParams(col, col.GetEffectiveVariables(), customAuth, out string? errorCode));
+        Assert.False(CheckWindowsAuthParams(col.GetEffectiveVariables(), customAuth, out string? errorCode));
         Assert.Equal(TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank, errorCode);
     }
 
@@ -273,7 +273,7 @@ public static class PororocaRequestCommonValidatorTests
         var customAuth = PororocaRequestAuth.MakeWindowsAuth(false, "win_login", "win_pwd", "{{win_domain}}");
 
         // WHEN AND THEN
-        Assert.False(CheckWindowsAuthParams(col, col.GetEffectiveVariables(), customAuth, out string? errorCode));
+        Assert.False(CheckWindowsAuthParams(col.GetEffectiveVariables(), customAuth, out string? errorCode));
         Assert.Equal(TranslateRequestErrors.WindowsAuthDomainCannotBeBlank, errorCode);
     }
 

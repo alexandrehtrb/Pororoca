@@ -27,7 +27,7 @@ public partial interface IPororocaVariableResolver
         reqAuth == PororocaRequestAuth.InheritedFromCollection ?
         CollectionScopedAuth : reqAuth;
 
-    public IDictionary<string, string> ResolveKeyValueParams(IEnumerable<PororocaKeyValueParam>? kvParams, IEnumerable<PororocaVariable> effectiveVars) =>
+    public static IDictionary<string, string> ResolveKeyValueParams(IEnumerable<PororocaKeyValueParam>? kvParams, IEnumerable<PororocaVariable> effectiveVars) =>
         kvParams == null ?
         new() :
         kvParams.Where(h => h.Enabled)
@@ -38,7 +38,7 @@ public partial interface IPororocaVariableResolver
                 .DistinctBy(h => h.Key) // Avoid duplicated pairs by key
                 .ToDictionary(h => h.Key, h => h.Value);
 
-    public string ReplaceTemplates(string? strToReplaceTemplatedVariables, IEnumerable<PororocaVariable> effectiveVars)
+    public static string ReplaceTemplates(string? strToReplaceTemplatedVariables, IEnumerable<PororocaVariable> effectiveVars)
     {
         if (string.IsNullOrEmpty(strToReplaceTemplatedVariables))
         {

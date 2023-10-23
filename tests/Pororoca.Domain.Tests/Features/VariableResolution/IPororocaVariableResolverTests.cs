@@ -38,7 +38,7 @@ public static class IPororocaVariableResolverTests
 
         // WHEN
         var effectiveVars = ((IPororocaVariableResolver)col).GetEffectiveVariables();
-        string resolvedString = ((IPororocaVariableResolver)col).ReplaceTemplates(inputString, effectiveVars);
+        string resolvedString = IPororocaVariableResolver.ReplaceTemplates(inputString, effectiveVars);
 
         // THEN
         Assert.Equal(expectedString, resolvedString);
@@ -70,7 +70,7 @@ public static class IPororocaVariableResolverTests
 
         // WHEN
         var effectiveVars = ((IPororocaVariableResolver)col).GetEffectiveVariables();
-        var resolvedKvps = varResolver.ResolveKeyValueParams(kvps, effectiveVars).ToArray();
+        var resolvedKvps = IPororocaVariableResolver.ResolveKeyValueParams(kvps, effectiveVars).ToArray();
 
         // THEN
         Assert.NotNull(resolvedKvps);
@@ -97,7 +97,7 @@ public static class IPororocaVariableResolverTests
 
         // WHEN
         var effectiveVars = ((IPororocaVariableResolver)col).GetEffectiveVariables();
-        var resolvedKvps = varResolver.ResolveKeyValueParams(kvps, effectiveVars).ToArray();
+        var resolvedKvps = IPororocaVariableResolver.ResolveKeyValueParams(kvps, effectiveVars).ToArray();
 
         // THEN
         Assert.NotNull(resolvedKvps);
@@ -119,7 +119,7 @@ public static class IPororocaVariableResolverTests
 
         // WHEN
         var effectiveVars = ((IPororocaVariableResolver)col).GetEffectiveVariables();
-        var resolvedKvps = varResolver.ResolveKeyValueParams(null, effectiveVars).ToArray();
+        var resolvedKvps = IPororocaVariableResolver.ResolveKeyValueParams(null, effectiveVars).ToArray();
 
         // THEN
         Assert.NotNull(resolvedKvps);

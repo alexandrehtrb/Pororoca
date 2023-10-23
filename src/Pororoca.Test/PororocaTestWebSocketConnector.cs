@@ -42,11 +42,11 @@ public sealed class PororocaTestWebSocketConnector : PororocaWebSocketConnector
 #pragma warning restore CA1061
     {
         var effectiveVars = this.varResolver.GetEffectiveVariables();
-        if (!IsValidClientMessage(this.varResolver, effectiveVars, msg, out string? validationErrorCode))
+        if (!IsValidClientMessage(effectiveVars, msg, out string? validationErrorCode))
         {
             throw new Exception($"Error: Could not send WebSocket client message. Cause: '{validationErrorCode}'.");
         }
-        else if (!TryTranslateClientMessage(this.varResolver, effectiveVars, msg, out var resolvedMsgToSend, out string? translationErrorCode))
+        else if (!TryTranslateClientMessage(effectiveVars, msg, out var resolvedMsgToSend, out string? translationErrorCode))
         {
             throw new Exception($"Error: Could not send WebSocket client message. Cause: '{translationErrorCode}'.");
         }

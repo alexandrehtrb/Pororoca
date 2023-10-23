@@ -18,7 +18,7 @@ public static class PororocaHttpRequestTranslator
 
     public static bool TryTranslateRequest(IPororocaVariableResolver variableResolver, IEnumerable<PororocaVariable> effectiveVars, PororocaHttpRequest req, out HttpRequestMessage? reqMsg, out string? errorCode)
     {
-        if (!TryResolveRequestUri(variableResolver, effectiveVars, req.Url, out var uri, out errorCode)
+        if (!TryResolveRequestUri(effectiveVars, req.Url, out var uri, out errorCode)
          || !IsHttpVersionAvailableInOS(req.HttpVersion, out errorCode))
         {
             reqMsg = null;
@@ -29,12 +29,12 @@ public static class PororocaHttpRequestTranslator
             try
             {
                 HttpMethod method = new(req.HttpMethod);
-                var resolvedContentHeaders = ResolveContentHeaders(variableResolver, effectiveVars, req.Headers);
+                var resolvedContentHeaders = ResolveContentHeaders(effectiveVars, req.Headers);
                 reqMsg = new(method, uri)
                 {
                     Version = ResolveHttpVersion(req.HttpVersion),
                     VersionPolicy = HttpVersionPolicy.RequestVersionExact,
-                    Content = ResolveRequestContent(variableResolver, effectiveVars, req.Body, resolvedContentHeaders)
+                    Content = ResolveRequestContent(effectiveVars, req.Body, resolvedContentHeaders)
                 };
 
                 var resolvedNonContentHeaders = ResolveNonContentHeaders(variableResolver, effectiveVars, req.Headers, req.CustomAuth);
@@ -74,28 +74,28 @@ public static class PororocaHttpRequestTranslator
 
     #region HTTP BODY
 
-    internal static IDictionary<string, string> ResolveFormUrlEncodedKeyValues(IPororocaVariableResolver variableResolver, IEnumerable<PororocaVariable> effectiveVars, PororocaHttpRequestBody reqBody) =>
-        variableResolver.ResolveKeyValueParams(reqBody.UrlEncodedValues!, effectiveVars);
+    internal static IDictionary<string, string> ResolveFormUrlEncodedKeyValues(IEnumerable<PororocaVariable> effectiveVars, PororocaHttpRequestBody reqBody) =>
+        IPororocaVariableResolver.ResolveKeyValueParams(reqBody.UrlEncodedValues!, effectiveVars);
 
-    internal static HttpContent? ResolveRequestContent(IPororocaVariableResolver variableResolver, IEnumerable<PororocaVariable> effectiveVars, PororocaHttpRequestBody? reqBody, IDictionary<string, string> resolvedContentHeaders)
+    internal static HttpContent? ResolveRequestContent(IEnumerable<PororocaVariable> effectiveVars, PororocaHttpRequestBody? reqBody, IDictionary<string, string> resolvedContentHeaders)
     {
         StringContent MakeRawContent()
         {
             // TODO: Fix bug that charset cannot be passed in contentType below
-            string resolvedRawContent = variableResolver.ReplaceTemplates(reqBody.RawContent!, effectiveVars);
+            string resolvedRawContent = IPororocaVariableResolver.ReplaceTemplates(reqBody.RawContent!, effectiveVars);
             return new(resolvedRawContent, Encoding.UTF8, reqBody.ContentType!);
         }
 
         FormUrlEncodedContent MakeFormUrlEncodedContent()
         {
-            var resolvedFormValues = ResolveFormUrlEncodedKeyValues(variableResolver, effectiveVars, reqBody);
+            var resolvedFormValues = ResolveFormUrlEncodedKeyValues(effectiveVars, reqBody);
             return new(resolvedFormValues);
         }
 
         StreamContent MakeFileContent(string fileSrcPath, string? contentType)
         {
             const int fileStreamBufferSize = 4096;
-            string resolvedFileSrcPath = variableResolver.ReplaceTemplates(fileSrcPath, effectiveVars);
+            string resolvedFileSrcPath = IPororocaVariableResolver.ReplaceTemplates(fileSrcPath, effectiveVars);
             // DO NOT USE "USING" FOR FILESTREAM HERE --> it will be disposed later, by the PororocaRequester
             FileStream fs = new(resolvedFileSrcPath, FileMode.Open, FileAccess.Read, FileShare.Read, fileStreamBufferSize, useAsync: true);
             StreamContent content = new(fs);
@@ -109,16 +109,16 @@ public static class PororocaHttpRequestTranslator
             var resolvedFormDataParams = reqBody!.FormDataValues!.Where(x => x.Enabled);
             foreach (var param in resolvedFormDataParams)
             {
-                string resolvedKey = variableResolver.ReplaceTemplates(param.Key, effectiveVars);
+                string resolvedKey = IPororocaVariableResolver.ReplaceTemplates(param.Key, effectiveVars);
                 if (param.Type == PororocaHttpRequestFormDataParamType.Text)
                 {
-                    string resolvedTextValue = variableResolver.ReplaceTemplates(param.TextValue!, effectiveVars);
+                    string resolvedTextValue = IPororocaVariableResolver.ReplaceTemplates(param.TextValue!, effectiveVars);
                     formDataContent.Add(content: new StringContent(resolvedTextValue, Encoding.UTF8, param.ContentType ?? MimeTypesDetector.DefaultMimeTypeForText),
                                         name: resolvedKey);
                 }
                 else if (param.Type == PororocaHttpRequestFormDataParamType.File)
                 {
-                    string resolvedFileSrcPath = variableResolver.ReplaceTemplates(param.FileSrcPath!, effectiveVars);
+                    string resolvedFileSrcPath = IPororocaVariableResolver.ReplaceTemplates(param.FileSrcPath!, effectiveVars);
                     string fileName = new FileInfo(param.FileSrcPath!).Name;
                     formDataContent.Add(content: MakeFileContent(resolvedFileSrcPath, param.ContentType),
                                         name: resolvedKey,
@@ -135,7 +135,7 @@ public static class PororocaHttpRequestTranslator
             dynamic? variablesJsonObj = null;
             if (!string.IsNullOrWhiteSpace(variables))
             {
-                variables = variableResolver.ReplaceTemplates(variables, effectiveVars);
+                variables = IPororocaVariableResolver.ReplaceTemplates(variables, effectiveVars);
                 try
                 {
                     variablesJsonObj = JsonSerializer.Deserialize<dynamic?>(variables, ExporterImporterJsonOptions);

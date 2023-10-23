@@ -46,7 +46,7 @@ public static class PororocaHttpRequestTranslatorTests
         req.UpdateBody(body);
 
         // WHEN
-        var resolvedUrlEncoded = ResolveFormUrlEncodedKeyValues(col, col.GetEffectiveVariables(), req.Body!);
+        var resolvedUrlEncoded = ResolveFormUrlEncodedKeyValues(col.GetEffectiveVariables(), req.Body!);
 
         // THEN
         Assert.Equal(2, resolvedUrlEncoded.Count);
@@ -66,7 +66,7 @@ public static class PororocaHttpRequestTranslatorTests
         PororocaHttpRequest req = new();
 
         // WHEN
-        var resolvedReqContent = ResolveRequestContent(col, col.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
+        var resolvedReqContent = ResolveRequestContent(col.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
 
         // THEN
         Assert.Null(resolvedReqContent);
@@ -88,7 +88,7 @@ public static class PororocaHttpRequestTranslatorTests
         req.UpdateBody(body);
 
         // WHEN
-        var resolvedReqContent = ResolveRequestContent(varResolver, varResolver.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
+        var resolvedReqContent = ResolveRequestContent(varResolver.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
 
         // THEN
         Assert.NotNull(resolvedReqContent);
@@ -119,7 +119,7 @@ public static class PororocaHttpRequestTranslatorTests
         req.UpdateBody(body);
 
         // WHEN
-        var resolvedReqContent = ResolveRequestContent(varResolver, varResolver.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
+        var resolvedReqContent = ResolveRequestContent(varResolver.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
 
         // THEN
         Assert.NotNull(resolvedReqContent);
@@ -150,7 +150,7 @@ public static class PororocaHttpRequestTranslatorTests
         req.UpdateBody(body);
 
         // WHEN
-        var resolvedReqContent = ResolveRequestContent(varResolver, varResolver.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
+        var resolvedReqContent = ResolveRequestContent(varResolver.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
 
         // THEN
         Assert.NotNull(resolvedReqContent);
@@ -189,7 +189,7 @@ public static class PororocaHttpRequestTranslatorTests
         req.UpdateBody(body);
 
         // WHEN
-        var resolvedReqContent = ResolveRequestContent(col, col.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
+        var resolvedReqContent = ResolveRequestContent(col.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
 
         // THEN
         Assert.NotNull(resolvedReqContent);
@@ -231,7 +231,7 @@ public static class PororocaHttpRequestTranslatorTests
         req.UpdateBody(body);
 
         // WHEN
-        var resolvedReqContent = ResolveRequestContent(col, col.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
+        var resolvedReqContent = ResolveRequestContent(col.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
 
         // THEN
         Assert.NotNull(resolvedReqContent);

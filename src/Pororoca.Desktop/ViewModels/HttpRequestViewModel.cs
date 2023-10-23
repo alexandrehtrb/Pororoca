@@ -327,7 +327,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     public void UpdateResolvedRequestUrlToolTip()
     {
         var varResolver = ((IPororocaVariableResolver)this.variableResolver);
-        ResolvedRequestUrlToolTip = varResolver.ReplaceTemplates(RequestUrl, varResolver.GetEffectiveVariables());
+        ResolvedRequestUrlToolTip = IPororocaVariableResolver.ReplaceTemplates(RequestUrl, varResolver.GetEffectiveVariables());
     }
 
     private static string FormatHttpVersionString(decimal httpVersion) =>

@@ -39,7 +39,7 @@ public static class PororocaWebSocketClientMessageTranslatorTests
         PororocaWebSocketClientMessage msg = new(msgType, string.Empty, PororocaWebSocketClientMessageContentMode.Raw, "Hello {{Name}}", null, null, disableCompressionForMsg);
 
         // WHEN
-        bool valid = TryTranslateClientMessage(varResolver, varResolver.GetEffectiveVariables(), msg, out var resolvedMsg, out string? errorCode);
+        bool valid = TryTranslateClientMessage(varResolver.GetEffectiveVariables(), msg, out var resolvedMsg, out string? errorCode);
 
         // THEN
         Assert.True(valid);
@@ -71,7 +71,7 @@ public static class PororocaWebSocketClientMessageTranslatorTests
         PororocaWebSocketClientMessage msg = new(msgType, string.Empty, PororocaWebSocketClientMessageContentMode.File, null, null, "{{FilePath}}", disableCompressionForMsg);
 
         // WHEN
-        bool valid = TryTranslateClientMessage(varResolver, varResolver.GetEffectiveVariables(), msg, out var resolvedMsg, out string? errorCode);
+        bool valid = TryTranslateClientMessage(varResolver.GetEffectiveVariables(), msg, out var resolvedMsg, out string? errorCode);
 
         // THEN
         Assert.True(valid);
@@ -105,7 +105,7 @@ public static class PororocaWebSocketClientMessageTranslatorTests
         PororocaWebSocketClientMessage msg = new(msgType, string.Empty, PororocaWebSocketClientMessageContentMode.File, null, null, "{{FilePath}}", disableCompressionForMsg);
 
         // WHEN
-        bool valid = TryTranslateClientMessage(varResolver, varResolver.GetEffectiveVariables(), msg, out var resolvedMsg, out string? errorCode);
+        bool valid = TryTranslateClientMessage(varResolver.GetEffectiveVariables(), msg, out var resolvedMsg, out string? errorCode);
 
         // THEN
         Assert.False(valid);

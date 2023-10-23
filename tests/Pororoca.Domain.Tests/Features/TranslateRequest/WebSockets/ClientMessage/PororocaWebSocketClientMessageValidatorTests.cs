@@ -42,7 +42,7 @@ public static class PororocaWebSocketClientMessageValidatorTests
         PororocaWebSocketClientMessage msg = new(PororocaWebSocketMessageType.Text, string.Empty, PororocaWebSocketClientMessageContentMode.Raw, "msg content", null, null, false);
 
         // WHEN
-        bool valid = IsValidClientMessage(varResolver, varResolver.GetEffectiveVariables(), msg, fileExistsVerifier, out string? errorCode);
+        bool valid = IsValidClientMessage(varResolver.GetEffectiveVariables(), msg, fileExistsVerifier, out string? errorCode);
 
         // THEN
         Assert.True(valid);
@@ -64,7 +64,7 @@ public static class PororocaWebSocketClientMessageValidatorTests
         PororocaWebSocketClientMessage msg = new(PororocaWebSocketMessageType.Text, string.Empty, PororocaWebSocketClientMessageContentMode.File, null, null, "{{FilePath}}", false);
 
         // WHEN
-        bool valid = IsValidClientMessage(varResolver, varResolver.GetEffectiveVariables(), msg, fileExistsVerifier, out string? errorCode);
+        bool valid = IsValidClientMessage(varResolver.GetEffectiveVariables(), msg, fileExistsVerifier, out string? errorCode);
 
         // THEN
         Assert.False(valid);
@@ -86,7 +86,7 @@ public static class PororocaWebSocketClientMessageValidatorTests
         PororocaWebSocketClientMessage msg = new(PororocaWebSocketMessageType.Text, string.Empty, PororocaWebSocketClientMessageContentMode.File, null, null, "{{FilePath}}", false);
 
         // WHEN
-        bool valid = IsValidClientMessage(varResolver, varResolver.GetEffectiveVariables(), msg, fileExistsVerifier, out string? errorCode);
+        bool valid = IsValidClientMessage(varResolver.GetEffectiveVariables(), msg, fileExistsVerifier, out string? errorCode);
 
         // THEN
         Assert.True(valid);
