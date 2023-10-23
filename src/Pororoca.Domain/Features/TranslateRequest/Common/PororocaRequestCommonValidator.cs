@@ -12,11 +12,11 @@ internal static class PororocaRequestCommonValidator
     internal static bool IsValidContentType(string? contentType) =>
         !string.IsNullOrWhiteSpace(contentType) && MimeTypesDetector.AllMimeTypes.Contains(contentType);
 
-    internal static bool ValidateAuthParams(IPororocaVariableResolver variableResolver, FileExistsVerifier fileExistsVerifier, PororocaRequestAuth? customAuth, out string? errorCode) =>
-        CheckClientCertificateFilesAndPassword(variableResolver, fileExistsVerifier, customAuth, out errorCode)
-     && CheckWindowsAuthParams(variableResolver, customAuth, out errorCode);
+    internal static bool ValidateAuthParams(IPororocaVariableResolver variableResolver, IEnumerable<PororocaVariable> effectiveVars, FileExistsVerifier fileExistsVerifier, PororocaRequestAuth? customAuth, out string? errorCode) =>
+        CheckClientCertificateFilesAndPassword(variableResolver, effectiveVars, fileExistsVerifier, customAuth, out errorCode)
+     && CheckWindowsAuthParams(variableResolver, effectiveVars, customAuth, out errorCode);
 
-    internal static bool CheckClientCertificateFilesAndPassword(IPororocaVariableResolver variableResolver, FileExistsVerifier fileExistsVerifier, PororocaRequestAuth? customAuth, out string? errorCode)
+    internal static bool CheckClientCertificateFilesAndPassword(IPororocaVariableResolver variableResolver, IEnumerable<PororocaVariable> effectiveVars, FileExistsVerifier fileExistsVerifier, PororocaRequestAuth? customAuth, out string? errorCode)
     {
         if (customAuth?.Mode == PororocaRequestAuthMode.ClientCertificate && customAuth?.ClientCertificate is not null)
         {
@@ -29,9 +29,9 @@ internal static class PororocaRequestCommonValidator
         }
 
         validation:
-        string resolvedCertificateFilePath = variableResolver.ReplaceTemplates(customAuth!.ClientCertificate!.CertificateFilePath);
-        string resolvedPrivateKeyFilePath = variableResolver.ReplaceTemplates(customAuth!.ClientCertificate!.PrivateKeyFilePath);
-        string resolvedFilePassword = variableResolver.ReplaceTemplates(customAuth!.ClientCertificate!.FilePassword);
+        string resolvedCertificateFilePath = variableResolver.ReplaceTemplates(customAuth!.ClientCertificate!.CertificateFilePath, effectiveVars);
+        string resolvedPrivateKeyFilePath = variableResolver.ReplaceTemplates(customAuth!.ClientCertificate!.PrivateKeyFilePath, effectiveVars);
+        string resolvedFilePassword = variableResolver.ReplaceTemplates(customAuth!.ClientCertificate!.FilePassword, effectiveVars);
 
         bool certFileExists = fileExistsVerifier.Invoke(resolvedCertificateFilePath);
         bool prvKeyFileSpecified = !string.IsNullOrWhiteSpace(resolvedPrivateKeyFilePath);
@@ -66,7 +66,7 @@ internal static class PororocaRequestCommonValidator
         }
     }
 
-    internal static bool CheckWindowsAuthParams(IPororocaVariableResolver variableResolver, PororocaRequestAuth? customAuth, out string? errorCode)
+    internal static bool CheckWindowsAuthParams(IPororocaVariableResolver variableResolver, IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? customAuth, out string? errorCode)
     {
         if (customAuth?.Mode == PororocaRequestAuthMode.Windows && customAuth?.Windows is not null)
         {
@@ -85,21 +85,21 @@ internal static class PororocaRequestCommonValidator
             return true;
         }
 
-        string resolvedLogin = variableResolver.ReplaceTemplates(customAuth.Windows.Login);
+        string resolvedLogin = variableResolver.ReplaceTemplates(customAuth.Windows.Login, effectiveVars);
         if (string.IsNullOrWhiteSpace(resolvedLogin))
         {
             errorCode = TranslateRequestErrors.WindowsAuthLoginCannotBeBlank;
             return false;
         }
 
-        string resolvedPassword = variableResolver.ReplaceTemplates(customAuth.Windows.Password);
+        string resolvedPassword = variableResolver.ReplaceTemplates(customAuth.Windows.Password, effectiveVars);
         if (string.IsNullOrWhiteSpace(resolvedPassword))
         {
             errorCode = TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank;
             return false;
         }
 
-        string resolvedDomain = variableResolver.ReplaceTemplates(customAuth.Windows.Domain);
+        string resolvedDomain = variableResolver.ReplaceTemplates(customAuth.Windows.Domain, effectiveVars);
         if (string.IsNullOrWhiteSpace(resolvedDomain))
         {
             errorCode = TranslateRequestErrors.WindowsAuthDomainCannotBeBlank;

@@ -1,4 +1,4 @@
-using Moq;
+using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.TranslateRequest;
 using Pororoca.Domain.Features.VariableResolution;
@@ -13,16 +13,11 @@ public static class PororocaWebSocketClientMessageValidatorTests
 {
     #region MOCKERS
 
-    private static Mock<IPororocaVariableResolver> MockVariableResolver(Dictionary<string, string> kvs)
+    private static IPororocaVariableResolver MockVariableResolver(Dictionary<string, string> kvs)
     {
-        Mock<IPororocaVariableResolver> mockedVariableResolver = new();
-
-        string f(string? k) => k == null ? string.Empty : kvs.TryGetValue(k, out string? value) ? value! : k;
-
-        mockedVariableResolver.Setup(x => x.ReplaceTemplates(It.IsAny<string?>()))
-                              .Returns((Func<string?, string>)f);
-
-        return mockedVariableResolver;
+        PororocaCollection col = new("col");
+        col.Variables.AddRange(kvs.Select(kv => new PororocaVariable(true, kv.Key, kv.Value, false)));
+        return col;
     }
 
     private static FileExistsVerifier MockFileExistsVerifier(bool exists) =>
@@ -42,16 +37,15 @@ public static class PororocaWebSocketClientMessageValidatorTests
     public static void Should_allow_any_client_message_with_raw_content()
     {
         // GIVEN
-        var mockedVariableResolver = MockVariableResolver(new());
+        var varResolver = MockVariableResolver(new());
         var fileExistsVerifier = MockFileExistsVerifier(false);
         PororocaWebSocketClientMessage msg = new(PororocaWebSocketMessageType.Text, string.Empty, PororocaWebSocketClientMessageContentMode.Raw, "msg content", null, null, false);
 
         // WHEN
-        bool valid = IsValidClientMessage(mockedVariableResolver.Object, msg, fileExistsVerifier, out string? errorCode);
+        bool valid = IsValidClientMessage(varResolver, varResolver.GetEffectiveVariables(), msg, fileExistsVerifier, out string? errorCode);
 
         // THEN
         Assert.True(valid);
-        mockedVariableResolver.Verify(x => x.ReplaceTemplates(It.IsAny<string>()), Times.Never);
         Assert.Null(errorCode);
     }
 
@@ -59,7 +53,7 @@ public static class PororocaWebSocketClientMessageValidatorTests
     public static void Should_reject_client_message_with_file_content_if_resolved_file_is_not_found()
     {
         // GIVEN
-        var mockedVariableResolver = MockVariableResolver(new()
+        var varResolver = MockVariableResolver(new()
         {
             { "{{FilePath}}", "./file.txt" }
         });
@@ -70,11 +64,10 @@ public static class PororocaWebSocketClientMessageValidatorTests
         PororocaWebSocketClientMessage msg = new(PororocaWebSocketMessageType.Text, string.Empty, PororocaWebSocketClientMessageContentMode.File, null, null, "{{FilePath}}", false);
 
         // WHEN
-        bool valid = IsValidClientMessage(mockedVariableResolver.Object, msg, fileExistsVerifier, out string? errorCode);
+        bool valid = IsValidClientMessage(varResolver, varResolver.GetEffectiveVariables(), msg, fileExistsVerifier, out string? errorCode);
 
         // THEN
         Assert.False(valid);
-        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{FilePath}}"), Times.Once);
         Assert.Equal(TranslateRequestErrors.WebSocketClientMessageContentFileNotFound, errorCode);
     }
 
@@ -82,9 +75,9 @@ public static class PororocaWebSocketClientMessageValidatorTests
     public static void Should_allow_client_message_with_file_content_if_resolved_file_is_found()
     {
         // GIVEN
-        var mockedVariableResolver = MockVariableResolver(new()
+        var varResolver = MockVariableResolver(new()
         {
-            { "{{FilePath}}", "./file.txt" }
+            { "FilePath", "./file.txt" }
         });
         var fileExistsVerifier = MockFileExistsVerifier(new Dictionary<string, bool>()
         {
@@ -93,11 +86,10 @@ public static class PororocaWebSocketClientMessageValidatorTests
         PororocaWebSocketClientMessage msg = new(PororocaWebSocketMessageType.Text, string.Empty, PororocaWebSocketClientMessageContentMode.File, null, null, "{{FilePath}}", false);
 
         // WHEN
-        bool valid = IsValidClientMessage(mockedVariableResolver.Object, msg, fileExistsVerifier, out string? errorCode);
+        bool valid = IsValidClientMessage(varResolver, varResolver.GetEffectiveVariables(), msg, fileExistsVerifier, out string? errorCode);
 
         // THEN
         Assert.True(valid);
-        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{FilePath}}"), Times.Once);
         Assert.Null(errorCode);
     }
 }

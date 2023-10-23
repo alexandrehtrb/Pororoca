@@ -8,6 +8,7 @@ using Pororoca.Domain.Features.Requester;
 using Pororoca.Domain.Features.TranslateRequest.Http;
 using Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection;
 using Pororoca.Domain.Features.VariableCapture;
+using Pororoca.Domain.Features.VariableResolution;
 using Pororoca.Infrastructure.Features.Requester;
 
 namespace Pororoca.Test;
@@ -206,7 +207,9 @@ public sealed class PororocaTest
 
     public async Task<PororocaHttpResponse> SendHttpRequestAsync(PororocaHttpRequest req, CancellationToken cancellationToken = default)
     {
+        var effectiveVars = ((IPororocaVariableResolver)Collection).GetEffectiveVariables();
         if (!PororocaHttpRequestValidator.IsValidRequest(Collection,
+                                                         effectiveVars,
                                                          req,
                                                          out string? errorCode))
         {
@@ -215,7 +218,7 @@ public sealed class PororocaTest
         else
         {
             IPororocaRequester requester = PororocaRequester.Singleton;
-            var res = await requester.RequestAsync(Collection, req, !ShouldCheckTlsCertificate, cancellationToken);
+            var res = await requester.RequestAsync(Collection, effectiveVars, req, !ShouldCheckTlsCertificate, cancellationToken);
             CaptureResponseValues(req, res);
             return res;
         }
@@ -242,11 +245,13 @@ public sealed class PororocaTest
                                                                             OnWebSocketMessageSending? onMessageSending = null,
                                                                             CancellationToken cancellationToken = default)
     {
-        if (!PororocaWebSocketConnectionValidator.IsValidConnection(Collection, ws, out var resolvedUri, out string? validationErrorCode))
+        var effectiveVars = ((IPororocaVariableResolver)Collection).GetEffectiveVariables();
+
+        if (!PororocaWebSocketConnectionValidator.IsValidConnection(Collection, effectiveVars, ws, out var resolvedUri, out string? validationErrorCode))
         {
             throw new Exception($"Error: Could not connect to WebSocket. Cause: '{validationErrorCode}'.");
         }
-        else if (!PororocaWebSocketConnectionTranslator.TryTranslateConnection(Collection, PororocaHttpClientProvider.Singleton, ws, !ShouldCheckTlsCertificate, out var wsAndHttpCli, out string? translationErrorCode))
+        else if (!PororocaWebSocketConnectionTranslator.TryTranslateConnection(Collection, effectiveVars, PororocaHttpClientProvider.Singleton, ws, !ShouldCheckTlsCertificate, out var wsAndHttpCli, out string? translationErrorCode))
         {
             throw new Exception($"Error: Could not connect to WebSocket. Cause: '{translationErrorCode}'.");
         }

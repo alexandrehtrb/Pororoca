@@ -1,5 +1,5 @@
 using System.Text;
-using Moq;
+using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.TranslateRequest;
 using Pororoca.Domain.Features.VariableResolution;
@@ -13,16 +13,11 @@ public static class PororocaWebSocketClientMessageTranslatorTests
 {
     #region MOCKERS
 
-    private static Mock<IPororocaVariableResolver> MockVariableResolver(Dictionary<string, string> kvs)
+    private static IPororocaVariableResolver MockVariableResolver(Dictionary<string, string> kvs)
     {
-        Mock<IPororocaVariableResolver> mockedVariableResolver = new();
-
-        string f(string? k) => k == null ? string.Empty : kvs.TryGetValue(k, out string? value) ? value! : k;
-
-        mockedVariableResolver.Setup(x => x.ReplaceTemplates(It.IsAny<string?>()))
-                              .Returns((Func<string?, string>)f);
-
-        return mockedVariableResolver;
+        PororocaCollection col = new("col");
+        col.Variables.AddRange(kvs.Select(kv => new PororocaVariable(true, kv.Key, kv.Value, false)));
+        return col;
     }
 
     #endregion
@@ -37,14 +32,14 @@ public static class PororocaWebSocketClientMessageTranslatorTests
     public static void Should_correctly_translate_client_message_with_resolved_raw_content(PororocaWebSocketMessageType msgType, bool disableCompressionForMsg)
     {
         // GIVEN
-        var mockedVariableResolver = MockVariableResolver(new()
+        var varResolver = MockVariableResolver(new()
         {
-            { "Hello {{Name}}", "Hello brother" }
+            { "Name", "brother" }
         });
         PororocaWebSocketClientMessage msg = new(msgType, string.Empty, PororocaWebSocketClientMessageContentMode.Raw, "Hello {{Name}}", null, null, disableCompressionForMsg);
 
         // WHEN
-        bool valid = TryTranslateClientMessage(mockedVariableResolver.Object, msg, out var resolvedMsg, out string? errorCode);
+        bool valid = TryTranslateClientMessage(varResolver, varResolver.GetEffectiveVariables(), msg, out var resolvedMsg, out string? errorCode);
 
         // THEN
         Assert.True(valid);
@@ -57,8 +52,6 @@ public static class PororocaWebSocketClientMessageTranslatorTests
         Assert.IsAssignableFrom<MemoryStream>(resolvedMsg!.BytesStream);
         Assert.Equal(13, resolvedMsg!.BytesLength);
         Assert.Equal("Hello brother", Encoding.UTF8.GetString(((MemoryStream)resolvedMsg!.BytesStream).ToArray()));
-
-        mockedVariableResolver.Verify(x => x.ReplaceTemplates("Hello {{Name}}"), Times.Once);
     }
 
     [Theory]
@@ -71,14 +64,14 @@ public static class PororocaWebSocketClientMessageTranslatorTests
     public static void Should_correctly_translate_client_message_with_resolved_file_content(PororocaWebSocketMessageType msgType, bool disableCompressionForMsg)
     {
         // GIVEN
-        var mockedVariableResolver = MockVariableResolver(new()
+        var varResolver = MockVariableResolver(new()
         {
-            { "{{FilePath}}", GetTestFilePath("testfilecontent1.json") }
+            { "FilePath", GetTestFilePath("testfilecontent1.json") }
         });
         PororocaWebSocketClientMessage msg = new(msgType, string.Empty, PororocaWebSocketClientMessageContentMode.File, null, null, "{{FilePath}}", disableCompressionForMsg);
 
         // WHEN
-        bool valid = TryTranslateClientMessage(mockedVariableResolver.Object, msg, out var resolvedMsg, out string? errorCode);
+        bool valid = TryTranslateClientMessage(varResolver, varResolver.GetEffectiveVariables(), msg, out var resolvedMsg, out string? errorCode);
 
         // THEN
         Assert.True(valid);
@@ -93,8 +86,6 @@ public static class PororocaWebSocketClientMessageTranslatorTests
         Assert.False(resolvedMsg!.BytesStream.CanWrite);
         Assert.Equal(8, resolvedMsg!.BytesLength);
         Assert.Equal("{\"id\":1}", new StreamReader(resolvedMsg!.BytesStream).ReadToEnd());
-
-        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{FilePath}}"), Times.Once);
     }
 
     [Theory]
@@ -107,21 +98,19 @@ public static class PororocaWebSocketClientMessageTranslatorTests
     public static void Should_return_error_in_case_of_exception(PororocaWebSocketMessageType msgType, bool disableCompressionForMsg)
     {
         // GIVEN
-        var mockedVariableResolver = MockVariableResolver(new()
+        var varResolver = MockVariableResolver(new()
         {
-            { "{{FilePath}}", GetTestFilePath("invalid_file.aaa") } // file that does not exist
+            { "FilePath", GetTestFilePath("invalid_file.aaa") } // file that does not exist
         });
         PororocaWebSocketClientMessage msg = new(msgType, string.Empty, PororocaWebSocketClientMessageContentMode.File, null, null, "{{FilePath}}", disableCompressionForMsg);
 
         // WHEN
-        bool valid = TryTranslateClientMessage(mockedVariableResolver.Object, msg, out var resolvedMsg, out string? errorCode);
+        bool valid = TryTranslateClientMessage(varResolver, varResolver.GetEffectiveVariables(), msg, out var resolvedMsg, out string? errorCode);
 
         // THEN
         Assert.False(valid);
         Assert.Equal(TranslateRequestErrors.WebSocketUnknownClientMessageTranslationError, errorCode);
         Assert.Null(resolvedMsg);
-
-        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{FilePath}}"), Times.Once);
     }
 
     private static string GetTestFilePath(string fileName)

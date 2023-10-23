@@ -488,7 +488,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     #region REQUEST HTTP METHOD, HTTP VERSION AND URL
 
     public void UpdateResolvedUrlToolTip() =>
-        ResolvedUrlToolTip = this.varResolver.ReplaceTemplates(Url);
+        ResolvedUrlToolTip = this.varResolver.ReplaceTemplates(Url, this.varResolver.GetEffectiveVariables());
 
     private static string FormatHttpVersionString(decimal httpVersion) =>
         httpVersion switch
@@ -580,13 +580,14 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     public async Task ConnectAsync()
     {
         var wsConn = ToWebSocketConnection();
+        var effectiveVars = this.varResolver.GetEffectiveVariables();
         bool disableTlsVerification = ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled;
 
-        if (!IsValidConnection(this.varResolver, wsConn, out var resolvedUri, out string? translateUriErrorCode))
+        if (!IsValidConnection(this.varResolver, effectiveVars, wsConn, out var resolvedUri, out string? translateUriErrorCode))
         {
             InvalidConnectionErrorCode = translateUriErrorCode;
         }
-        else if (!TryTranslateConnection(this.varResolver, this.httpClientProvider, wsConn, disableTlsVerification,
+        else if (!TryTranslateConnection(this.varResolver, effectiveVars, this.httpClientProvider, wsConn, disableTlsVerification,
                                          out var resolvedClients, out string? translateConnErrorCode))
         {
             InvalidConnectionErrorCode = translateConnErrorCode;
@@ -638,12 +639,12 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         else
         {
             var msg = Items[MessageToSendSelectedIndex].ToWebSocketClientMessage();
-
-            if (!IsValidClientMessage(this.varResolver, msg, out string? validationErrorCode))
+            var effectiveVars = this.varResolver.GetEffectiveVariables();
+            if (!IsValidClientMessage(this.varResolver, effectiveVars, msg, out string? validationErrorCode))
             {
                 InvalidClientMessageErrorCode = validationErrorCode;
             }
-            else if (!TryTranslateClientMessage(this.varResolver, msg, out var resolvedMsgToSend, out string? translationErrorCode))
+            else if (!TryTranslateClientMessage(this.varResolver, effectiveVars, msg, out var resolvedMsgToSend, out string? translationErrorCode))
             {
                 InvalidClientMessageErrorCode = translationErrorCode;
             }

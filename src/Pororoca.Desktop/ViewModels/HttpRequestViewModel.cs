@@ -324,8 +324,11 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST HTTP METHOD, HTTP VERSION AND URL
 
-    public void UpdateResolvedRequestUrlToolTip() =>
-        ResolvedRequestUrlToolTip = ((IPororocaVariableResolver)this.variableResolver).ReplaceTemplates(RequestUrl);
+    public void UpdateResolvedRequestUrlToolTip()
+    {
+        var varResolver = ((IPororocaVariableResolver)this.variableResolver);
+        ResolvedRequestUrlToolTip = varResolver.ReplaceTemplates(RequestUrl, varResolver.GetEffectiveVariables());
+    }
 
     private static string FormatHttpVersionString(decimal httpVersion) =>
         httpVersion switch
@@ -419,7 +422,8 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     {
         ClearInvalidRequestWarnings();
         var generatedReq = ToHttpRequest();
-        if (!this.requester.IsValidRequest(this.variableResolver, generatedReq, out string? errorCode))
+        var effectiveVars = ((IPororocaVariableResolver)this.variableResolver).GetEffectiveVariables();
+        if (!this.requester.IsValidRequest(this.variableResolver, effectiveVars, generatedReq, out string? errorCode))
         {
             this.invalidRequestMessageErrorCode = errorCode;
             ShowInvalidRequestWarnings();
@@ -427,7 +431,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         else
         {
             ShowSendingRequestUI();
-            var res = await SendRequestAsync(generatedReq);
+            var res = await SendRequestAsync(generatedReq, effectiveVars);
             ResponseDataCtx.UpdateWithResponse(res);
             ShowNotSendingRequestUI();
         }
@@ -525,7 +529,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         IsSendRequestProgressBarVisible = false;
     }
 
-    private Task<PororocaHttpResponse> SendRequestAsync(PororocaHttpRequest generatedReq)
+    private Task<PororocaHttpResponse> SendRequestAsync(PororocaHttpRequest generatedReq, IEnumerable<PororocaVariable> effectiveVars)
     {
         bool disableSslVerification = ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled;
         this.sendRequestCancellationTokenSourceField = new();
@@ -533,7 +537,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         // Awaiting the request.RequestAsync() here, or simply returning its Task,
         // causes the UI to freeze for a few seconds, especially when performing the first request to a server.
         // That is why we are invoking the code to run in a new thread, like below.
-        return Task.Run(async () => await this.requester.RequestAsync(this.variableResolver, generatedReq, disableSslVerification, this.sendRequestCancellationTokenSourceField.Token));
+        return Task.Run(async () => await this.requester.RequestAsync(this.variableResolver, effectiveVars, generatedReq, disableSslVerification, this.sendRequestCancellationTokenSourceField.Token));
     }
 
     #endregion

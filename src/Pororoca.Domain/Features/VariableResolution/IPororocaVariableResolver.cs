@@ -27,18 +27,18 @@ public partial interface IPororocaVariableResolver
         reqAuth == PororocaRequestAuth.InheritedFromCollection ?
         CollectionScopedAuth : reqAuth;
 
-    public IDictionary<string, string> ResolveKeyValueParams(IEnumerable<PororocaKeyValueParam>? kvParams) =>
+    public IDictionary<string, string> ResolveKeyValueParams(IEnumerable<PororocaKeyValueParam>? kvParams, IEnumerable<PororocaVariable> effectiveVars) =>
         kvParams == null ?
         new() :
         kvParams.Where(h => h.Enabled)
                 .Select(h => new KeyValuePair<string, string>(
-                    ReplaceTemplates(h.Key),
-                    ReplaceTemplates(h.Value)
+                    ReplaceTemplates(h.Key, effectiveVars),
+                    ReplaceTemplates(h.Value, effectiveVars)
                 ))
                 .DistinctBy(h => h.Key) // Avoid duplicated pairs by key
                 .ToDictionary(h => h.Key, h => h.Value);
 
-    public string ReplaceTemplates(string? strToReplaceTemplatedVariables)
+    public string ReplaceTemplates(string? strToReplaceTemplatedVariables, IEnumerable<PororocaVariable> effectiveVars)
     {
         if (string.IsNullOrEmpty(strToReplaceTemplatedVariables))
         {
@@ -46,7 +46,6 @@ public partial interface IPororocaVariableResolver
         }
         else
         {
-            var effectiveVars = GetEffectiveVariables();
             return PororocaVariableRegex.Replace(strToReplaceTemplatedVariables, match =>
             {
                 string keyName = match.Groups["k"].Value;
@@ -56,7 +55,7 @@ public partial interface IPororocaVariableResolver
         }
     }
 
-    internal IEnumerable<PororocaVariable> GetEffectiveVariables()
+    public IEnumerable<PororocaVariable> GetEffectiveVariables()
     {
         var currentEnv = Environments.FirstOrDefault(e => e.IsCurrent);
         var effectiveEnvVars = currentEnv?.Variables?.Where(sev => sev.Enabled) ?? Enumerable.Empty<PororocaVariable>();

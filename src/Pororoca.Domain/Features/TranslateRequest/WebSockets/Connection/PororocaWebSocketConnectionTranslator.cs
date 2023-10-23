@@ -1,4 +1,5 @@
 using System.Net.WebSockets;
+using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.Requester;
 using Pororoca.Domain.Features.TranslateRequest.Common;
@@ -12,6 +13,7 @@ namespace Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection;
 public static class PororocaWebSocketConnectionTranslator
 {
     public static bool TryTranslateConnection(IPororocaVariableResolver varResolver,
+                                              IEnumerable<PororocaVariable> effectiveVars,
                                               IPororocaHttpClientProvider httpClientProvider,
                                               PororocaWebSocketConnection wsConn,
                                               bool disableTlsVerification,
@@ -19,6 +21,7 @@ public static class PororocaWebSocketConnectionTranslator
                                               out string? errorCode) =>
         TryTranslateConnection(IsWebSocketHttpVersionAvailableInOS,
                                varResolver,
+                               effectiveVars,
                                httpClientProvider,
                                wsConn,
                                disableTlsVerification,
@@ -27,6 +30,7 @@ public static class PororocaWebSocketConnectionTranslator
 
     internal static bool TryTranslateConnection(HttpVersionAvailableVerifier httpVersionVerifier,
                                                 IPororocaVariableResolver varResolver,
+                                                IEnumerable<PororocaVariable> effectiveVars,
                                                 IPororocaHttpClientProvider httpClientProvider,
                                                 PororocaWebSocketConnection wsConn,
                                                 bool disableTlsVerification,
@@ -42,13 +46,13 @@ public static class PororocaWebSocketConnectionTranslator
         {
             try
             {
-                var resolvedAuth = ResolveRequestAuth(varResolver, wsConn.CustomAuth);
+                var resolvedAuth = ResolveRequestAuth(varResolver, effectiveVars, wsConn.CustomAuth);
                 var httpCli = httpClientProvider.Provide(disableTlsVerification, resolvedAuth);
 
                 var wsCli = new ClientWebSocket();
                 SetHttpVersion(wsConn, wsCli);
-                SetConnectionRequestHeaders(varResolver, wsConn, wsCli);
-                SetSubprotocols(varResolver, wsConn, wsCli);
+                SetConnectionRequestHeaders(varResolver, effectiveVars, wsConn, wsCli);
+                SetSubprotocols(varResolver, effectiveVars, wsConn, wsCli);
                 SetCompressionOptions(wsConn, wsCli);
 
                 wsAndHttpCli = (wsCli, httpCli);
@@ -69,18 +73,18 @@ public static class PororocaWebSocketConnectionTranslator
         wsCli.Options.HttpVersion = PororocaRequestCommonTranslator.ResolveHttpVersion(wsConn.HttpVersion);
     }
 
-    private static void SetConnectionRequestHeaders(IPororocaVariableResolver varResolver, PororocaWebSocketConnection wsConn, ClientWebSocket wsCli)
+    private static void SetConnectionRequestHeaders(IPororocaVariableResolver varResolver, IEnumerable<PororocaVariable> effectiveVars, PororocaWebSocketConnection wsConn, ClientWebSocket wsCli)
     {
-        var resolvedNonContentHeaders = ResolveNonContentHeaders(varResolver, wsConn.Headers, wsConn.CustomAuth);
+        var resolvedNonContentHeaders = ResolveNonContentHeaders(varResolver, effectiveVars, wsConn.Headers, wsConn.CustomAuth);
         foreach (var header in resolvedNonContentHeaders)
         {
             wsCli.Options.SetRequestHeader(header.Key, header.Value);
         }
     }
 
-    private static void SetSubprotocols(IPororocaVariableResolver varResolver, PororocaWebSocketConnection wsConn, ClientWebSocket wsCli)
+    private static void SetSubprotocols(IPororocaVariableResolver varResolver, IEnumerable<PororocaVariable> effectiveVars, PororocaWebSocketConnection wsConn, ClientWebSocket wsCli)
     {
-        var subprotocols = varResolver.ResolveKeyValueParams(wsConn.Subprotocols).Select(kv => kv.Key);
+        var subprotocols = varResolver.ResolveKeyValueParams(wsConn.Subprotocols, effectiveVars).Select(kv => kv.Key);
         foreach (string subprotocol in subprotocols)
         {
             wsCli.Options.AddSubProtocol(subprotocol);
