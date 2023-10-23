@@ -99,7 +99,7 @@ public static partial class PororocaResponseValueCapturerTests
     [InlineData("123987456", "/env:Envelope/env:Body/xsi:response/xsi:Value/wsa:MyVal2", testXmlObjWithNamespaces)]
     public static void TestXmlValueCapture(string expectedCapture, string xpath, string xml)
     {
-        var (doc, nsm) = LoadXmlDocumentAndNamespaceManager(xml);
-        Assert.Equal(expectedCapture, CaptureXmlValue(xpath, doc, nsm));
+        var docAndNsm = LoadXmlDocumentAndNamespaceManager(xml);
+        Assert.Equal(expectedCapture, CaptureXmlValue(xpath, docAndNsm!.Value.Item1, docAndNsm!.Value.Item2));
     }
 }

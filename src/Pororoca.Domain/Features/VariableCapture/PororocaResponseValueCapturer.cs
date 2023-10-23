@@ -37,10 +37,10 @@ public static partial class PororocaResponseValueCapturer
         }
     }
 
-    internal static (XmlDocument?, XmlNamespaceManager?) LoadXmlDocumentAndNamespaceManager(string xml)
+    internal static (XmlDocument, XmlNamespaceManager)? LoadXmlDocumentAndNamespaceManager(string xml)
     {
         if (string.IsNullOrWhiteSpace(xml))
-            return (null, null);
+            return null;
 
         try
         {
@@ -56,7 +56,7 @@ public static partial class PororocaResponseValueCapturer
         }
         catch
         {
-            return (null, null);
+            return null;
         }
     }
 

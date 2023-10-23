@@ -29,6 +29,8 @@ public sealed class PororocaHttpResponse
 
     private readonly byte[]? binaryBody;
 
+    private (XmlDocument xmlDoc, XmlNamespaceManager xmlNsm)? cachedXmlDocAndNsm;
+
     public bool WasCancelled =>
         Exception is TaskCanceledException;
 
@@ -184,8 +186,17 @@ public sealed class PororocaHttpResponse
                 string body = GetBodyAsString() ?? string.Empty;
                 // holding the doc and nsm here to spare processing 
                 // of reading and parsing XML document and namespaces
-                var (doc, nsm) = PororocaResponseValueCapturer.LoadXmlDocumentAndNamespaceManager(body);
-                return PororocaResponseValueCapturer.CaptureXmlValue(capture.Path!, doc, nsm);
+                // if cachedXmlDocAndNsm is not null (already loaded), 
+                // then it won't be loaded again
+                this.cachedXmlDocAndNsm ??= PororocaResponseValueCapturer.LoadXmlDocumentAndNamespaceManager(body);
+                if (this.cachedXmlDocAndNsm is not null)
+                {
+                    return PororocaResponseValueCapturer.CaptureXmlValue(capture.Path!, this.cachedXmlDocAndNsm.Value.xmlDoc, this.cachedXmlDocAndNsm.Value.xmlNsm);
+                }
+                else
+                {
+                    return null;
+                }
             }
             else
             {
