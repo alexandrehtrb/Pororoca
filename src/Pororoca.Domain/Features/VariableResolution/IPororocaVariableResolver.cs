@@ -1,12 +1,14 @@
+using System.Text.RegularExpressions;
 using Pororoca.Domain.Features.Entities.Pororoca;
-using Pororoca.Domain.Features.Entities.Pororoca.Http;
 
 namespace Pororoca.Domain.Features.VariableResolution;
 
-public interface IPororocaVariableResolver
+public partial interface IPororocaVariableResolver
 {
-    const string VariableTemplateBeginToken = "{{";
-    const string VariableTemplateEndToken = "}}";
+    public static readonly Regex PororocaVariableRegex = GeneratePororocaVariableRegex();
+
+    [GeneratedRegex("\\{\\{(?<k>[\\w\\d_\\-\\.]+)\\}\\}")]
+    private static partial Regex GeneratePororocaVariableRegex();
 
     List<PororocaVariable> Variables { get; } // collection variables
     PororocaRequestAuth? CollectionScopedAuth { get; } // collection scoped auth
@@ -38,33 +40,31 @@ public interface IPororocaVariableResolver
 
     public string ReplaceTemplates(string? strToReplaceTemplatedVariables)
     {
-        if (string.IsNullOrWhiteSpace(strToReplaceTemplatedVariables))
+        if (string.IsNullOrEmpty(strToReplaceTemplatedVariables))
         {
             return strToReplaceTemplatedVariables ?? string.Empty;
         }
         else
         {
-            var currentEnv = Environments.FirstOrDefault(e => e.IsCurrent);
-            IEnumerable<PororocaVariable>? currentEnvironmentVariables = currentEnv?.Variables;
-            IEnumerable<PororocaVariable> effectiveVariables = MergeVariables(Variables, currentEnvironmentVariables);
-            string resolvedStr = strToReplaceTemplatedVariables!;
-            foreach (var v in effectiveVariables)
+            var effectiveVars = GetEffectiveVariables();
+            return PororocaVariableRegex.Replace(strToReplaceTemplatedVariables, match =>
             {
-                string variableTemplate = VariableTemplateBeginToken + v.Key + VariableTemplateEndToken;
-                resolvedStr = resolvedStr.Replace(variableTemplate, v.Value ?? variableTemplate);
-            }
-            return resolvedStr;
+                string keyName = match.Groups["k"].Value;
+                var effectiveVar = effectiveVars.FirstOrDefault(v => v.Key == keyName);
+                return effectiveVar?.Value ?? match.Value;
+            });
         }
     }
 
-    internal static PororocaVariable[] MergeVariables(IEnumerable<PororocaVariable> collectionVariables, IEnumerable<PororocaVariable>? selectedEnvironmentVariables)
+    internal IEnumerable<PororocaVariable> GetEffectiveVariables()
     {
-        var effectiveEnvVars = selectedEnvironmentVariables?.Where(sev => sev.Enabled) ?? Array.Empty<PororocaVariable>();
-        var effectiveColVars = collectionVariables.Where(cv => cv.Enabled);
+        var currentEnv = Environments.FirstOrDefault(e => e.IsCurrent);
+        var effectiveEnvVars = currentEnv?.Variables?.Where(sev => sev.Enabled) ?? Enumerable.Empty<PororocaVariable>();
+        var effectiveColVars = Variables.Where(cv => cv.Enabled);
         var effectiveColVarsNotInEnv =
             effectiveColVars.Where(ecv => !effectiveEnvVars.Any(eev => eev.Key == ecv.Key));
 
         // Environment variable overrides collection variable
-        return effectiveEnvVars.Concat(effectiveColVarsNotInEnv).ToArray();
+        return effectiveEnvVars.Concat(effectiveColVarsNotInEnv);
     }
 }
