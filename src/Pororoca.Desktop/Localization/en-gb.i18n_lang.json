@@ -1,8 +1,8 @@
 {
     "CannotCopyOrCutCollectionDialog/Title": "Pororoca - Copy items",
     "CannotCopyOrCutCollectionDialog/Content": "You can duplicate, but not copy or cut a collection.",
-    "CannotPasteItemToItselfDialog/Title":"Pororoca - Cut items",
-    "CannotPasteItemToItselfDialog/Content":"Cannot paste a cut item to itself.",
+    "CannotPasteItemToItselfDialog/Title": "Pororoca - Cut items",
+    "CannotPasteItemToItselfDialog/Content": "Cannot paste a cut item to itself.",
     "Collection/AddEnvironment": "Add environment",
     "Collection/AddFolder": "Add folder",
     "Collection/AddHttpRequest": "Add HTTP request",
@@ -54,7 +54,7 @@
     "ContextMenu/Paste": "Paste",
     "ContextMenu/Rename": "Rename",
     "ContextMenu/SetAsCurrentEnvironment": "Set as current environment",
-    "DeleteItemsDialog/Title":"Pororoca - Delete items",
+    "DeleteItemsDialog/Title": "Pororoca - Delete items",
     "DeleteItemsDialog/MessageSingleItem": "Are you sure you want to delete '{0}'?",
     "DeleteItemsDialog/MessageMultipleItems": "Are you sure you want to delete the selected items?",
     "EditableTextBlock/RenameToolTip": "Rename (F2)",
@@ -285,7 +285,11 @@
     "WebSocketExchangedMessages/FromClientToServer": "client -> server",
     "WebSocketExchangedMessages/FromServerToClient": "server -> client",
     "WebSocketExchangedMessages/InstantDescriptionFormat": "HH:mm:ss, yyyy-MM-dd, 'GMT'z'h'",
-    "WebSocketExchangedMessages/SectionTitle": "Messages exchanged",
+    "WebSocketExchangedMessages/SectionTitle": "Response",
+    "WebSocketExchangedMessages/SectionTitleFailedFormat": "Response: Failed ({0})",
+    "WebSocketExchangedMessages/SectionTitleSuccessfulFormat": "Response: {0} ({1})",
+    "WebSocketExchangedMessages/MessagesExchangedTab": "Messages exchanged",
+    "WebSocketExchangedMessages/HeadersTab": "Headers",
     "WebSocketExchangedMessages/SendMessage": "Send",
     "WebSocketExchangedMessages/TextContentDescriptionFormat": "text, {0} bytes"
 }

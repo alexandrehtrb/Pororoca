@@ -1,5 +1,7 @@
 using System.Buffers;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Net;
 using System.Net.WebSockets;
 using System.Threading.Channels;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
@@ -18,6 +20,11 @@ public class PororocaWebSocketConnector
     public PororocaWebSocketConnectorState State { get; private set; }
 
     public Exception? ConnectionException { get; private set; }
+
+    public HttpStatusCode ConnectionHttpStatusCode { get; private set; }
+    public IReadOnlyDictionary<string, IEnumerable<string>>? ConnectionHttpHeaders { get; private set; }
+    public TimeSpan ElapsedConnectionTimeSpan { get; private set; }
+
 
     private bool isSendingAMessageField;
     public bool IsSendingAMessage
@@ -81,18 +88,21 @@ public class PororocaWebSocketConnector
         if (State == PororocaWebSocketConnectorState.Connected || State == PororocaWebSocketConnectorState.Connecting)
             return;  // Not throwing exception if user tried to connect whilst WebSocket is connected
 
+        Stopwatch sw = new();
         try
         {
             SetIsConnecting();
+            sw.Start();
             await client.ConnectAsync(uri!, httpClient, cancellationToken);
-            SetupAfterConnected(client);
+            sw.Stop();
+            SetupAfterConnected(client,sw.Elapsed);
             SetIsConnected();
-            // Starting at .NET 7, connection response status code and headers will be available for reading,
-            // TODO: show them on screen.
         }
         catch (Exception ex)
         {
             SetIsDisconnected(ex);
+            sw.Stop();
+            ElapsedConnectionTimeSpan = sw.Elapsed;
         }
     }
 
@@ -101,11 +111,15 @@ public class PororocaWebSocketConnector
         CloseStartingByClientAsync(null, cancellationToken) :
         Task.CompletedTask;  // Not throwing exception if user tried to disconnect whilst WebSocket is not connected
 
-    private void SetupAfterConnected(ClientWebSocket resolvedClient)
+    private void SetupAfterConnected(ClientWebSocket resolvedClient, TimeSpan elapsedConnectionTimeSpan)
     {
         this.client = resolvedClient;
         ClearAfterConnect();
         MessagesToSendChannel = BuildMessagesToSendChannel();
+
+        ConnectionHttpStatusCode = resolvedClient.HttpStatusCode;
+        ConnectionHttpHeaders = resolvedClient.HttpResponseHeaders;
+        ElapsedConnectionTimeSpan = elapsedConnectionTimeSpan;
 
         this.cancelSendingAndReceivingTokenSource = new(); // no maximum lifetime period
         StartMessagesExchangesProcessInBackground(this.cancelSendingAndReceivingTokenSource.Token);

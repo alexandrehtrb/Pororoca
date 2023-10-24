@@ -669,9 +669,6 @@
                 VerticalAlignment="Stretch"
                 Source="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.Source}"
                 CanUserResizeColumns="True">
-              <!--DataGrid.KeyBindings>
-                <KeyBinding Command="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.CopyCmd}" Gesture="Ctrl+C" />
-              </TreeDataGrid.KeyBindings-->
               <TreeDataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem
