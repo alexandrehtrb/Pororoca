@@ -42,7 +42,7 @@ public static class PororocaWebSocketCommonTranslatorTests
         ws.HttpVersion = 3.0m;
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, varResolver.GetEffectiveVariables(), httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.False(valid);
@@ -65,7 +65,7 @@ public static class PororocaWebSocketCommonTranslatorTests
         ws.HttpVersion = 2.0m;
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, varResolver.GetEffectiveVariables(), httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.True(valid);
@@ -100,7 +100,7 @@ public static class PororocaWebSocketCommonTranslatorTests
         ))).Returns(httpClient);
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, varResolver.GetEffectiveVariables(), httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.True(valid);
@@ -127,7 +127,7 @@ public static class PororocaWebSocketCommonTranslatorTests
         httpClientProviderMock.Setup(x => x.Provide(It.IsAny<bool>(), It.IsAny<PororocaRequestAuth>())).Returns(httpClient);
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, varResolver.GetEffectiveVariables(), httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.True(valid);
@@ -158,7 +158,7 @@ public static class PororocaWebSocketCommonTranslatorTests
         httpClientProviderMock.Setup(x => x.Provide(It.IsAny<bool>(), It.IsAny<PororocaRequestAuth>())).Returns(httpClient);
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, varResolver.GetEffectiveVariables(), httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.True(valid);
@@ -183,7 +183,7 @@ public static class PororocaWebSocketCommonTranslatorTests
         httpClientProviderMock.Setup(x => x.Provide(It.IsAny<bool>(), It.IsAny<PororocaRequestAuth>())).Returns(httpClient);
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, varResolver.GetEffectiveVariables(), httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.True(valid);
@@ -220,7 +220,7 @@ public static class PororocaWebSocketCommonTranslatorTests
         ws.CustomAuth = PororocaRequestAuth.MakeBasicAuth("usr", "{{K3Value}}");
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, varResolver.GetEffectiveVariables(), httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.True(valid);
@@ -256,7 +256,7 @@ public static class PororocaWebSocketCommonTranslatorTests
         };
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, varResolver.GetEffectiveVariables(), httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.True(valid);
@@ -285,7 +285,7 @@ public static class PororocaWebSocketCommonTranslatorTests
         httpClientProviderMock.Setup(x => x.Provide(It.IsAny<bool>(), It.IsAny<PororocaRequestAuth>())).Returns(httpClient);
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, varResolver.GetEffectiveVariables(), httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.True(valid);
@@ -310,7 +310,7 @@ public static class PororocaWebSocketCommonTranslatorTests
         ws.CompressionOptions = new(14, true, 12, false);
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, varResolver.GetEffectiveVariables(), httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.True(valid);
@@ -343,7 +343,7 @@ public static class PororocaWebSocketCommonTranslatorTests
         httpClientProviderMock.Setup(x => x.Provide(It.IsAny<bool>(), It.IsAny<PororocaRequestAuth>())).Throws(ex);
 
         // WHEN
-        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver, varResolver.GetEffectiveVariables(), httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
+        bool valid = TryTranslateConnection(httpVersionVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, httpClientProviderMock.Object, ws, disableTlsVerification, out var clis, out string? errorCode);
 
         // THEN
         Assert.False(valid);

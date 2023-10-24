@@ -12,16 +12,16 @@ namespace Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection;
 
 public static class PororocaWebSocketConnectionTranslator
 {
-    public static bool TryTranslateConnection(IPororocaVariableResolver varResolver,
-                                              IEnumerable<PororocaVariable> effectiveVars,
+    public static bool TryTranslateConnection(IEnumerable<PororocaVariable> effectiveVars,
+                                              PororocaRequestAuth? collectionScopedAuth,
                                               IPororocaHttpClientProvider httpClientProvider,
                                               PororocaWebSocketConnection wsConn,
                                               bool disableTlsVerification,
                                               out (ClientWebSocket? wsCli, HttpClient? httpCli) wsAndHttpCli,
                                               out string? errorCode) =>
         TryTranslateConnection(IsWebSocketHttpVersionAvailableInOS,
-                               varResolver,
                                effectiveVars,
+                               collectionScopedAuth,
                                httpClientProvider,
                                wsConn,
                                disableTlsVerification,
@@ -29,8 +29,8 @@ public static class PororocaWebSocketConnectionTranslator
                                out errorCode);
 
     internal static bool TryTranslateConnection(HttpVersionAvailableVerifier httpVersionVerifier,
-                                                IPororocaVariableResolver varResolver,
                                                 IEnumerable<PororocaVariable> effectiveVars,
+                                                PororocaRequestAuth? collectionScopedAuth,
                                                 IPororocaHttpClientProvider httpClientProvider,
                                                 PororocaWebSocketConnection wsConn,
                                                 bool disableTlsVerification,
@@ -46,12 +46,12 @@ public static class PororocaWebSocketConnectionTranslator
         {
             try
             {
-                var resolvedAuth = ResolveRequestAuth(varResolver, effectiveVars, wsConn.CustomAuth);
+                var resolvedAuth = ResolveRequestAuth(effectiveVars, collectionScopedAuth, wsConn.CustomAuth);
                 var httpCli = httpClientProvider.Provide(disableTlsVerification, resolvedAuth);
 
                 var wsCli = new ClientWebSocket();
                 SetHttpVersion(wsConn, wsCli);
-                SetConnectionRequestHeaders(varResolver, effectiveVars, wsConn, wsCli);
+                SetConnectionRequestHeaders(effectiveVars, collectionScopedAuth, wsConn, wsCli);
                 SetSubprotocols(effectiveVars, wsConn, wsCli);
                 SetCompressionOptions(wsConn, wsCli);
 
@@ -73,9 +73,9 @@ public static class PororocaWebSocketConnectionTranslator
         wsCli.Options.HttpVersion = PororocaRequestCommonTranslator.ResolveHttpVersion(wsConn.HttpVersion);
     }
 
-    private static void SetConnectionRequestHeaders(IPororocaVariableResolver varResolver, IEnumerable<PororocaVariable> effectiveVars, PororocaWebSocketConnection wsConn, ClientWebSocket wsCli)
+    private static void SetConnectionRequestHeaders(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaWebSocketConnection wsConn, ClientWebSocket wsCli)
     {
-        var resolvedNonContentHeaders = ResolveNonContentHeaders(varResolver, effectiveVars, wsConn.Headers, wsConn.CustomAuth);
+        var resolvedNonContentHeaders = ResolveNonContentHeaders(effectiveVars, collectionScopedAuth, wsConn.CustomAuth, wsConn.Headers);
         foreach (var header in resolvedNonContentHeaders)
         {
             wsCli.Options.SetRequestHeader(header.Key, header.Value);

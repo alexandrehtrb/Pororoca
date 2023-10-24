@@ -56,7 +56,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateUrl(urlTemplate);
 
         // WHEN
-        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.InvalidUrl, errorCode);
@@ -74,7 +74,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateHttpVersion(3.0m);
 
         // WHEN
-        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.Http3UnavailableInOSVersion, errorCode);
@@ -95,7 +95,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateBody(body);
 
         // WHEN
-        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRaw, errorCode);
@@ -116,7 +116,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateBody(body);
 
         // WHEN
-        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyFile, errorCode);
@@ -137,7 +137,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateBody(body);
 
         // WHEN
-        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.InvalidContentTypeRaw, errorCode);
@@ -158,7 +158,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateBody(body);
 
         // WHEN
-        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.InvalidContentTypeFile, errorCode);
@@ -176,7 +176,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateHttpVersion(1.1m);
 
         // WHEN
-        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Null(errorCode);
@@ -197,7 +197,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateBody(body);
 
         // WHEN
-        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Null(errorCode);
@@ -219,7 +219,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateBody(body);
 
         // WHEN
-        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.InvalidContentTypeFormData, errorCode);
@@ -241,7 +241,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateBody(body);
 
         // WHEN
-        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Null(errorCode);
@@ -262,7 +262,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateBody(body);
 
         // WHEN
-        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Null(errorCode);
@@ -283,7 +283,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateBody(body);
 
         // WHEN
-        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.ReqBodyFileNotFound, errorCode);
@@ -307,7 +307,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateBody(body);
 
         // WHEN
-        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Null(errorCode);
@@ -329,7 +329,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateBody(body);
 
         // WHEN
-        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.ReqBodyFileNotFound, errorCode);
@@ -351,7 +351,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateBody(body);
 
         // WHEN
-        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Null(errorCode);
@@ -372,7 +372,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateCustomAuth(auth);
 
         // WHEN
-        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.ClientCertificatePkcs12CertificateFileNotFound, errorCode);
@@ -395,7 +395,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateCustomAuth(auth);
 
         // WHEN
-        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.ClientCertificatePemCertificateFileNotFound, errorCode);
@@ -418,7 +418,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateCustomAuth(auth);
 
         // WHEN
-        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.ClientCertificatePemPrivateKeyFileNotFound, errorCode);
@@ -440,7 +440,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateCustomAuth(auth);
 
         // WHEN
-        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank, errorCode);
@@ -463,7 +463,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateCustomAuth(auth);
 
         // WHEN
-        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Null(errorCode);
@@ -490,7 +490,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateCustomAuth(auth);
 
         // WHEN
-        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Null(errorCode);
@@ -516,7 +516,7 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateCustomAuth(auth);
 
         // WHEN
-        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.True(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Null(errorCode);
@@ -539,7 +539,30 @@ public static class PororocaHttpRequestValidatorTests
         req.UpdateCustomAuth(auth);
 
         // WHEN
-        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), req, out string? errorCode));
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, req, out string? errorCode));
+
+        // THEN
+        Assert.Equal(TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank, errorCode);
+    }
+
+    #endregion
+
+    #region IS VALID COLLECTION-SCOPED AUTH
+
+    [Fact]
+    public static void Should_reject_req_with_invalid_collection_scoped_windows_auth()
+    {
+        // GIVEN
+        var varResolver = MockVariableResolver("win_pwd", "");
+        var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
+        var mockedFileExistsVerifier = MockFileExistsVerifier(false);
+        var collectionScopedAuth = PororocaRequestAuth.MakeWindowsAuth(false, "win_login", "{{win_pwd}}", "win_domain");
+        PororocaHttpRequest req = new();
+        req.UpdateUrl("http://www.pudim.com.br");
+        req.UpdateCustomAuth(PororocaRequestAuth.InheritedFromCollection);
+
+        // WHEN
+        Assert.False(IsValidRequest(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), collectionScopedAuth, req, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank, errorCode);

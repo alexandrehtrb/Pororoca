@@ -9,15 +9,15 @@ namespace Pororoca.Domain.Features.TranslateRequest.Http;
 
 public static class PororocaHttpRequestValidator
 {
-    public static bool IsValidRequest(IPororocaVariableResolver variableResolver, IEnumerable<PororocaVariable> effectiveVars, PororocaHttpRequest req, out string? errorCode) =>
-        IsValidRequest(IsHttpVersionAvailableInOS, File.Exists, variableResolver, effectiveVars, req, out errorCode);
+    public static bool IsValidRequest(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaHttpRequest req, out string? errorCode) =>
+        IsValidRequest(IsHttpVersionAvailableInOS, File.Exists, effectiveVars, collectionScopedAuth, req, out errorCode);
 
-    internal static bool IsValidRequest(HttpVersionAvailableVerifier httpVersionOSVerifier, FileExistsVerifier fileExistsVerifier, IPororocaVariableResolver variableResolver, IEnumerable<PororocaVariable> effectiveVars, PororocaHttpRequest req, out string? errorCode) =>
+    internal static bool IsValidRequest(HttpVersionAvailableVerifier httpVersionOSVerifier, FileExistsVerifier fileExistsVerifier, IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaHttpRequest req, out string? errorCode) =>
         TryResolveRequestUri(effectiveVars, req.Url, out _, out errorCode)
         && httpVersionOSVerifier(req.HttpVersion, out errorCode)
         && HasValidContentTypeForReqBody(req, out errorCode)
         && CheckReqBodyFileExists(effectiveVars, req, fileExistsVerifier, out errorCode)
-        && ValidateAuthParams(effectiveVars, fileExistsVerifier, req.CustomAuth, out errorCode);
+        && ValidateAuthParams(effectiveVars, fileExistsVerifier, ChooseRequestAuth(collectionScopedAuth, req.CustomAuth), out errorCode);
 
     private static bool HasValidContentTypeForReqBody(PororocaHttpRequest req, out string? errorCode)
     {

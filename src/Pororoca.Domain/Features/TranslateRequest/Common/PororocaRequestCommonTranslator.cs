@@ -7,6 +7,10 @@ namespace Pororoca.Domain.Features.TranslateRequest.Common;
 
 public static class PororocaRequestCommonTranslator
 {
+    internal static PororocaRequestAuth? ChooseRequestAuth(PororocaRequestAuth? collectionScopedAuth, PororocaRequestAuth? reqAuth) =>
+        reqAuth?.Mode == PororocaRequestAuthMode.InheritFromCollection ?
+        collectionScopedAuth : reqAuth;
+
     private static readonly ImmutableList<string> acceptedUriSchemes = ImmutableList.Create<string>(
         Uri.UriSchemeHttp,
         Uri.UriSchemeHttps,
@@ -54,11 +58,11 @@ public static class PororocaRequestCommonTranslator
     internal static IDictionary<string, string> ResolveContentHeaders(IEnumerable<PororocaVariable> effectiveVars, IReadOnlyList<PororocaKeyValueParam>? unresolvedHeaders) =>
         ResolveHeaders(effectiveVars, unresolvedHeaders, IsContentHeader);
 
-    internal static IDictionary<string, string> ResolveNonContentHeaders(IPororocaVariableResolver variableResolver, IEnumerable<PororocaVariable> effectiveVars, IReadOnlyList<PororocaKeyValueParam>? unresolvedHeaders, PororocaRequestAuth? reqAuth)
+    internal static IDictionary<string, string> ResolveNonContentHeaders(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaRequestAuth? reqAuth, IReadOnlyList<PororocaKeyValueParam>? unresolvedHeaders)
     {
         var nonContentHeaders = ResolveHeaders(effectiveVars, unresolvedHeaders, headerName => !IsContentHeader(headerName));
 
-        string? customAuthHeaderValue = ResolveCustomAuthHeaderValue(variableResolver, effectiveVars, reqAuth);
+        string? customAuthHeaderValue = ResolveCustomAuthHeaderValue(effectiveVars, collectionScopedAuth, reqAuth);
         if (customAuthHeaderValue != null)
         {
             // Custom auth overrides declared authorization header
@@ -76,7 +80,7 @@ public static class PororocaRequestCommonTranslator
            .Where(h => h.Key != "Content-Type" && headerNameCriteria(h.Key)) // Content-Type header is set by the content, later
            .ToDictionary(h => h.Key, h => h.Value);
 
-    private static string? ResolveCustomAuthHeaderValue(IPororocaVariableResolver variableResolver, IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? reqAuth)
+    private static string? ResolveCustomAuthHeaderValue(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaRequestAuth? reqAuth)
     {
         string? MakeBasicAuthToken(PororocaRequestAuth auth)
         {
@@ -92,7 +96,7 @@ public static class PororocaRequestCommonTranslator
             return resolvedBearerToken;
         }
 
-        var authToUse = variableResolver.GetAuthForRequest(reqAuth);
+        var authToUse = ChooseRequestAuth(collectionScopedAuth, reqAuth);
 
         return authToUse?.Mode switch
         {
@@ -106,9 +110,9 @@ public static class PororocaRequestCommonTranslator
 
     #region AUTH
 
-    internal static PororocaRequestAuth? ResolveRequestAuth(IPororocaVariableResolver variableResolver, IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? reqAuth)
+    internal static PororocaRequestAuth? ResolveRequestAuth(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaRequestAuth? reqAuth)
     {
-        var authToUse = variableResolver.GetAuthForRequest(reqAuth);
+        var authToUse = ChooseRequestAuth(collectionScopedAuth, reqAuth);
 
         if (authToUse is null)
             return null;

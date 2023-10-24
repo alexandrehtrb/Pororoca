@@ -54,7 +54,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         ws.Url = "{{url}}";
 
         // WHEN
-        Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), ws, out var resolvedUri, out string? errorCode));
+        Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.InvalidUrl, errorCode);
@@ -71,7 +71,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         ws.Url = "{{url}}";
 
         // WHEN
-        Assert.True(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), ws, out var resolvedUri, out string? errorCode));
+        Assert.True(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
 
         // THEN
         Assert.Null(errorCode);
@@ -93,7 +93,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         ws.HttpVersion = 2.0m;
 
         // WHEN
-        Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), ws, out var resolvedUri, out string? errorCode));
+        Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.WebSocketHttpVersionUnavailable, errorCode);
@@ -111,7 +111,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         ws.HttpVersion = 2.0m;
 
         // WHEN
-        Assert.True(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), ws, out _, out string? errorCode));
+        Assert.True(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out _, out string? errorCode));
 
         // THEN
         Assert.Null(errorCode);
@@ -134,7 +134,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         ws.CustomAuth = auth;
 
         // WHEN
-        Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), ws, out var resolvedUri, out string? errorCode));
+        Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.ClientCertificatePkcs12CertificateFileNotFound, errorCode);
@@ -157,7 +157,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         ws.CustomAuth = auth;
 
         // WHEN
-        Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), ws, out var resolvedUri, out string? errorCode));
+        Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.ClientCertificatePemCertificateFileNotFound, errorCode);
@@ -180,7 +180,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         ws.CustomAuth = auth;
 
         // WHEN
-        Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), ws, out var resolvedUri, out string? errorCode));
+        Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.ClientCertificatePemPrivateKeyFileNotFound, errorCode);
@@ -202,7 +202,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         ws.CustomAuth = auth;
 
         // WHEN
-        Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), ws, out var resolvedUri, out string? errorCode));
+        Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank, errorCode);
@@ -225,7 +225,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         ws.CustomAuth = auth;
 
         // WHEN
-        Assert.True(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), ws, out var resolvedUri, out string? errorCode));
+        Assert.True(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
 
         // THEN
         Assert.Null(errorCode);
@@ -252,7 +252,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         ws.CustomAuth = auth;
 
         // WHEN
-        Assert.True(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), ws, out var resolvedUri, out string? errorCode));
+        Assert.True(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
 
         // THEN
         Assert.Null(errorCode);
@@ -278,7 +278,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         ws.CustomAuth = auth;
 
         // WHEN
-        Assert.True(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), ws, out var resolvedUri, out string? errorCode));
+        Assert.True(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
 
         // THEN
         Assert.Null(errorCode);
@@ -301,7 +301,30 @@ public static class PororocaWebSocketConnectionValidatorTests
         ws.CustomAuth = auth;
 
         // WHEN
-        Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), ws, out var resolvedUri, out string? errorCode));
+        Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
+
+        // THEN
+        Assert.Equal(TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank, errorCode);
+    }
+
+    #endregion
+
+    #region IS VALID COLLECTION-SCOPED AUTH
+
+    [Fact]
+    public static void Should_reject_ws_with_invalid_collection_scoped_windows_auth()
+    {
+        // GIVEN
+        var varResolver = MockVariableResolver("win_pwd", "");
+        var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
+        var mockedFileExistsVerifier = MockFileExistsVerifier(false);
+        var collectionScopedAuth = PororocaRequestAuth.MakeWindowsAuth(false, "win_login", "{{win_pwd}}", "win_domain");
+        PororocaWebSocketConnection ws = new();
+        ws.Url = "ws://www.pudim.com.br";
+        ws.CustomAuth = PororocaRequestAuth.InheritedFromCollection;
+
+        // WHEN
+        Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), collectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank, errorCode);
@@ -322,7 +345,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         ws.Url = "ws://www.pudim.com.br";
 
         // WHEN
-        Assert.True(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), ws, out _, out string? errorCode));
+        Assert.True(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out _, out string? errorCode));
 
         // THEN
         Assert.Null(errorCode);
@@ -344,7 +367,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         ws.CompressionOptions = new(clientMaxWindowBits, true, serverMaxWindowBits, true);
 
         // WHEN
-        Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), ws, out _, out string? errorCode));
+        Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out _, out string? errorCode));
 
         // THEN
         Assert.Equal(TranslateRequestErrors.WebSocketCompressionMaxWindowBitsOutOfRange, errorCode);
@@ -366,7 +389,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         ws.CompressionOptions = new(clientMaxWindowBits, true, serverMaxWindowBits, true);
 
         // WHEN
-        Assert.True(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver, varResolver.GetEffectiveVariables(), ws, out _, out string? errorCode));
+        Assert.True(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out _, out string? errorCode));
 
         // THEN
         Assert.Null(errorCode);

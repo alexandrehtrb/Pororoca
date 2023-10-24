@@ -14,18 +14,17 @@ public partial interface IPororocaVariableResolver
     PororocaRequestAuth? CollectionScopedAuth { get; } // collection scoped auth
     List<PororocaEnvironment> Environments { get; } // collection environments
 
-    // Example of templated string:
-    // "https://{{MyApiHost}}/api/location?city=Campinas"
-    // If there is a variable with the key "MyApiHost" and with the value "www.api.com.br" (all without quotes)
-    // Then this method should return:
-    // "https://www.api.com.br/api/location?city=Campinas"
-    // The variable resolution depends on collection and environment variables.
-    // Environment variables have precedence over collection variables.
-    // If the variable key is not declared or the variable is not enabled, then the raw key should be used as is.
+    public IEnumerable<PororocaVariable> GetEffectiveVariables()
+    {
+        var currentEnv = Environments.FirstOrDefault(e => e.IsCurrent);
+        var effectiveEnvVars = currentEnv?.Variables?.Where(sev => sev.Enabled) ?? Enumerable.Empty<PororocaVariable>();
+        var effectiveColVars = Variables.Where(cv => cv.Enabled);
+        var effectiveColVarsNotInEnv =
+            effectiveColVars.Where(ecv => !effectiveEnvVars.Any(eev => eev.Key == ecv.Key));
 
-    public PororocaRequestAuth? GetAuthForRequest(PororocaRequestAuth? reqAuth) =>
-        reqAuth == PororocaRequestAuth.InheritedFromCollection ?
-        CollectionScopedAuth : reqAuth;
+        // Environment variable overrides collection variable
+        return effectiveEnvVars.Concat(effectiveColVarsNotInEnv);
+    }
 
     public static IDictionary<string, string> ResolveKeyValueParams(IEnumerable<PororocaKeyValueParam>? kvParams, IEnumerable<PororocaVariable> effectiveVars) =>
         kvParams == null ?
@@ -37,6 +36,15 @@ public partial interface IPororocaVariableResolver
                 ))
                 .DistinctBy(h => h.Key) // Avoid duplicated pairs by key
                 .ToDictionary(h => h.Key, h => h.Value);
+
+    // Example of templated string:
+    // "https://{{MyApiHost}}/api/location?city=Campinas"
+    // If there is a variable with the key "MyApiHost" and with the value "www.api.com.br" (all without quotes)
+    // Then this method should return:
+    // "https://www.api.com.br/api/location?city=Campinas"
+    // The variable resolution depends on collection and environment variables.
+    // Environment variables have precedence over collection variables.
+    // If the variable key is not declared or the variable is not enabled, then the raw key should be used as is.
 
     public static string ReplaceTemplates(string? strToReplaceTemplatedVariables, IEnumerable<PororocaVariable> effectiveVars)
     {
@@ -53,17 +61,5 @@ public partial interface IPororocaVariableResolver
                 return effectiveVar?.Value ?? match.Value;
             });
         }
-    }
-
-    public IEnumerable<PororocaVariable> GetEffectiveVariables()
-    {
-        var currentEnv = Environments.FirstOrDefault(e => e.IsCurrent);
-        var effectiveEnvVars = currentEnv?.Variables?.Where(sev => sev.Enabled) ?? Enumerable.Empty<PororocaVariable>();
-        var effectiveColVars = Variables.Where(cv => cv.Enabled);
-        var effectiveColVarsNotInEnv =
-            effectiveColVars.Where(ecv => !effectiveEnvVars.Any(eev => eev.Key == ecv.Key));
-
-        // Environment variable overrides collection variable
-        return effectiveEnvVars.Concat(effectiveColVarsNotInEnv);
     }
 }

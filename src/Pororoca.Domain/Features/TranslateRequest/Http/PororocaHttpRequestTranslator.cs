@@ -16,7 +16,7 @@ public static class PororocaHttpRequestTranslator
 
     #region TRANSLATE REQUEST
 
-    public static bool TryTranslateRequest(IPororocaVariableResolver variableResolver, IEnumerable<PororocaVariable> effectiveVars, PororocaHttpRequest req, out HttpRequestMessage? reqMsg, out string? errorCode)
+    public static bool TryTranslateRequest(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaHttpRequest req, out HttpRequestMessage? reqMsg, out string? errorCode)
     {
         if (!TryResolveRequestUri(effectiveVars, req.Url, out var uri, out errorCode)
          || !IsHttpVersionAvailableInOS(req.HttpVersion, out errorCode))
@@ -37,13 +37,13 @@ public static class PororocaHttpRequestTranslator
                     Content = ResolveRequestContent(effectiveVars, req.Body, resolvedContentHeaders)
                 };
 
-                var resolvedNonContentHeaders = ResolveNonContentHeaders(variableResolver, effectiveVars, req.Headers, req.CustomAuth);
+                var resolvedNonContentHeaders = ResolveNonContentHeaders(effectiveVars, collectionScopedAuth, req.CustomAuth, req.Headers);
                 foreach (var header in resolvedNonContentHeaders)
                 {
                     reqMsg.Headers.TryAddWithoutValidation(header.Key, header.Value);
                 }
 
-                IncludeAuthInOptions(variableResolver, effectiveVars, req, reqMsg);
+                IncludeAuthInOptions(effectiveVars, collectionScopedAuth, req, reqMsg);
 
                 return true;
             }
@@ -60,9 +60,9 @@ public static class PororocaHttpRequestTranslator
 
     #region AUTH
 
-    private static void IncludeAuthInOptions(IPororocaVariableResolver variableResolver, IEnumerable<PororocaVariable> effectiveVars, PororocaHttpRequest req, HttpRequestMessage reqMsg)
+    private static void IncludeAuthInOptions(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaHttpRequest req, HttpRequestMessage reqMsg)
     {
-        var resolvedAuth = ResolveRequestAuth(variableResolver, effectiveVars, req.CustomAuth);
+        var resolvedAuth = ResolveRequestAuth(effectiveVars, collectionScopedAuth, req.CustomAuth);
 
         if (resolvedAuth is not null)
         {

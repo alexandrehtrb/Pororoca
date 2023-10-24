@@ -208,8 +208,8 @@ public sealed class PororocaTest
     public async Task<PororocaHttpResponse> SendHttpRequestAsync(PororocaHttpRequest req, CancellationToken cancellationToken = default)
     {
         var effectiveVars = ((IPororocaVariableResolver)Collection).GetEffectiveVariables();
-        if (!PororocaHttpRequestValidator.IsValidRequest(Collection,
-                                                         effectiveVars,
+        if (!PororocaHttpRequestValidator.IsValidRequest(effectiveVars,
+                                                         Collection.CollectionScopedAuth,
                                                          req,
                                                          out string? errorCode))
         {
@@ -218,7 +218,7 @@ public sealed class PororocaTest
         else
         {
             IPororocaRequester requester = PororocaRequester.Singleton;
-            var res = await requester.RequestAsync(Collection, effectiveVars, req, !ShouldCheckTlsCertificate, cancellationToken);
+            var res = await requester.RequestAsync(effectiveVars, Collection.CollectionScopedAuth, req, !ShouldCheckTlsCertificate, cancellationToken);
             CaptureResponseValues(req, res);
             return res;
         }
@@ -247,11 +247,11 @@ public sealed class PororocaTest
     {
         var effectiveVars = ((IPororocaVariableResolver)Collection).GetEffectiveVariables();
 
-        if (!PororocaWebSocketConnectionValidator.IsValidConnection(Collection, effectiveVars, ws, out var resolvedUri, out string? validationErrorCode))
+        if (!PororocaWebSocketConnectionValidator.IsValidConnection(effectiveVars, Collection.CollectionScopedAuth, ws, out var resolvedUri, out string? validationErrorCode))
         {
             throw new Exception($"Error: Could not connect to WebSocket. Cause: '{validationErrorCode}'.");
         }
-        else if (!PororocaWebSocketConnectionTranslator.TryTranslateConnection(Collection, effectiveVars, PororocaHttpClientProvider.Singleton, ws, !ShouldCheckTlsCertificate, out var wsAndHttpCli, out string? translationErrorCode))
+        else if (!PororocaWebSocketConnectionTranslator.TryTranslateConnection(effectiveVars, Collection.CollectionScopedAuth, PororocaHttpClientProvider.Singleton, ws, !ShouldCheckTlsCertificate, out var wsAndHttpCli, out string? translationErrorCode))
         {
             throw new Exception($"Error: Could not connect to WebSocket. Cause: '{translationErrorCode}'.");
         }

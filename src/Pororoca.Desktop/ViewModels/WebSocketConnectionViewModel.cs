@@ -37,7 +37,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region CONNECTION
 
-    private readonly IPororocaVariableResolver varResolver;
+    private readonly CollectionViewModel col;
     private readonly IPororocaHttpClientProvider httpClientProvider;
     private readonly PororocaWebSocketConnector connector;
 
@@ -335,7 +335,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     #endregion
 
     public WebSocketConnectionViewModel(ICollectionOrganizationItemParentViewModel parentVm,
-                                        IPororocaVariableResolver variableResolver,
+                                        CollectionViewModel col,
                                         PororocaWebSocketConnection ws) : base(parentVm, ws.Name)
     {
         #region COLLECTION ORGANIZATION
@@ -347,7 +347,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
         #region CONNECTION
 
-        this.varResolver = variableResolver;
+        this.col = col;
         this.httpClientProvider = PororocaHttpClientProvider.Singleton;
         this.connector = new(OnWebSocketConnectionChanged, OnWebSocketMessageSending);
 
@@ -488,7 +488,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     #region REQUEST HTTP METHOD, HTTP VERSION AND URL
 
     public void UpdateResolvedUrlToolTip() =>
-        ResolvedUrlToolTip = IPororocaVariableResolver.ReplaceTemplates(Url, this.varResolver.GetEffectiveVariables());
+        ResolvedUrlToolTip = IPororocaVariableResolver.ReplaceTemplates(Url, ((IPororocaVariableResolver)this.col).GetEffectiveVariables());
 
     private static string FormatHttpVersionString(decimal httpVersion) =>
         httpVersion switch
@@ -580,14 +580,14 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     public async Task ConnectAsync()
     {
         var wsConn = ToWebSocketConnection();
-        var effectiveVars = this.varResolver.GetEffectiveVariables();
+        var effectiveVars = ((IPororocaVariableResolver)this.col).GetEffectiveVariables();
         bool disableTlsVerification = ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled;
-
-        if (!IsValidConnection(this.varResolver, effectiveVars, wsConn, out var resolvedUri, out string? translateUriErrorCode))
+        
+        if (!IsValidConnection(effectiveVars, this.col.CollectionScopedAuth, wsConn, out var resolvedUri, out string? translateUriErrorCode))
         {
             InvalidConnectionErrorCode = translateUriErrorCode;
         }
-        else if (!TryTranslateConnection(this.varResolver, effectiveVars, this.httpClientProvider, wsConn, disableTlsVerification,
+        else if (!TryTranslateConnection(effectiveVars, this.col.CollectionScopedAuth, this.httpClientProvider, wsConn, disableTlsVerification,
                                          out var resolvedClients, out string? translateConnErrorCode))
         {
             InvalidConnectionErrorCode = translateConnErrorCode;
@@ -639,7 +639,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         else
         {
             var msg = Items[MessageToSendSelectedIndex].ToWebSocketClientMessage();
-            var effectiveVars = this.varResolver.GetEffectiveVariables();
+            var effectiveVars = ((IPororocaVariableResolver)this.col).GetEffectiveVariables();
             if (!IsValidClientMessage(effectiveVars, msg, out string? validationErrorCode))
             {
                 InvalidClientMessageErrorCode = validationErrorCode;

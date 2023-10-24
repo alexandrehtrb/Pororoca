@@ -26,7 +26,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #region REQUEST
 
     private readonly IPororocaRequester requester = PororocaRequester.Singleton;
-    private readonly CollectionViewModel variableResolver;
+    private readonly CollectionViewModel col;
 
     // To preserve the state of the last shown request tab
     [Reactive]
@@ -253,7 +253,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
         #region REQUEST
 
-        this.variableResolver = variableResolver;
+        this.col = variableResolver;
 
         #endregion
 
@@ -300,7 +300,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         #endregion
 
         #region RESPONSE
-        ResponseDataCtx = new(this.variableResolver, this);
+        ResponseDataCtx = new(this.col, this);
         #region RESPONSE CAPTURES
         ResCapturesTableVm = new(req.ResponseCaptures);
         #endregion
@@ -326,7 +326,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     public void UpdateResolvedRequestUrlToolTip()
     {
-        var varResolver = ((IPororocaVariableResolver)this.variableResolver);
+        var varResolver = ((IPororocaVariableResolver)this.col);
         ResolvedRequestUrlToolTip = IPororocaVariableResolver.ReplaceTemplates(RequestUrl, varResolver.GetEffectiveVariables());
     }
 
@@ -422,8 +422,8 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     {
         ClearInvalidRequestWarnings();
         var generatedReq = ToHttpRequest();
-        var effectiveVars = ((IPororocaVariableResolver)this.variableResolver).GetEffectiveVariables();
-        if (!this.requester.IsValidRequest(this.variableResolver, effectiveVars, generatedReq, out string? errorCode))
+        var effectiveVars = ((IPororocaVariableResolver)this.col).GetEffectiveVariables();
+        if (!this.requester.IsValidRequest(effectiveVars, this.col.CollectionScopedAuth, generatedReq, out string? errorCode))
         {
             this.invalidRequestMessageErrorCode = errorCode;
             ShowInvalidRequestWarnings();
@@ -537,7 +537,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         // Awaiting the request.RequestAsync() here, or simply returning its Task,
         // causes the UI to freeze for a few seconds, especially when performing the first request to a server.
         // That is why we are invoking the code to run in a new thread, like below.
-        return Task.Run(async () => await this.requester.RequestAsync(this.variableResolver, effectiveVars, generatedReq, disableSslVerification, this.sendRequestCancellationTokenSourceField.Token));
+        return Task.Run(async () => await this.requester.RequestAsync(effectiveVars, this.col.CollectionScopedAuth, generatedReq, disableSslVerification, this.sendRequestCancellationTokenSourceField.Token));
     }
 
     #endregion

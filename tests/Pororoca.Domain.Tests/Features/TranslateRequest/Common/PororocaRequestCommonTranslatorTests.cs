@@ -182,7 +182,7 @@ public static class PororocaRequestCommonTranslatorTests
         };
 
         // WHEN
-        var contentHeaders = ResolveNonContentHeaders(col, col.GetEffectiveVariables(), headers, null);
+        var contentHeaders = ResolveNonContentHeaders(col.GetEffectiveVariables(), col.CollectionScopedAuth, null, headers);
 
         // THEN
         Assert.Equal(2, contentHeaders.Count);
@@ -214,7 +214,7 @@ public static class PororocaRequestCommonTranslatorTests
         };
 
         // WHEN
-        var contentHeaders = ResolveNonContentHeaders(col, col.GetEffectiveVariables(), headers, null);
+        var contentHeaders = ResolveNonContentHeaders(col.GetEffectiveVariables(), col.CollectionScopedAuth, null, headers);
 
         // THEN
         Assert.Equal(3, contentHeaders.Count);
@@ -249,7 +249,7 @@ public static class PororocaRequestCommonTranslatorTests
         var reqAuth = PororocaRequestAuth.MakeBasicAuth("{{Username}}", "{{Password}}");
 
         // WHEN
-        var contentHeaders = ResolveNonContentHeaders(col, col.GetEffectiveVariables(), headers, reqAuth);
+        var contentHeaders = ResolveNonContentHeaders(col.GetEffectiveVariables(), col.CollectionScopedAuth, reqAuth, headers);
 
         // THEN
         Assert.Equal(3, contentHeaders.Count);
@@ -283,7 +283,7 @@ public static class PororocaRequestCommonTranslatorTests
         var reqAuth = PororocaRequestAuth.MakeBearerAuth("{{BearerToken}}");
 
         // WHEN
-        var contentHeaders = ResolveNonContentHeaders(col, col.GetEffectiveVariables(), headers, reqAuth);
+        var contentHeaders = ResolveNonContentHeaders(col.GetEffectiveVariables(), col.CollectionScopedAuth, reqAuth, headers);
 
         // THEN
         Assert.Equal(3, contentHeaders.Count);
@@ -320,7 +320,7 @@ public static class PororocaRequestCommonTranslatorTests
         var reqAuth = PororocaRequestAuth.InheritedFromCollection;
 
         // WHEN
-        var contentHeaders = ResolveNonContentHeaders(col, col.GetEffectiveVariables(), headers, reqAuth);
+        var contentHeaders = ResolveNonContentHeaders(col.GetEffectiveVariables(), col.CollectionScopedAuth, reqAuth, headers);
 
         // THEN
         Assert.Equal(3, contentHeaders.Count);
@@ -342,7 +342,7 @@ public static class PororocaRequestCommonTranslatorTests
         // GIVEN
         PororocaCollection col = new("VarResolver");
         // WHEN
-        var resolvedAuth = ResolveRequestAuth(col, col.GetEffectiveVariables(), reqAuth: null);
+        var resolvedAuth = ResolveRequestAuth(col.GetEffectiveVariables(), col.CollectionScopedAuth, reqAuth: null);
         // THEN
         Assert.Null(resolvedAuth);
     }
@@ -358,7 +358,7 @@ public static class PororocaRequestCommonTranslatorTests
         var reqAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "{{PrivateKeyFilePassword}}");
 
         // WHEN
-        var resolvedAuth = ResolveRequestAuth(col, col.GetEffectiveVariables(), reqAuth);
+        var resolvedAuth = ResolveRequestAuth(col.GetEffectiveVariables(), col.CollectionScopedAuth, reqAuth);
 
         // THEN
         Assert.NotNull(resolvedAuth);
@@ -382,7 +382,7 @@ public static class PororocaRequestCommonTranslatorTests
         col.Variables.Add(new(true, "win_domain", "alexandre.mydomain.net", false));
 
         // WHEN
-        var resolvedAuth = ResolveRequestAuth(col, col.GetEffectiveVariables(), PororocaRequestAuth.InheritedFromCollection);
+        var resolvedAuth = ResolveRequestAuth(col.GetEffectiveVariables(), col.CollectionScopedAuth, PororocaRequestAuth.InheritedFromCollection);
 
         // THEN
         Assert.NotNull(resolvedAuth);
