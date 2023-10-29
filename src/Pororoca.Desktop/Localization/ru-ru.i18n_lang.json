@@ -203,7 +203,7 @@
   "TopMenu/File": "Файл",
   "TopMenu/Options": "Настройки",
   "TopMenu/Help": "Ажуда",
-  "TopMenu/RunUITests": "Выполнение UI тестов (F12)",
+  "TopMenu/RunUITests": "Выполнение UI тестов (Ctrl+F12)",
 	"TopMenu/Saved": "Сохранено!",
   "TopMenuFile/Exit": "Выход",
   "TopMenuFile/SaveAll": "Сохранить все",

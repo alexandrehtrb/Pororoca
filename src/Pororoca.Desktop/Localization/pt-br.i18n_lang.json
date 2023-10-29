@@ -206,7 +206,7 @@
     "TopMenu/File": "Arquivo",
     "TopMenu/Options": "Opções",
     "TopMenu/Help": "Ajuda",
-    "TopMenu/RunUITests": "Rodar testes de UI (F12)",
+    "TopMenu/RunUITests": "Rodar testes de UI (Ctrl+F12)",
 	"TopMenu/Saved": "Salvo!",
     "TopMenuFile/Exit": "Sair",
     "TopMenuFile/SaveAll": "Salvar tudo",
