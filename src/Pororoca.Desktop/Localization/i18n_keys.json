@@ -149,6 +149,7 @@
 	"HttpResponse/CaptureTypeBody",
 	"HttpResponse/CaptureHeaderNameOrBodyPath",
 	"HttpResponse/CaptureCapturedValue",
+	"HttpResponse/ExecuteCapturesTooltip",
 	"HttpResponse/CaptureTip",
 	"RequestAuth/AuthModeInheritFromCollection",
 	"RequestAuth/AuthModeBasic",

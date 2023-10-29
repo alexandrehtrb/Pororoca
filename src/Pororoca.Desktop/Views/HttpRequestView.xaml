@@ -936,9 +936,30 @@
                   Orientation="Horizontal"
                   Margin="0,8,0,0">
                 <Button
+                  x:Name="btResCaptureExecuteCaptures"
+                  Margin="3,0,3,0"
+                  Command="{Binding ResponseDataCtx.ExecuteCapturesCmd}"
+                  ToolTip.Tip="{Binding i18n.HttpResponse.ExecuteCapturesTooltip}"
+                  HorizontalContentAlignment="Center"
+                  VerticalContentAlignment="Center"
+                  Classes="Secondary">
+                  <Panel>
+                    <Image
+                        Width="12"
+                        Height="12"
+                        Margin="0,3,0,3"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                      <Image.Source>
+                        <DrawingImage Drawing="{StaticResource IconPlay}"/>
+                      </Image.Source>
+                    </Image>
+                  </Panel>
+                </Button>
+                <Button
                     Name="btResCaptureAddHeaderCapture"
                     Content="{Binding i18n.HttpResponse.CaptureAddHeaderCapture}"
-                    Margin="0,0,3,0"
+                    Margin="3,0,3,0"
                     Command="{Binding ResCapturesTableVm.AddNewHeaderCaptureCmd}"
                     Classes="Secondary"/>
                 <Button

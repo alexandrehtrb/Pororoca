@@ -149,6 +149,7 @@
     "HttpResponse/CaptureTypeBody": "corpo",
     "HttpResponse/CaptureHeaderNameOrBodyPath": "NOME INTESTAZIONE / PERCORSO CORPO",
     "HttpResponse/CaptureCapturedValue": "VALORE",
+    "HttpResponse/ExecuteCapturesTooltip": "Eseguire acquisizioni",
     "HttpResponse/CaptureTip": "Suggerimento: Per l'acquisizione del valore JSON: $.myProp[0].myProp2 ($ significa radice, [0] significa elemento dell'array). Per l'acquisizione del valore XML, utilizzare la sintassi XPath 1.0. I valori acquisiti vengono salvati come variabili dell'ambiente attivo.",
     "RequestAuth/AuthModeInheritFromCollection": "Eredita dalla raccolta",
     "RequestAuth/AuthModeBasic": "Basic",

@@ -149,6 +149,7 @@
     "HttpResponse/CaptureTypeBody": "Body",
     "HttpResponse/CaptureHeaderNameOrBodyPath": "HEADER NAME / BODY PATH",
     "HttpResponse/CaptureCapturedValue": "VALUE",
+    "HttpResponse/ExecuteCapturesTooltip": "Execute captures",
     "HttpResponse/CaptureTip": "Tip: For JSON value capture: $.myProp[0].myProp2 ($ means root, [0] means array element). For XML value capture, use XPath 1.0 syntax. Captured values are saved as variables of the active environment.",
     "RequestAuth/AuthModeInheritFromCollection": "Inherit from collection",
     "RequestAuth/AuthModeBasic": "Basic",

@@ -54,6 +54,8 @@ public sealed class HttpResponseViewModel : ViewModelBase
 
     public ReactiveCommand<Unit, Unit> DisableTlsVerificationCmd { get; }
 
+    public ReactiveCommand<Unit, Unit> ExecuteCapturesCmd { get; }
+
     public HttpResponseViewModel(CollectionViewModel colVm, HttpRequestViewModel reqVm)
     {
         this.colVm = colVm;
@@ -61,6 +63,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
         ResponseHeadersAndTrailersTableVm = new();
         SaveResponseBodyToFileCmd = ReactiveCommand.CreateFromTask(SaveResponseBodyToFileAsync);
         DisableTlsVerificationCmd = ReactiveCommand.Create(EnableTlsVerification);
+        ExecuteCapturesCmd = ReactiveCommand.Create(ExecuteCaptures);
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
 
         UpdateWithResponse(this.res);
@@ -180,6 +183,14 @@ public sealed class HttpResponseViewModel : ViewModelBase
             {
                 tableItems.Add(new(tableItems, true, kvp.Key, kvp.Value));
             }
+        }
+    }
+
+    private void ExecuteCaptures()
+    {
+        if (this.res != null && this.res.Successful)
+        {
+            CaptureResponseValues(this.res);
         }
     }
 
