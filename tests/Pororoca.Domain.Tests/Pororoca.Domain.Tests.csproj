@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Pororoca.Domain\Pororoca.Domain.csproj"/>
+    <ProjectReference Include="..\..\src\Pororoca.Domain.OpenAPI\Pororoca.Domain.OpenAPI.csproj"/>
     <PackageReference Include="Moq" Version="4.18.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.0" />
     <PackageReference Include="xunit" Version="2.5.0" />

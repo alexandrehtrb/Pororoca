@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pororoca.Desktop.Localizati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pororoca.Test.Tests", "tests\Pororoca.Test.Tests\Pororoca.Test.Tests.csproj", "{A786219B-2B41-448A-8B02-8A86285EF215}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pororoca.Domain.OpenAPI", "src\Pororoca.Domain.OpenAPI\Pororoca.Domain.OpenAPI.csproj", "{4563CC55-150B-44E0-BEA0-49689DB9A010}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{A786219B-2B41-448A-8B02-8A86285EF215}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A786219B-2B41-448A-8B02-8A86285EF215}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A786219B-2B41-448A-8B02-8A86285EF215}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4563CC55-150B-44E0-BEA0-49689DB9A010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4563CC55-150B-44E0-BEA0-49689DB9A010}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4563CC55-150B-44E0-BEA0-49689DB9A010}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4563CC55-150B-44E0-BEA0-49689DB9A010}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,6 +80,7 @@ Global
 		{4CEA2473-DF87-40FF-81D0-4748A1718E18} = {332DAD93-C16B-4760-81DC-39A4F7A6ECB2}
 		{5A1F7684-1B29-4F4D-86E1-E86C5B9D0B13} = {332DAD93-C16B-4760-81DC-39A4F7A6ECB2}
 		{A786219B-2B41-448A-8B02-8A86285EF215} = {0B5C94C5-E2E0-4BD4-A93C-E2AE91A325FA}
+		{4563CC55-150B-44E0-BEA0-49689DB9A010} = {332DAD93-C16B-4760-81DC-39A4F7A6ECB2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {453D438F-F214-410A-BDAC-CE5BDB40F0EF}

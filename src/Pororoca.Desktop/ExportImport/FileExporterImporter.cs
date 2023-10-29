@@ -8,6 +8,7 @@ using static Pororoca.Domain.Features.ExportCollection.PororocaCollectionExporte
 using static Pororoca.Domain.Features.ExportCollection.PostmanCollectionV21Exporter;
 using static Pororoca.Domain.Features.ExportEnvironment.PororocaEnvironmentExporter;
 using static Pororoca.Domain.Features.ExportEnvironment.PostmanEnvironmentExporter;
+using static Pororoca.Domain.Features.ImportCollection.OpenApiImporter;
 using static Pororoca.Domain.Features.ImportCollection.PororocaCollectionImporter;
 using static Pororoca.Domain.Features.ImportCollection.PostmanCollectionV21Importer;
 using static Pororoca.Domain.Features.ImportEnvironment.PororocaEnvironmentImporter;
@@ -27,6 +28,8 @@ internal static partial class FileExporterImporter
     private const string PororocaEnvironmentExtensionGlob = $"*.{PororocaEnvironmentExtension}";
     private const string PostmanEnvironmentExtensionGlob = $"*.{PostmanEnvironmentExtension}";
     private const string JsonExtensionGlob = $"*.json";
+    private const string YamlExtensionGlob = $"*.yaml";
+    private const string YmlExtensionGlob = $"*.yml";
 
     private static readonly Regex pororocaSchemaRegex = GeneratePororocaSchemaRegex();
 
@@ -228,7 +231,7 @@ internal static partial class FileExporterImporter
             fileSelectionfilters.Add(
                 new(Localizer.Instance.Collection.ImportCollectionDialogTypes)
                 {
-                    Patterns = new List<string> { PororocaCollectionExtensionGlob, PostmanCollectionExtensionGlob, JsonExtensionGlob }
+                    Patterns = new List<string> { PororocaCollectionExtensionGlob, PostmanCollectionExtensionGlob, JsonExtensionGlob, YamlExtensionGlob, YmlExtensionGlob }
                 }
             );
         }
@@ -245,23 +248,23 @@ internal static partial class FileExporterImporter
             foreach (string filePath in filesPaths)
             {
                 string fileContent = await File.ReadAllTextAsync(filePath, Encoding.UTF8) ?? string.Empty;
-                bool isPororocaCollection = pororocaSchemaRegex.IsMatch(fileContent);
+                bool possiblyPororocaCollection = pororocaSchemaRegex.IsMatch(fileContent);
+                bool possiblyPostmanCollection = fileContent.Contains("postman");
+                bool possiblyOpenApi = fileContent.Contains("openapi") && (filePath.EndsWith(".yaml") || filePath.EndsWith(".yml") || filePath.EndsWith(".json"));
 
                 // First, tries to import as a Pororoca collection
-                if (isPororocaCollection)
+                if (possiblyPororocaCollection && TryImportPororocaCollection(fileContent, preserveId: false, out var importedPororocaCollection))
                 {
-                    if (TryImportPororocaCollection(fileContent, preserveId: false, out var importedPororocaCollection))
-                    {
-                        mwvm.AddCollection(importedPororocaCollection!);
-                    }
+                    mwvm.AddCollection(importedPororocaCollection!);
                 }
                 // If not a valid Pororoca collection, then tries to import as a Postman collection
-                else
+                else if (possiblyPostmanCollection && TryImportPostmanCollection(fileContent, out var importedPostmanCollection))
                 {
-                    if (TryImportPostmanCollection(fileContent, out var importedPostmanCollection))
-                    {
-                        mwvm.AddCollection(importedPostmanCollection!);
-                    }
+                    mwvm.AddCollection(importedPostmanCollection!);
+                }
+                else if (possiblyOpenApi && TryImportOpenApi(fileContent, out var importedOpenApiCollection))
+                {
+                    mwvm.AddCollection(importedOpenApiCollection!);
                 }
             }
         }
