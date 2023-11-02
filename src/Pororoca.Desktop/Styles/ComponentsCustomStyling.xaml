@@ -171,16 +171,34 @@
         Value="{DynamicResource ResponseCapturedValueTextBrush}"/>
   </Style>
 
-  <Style Selector="DataGridColumnHeader">
+  <Style Selector="TreeDataGridColumnHeader">
     <Setter
         Property="Background"
         Value="Transparent"/>
+    <Setter
+        Property="Foreground"
+        Value="{DynamicResource TreeDataGridColumnHeaderForegroundBrush}"/>
+    <Setter
+        Property="TextBlock.Padding"
+        Value="8 4"/>
     <Setter
         Property="TextBlock.FontSize"
         Value="14"/>
     <Setter
         Property="TextBlock.FontWeight"
         Value="Light"/>
+  </Style>
+
+  <Style Selector="TreeDataGridCheckBoxCell">
+    <Setter
+        Property="TextBlock.Padding"
+        Value="8 4"/>
+  </Style>
+  
+  <Style Selector="TreeDataGridTextCell">
+    <Setter
+        Property="TextBlock.Padding"
+        Value="8 4"/>
   </Style>
 
   <Style Selector="GridSplitter.Separator">

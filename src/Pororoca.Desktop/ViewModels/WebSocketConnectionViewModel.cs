@@ -214,13 +214,13 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region CONNECTION OPTION HEADERS
 
-    public KeyValueParamsDataGridViewModel ConnectionRequestHeadersTableVm { get; }
+    public RequestHeadersDataGridViewModel ConnectionRequestHeadersTableVm { get; }
 
     #endregion
 
     #region CONNECTION OPTION SUBPROTOCOLS
 
-    public KeyValueParamsDataGridViewModel SubprotocolsTableVm { get; }
+    public SubprotocolsDataGridViewModel SubprotocolsTableVm { get; }
 
     #endregion
 

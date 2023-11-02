@@ -9,6 +9,7 @@
   <Application.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
+        <MergeResourceInclude Source="/Styles/DataTemplates.xaml"/>
         <MergeResourceInclude Source="/Styles/Themes.xaml"/>
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
@@ -16,12 +17,11 @@
   <Application.Styles>
     <FluentTheme/>
     <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml"/>
-    <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+    <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>
     <StyleInclude Source="/Styles/Fonts.xaml"/>
     <StyleInclude Source="/Styles/Icons.xaml"/>
     <StyleInclude Source="/Styles/BrushesDefinitions.xaml"/>
     <StyleInclude Source="/Styles/ComponentsCustomStyling.xaml"/>
-    <StyleInclude Source="/Styles/DragAndDropDataGrid.xaml"/>
     <StyleInclude Source="/Styles/SideBar.xaml"/>
   </Application.Styles>
 </Application>

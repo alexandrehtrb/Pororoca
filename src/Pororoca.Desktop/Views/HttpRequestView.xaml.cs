@@ -5,7 +5,6 @@ using AvaloniaEdit;
 using Pororoca.Desktop.TextEditorConfig;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
-using static Pororoca.Desktop.Views.DataGridSelectionUpdater;
 
 namespace Pororoca.Desktop.Views;
 
@@ -55,36 +54,6 @@ public class HttpRequestView : UserControl
     #endregion
 
     #region VIEW COMPONENTS EVENTS
-
-    public void OnSelectedRequestHeadersChanged(object sender, SelectionChangedEventArgs e)
-    {
-        var tableVm = ((HttpRequestViewModel)DataContext!).RequestHeadersTableVm;
-        UpdateVmSelectedItems(tableVm, e);
-    }
-
-    public void OnSelectedUrlEncodedParamsChanged(object sender, SelectionChangedEventArgs e)
-    {
-        var tableVm = ((HttpRequestViewModel)DataContext!).UrlEncodedParamsTableVm;
-        UpdateVmSelectedItems(tableVm, e);
-    }
-
-    public void OnSelectedFormDataParamsChanged(object sender, SelectionChangedEventArgs e)
-    {
-        var tableVm = ((HttpRequestViewModel)DataContext!).FormDataParamsTableVm;
-        UpdateVmSelectedItems(tableVm, e);
-    }
-
-    public void OnSelectedResponseHeadersAndTrailersChanged(object sender, SelectionChangedEventArgs e)
-    {
-        var tableVm = ((HttpRequestViewModel)DataContext!).ResponseDataCtx.ResponseHeadersAndTrailersTableVm;
-        UpdateVmSelectedItems(tableVm, e);
-    }
-
-    public void OnSelectedResponseCapturesChanged(object sender, SelectionChangedEventArgs e)
-    {
-        var tableVm = ((HttpRequestViewModel)DataContext!).ResCapturesTableVm;
-        UpdateVmSelectedItems(tableVm, e);
-    }
 
     public void OnRequestUrlPointerEnter(object sender, PointerEventArgs e)
     {

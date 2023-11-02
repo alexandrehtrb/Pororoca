@@ -5,7 +5,6 @@ using AvaloniaEdit;
 using Pororoca.Desktop.TextEditorConfig;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Domain.Features.Common;
-using static Pororoca.Desktop.Views.DataGridSelectionUpdater;
 
 namespace Pororoca.Desktop.Views;
 
@@ -28,18 +27,6 @@ public class WebSocketConnectionView : UserControl
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
     #region VIEW COMPONENTS EVENTS
-
-    public void OnSelectedConnectionRequestHeadersChanged(object sender, SelectionChangedEventArgs e)
-    {
-        var tableVm = ((WebSocketConnectionViewModel)DataContext!).ConnectionRequestHeadersTableVm;
-        UpdateVmSelectedItems(tableVm, e);
-    }
-
-    public void OnSelectedSubprotocolsChanged(object sender, SelectionChangedEventArgs e)
-    {
-        var tableVm = ((WebSocketConnectionViewModel)DataContext!).SubprotocolsTableVm;
-        UpdateVmSelectedItems(tableVm, e);
-    }
 
     public void OnUrlPointerEnter(object sender, PointerEventArgs e)
     {
