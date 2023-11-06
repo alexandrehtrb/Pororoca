@@ -50,7 +50,7 @@ public sealed class HttpResponseCapturesDataGridViewModel : BaseDataGridWithOper
     {        
         var targetVarColumn = new TextColumn<HttpResponseCaptureViewModel, string>(
             Localizer.Instance.HttpResponse.CaptureTargetVariable,
-            x => x.Type, (x, v) => x.Type = v ?? string.Empty,
+            x => x.TargetVariable, (x, v) => x.TargetVariable = v ?? string.Empty,
             width: new(0.25, GridUnitType.Star));
         
         var typeColumn = new TextColumn<HttpResponseCaptureViewModel, string>(
