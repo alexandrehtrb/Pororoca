@@ -76,145 +76,179 @@ public static class OpenApiImporterTests
         Assert.Equal(2, col.Environments.Count);
 
         Assert.Equal("Servidor de Produção", col.Environments[0].Name);
-        var prodBaseUrlVar = Assert.Single(col.Environments[0].Variables);
-        Assert.True(prodBaseUrlVar.Enabled);
-        Assert.Equal("BaseUrl", prodBaseUrlVar.Key);
-        Assert.Equal("https://pix.example.com/api", prodBaseUrlVar.Value);
+        var prodVars = col.Environments[0].Variables;
+        Assert.Equal(3, prodVars.Count);
+
+        var v = prodVars[0];
+        Assert.True(v.Enabled);
+        Assert.Equal("BaseUrl", v.Key);
+        Assert.Equal("https://pix.example.com/api", v.Value);
+        Assert.False(v.IsSecret);
+
+        v = prodVars[1];
+        Assert.True(v.Enabled);
+        Assert.Equal("oauth2_client_id", v.Key);
+        Assert.Equal(string.Empty, v.Value);
+        Assert.True(v.IsSecret);
+
+        v = prodVars[2];
+        Assert.True(v.Enabled);
+        Assert.Equal("oauth2_client_secret", v.Key);
+        Assert.Equal(string.Empty, v.Value);
+        Assert.True(v.IsSecret);
 
         Assert.Equal("Servidor de Homologação", col.Environments[1].Name);
-        var hmlBaseUrlVar = Assert.Single(col.Environments[1].Variables);
-        Assert.True(hmlBaseUrlVar.Enabled);
-        Assert.Equal("BaseUrl", hmlBaseUrlVar.Key);
-        Assert.Equal("https://pix-h.example.com/api", hmlBaseUrlVar.Value);
+        var hmlVars = col.Environments[1].Variables;
+        Assert.Equal(3, hmlVars.Count);
+
+        v = hmlVars[0];
+        Assert.True(v.Enabled);
+        Assert.Equal("BaseUrl", v.Key);
+        Assert.Equal("https://pix-h.example.com/api", v.Value);
+        Assert.False(v.IsSecret);
+
+        v = hmlVars[1];
+        Assert.True(v.Enabled);
+        Assert.Equal("oauth2_client_id", v.Key);
+        Assert.Equal(string.Empty, v.Value);
+        Assert.True(v.IsSecret);
+
+        v = hmlVars[2];
+        Assert.True(v.Enabled);
+        Assert.Equal("oauth2_client_secret", v.Key);
+        Assert.Equal(string.Empty, v.Value);
+        Assert.True(v.IsSecret);
 
         #endregion
 
         #region TOTAL REQUESTS, URLS, NAMES AND HTTP METHODS
 
-        Assert.Equal(7, col.Folders.Count);
+        Assert.Equal(8, col.Folders.Count);
 
         //------------------------
-        Assert.Equal("Cob", col.Folders[0].Name);
+        Assert.Equal("OAuth2", col.Folders[0].Name);
 
-        Assert.Equal("Criar cobrança imediata.", col.Folders[0].Requests[0].Name);
-        Assert.Equal("PUT", col.Folders[0].HttpRequests[0].HttpMethod);
-        Assert.Equal("{{BaseUrl}}/cob/{{txid}}", col.Folders[0].HttpRequests[0].Url);
+        Assert.Equal("Cob", col.Folders[1].Name);
 
-        Assert.Equal("Revisar cobrança imediata.", col.Folders[0].Requests[1].Name);
-        Assert.Equal("PATCH", col.Folders[0].HttpRequests[1].HttpMethod);
-        Assert.Equal("{{BaseUrl}}/cob/{{txid}}", col.Folders[0].HttpRequests[1].Url);
-
-        Assert.Equal("Consultar cobrança imediata.", col.Folders[0].Requests[2].Name);
-        Assert.Equal("GET", col.Folders[0].HttpRequests[2].HttpMethod);
-        Assert.Equal("{{BaseUrl}}/cob/{{txid}}?revisao=0", col.Folders[0].HttpRequests[2].Url);
-
-        Assert.Equal("Criar cobrança imediata.", col.Folders[0].Requests[3].Name);
-        Assert.Equal("POST", col.Folders[0].HttpRequests[3].HttpMethod);
-        Assert.Equal("{{BaseUrl}}/cob", col.Folders[0].HttpRequests[3].Url);
-
-        Assert.Equal("Consultar lista de cobranças imediatas.", col.Folders[0].Requests[4].Name);
-        Assert.Equal("GET", col.Folders[0].HttpRequests[4].HttpMethod);
-        Assert.Contains("{{BaseUrl}}/cob?inicio=", col.Folders[0].HttpRequests[4].Url);
-        //------------------------
-        Assert.Equal("CobV", col.Folders[1].Name);
-
-        Assert.Equal("Criar cobrança com vencimento.", col.Folders[1].Requests[0].Name);
+        Assert.Equal("Criar cobrança imediata.", col.Folders[1].Requests[0].Name);
         Assert.Equal("PUT", col.Folders[1].HttpRequests[0].HttpMethod);
-        Assert.Equal("{{BaseUrl}}/cobv/{{txid}}", col.Folders[1].HttpRequests[0].Url);
+        Assert.Equal("{{BaseUrl}}/cob/{{txid}}", col.Folders[1].HttpRequests[0].Url);
 
-        Assert.Equal("Revisar cobrança com vencimento.", col.Folders[1].Requests[1].Name);
+        Assert.Equal("Revisar cobrança imediata.", col.Folders[1].Requests[1].Name);
         Assert.Equal("PATCH", col.Folders[1].HttpRequests[1].HttpMethod);
-        Assert.Equal("{{BaseUrl}}/cobv/{{txid}}", col.Folders[1].HttpRequests[1].Url);
+        Assert.Equal("{{BaseUrl}}/cob/{{txid}}", col.Folders[1].HttpRequests[1].Url);
 
-        Assert.Equal("Consultar cobrança com vencimento.", col.Folders[1].Requests[2].Name);
+        Assert.Equal("Consultar cobrança imediata.", col.Folders[1].Requests[2].Name);
         Assert.Equal("GET", col.Folders[1].HttpRequests[2].HttpMethod);
-        Assert.Equal("{{BaseUrl}}/cobv/{{txid}}?revisao=0", col.Folders[1].HttpRequests[2].Url);
+        Assert.Equal("{{BaseUrl}}/cob/{{txid}}?revisao=0", col.Folders[1].HttpRequests[2].Url);
 
-        Assert.Equal("Consultar lista de cobranças com vencimento.", col.Folders[1].Requests[3].Name);
-        Assert.Equal("GET", col.Folders[1].HttpRequests[3].HttpMethod);
-        Assert.Contains("{{BaseUrl}}/cobv?inicio=", col.Folders[1].HttpRequests[3].Url);
+        Assert.Equal("Criar cobrança imediata.", col.Folders[1].Requests[3].Name);
+        Assert.Equal("POST", col.Folders[1].HttpRequests[3].HttpMethod);
+        Assert.Equal("{{BaseUrl}}/cob", col.Folders[1].HttpRequests[3].Url);
+
+        Assert.Equal("Consultar lista de cobranças imediatas.", col.Folders[1].Requests[4].Name);
+        Assert.Equal("GET", col.Folders[1].HttpRequests[4].HttpMethod);
+        Assert.Contains("{{BaseUrl}}/cob?inicio=", col.Folders[1].HttpRequests[4].Url);
         //------------------------
-        Assert.Equal("LoteCobV", col.Folders[2].Name);
+        Assert.Equal("CobV", col.Folders[2].Name);
 
-        Assert.Equal("Criar/Alterar lote de cobranças com vencimento.", col.Folders[2].Requests[0].Name);
+        Assert.Equal("Criar cobrança com vencimento.", col.Folders[2].Requests[0].Name);
         Assert.Equal("PUT", col.Folders[2].HttpRequests[0].HttpMethod);
-        Assert.Equal("{{BaseUrl}}/lotecobv/{{id}}", col.Folders[2].HttpRequests[0].Url);
+        Assert.Equal("{{BaseUrl}}/cobv/{{txid}}", col.Folders[2].HttpRequests[0].Url);
 
-        Assert.Equal("Utilizado para revisar cobranças específicas dentro de um lote de cobranças com vencimento.", col.Folders[2].Requests[1].Name);
+        Assert.Equal("Revisar cobrança com vencimento.", col.Folders[2].Requests[1].Name);
         Assert.Equal("PATCH", col.Folders[2].HttpRequests[1].HttpMethod);
-        Assert.Equal("{{BaseUrl}}/lotecobv/{{id}}", col.Folders[2].HttpRequests[1].Url);
+        Assert.Equal("{{BaseUrl}}/cobv/{{txid}}", col.Folders[2].HttpRequests[1].Url);
 
-        Assert.Equal("Consultar um lote específico de cobranças com vencimento.", col.Folders[2].Requests[2].Name);
+        Assert.Equal("Consultar cobrança com vencimento.", col.Folders[2].Requests[2].Name);
         Assert.Equal("GET", col.Folders[2].HttpRequests[2].HttpMethod);
-        Assert.Equal("{{BaseUrl}}/lotecobv/{{id}}", col.Folders[2].HttpRequests[2].Url);
+        Assert.Equal("{{BaseUrl}}/cobv/{{txid}}?revisao=0", col.Folders[2].HttpRequests[2].Url);
 
-        Assert.Equal("Consultar lotes de cobranças com vencimento.", col.Folders[2].Requests[3].Name);
+        Assert.Equal("Consultar lista de cobranças com vencimento.", col.Folders[2].Requests[3].Name);
         Assert.Equal("GET", col.Folders[2].HttpRequests[3].HttpMethod);
-        Assert.Contains("{{BaseUrl}}/lotecobv?inicio=", col.Folders[2].HttpRequests[3].Url);
+        Assert.Contains("{{BaseUrl}}/cobv?inicio=", col.Folders[2].HttpRequests[3].Url);
         //------------------------
-        Assert.Equal("PayloadLocation", col.Folders[3].Name);
+        Assert.Equal("LoteCobV", col.Folders[3].Name);
 
-        Assert.Equal("Criar location do payload.", col.Folders[3].Requests[0].Name);
-        Assert.Equal("POST", col.Folders[3].HttpRequests[0].HttpMethod);
-        Assert.Equal("{{BaseUrl}}/loc", col.Folders[3].HttpRequests[0].Url);
+        Assert.Equal("Criar/Alterar lote de cobranças com vencimento.", col.Folders[3].Requests[0].Name);
+        Assert.Equal("PUT", col.Folders[3].HttpRequests[0].HttpMethod);
+        Assert.Equal("{{BaseUrl}}/lotecobv/{{id}}", col.Folders[3].HttpRequests[0].Url);
 
-        Assert.Equal("Consultar locations cadastradas.", col.Folders[3].Requests[1].Name);
-        Assert.Equal("GET", col.Folders[3].HttpRequests[1].HttpMethod);
-        Assert.Contains("{{BaseUrl}}/loc?inicio=", col.Folders[3].HttpRequests[1].Url);
+        Assert.Equal("Utilizado para revisar cobranças específicas dentro de um lote de cobranças com vencimento.", col.Folders[3].Requests[1].Name);
+        Assert.Equal("PATCH", col.Folders[3].HttpRequests[1].HttpMethod);
+        Assert.Equal("{{BaseUrl}}/lotecobv/{{id}}", col.Folders[3].HttpRequests[1].Url);
 
-        Assert.Equal("Recuperar location do payload.", col.Folders[3].Requests[2].Name);
+        Assert.Equal("Consultar um lote específico de cobranças com vencimento.", col.Folders[3].Requests[2].Name);
         Assert.Equal("GET", col.Folders[3].HttpRequests[2].HttpMethod);
-        Assert.Equal("{{BaseUrl}}/loc/{{id}}", col.Folders[3].HttpRequests[2].Url);
+        Assert.Equal("{{BaseUrl}}/lotecobv/{{id}}", col.Folders[3].HttpRequests[2].Url);
 
-        Assert.Equal("Desvincular uma cobrança de uma location.", col.Folders[3].Requests[3].Name);
-        Assert.Equal("DELETE", col.Folders[3].HttpRequests[3].HttpMethod);
-        Assert.Equal("{{BaseUrl}}/loc/{{id}}/txid", col.Folders[3].HttpRequests[3].Url);
+        Assert.Equal("Consultar lotes de cobranças com vencimento.", col.Folders[3].Requests[3].Name);
+        Assert.Equal("GET", col.Folders[3].HttpRequests[3].HttpMethod);
+        Assert.Contains("{{BaseUrl}}/lotecobv?inicio=", col.Folders[3].HttpRequests[3].Url);
         //------------------------
-        Assert.Equal("Pix", col.Folders[4].Name);
+        Assert.Equal("PayloadLocation", col.Folders[4].Name);
 
-        Assert.Equal("Consultar Pix.", col.Folders[4].Requests[0].Name);
-        Assert.Equal("GET", col.Folders[4].HttpRequests[0].HttpMethod);
-        Assert.Equal("{{BaseUrl}}/pix/{{e2eid}}", col.Folders[4].HttpRequests[0].Url);
+        Assert.Equal("Criar location do payload.", col.Folders[4].Requests[0].Name);
+        Assert.Equal("POST", col.Folders[4].HttpRequests[0].HttpMethod);
+        Assert.Equal("{{BaseUrl}}/loc", col.Folders[4].HttpRequests[0].Url);
 
-        Assert.Equal("Consultar Pix recebidos.", col.Folders[4].Requests[1].Name);
+        Assert.Equal("Consultar locations cadastradas.", col.Folders[4].Requests[1].Name);
         Assert.Equal("GET", col.Folders[4].HttpRequests[1].HttpMethod);
-        Assert.Contains("{{BaseUrl}}/pix?inicio=", col.Folders[4].HttpRequests[1].Url);
+        Assert.Contains("{{BaseUrl}}/loc?inicio=", col.Folders[4].HttpRequests[1].Url);
 
-        Assert.Equal("Solicitar devolução.", col.Folders[4].Requests[2].Name);
-        Assert.Equal("PUT", col.Folders[4].HttpRequests[2].HttpMethod);
-        Assert.Equal("{{BaseUrl}}/pix/{{e2eid}}/devolucao/{{id}}", col.Folders[4].HttpRequests[2].Url);
+        Assert.Equal("Recuperar location do payload.", col.Folders[4].Requests[2].Name);
+        Assert.Equal("GET", col.Folders[4].HttpRequests[2].HttpMethod);
+        Assert.Equal("{{BaseUrl}}/loc/{{id}}", col.Folders[4].HttpRequests[2].Url);
 
-        Assert.Equal("Consultar devolução.", col.Folders[4].Requests[3].Name);
-        Assert.Equal("GET", col.Folders[4].HttpRequests[3].HttpMethod);
-        Assert.Equal("{{BaseUrl}}/pix/{{e2eid}}/devolucao/{{id}}", col.Folders[4].HttpRequests[3].Url);
+        Assert.Equal("Desvincular uma cobrança de uma location.", col.Folders[4].Requests[3].Name);
+        Assert.Equal("DELETE", col.Folders[4].HttpRequests[3].HttpMethod);
+        Assert.Equal("{{BaseUrl}}/loc/{{id}}/txid", col.Folders[4].HttpRequests[3].Url);
         //------------------------
-        Assert.Equal("CobPayload", col.Folders[5].Name);
+        Assert.Equal("Pix", col.Folders[5].Name);
 
-        Assert.Equal("Recuperar o payload JSON que representa a cobrança imediata.", col.Folders[5].Requests[0].Name);
+        Assert.Equal("Consultar Pix.", col.Folders[5].Requests[0].Name);
         Assert.Equal("GET", col.Folders[5].HttpRequests[0].HttpMethod);
-        Assert.Equal("{{BaseUrl}}/{{pixUrlAccessToken}}", col.Folders[5].HttpRequests[0].Url);
+        Assert.Equal("{{BaseUrl}}/pix/{{e2eid}}", col.Folders[5].HttpRequests[0].Url);
 
-        Assert.Equal("Recuperar o payload JSON que representa a cobrança com vencimento.", col.Folders[5].Requests[1].Name);
+        Assert.Equal("Consultar Pix recebidos.", col.Folders[5].Requests[1].Name);
         Assert.Equal("GET", col.Folders[5].HttpRequests[1].HttpMethod);
-        Assert.Equal("{{BaseUrl}}/cobv/{{pixUrlAccessToken}}", col.Folders[5].HttpRequests[1].Url);
+        Assert.Contains("{{BaseUrl}}/pix?inicio=", col.Folders[5].HttpRequests[1].Url);
+
+        Assert.Equal("Solicitar devolução.", col.Folders[5].Requests[2].Name);
+        Assert.Equal("PUT", col.Folders[5].HttpRequests[2].HttpMethod);
+        Assert.Equal("{{BaseUrl}}/pix/{{e2eid}}/devolucao/{{id}}", col.Folders[5].HttpRequests[2].Url);
+
+        Assert.Equal("Consultar devolução.", col.Folders[5].Requests[3].Name);
+        Assert.Equal("GET", col.Folders[5].HttpRequests[3].HttpMethod);
+        Assert.Equal("{{BaseUrl}}/pix/{{e2eid}}/devolucao/{{id}}", col.Folders[5].HttpRequests[3].Url);
         //------------------------
-        Assert.Equal("Webhook", col.Folders[6].Name);
+        Assert.Equal("CobPayload", col.Folders[6].Name);
 
-        Assert.Equal("Configurar o Webhook Pix.", col.Folders[6].Requests[0].Name);
-        Assert.Equal("PUT", col.Folders[6].HttpRequests[0].HttpMethod);
-        Assert.Equal("{{BaseUrl}}/webhook/{{chave}}", col.Folders[6].HttpRequests[0].Url);
+        Assert.Equal("Recuperar o payload JSON que representa a cobrança imediata.", col.Folders[6].Requests[0].Name);
+        Assert.Equal("GET", col.Folders[6].HttpRequests[0].HttpMethod);
+        Assert.Equal("{{BaseUrl}}/{{pixUrlAccessToken}}", col.Folders[6].HttpRequests[0].Url);
 
-        Assert.Equal("Exibir informações acerca do Webhook Pix.", col.Folders[6].Requests[1].Name);
+        Assert.Equal("Recuperar o payload JSON que representa a cobrança com vencimento.", col.Folders[6].Requests[1].Name);
         Assert.Equal("GET", col.Folders[6].HttpRequests[1].HttpMethod);
-        Assert.Equal("{{BaseUrl}}/webhook/{{chave}}", col.Folders[6].HttpRequests[1].Url);
+        Assert.Equal("{{BaseUrl}}/cobv/{{pixUrlAccessToken}}", col.Folders[6].HttpRequests[1].Url);
+        //------------------------
+        Assert.Equal("Webhook", col.Folders[7].Name);
 
-        Assert.Equal("Cancelar o webhook Pix.", col.Folders[6].Requests[2].Name);
-        Assert.Equal("DELETE", col.Folders[6].HttpRequests[2].HttpMethod);
-        Assert.Equal("{{BaseUrl}}/webhook/{{chave}}", col.Folders[6].HttpRequests[2].Url);
+        Assert.Equal("Configurar o Webhook Pix.", col.Folders[7].Requests[0].Name);
+        Assert.Equal("PUT", col.Folders[7].HttpRequests[0].HttpMethod);
+        Assert.Equal("{{BaseUrl}}/webhook/{{chave}}", col.Folders[7].HttpRequests[0].Url);
 
-        Assert.Equal("Consultar webhooks cadastrados.", col.Folders[6].Requests[3].Name);
-        Assert.Equal("GET", col.Folders[6].HttpRequests[3].HttpMethod);
-        Assert.Contains("{{BaseUrl}}/webhook?inicio=", col.Folders[6].HttpRequests[3].Url);
+        Assert.Equal("Exibir informações acerca do Webhook Pix.", col.Folders[7].Requests[1].Name);
+        Assert.Equal("GET", col.Folders[7].HttpRequests[1].HttpMethod);
+        Assert.Equal("{{BaseUrl}}/webhook/{{chave}}", col.Folders[7].HttpRequests[1].Url);
+
+        Assert.Equal("Cancelar o webhook Pix.", col.Folders[7].Requests[2].Name);
+        Assert.Equal("DELETE", col.Folders[7].HttpRequests[2].HttpMethod);
+        Assert.Equal("{{BaseUrl}}/webhook/{{chave}}", col.Folders[7].HttpRequests[2].Url);
+
+        Assert.Equal("Consultar webhooks cadastrados.", col.Folders[7].Requests[3].Name);
+        Assert.Equal("GET", col.Folders[7].HttpRequests[3].HttpMethod);
+        Assert.Contains("{{BaseUrl}}/webhook?inicio=", col.Folders[7].HttpRequests[3].Url);
         //------------------------
 
         #endregion
@@ -234,7 +268,7 @@ public static class OpenApiImporterTests
 
         #region REQUEST WITH RAW JSON BODY
 
-        var req = col.Folders[1].HttpRequests[0];
+        var req = col.Folders[2].HttpRequests[0];
 
         Assert.Equal("Criar cobrança com vencimento.", req.Name);
         Assert.Equal("PUT", req.HttpMethod);
@@ -263,7 +297,7 @@ public static class OpenApiImporterTests
 
         #region REQUEST WITH QUERY PARAMETERS AND EMPTY BODY
 
-        var req = col.Folders[0].HttpRequests[5];
+        var req = col.Folders[1].HttpRequests[5];
 
         Assert.Equal("Updates a pet in the store with form data", req.Name);
         Assert.Equal("POST", req.HttpMethod);
@@ -308,6 +342,82 @@ public static class OpenApiImporterTests
 
         #endregion
     }
+
+    [Fact]
+    public static void Should_read_request_with_OAuth2_client_credentials_correctly()
+    {
+        // GIVEN
+        string fileContent = GetTestFile("openapi_pix.yaml");
+
+        // WHEN AND THEN
+        Assert.True(TryImportOpenApi(fileContent, out var col));
+
+        // THEN
+        Assert.NotNull(col);
+
+        #region COLLECTION WITH OAUTH2 CLIENT CREDENTIALS
+
+        var oauth2folder = col.Folders[0];
+        Assert.NotNull(oauth2folder);
+        var clientCredentialsFolder = Assert.Single(oauth2folder.Folders);
+        Assert.Equal("Client credentials", clientCredentialsFolder.Name);
+        var req = Assert.Single(clientCredentialsFolder.HttpRequests);
+
+        Assert.Equal("Get access token", req.Name);
+        Assert.Equal("POST", req.HttpMethod);
+        Assert.Equal("https://pix.example.com/oauth/token", req.Url);
+        Assert.NotNull(req.Body);
+        Assert.Equal(PororocaHttpRequestBodyMode.UrlEncoded, req.Body.Mode);
+        Assert.Null(req.Body.ContentType);
+        Assert.NotNull(req.Body.UrlEncodedValues);
+        Assert.Equal(4, req.Body.UrlEncodedValues.Count);
+        Assert.Equal(new(true, "grant_type", "client_credentials"), req.Body.UrlEncodedValues[0]);
+        Assert.Equal(new(true, "client_id", "{{oauth2_client_id}}"), req.Body.UrlEncodedValues[1]);
+        Assert.Equal(new(true, "client_secret", "{{oauth2_client_secret}}"), req.Body.UrlEncodedValues[2]);
+        Assert.Equal(new(true, "scope", "cob.write cob.read cobv.write cobv.read lotecobv.write lotecobv.read pix.write pix.read webhook.read webhook.write payloadlocation.write payloadlocation.read"), req.Body.UrlEncodedValues[3]);
+
+        #endregion
+    }
+
+    [Fact]
+    public static void Should_read_request_with_API_keys_correctly()
+    {
+        // GIVEN
+        // the original document had API keys in query params,
+        // changed to headers for this test
+        string fileContent = GetTestFile("SHODAN-OPENAPI.json");
+
+        // WHEN AND THEN
+        Assert.True(TryImportOpenApi(fileContent, out var col));
+
+        // THEN
+        Assert.NotNull(col);
+
+        Assert.NotNull(col);
+        Assert.Equal("Shodan REST API Documentation", col.Name);
+
+        var env = Assert.Single(col.Environments);
+
+        Assert.Equal("env1", env.Name);
+
+        var v = Assert.Single(env.Variables);
+        Assert.True(v.Enabled);
+        Assert.Equal("BaseUrl", v.Key);
+        Assert.Equal("https://api.shodan.io", v.Value);
+        Assert.False(v.IsSecret);
+
+        var folder = Assert.Single(col.Folders);
+        Assert.Equal("Search Methods", folder.Name);
+        var req = Assert.Single(folder.HttpRequests);
+
+        Assert.Equal("req", req.Name);
+        Assert.Equal("GET", req.HttpMethod);
+        Assert.Equal("{{BaseUrl}}/shodan/host/{{ip}}?history=False&minify=False", req.Url);
+        Assert.NotNull(req.Headers);
+        Assert.Equal(new(true, "SHODAN-KEY", "{{SHODAN-KEY}}"), Assert.Single(req.Headers));
+        Assert.Null(req.Body);
+    }
+
 
     private static string GetTestFile(string fileName)
     {
