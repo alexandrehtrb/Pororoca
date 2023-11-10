@@ -20,11 +20,12 @@
     <FileVersion>$(Version)</FileVersion>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <Copyright>AlexandreHTRB</Copyright>
+    <StartupObject>Pororoca.Desktop.Program</StartupObject>
     <!-- Licence also available at https://github.com/alexandrehtrb/Pororoca/LICENCE.md -->
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Pororoca.Domain\Pororoca.Domain.csproj" />
-    <ProjectReference Include="..\Pororoca.Domain.OpenAPI\Pororoca.Domain.OpenAPI.csproj"/>
+    <ProjectReference Include="..\Pororoca.Domain.OpenAPI\Pororoca.Domain.OpenAPI.csproj" />
     <ProjectReference Include="..\Pororoca.Infrastructure\Pororoca.Infrastructure.csproj" />
     <ProjectReference Include="..\Pororoca.Desktop.Localization.SourceGeneration\Pororoca.Desktop.Localization.SourceGeneration.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
   </ItemGroup>

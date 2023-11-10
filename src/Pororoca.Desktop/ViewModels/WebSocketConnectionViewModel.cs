@@ -1,9 +1,13 @@
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.Linq;
+using System.Net;
 using System.Reactive;
 using System.Security.Authentication;
 using AvaloniaEdit.Document;
+using DynamicData;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
@@ -38,6 +42,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     #region CONNECTION
 
     private readonly CollectionViewModel col;
+    private static readonly TimeSpan oneSecond = TimeSpan.FromSeconds(1);
+    private static readonly TimeSpan oneMinute = TimeSpan.FromMinutes(1);
     private readonly IPororocaHttpClientProvider httpClientProvider;
     private readonly PororocaWebSocketConnector connector;
 
@@ -80,6 +86,11 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     [Reactive]
     public bool IsDisableTlsVerificationVisible { get; set; }
+
+    [Reactive]
+    public string ResponseStatusCodeElapsedTimeTitle { get; private set; } =
+        Localizer.Instance.WebSocketExchangedMessages.SectionTitle;
+
 
     public ReactiveCommand<Unit, Unit> ConnectCmd { get; }
 
@@ -261,6 +272,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region EXCHANGED MESSAGES
 
+    public ResponseHeadersAndTrailersDataGridViewModel ConnectionResponseHeadersTableVm { get; }
+
     private string? invalidClientMessageErrorCodeField;
     private string? InvalidClientMessageErrorCode
     {
@@ -419,6 +432,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         #endregion
 
         #region EXCHANGED MESSAGES
+        ConnectionResponseHeadersTableVm = new(new List<PororocaKeyValueParam>());
         ExchangedMessages = new();
         this.connector.ExchangedMessages.CollectionChanged += OnConnectorExchangedMessagesUpdated;
         SendMessageCmd = ReactiveCommand.CreateFromTask(SendMessageAsync);
@@ -601,8 +615,21 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             // causes the UI to freeze for a few seconds, especially when performing the first request to a server.
             // That is why we are invoking the code to run in a new thread, like below.
             await Task.Run(() => this.connector.ConnectAsync(resolvedClients.wsCli!, resolvedClients.httpCli!, resolvedUri!, this.cancelConnectionAttemptTokenSource.Token));
+            ResponseStatusCodeElapsedTimeTitle = this.connector.ConnectionException is null
+                    ? FormatSuccessfulResponseTitle(this.connector.ElapsedConnectionTimeSpan,resolvedClients.wsCli!.HttpStatusCode)
+                    : FormatFailedResponseTitle(this.connector.ElapsedConnectionTimeSpan);
+
+            ConnectionResponseHeadersTableVm.Items.Clear();
+            var resHeaders = this.connector.ConnectionHttpHeaders?.SelectMany(
+                kv => kv.Value.Select(val => new KeyValueParamViewModel(ConnectionResponseHeadersTableVm.Items, true, kv.Key, val))).ToList()
+                ?? new List<KeyValueParamViewModel>();
+            foreach (var header in resHeaders)
+            {
+                ConnectionResponseHeadersTableVm.Items.Add(header);
+            }
         }
     }
+
 
     public void CancelConnect() =>
         this.cancelConnectionAttemptTokenSource?.Cancel();
@@ -625,6 +652,25 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled = true;
         IsDisableTlsVerificationVisible = false;
     }
+
+    private static string FormatSuccessfulResponseTitle(TimeSpan elapsedTime, HttpStatusCode statusCode) =>
+        string.Format(Localizer.Instance.WebSocketExchangedMessages.SectionTitleSuccessfulFormat,
+            FormatHttpStatusCode(statusCode),
+            FormatElapsedTime(elapsedTime));
+
+    private static string FormatFailedResponseTitle(TimeSpan elapsedTime) =>
+        string.Format(Localizer.Instance.WebSocketExchangedMessages.SectionTitleFailedFormat,
+            FormatElapsedTime(elapsedTime));
+
+    private static string FormatHttpStatusCode(HttpStatusCode statusCode) =>
+        $"{(int)statusCode} {Enum.GetName(statusCode)}";
+
+    private static string FormatElapsedTime(TimeSpan elapsedTime) =>
+        elapsedTime < oneSecond ?
+            string.Format(Localizer.Instance.HttpResponse.ElapsedTimeMillisecondsFormat, (int)elapsedTime.TotalMilliseconds) :
+            elapsedTime < oneMinute ? // More or equal than one second, but less than one minute
+                string.Format(Localizer.Instance.HttpResponse.ElapsedTimeSecondsFormat, elapsedTime.TotalSeconds) : // TODO: Format digit separator according to language
+                string.Format(Localizer.Instance.HttpResponse.ElapsedTimeMinutesFormat, elapsedTime.Minutes, elapsedTime.Seconds);
 
     #endregion
 
