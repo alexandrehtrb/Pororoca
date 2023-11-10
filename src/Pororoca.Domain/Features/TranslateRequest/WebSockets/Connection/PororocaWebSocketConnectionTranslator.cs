@@ -54,6 +54,7 @@ public static class PororocaWebSocketConnectionTranslator
                 SetConnectionRequestHeaders(effectiveVars, collectionScopedAuth, wsConn, wsCli);
                 SetSubprotocols(effectiveVars, wsConn, wsCli);
                 SetCompressionOptions(wsConn, wsCli);
+                SetCollectHttpResponseDetails(wsCli);
 
                 wsAndHttpCli = (wsCli, httpCli);
                 return true;
@@ -72,6 +73,7 @@ public static class PororocaWebSocketConnectionTranslator
         wsCli.Options.HttpVersionPolicy = HttpVersionPolicy.RequestVersionExact;
         wsCli.Options.HttpVersion = PororocaRequestCommonTranslator.ResolveHttpVersion(wsConn.HttpVersion);
     }
+
 
     private static void SetConnectionRequestHeaders(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaWebSocketConnection wsConn, ClientWebSocket wsCli)
     {
@@ -104,4 +106,5 @@ public static class PororocaWebSocketConnectionTranslator
             };
         }
     }
+    private static void SetCollectHttpResponseDetails(ClientWebSocket wsCli) => wsCli.Options.CollectHttpResponseDetails = true;
 }

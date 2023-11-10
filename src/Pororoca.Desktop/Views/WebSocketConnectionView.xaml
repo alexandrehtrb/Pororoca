@@ -16,720 +16,762 @@
     d:DesignHeight="700"
     FontSize="14">
 
-  <UserControl.Resources>
-    <conv:WebSocketConnectionOptionMatchConverter x:Key="connectionOptionMatch"/>
-  </UserControl.Resources>
+    <UserControl.Resources>
+        <conv:WebSocketConnectionOptionMatchConverter x:Key="connectionOptionMatch"/>
+    </UserControl.Resources>
 
-  <UserControl.Styles>
-    <Style Selector="TabItem">
-      <Setter
-          Property="FontSize"
-          Value="20"/>
-    </Style>
-  </UserControl.Styles>
+    <UserControl.Styles>
+        <Style Selector="TabItem">
+            <Setter
+                Property="FontSize"
+                Value="20"/>
+        </Style>
+    </UserControl.Styles>
 
-  <Grid
-      HorizontalAlignment="Stretch"
-      VerticalAlignment="Stretch">
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*"/>
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*"/>
-    </Grid.RowDefinitions>
-
-    <StackPanel
-        Grid.Column="0"
-        Grid.Row="0"
-        Margin="0,24,0,0"
-        Orientation="Vertical"
+    <Grid
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
-
-      <Grid
-          Margin="24,0,24,0"
-          HorizontalAlignment="Stretch"
-          VerticalAlignment="Top">
-        <controls:EditableTextBlock x:Name="etbName" DataContext="{Binding NameEditableVm}"/>
-      </Grid>
-
-      <Grid
-          ShowGridLines="False"
-          Height="40"
-          Margin="24,40,24,16"
-          ColumnDefinitions="*, Auto, Auto">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
         <StackPanel
             Grid.Column="0"
             Grid.Row="0"
-            Margin="0,0,6,0"
+            Margin="0,24,0,0"
             Orientation="Vertical"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
 
-          <TextBox
-              x:Name="tbUrl"
-              Height="40"
-              Text="{Binding Url}"
-              Watermark="{Binding i18n.WebSocketConnection.UrlWatermark}"
-              VerticalContentAlignment="Center"
-              ToolTip.Tip="{Binding ResolvedUrlToolTip}"
-              Classes="SingleLine"
-              PointerEntered="OnUrlPointerEnter"
-              Classes.HasValidationProblem="{Binding HasUrlValidationProblem}"/>
+            <Grid
+                Margin="24,0,24,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top">
+                <controls:EditableTextBlock x:Name="etbName" DataContext="{Binding NameEditableVm}"/>
+            </Grid>
 
-          <TextBlock
-              Name="tbErrorMsg"
-              Margin="12,6,12,0"
-              Classes="ErrorMessage"
-              Text="{Binding InvalidConnectionError}"
-              IsVisible="{Binding IsInvalidConnectionErrorVisible}"/>
+            <Grid
+                ShowGridLines="False"
+                Height="40"
+                Margin="24,40,24,16"
+                ColumnDefinitions="*, Auto, Auto">
 
-          <TextBlock
-              Name="tbIsWsConnected"
-              Margin="12,6,12,0"
-              FontSize="14"
-              Foreground="{DynamicResource WebSocketConnectedBrush}"
-              Text="{Binding i18n.WebSocketConnection.Connected}"
-              IsVisible="{Binding IsConnected}"/>
+                <StackPanel
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Margin="0,0,6,0"
+                    Orientation="Vertical"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
 
+                    <TextBox
+                        x:Name="tbUrl"
+                        Height="40"
+                        Text="{Binding Url}"
+                        Watermark="{Binding i18n.WebSocketConnection.UrlWatermark}"
+                        VerticalContentAlignment="Center"
+                        ToolTip.Tip="{Binding ResolvedUrlToolTip}"
+                        Classes="SingleLine"
+                        PointerEntered="OnUrlPointerEnter"
+                        Classes.HasValidationProblem="{Binding HasUrlValidationProblem}"/>
+
+                    <TextBlock
+                        Name="tbErrorMsg"
+                        Margin="12,6,12,0"
+                        Classes="ErrorMessage"
+                        Text="{Binding InvalidConnectionError}"
+                        IsVisible="{Binding IsInvalidConnectionErrorVisible}"/>
+
+                    <TextBlock
+                        Name="tbIsWsConnected"
+                        Margin="12,6,12,0"
+                        FontSize="14"
+                        Foreground="{DynamicResource WebSocketConnectedBrush}"
+                        Text="{Binding i18n.WebSocketConnection.Connected}"
+                        IsVisible="{Binding IsConnected}"/>
+
+                </StackPanel>
+
+                <ComboBox
+                    Name="cbHttpVersion"
+                    Grid.Column="1"
+                    Grid.Row="0"
+                    Width="120"
+                    Height="40"
+                    Margin="6,0,12,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Stretch"
+                    SelectedIndex="{Binding HttpVersionSelectedIndex, Mode=TwoWay}"
+                    ItemsSource="{Binding HttpVersionSelectionOptions}"
+                    Classes.HasValidationProblem="{Binding HasHttpVersionValidationProblem}"/>
+
+                <Button
+                    Name="btConnect"
+                    Grid.Column="2"
+                    Grid.Row="0"
+                    Height="40"
+                    Width="104"
+                    Margin="12,0,0,0"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    IsVisible="{Binding !IsConnected}"
+                    Command="{Binding ConnectCmd}"
+                    Content="{Binding i18n.WebSocketConnection.Connect}"
+                    ToolTip.Tip="{Binding i18n.WebSocketConnection.ConnectToolTip}"
+                    Classes="Primary"/>
+
+                <Button
+                    Grid.Column="2"
+                    Grid.Row="0"
+                    Height="40"
+                    Width="104"
+                    Margin="12,0,0,0"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    IsVisible="{Binding IsConnecting}"
+                    Command="{Binding CancelConnectCmd}"
+                    Content="{Binding i18n.WebSocketConnection.CancelConnect}"
+                    ToolTip.Tip="{Binding i18n.WebSocketConnection.CancelConnectToolTip}"
+                    Classes="Primary"/>
+
+                <Button
+                    Name="btDisconnect"
+                    Grid.Column="2"
+                    Grid.Row="0"
+                    Height="40"
+                    Width="104"
+                    Margin="12,0,0,0"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    IsVisible="{Binding IsConnected}"
+                    Command="{Binding DisconnectCmd}"
+                    Content="{Binding i18n.WebSocketConnection.Disconnect}"
+                    ToolTip.Tip="{Binding i18n.WebSocketConnection.DisconnectToolTip}"
+                    Classes="PrimaryInverted"/>
+
+                <Button
+                    Grid.Column="2"
+                    Grid.Row="0"
+                    Height="40"
+                    Width="104"
+                    Margin="12,0,0,0"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    IsVisible="{Binding IsDisconnecting}"
+                    Command="{Binding CancelDisconnectCmd}"
+                    Content="{Binding i18n.WebSocketConnection.CancelDisconnect}"
+                    Classes="PrimaryInverted"/>
+
+            </Grid>
+
+            <!-- The grid below is necessary to preserve a spacing for the progress bar when it is not visible -->
+            <Grid
+                Margin="0,0,0,16"
+                Height="4"
+                HorizontalAlignment="Stretch">
+                <!-- CONNECTION RESPONSE PROGRESS BAR -->
+                <ProgressBar
+                    IsIndeterminate="True"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    IsVisible="{Binding IsConnectingOrDisconnecting}"/>
+            </Grid>
+
+            <Separator
+                Margin="-12,0,-12,0"
+                Classes="Separator"
+                Height="6"/>
         </StackPanel>
 
-        <ComboBox
-            Name="cbHttpVersion"
-            Grid.Column="1"
-            Grid.Row="0"
-            Width="120"
-            Height="40"
-            Margin="6,0,12,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Stretch"
-            SelectedIndex="{Binding HttpVersionSelectedIndex, Mode=TwoWay}"
-            ItemsSource="{Binding HttpVersionSelectionOptions}"
-            Classes.HasValidationProblem="{Binding HasHttpVersionValidationProblem}"/>
-
-        <Button
-            Name="btConnect"
-            Grid.Column="2"
-            Grid.Row="0"
-            Height="40"
-            Width="104"
-            Margin="12,0,0,0"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center"
-            IsVisible="{Binding !IsConnected}"
-            Command="{Binding ConnectCmd}"
-            Content="{Binding i18n.WebSocketConnection.Connect}"
-            ToolTip.Tip="{Binding i18n.WebSocketConnection.ConnectToolTip}"
-            Classes="Primary"/>
-
-        <Button
-            Grid.Column="2"
-            Grid.Row="0"
-            Height="40"
-            Width="104"
-            Margin="12,0,0,0"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center"
-            IsVisible="{Binding IsConnecting}"
-            Command="{Binding CancelConnectCmd}"
-            Content="{Binding i18n.WebSocketConnection.CancelConnect}"
-            ToolTip.Tip="{Binding i18n.WebSocketConnection.CancelConnectToolTip}"
-            Classes="Primary"/>
-
-        <Button
-            Name="btDisconnect"
-            Grid.Column="2"
-            Grid.Row="0"
-            Height="40"
-            Width="104"
-            Margin="12,0,0,0"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center"
-            IsVisible="{Binding IsConnected}"
-            Command="{Binding DisconnectCmd}"
-            Content="{Binding i18n.WebSocketConnection.Disconnect}"
-            ToolTip.Tip="{Binding i18n.WebSocketConnection.DisconnectToolTip}"
-            Classes="PrimaryInverted"/>
-
-        <Button
-            Grid.Column="2"
-            Grid.Row="0"
-            Height="40"
-            Width="104"
-            Margin="12,0,0,0"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center"
-            IsVisible="{Binding IsDisconnecting}"
-            Command="{Binding CancelDisconnectCmd}"
-            Content="{Binding i18n.WebSocketConnection.CancelDisconnect}"
-            Classes="PrimaryInverted"/>
-
-      </Grid>
-
-      <!-- The grid below is necessary to preserve a spacing for the progress bar when it is not visible -->
-      <Grid
-          Margin="0,0,0,16"
-          Height="4"
-          HorizontalAlignment="Stretch">
-        <!-- CONNECTION RESPONSE PROGRESS BAR -->
-        <ProgressBar
-            IsIndeterminate="True"
-            VerticalAlignment="Stretch"
-            HorizontalAlignment="Stretch"
-            IsVisible="{Binding IsConnectingOrDisconnecting}"/>
-      </Grid>
-
-      <Separator
-          Margin="-12,0,-12,0"
-          Classes="Separator"
-          Height="6"/>
-    </StackPanel>
-
-    <Grid
-        Grid.Column="0"
-        Grid.Row="1"
-        Margin="12,0,12,0"
-        VerticalAlignment="Stretch"
-        ColumnDefinitions="* , Auto , * , Auto , *">
-
-      <!-- CONNECTION REQUEST -->
-      <Grid
-          Grid.Column="0"
-          Grid.Row="0"
-          RowDefinitions="Auto, *">
-
-        <TextBlock
-            Grid.Column="0"
-            Grid.Row="0"
-            Margin="12,28,12,0"
-            Classes="SectionTitle"
-            Text="{Binding i18n.WebSocketConnection.SectionTitle}"/>
-        <TabControl
-            Name="tabControlConnectionRequest"
+        <Grid
             Grid.Column="0"
             Grid.Row="1"
-            Margin="12,24,12,12"
-            TabStripPlacement="Top"
-            SelectedIndex="{Binding SelectedConnectionTabIndex}">
-          <!-- CONNECTION OPTIONS -->
-          <TabItem Name="tabItemConnectionRequestOptions">
-            <TabItem.Header>
-              <TextBlock
-                  Classes="TabItemHeader"
-                  Text="{Binding i18n.WebSocketConnection.ConnectionRequestOptions}"/>
-            </TabItem.Header>
+            Margin="12,0,12,0"
+            VerticalAlignment="Stretch"
+            ColumnDefinitions="* , Auto , * , Auto , *">
 
-            <Grid Margin="0,12,0,0">
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-              </Grid.ColumnDefinitions>
-              <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-              </Grid.RowDefinitions>
+            <!-- CONNECTION REQUEST -->
+            <Grid
+                Grid.Column="0"
+                Grid.Row="0"
+                RowDefinitions="Auto, *">
 
-              <ComboBox
-                  x:Name="cbWsScrReqOptions"
-                  Grid.Column="0"
-                  Grid.Row="0"
-                  Height="36"
-                  Width="190"
-                  HorizontalAlignment="Left"
-                  VerticalAlignment="Stretch"
-                  SelectedIndex="{Binding ConnectionOptionSelectedIndex, Mode=TwoWay}">
-                <ComboBoxItem
-                    x:Name="cbiWsScrReqOptionHeaders"
-                    Content="{Binding i18n.WebSocketConnection.OptionHeaders}"/>
-                <ComboBoxItem
-                    x:Name="cbiWsScrReqOptionSubprotocols"
-                    Content="{Binding i18n.WebSocketConnection.OptionSubprotocols}"/>
-                <ComboBoxItem
-                    x:Name="cbiWsScrReqOptionCompression"
-                    Content="{Binding i18n.WebSocketConnection.OptionCompression}"/>
-              </ComboBox>
-              <!-- CONNECTION REQUEST HEADERS -->
-              <Grid
-                  x:Name="grWsConnReqHeaders"
-                  Grid.Column="0"
-                  Grid.Row="1"
-                  Margin="-12,12,-12,12"
-                  IsVisible="{Binding ConnectionOptionSelectedIndex, 
+                <TextBlock
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Margin="12,28,12,0"
+                    Classes="SectionTitle"
+                    Text="{Binding i18n.WebSocketConnection.SectionTitle}"/>
+                <TabControl
+                    Name="tabControlConnectionRequest"
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Margin="12,24,12,12"
+                    TabStripPlacement="Top"
+                    SelectedIndex="{Binding SelectedConnectionTabIndex}">
+                    <!-- CONNECTION OPTIONS -->
+                    <TabItem Name="tabItemConnectionRequestOptions">
+                        <TabItem.Header>
+                            <TextBlock
+                                Classes="TabItemHeader"
+                                Text="{Binding i18n.WebSocketConnection.ConnectionRequestOptions}"/>
+                        </TabItem.Header>
+
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <ComboBox
+                                x:Name="cbWsScrReqOptions"
+                                Grid.Column="0"
+                                Grid.Row="0"
+                                Height="36"
+                                Width="190"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Stretch"
+                                SelectedIndex="{Binding ConnectionOptionSelectedIndex, Mode=TwoWay}">
+                                <ComboBoxItem
+                                    x:Name="cbiWsScrReqOptionHeaders"
+                                    Content="{Binding i18n.WebSocketConnection.OptionHeaders}"/>
+                                <ComboBoxItem
+                                    x:Name="cbiWsScrReqOptionSubprotocols"
+                                    Content="{Binding i18n.WebSocketConnection.OptionSubprotocols}"/>
+                                <ComboBoxItem
+                                    x:Name="cbiWsScrReqOptionCompression"
+                                    Content="{Binding i18n.WebSocketConnection.OptionCompression}"/>
+                            </ComboBox>
+                            <!-- CONNECTION REQUEST HEADERS -->
+                            <Grid
+                                x:Name="grWsConnReqHeaders"
+                                Grid.Column="0"
+                                Grid.Row="1"
+                                Margin="-12,12,-12,12"
+                                IsVisible="{Binding ConnectionOptionSelectedIndex, 
                               Mode=OneWay,
                               Converter={StaticResource connectionOptionMatch}, 
                               ConverterParameter=Headers}">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto"/>
-                  <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Button
-                    Name="btAddConnectionRequestHeader"
-                    Grid.Column="0"
-                    Grid.Row="0"
-                    Height="24"
-                    Width="24"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Padding="2"
-                    Margin="12,0,0,0"
-                    Classes="Secondary"
-                    ToolTip.Tip="{Binding i18n.WebSocketConnection.ConnectionRequestHeaderAdd}"
-                    Command="{Binding ConnectionRequestHeadersTableVm.AddNewCmd}">
-                  <Button.Content>
-                    <Image
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Center"
-                        Width="12"
-                        Height="12">
-                      <Image.Source>
-                        <DrawingImage Drawing="{StaticResource IconAdd}"/>
-                      </Image.Source>
-                    </Image>
-                  </Button.Content>
-                </Button>
-                <TreeDataGrid
-                    Name="dgWsConnectionReqHeaders"
-                    Grid.Column="0"
-                    Grid.Row="1"
-                    Margin="0,12,0,0"
-                    VerticalAlignment="Stretch"
-                    AutoDragDropRows="True"
-                    Source="{Binding ConnectionRequestHeadersTableVm.Source}"
-                    CanUserResizeColumns="True">
-                    <!--DataGrid.KeyBindings>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Button
+                                    Name="btAddConnectionRequestHeader"
+                                    Grid.Column="0"
+                                    Grid.Row="0"
+                                    Height="24"
+                                    Width="24"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Padding="2"
+                                    Margin="12,0,0,0"
+                                    Classes="Secondary"
+                                    ToolTip.Tip="{Binding i18n.WebSocketConnection.ConnectionRequestHeaderAdd}"
+                                    Command="{Binding ConnectionRequestHeadersTableVm.AddNewCmd}">
+                                    <Button.Content>
+                                        <Image
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            Width="12"
+                                            Height="12">
+                                            <Image.Source>
+                                                <DrawingImage Drawing="{StaticResource IconAdd}"/>
+                                            </Image.Source>
+                                        </Image>
+                                    </Button.Content>
+                                </Button>
+                                <TreeDataGrid
+                                    Name="dgWsConnectionReqHeaders"
+                                    Grid.Column="0"
+                                    Grid.Row="1"
+                                    Margin="0,12,0,0"
+                                    VerticalAlignment="Stretch"
+                                    AutoDragDropRows="True"
+                                    Source="{Binding ConnectionRequestHeadersTableVm.Source}"
+                                    CanUserResizeColumns="True">
+                                    <!--DataGrid.KeyBindings>
                       <KeyBinding Command="{Binding ConnectionRequestHeadersTableVm.CutCmd}" Gesture="Ctrl+X" />
                       <KeyBinding Command="{Binding ConnectionRequestHeadersTableVm.CopyCmd}" Gesture="Ctrl+C" />
                       <KeyBinding Command="{Binding ConnectionRequestHeadersTableVm.PasteCmd}" Gesture="Ctrl+V" />
                       <KeyBinding Command="{Binding ConnectionRequestHeadersTableVm.DuplicateCmd}" Gesture="Ctrl+D" />
                       <KeyBinding Command="{Binding ConnectionRequestHeadersTableVm.DeleteCmd}" Gesture="Delete" />
                     </TreeDataGrid.KeyBindings-->
-                    <TreeDataGrid.ContextMenu>
-                      <ContextMenu>
-                        <MenuItem
-                              Header="{Binding i18n.ContextMenu.Cut}"
-                              Command="{Binding ConnectionRequestHeadersTableVm.CutCmd}"
-                              InputGesture="Ctrl+X"/>
-                          <MenuItem
-                              Header="{Binding i18n.ContextMenu.Copy}"
-                              Command="{Binding ConnectionRequestHeadersTableVm.CopyCmd}"
-                              InputGesture="Ctrl+C"/>
-                          <MenuItem
-                              Header="{Binding i18n.ContextMenu.Paste}"
-                              Command="{Binding ConnectionRequestHeadersTableVm.PasteCmd}"
-                              InputGesture="Ctrl+V"
-                              IsEnabled="{Binding ConnectionRequestHeadersTableVm.InnerClipboardArea.CanPaste}"/>
-                          <MenuItem
-                              Header="{Binding i18n.ContextMenu.Delete}"
-                              Command="{Binding ConnectionRequestHeadersTableVm.DeleteCmd}"
-                              InputGesture="Delete"/>
-                      </ContextMenu>
-                    </TreeDataGrid.ContextMenu>
-                </TreeDataGrid>
-              </Grid>
-              <!-- CONNECTION REQUEST SUBPROTOCOLS -->
-              <Grid
-                  x:Name="grWsConnReqSubprotocols"
-                  Grid.Column="0"
-                  Grid.Row="1"
-                  Margin="-12,12,-12,12"
-                  IsVisible="{Binding ConnectionOptionSelectedIndex, 
+                                    <TreeDataGrid.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem
+                                                  Header="{Binding i18n.ContextMenu.Cut}"
+                                                  Command="{Binding ConnectionRequestHeadersTableVm.CutCmd}"
+                                                  InputGesture="Ctrl+X"/>
+                                            <MenuItem
+                                                Header="{Binding i18n.ContextMenu.Copy}"
+                                                Command="{Binding ConnectionRequestHeadersTableVm.CopyCmd}"
+                                                InputGesture="Ctrl+C"/>
+                                            <MenuItem
+                                                Header="{Binding i18n.ContextMenu.Paste}"
+                                                Command="{Binding ConnectionRequestHeadersTableVm.PasteCmd}"
+                                                InputGesture="Ctrl+V"
+                                                IsEnabled="{Binding ConnectionRequestHeadersTableVm.InnerClipboardArea.CanPaste}"/>
+                                            <MenuItem
+                                                Header="{Binding i18n.ContextMenu.Delete}"
+                                                Command="{Binding ConnectionRequestHeadersTableVm.DeleteCmd}"
+                                                InputGesture="Delete"/>
+                                        </ContextMenu>
+                                    </TreeDataGrid.ContextMenu>
+                                </TreeDataGrid>
+                            </Grid>
+                            <!-- CONNECTION REQUEST SUBPROTOCOLS -->
+                            <Grid
+                                x:Name="grWsConnReqSubprotocols"
+                                Grid.Column="0"
+                                Grid.Row="1"
+                                Margin="-12,12,-12,12"
+                                IsVisible="{Binding ConnectionOptionSelectedIndex, 
                               Mode=OneWay,
                               Converter={StaticResource connectionOptionMatch}, 
                               ConverterParameter=Subprotocols}">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto"/>
-                  <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Button
-                    Name="btAddSubprotocol"
-                    Grid.Column="0"
-                    Grid.Row="0"
-                    Height="24"
-                    Width="24"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Padding="2"
-                    Margin="12,0,0,0"
-                    Classes="Secondary"
-                    ToolTip.Tip="{Binding i18n.WebSocketConnection.ConnectionRequestSubprotocolAdd}"
-                    Command="{Binding SubprotocolsTableVm.AddNewCmd}">
-                  <Button.Content>
-                    <Image
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Center"
-                        Width="12"
-                        Height="12">
-                      <Image.Source>
-                        <DrawingImage Drawing="{StaticResource IconAdd}"/>
-                      </Image.Source>
-                    </Image>
-                  </Button.Content>
-                </Button>
-                <TreeDataGrid
-                    Name="dbSubprotocols"
-                    Grid.Column="0"
-                    Grid.Row="1"
-                    Margin="0,12,0,0"
-                    VerticalAlignment="Stretch"
-                    AutoDragDropRows="True"
-                    Source="{Binding SubprotocolsTableVm.Source}"
-                    CanUserResizeColumns="True">
-                    <!--DataGrid.KeyBindings>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Button
+                                    Name="btAddSubprotocol"
+                                    Grid.Column="0"
+                                    Grid.Row="0"
+                                    Height="24"
+                                    Width="24"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Padding="2"
+                                    Margin="12,0,0,0"
+                                    Classes="Secondary"
+                                    ToolTip.Tip="{Binding i18n.WebSocketConnection.ConnectionRequestSubprotocolAdd}"
+                                    Command="{Binding SubprotocolsTableVm.AddNewCmd}">
+                                    <Button.Content>
+                                        <Image
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            Width="12"
+                                            Height="12">
+                                            <Image.Source>
+                                                <DrawingImage Drawing="{StaticResource IconAdd}"/>
+                                            </Image.Source>
+                                        </Image>
+                                    </Button.Content>
+                                </Button>
+                                <TreeDataGrid
+                                    Name="dbSubprotocols"
+                                    Grid.Column="0"
+                                    Grid.Row="1"
+                                    Margin="0,12,0,0"
+                                    VerticalAlignment="Stretch"
+                                    AutoDragDropRows="True"
+                                    Source="{Binding SubprotocolsTableVm.Source}"
+                                    CanUserResizeColumns="True">
+                                    <!--DataGrid.KeyBindings>
                       <KeyBinding Command="{Binding SubprotocolsTableVm.CutCmd}" Gesture="Ctrl+X" />
                       <KeyBinding Command="{Binding SubprotocolsTableVm.CopyCmd}" Gesture="Ctrl+C" />
                       <KeyBinding Command="{Binding SubprotocolsTableVm.PasteCmd}" Gesture="Ctrl+V" />
                       <KeyBinding Command="{Binding SubprotocolsTableVm.DuplicateCmd}" Gesture="Ctrl+D" />
                       <KeyBinding Command="{Binding SubprotocolsTableVm.DeleteCmd}" Gesture="Delete" />
                     </TreeDataGrid.KeyBindings-->
-                    <TreeDataGrid.ContextMenu>
-                      <ContextMenu>
-                        <MenuItem
-                              Header="{Binding i18n.ContextMenu.Cut}"
-                              Command="{Binding SubprotocolsTableVm.CutCmd}"
-                              InputGesture="Ctrl+X"/>
-                          <MenuItem
-                              Header="{Binding i18n.ContextMenu.Copy}"
-                              Command="{Binding SubprotocolsTableVm.CopyCmd}"
-                              InputGesture="Ctrl+C"/>
-                          <MenuItem
-                              Header="{Binding i18n.ContextMenu.Paste}"
-                              Command="{Binding SubprotocolsTableVm.PasteCmd}"
-                              InputGesture="Ctrl+V"
-                              IsEnabled="{Binding SubprotocolsTableVm.InnerClipboardArea.CanPaste}"/>
-                          <MenuItem
-                              Header="{Binding i18n.ContextMenu.Delete}"
-                              Command="{Binding SubprotocolsTableVm.DeleteCmd}"
-                              InputGesture="Delete"/>
-                      </ContextMenu>
-                    </TreeDataGrid.ContextMenu>
-                </TreeDataGrid>
-              </Grid>
-              <!-- CONNECTION COMPRESSION -->
-              <StackPanel
-                  x:Name="spWsConnReqCompression"
-                  Grid.Column="0"
-                  Grid.Row="1"
-                  Margin="0,12,0,12"
-                  IsVisible="{Binding ConnectionOptionSelectedIndex, 
+                                    <TreeDataGrid.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem
+                                                  Header="{Binding i18n.ContextMenu.Cut}"
+                                                  Command="{Binding SubprotocolsTableVm.CutCmd}"
+                                                  InputGesture="Ctrl+X"/>
+                                            <MenuItem
+                                                Header="{Binding i18n.ContextMenu.Copy}"
+                                                Command="{Binding SubprotocolsTableVm.CopyCmd}"
+                                                InputGesture="Ctrl+C"/>
+                                            <MenuItem
+                                                Header="{Binding i18n.ContextMenu.Paste}"
+                                                Command="{Binding SubprotocolsTableVm.PasteCmd}"
+                                                InputGesture="Ctrl+V"
+                                                IsEnabled="{Binding SubprotocolsTableVm.InnerClipboardArea.CanPaste}"/>
+                                            <MenuItem
+                                                Header="{Binding i18n.ContextMenu.Delete}"
+                                                Command="{Binding SubprotocolsTableVm.DeleteCmd}"
+                                                InputGesture="Delete"/>
+                                        </ContextMenu>
+                                    </TreeDataGrid.ContextMenu>
+                                </TreeDataGrid>
+                            </Grid>
+                            <!-- CONNECTION COMPRESSION -->
+                            <StackPanel
+                                x:Name="spWsConnReqCompression"
+                                Grid.Column="0"
+                                Grid.Row="1"
+                                Margin="0,12,0,12"
+                                IsVisible="{Binding ConnectionOptionSelectedIndex, 
                               Mode=OneWay,
                               Converter={StaticResource connectionOptionMatch}, 
                               ConverterParameter=Compression}">
-                <CheckBox
-                    x:Name="cbWsConnReqCompressionEnable"
-                    Content="{Binding i18n.WebSocketConnection.EnableCompression}"
-                    IsChecked="{Binding EnableCompression}"/>
+                                <CheckBox
+                                    x:Name="cbWsConnReqCompressionEnable"
+                                    Content="{Binding i18n.WebSocketConnection.EnableCompression}"
+                                    IsChecked="{Binding EnableCompression}"/>
 
-                <StackPanel
-                    x:Name="spWsConnReqCompressionOptions"
-                    IsVisible="{Binding EnableCompression}">
-                  <CheckBox
-                      Margin="0,12,0,0"
-                      Content="{Binding i18n.WebSocketConnection.CompressionClientContextTakeover}"
-                      IsChecked="{Binding CompressionClientContextTakeoverEnabled}"/>
+                                <StackPanel
+                                    x:Name="spWsConnReqCompressionOptions"
+                                    IsVisible="{Binding EnableCompression}">
+                                    <CheckBox
+                                        Margin="0,12,0,0"
+                                        Content="{Binding i18n.WebSocketConnection.CompressionClientContextTakeover}"
+                                        IsChecked="{Binding CompressionClientContextTakeoverEnabled}"/>
 
-                  <StackPanel
-                      Orientation="Horizontal"
-                      Margin="0,12,0,0">
-                    <TextBlock
-                        TextWrapping="Wrap"
-                        FontSize="14"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Center"
-                        Margin="0,0,6,0"
-                        Text="{Binding i18n.WebSocketConnection.CompressionClientMaxWindowBits}"/>
-                    <NumericUpDown
-                        Margin="6,0,0,0"
-                        VerticalAlignment="Center"
-                        Increment="1"
-                        Minimum="9"
-                        Maximum="15"
-                        Value="{Binding CompressionClientMaxWindowBits, Mode=TwoWay}"/>
-                  </StackPanel>
+                                    <StackPanel
+                                        Orientation="Horizontal"
+                                        Margin="0,12,0,0">
+                                        <TextBlock
+                                            TextWrapping="Wrap"
+                                            FontSize="14"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,6,0"
+                                            Text="{Binding i18n.WebSocketConnection.CompressionClientMaxWindowBits}"/>
+                                        <NumericUpDown
+                                            Margin="6,0,0,0"
+                                            VerticalAlignment="Center"
+                                            Increment="1"
+                                            Minimum="9"
+                                            Maximum="15"
+                                            Value="{Binding CompressionClientMaxWindowBits, Mode=TwoWay}"/>
+                                    </StackPanel>
 
-                  <CheckBox
-                      Margin="0,12,0,0"
-                      Content="{Binding i18n.WebSocketConnection.CompressionServerContextTakeover}"
-                      IsChecked="{Binding CompressionServerContextTakeoverEnabled}"/>
+                                    <CheckBox
+                                        Margin="0,12,0,0"
+                                        Content="{Binding i18n.WebSocketConnection.CompressionServerContextTakeover}"
+                                        IsChecked="{Binding CompressionServerContextTakeoverEnabled}"/>
 
-                  <StackPanel
-                      Orientation="Horizontal"
-                      Margin="0,12,0,0">
-                    <TextBlock
-                        TextWrapping="Wrap"
-                        FontSize="14"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Center"
-                        Margin="0,0,6,0"
-                        Text="{Binding i18n.WebSocketConnection.CompressionServerMaxWindowBits}"/>
-                    <NumericUpDown
-                        Margin="6,0,0,0"
-                        VerticalAlignment="Center"
-                        Increment="1"
-                        Minimum="9"
-                        Maximum="15"
-                        Value="{Binding CompressionServerMaxWindowBits, Mode=TwoWay}"/>
-                  </StackPanel>
+                                    <StackPanel
+                                        Orientation="Horizontal"
+                                        Margin="0,12,0,0">
+                                        <TextBlock
+                                            TextWrapping="Wrap"
+                                            FontSize="14"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,6,0"
+                                            Text="{Binding i18n.WebSocketConnection.CompressionServerMaxWindowBits}"/>
+                                        <NumericUpDown
+                                            Margin="6,0,0,0"
+                                            VerticalAlignment="Center"
+                                            Increment="1"
+                                            Minimum="9"
+                                            Maximum="15"
+                                            Value="{Binding CompressionServerMaxWindowBits, Mode=TwoWay}"/>
+                                    </StackPanel>
 
-                </StackPanel>
-              </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </TabItem>
+                    <!-- CONNECTION REQUEST AUTH -->
+                    <TabItem Name="tabItemConnectionRequestAuth">
+                        <TabItem.Header>
+                            <TextBlock
+                                Classes="TabItemHeader"
+                                Text="{Binding i18n.WebSocketConnection.CustomAuth}"/>
+                        </TabItem.Header>
+                        <v:RequestAuthView DataContext="{Binding RequestAuthDataCtx}"/>
+                    </TabItem>
+                    <!-- CONNECTION EXCEPTION -->
+                    <TabItem Name="tabItemConnectionRequestException">
+                        <TabItem.Header>
+                            <TextBlock
+                                Classes="TabItemHeader"
+                                Text="{Binding i18n.WebSocketConnection.ConnectionException}"/>
+                        </TabItem.Header>
+                        <Grid RowDefinitions="*, Auto">
+                            <!-- AcceptsReturn="True" allows for horizontal scrollbar -->
+                            <TextBox
+                                Name="tbConnectionException"
+                                Grid.Column="0"
+                                Grid.Row="0"
+                                Margin="0,12,0,12"
+                                Watermark="{Binding i18n.WebSocketConnection.ConnectionExceptionWatermark}"
+                                TextWrapping="NoWrap"
+                                IsReadOnly="True"
+                                HorizontalAlignment="Stretch"
+                                Classes="CodeTextBox"
+                                Text="{Binding ConnectionExceptionContent}"/>
+                            <Button
+                                Name="btDisableTlsVerification"
+                                Grid.Column="0"
+                                Grid.Row="1"
+                                Content="{Binding i18n.HttpResponse.DisableTlsVerification}"
+                                Margin="0,0,0,12"
+                                IsVisible="{Binding IsDisableTlsVerificationVisible}"
+                                Command="{Binding DisableTlsVerificationCmd}"
+                                Classes="Primary"/>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
             </Grid>
-          </TabItem>
-          <!-- CONNECTION REQUEST AUTH -->
-          <TabItem Name="tabItemConnectionRequestAuth">
-            <TabItem.Header>
-              <TextBlock
-                  Classes="TabItemHeader"
-                  Text="{Binding i18n.WebSocketConnection.CustomAuth}"/>
-            </TabItem.Header>
-            <v:RequestAuthView DataContext="{Binding RequestAuthDataCtx}"/>
-          </TabItem>
-          <!-- CONNECTION EXCEPTION -->
-          <TabItem Name="tabItemConnectionRequestException">
-            <TabItem.Header>
-              <TextBlock
-                  Classes="TabItemHeader"
-                  Text="{Binding i18n.WebSocketConnection.ConnectionException}"/>
-            </TabItem.Header>
-            <Grid RowDefinitions="*, Auto">
-              <!-- AcceptsReturn="True" allows for horizontal scrollbar -->
-              <TextBox
-                  Name="tbConnectionException"
-                  Grid.Column="0"
-                  Grid.Row="0"
-                  Margin="0,12,0,12"
-                  Watermark="{Binding i18n.WebSocketConnection.ConnectionExceptionWatermark}"
-                  TextWrapping="NoWrap"
-                  IsReadOnly="True"
-                  HorizontalAlignment="Stretch"
-                  Classes="CodeTextBox"
-                  Text="{Binding ConnectionExceptionContent}"/>
-              <Button
-                  Name="btDisableTlsVerification"
-                  Grid.Column="0"
-                  Grid.Row="1"
-                  Content="{Binding i18n.HttpResponse.DisableTlsVerification}"
-                  Margin="0,0,0,12"
-                  IsVisible="{Binding IsDisableTlsVerificationVisible}"
-                  Command="{Binding DisableTlsVerificationCmd}"
-                  Classes="Primary"/>
-            </Grid>
-          </TabItem>
-        </TabControl>
-      </Grid>
-      <Rectangle
-          Margin="12,0,12,0"
-          Grid.Column="1"
-          Grid.Row="0"
-          Width="6"
-          VerticalAlignment="Stretch"
-          Classes="Separator"/>
-      <!-- MESSAGES EXCHANGED -->
-      <Grid
-          Grid.Column="2"
-          Grid.Row="0"
-          RowDefinitions="Auto, * , Auto">
-
-        <TextBlock
-            Grid.Column="0"
-            Grid.Row="0"
-            Margin="12,28,12,0"
-            Classes="SectionTitle"
-            Text="{Binding i18n.WebSocketExchangedMessages.SectionTitle}"/>
-
-        <ListBox
-            Name="ExchangedMessagesList"
-            Grid.Column="0"
-            Grid.Row="1"
-            Margin="12,24,12,8"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            ItemsSource="{Binding ExchangedMessages, Mode=TwoWay}"
-            SelectedItem="{Binding SelectedExchangedMessage, Mode=TwoWay}">
-
-          <ListBox.ItemTemplate>
-            <DataTemplate>
-              <StackPanel
-                  Margin="0,2"
-                  Orientation="Vertical"
-                  MinHeight="40">
-                <TextBlock
-                    HorizontalAlignment="Left"
-                    Text="{Binding OriginDescription}"
-                    Classes.WebSocketMessageFromServerPrimary="{Binding IsFromServer}"
-                    Classes.WebSocketMessageFromClientPrimary="{Binding IsFromClient}"
-                    FontSize="14"
-                    FontWeight="Regular"
-                    TextAlignment="Left"
-                    TextWrapping="NoWrap"
-                    TextTrimming="CharacterEllipsis"/>
-                <TextBlock
-                    HorizontalAlignment="Left"
-                    Margin="4,4,4,0"
-                    MinWidth="160"
-                    Text="{Binding MessageSizeDescription}"
-                    Classes.WebSocketMessageFromServerSecondary="{Binding IsFromServer}"
-                    Classes.WebSocketMessageFromClientSecondary="{Binding IsFromClient}"
-                    FontFamily="{StaticResource CodeFontFamily}"
-                    FontSize="12"
-                    FontWeight="Light"
-                    TextAlignment="Left"
-                    TextWrapping="NoWrap"
-                    TextTrimming="CharacterEllipsis"/>
-                <TextBlock
-                    HorizontalAlignment="Stretch"
-                    Margin="4,4,4,2"
-                    Text="{Binding InstantDescription}"
-                    Classes.WebSocketMessageFromServerSecondary="{Binding IsFromServer}"
-                    Classes.WebSocketMessageFromClientSecondary="{Binding IsFromClient}"
-                    FontSize="12"
-                    FontWeight="Light"
-                    TextAlignment="Left"
-                    TextWrapping="NoWrap"
-                    TextTrimming="CharacterEllipsis"/>
-              </StackPanel>
-            </DataTemplate>
-          </ListBox.ItemTemplate>
-        </ListBox>
-
-        <StackPanel
-            Grid.Column="0"
-            Grid.Row="2"
-            Margin="12,8,12,24"
-            Orientation="Vertical">
-
-          <Grid ColumnDefinitions="Auto, *, Auto">
-
-            <Button
-                x:Name="btAddWsCliMsg"
-                Grid.Column="0"
-                Grid.Row="0"
-                Height="40"
-                Width="40"
-                HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center"
-                Padding="2"
-                Margin="0,0,12,0"
-                Classes="Primary"
-                ToolTip.Tip="{Binding i18n.WebSocketClientMessage.NewMessage}"
-                Command="{Binding AddNewWebSocketClientMessageCmd}">
-              <Button.Content>
-                <Image
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    Width="16"
-                    Height="16">
-                  <Image.Source>
-                    <DrawingImage Drawing="{StaticResource IconAdd}"/>
-                  </Image.Source>
-                </Image>
-              </Button.Content>
-            </Button>
-
-            <ComboBox
-                Name="cbWsMsgToSend"
+            <Rectangle
+                Margin="12,0,12,0"
                 Grid.Column="1"
                 Grid.Row="0"
-                Height="40"
-                HorizontalAlignment="Stretch"
-                ItemsSource="{Binding Items}"
-                SelectedIndex="{Binding MessageToSendSelectedIndex, Mode=TwoWay}">
-              <ComboBox.ItemTemplate>
-                <DataTemplate>
-                  <TextBlock Text="{Binding Name}"/>
-                </DataTemplate>
-              </ComboBox.ItemTemplate>
-            </ComboBox>
-
-            <Button
-                Name="btSendMessage"
+                Width="6"
+                VerticalAlignment="Stretch"
+                Classes="Separator"/>
+            <!-- MESSAGES EXCHANGED -->
+            <Grid
                 Grid.Column="2"
                 Grid.Row="0"
-                Height="40"
-                Width="72"
-                Margin="12,0,0,0"
-                HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center"
-                Command="{Binding SendMessageCmd}"
-                Content="{Binding i18n.WebSocketExchangedMessages.SendMessage}"
-                Classes="Primary"/>
+                RowDefinitions="Auto, *">
+        
+                <TextBlock
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Margin="12,28,12,0"
+                    Classes="SectionTitle"
+                    Text="{Binding ResponseStatusCodeElapsedTimeTitle}"/>
 
-          </Grid>
+                <TabControl
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Margin="12,24,12,12"
+                    TabStripPlacement="Top">
+                    <TabItem>
+                        <TabItem.Header>
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Classes="TabItemHeader"
+                                Text="{Binding i18n.WebSocketExchangedMessages.MessagesExchangedTab}"/>
+                        </TabItem.Header>
+                        <Grid
+                            RowDefinitions="* , Auto">
 
-          <ProgressBar
-              IsIndeterminate="True"
-              Margin="0,12,0,0"
-              HorizontalAlignment="Stretch"
-              IsVisible="{Binding IsSendingAMessage}"/>
+                            <ListBox
+                                Name="ExchangedMessagesList"
+                                Grid.Column="0"
+                                Grid.Row="0"
+                                Margin="0,24,0,8"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                ItemsSource="{Binding ExchangedMessages, Mode=TwoWay}"
+                                SelectedItem="{Binding SelectedExchangedMessage, Mode=TwoWay}">
 
-          <TextBlock
-              Name="tbMessageToSendError"
-              Margin="12,6,12,0"
-              Classes="ErrorMessage"
-              Text="{Binding InvalidClientMessageError}"
-              IsVisible="{Binding IsInvalidClientMessageErrorVisible}"/>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel
+                                            Margin="0,2"
+                                            Orientation="Vertical"
+                                            MinHeight="40">
+                                            <TextBlock
+                                                HorizontalAlignment="Left"
+                                                Text="{Binding OriginDescription}"
+                                                Classes.WebSocketMessageFromServerPrimary="{Binding IsFromServer}"
+                                                Classes.WebSocketMessageFromClientPrimary="{Binding IsFromClient}"
+                                                FontSize="14"
+                                                FontWeight="Regular"
+                                                TextAlignment="Left"
+                                                TextWrapping="NoWrap"
+                                                TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock
+                                                HorizontalAlignment="Left"
+                                                Margin="4,4,4,0"
+                                                MinWidth="160"
+                                                Text="{Binding MessageSizeDescription}"
+                                                Classes.WebSocketMessageFromServerSecondary="{Binding IsFromServer}"
+                                                Classes.WebSocketMessageFromClientSecondary="{Binding IsFromClient}"
+                                                FontFamily="{StaticResource CodeFontFamily}"
+                                                FontSize="12"
+                                                FontWeight="Light"
+                                                TextAlignment="Left"
+                                                TextWrapping="NoWrap"
+                                                TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock
+                                                HorizontalAlignment="Stretch"
+                                                Margin="4,4,4,2"
+                                                Text="{Binding InstantDescription}"
+                                                Classes.WebSocketMessageFromServerSecondary="{Binding IsFromServer}"
+                                                Classes.WebSocketMessageFromClientSecondary="{Binding IsFromClient}"
+                                                FontSize="12"
+                                                FontWeight="Light"
+                                                TextAlignment="Left"
+                                                TextWrapping="NoWrap"
+                                                TextTrimming="CharacterEllipsis"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
 
-        </StackPanel>
-      </Grid>
-      <Rectangle
-          Margin="12,0,12,0"
-          Grid.Column="3"
-          Grid.Row="0"
-          Width="6"
-          VerticalAlignment="Stretch"
-          Classes="Separator"/>
-      <!-- MESSAGE DETAIL -->
-      <Grid
-          Grid.Column="4"
-          Grid.Row="0"
-          RowDefinitions="Auto, Auto, * , Auto">
+                            <StackPanel
+                                Grid.Column="0"
+                                Grid.Row="1"
+                                Margin="0,8,0,24"
+                                Orientation="Vertical">
 
-        <TextBlock
-            Grid.Column="0"
-            Grid.Row="0"
-            Margin="12,28,12,0"
-            Classes="SectionTitle"
-            Text="{Binding i18n.WebSocketExchangedMessageDetail.SectionTitle}"/>
+                                <Grid ColumnDefinitions="Auto, *, Auto">
 
-        <TextBox
-            Name="tbMessageDetailType"
-            Grid.Column="0"
-            Grid.Row="1"
-            Margin="12,24,12,6"
-            Height="40"
-            Text="{Binding SelectedExchangedMessageType}"
-            Watermark="{Binding i18n.WebSocketExchangedMessageDetail.MessageTypeWatermark}"
-            Classes="SingleLine"
-            VerticalContentAlignment="Center"/>
+                                    <Button
+                                        x:Name="btAddWsCliMsg"
+                                        Grid.Column="0"
+                                        Grid.Row="0"
+                                        Height="40"
+                                        Width="40"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Padding="2"
+                                        Margin="0,0,12,0"
+                                        Classes="Primary"
+                                        ToolTip.Tip="{Binding i18n.WebSocketClientMessage.NewMessage}"
+                                        Command="{Binding AddNewWebSocketClientMessageCmd}">
+                                        <Button.Content>
+                                            <Image
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
+                                                Width="16"
+                                                Height="16">
+                                                <Image.Source>
+                                                    <DrawingImage Drawing="{StaticResource IconAdd}"/>
+                                                </Image.Source>
+                                            </Image>
+                                        </Button.Content>
+                                    </Button>
 
-        <!-- AcceptsReturn="True" allows for horizontal scrollbar -->
-        <AvaloniaEdit:TextEditor
-            Name="SelectedExchangedMessageContentEditor"
-            Grid.Column="0"
-            Grid.Row="2"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Margin="12,6,12,24"
-            IsReadOnly="True"
-            Document="{Binding SelectedExchangedMessageContentTextDocument}"/>
+                                    <ComboBox
+                                        Name="cbWsMsgToSend"
+                                        Grid.Column="1"
+                                        Grid.Row="0"
+                                        Height="40"
+                                        HorizontalAlignment="Stretch"
+                                        ItemsSource="{Binding Items}"
+                                        SelectedIndex="{Binding MessageToSendSelectedIndex, Mode=TwoWay}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Name}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
 
-        <Button
-            Grid.Column="0"
-            Grid.Row="3"
-            Content="{Binding i18n.WebSocketExchangedMessageDetail.SaveToFile}"
-            ToolTip.Tip="{Binding i18n.WebSocketExchangedMessageDetail.SaveToFileToolTip}"
-            ToolTip.Placement="Top"
-            Margin="12,0,12,24"
-            IsVisible="{Binding IsSaveSelectedExchangedMessageToFileVisible}"
-            Command="{Binding SaveSelectedExchangedMessageToFileCmd}"
-            Classes="Primary"/>
-      </Grid>
+                                    <Button
+                                        Name="btSendMessage"
+                                        Grid.Column="2"
+                                        Grid.Row="0"
+                                        Height="40"
+                                        Width="72"
+                                        Margin="12,0,0,0"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Command="{Binding SendMessageCmd}"
+                                        Content="{Binding i18n.WebSocketExchangedMessages.SendMessage}"
+                                        Classes="Primary"/>
+
+                                </Grid>
+
+                                <ProgressBar
+                                    IsIndeterminate="True"
+                                    Margin="0,12,0,0"
+                                    HorizontalAlignment="Stretch"
+                                    IsVisible="{Binding IsSendingAMessage}"/>
+
+                                <TextBlock
+                                    Name="tbMessageToSendError"
+                                    Margin="12,6,12,0"
+                                    Classes="ErrorMessage"
+                                    Text="{Binding InvalidClientMessageError}"
+                                    IsVisible="{Binding IsInvalidClientMessageErrorVisible}"/>
+
+                            </StackPanel>
+                        </Grid>
+                    </TabItem>
+                    <TabItem>
+                        <TabItem.Header>
+                            <TextBlock
+                                Classes="TabItemHeader"
+                                VerticalAlignment="Center"
+                                Text="{Binding i18n.WebSocketExchangedMessages.HeadersTab}"/>
+                        </TabItem.Header>
+                        <TreeDataGrid
+                                    Name="dgWebsocketResHeaders"
+                                    Margin="-12,12,-12,12"
+                                    VerticalAlignment="Stretch"
+                                    Source="{Binding ConnectionResponseHeadersTableVm.Source}"
+                                    CanUserResizeColumns="True">
+                            <TreeDataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem
+                                        Header="{Binding i18n.ContextMenu.Copy}"
+                                        Command="{Binding ConnectionResponseHeadersTableVm.CopyCmd}"
+                                        InputGesture="Ctrl+C"/>
+                                </ContextMenu>
+                            </TreeDataGrid.ContextMenu>
+                        </TreeDataGrid>
+                    </TabItem>
+                </TabControl>
+                
+            </Grid>
+            <Rectangle
+                Margin="12,0,12,0"
+                Grid.Column="3"
+                Grid.Row="0"
+                Width="6"
+                VerticalAlignment="Stretch"
+                Classes="Separator"/>
+            <!-- MESSAGE DETAIL -->
+            <Grid
+                Grid.Column="4"
+                Grid.Row="0"
+                RowDefinitions="Auto, Auto, * , Auto">
+
+                <TextBlock
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Margin="12,28,12,0"
+                    Classes="SectionTitle"
+                    Text="{Binding i18n.WebSocketExchangedMessageDetail.SectionTitle}"/>
+
+                <TextBox
+                    Name="tbMessageDetailType"
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Margin="12,24,12,6"
+                    Height="40"
+                    Text="{Binding SelectedExchangedMessageType}"
+                    Watermark="{Binding i18n.WebSocketExchangedMessageDetail.MessageTypeWatermark}"
+                    Classes="SingleLine"
+                    VerticalContentAlignment="Center"/>
+
+                <!-- AcceptsReturn="True" allows for horizontal scrollbar -->
+                <AvaloniaEdit:TextEditor
+                    Name="SelectedExchangedMessageContentEditor"
+                    Grid.Column="0"
+                    Grid.Row="2"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Margin="12,6,12,24"
+                    IsReadOnly="True"
+                    Document="{Binding SelectedExchangedMessageContentTextDocument}"/>
+
+                <Button
+                    Grid.Column="0"
+                    Grid.Row="3"
+                    Content="{Binding i18n.WebSocketExchangedMessageDetail.SaveToFile}"
+                    ToolTip.Tip="{Binding i18n.WebSocketExchangedMessageDetail.SaveToFileToolTip}"
+                    ToolTip.Placement="Top"
+                    Margin="12,0,12,24"
+                    IsVisible="{Binding IsSaveSelectedExchangedMessageToFileVisible}"
+                    Command="{Binding SaveSelectedExchangedMessageToFileCmd}"
+                    Classes="Primary"/>
+            </Grid>
+        </Grid>
     </Grid>
-  </Grid>
 </UserControl>
