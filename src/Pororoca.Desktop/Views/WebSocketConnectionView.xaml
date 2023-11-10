@@ -297,6 +297,7 @@
                     Grid.Row="1"
                     Margin="0,12,0,0"
                     VerticalAlignment="Stretch"
+                    AutoDragDropRows="True"
                     Source="{Binding ConnectionRequestHeadersTableVm.Source}"
                     CanUserResizeColumns="True">
                     <!--DataGrid.KeyBindings>
@@ -377,6 +378,7 @@
                     Grid.Row="1"
                     Margin="0,12,0,0"
                     VerticalAlignment="Stretch"
+                    AutoDragDropRows="True"
                     Source="{Binding SubprotocolsTableVm.Source}"
                     CanUserResizeColumns="True">
                     <!--DataGrid.KeyBindings>

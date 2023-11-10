@@ -244,6 +244,7 @@
                   Grid.Row="1"
                   Margin="0,12,0,0"
                   VerticalAlignment="Stretch"
+                  AutoDragDropRows="True"
                   Source="{Binding RequestHeadersTableVm.Source}"
                   CanUserResizeColumns="True">
                   <!--DataGrid.KeyBindings>
@@ -457,6 +458,7 @@
                     Grid.Column="0"
                     Grid.Row="1"
                     Margin="-12,12,-12,0"
+                    AutoDragDropRows="True"
                     Source="{Binding UrlEncodedParamsTableVm.Source}"
                     CanUserResizeColumns="True">
                     <!--DataGrid.KeyBindings>
@@ -530,6 +532,7 @@
                     Grid.Column="0"
                     Grid.Row="1"
                     Margin="-12,24,-12,0"
+                    AutoDragDropRows="True"
                     Source="{Binding FormDataParamsTableVm.Source}"
                     CanUserResizeColumns="True">
                   <!--DataGrid.KeyBindings>
@@ -667,6 +670,7 @@
                 Name="dgResHeaders"
                 Margin="-12,12,-12,12"
                 VerticalAlignment="Stretch"
+                AutoDragDropRows="False"
                 Source="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.Source}"
                 CanUserResizeColumns="True">
               <!--DataGrid.KeyBindings>
@@ -804,6 +808,7 @@
                 Name="dgResCaptures"
                 Margin="-12,12,-12,12"
                 VerticalAlignment="Stretch"
+                AutoDragDropRows="True"
                 Source="{Binding ResCapturesTableVm.Source}"
                 CanUserResizeColumns="True">
               <!--DataGrid.KeyBindings>
