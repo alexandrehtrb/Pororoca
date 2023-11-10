@@ -47,7 +47,7 @@ public sealed partial class HeadersCutCopyPasteDeleteUITest : UITest
         await HttpRobot.EditRequestHeaderAt(1, true, "k4", "v4");
 
         // copy and paste
-        await HttpRobot.SelectRequestHeaders(HttpRobot.ReqHeadersVm.Items.ToArray());
+        await HttpRobot.SelectRequestHeaders(0, 1);
         await HttpRobot.CopySelectedRequestHeaders();
         await TreeRobot.Select("COL1/HTTP1");
         await HttpRobot.PasteRequestHeaders();
@@ -60,7 +60,7 @@ public sealed partial class HeadersCutCopyPasteDeleteUITest : UITest
         Assert(headers.Contains(new(true, "k4", "v4")));
 
         // cut and paste
-        await HttpRobot.SelectRequestHeaders(HttpRobot.ReqHeadersVm.Items[0], HttpRobot.ReqHeadersVm.Items[1]);
+        await HttpRobot.SelectRequestHeaders(0, 1);
         await HttpRobot.CutSelectedRequestHeaders();
 
         headers = HttpRobot.ReqHeadersVm.Items.Select(x => x.ToKeyValueParam()).ToArray();
@@ -79,7 +79,7 @@ public sealed partial class HeadersCutCopyPasteDeleteUITest : UITest
         Assert(headers.Contains(new(true, "k2", "v2")));
 
         // delete
-        await HttpRobot.SelectRequestHeaders(HttpRobot.ReqHeadersVm.Items[0], HttpRobot.ReqHeadersVm.Items[1]);
+        await HttpRobot.SelectRequestHeaders(0, 1);
         await HttpRobot.DeleteSelectedRequestHeaders();
 
         headers = HttpRobot.ReqHeadersVm.Items.Select(x => x.ToKeyValueParam()).ToArray();

@@ -189,7 +189,7 @@ public sealed class HttpRequestValidationsUITest : UITest
         // invalid or blank content-type
         await HttpRobot.SetFormDataBody(Array.Empty<PororocaHttpRequestFormDataParam>());
         await HttpRobot.ReqBodyFormDataAddTextParam.ClickOn();
-        var paramVm = HttpRobot.ReqBodyFormDataParams.ItemsSource.Cast<FormDataParamViewModel>().First();
+        var paramVm = HttpRobot.ReqBodyFormDataParams.Source!.Items!.Cast<FormDataParamViewModel>().First();
         
         paramVm.ContentType = string.Empty;
         await UITestActions.WaitAfterActionAsync();

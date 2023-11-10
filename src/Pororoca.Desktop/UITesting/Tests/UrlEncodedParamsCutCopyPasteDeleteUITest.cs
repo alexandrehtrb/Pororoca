@@ -49,7 +49,7 @@ public sealed partial class UrlEncodedParamsCutCopyPasteDeleteUITest : UITest
         await HttpRobot.EditUrlEncodedParamAt(1, true, "k4", "v4");
 
         // copy and paste
-        await HttpRobot.SelectUrlEncodedParams(HttpRobot.UrlEncodedParamsVm.Items.ToArray());
+        await HttpRobot.SelectUrlEncodedParams(0, 1);
         await HttpRobot.CopySelectedUrlEncodedParams();
         await TreeRobot.Select("COL1/HTTP1");
         await HttpRobot.PasteUrlEncodedParams();
@@ -62,7 +62,7 @@ public sealed partial class UrlEncodedParamsCutCopyPasteDeleteUITest : UITest
         Assert(ueps.Contains(new(true, "k4", "v4")));
 
         // cut and paste
-        await HttpRobot.SelectUrlEncodedParams(HttpRobot.UrlEncodedParamsVm.Items[0], HttpRobot.UrlEncodedParamsVm.Items[1]);
+        await HttpRobot.SelectUrlEncodedParams(0, 1);
         await HttpRobot.CutSelectedUrlEncodedParams();
 
         ueps = HttpRobot.UrlEncodedParamsVm.Items.Select(x => x.ToKeyValueParam()).ToArray();
@@ -81,7 +81,7 @@ public sealed partial class UrlEncodedParamsCutCopyPasteDeleteUITest : UITest
         Assert(ueps.Contains(new(true, "k2", "v2")));
 
         // delete
-        await HttpRobot.SelectUrlEncodedParams(HttpRobot.UrlEncodedParamsVm.Items[0], HttpRobot.UrlEncodedParamsVm.Items[1]);
+        await HttpRobot.SelectUrlEncodedParams(0, 1);
         await HttpRobot.DeleteSelectedUrlEncodedParams();
 
         ueps = HttpRobot.UrlEncodedParamsVm.Items.Select(x => x.ToKeyValueParam()).ToArray();

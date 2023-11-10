@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Controls.Selection;
 using Pororoca.Desktop.ViewModels.DataGrids;
 
 namespace Pororoca.Desktop.UITesting.Robots;
@@ -7,7 +8,7 @@ internal interface IVariablesEditorRobot
 {
     Task EditVariableAt(int index, bool enabled, string key, string value, bool isSecret = false);
     Task SetVariables(IEnumerable<VariableViewModel> vars);
-    Task SelectVariables(params VariableViewModel[] vars);
+    Task SelectVariables(params int[] indexes);
     Task CutSelectedVariables();
     Task CopySelectedVariables();
     Task PasteVariables();
@@ -23,9 +24,9 @@ internal interface IVariablesEditorRobot
         await UITestActions.WaitAfterActionAsync();
     }
 
-    protected static async Task EditVariableAt(DataGrid variablesDg, int index, bool enabled, string key, string value, bool isSecret = false)
+    protected static async Task EditVariableAt(TreeDataGrid variablesDg, int index, bool enabled, string key, string value, bool isSecret = false)
     {
-        var colVarsVms = variablesDg.ItemsSource.Cast<VariableViewModel>();
+        var colVarsVms = variablesDg.Source!.Items.Cast<VariableViewModel>();
         var colVar = colVarsVms.ElementAt(index);
         colVar.Enabled = enabled;
         colVar.Key = key;
@@ -34,10 +35,14 @@ internal interface IVariablesEditorRobot
         await UITestActions.WaitAfterActionAsync();
     }
 
-    protected static async Task SelectVariables(DataGrid variablesDg, params VariableViewModel[] vars)
+    protected static async Task SelectVariables(TreeDataGrid variablesDg, params int[] indexes)
     {
-        variablesDg.SelectedItems.Clear();
-        foreach (var v in vars) variablesDg.SelectedItems.Add(v);
+        var selection = (TreeDataGridRowSelectionModel<VariableViewModel>)variablesDg.Source!.Selection!;
+        foreach (int i in indexes)
+        {
+            // needs to be one at a time, weird bug in TreeDataGrid
+            selection.Select(new(i));
+        }
         await UITestActions.WaitAfterActionAsync();
     }
 
