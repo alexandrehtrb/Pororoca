@@ -63,9 +63,10 @@ public sealed class HttpResponseCapturesDataGridViewModel : BaseDataGridWithOper
             x => x.HeaderNameOrBodyPath, (x, v) => x.HeaderNameOrBodyPath = v ?? string.Empty,
             width: new(0.30, GridUnitType.Star));
 
-        var capturedValueColumn = new TextColumn<HttpResponseCaptureViewModel, string>(
+        var capturedValueColumn = new TemplateColumn<HttpResponseCaptureViewModel>(
             Localizer.Instance.HttpResponse.CaptureCapturedValue,
-            x => x.CapturedValue, (x, v) => x.CapturedValue = v ?? string.Empty,
+            "resCaptureCapturedValueCell",
+            "resCaptureCapturedValueEditingCell",
             width: new(0.22, GridUnitType.Star));
 
         var removeCaptureColumn = new TemplateColumn<HttpResponseCaptureViewModel>(

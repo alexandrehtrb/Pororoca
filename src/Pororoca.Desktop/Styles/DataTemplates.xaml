@@ -81,4 +81,14 @@
           Classes="Trash">
       </Button>
   </DataTemplate>
+  <DataTemplate x:Key="resCaptureCapturedValueCell" x:DataType="vmdg:HttpResponseCaptureViewModel">
+      <TextBlock
+          Text="{Binding CapturedValue}"
+          VerticalAlignment="Center"
+          Padding="8 4"          
+          Foreground="{DynamicResource ResponseCapturedValueTextBrush}"/>
+  </DataTemplate>
+  <DataTemplate x:Key="resCaptureCapturedValueEditingCell" x:DataType="vmdg:HttpResponseCaptureViewModel">
+      <TextBox Text="{Binding CapturedValue}"/>
+  </DataTemplate>
 </ResourceDictionary>
