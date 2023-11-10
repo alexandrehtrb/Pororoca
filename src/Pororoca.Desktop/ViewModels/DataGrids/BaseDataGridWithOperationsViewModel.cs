@@ -32,7 +32,14 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
         DuplicateCmd = ReactiveCommand.Create(DuplicateSelected);
         DeleteCmd = ReactiveCommand.Create(DeleteSelected);
 
-        Items = new(initialValues is null ? Array.Empty<VM>() : initialValues.Select(ToVm));
+        Items = new(); // this is necessary because ToVm() uses Items property, which cannot be null
+        if (initialValues is not null)
+        {
+            foreach (var v in initialValues)
+            {
+                Items.Add(ToVm(v));
+            }
+        }
         Source = GenerateDataGridSource();
         Source.RowSelection!.SingleSelect = false;
     }
