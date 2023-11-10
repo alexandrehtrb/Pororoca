@@ -189,6 +189,10 @@
         Value="Light"/>
   </Style>
 
+  <Style Selector=":is(TreeDataGridCell)">
+    <Setter Property="MinHeight" Value="32"/>
+  </Style>
+
   <Style Selector="TreeDataGridCheckBoxCell">
     <Setter
         Property="TextBlock.Padding"
