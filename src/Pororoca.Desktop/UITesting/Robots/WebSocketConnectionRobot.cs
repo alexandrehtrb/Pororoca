@@ -10,7 +10,7 @@ public sealed class WebSocketConnectionRobot : BaseNamedRobot
 {
     public WebSocketConnectionRobot(WebSocketConnectionView rootView) : base(rootView) { }
 
-    internal TreeDataGrid ConnectionRequestHeaders => GetChildView<TreeDataGrid>("dgWsConnectionReqHeaders")!;
+    internal DataGrid ConnectionRequestHeaders => GetChildView<DataGrid>("dgWsConnectionReqHeaders")!;
     internal Button AddConnectionRequestHeader => GetChildView<Button>("btAddConnectionRequestHeader")!;
     internal Button AddSubprotocol => GetChildView<Button>("btAddSubprotocol")!;
     internal Button AddClientMessage => GetChildView<Button>("btAddWsCliMsg")!;
@@ -25,7 +25,7 @@ public sealed class WebSocketConnectionRobot : BaseNamedRobot
     internal ComboBoxItem ConnectionRequestOptionCompression => GetChildView<ComboBoxItem>("cbiWsScrReqOptionCompression")!;
     internal ComboBoxItem ConnectionRequestOptionHeaders => GetChildView<ComboBoxItem>("cbiWsScrReqOptionHeaders")!;
     internal ComboBoxItem ConnectionRequestOptionSubprotocols => GetChildView<ComboBoxItem>("cbiWsScrReqOptionSubprotocols")!;
-    internal TreeDataGrid Subprotocols => GetChildView<TreeDataGrid>("dbSubprotocols")!;
+    internal DataGrid Subprotocols => GetChildView<DataGrid>("dbSubprotocols")!;
     internal ListBox ExchangedMessages => GetChildView<ListBox>("ExchangedMessagesList")!;
     internal TextEditor MessageDetailContent => GetChildView<TextEditor>("SelectedExchangedMessageContentEditor")!;
     internal TabControl TabControlConnectionRequest => GetChildView<TabControl>("tabControlConnectionRequest")!;

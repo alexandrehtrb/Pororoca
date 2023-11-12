@@ -45,7 +45,7 @@ public sealed partial class FormDataParamsCutCopyPasteDeleteUITest : UITest
         await HttpRobot.SetFormDataBody(new[] { p3, p4 });
 
         // copy and paste
-        await HttpRobot.SelectFormDataParams(0, 1);
+        await HttpRobot.SelectFormDataParams(HttpRobot.FormDataParamsVm.Items.ToArray());
         await HttpRobot.CopySelectedFormDataParams();
         await TreeRobot.Select("COL1/HTTP1");
         await HttpRobot.PasteFormDataParams();
@@ -58,7 +58,7 @@ public sealed partial class FormDataParamsCutCopyPasteDeleteUITest : UITest
         Assert(fps.Contains(p4));
 
         // cut and paste
-        await HttpRobot.SelectFormDataParams(0, 1);
+        await HttpRobot.SelectFormDataParams(HttpRobot.FormDataParamsVm.Items[0], HttpRobot.FormDataParamsVm.Items[1]);
         await HttpRobot.CutSelectedFormDataParams();
 
         fps = HttpRobot.FormDataParamsVm.Items.Select(x => x.ToFormDataParam()).ToArray();
@@ -77,7 +77,7 @@ public sealed partial class FormDataParamsCutCopyPasteDeleteUITest : UITest
         Assert(fps.Contains(p2));
 
         // delete
-        await HttpRobot.SelectFormDataParams(0, 1);
+        await HttpRobot.SelectFormDataParams(HttpRobot.FormDataParamsVm.Items[0], HttpRobot.FormDataParamsVm.Items[1]);
         await HttpRobot.DeleteSelectedFormDataParams();
 
         fps = HttpRobot.FormDataParamsVm.Items.Select(x => x.ToFormDataParam()).ToArray();

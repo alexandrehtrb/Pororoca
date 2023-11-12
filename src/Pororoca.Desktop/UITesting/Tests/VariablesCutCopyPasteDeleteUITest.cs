@@ -48,7 +48,7 @@ public sealed partial class VariablesCutCopyPasteDeleteUITest : UITest
         await EnvRobot.EditVariableAt(2, false, "EV3", "ev3_value", true);
 
         // copy from env to col vars
-        await EnvRobot.SelectVariables(1, 2);
+        await EnvRobot.SelectVariables(EnvRobot.VariablesVm.Items[1], EnvRobot.VariablesVm.Items[2]);
         await EnvRobot.CopySelectedVariables();
         await TreeRobot.Select("COL1/VARS");
         await ColVarsRobot.PasteVariables();
@@ -62,7 +62,7 @@ public sealed partial class VariablesCutCopyPasteDeleteUITest : UITest
         Assert(colVars.Contains(new PororocaVariable(false, "EV3", "ev3_value", true)));
 
         // delete col vars
-        await ColVarsRobot.SelectVariables(3, 4);
+        await ColVarsRobot.SelectVariables(ColVarsRobot.VariablesVm.Items[3], ColVarsRobot.VariablesVm.Items[4]);
         await ColVarsRobot.DeleteSelectedVariables();
 
         colVars = ColVarsRobot.VariablesVm.Items.Select(x => x.ToVariable()).ToArray();
@@ -72,7 +72,7 @@ public sealed partial class VariablesCutCopyPasteDeleteUITest : UITest
         Assert(colVars.Contains(new PororocaVariable(true, "CV3", "cv3_value", true)));
 
         // cut from col vars to env
-        await ColVarsRobot.SelectVariables(0, 2);
+        await ColVarsRobot.SelectVariables(ColVarsRobot.VariablesVm.Items[0], ColVarsRobot.VariablesVm.Items[2]);
         await ColVarsRobot.CutSelectedVariables();
 
         colVars = ColVarsRobot.VariablesVm.Items.Select(x => x.ToVariable()).ToArray();
@@ -91,7 +91,7 @@ public sealed partial class VariablesCutCopyPasteDeleteUITest : UITest
         Assert(envVars.Contains(new PororocaVariable(true, "CV3", "cv3_value", true)));
 
         // delete env vars
-        await EnvRobot.SelectVariables(0, 1, 2, 3, 4);
+        await EnvRobot.SelectVariables(EnvRobot.VariablesVm.Items.ToArray());
         await EnvRobot.DeleteSelectedVariables();
         envVars = EnvRobot.VariablesVm.Items.Select(x => x.ToVariable()).ToArray();
         Assert(envVars.Length == 0);

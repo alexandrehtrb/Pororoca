@@ -99,13 +99,14 @@
       </Image>
     </Button>
 
-    <TreeDataGrid
+    <DataGrid
         Name="dgVariables"
         Grid.Column="0"
         Grid.Row="3"
         Margin="0,12,0,0"
-        AutoDragDropRows="True"
-        Source="{Binding VariablesTableVm.Source}"
+        AutoGenerateColumns="False"
+        ItemsSource="{Binding VariablesTableVm.Items}"
+        SelectionChanged="OnSelectedVariablesChanged"
         CanUserResizeColumns="True">
         <!--DataGrid.KeyBindings>
           <KeyBinding Command="{Binding VariablesTableVm.CutCmd}" Gesture="Ctrl+X" />
@@ -114,7 +115,7 @@
           <KeyBinding Command="{Binding VariablesTableVm.DuplicateCmd}" Gesture="Ctrl+D" />
           <KeyBinding Command="{Binding VariablesTableVm.DeleteCmd}" Gesture="Delete" />
         </DataGrid.KeyBindings-->
-        <TreeDataGrid.ContextMenu>
+        <DataGrid.ContextMenu>
           <ContextMenu>
             <MenuItem
                   Header="{Binding i18n.ContextMenu.Cut}"
@@ -134,8 +135,86 @@
                   Command="{Binding VariablesTableVm.DeleteCmd}"
                   InputGesture="Delete"/>
           </ContextMenu>
-        </TreeDataGrid.ContextMenu>
-    </TreeDataGrid>
+        </DataGrid.ContextMenu>
+      <DataGrid.Columns>
+        <DataGridCheckBoxColumn
+            Width="*"
+            Binding="{Binding Enabled}">
+          <DataGridCheckBoxColumn.Header>
+            <TextBlock Text="{Binding i18n.Environment.VariableEnabled}"/>
+          </DataGridCheckBoxColumn.Header>
+        </DataGridCheckBoxColumn>
+        <DataGridTextColumn
+            Width="2*"
+            Binding="{Binding Key}">
+          <DataGridTextColumn.Header>
+            <TextBlock Text="{Binding i18n.Environment.VariableName}"/>
+          </DataGridTextColumn.Header>
+        </DataGridTextColumn>
+        <DataGridTextColumn
+            Width="2*"
+            Binding="{Binding Value}">
+          <DataGridTextColumn.Header>
+            <TextBlock Text="{Binding i18n.Environment.VariableValue}"/>
+          </DataGridTextColumn.Header>
+        </DataGridTextColumn>
+        <DataGridCheckBoxColumn
+            Width="*"
+            Binding="{Binding IsSecret}">
+          <DataGridCheckBoxColumn.Header>
+            <TextBlock Text="{Binding i18n.Environment.VariableIsSecret}"/>
+          </DataGridCheckBoxColumn.Header>
+        </DataGridCheckBoxColumn>
+        <DataGridTemplateColumn
+            Width="0.2*"
+            Header="">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <Button
+                  Command="{Binding RemoveVariableCmd}"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Center"
+                  HorizontalContentAlignment="Center"
+                  VerticalContentAlignment="Center"
+                  Classes="Trash">
+              </Button>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn
+            Width="0.2*"
+            Header="">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <Button
+                  Command="{Binding MoveVariableUpCmd}"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Center"
+                  HorizontalContentAlignment="Center"
+                  VerticalContentAlignment="Center"
+                  Classes="MoveUp">
+              </Button>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn
+            Width="0.2*"
+            Header="">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <Button
+                  Command="{Binding MoveVariableDownCmd}"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Center"
+                  HorizontalContentAlignment="Center"
+                  VerticalContentAlignment="Center"
+                  Classes="MoveDown">
+              </Button>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+      </DataGrid.Columns>
+    </DataGrid>
 
     <TextBlock
         Grid.Column="0"

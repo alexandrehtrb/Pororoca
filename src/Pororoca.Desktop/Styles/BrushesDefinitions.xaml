@@ -52,7 +52,7 @@
     <SolidColorBrush x:Key="MainWindowSidebarTabItemForegroundBrush" Color="{DynamicResource SystemBaseMediumHighColor}"/>
     <SolidColorBrush x:Key="MainWindowSidebarTabItemHoverForegroundBrush" Color="{DynamicResource SystemBaseHighColor}"/>
     <SolidColorBrush x:Key="MainWindowSidebarTabItemSelectedForegroundBrush" Color="{DynamicResource SystemBaseHighColor}"/>
-    <SolidColorBrush x:Key="TreeDataGridColumnHeaderForegroundBrush" Color="{DynamicResource SystemBaseMediumHighColor}"/>
+    <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrush" Color="{DynamicResource SystemBaseMediumHighColor}"/>
     <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked" Color="{DynamicResource SystemBaseHighColor}"/>
     <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPointerOver" Color="{DynamicResource SystemBaseHighColor}"/>
     <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPressed" Color="{DynamicResource SystemBaseLowColor}"/>

@@ -103,7 +103,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST HEADERS
 
-    public RequestHeadersDataGridViewModel RequestHeadersTableVm { get; }
+    public KeyValueParamsDataGridViewModel RequestHeadersTableVm { get; }
 
     #endregion
 
@@ -183,7 +183,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST BODY URL ENCODED
 
-    public UrlEncodedParamsDataGridViewModel UrlEncodedParamsTableVm { get; }
+    public KeyValueParamsDataGridViewModel UrlEncodedParamsTableVm { get; }
 
     #endregion
 

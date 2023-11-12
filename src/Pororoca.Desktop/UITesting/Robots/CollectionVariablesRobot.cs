@@ -10,7 +10,7 @@ public sealed class CollectionVariablesRobot : BaseRobot, IVariablesEditorRobot
     public CollectionVariablesRobot(CollectionVariablesView rootView) : base(rootView){}
 
     internal Button AddVariable => GetChildView<Button>("btAddVariable")!;
-    public TreeDataGrid Variables => GetChildView<TreeDataGrid>("dgVariables")!;
+    public DataGrid Variables => GetChildView<DataGrid>("dgVariables")!;
     internal VariablesDataGridViewModel VariablesVm => ((CollectionVariablesViewModel)RootView!.DataContext!).VariablesTableVm;
 
     public Task SetVariables(IEnumerable<VariableViewModel> vars)
@@ -22,8 +22,8 @@ public sealed class CollectionVariablesRobot : BaseRobot, IVariablesEditorRobot
     public Task EditVariableAt(int index, bool enabled, string key, string value, bool isSecret = false) =>
         IVariablesEditorRobot.EditVariableAt(Variables, index, enabled, key, value, isSecret);
     
-    public Task SelectVariables(params int[] indexes) =>
-        IVariablesEditorRobot.SelectVariables(Variables, indexes);
+    public Task SelectVariables(params VariableViewModel[] vars) =>
+        IVariablesEditorRobot.SelectVariables(Variables, vars);
     
     public Task CutSelectedVariables() => IVariablesEditorRobot.CutSelectedVariables(VariablesVm);
 

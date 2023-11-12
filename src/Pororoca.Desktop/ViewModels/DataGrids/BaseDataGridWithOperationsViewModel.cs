@@ -1,20 +1,20 @@
+using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Reactive;
-using Avalonia.Controls;
 using Pororoca.Desktop.HotKeys;
 using ReactiveUI;
 
 namespace Pororoca.Desktop.ViewModels.DataGrids;
 
 public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
-    where VM : class
+    where VM : notnull
     where D : notnull, new()
 {
     public abstract SimpleClipboardArea<D> InnerClipboardArea { get; }
 
     public ObservableCollection<VM> Items { get; }
 
-    public FlatTreeDataGridSource<VM> Source { get; }
+    public ConcurrentDictionary<VM, bool> SelectedItems { get; }
 
     public ReactiveCommand<Unit, Unit> AddNewCmd { get; }
     public ReactiveCommand<Unit, Unit> CutCmd { get; }
@@ -32,19 +32,14 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
         DuplicateCmd = ReactiveCommand.Create(DuplicateSelected);
         DeleteCmd = ReactiveCommand.Create(DeleteSelected);
 
-        Items = new(); // this is necessary because ToVm() uses Items property, which cannot be null
-        if (initialValues is not null)
+        Items = new();
+        SelectedItems = new();
+        foreach (var v in (initialValues ?? new()))
         {
-            foreach (var v in initialValues)
-            {
-                Items.Add(ToVm(v));
-            }
+            Items.Add(ToVm(v));
         }
-        Source = GenerateDataGridSource();
-        Source.RowSelection!.SingleSelect = false;
     }
 
-    protected abstract FlatTreeDataGridSource<VM> GenerateDataGridSource();
     protected abstract VM ToVm(D domainObj);
     protected abstract D ToDomain(VM viewModel);
     protected abstract D MakeCopy(D domainObj);
@@ -54,18 +49,18 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
 
     internal void CutOrCopySelected(bool falseIfCutTrueIfCopy)
     {
-        if (Source.RowSelection is not null)
+        if (SelectedItems is not null && SelectedItems.Count > 0)
         {
             // needs to generate a new array because of concurrency problems
-            var vars = Source.RowSelection.SelectedItems.ToArray();
+            var vars = SelectedItems.Select(x => x.Key).ToArray();
             if (falseIfCutTrueIfCopy == false)
             {
                 foreach (var v in vars)
                 {
-                    Items.Remove(v!);
+                    Items.Remove(v);
                 }
             }
-            var varsDomain = vars.Select(x => ToDomain(x!)).ToArray();
+            var varsDomain = vars.Select(ToDomain).ToArray();
             InnerClipboardArea.PushToArea(varsDomain);
         }
     }
@@ -84,14 +79,14 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
     
     private void DuplicateSelected()
     {
-        if (Source.RowSelection is not null)
+        if (SelectedItems is not null && SelectedItems.Count > 0)
         {
             // needs to generate a new array because of concurrency problems
-            var varsToDuplicate = Source.RowSelection.SelectedItems.ToArray();
+            var varsToDuplicate = SelectedItems.Select(x => x.Key).ToArray();
             foreach (var v in varsToDuplicate)
             {
-                var vCopy = ToVm(ToDomain(v!));
-                int position = Items.IndexOf(v!);
+                var vCopy = ToVm(ToDomain(v));
+                int position = Items.IndexOf(v);
                 Items.Insert(position, vCopy);
             }
         }
@@ -99,13 +94,13 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
 
     internal void DeleteSelected()
     {
-        if (Source.RowSelection is not null)
+        if (SelectedItems is not null && SelectedItems.Count > 0)
         {
             // needs to generate a new array because of concurrency problems
-            var varsToDelete = Source.RowSelection.SelectedItems.ToArray();
+            var varsToDelete = SelectedItems.Select(x => x.Key).ToArray();
             foreach (var v in varsToDelete)
             {
-                Items.Remove(v!);
+                Items.Remove(v);
             }
         }
     }

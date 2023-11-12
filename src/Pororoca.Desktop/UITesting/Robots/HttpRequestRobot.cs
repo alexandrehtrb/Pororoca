@@ -1,6 +1,5 @@
 using System.Globalization;
 using Avalonia.Controls;
-using Avalonia.Controls.Selection;
 using AvaloniaEdit;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.ViewModels.DataGrids;
@@ -27,7 +26,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal Button Cancel => GetChildView<Button>("btCancelRequest")!;
     internal TabItem TabReqHeaders => GetChildView<TabItem>("tabItemReqHeaders")!;
     internal Button AddReqHeader => GetChildView<Button>("btReqHeaderAdd")!;
-    internal TreeDataGrid ReqHeaders => GetChildView<TreeDataGrid>("dgReqHeaders")!;
+    internal DataGrid ReqHeaders => GetChildView<DataGrid>("dgReqHeaders")!;
     internal TabItem TabReqBody => GetChildView<TabItem>("tabItemReqBody")!;
     internal ComboBox ReqBodyMode => GetChildView<ComboBox>("cbReqBodyMode")!;
     internal ComboBoxItem ReqBodyModeOptionNone => GetChildView<ComboBoxItem>("cbiReqBodyModeNone")!;
@@ -42,18 +41,18 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal TextBox ReqBodyFileSrcPath => GetChildView<TextBox>("tbReqBodyFileSrcPath")!;
     internal Button ReqBodyFileSearch => GetChildView<Button>("btReqBodyFileSearch")!;
     internal Button ReqBodyUrlEncodedAddParam => GetChildView<Button>("btReqBodyUrlEncodedAddParam")!;
-    internal TreeDataGrid ReqBodyUrlEncodedParams => GetChildView<TreeDataGrid>("dgReqBodyUrlEncodedParams")!;
+    internal DataGrid ReqBodyUrlEncodedParams => GetChildView<DataGrid>("dgReqBodyUrlEncodedParams")!;
     internal Button ReqBodyFormDataAddTextParam => GetChildView<Button>("btReqBodyFormDataAddTextParam")!;
     internal Button ReqBodyFormDataAddFileParam => GetChildView<Button>("btReqBodyFormDataAddFileParam")!;
-    internal TreeDataGrid ReqBodyFormDataParams => GetChildView<TreeDataGrid>("dgReqBodyFormDataParams")!;
+    internal DataGrid ReqBodyFormDataParams => GetChildView<DataGrid>("dgReqBodyFormDataParams")!;
     internal TextBox ReqBodyGraphQlQuery => GetChildView<TextBox>("tbReqBodyGraphQlQuery")!;
     internal TextBox ReqBodyGraphQlVariables => GetChildView<TextBox>("tbReqBodyGraphQlVariables")!;
     internal TabItem TabReqAuth => GetChildView<TabItem>("tabItemReqAuth")!;
     internal TextBlock ResTitle => GetChildView<TextBlock>("tbResTitle")!;
     internal TabItem TabResHeaders => GetChildView<TabItem>("tabItemResHeaders")!;
-    internal TreeDataGrid ResHeaders => GetChildView<TreeDataGrid>("dgResHeaders")!;
+    internal DataGrid ResHeaders => GetChildView<DataGrid>("dgResHeaders")!;
     internal TabItem TabResBody => GetChildView<TabItem>("tabItemResBody")!;
-    internal TreeDataGrid ResCaptures => GetChildView<TreeDataGrid>("dgResCaptures")!;
+    internal DataGrid ResCaptures => GetChildView<DataGrid>("dgResCaptures")!;
     internal TabItem TabResCapture => GetChildView<TabItem>("tabItemResCapture")!;
     internal TextEditor ResBodyRawContent => GetChildView<TextEditor>("ResponseBodyRawContentEditor")!;
     internal Button ResAddCaptureHeader => GetChildView<Button>("btResCaptureAddHeaderCapture")!;
@@ -102,14 +101,11 @@ public sealed class HttpRequestRobot : BaseNamedRobot
         await UITestActions.WaitAfterActionAsync();
     }
 
-    internal async Task SelectRequestHeaders(params int[] indexes)
+    internal async Task SelectRequestHeaders(params KeyValueParamViewModel[] headersVms)
     {
-        var selection = (TreeDataGridRowSelectionModel<KeyValueParamViewModel>)ReqHeaders.Source!.Selection!;
-        foreach (int i in indexes)
-        {
-            // needs to be one at a time, weird bug in TreeDataGrid
-            selection.Select(new(i));
-        }
+        ReqHeaders.SelectedItems.Clear();
+        foreach (var h in headersVms)
+            ReqHeaders.SelectedItems.Add(h);
         await UITestActions.WaitAfterActionAsync();
     }
 
@@ -182,14 +178,11 @@ public sealed class HttpRequestRobot : BaseNamedRobot
         await UITestActions.WaitAfterActionAsync();
     }
 
-    internal async Task SelectUrlEncodedParams(params int[] indexes)
+    internal async Task SelectUrlEncodedParams(params KeyValueParamViewModel[] vms)
     {
-        var selection = (TreeDataGridRowSelectionModel<KeyValueParamViewModel>)ReqBodyUrlEncodedParams.Source!.Selection!;
-        foreach (int i in indexes)
-        {
-            // needs to be one at a time, weird bug in TreeDataGrid
-            selection.Select(new(i));
-        }
+        ReqBodyUrlEncodedParams.SelectedItems.Clear();
+        foreach (var h in vms)
+            ReqBodyUrlEncodedParams.SelectedItems.Add(h);
         await UITestActions.WaitAfterActionAsync();
     }
 
@@ -230,14 +223,11 @@ public sealed class HttpRequestRobot : BaseNamedRobot
         await UITestActions.WaitAfterActionAsync();
     }
 
-    internal async Task SelectFormDataParams(params int[] indexes)
+    internal async Task SelectFormDataParams(params FormDataParamViewModel[] vms)
     {
-        var selection = (TreeDataGridRowSelectionModel<FormDataParamViewModel>)ReqBodyFormDataParams.Source!.Selection!;
-        foreach (int i in indexes)
-        {
-            // needs to be one at a time, weird bug in TreeDataGrid
-            selection.Select(new(i));
-        }
+        ReqBodyFormDataParams.SelectedItems.Clear();
+        foreach (var h in vms)
+            ReqBodyFormDataParams.SelectedItems.Add(h);
         await UITestActions.WaitAfterActionAsync();
     }
 
@@ -344,14 +334,11 @@ public sealed class HttpRequestRobot : BaseNamedRobot
         await Auth.SetPemCertificateAuth(certFilePath, prvKeyFilePath, prvKeyPassword);
     }
 
-    internal async Task SelectResponseHeaders(params int[] indexes)
+    internal async Task SelectResponseHeaders(params KeyValueParamViewModel[] headersVms)
     {
-        var selection = (TreeDataGridRowSelectionModel<KeyValueParamViewModel>)ResHeaders.Source!.Selection!;
-        foreach (int i in indexes)
-        {
-            // needs to be one at a time, weird bug in TreeDataGrid
-            selection.Select(new(i));
-        }
+        ResHeaders.SelectedItems.Clear();
+        foreach (var h in headersVms)
+            ResHeaders.SelectedItems.Add(h);
         await UITestActions.WaitAfterActionAsync();
     }
 

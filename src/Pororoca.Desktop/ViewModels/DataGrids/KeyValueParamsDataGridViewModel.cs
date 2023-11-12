@@ -3,7 +3,7 @@ using Pororoca.Domain.Features.Entities.Pororoca;
 
 namespace Pororoca.Desktop.ViewModels.DataGrids;
 
-public abstract class KeyValueParamsDataGridViewModel : BaseDataGridWithOperationsViewModel<KeyValueParamViewModel, PororocaKeyValueParam>
+public sealed class KeyValueParamsDataGridViewModel : BaseDataGridWithOperationsViewModel<KeyValueParamViewModel, PororocaKeyValueParam>
 {
     public override SimpleClipboardArea<PororocaKeyValueParam> InnerClipboardArea =>
         KeyValueParamsClipboardArea.Instance;

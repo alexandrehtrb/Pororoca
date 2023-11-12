@@ -218,13 +218,13 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region CONNECTION OPTION HEADERS
 
-    public RequestHeadersDataGridViewModel ConnectionRequestHeadersTableVm { get; }
+    public KeyValueParamsDataGridViewModel ConnectionRequestHeadersTableVm { get; }
 
     #endregion
 
     #region CONNECTION OPTION SUBPROTOCOLS
 
-    public SubprotocolsDataGridViewModel SubprotocolsTableVm { get; }
+    public KeyValueParamsDataGridViewModel SubprotocolsTableVm { get; }
 
     #endregion
 
@@ -267,7 +267,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     [Reactive]
     public string? ResponseStatusCodeElapsedTimeTitle { get; private set; }
 
-    public ResponseHeadersAndTrailersDataGridViewModel ConnectionResponseHeadersTableVm { get; }
+    public KeyValueParamsDataGridViewModel ConnectionResponseHeadersTableVm { get; }
 
     #endregion
 

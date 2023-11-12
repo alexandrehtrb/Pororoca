@@ -30,7 +30,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
     [Reactive]
     public int ResponseTabsSelectedIndex { get; set; }
 
-    public ResponseHeadersAndTrailersDataGridViewModel ResponseHeadersAndTrailersTableVm { get; }
+    public KeyValueParamsDataGridViewModel ResponseHeadersAndTrailersTableVm { get; }
 
     [Reactive]
     public TextDocument? ResponseRawContentTextDocument { get; set; }
