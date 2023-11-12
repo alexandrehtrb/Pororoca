@@ -253,7 +253,7 @@
     "WebSocketConnection/Connect": "Connetti",
     "WebSocketConnection/ConnectToolTip": "Connetti (F5)",
     "WebSocketConnection/Connected": "CONNESSO",
-    "WebSocketConnection/ConnectionException": "Eccezione",
+    "WebSocketConnection/ConnectionResponse": "Risposta",
     "WebSocketConnection/ConnectionExceptionWatermark": "(Eccezione di connessione qui se si verifica)",
     "WebSocketConnection/ConnectionRequestHeaderAdd": "Aggiungi intestazione",
     "WebSocketConnection/ConnectionRequestHeaderEnabled": "ABILITATO",
@@ -285,11 +285,7 @@
     "WebSocketExchangedMessages/FromClientToServer": "client -> server",
     "WebSocketExchangedMessages/FromServerToClient": "server -> client",
     "WebSocketExchangedMessages/InstantDescriptionFormat": "HH:mm:ss, yyyy-MM-dd, 'GMT'z'h'",
-    "WebSocketExchangedMessages/SectionTitle": "Risposta",
-    "WebSocketExchangedMessages/SectionTitleFailedFormat": "Risposta: Fallita ({0})",
-    "WebSocketExchangedMessages/SectionTitleSuccessfulFormat": "Risposta: {0} ({1})",
-    "WebSocketExchangedMessages/MessagesExchangedTab": "Messaggi scambiati",
-    "WebSocketExchangedMessages/HeadersTab": "Intestazioni",
+    "WebSocketExchangedMessages/SectionTitle": "Messaggi scambiati",
     "WebSocketExchangedMessages/SendMessage": "Invia",
     "WebSocketExchangedMessages/TextContentDescriptionFormat": "testo, {0} byte"
 }

@@ -253,7 +253,7 @@
     "WebSocketConnection/Connect",
     "WebSocketConnection/ConnectToolTip",
     "WebSocketConnection/Connected",
-    "WebSocketConnection/ConnectionException",
+    "WebSocketConnection/ConnectionResponse",
     "WebSocketConnection/ConnectionExceptionWatermark",
     "WebSocketConnection/ConnectionRequestHeaderAdd",
     "WebSocketConnection/ConnectionRequestHeaderEnabled",
@@ -286,10 +286,6 @@
     "WebSocketExchangedMessages/FromServerToClient",
     "WebSocketExchangedMessages/InstantDescriptionFormat",
     "WebSocketExchangedMessages/SectionTitle",
-    "WebSocketExchangedMessages/SectionTitleFailedFormat",
-    "WebSocketExchangedMessages/SectionTitleSuccessfulFormat",
-    "WebSocketExchangedMessages/MessagesExchangedTab",
-    "WebSocketExchangedMessages/HeadersTab",
     "WebSocketExchangedMessages/SendMessage",
     "WebSocketExchangedMessages/TextContentDescriptionFormat"
 ]

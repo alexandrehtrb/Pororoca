@@ -2,12 +2,10 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Reactive;
 using System.Security.Authentication;
 using AvaloniaEdit.Document;
-using DynamicData;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
@@ -86,11 +84,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     [Reactive]
     public bool IsDisableTlsVerificationVisible { get; set; }
-
-    [Reactive]
-    public string ResponseStatusCodeElapsedTimeTitle { get; private set; } =
-        Localizer.Instance.WebSocketExchangedMessages.SectionTitle;
-
 
     public ReactiveCommand<Unit, Unit> ConnectCmd { get; }
 
@@ -263,16 +256,22 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #endregion
 
-    #region CONNECTION EXCEPTION
+    #region CONNECTION RESPONSE
 
     [Reactive]
+    public bool WasConnectionSuccessful { get; private set; }
+    
+    [Reactive]
     public string? ConnectionExceptionContent { get; set; }
+
+    [Reactive]
+    public string? ResponseStatusCodeElapsedTimeTitle { get; private set; }
+
+    public ResponseHeadersAndTrailersDataGridViewModel ConnectionResponseHeadersTableVm { get; }
 
     #endregion
 
     #region EXCHANGED MESSAGES
-
-    public ResponseHeadersAndTrailersDataGridViewModel ConnectionResponseHeadersTableVm { get; }
 
     private string? invalidClientMessageErrorCodeField;
     private string? InvalidClientMessageErrorCode
@@ -575,9 +574,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         IsDisconnecting = state == PororocaWebSocketConnectorState.Disconnecting;
         IsConnected = state == PororocaWebSocketConnectorState.Connected;
         ConnectionExceptionContent = ex?.ToString();
-        if (ex is not null)
+        if (state == PororocaWebSocketConnectorState.Connected || ex is not null)
         {
-            // switching to Exception tab
             // TODO: do not use fixed integers here, find a better way
             SelectedConnectionTabIndex = 2;
         }
@@ -615,10 +613,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             // causes the UI to freeze for a few seconds, especially when performing the first request to a server.
             // That is why we are invoking the code to run in a new thread, like below.
             await Task.Run(() => this.connector.ConnectAsync(resolvedClients.wsCli!, resolvedClients.httpCli!, resolvedUri!, this.cancelConnectionAttemptTokenSource.Token));
-            ResponseStatusCodeElapsedTimeTitle = this.connector.ConnectionException is null
-                    ? FormatSuccessfulResponseTitle(this.connector.ElapsedConnectionTimeSpan,resolvedClients.wsCli!.HttpStatusCode)
-                    : FormatFailedResponseTitle(this.connector.ElapsedConnectionTimeSpan);
-
+            WasConnectionSuccessful = this.connector.ConnectionException is null;
+            ResponseStatusCodeElapsedTimeTitle = FormatResponseTitle(this.connector.ElapsedConnectionTimeSpan, resolvedClients.wsCli!.HttpStatusCode);
             ConnectionResponseHeadersTableVm.Items.Clear();
             var resHeaders = this.connector.ConnectionHttpHeaders?.SelectMany(
                 kv => kv.Value.Select(val => new KeyValueParamViewModel(ConnectionResponseHeadersTableVm.Items, true, kv.Key, val))).ToList()
@@ -629,7 +625,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             }
         }
     }
-
 
     public void CancelConnect() =>
         this.cancelConnectionAttemptTokenSource?.Cancel();
@@ -653,13 +648,9 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         IsDisableTlsVerificationVisible = false;
     }
 
-    private static string FormatSuccessfulResponseTitle(TimeSpan elapsedTime, HttpStatusCode statusCode) =>
-        string.Format(Localizer.Instance.WebSocketExchangedMessages.SectionTitleSuccessfulFormat,
+    private static string FormatResponseTitle(TimeSpan elapsedTime, HttpStatusCode statusCode) =>
+        string.Format("{0} ({1})",
             FormatHttpStatusCode(statusCode),
-            FormatElapsedTime(elapsedTime));
-
-    private static string FormatFailedResponseTitle(TimeSpan elapsedTime) =>
-        string.Format(Localizer.Instance.WebSocketExchangedMessages.SectionTitleFailedFormat,
             FormatElapsedTime(elapsedTime));
 
     private static string FormatHttpStatusCode(HttpStatusCode statusCode) =>
