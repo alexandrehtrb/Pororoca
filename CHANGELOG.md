@@ -1,5 +1,6 @@
 # Changelog
 
+* [2.5.0](#240-2023-11-13)
 * [2.4.0](#240-2023-10-15)
 * [2.3.1](#231-2023-09-28)
 * [2.3.0](#230-2023-09-26)
@@ -14,6 +15,41 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [2.5.0](https://github.com/alexandrehtrb/Pororoca/tree/2.5.0) (2023-11-13)
+
+### Features
+
+* Adds italian language by [@alessiotm](https://github.com/alessiotm).
+* Show WebSocket connection response HTTP status code and headers by [@tetropolix](https://github.com/tetropolix).
+* Import OpenAPI / Swagger files.
+* Re-run response captures (no need to send a request again).
+
+### Bug Fixes
+
+* Fixed crash of response capture when Content-Type was JSON, but the body wasn't JSON.
+* Collection-scoped auth is now validated before requests.
+* No more crash when copying text from help dialog (bug fixed in MessageBox).
+
+### Refactors
+
+* Variable resolution now uses regex and cached variables, which should cause a lower memory consumption, especially if you have a lot of collection and environment variables.
+* XML body response captures now caches XmlDocument and XmlNamespaceManager, saving memory.
+* Replaced Moq for NSubstitute in unit tests.
+
+### Others
+
+* Raised .NET SDK version to 7.0.403.
+* Raised Avalonia version to 11.0.5.
+* Raised MessageBox.Avalonia version to 3.1.5.1.
+* Removed `global.json`.
+* UI tests keybinding changed to Ctrl+F12 and menu item moved to inside Help.
+
+### New Contributors
+
+* [@alessiotm](https://github.com/alessiotm) made his first contribution in PR [#54](https://github.com/alexandrehtrb/Pororoca/pull/54)
+* [@tetropolix](https://github.com/tetropolix) made his first contribution in PR [#55](https://github.com/alexandrehtrb/Pororoca/pull/55)
+
 
 ## [2.4.0](https://github.com/alexandrehtrb/Pororoca/tree/2.4.0) (2023-10-15)
 
