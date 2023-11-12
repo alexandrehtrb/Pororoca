@@ -9,7 +9,6 @@
   <Application.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
-        <MergeResourceInclude Source="/Styles/DataTemplates.xaml"/>
         <MergeResourceInclude Source="/Styles/Themes.xaml"/>
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
