@@ -55,9 +55,9 @@
     <PackageReference Include="Avalonia.Desktop" Version="11.0.5" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.5" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.5" />
-    <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.0.1" />
     <!-- TreeDataGrid needs fixes for drag-and-drop with text selection and columns collapsing when Source changes -->
-    <!--ProjectReference Include="..\..\..\Avalonia.Controls.TreeDataGrid\src\Avalonia.Controls.TreeDataGrid\Avalonia.Controls.TreeDataGrid.csproj"/-->
+    <!--PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.0.1" /-->
+    <ProjectReference Include="..\Avalonia.Controls.TreeDataGrid\Avalonia.Controls.TreeDataGrid.csproj"/>
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.5" />
     <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.0.1" />
