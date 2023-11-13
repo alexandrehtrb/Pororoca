@@ -25,6 +25,9 @@
     <!-- IconExport, CC Attribution License, author: Font Awesome, taken from: https://www.svgrepo.com/svg/352022/file-export -->
     <PathGeometry x:Key="IconExportGeometry">M384 121.9c0-6.3-2.5-12.4-7-16.9L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128zM571 308l-95.7-96.4c-10.1-10.1-27.4-3-27.4 11.3V288h-64v64h64v65.2c0 14.3 17.3 21.4 27.4 11.3L571 332c6.6-6.6 6.6-17.4 0-24zm-379 28v-32c0-8.8 7.2-16 16-16h176V160H248c-13.2 0-24-10.8-24-24V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V352H208c-8.8 0-16-7.2-16-16z</PathGeometry>
 
+    <!-- IconGrabber, MIT License, author: Primer, taken from: https://www.svgrepo.com/svg/347759/grabber -->
+    <PathGeometry x:Key="IconGrabberGeometry">M15 18a1 1 0 100-2 1 1 0 000 2zm1-6a1 1 0 11-2 0 1 1 0 012 0zm-7 6a1 1 0 100-2 1 1 0 000 2zm0-5a1 1 0 100-2 1 1 0 000 2zm7-6a1 1 0 11-2 0 1 1 0 012 0zM9 8a1 1 0 100-2 1 1 0 000 2z</PathGeometry>
+    
     <!-- IconImport, CC Attribution License, author: Font Awesome, taken from: https://www.svgrepo.com/svg/352027/file-import -->
     <PathGeometry x:Key="IconImportGeometry">M16 288c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h112v-64zm489-183L407.1 7c-4.5-4.5-10.6-7-17-7H384v128h128v-6.1c0-6.3-2.5-12.4-7-16.9zm-153 31V0H152c-13.3 0-24 10.7-24 24v264h128v-65.2c0-14.3 17.3-21.4 27.4-11.3L379 308c6.6 6.7 6.6 17.4 0 24l-95.7 96.4c-10.1 10.1-27.4 3-27.4-11.3V352H128v136c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H376c-13.2 0-24-10.8-24-24z</PathGeometry>
     
@@ -54,6 +57,7 @@
     <GeometryDrawing x:Key="IconCheck" Brush="{DynamicResource DefaultIconsBrush}" Geometry="{StaticResource IconCheckGeometry}" />
     <GeometryDrawing x:Key="IconEdit" Brush="{DynamicResource DefaultIconsBrush}" Geometry="{StaticResource IconEditGeometry}" />
     <GeometryDrawing x:Key="IconExport" Brush="{DynamicResource DefaultIconsBrush}" Geometry="{StaticResource IconExportGeometry}" />
+    <GeometryDrawing x:Key="IconGrabber" Brush="{DynamicResource DefaultIconsBrush}" Geometry="{StaticResource IconGrabberGeometry}" />
     <GeometryDrawing x:Key="IconImport" Brush="{DynamicResource DefaultIconsBrush}" Geometry="{StaticResource IconImportGeometry}" />
     <GeometryDrawing x:Key="IconHttp" Brush="{DynamicResource DefaultIconsBrush}" Geometry="{StaticResource IconHttpGeometry}" />
     <GeometryDrawing x:Key="IconLeaf" Brush="{DynamicResource DefaultIconsBrush}" Geometry="{StaticResource IconLeafGeometry}" />

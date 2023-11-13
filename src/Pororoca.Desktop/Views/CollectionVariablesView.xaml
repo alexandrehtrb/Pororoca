@@ -73,7 +73,9 @@
         AutoGenerateColumns="False"
         ItemsSource="{Binding VariablesTableVm.Items}"
         SelectionChanged="OnSelectedVariablesChanged"
-        CanUserResizeColumns="True">
+        CanUserResizeColumns="True"
+        HeadersVisibility="All"
+        Classes="DragAndDrop VariablesDragAndDrop">
         <!--DataGrid.KeyBindings>
           <KeyBinding Command="{Binding VariablesTableVm.CutCmd}" Gesture="Ctrl+X" />
           <KeyBinding Command="{Binding VariablesTableVm.CopyCmd}" Gesture="Ctrl+C" />
@@ -143,38 +145,6 @@
                   HorizontalContentAlignment="Center"
                   VerticalContentAlignment="Center"
                   Classes="Trash">
-              </Button>
-            </DataTemplate>
-          </DataGridTemplateColumn.CellTemplate>
-        </DataGridTemplateColumn>
-        <DataGridTemplateColumn
-            Width="0.2*"
-            Header="">
-          <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate>
-              <Button
-                  Command="{Binding MoveVariableUpCmd}"
-                  VerticalAlignment="Center"
-                  HorizontalAlignment="Center"
-                  HorizontalContentAlignment="Center"
-                  VerticalContentAlignment="Center"
-                  Classes="MoveUp">
-              </Button>
-            </DataTemplate>
-          </DataGridTemplateColumn.CellTemplate>
-        </DataGridTemplateColumn>
-        <DataGridTemplateColumn
-            Width="0.2*"
-            Header="">
-          <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate>
-              <Button
-                  Command="{Binding MoveVariableDownCmd}"
-                  VerticalAlignment="Center"
-                  HorizontalAlignment="Center"
-                  HorizontalContentAlignment="Center"
-                  VerticalContentAlignment="Center"
-                  Classes="MoveDown">
               </Button>
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>

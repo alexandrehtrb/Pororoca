@@ -967,7 +967,9 @@
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding ResCapturesTableVm.Items}"
                   SelectionChanged="OnSelectedResponseCapturesChanged"
-                  CanUserResizeColumns="True">
+                  CanUserResizeColumns="True"
+                  HeadersVisibility="All"
+                  Classes="DragAndDrop ResponseCapturesDragAndDrop">
                 <!--DataGrid.KeyBindings>
               <KeyBinding Command="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.CopyCmd}" Gesture="Ctrl+C" />
             </DataGrid.KeyBindings-->

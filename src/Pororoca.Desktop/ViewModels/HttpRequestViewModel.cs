@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Reactive;
 using AvaloniaEdit.Document;
+using Pororoca.Desktop.Behaviors;
 using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
@@ -21,7 +22,7 @@ using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOp
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
+public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, IResponseCapturesDataGridOwner
 {
     #region REQUEST
 
