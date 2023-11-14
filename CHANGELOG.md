@@ -34,7 +34,7 @@
 
 ### Refactors
 
-* Variable resolution now uses regex and cached variables, which should cause a lower memory consumption, especially if you have a lot of collection and environment variables.
+* Variable resolution now uses regex and cached variables, which should improve performance and lower memory consumption, especially if you have a lot of collection and environment variables.
 * XML body response captures now caches XmlDocument and XmlNamespaceManager, saving memory.
 * Replaced Moq for NSubstitute in unit tests.
 
