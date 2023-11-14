@@ -37,10 +37,10 @@ public static partial class PororocaResponseValueCapturer
         }
     }
 
-    internal static (XmlDocument?, XmlNamespaceManager?) LoadXmlDocumentAndNamespaceManager(string xml)
+    internal static (XmlDocument, XmlNamespaceManager)? LoadXmlDocumentAndNamespaceManager(string xml)
     {
         if (string.IsNullOrWhiteSpace(xml))
-            return (null, null);
+            return null;
 
         try
         {
@@ -56,7 +56,7 @@ public static partial class PororocaResponseValueCapturer
         }
         catch
         {
-            return (null, null);
+            return null;
         }
     }
 
@@ -82,11 +82,11 @@ public static partial class PororocaResponseValueCapturer
 
     public static string? CaptureJsonValue(string path, string json)
     {
-        string[] subpaths = path.Split('.');
-        var jsonNode = JsonNode.Parse(json);
-
         try
         {
+            string[] subpaths = path.Split('.');
+            var jsonNode = JsonNode.Parse(json);
+            
             foreach (string subpath in subpaths)
             {
                 if (IsArrayElementSubpath(subpath, out string? elementName, out int? index1, out int? index2))

@@ -1,4 +1,5 @@
 using System.Reactive;
+using Pororoca.Desktop.Behaviors;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.ViewModels.DataGrids;
@@ -8,7 +9,7 @@ using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
+public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel, IVariablesDataGridOwner
 {
     #region COLLECTION ORGANIZATION
 

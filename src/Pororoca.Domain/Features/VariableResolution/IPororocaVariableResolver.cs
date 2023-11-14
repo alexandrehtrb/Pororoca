@@ -1,16 +1,41 @@
+using System.Text.RegularExpressions;
 using Pororoca.Domain.Features.Entities.Pororoca;
-using Pororoca.Domain.Features.Entities.Pororoca.Http;
 
 namespace Pororoca.Domain.Features.VariableResolution;
 
-public interface IPororocaVariableResolver
+public partial interface IPororocaVariableResolver
 {
-    const string VariableTemplateBeginToken = "{{";
-    const string VariableTemplateEndToken = "}}";
+    public static readonly Regex PororocaVariableRegex = GeneratePororocaVariableRegex();
+
+    [GeneratedRegex("\\{\\{(?<k>[\\w\\d_\\-\\.]+)\\}\\}")]
+    private static partial Regex GeneratePororocaVariableRegex();
 
     List<PororocaVariable> Variables { get; } // collection variables
     PororocaRequestAuth? CollectionScopedAuth { get; } // collection scoped auth
     List<PororocaEnvironment> Environments { get; } // collection environments
+
+    public IEnumerable<PororocaVariable> GetEffectiveVariables()
+    {
+        var currentEnv = Environments.FirstOrDefault(e => e.IsCurrent);
+        var effectiveEnvVars = currentEnv?.Variables?.Where(sev => sev.Enabled) ?? Enumerable.Empty<PororocaVariable>();
+        var effectiveColVars = Variables.Where(cv => cv.Enabled);
+        var effectiveColVarsNotInEnv =
+            effectiveColVars.Where(ecv => !effectiveEnvVars.Any(eev => eev.Key == ecv.Key));
+
+        // Environment variable overrides collection variable
+        return effectiveEnvVars.Concat(effectiveColVarsNotInEnv);
+    }
+
+    public static IDictionary<string, string> ResolveKeyValueParams(IEnumerable<PororocaKeyValueParam>? kvParams, IEnumerable<PororocaVariable> effectiveVars) =>
+        kvParams == null ?
+        new() :
+        kvParams.Where(h => h.Enabled)
+                .Select(h => new KeyValuePair<string, string>(
+                    ReplaceTemplates(h.Key, effectiveVars),
+                    ReplaceTemplates(h.Value, effectiveVars)
+                ))
+                .DistinctBy(h => h.Key) // Avoid duplicated pairs by key
+                .ToDictionary(h => h.Key, h => h.Value);
 
     // Example of templated string:
     // "https://{{MyApiHost}}/api/location?city=Campinas"
@@ -21,50 +46,20 @@ public interface IPororocaVariableResolver
     // Environment variables have precedence over collection variables.
     // If the variable key is not declared or the variable is not enabled, then the raw key should be used as is.
 
-    public PororocaRequestAuth? GetAuthForRequest(PororocaRequestAuth? reqAuth) =>
-        reqAuth == PororocaRequestAuth.InheritedFromCollection ?
-        CollectionScopedAuth : reqAuth;
-
-    public IDictionary<string, string> ResolveKeyValueParams(IEnumerable<PororocaKeyValueParam>? kvParams) =>
-        kvParams == null ?
-        new() :
-        kvParams.Where(h => h.Enabled)
-                .Select(h => new KeyValuePair<string, string>(
-                    ReplaceTemplates(h.Key),
-                    ReplaceTemplates(h.Value)
-                ))
-                .DistinctBy(h => h.Key) // Avoid duplicated pairs by key
-                .ToDictionary(h => h.Key, h => h.Value);
-
-    public string ReplaceTemplates(string? strToReplaceTemplatedVariables)
+    public static string ReplaceTemplates(string? strToReplaceTemplatedVariables, IEnumerable<PororocaVariable> effectiveVars)
     {
-        if (string.IsNullOrWhiteSpace(strToReplaceTemplatedVariables))
+        if (string.IsNullOrEmpty(strToReplaceTemplatedVariables))
         {
             return strToReplaceTemplatedVariables ?? string.Empty;
         }
         else
         {
-            var currentEnv = Environments.FirstOrDefault(e => e.IsCurrent);
-            IEnumerable<PororocaVariable>? currentEnvironmentVariables = currentEnv?.Variables;
-            IEnumerable<PororocaVariable> effectiveVariables = MergeVariables(Variables, currentEnvironmentVariables);
-            string resolvedStr = strToReplaceTemplatedVariables!;
-            foreach (var v in effectiveVariables)
+            return PororocaVariableRegex.Replace(strToReplaceTemplatedVariables, match =>
             {
-                string variableTemplate = VariableTemplateBeginToken + v.Key + VariableTemplateEndToken;
-                resolvedStr = resolvedStr.Replace(variableTemplate, v.Value ?? variableTemplate);
-            }
-            return resolvedStr;
+                string keyName = match.Groups["k"].Value;
+                var effectiveVar = effectiveVars.FirstOrDefault(v => v.Key == keyName);
+                return effectiveVar?.Value ?? match.Value;
+            });
         }
-    }
-
-    internal static PororocaVariable[] MergeVariables(IEnumerable<PororocaVariable> collectionVariables, IEnumerable<PororocaVariable>? selectedEnvironmentVariables)
-    {
-        var effectiveEnvVars = selectedEnvironmentVariables?.Where(sev => sev.Enabled) ?? Array.Empty<PororocaVariable>();
-        var effectiveColVars = collectionVariables.Where(cv => cv.Enabled);
-        var effectiveColVarsNotInEnv =
-            effectiveColVars.Where(ecv => !effectiveEnvVars.Any(eev => eev.Key == ecv.Key));
-
-        // Environment variable overrides collection variable
-        return effectiveEnvVars.Concat(effectiveColVarsNotInEnv).ToArray();
     }
 }

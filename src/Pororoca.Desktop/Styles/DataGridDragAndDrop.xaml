@@ -1,0 +1,119 @@
+<Styles
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+  xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
+  xmlns:idd="clr-namespace:Avalonia.Xaml.Interactions.DragAndDrop;assembly=Avalonia.Xaml.Interactions.DragAndDrop"
+  xmlns:b="using:Pororoca.Desktop.Behaviors">
+
+  <Style Selector="DataGrid.DragAndDrop">
+    <Setter
+      Property="RowHeaderWidth"
+      Value="24" />
+  </Style>
+
+  <Style Selector="DataGrid.DragAndDrop DataGridRowHeader">
+    <Setter Property="(i:Interaction.Behaviors)">
+      <i:BehaviorCollectionTemplate>
+        <i:BehaviorCollection>
+          <idd:ContextDragBehavior HorizontalDragThreshold="3" VerticalDragThreshold="3" />
+        </i:BehaviorCollection>
+      </i:BehaviorCollectionTemplate>
+    </Setter>
+    <Setter Property="Content">
+      <Template>
+        <Image
+          Margin="12,0,12,0"
+          Width="12"
+          Height="12"
+          VerticalAlignment="Center"
+          HorizontalAlignment="Center">
+          <Image.Source>
+            <DrawingImage Drawing="{StaticResource IconGrabber}" />
+          </Image.Source>
+        </Image>
+      </Template>
+    </Setter>
+  </Style>
+
+  <Style Selector="DataGrid.VariablesDragAndDrop">
+    <Style.Resources>
+      <b:VariablesDataGridDropHandler x:Key="VariablesDataGridDropHandler" />
+    </Style.Resources>
+    <Setter Property="(i:Interaction.Behaviors)">
+      <i:BehaviorCollectionTemplate>
+        <i:BehaviorCollection>
+          <idd:ContextDropBehavior Handler="{StaticResource VariablesDataGridDropHandler}" />
+        </i:BehaviorCollection>
+      </i:BehaviorCollectionTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="DataGrid.RequestHeadersDragAndDrop">
+    <Style.Resources>
+      <b:RequestHeadersDataGridDropHandler x:Key="RequestHeadersDataGridDropHandler" />
+    </Style.Resources>
+    <Setter Property="(i:Interaction.Behaviors)">
+      <i:BehaviorCollectionTemplate>
+        <i:BehaviorCollection>
+          <idd:ContextDropBehavior Handler="{StaticResource RequestHeadersDataGridDropHandler}" />
+        </i:BehaviorCollection>
+      </i:BehaviorCollectionTemplate>
+    </Setter>
+  </Style>
+  
+  <Style Selector="DataGrid.FormDataParamsDragAndDrop">
+    <Style.Resources>
+      <b:FormDataParamsDataGridDropHandler x:Key="FormDataParamsDataGridDropHandler" />
+    </Style.Resources>
+    <Setter Property="(i:Interaction.Behaviors)">
+      <i:BehaviorCollectionTemplate>
+        <i:BehaviorCollection>
+          <idd:ContextDropBehavior Handler="{StaticResource FormDataParamsDataGridDropHandler}" />
+        </i:BehaviorCollection>
+      </i:BehaviorCollectionTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="DataGrid.UrlEncodedParamsDragAndDrop">
+    <Style.Resources>
+      <b:UrlEncodedParamsDataGridDropHandler x:Key="UrlEncodedParamsDataGridDropHandler" />
+    </Style.Resources>
+    <Setter Property="(i:Interaction.Behaviors)">
+      <i:BehaviorCollectionTemplate>
+        <i:BehaviorCollection>
+          <idd:ContextDropBehavior Handler="{StaticResource UrlEncodedParamsDataGridDropHandler}" />
+        </i:BehaviorCollection>
+      </i:BehaviorCollectionTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="DataGrid.ResponseCapturesDragAndDrop">
+    <Style.Resources>
+      <b:ResponseCapturesDataGridDropHandler x:Key="ResponseCapturesDataGridDropHandler" />
+    </Style.Resources>
+    <Setter Property="(i:Interaction.Behaviors)">
+      <i:BehaviorCollectionTemplate>
+        <i:BehaviorCollection>
+          <idd:ContextDropBehavior
+            Handler="{StaticResource ResponseCapturesDataGridDropHandler}" />
+        </i:BehaviorCollection>
+      </i:BehaviorCollectionTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="DataGrid.SubprotocolsDragAndDrop">
+    <Style.Resources>
+      <b:SubprotocolsDataGridDropHandler x:Key="SubprotocolsDataGridDropHandler" />
+    </Style.Resources>
+    <Setter Property="(i:Interaction.Behaviors)">
+      <i:BehaviorCollectionTemplate>
+        <i:BehaviorCollection>
+          <idd:ContextDropBehavior
+            Handler="{StaticResource SubprotocolsDataGridDropHandler}" />
+        </i:BehaviorCollection>
+      </i:BehaviorCollectionTemplate>
+    </Setter>
+  </Style>
+
+</Styles>

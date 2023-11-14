@@ -33,7 +33,7 @@
     <KeyBinding Command="{Binding HotKeys.MoveDownCmd}" Gesture="Alt+Down"/>
     <KeyBinding Command="{Binding HotKeys.SwitchToPreviousItemCmd}" Gesture="Ctrl+PageUp"/>
     <KeyBinding Command="{Binding HotKeys.SwitchToNextItemCmd}" Gesture="Ctrl+PageDown"/>
-    <KeyBinding Command="{Binding RunUITestsCmd}" Gesture="F12"/>
+    <KeyBinding Command="{Binding RunUITestsCmd}" Gesture="Ctrl+F12"/>
     <KeyBinding Command="{Binding SaveAllCmd}" Gesture="Ctrl+Shift+S"/>
   </Window.KeyBindings>
 
@@ -181,6 +181,20 @@
                 </Image>
               </MenuItem.Icon>
             </MenuItem>
+            <MenuItem
+                x:Name="topMenuItemOptionsLanguageItalian"
+                Header="{Binding i18n.TopMenuLanguage.Italian}"
+                Command="{Binding SelectLanguageItalianCmd}">
+              <MenuItem.Icon>
+                <Image
+                    IsVisible="{Binding IsLanguageItalian}"
+                    Classes="MenuItemCheckMark">
+                  <Image.Source>
+                    <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                  </Image.Source>
+                </Image>
+              </MenuItem.Icon>
+            </MenuItem>
           </MenuItem>
           <MenuItem
               x:Name="topMenuItemOptionsEnableTlsVerification"
@@ -207,11 +221,11 @@
           <MenuItem
             Header="{Binding VersionName}"
             IsEnabled="False"/>
-        </MenuItem>
-        <MenuItem
+          <MenuItem
             Header="{Binding i18n.TopMenu.RunUITests}"
             IsVisible="{Binding IsRunUITestsVisible}"
             Command="{Binding RunUITestsCmd}"/>
+        </MenuItem>        
         <MenuItem
             Header="{Binding i18n.TopMenu.Saved}"
             HorizontalAlignment="Right"

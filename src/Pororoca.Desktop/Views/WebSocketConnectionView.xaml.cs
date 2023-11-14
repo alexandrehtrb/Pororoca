@@ -31,13 +31,19 @@ public class WebSocketConnectionView : UserControl
 
     public void OnSelectedConnectionRequestHeadersChanged(object sender, SelectionChangedEventArgs e)
     {
-        var tableVm = ((WebSocketConnectionViewModel)DataContext!).ConnectionRequestHeadersTableVm;
+        var tableVm = ((WebSocketConnectionViewModel)DataContext!).RequestHeadersTableVm;
         UpdateVmSelectedItems(tableVm, e);
     }
 
     public void OnSelectedSubprotocolsChanged(object sender, SelectionChangedEventArgs e)
     {
         var tableVm = ((WebSocketConnectionViewModel)DataContext!).SubprotocolsTableVm;
+        UpdateVmSelectedItems(tableVm, e);
+    }
+
+    public void OnSelectedConnectionResponseHeadersChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var tableVm = ((WebSocketConnectionViewModel)DataContext!).ConnectionResponseHeadersTableVm;
         UpdateVmSelectedItems(tableVm, e);
     }
 

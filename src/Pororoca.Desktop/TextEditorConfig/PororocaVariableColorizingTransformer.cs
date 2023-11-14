@@ -2,16 +2,12 @@ using System.Text.RegularExpressions;
 using Avalonia.Media;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
+using Pororoca.Domain.Features.VariableResolution;
 
 namespace Pororoca.Desktop.TextEditorConfig;
 
 internal partial class PororocaVariableColorizingTransformer : DocumentColorizingTransformer
 {
-    private static readonly Regex pororocaVarRegex = GeneratePororocaVariableRegex();
-
-    [GeneratedRegex("\\{\\{[\\w\\d]+\\}\\}")]
-    private static partial Regex GeneratePororocaVariableRegex();
-
     public IBrush PororocaVariableHighlightBrush { get; set; }
 
     public PororocaVariableColorizingTransformer(IBrush initialHighlightBrush) =>
@@ -20,7 +16,7 @@ internal partial class PororocaVariableColorizingTransformer : DocumentColorizin
     protected override void ColorizeLine(DocumentLine line)
     {
         string lineText = CurrentContext.Document.GetText(line);
-        var matches = pororocaVarRegex.Matches(lineText);
+        var matches = IPororocaVariableResolver.PororocaVariableRegex.Matches(lineText);
         foreach (object objM in matches)
         {
             var match = (Match)objM;

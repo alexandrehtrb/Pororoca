@@ -1,0 +1,204 @@
+openapi: 3.0.3
+info:
+  title: Imgflip API
+  description: API documentation for integrating with Imgflip
+  version: 1.0.0
+servers:
+  - url: https://api.imgflip.com
+paths:
+  /get_memes:
+    get:
+      summary: Get popular memes
+      description: Retrieves an array of popular memes that may be captioned with this API
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      memes:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Meme'
+  /caption_image:
+    post:
+      summary: Add a caption to an Imgflip meme template
+      description: Creates a meme by adding a caption to an Imgflip meme template
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                template_id:
+                  type: string
+                  description: A template ID as returned by the get_memes response
+                username:
+                  type: string
+                  description: Username of a valid Imgflip account
+                password:
+                  type: string
+                  description: Password for the Imgflip account
+                text0:
+                  type: string
+                  description: Top text for the meme
+                text1:
+                  type: string
+                  description: Bottom text for the meme
+                font:
+                  type: string
+                  description: The font family to use for the text
+                  enum:
+                    - impact
+                    - arial
+                max_font_size:
+                  type: integer
+                  description: Maximum font size in pixels
+                  minimum: 1
+                no_watermark:
+                  type: boolean
+                  description: Remove the Imgflip.com watermark
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                        format: uri
+                        description: URL of the created meme
+                      page_url:
+                        type: string
+                        format: uri
+                        description: URL of the meme page
+
+  /search_memes:
+    post:
+      summary: Search for meme templates
+      description: Searches for meme templates that can be captioned with the /caption_image endpoint
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Username of a valid Imgflip account with Premium API subscription
+                password:
+                  type: string
+                  description: Password for the Imgflip account
+                query:
+                  type: string
+                  description: A text query to search the meme database for
+                include_nsfw:
+                  type: boolean
+                  description: Allow not-safe-for-work memes to be returned
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      memes:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Meme'
+  /create_meme:
+    post:
+      summary: Create a custom meme
+      description: Creates a custom meme by specifying an image URL and adding text captions
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Username of a valid Imgflip account
+                password:
+                  type: string
+                  description: Password for the Imgflip account
+                template_id:
+                  type: string
+                  description: ID of the meme template to use
+                text0:
+                  type: string
+                  description: Top text for the meme
+                text1:
+                  type: string
+                  description: Bottom text for the meme
+              required:
+                - username
+                - password
+                - template_id
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                        format: uri
+                        description: URL of the created meme
+                      page_url:
+                        type: string
+                        format: uri
+                        description: URL of the meme page
+
+components:
+  schemas:
+    Meme:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the meme template
+        name:
+          type: string
+          description: Name of the meme template
+        url:
+          type: string
+          format: uri
+          description: URL of the meme template image
+        width:
+          type: integer
+          description: Width of the meme template image
+        height:
+          type: integer
+          description: Height of the meme template image
+

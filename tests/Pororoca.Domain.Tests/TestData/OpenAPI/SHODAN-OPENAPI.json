@@ -1,0 +1,59 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Shodan REST API Documentation",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://api.shodan.io"
+        }
+    ],
+    "tags": [],
+    "paths": {
+        "/shodan/host/{ip}": {
+            "get": {
+                "tags": ["Search Methods"],
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "history",
+                        "in": "query",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "minify",
+                        "in": "query",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "ip",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "ApiKeyAuth": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "SHODAN-KEY"
+            }
+        }
+    }
+}

@@ -1,4 +1,3 @@
-using Moq;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.VariableResolution;
@@ -9,16 +8,16 @@ namespace Pororoca.Domain.Tests.Features.TranslateRequest.Http;
 
 public static class PororocaHttpRequestTranslatorTests
 {
+    private static IEnumerable<PororocaVariable> GetEffectiveVariables(this PororocaCollection col) =>
+        ((IPororocaVariableResolver)col).GetEffectiveVariables();
+
     #region MOCKERS
 
-    private static Mock<IPororocaVariableResolver> MockVariableResolver(string key, string value)
+    private static IPororocaVariableResolver MockVariableResolver(string key, string value)
     {
-        Mock<IPororocaVariableResolver> mockedVariableResolver = new();
-
-        mockedVariableResolver.Setup(x => x.ReplaceTemplates(key))
-                              .Returns(value);
-
-        return mockedVariableResolver;
+        PororocaCollection col = new("col");
+        col.Variables.Add(new(true, key, value, false));
+        return col;
     }
 
     #endregion
@@ -47,7 +46,7 @@ public static class PororocaHttpRequestTranslatorTests
         req.UpdateBody(body);
 
         // WHEN
-        var resolvedUrlEncoded = ResolveFormUrlEncodedKeyValues(col, req.Body!);
+        var resolvedUrlEncoded = ResolveFormUrlEncodedKeyValues(col.GetEffectiveVariables(), req.Body!);
 
         // THEN
         Assert.Equal(2, resolvedUrlEncoded.Count);
@@ -67,7 +66,7 @@ public static class PororocaHttpRequestTranslatorTests
         PororocaHttpRequest req = new();
 
         // WHEN
-        var resolvedReqContent = ResolveRequestContent(col, req.Body, resolvedContentHeaders);
+        var resolvedReqContent = ResolveRequestContent(col.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
 
         // THEN
         Assert.Null(resolvedReqContent);
@@ -77,7 +76,7 @@ public static class PororocaHttpRequestTranslatorTests
     public static async Task Should_resolve_raw_content_correctly()
     {
         // GIVEN
-        var mockedVariableResolver = MockVariableResolver("{\"id\":{{myID}}}", "{\"id\":3162}");
+        var varResolver = MockVariableResolver("myID", "3162");
         Dictionary<string, string> resolvedContentHeaders = new(1)
         {
             { "Content-Language", "pt-BR" }
@@ -89,11 +88,9 @@ public static class PororocaHttpRequestTranslatorTests
         req.UpdateBody(body);
 
         // WHEN
-        var resolvedReqContent = ResolveRequestContent(mockedVariableResolver.Object, req.Body, resolvedContentHeaders);
+        var resolvedReqContent = ResolveRequestContent(varResolver.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
 
         // THEN
-        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{\"id\":{{myID}}}"), Times.Once);
-
         Assert.NotNull(resolvedReqContent);
         Assert.True(resolvedReqContent is StringContent);
         Assert.NotNull(resolvedReqContent!.Headers.ContentType);
@@ -110,7 +107,7 @@ public static class PororocaHttpRequestTranslatorTests
     {
         // GIVEN
         string testFilePath = GetTestFilePath("testfilecontent1.json");
-        var mockedVariableResolver = MockVariableResolver("{{MyFilePath}}", testFilePath);
+        var varResolver = MockVariableResolver("MyFilePath", testFilePath);
         Dictionary<string, string> resolvedContentHeaders = new(1)
         {
             { "Content-Language", "pt-BR" }
@@ -122,11 +119,9 @@ public static class PororocaHttpRequestTranslatorTests
         req.UpdateBody(body);
 
         // WHEN
-        var resolvedReqContent = ResolveRequestContent(mockedVariableResolver.Object, req.Body, resolvedContentHeaders);
+        var resolvedReqContent = ResolveRequestContent(varResolver.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
 
         // THEN
-        mockedVariableResolver.Verify(x => x.ReplaceTemplates("{{MyFilePath}}"), Times.Once);
-
         Assert.NotNull(resolvedReqContent);
         Assert.True(resolvedReqContent is StreamContent);
         Assert.NotNull(resolvedReqContent!.Headers.ContentType);
@@ -143,8 +138,7 @@ public static class PororocaHttpRequestTranslatorTests
         // GIVEN
         const string qry = "myGraphQlQuery";
         const string variables = "{\"id\":{{CocoId}}}";
-        const string resolvedVariables = "{\"id\":19}";
-        var mockedVariableResolver = MockVariableResolver(variables, resolvedVariables);
+        var varResolver = MockVariableResolver("CocoId", "19");
         Dictionary<string, string> resolvedContentHeaders = new(1)
         {
             { "Content-Language", "pt-BR" }
@@ -156,11 +150,9 @@ public static class PororocaHttpRequestTranslatorTests
         req.UpdateBody(body);
 
         // WHEN
-        var resolvedReqContent = ResolveRequestContent(mockedVariableResolver.Object, req.Body, resolvedContentHeaders);
+        var resolvedReqContent = ResolveRequestContent(varResolver.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
 
         // THEN
-        mockedVariableResolver.Verify(x => x.ReplaceTemplates(variables), Times.Once);
-
         Assert.NotNull(resolvedReqContent);
         Assert.True(resolvedReqContent is StringContent);
         Assert.NotNull(resolvedReqContent!.Headers.ContentType);
@@ -197,7 +189,7 @@ public static class PororocaHttpRequestTranslatorTests
         req.UpdateBody(body);
 
         // WHEN
-        var resolvedReqContent = ResolveRequestContent(col, req.Body, resolvedContentHeaders);
+        var resolvedReqContent = ResolveRequestContent(col.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
 
         // THEN
         Assert.NotNull(resolvedReqContent);
@@ -239,7 +231,7 @@ public static class PororocaHttpRequestTranslatorTests
         req.UpdateBody(body);
 
         // WHEN
-        var resolvedReqContent = ResolveRequestContent(col, req.Body, resolvedContentHeaders);
+        var resolvedReqContent = ResolveRequestContent(col.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
 
         // THEN
         Assert.NotNull(resolvedReqContent);

@@ -41,11 +41,12 @@ public sealed class PororocaTestWebSocketConnector : PororocaWebSocketConnector
     public async Task SendMessageAsync(PororocaWebSocketClientMessage msg, TimeSpan waitingTimeInSeconds)
 #pragma warning restore CA1061
     {
-        if (!IsValidClientMessage(this.varResolver, msg, out string? validationErrorCode))
+        var effectiveVars = this.varResolver.GetEffectiveVariables();
+        if (!IsValidClientMessage(effectiveVars, msg, out string? validationErrorCode))
         {
             throw new Exception($"Error: Could not send WebSocket client message. Cause: '{validationErrorCode}'.");
         }
-        else if (!TryTranslateClientMessage(this.varResolver, msg, out var resolvedMsgToSend, out string? translationErrorCode))
+        else if (!TryTranslateClientMessage(effectiveVars, msg, out var resolvedMsgToSend, out string? translationErrorCode))
         {
             throw new Exception($"Error: Could not send WebSocket client message. Cause: '{translationErrorCode}'.");
         }

@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Reactive;
 using AvaloniaEdit.Document;
+using Pororoca.Desktop.Behaviors;
 using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
@@ -21,12 +22,12 @@ using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOp
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
+public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, IRequestHeadersDataGridOwner
 {
     #region REQUEST
 
     private readonly IPororocaRequester requester = PororocaRequester.Singleton;
-    private readonly CollectionViewModel variableResolver;
+    private readonly CollectionViewModel col;
 
     // To preserve the state of the last shown request tab
     [Reactive]
@@ -253,7 +254,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
         #region REQUEST
 
-        this.variableResolver = variableResolver;
+        this.col = variableResolver;
 
         #endregion
 
@@ -300,7 +301,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         #endregion
 
         #region RESPONSE
-        ResponseDataCtx = new(this.variableResolver, this);
+        ResponseDataCtx = new(this.col, this);
         #region RESPONSE CAPTURES
         ResCapturesTableVm = new(req.ResponseCaptures);
         #endregion
@@ -324,8 +325,11 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST HTTP METHOD, HTTP VERSION AND URL
 
-    public void UpdateResolvedRequestUrlToolTip() =>
-        ResolvedRequestUrlToolTip = ((IPororocaVariableResolver)this.variableResolver).ReplaceTemplates(RequestUrl);
+    public void UpdateResolvedRequestUrlToolTip()
+    {
+        var varResolver = ((IPororocaVariableResolver)this.col);
+        ResolvedRequestUrlToolTip = IPororocaVariableResolver.ReplaceTemplates(RequestUrl, varResolver.GetEffectiveVariables());
+    }
 
     private static string FormatHttpVersionString(decimal httpVersion) =>
         httpVersion switch
@@ -419,7 +423,8 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     {
         ClearInvalidRequestWarnings();
         var generatedReq = ToHttpRequest();
-        if (!this.requester.IsValidRequest(this.variableResolver, generatedReq, out string? errorCode))
+        var effectiveVars = ((IPororocaVariableResolver)this.col).GetEffectiveVariables();
+        if (!this.requester.IsValidRequest(effectiveVars, this.col.CollectionScopedAuth, generatedReq, out string? errorCode))
         {
             this.invalidRequestMessageErrorCode = errorCode;
             ShowInvalidRequestWarnings();
@@ -427,7 +432,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         else
         {
             ShowSendingRequestUI();
-            var res = await SendRequestAsync(generatedReq);
+            var res = await SendRequestAsync(generatedReq, effectiveVars);
             ResponseDataCtx.UpdateWithResponse(res);
             ShowNotSendingRequestUI();
         }
@@ -525,7 +530,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         IsSendRequestProgressBarVisible = false;
     }
 
-    private Task<PororocaHttpResponse> SendRequestAsync(PororocaHttpRequest generatedReq)
+    private Task<PororocaHttpResponse> SendRequestAsync(PororocaHttpRequest generatedReq, IEnumerable<PororocaVariable> effectiveVars)
     {
         bool disableSslVerification = ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled;
         this.sendRequestCancellationTokenSourceField = new();
@@ -533,7 +538,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         // Awaiting the request.RequestAsync() here, or simply returning its Task,
         // causes the UI to freeze for a few seconds, especially when performing the first request to a server.
         // That is why we are invoking the code to run in a new thread, like below.
-        return Task.Run(async () => await this.requester.RequestAsync(this.variableResolver, generatedReq, disableSslVerification, this.sendRequestCancellationTokenSourceField.Token));
+        return Task.Run(async () => await this.requester.RequestAsync(effectiveVars, this.col.CollectionScopedAuth, generatedReq, disableSslVerification, this.sendRequestCancellationTokenSourceField.Token));
     }
 
     #endregion

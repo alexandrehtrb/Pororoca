@@ -4,7 +4,8 @@ public enum Language
 {
     Portuguese,
     English,
-    Russian
+    Russian,
+    Italian
 }
 
 public static class LanguageExtensions
@@ -14,6 +15,7 @@ public static class LanguageExtensions
         Language.Portuguese => "pt-br",
         Language.English => "en-gb",
         Language.Russian => "ru-ru",
+        Language.Italian => "it-it",
         _ => "en-gb",
     };
 
@@ -22,6 +24,7 @@ public static class LanguageExtensions
         "pt-br" => Language.Portuguese,
         "en-gb" => Language.English,
         "ru-ru" => Language.Russian,
+        "it-it" => Language.Italian,
         _ => throw new KeyNotFoundException($"No language found for LCID '{lcid}'.")
     };
 }

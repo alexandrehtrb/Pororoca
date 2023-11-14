@@ -17,7 +17,7 @@ public sealed class PororocaRequester : IPororocaRequester
     {
     }
 
-    public async Task<PororocaHttpResponse> RequestAsync(IPororocaVariableResolver variableResolver, PororocaHttpRequest req, bool disableSslVerification, CancellationToken cancellationToken = default)
+    public async Task<PororocaHttpResponse> RequestAsync(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaHttpRequest req, bool disableSslVerification, CancellationToken cancellationToken = default)
     {
         HttpRequestMessage? reqMsg = null;
         HttpResponseMessage resMsg;
@@ -25,7 +25,7 @@ public sealed class PororocaRequester : IPororocaRequester
         sw.Start();
         try
         {
-            if (!PororocaHttpRequestTranslator.TryTranslateRequest(variableResolver, req, out reqMsg, out string? errorCode))
+            if (!PororocaHttpRequestTranslator.TryTranslateRequest(effectiveVars, collectionScopedAuth, req, out reqMsg, out string? errorCode))
             {
                 reqMsg?.Dispose();
                 sw.Stop();
@@ -50,8 +50,8 @@ public sealed class PororocaRequester : IPororocaRequester
         }
     }
 
-    public bool IsValidRequest(IPororocaVariableResolver variableResolver, PororocaHttpRequest req, out string? errorCode) =>
-        PororocaHttpRequestValidator.IsValidRequest(variableResolver, req, out errorCode);
+    public bool IsValidRequest(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaHttpRequest req, out string? errorCode) =>
+        PororocaHttpRequestValidator.IsValidRequest(effectiveVars, collectionScopedAuth, req, out errorCode);
 
     private static PororocaRequestAuth? GetResolvedAuth(HttpRequestMessage reqMsg)
     {

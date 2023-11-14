@@ -7,6 +7,10 @@ namespace Pororoca.Domain.Features.TranslateRequest.Common;
 
 public static class PororocaRequestCommonTranslator
 {
+    internal static PororocaRequestAuth? ChooseRequestAuth(PororocaRequestAuth? collectionScopedAuth, PororocaRequestAuth? reqAuth) =>
+        reqAuth?.Mode == PororocaRequestAuthMode.InheritFromCollection ?
+        collectionScopedAuth : reqAuth;
+
     private static readonly ImmutableList<string> acceptedUriSchemes = ImmutableList.Create<string>(
         Uri.UriSchemeHttp,
         Uri.UriSchemeHttps,
@@ -16,9 +20,9 @@ public static class PororocaRequestCommonTranslator
 
     #region REQUEST URL
 
-    public static bool TryResolveRequestUri(IPororocaVariableResolver variableResolver, string rawUrl, out Uri? uri, out string? errorCode)
+    public static bool TryResolveRequestUri(IEnumerable<PororocaVariable> effectiveVars, string rawUrl, out Uri? uri, out string? errorCode)
     {
-        string? resolvedRawUri = variableResolver.ReplaceTemplates(rawUrl);
+        string? resolvedRawUri = IPororocaVariableResolver.ReplaceTemplates(rawUrl, effectiveVars);
         bool validUri = Uri.TryCreate(resolvedRawUri, UriKind.Absolute, out var parsedUri);
         bool validScheme = validUri && acceptedUriSchemes.Contains(parsedUri!.Scheme);
         bool success = validUri && validScheme;
@@ -51,14 +55,14 @@ public static class PororocaRequestCommonTranslator
      || headerName == "Expires"
      || headerName == "Last-Modified";
 
-    internal static IDictionary<string, string> ResolveContentHeaders(IPororocaVariableResolver variableResolver, IReadOnlyList<PororocaKeyValueParam>? unresolvedHeaders) =>
-        ResolveHeaders(variableResolver, unresolvedHeaders, IsContentHeader);
+    internal static IDictionary<string, string> ResolveContentHeaders(IEnumerable<PororocaVariable> effectiveVars, IReadOnlyList<PororocaKeyValueParam>? unresolvedHeaders) =>
+        ResolveHeaders(effectiveVars, unresolvedHeaders, IsContentHeader);
 
-    internal static IDictionary<string, string> ResolveNonContentHeaders(IPororocaVariableResolver variableResolver, IReadOnlyList<PororocaKeyValueParam>? unresolvedHeaders, PororocaRequestAuth? reqAuth)
+    internal static IDictionary<string, string> ResolveNonContentHeaders(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaRequestAuth? reqAuth, IReadOnlyList<PororocaKeyValueParam>? unresolvedHeaders)
     {
-        var nonContentHeaders = ResolveHeaders(variableResolver, unresolvedHeaders, headerName => !IsContentHeader(headerName));
+        var nonContentHeaders = ResolveHeaders(effectiveVars, unresolvedHeaders, headerName => !IsContentHeader(headerName));
 
-        string? customAuthHeaderValue = ResolveCustomAuthHeaderValue(variableResolver, reqAuth);
+        string? customAuthHeaderValue = ResolveCustomAuthHeaderValue(effectiveVars, collectionScopedAuth, reqAuth);
         if (customAuthHeaderValue != null)
         {
             // Custom auth overrides declared authorization header
@@ -68,31 +72,31 @@ public static class PororocaRequestCommonTranslator
         return nonContentHeaders;
     }
 
-    private static IDictionary<string, string> ResolveHeaders(IPororocaVariableResolver variableResolver, IReadOnlyList<PororocaKeyValueParam>? unresolvedHeaders, Func<string, bool> headerNameCriteria) =>
+    private static IDictionary<string, string> ResolveHeaders(IEnumerable<PororocaVariable> effectiveVars, IReadOnlyList<PororocaKeyValueParam>? unresolvedHeaders, Func<string, bool> headerNameCriteria) =>
         unresolvedHeaders == null ?
         new() :
-        variableResolver
-           .ResolveKeyValueParams(unresolvedHeaders)
+        IPororocaVariableResolver
+           .ResolveKeyValueParams(unresolvedHeaders, effectiveVars)
            .Where(h => h.Key != "Content-Type" && headerNameCriteria(h.Key)) // Content-Type header is set by the content, later
            .ToDictionary(h => h.Key, h => h.Value);
 
-    private static string? ResolveCustomAuthHeaderValue(IPororocaVariableResolver variableResolver, PororocaRequestAuth? reqAuth)
+    private static string? ResolveCustomAuthHeaderValue(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaRequestAuth? reqAuth)
     {
         string? MakeBasicAuthToken(PororocaRequestAuth auth)
         {
-            string? resolvedLogin = variableResolver.ReplaceTemplates(auth.BasicAuthLogin!);
-            string? resolvedPassword = variableResolver.ReplaceTemplates(auth.BasicAuthPassword!);
+            string? resolvedLogin = IPororocaVariableResolver.ReplaceTemplates(auth.BasicAuthLogin!, effectiveVars);
+            string? resolvedPassword = IPororocaVariableResolver.ReplaceTemplates(auth.BasicAuthPassword!, effectiveVars);
             string basicAuthTkn = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{resolvedLogin}:{resolvedPassword}"));
             return basicAuthTkn;
         }
 
         string? MakeBearerAuthToken(PororocaRequestAuth auth)
         {
-            string? resolvedBearerToken = variableResolver.ReplaceTemplates(auth.BearerToken!);
+            string? resolvedBearerToken = IPororocaVariableResolver.ReplaceTemplates(auth.BearerToken!, effectiveVars);
             return resolvedBearerToken;
         }
 
-        var authToUse = variableResolver.GetAuthForRequest(reqAuth);
+        var authToUse = ChooseRequestAuth(collectionScopedAuth, reqAuth);
 
         return authToUse?.Mode switch
         {
@@ -106,15 +110,15 @@ public static class PororocaRequestCommonTranslator
 
     #region AUTH
 
-    internal static PororocaRequestAuth? ResolveRequestAuth(IPororocaVariableResolver variableResolver, PororocaRequestAuth? reqAuth)
+    internal static PororocaRequestAuth? ResolveRequestAuth(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaRequestAuth? reqAuth)
     {
-        var authToUse = variableResolver.GetAuthForRequest(reqAuth);
+        var authToUse = ChooseRequestAuth(collectionScopedAuth, reqAuth);
 
         if (authToUse is null)
             return null;
 
-        var resolvedClientCert = ResolveClientCertificate(variableResolver, authToUse.ClientCertificate);
-        var resolvedWindowsAuth = ResolveWindowsAuth(variableResolver, authToUse.Windows);
+        var resolvedClientCert = ResolveClientCertificate(effectiveVars, authToUse.ClientCertificate);
+        var resolvedWindowsAuth = ResolveWindowsAuth(effectiveVars, authToUse.Windows);
 
         if (resolvedClientCert is null && resolvedWindowsAuth is null)
             return null;
@@ -133,13 +137,13 @@ public static class PororocaRequestCommonTranslator
 
     #region CLIENT CERTIFICATES
 
-    internal static PororocaRequestAuthClientCertificate? ResolveClientCertificate(IPororocaVariableResolver variableResolver, PororocaRequestAuthClientCertificate? unresolvedClientCertificate)
+    internal static PororocaRequestAuthClientCertificate? ResolveClientCertificate(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuthClientCertificate? unresolvedClientCertificate)
     {
         if (unresolvedClientCertificate == null)
             return null;
 
-        string resolvedPrivateKeyFilePath = variableResolver.ReplaceTemplates(unresolvedClientCertificate.PrivateKeyFilePath);
-        string resolvedFilePassword = variableResolver.ReplaceTemplates(unresolvedClientCertificate.FilePassword);
+        string resolvedPrivateKeyFilePath = IPororocaVariableResolver.ReplaceTemplates(unresolvedClientCertificate.PrivateKeyFilePath, effectiveVars);
+        string resolvedFilePassword = IPororocaVariableResolver.ReplaceTemplates(unresolvedClientCertificate.FilePassword, effectiveVars);
 
         string? nulledPrivateKeyFilePath = string.IsNullOrWhiteSpace(resolvedPrivateKeyFilePath) ?
                                            null : resolvedPrivateKeyFilePath;
@@ -148,7 +152,7 @@ public static class PororocaRequestCommonTranslator
 
         return new(
             Type: unresolvedClientCertificate.Type,
-            CertificateFilePath: variableResolver.ReplaceTemplates(unresolvedClientCertificate.CertificateFilePath),
+            CertificateFilePath: IPororocaVariableResolver.ReplaceTemplates(unresolvedClientCertificate.CertificateFilePath, effectiveVars),
             PrivateKeyFilePath: nulledPrivateKeyFilePath,
             FilePassword: nulledFilePassword
         );
@@ -158,16 +162,16 @@ public static class PororocaRequestCommonTranslator
 
     #region WINDOWS AUTHENTICATION
 
-    internal static PororocaRequestAuthWindows? ResolveWindowsAuth(IPororocaVariableResolver variableResolver, PororocaRequestAuthWindows? unresolvedWinAuth)
+    internal static PororocaRequestAuthWindows? ResolveWindowsAuth(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuthWindows? unresolvedWinAuth)
     {
         if (unresolvedWinAuth is null)
             return null;
         else if (unresolvedWinAuth.UseCurrentUser)
             return new(true, null, null, null);
         else return new(UseCurrentUser: false,
-                        Login: variableResolver.ReplaceTemplates(unresolvedWinAuth.Login),
-                        Password: variableResolver.ReplaceTemplates(unresolvedWinAuth.Password),
-                        Domain: variableResolver.ReplaceTemplates(unresolvedWinAuth.Domain));
+                        Login: IPororocaVariableResolver.ReplaceTemplates(unresolvedWinAuth.Login, effectiveVars),
+                        Password: IPororocaVariableResolver.ReplaceTemplates(unresolvedWinAuth.Password, effectiveVars),
+                        Domain: IPororocaVariableResolver.ReplaceTemplates(unresolvedWinAuth.Domain, effectiveVars));
     }
 
     #endregion

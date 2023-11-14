@@ -1,13 +1,13 @@
+using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
-using Pororoca.Domain.Features.VariableResolution;
 
 namespace Pororoca.Domain.Features.Requester;
 
 public interface IPororocaRequester
 {
-    bool IsValidRequest(IPororocaVariableResolver variableResolver, PororocaHttpRequest req, out string? errorCode);
+    bool IsValidRequest(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaHttpRequest req, out string? errorCode);
 
     // TODO: Customizable timeout period
     // TODO: Optional compressed request or response
-    Task<PororocaHttpResponse> RequestAsync(IPororocaVariableResolver variableResolver, PororocaHttpRequest req, bool disableSslVerification, CancellationToken cancellationToken = default);
+    Task<PororocaHttpResponse> RequestAsync(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaHttpRequest req, bool disableSslVerification, CancellationToken cancellationToken = default);
 }

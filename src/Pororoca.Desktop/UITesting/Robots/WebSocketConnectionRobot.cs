@@ -30,7 +30,9 @@ public sealed class WebSocketConnectionRobot : BaseNamedRobot
     internal TextEditor MessageDetailContent => GetChildView<TextEditor>("SelectedExchangedMessageContentEditor")!;
     internal TabControl TabControlConnectionRequest => GetChildView<TabControl>("tabControlConnectionRequest")!;
     internal TabItem TabConnectionRequestAuth => GetChildView<TabItem>("tabItemConnectionRequestAuth")!;
-    internal TabItem TabConnectionRequestException => GetChildView<TabItem>("tabItemConnectionRequestException")!;
+    internal TabItem TabConnectionResponse => GetChildView<TabItem>("tabItemConnectionResponse")!;
+    internal TextBlock ConnectionResponseStatusCode => GetChildView<TextBlock>("tbWebsocketResStatusCodeAndTime")!;
+    internal DataGrid ConnectionResponseHeaders => GetChildView<DataGrid>("dgWebsocketResHeaders")!;
     internal TabItem TabConnectionRequestOptions => GetChildView<TabItem>("tabItemConnectionRequestOptions")!;
     internal TextBox ConnectionRequestException => GetChildView<TextBox>("tbConnectionException")!;
     internal TextBox MessageDetailType => GetChildView<TextBox>("tbMessageDetailType")!;

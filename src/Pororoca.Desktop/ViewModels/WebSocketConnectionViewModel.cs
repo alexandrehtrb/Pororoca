@@ -1,9 +1,12 @@
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.Net;
 using System.Reactive;
 using System.Security.Authentication;
 using AvaloniaEdit.Document;
+using Pororoca.Desktop.Behaviors;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
@@ -25,7 +28,7 @@ using static Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection.Por
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemParentViewModel<WebSocketClientMessageViewModel>
+public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemParentViewModel<WebSocketClientMessageViewModel>, IRequestHeadersDataGridOwner
 {
     #region COLLECTION ORGANIZATION
 
@@ -37,7 +40,9 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region CONNECTION
 
-    private readonly IPororocaVariableResolver varResolver;
+    private readonly CollectionViewModel col;
+    private static readonly TimeSpan oneSecond = TimeSpan.FromSeconds(1);
+    private static readonly TimeSpan oneMinute = TimeSpan.FromMinutes(1);
     private readonly IPororocaHttpClientProvider httpClientProvider;
     private readonly PororocaWebSocketConnector connector;
 
@@ -214,7 +219,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region CONNECTION OPTION HEADERS
 
-    public KeyValueParamsDataGridViewModel ConnectionRequestHeadersTableVm { get; }
+    public KeyValueParamsDataGridViewModel RequestHeadersTableVm { get; }
 
     #endregion
 
@@ -252,10 +257,18 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #endregion
 
-    #region CONNECTION EXCEPTION
+    #region CONNECTION RESPONSE
 
     [Reactive]
+    public bool WasConnectionSuccessful { get; private set; }
+    
+    [Reactive]
     public string? ConnectionExceptionContent { get; set; }
+
+    [Reactive]
+    public string? ResponseStatusCodeElapsedTimeTitle { get; private set; }
+
+    public KeyValueParamsDataGridViewModel ConnectionResponseHeadersTableVm { get; }
 
     #endregion
 
@@ -335,7 +348,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     #endregion
 
     public WebSocketConnectionViewModel(ICollectionOrganizationItemParentViewModel parentVm,
-                                        IPororocaVariableResolver variableResolver,
+                                        CollectionViewModel col,
                                         PororocaWebSocketConnection ws) : base(parentVm, ws.Name)
     {
         #region COLLECTION ORGANIZATION
@@ -347,7 +360,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
         #region CONNECTION
 
-        this.varResolver = variableResolver;
+        this.col = col;
         this.httpClientProvider = PororocaHttpClientProvider.Singleton;
         this.connector = new(OnWebSocketConnectionChanged, OnWebSocketMessageSending);
 
@@ -385,7 +398,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
         #region CONNECTION OPTION HEADERS
 
-        ConnectionRequestHeadersTableVm = new(ws.Headers);
+        RequestHeadersTableVm = new(ws.Headers);
 
         #endregion
 
@@ -419,6 +432,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         #endregion
 
         #region EXCHANGED MESSAGES
+        ConnectionResponseHeadersTableVm = new(new List<PororocaKeyValueParam>());
         ExchangedMessages = new();
         this.connector.ExchangedMessages.CollectionChanged += OnConnectorExchangedMessagesUpdated;
         SendMessageCmd = ReactiveCommand.CreateFromTask(SendMessageAsync);
@@ -488,7 +502,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     #region REQUEST HTTP METHOD, HTTP VERSION AND URL
 
     public void UpdateResolvedUrlToolTip() =>
-        ResolvedUrlToolTip = this.varResolver.ReplaceTemplates(Url);
+        ResolvedUrlToolTip = IPororocaVariableResolver.ReplaceTemplates(Url, ((IPororocaVariableResolver)this.col).GetEffectiveVariables());
 
     private static string FormatHttpVersionString(decimal httpVersion) =>
         httpVersion switch
@@ -533,7 +547,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         ws.HttpVersion = HttpVersion;
         ws.Url = Url;
         ws.CustomAuth = RequestAuthDataCtx.ToCustomAuth();
-        ws.Headers = ConnectionRequestHeadersTableVm.Items.Count == 0 ? null : ConnectionRequestHeadersTableVm.Items.Select(h => h.ToKeyValueParam()).ToList();
+        ws.Headers = RequestHeadersTableVm.Items.Count == 0 ? null : RequestHeadersTableVm.Items.Select(h => h.ToKeyValueParam()).ToList();
         ws.ClientMessages = Items.Count == 0 ? null : Items.Select(i => i.ToWebSocketClientMessage()).ToList();
         ws.Subprotocols = SubprotocolsTableVm.Items.Count == 0 ? null : SubprotocolsTableVm.Items.Select(s => s.ToKeyValueParam()).ToList();
         ws.CompressionOptions = WrapCompressionOptionsFromInputs();
@@ -561,9 +575,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         IsDisconnecting = state == PororocaWebSocketConnectorState.Disconnecting;
         IsConnected = state == PororocaWebSocketConnectorState.Connected;
         ConnectionExceptionContent = ex?.ToString();
-        if (ex is not null)
+        if (state == PororocaWebSocketConnectorState.Connected || ex is not null)
         {
-            // switching to Exception tab
             // TODO: do not use fixed integers here, find a better way
             SelectedConnectionTabIndex = 2;
         }
@@ -580,13 +593,14 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     public async Task ConnectAsync()
     {
         var wsConn = ToWebSocketConnection();
+        var effectiveVars = ((IPororocaVariableResolver)this.col).GetEffectiveVariables();
         bool disableTlsVerification = ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled;
-
-        if (!IsValidConnection(this.varResolver, wsConn, out var resolvedUri, out string? translateUriErrorCode))
+        
+        if (!IsValidConnection(effectiveVars, this.col.CollectionScopedAuth, wsConn, out var resolvedUri, out string? translateUriErrorCode))
         {
             InvalidConnectionErrorCode = translateUriErrorCode;
         }
-        else if (!TryTranslateConnection(this.varResolver, this.httpClientProvider, wsConn, disableTlsVerification,
+        else if (!TryTranslateConnection(effectiveVars, this.col.CollectionScopedAuth, this.httpClientProvider, wsConn, disableTlsVerification,
                                          out var resolvedClients, out string? translateConnErrorCode))
         {
             InvalidConnectionErrorCode = translateConnErrorCode;
@@ -600,6 +614,16 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             // causes the UI to freeze for a few seconds, especially when performing the first request to a server.
             // That is why we are invoking the code to run in a new thread, like below.
             await Task.Run(() => this.connector.ConnectAsync(resolvedClients.wsCli!, resolvedClients.httpCli!, resolvedUri!, this.cancelConnectionAttemptTokenSource.Token));
+            WasConnectionSuccessful = this.connector.ConnectionException is null;
+            ResponseStatusCodeElapsedTimeTitle = FormatResponseTitle(this.connector.ElapsedConnectionTimeSpan, resolvedClients.wsCli!.HttpStatusCode);
+            ConnectionResponseHeadersTableVm.Items.Clear();
+            var resHeaders = this.connector.ConnectionHttpHeaders?.SelectMany(
+                kv => kv.Value.Select(val => new KeyValueParamViewModel(ConnectionResponseHeadersTableVm.Items, true, kv.Key, val))).ToList()
+                ?? new List<KeyValueParamViewModel>();
+            foreach (var header in resHeaders)
+            {
+                ConnectionResponseHeadersTableVm.Items.Add(header);
+            }
         }
     }
 
@@ -625,6 +649,21 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         IsDisableTlsVerificationVisible = false;
     }
 
+    private static string FormatResponseTitle(TimeSpan elapsedTime, HttpStatusCode statusCode) =>
+        string.Format("{0} ({1})",
+            FormatHttpStatusCode(statusCode),
+            FormatElapsedTime(elapsedTime));
+
+    private static string FormatHttpStatusCode(HttpStatusCode statusCode) =>
+        $"{(int)statusCode} {Enum.GetName(statusCode)}";
+
+    private static string FormatElapsedTime(TimeSpan elapsedTime) =>
+        elapsedTime < oneSecond ?
+            string.Format(Localizer.Instance.HttpResponse.ElapsedTimeMillisecondsFormat, (int)elapsedTime.TotalMilliseconds) :
+            elapsedTime < oneMinute ? // More or equal than one second, but less than one minute
+                string.Format(Localizer.Instance.HttpResponse.ElapsedTimeSecondsFormat, elapsedTime.TotalSeconds) : // TODO: Format digit separator according to language
+                string.Format(Localizer.Instance.HttpResponse.ElapsedTimeMinutesFormat, elapsedTime.Minutes, elapsedTime.Seconds);
+
     #endregion
 
     #region EXCHANGED MESSAGES
@@ -638,12 +677,12 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         else
         {
             var msg = Items[MessageToSendSelectedIndex].ToWebSocketClientMessage();
-
-            if (!IsValidClientMessage(this.varResolver, msg, out string? validationErrorCode))
+            var effectiveVars = ((IPororocaVariableResolver)this.col).GetEffectiveVariables();
+            if (!IsValidClientMessage(effectiveVars, msg, out string? validationErrorCode))
             {
                 InvalidClientMessageErrorCode = validationErrorCode;
             }
-            else if (!TryTranslateClientMessage(this.varResolver, msg, out var resolvedMsgToSend, out string? translationErrorCode))
+            else if (!TryTranslateClientMessage(effectiveVars, msg, out var resolvedMsgToSend, out string? translationErrorCode))
             {
                 InvalidClientMessageErrorCode = translationErrorCode;
             }
