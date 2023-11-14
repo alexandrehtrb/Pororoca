@@ -249,7 +249,9 @@
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding RequestHeadersTableVm.Items}"
                   SelectionChanged="OnSelectedRequestHeadersChanged"
-                  CanUserResizeColumns="True">
+                  CanUserResizeColumns="True"
+                  HeadersVisibility="All"
+                  Classes="DragAndDrop RequestHeadersDragAndDrop">
                 <!--DataGrid.KeyBindings>
                     <KeyBinding Command="{Binding RequestHeadersTableVm.CutCmd}" Gesture="Ctrl+X" />
                     <KeyBinding Command="{Binding RequestHeadersTableVm.CopyCmd}" Gesture="Ctrl+C" />
@@ -280,7 +282,7 @@
                 </DataGrid.ContextMenu>
                 <DataGrid.Columns>
                   <DataGridCheckBoxColumn
-                      Width="0.19*"
+                      Width="0.24*"
                       Binding="{Binding Enabled}">
                     <DataGridCheckBoxColumn.Header>
                       <TextBlock Text="{Binding i18n.HttpRequest.HeaderEnabled}"/>
@@ -294,7 +296,7 @@
                     </DataGridTextColumn.Header>
                   </DataGridTextColumn>
                   <DataGridTextColumn
-                      Width="0.37*"
+                      Width="0.32*"
                       Binding="{Binding Value}">
                     <DataGridTextColumn.Header>
                       <TextBlock Text="{Binding i18n.HttpRequest.HeaderValue}"/>
@@ -503,7 +505,9 @@
                     AutoGenerateColumns="False"
                     ItemsSource="{Binding UrlEncodedParamsTableVm.Items}"
                     SelectionChanged="OnSelectedUrlEncodedParamsChanged"
-                    CanUserResizeColumns="True">
+                    CanUserResizeColumns="True"
+                    HeadersVisibility="All"
+                    Classes="DragAndDrop UrlEncodedParamsDragAndDrop">
                   <!--DataGrid.KeyBindings>
                       <KeyBinding Command="{Binding UrlEncodedParamsTableVm.CutCmd}" Gesture="Ctrl+X" />
                       <KeyBinding Command="{Binding UrlEncodedParamsTableVm.CopyCmd}" Gesture="Ctrl+C" />
@@ -534,7 +538,7 @@
                   </DataGrid.ContextMenu>
                   <DataGrid.Columns>
                     <DataGridCheckBoxColumn
-                        Width="0.19*"
+                        Width="0.22*"
                         Binding="{Binding Enabled}">
                       <DataGridCheckBoxColumn.Header>
                         <TextBlock Text="{Binding i18n.HttpRequest.BodyUrlEncodedParamEnabled}"/>
@@ -548,7 +552,7 @@
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                        Width="0.35*"
+                        Width="0.32*"
                         Binding="{Binding Value}">
                       <DataGridTextColumn.Header>
                         <TextBlock Text="{Binding i18n.HttpRequest.BodyUrlEncodedParamValue}"/>
@@ -617,7 +621,9 @@
                     AutoGenerateColumns="False"
                     ItemsSource="{Binding FormDataParamsTableVm.Items}"
                     SelectionChanged="OnSelectedFormDataParamsChanged"
-                    CanUserResizeColumns="True">
+                    CanUserResizeColumns="True"
+                    HeadersVisibility="All"
+                    Classes="DragAndDrop FormDataParamsDragAndDrop">
                   <!--DataGrid.KeyBindings>
                     <KeyBinding Command="{Binding FormDataParamsTableVm.CutCmd}" Gesture="Ctrl+X" />
                     <KeyBinding Command="{Binding FormDataParamsTableVm.CopyCmd}" Gesture="Ctrl+C" />

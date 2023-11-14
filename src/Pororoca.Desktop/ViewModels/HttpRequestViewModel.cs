@@ -22,7 +22,7 @@ using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOp
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, IResponseCapturesDataGridOwner
+public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, IRequestHeadersDataGridOwner
 {
     #region REQUEST
 

@@ -24,7 +24,7 @@
 * Show WebSocket connection response HTTP status code and headers by [@tetropolix](https://github.com/tetropolix).
 * Import OpenAPI / Swagger files.
 * Re-run response captures (no need to send a request again).
-* Drag-and-drop in collection and environment variables, and response captures (for other tables, will be added in the next releases).
+* Drag-and-drop in tables - click, hold and drag the "`::`" at the left of the row to move it on the table.
 
 ### Bug Fixes
 

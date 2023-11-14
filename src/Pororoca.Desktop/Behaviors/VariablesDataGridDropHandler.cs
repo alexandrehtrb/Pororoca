@@ -1,7 +1,7 @@
+using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
-using Avalonia.Xaml.Interactions.DragAndDrop;
 using Pororoca.Desktop.ViewModels.DataGrids;
 
 namespace Pororoca.Desktop.Behaviors;
@@ -11,9 +11,12 @@ public interface IVariablesDataGridOwner
     VariablesDataGridViewModel VariablesTableVm { get; }
 }
 
-public class VariablesDataGridDropHandler : DropHandlerBase
+public class VariablesDataGridDropHandler : BaseDataGridDropHandler<VariableViewModel>
 {
-    private bool Validate(DataGrid dg, DragEventArgs e, object? sourceContext, object? targetContext, bool bExecute)
+    protected override VariableViewModel MakeCopy(ObservableCollection<VariableViewModel> parentCollection, VariableViewModel item) =>
+        new(parentCollection, item.ToVariable());
+
+    protected override bool Validate(DataGrid dg, DragEventArgs e, object? sourceContext, object? targetContext, bool bExecute)
     {
         if (sourceContext is not VariableViewModel sourceItem
          || targetContext is not IVariablesDataGridOwner vm
@@ -24,61 +27,6 @@ public class VariablesDataGridDropHandler : DropHandlerBase
         }
 
         var items = vm.VariablesTableVm.Items;
-        int sourceIndex = items.IndexOf(sourceItem);
-        int targetIndex = items.IndexOf(targetItem);
-
-        if (sourceIndex < 0 || targetIndex < 0)
-        {
-            return false;
-        }
-
-        switch (e.DragEffects)
-        {
-            case DragDropEffects.Copy:
-            {
-                if (bExecute)
-                {
-                    VariableViewModel clone = new(items, sourceItem.ToVariable().Copy());
-                    InsertItem(items, clone, targetIndex + 1);
-                }
-                return true;
-            }
-            case DragDropEffects.Move:
-            {
-                if (bExecute)
-                {
-                    MoveItem(items, sourceIndex, targetIndex);
-                }
-                return true;
-            }
-            case DragDropEffects.Link:
-            {
-                if (bExecute)
-                {
-                    SwapItem(items, sourceIndex, targetIndex);
-                }
-                return true;
-            }
-            default:
-                return false;
-        }
-    }
-        
-    public override bool Validate(object? sender, DragEventArgs e, object? sourceContext, object? targetContext, object? state)
-    {
-        if (e.Source is Control && sender is DataGrid dg)
-        {
-            return Validate(dg, e, sourceContext, targetContext, false);
-        }
-        return false;
-    }
-
-    public override bool Execute(object? sender, DragEventArgs e, object? sourceContext, object? targetContext, object? state)
-    {
-        if (e.Source is Control && sender is DataGrid dg)
-        {
-            return Validate(dg, e, sourceContext, targetContext, true);
-        }
-        return false;
-    }
+        return RunDropAction(e, bExecute, sourceItem, targetItem, items);
+    }       
 }

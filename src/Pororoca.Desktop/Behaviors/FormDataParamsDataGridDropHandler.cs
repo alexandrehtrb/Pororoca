@@ -7,22 +7,22 @@ using Pororoca.Desktop.ViewModels.DataGrids;
 
 namespace Pororoca.Desktop.Behaviors;
 
-public sealed class ResponseCapturesDataGridDropHandler : BaseDataGridDropHandler<HttpResponseCaptureViewModel>
+public sealed class FormDataParamsDataGridDropHandler : BaseDataGridDropHandler<FormDataParamViewModel>
 {
-    protected override HttpResponseCaptureViewModel MakeCopy(ObservableCollection<HttpResponseCaptureViewModel> parentCollection, HttpResponseCaptureViewModel item) =>
-        new(parentCollection, item.ToResponseCapture());
+    protected override FormDataParamViewModel MakeCopy(ObservableCollection<FormDataParamViewModel> parentCollection, FormDataParamViewModel item) =>
+        new(parentCollection, item.ToFormDataParam());
 
     protected override bool Validate(DataGrid dg, DragEventArgs e, object? sourceContext, object? targetContext, bool bExecute)
     {
-        if (sourceContext is not HttpResponseCaptureViewModel sourceItem
+        if (sourceContext is not FormDataParamViewModel sourceItem
          || targetContext is not HttpRequestViewModel vm
          || dg.GetVisualAt(e.GetPosition(dg)) is not Control targetControl
-         || targetControl.DataContext is not HttpResponseCaptureViewModel targetItem)
+         || targetControl.DataContext is not FormDataParamViewModel targetItem)
         {
             return false;
         }
 
-        var items = vm.ResCapturesTableVm.Items;
+        var items = vm.FormDataParamsTableVm.Items;
         return RunDropAction(e, bExecute, sourceItem, targetItem, items);
     }
 }

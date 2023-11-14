@@ -6,6 +6,7 @@ using System.Net;
 using System.Reactive;
 using System.Security.Authentication;
 using AvaloniaEdit.Document;
+using Pororoca.Desktop.Behaviors;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
@@ -27,7 +28,7 @@ using static Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection.Por
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemParentViewModel<WebSocketClientMessageViewModel>
+public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemParentViewModel<WebSocketClientMessageViewModel>, IRequestHeadersDataGridOwner
 {
     #region COLLECTION ORGANIZATION
 
@@ -218,7 +219,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region CONNECTION OPTION HEADERS
 
-    public KeyValueParamsDataGridViewModel ConnectionRequestHeadersTableVm { get; }
+    public KeyValueParamsDataGridViewModel RequestHeadersTableVm { get; }
 
     #endregion
 
@@ -397,7 +398,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
         #region CONNECTION OPTION HEADERS
 
-        ConnectionRequestHeadersTableVm = new(ws.Headers);
+        RequestHeadersTableVm = new(ws.Headers);
 
         #endregion
 
@@ -546,7 +547,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         ws.HttpVersion = HttpVersion;
         ws.Url = Url;
         ws.CustomAuth = RequestAuthDataCtx.ToCustomAuth();
-        ws.Headers = ConnectionRequestHeadersTableVm.Items.Count == 0 ? null : ConnectionRequestHeadersTableVm.Items.Select(h => h.ToKeyValueParam()).ToList();
+        ws.Headers = RequestHeadersTableVm.Items.Count == 0 ? null : RequestHeadersTableVm.Items.Select(h => h.ToKeyValueParam()).ToList();
         ws.ClientMessages = Items.Count == 0 ? null : Items.Select(i => i.ToWebSocketClientMessage()).ToList();
         ws.Subprotocols = SubprotocolsTableVm.Items.Count == 0 ? null : SubprotocolsTableVm.Items.Select(s => s.ToKeyValueParam()).ToList();
         ws.CompressionOptions = WrapCompressionOptionsFromInputs();

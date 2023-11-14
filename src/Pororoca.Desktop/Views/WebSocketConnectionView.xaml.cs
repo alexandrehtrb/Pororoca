@@ -31,7 +31,7 @@ public class WebSocketConnectionView : UserControl
 
     public void OnSelectedConnectionRequestHeadersChanged(object sender, SelectionChangedEventArgs e)
     {
-        var tableVm = ((WebSocketConnectionViewModel)DataContext!).ConnectionRequestHeadersTableVm;
+        var tableVm = ((WebSocketConnectionViewModel)DataContext!).RequestHeadersTableVm;
         UpdateVmSelectedItems(tableVm, e);
     }
 
