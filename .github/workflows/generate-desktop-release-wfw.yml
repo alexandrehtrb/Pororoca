@@ -43,7 +43,7 @@ jobs:
       if: ${{ env.WINDOWS_INSTALLER_RELEASE == 'true' }}
       uses: repolevedavaj/install-nsis@v1.0.0
       with:
-        nsis-version: 3.08
+        nsis-version: 3.09
     
     - name: Add NSIS to PATH (Windows installer version only)
       if: ${{ env.WINDOWS_INSTALLER_RELEASE == 'true' }}
