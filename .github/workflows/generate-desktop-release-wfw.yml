@@ -41,20 +41,9 @@ jobs:
 
     - name: Install NSIS (Windows installer version only)
       if: ${{ env.WINDOWS_INSTALLER_RELEASE == 'true' }}
-      uses: repolevedavaj/install-nsis@v1.0.0
+      uses: alexandrehtrb/install-nsis@v1
       with:
         nsis-version: 3.09
-    
-    - name: Add NSIS to PATH (Windows installer version only)
-      if: ${{ env.WINDOWS_INSTALLER_RELEASE == 'true' }}
-      shell: pwsh
-      run: |
-        echo "${env:ProgramFiles(x86)}\NSIS" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-
-    - name: Check if NSIS was added to PATH (Windows installer version only)
-      if: ${{ env.WINDOWS_INSTALLER_RELEASE == 'true' }}
-      shell: pwsh
-      run: makensis /VERSION
 
     - name: Restore solution
       run: dotnet restore --nologo --verbosity quiet
