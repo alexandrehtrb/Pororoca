@@ -41,7 +41,7 @@ jobs:
 
     - name: Install NSIS (Windows installer version only)
       if: ${{ env.WINDOWS_INSTALLER_RELEASE == 'true' }}
-      uses: alexandrehtrb/install-nsis@v1.1
+      uses: alexandrehtrb/install-nsis@v1.2
       with:
         nsis-version: 3.09
 
