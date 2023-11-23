@@ -8,7 +8,7 @@ namespace Pororoca.Domain.Features.ExportCollection;
 public static class PororocaCollectionExporter
 {
     public static string ExportAsPororocaCollection(PororocaCollection col, bool shouldHideSecrets) =>
-        JsonSerializer.Serialize(GenerateCollectionToExport(col, shouldHideSecrets), options: ExporterImporterJsonOptions);
+        JsonSerializer.Serialize(GenerateCollectionToExport(col, shouldHideSecrets), MainJsonCtxWithConverters.PororocaCollection);
 
     internal static PororocaCollection GenerateCollectionToExport(PororocaCollection col, bool shouldHideSecrets)
     {

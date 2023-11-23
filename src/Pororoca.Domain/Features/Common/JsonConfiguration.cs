@@ -1,35 +1,40 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
+using Pororoca.Domain.Features.Entities.Postman;
 
 namespace Pororoca.Domain.Features.Common;
 
 internal static class JsonConfiguration
 {
-    internal static readonly JsonSerializerOptions ExporterImporterJsonOptions =
-        SetupCustomConvertersInJsonOptions(SetupExporterImporterJsonOptions(new JsonSerializerOptions()));
-
-    internal static readonly JsonSerializerOptions ExporterImporterWithoutCustomConvertersJsonOptions =
-        SetupExporterImporterJsonOptions(new JsonSerializerOptions());
+    internal static readonly PororocaJsonSrcGenContext MainJsonCtxWithConverters =
+        MakePororocaJsonContext(true);
+    
+    internal static readonly PororocaJsonSrcGenContext MainJsonCtx =
+        MakePororocaJsonContext(false);
 
     internal static readonly JsonSerializerOptions ViewJsonResponseOptions = SetupViewJsonResponseOptions();
 
     internal static readonly JsonSerializerOptions MinifyingOptions = SetupMinifyingOptions();
 
-    private static JsonSerializerOptions SetupExporterImporterJsonOptions(JsonSerializerOptions options)
+    private static PororocaJsonSrcGenContext MakePororocaJsonContext(bool includeCustomConverters)
     {
+        JsonSerializerOptions options = new();
         options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
         options.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
         options.WriteIndented = true;
         options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-        return options;
-    }
 
-    private static JsonSerializerOptions SetupCustomConvertersInJsonOptions(JsonSerializerOptions options)
-    {
-        options.Converters.Add(new PororocaRequestJsonConverter());
-        return options;
+        if (includeCustomConverters)
+        {
+            options.Converters.Add(new PororocaRequestJsonConverter());
+        }
+
+        return new(options);
     }
 
     private static JsonSerializerOptions SetupViewJsonResponseOptions()
@@ -51,4 +56,14 @@ internal static class JsonConfiguration
         options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         return options;
     }
+}
+
+[JsonSerializable(typeof(PororocaCollection))]
+[JsonSerializable(typeof(PororocaEnvironment))]
+[JsonSerializable(typeof(PororocaHttpRequest))]
+[JsonSerializable(typeof(PororocaWebSocketConnection))]
+[JsonSerializable(typeof(PostmanCollectionV21))]
+[JsonSerializable(typeof(PostmanEnvironment))]
+internal partial class PororocaJsonSrcGenContext : JsonSerializerContext
+{
 }

@@ -11,7 +11,7 @@ public static class PostmanCollectionV21Exporter
     public static string ExportAsPostmanCollectionV21(PororocaCollection col, bool shouldHideSecrets)
     {
         var postmanCollection = ConvertToPostmanCollectionV21(col, shouldHideSecrets);
-        return JsonSerializer.Serialize(postmanCollection!, options: ExporterImporterJsonOptions);
+        return JsonSerializer.Serialize(postmanCollection!, MainJsonCtx.PostmanCollectionV21);
     }
 
     internal static PostmanCollectionV21 ConvertToPostmanCollectionV21(PororocaCollection col, bool shouldHideSecrets) =>

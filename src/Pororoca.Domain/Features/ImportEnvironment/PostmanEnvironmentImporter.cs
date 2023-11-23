@@ -11,7 +11,7 @@ public static class PostmanEnvironmentImporter
     {
         try
         {
-            var postmanEnvironment = JsonSerializer.Deserialize<PostmanEnvironment>(postmanEnvironmentFileContent, options: ExporterImporterJsonOptions);
+            var postmanEnvironment = JsonSerializer.Deserialize(postmanEnvironmentFileContent, MainJsonCtx.PostmanEnvironment);
             if (postmanEnvironment == null
              || postmanEnvironment.Name == null)
             {

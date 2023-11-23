@@ -138,7 +138,7 @@ public static class PororocaHttpRequestTranslator
                 variables = IPororocaVariableResolver.ReplaceTemplates(variables, effectiveVars);
                 try
                 {
-                    variablesJsonObj = JsonSerializer.Deserialize<dynamic?>(variables, ExporterImporterJsonOptions);
+                    variablesJsonObj = JsonSerializer.Deserialize<dynamic?>(variables, MinifyingOptions);
                 }
                 catch
                 {

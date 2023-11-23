@@ -9,15 +9,16 @@ public sealed class PororocaEnvironment : ICloneable
     [JsonInclude]
     public Guid Id { get; set; }
 
-    public DateTimeOffset CreatedAt { get; init; }
+    [JsonInclude]
+    public DateTimeOffset CreatedAt { get; internal set; }
 
     [JsonInclude]
-    public string Name { get; private set; }
+    public string Name { get; internal set; }
 
     public bool IsCurrent { get; set; }
 
     [JsonInclude]
-    public List<PororocaVariable> Variables { get; private set; }
+    public List<PororocaVariable> Variables { get; internal set; }
 
 #nullable disable warnings
     public PororocaEnvironment()

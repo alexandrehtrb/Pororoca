@@ -10,7 +10,7 @@ public static class PororocaEnvironmentImporter
     {
         try
         {
-            pororocaEnvironment = JsonSerializer.Deserialize<PororocaEnvironment>(pororocaEnvironmentFileContent, options: ExporterImporterJsonOptions);
+            pororocaEnvironment = JsonSerializer.Deserialize(pororocaEnvironmentFileContent, MainJsonCtx.PororocaEnvironment);
 
             // Always generating new id, in case user imports the same environment twice
             // And always set as not current environment

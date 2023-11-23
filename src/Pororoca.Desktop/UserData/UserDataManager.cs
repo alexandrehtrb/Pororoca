@@ -40,7 +40,7 @@ public static class UserDataManager
             try
             {
                 string json = File.ReadAllText(userPreferencesFilePath, Encoding.UTF8);
-                return JsonSerializer.Deserialize<UserPreferences>(json, options: userPreferencesJsonOptions);
+                return JsonSerializer.Deserialize(json, UserPreferencesJsonSrcGenContext.Default.UserPreferences);
             }
             catch
             {
@@ -100,7 +100,7 @@ public static class UserDataManager
     private static void SaveUserPreferences(UserPreferences userPrefs)
     {
         string path = GetUserDataFilePath(userPreferencesFileName);
-        string json = JsonSerializer.Serialize(userPrefs, options: userPreferencesJsonOptions);
+        string json = JsonSerializer.Serialize(userPrefs, UserPreferencesJsonSrcGenContext.Default.UserPreferences);
         File.WriteAllText(path, json, Encoding.UTF8);
     }
 

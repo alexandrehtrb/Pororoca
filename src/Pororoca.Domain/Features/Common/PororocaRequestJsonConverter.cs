@@ -43,9 +43,9 @@ public sealed class PororocaRequestJsonConverter : JsonConverter<PororocaRequest
         // and a StackOverflowExcpetion will arise
         return requestType switch
         {
-            PororocaRequestType.Websocket => JsonSerializer.Deserialize<PororocaWebSocketConnection>(ref readerAtStart, ExporterImporterWithoutCustomConvertersJsonOptions)!,
-            PororocaRequestType.Http => JsonSerializer.Deserialize<PororocaHttpRequest>(ref readerAtStart, ExporterImporterWithoutCustomConvertersJsonOptions)!,
-            _ => JsonSerializer.Deserialize<PororocaHttpRequest>(ref readerAtStart, ExporterImporterWithoutCustomConvertersJsonOptions)!
+            PororocaRequestType.Websocket => JsonSerializer.Deserialize(ref readerAtStart, MainJsonCtx.PororocaWebSocketConnection)!,
+            PororocaRequestType.Http => JsonSerializer.Deserialize(ref readerAtStart, MainJsonCtx.PororocaHttpRequest)!,
+            _ => JsonSerializer.Deserialize(ref readerAtStart, MainJsonCtx.PororocaHttpRequest)!
         };
     }
 
@@ -54,8 +54,8 @@ public sealed class PororocaRequestJsonConverter : JsonConverter<PororocaRequest
         // No need for this one in our use case, but to just dump the object into JSON
         // (without having the requestType property!), we can do this:
         if (req is PororocaHttpRequest httpReq)
-            JsonSerializer.Serialize(writer, httpReq, ExporterImporterWithoutCustomConvertersJsonOptions);
+            JsonSerializer.Serialize(writer, httpReq, MainJsonCtx.PororocaHttpRequest);
         else if (req is PororocaWebSocketConnection wsConn)
-            JsonSerializer.Serialize(writer, wsConn, ExporterImporterWithoutCustomConvertersJsonOptions);
+            JsonSerializer.Serialize(writer, wsConn, MainJsonCtx.PororocaWebSocketConnection);
     }
 }

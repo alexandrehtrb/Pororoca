@@ -7,7 +7,7 @@ namespace Pororoca.Domain.Features.ExportEnvironment;
 public static class PororocaEnvironmentExporter
 {
     public static string ExportAsPororocaEnvironment(PororocaEnvironment env, bool shouldHideSecrets) =>
-        JsonSerializer.Serialize(GenerateEnvironmentToExport(env, shouldHideSecrets, false), options: ExporterImporterJsonOptions);
+        JsonSerializer.Serialize(GenerateEnvironmentToExport(env, shouldHideSecrets, false), MainJsonCtx.PororocaEnvironment);
 
     internal static PororocaEnvironment GenerateEnvironmentToExport(PororocaEnvironment env, bool shouldHideSecrets, bool preserveIsCurrentEnvironment)
     {

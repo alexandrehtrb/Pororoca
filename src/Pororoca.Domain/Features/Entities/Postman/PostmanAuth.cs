@@ -41,7 +41,7 @@ internal class PostmanAuth
         {
             if (je.ValueKind == JsonValueKind.Object)
             {
-                var basic = je.Deserialize<PostmanAuthBasic>(options: ExporterImporterJsonOptions);
+                var basic = je.Deserialize<PostmanAuthBasic>(options: MinifyingOptions);
                 return (basic.Username ?? string.Empty, basic.Password ?? string.Empty);
             }
             else if (je.ValueKind == JsonValueKind.Array)
@@ -67,7 +67,7 @@ internal class PostmanAuth
         {
             if (je.ValueKind == JsonValueKind.Object)
             {
-                var bearer = je.Deserialize<PostmanAuthBearer>(options: ExporterImporterJsonOptions);
+                var bearer = je.Deserialize<PostmanAuthBearer>(options: MinifyingOptions);
                 return bearer.Token ?? string.Empty;
             }
             else if (je.ValueKind == JsonValueKind.Array)
@@ -96,7 +96,7 @@ internal class PostmanAuth
         {
             if (je.ValueKind == JsonValueKind.Object)
             {
-                var ntlm = je.Deserialize<PostmanAuthNtlm>(options: ExporterImporterJsonOptions);
+                var ntlm = je.Deserialize<PostmanAuthNtlm>(options: MinifyingOptions);
                 return (ntlm.Username ?? string.Empty, ntlm.Password ?? string.Empty, ntlm.Domain ?? string.Empty, ntlm.Workstation ?? string.Empty);
             }
             else if (je.ValueKind == JsonValueKind.Array)

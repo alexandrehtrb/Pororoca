@@ -5,25 +5,25 @@ namespace Pororoca.Domain.Features.Entities.Pororoca.Http;
 public sealed class PororocaHttpRequest : PororocaRequest
 {
     [JsonInclude]
-    public decimal HttpVersion { get; private set; }
+    public decimal HttpVersion { get; internal set; }
 
     [JsonInclude]
-    public string HttpMethod { get; private set; }
+    public string HttpMethod { get; internal set; }
 
     [JsonInclude]
-    public string Url { get; private set; }
+    public string Url { get; internal set; }
 
     [JsonInclude]
-    public List<PororocaKeyValueParam>? Headers { get; private set; }
+    public List<PororocaKeyValueParam>? Headers { get; internal set; }
 
     [JsonInclude]
-    public PororocaHttpRequestBody? Body { get; private set; }
+    public PororocaHttpRequestBody? Body { get; internal set; }
 
     [JsonInclude]
-    public PororocaRequestAuth? CustomAuth { get; private set; }
+    public PororocaRequestAuth? CustomAuth { get; internal set; }
 
     [JsonInclude]
-    public List<PororocaHttpResponseValueCapture>? ResponseCaptures { get; private set; }
+    public List<PororocaHttpResponseValueCapture>? ResponseCaptures { get; internal set; }
 
 #nullable disable warnings
     public PororocaHttpRequest() : this(string.Empty)
