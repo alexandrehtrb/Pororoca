@@ -8,6 +8,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
     <PublishReadyToRun>true</PublishReadyToRun>
+    <NoWarn>AD0001</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />

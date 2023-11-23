@@ -17,8 +17,8 @@ public static class TestEndpoints
         app.MapGet("test/get/headers", TestGetHeaders);
         app.MapGet("test/get/trailers", TestGetTrailers);
         app.MapGet("test/auth", TestAuthHeader);
-        app.MapGet("test/http1websocket", TestHttp1WebSocket);
-        app.MapConnect("test/http2websocket", TestHttp2WebSocket);
+        app.MapGet("test/http1websocket", (Delegate)TestHttp1WebSocket);
+        app.MapConnect("test/http2websocket", (Delegate)TestHttp2WebSocket);
 
         // HttpContext as a parameter makes some endpoints hidden in Swagger (?)
         app.MapPost("test/post/none", TestPostNone);
@@ -70,7 +70,7 @@ public static class TestEndpoints
     {
         foreach (var reqHeader in httpCtx.Request.Headers)
         {
-            httpCtx.Response.Headers.Add($"MIRRORED-{reqHeader.Key}", reqHeader.Value);
+            httpCtx.Response.Headers.Append($"MIRRORED-{reqHeader.Key}", reqHeader.Value);
         }
         return Results.NoContent();
     }
