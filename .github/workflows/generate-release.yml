@@ -12,6 +12,10 @@ on:
         required: true
         default: false
         type: boolean
+      sbomDesktop:
+        required: true
+        default: true
+        type: boolean
       linux-x64:
         required: true
         default: true
@@ -44,7 +48,9 @@ on:
 jobs:
   nuget:
     if: ${{ inputs.nuget }}
-    uses: ./.github/workflows/generate-pororoca-test-nuget-wfw.yml
+    uses: ./.github/workflows/generate-nuget-and-sboms-wfw.yml
+    with:
+      generateSbomDesktop: ${{ inputs.sbomDesktop }}
   linux-x64:
     if: ${{ inputs.linux-x64 }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml

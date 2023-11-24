@@ -2,6 +2,10 @@ name: Generate Pororoca.Test NuGet
 
 on:
   workflow_call:
+    inputs:
+      generateDesktopSbom:
+        required: true
+        type: boolean
 
 jobs:
 
@@ -18,6 +22,9 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.403
+    
+    - name: Install CycloneDX SBOM tool
+      run: dotnet tool install --global CycloneDX
 
     - name: Restore solution
       run: dotnet restore --nologo --verbosity quiet
@@ -35,10 +42,28 @@ jobs:
         $versionName = $nugetCsprojXml.Project.PropertyGroup.PackageVersion
         echo "VERSION_NAME=${versionName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
     
+    - name: Generate Pororoca.Test SBOM file
+      run: dotnet CycloneDX ./src/Pororoca.Test/Pororoca.Test.csproj -o ./out/ -f sbom_pororoca_test.json -sv $env:VERSION_NAME --json
+    
+    - name: Generate Pororoca.Desktop SBOM file
+      if: ${{ inputs.generateDesktopSbom }}
+      run: dotnet CycloneDX ./src/Pororoca.Desktop/Pororoca.Desktop.csproj -o ./out/ -f sbom_pororoca_desktop.json -sv $env:VERSION_NAME --json
+    
     - name: Pack NuGet
       run: dotnet pack ./src/Pororoca.Test/Pororoca.Test.csproj --nologo --verbosity quiet --configuration Release
           
-    - name: Upload build artifacts
+    - name: Upload NuGet package artifact
       uses: actions/upload-artifact@v3
       with:
         path: ${{ format('./src/Pororoca.Test/bin/Release/Pororoca.Test.{0}.nupkg', env.VERSION_NAME) }}
+
+    - name: Upload Pororoca.Desktop SBOM file artifact
+      if: ${{ inputs.generateDesktopSbom }}
+      uses: actions/upload-artifact@v3
+      with:
+        path: ./out/sbom_pororoca_desktop.json
+    
+    - name: Upload Pororoca.Test SBOM file artifact
+      uses: actions/upload-artifact@v3
+      with:
+        path: ./out/sbom_pororoca_test.json

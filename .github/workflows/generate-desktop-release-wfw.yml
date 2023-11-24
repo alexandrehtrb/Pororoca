@@ -43,6 +43,9 @@ jobs:
     # https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md
     # No need to install here
 
+    - name: Install CycloneDX SBOM tool
+      run: dotnet tool install --global CycloneDX
+
     - name: Restore solution
       run: dotnet restore --nologo --verbosity quiet
       
@@ -58,6 +61,9 @@ jobs:
         ([XML]$desktopCsprojXml = Get-Content ./src/Pororoca.Desktop/Pororoca.Desktop.csproj)
         $versionName = $desktopCsprojXml.Project.PropertyGroup.Version
         echo "VERSION_NAME=${versionName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+    
+    - name: Generate SBOM file
+      run: dotnet CycloneDX ./src/Pororoca.Desktop/Pororoca.Desktop.csproj -o $env:OUTPUT_FOLDER -f sbom_pororoca_test.json -sv $env:VERSION_NAME --json
           
     - name: Generate Pororoca Desktop dlls
       shell: pwsh

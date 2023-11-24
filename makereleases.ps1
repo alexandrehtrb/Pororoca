@@ -53,8 +53,8 @@ function Get-RuntimesToPublishFor
 
 	# Windows releases should be built on a Windows machine, because of dotnet
 	# Linux and Mac OS releases should be built on one of those OSs, because of chmod and zip
-	return $IsWindows ? $windowsRuntimes : $unixRuntimes
-	#return @("linux-x64")
+	#return $IsWindows ? $windowsRuntimes : $unixRuntimes
+	return @("win-x64_installer")
 }
 
 #################### Pre-release build and tests ####################
@@ -192,6 +192,7 @@ function Generate-PororocaDesktopRelease {
 	Make-AppFolderIfMacOS -Runtime $runtime -OutputFolder $outputFolder
 	Copy-LogoIfLinux -Runtime $runtime -OutputFolder $outputFolder
 	Copy-Licence -OutputFolder $outputFolder
+	Generate-SBOM -OutputFolder $outputFolder
 	if ($isInstallOnWindowsRelease)
 	{
 		Copy-IconIfInstalledOnWindows -Runtime $runtime -OutputFolder $outputFolder
@@ -357,6 +358,16 @@ function Copy-Licence
 
 	Copy-Item -Path "./LICENCE.md" `
 			  -Destination $outputFolder
+}
+
+function Generate-SBOM
+{
+	param (
+		[string]$outputFolder,
+		[string]$versionName
+    )
+
+	dotnet CycloneDX ./src/Pororoca.Desktop/Pororoca.Desktop.csproj -o $outputFolder -f sbom.json -sv $versionName --json
 }
 
 function Compress-Package
