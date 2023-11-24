@@ -2,10 +2,6 @@ name: Generate Pororoca.Test NuGet
 
 on:
   workflow_call:
-    inputs:
-      generateDesktopSbom:
-        required: true
-        type: boolean
 
 jobs:
 
@@ -46,7 +42,6 @@ jobs:
       run: dotnet CycloneDX ./src/Pororoca.Test/Pororoca.Test.csproj -o ./out/ -f sbom_pororoca_test.json -sv $env:VERSION_NAME --json
     
     - name: Generate Pororoca.Desktop SBOM file
-      if: ${{ inputs.generateDesktopSbom }}
       run: dotnet CycloneDX ./src/Pororoca.Desktop/Pororoca.Desktop.csproj -o ./out/ -f sbom_pororoca_desktop.json -sv $env:VERSION_NAME --json
     
     - name: Pack NuGet
@@ -58,7 +53,6 @@ jobs:
         path: ${{ format('./src/Pororoca.Test/bin/Release/Pororoca.Test.{0}.nupkg', env.VERSION_NAME) }}
 
     - name: Upload Pororoca.Desktop SBOM file artifact
-      if: ${{ inputs.generateDesktopSbom }}
       uses: actions/upload-artifact@v3
       with:
         path: ./out/sbom_pororoca_desktop.json

@@ -3,7 +3,7 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
-      nuget:
+      nuget-and-sboms:
         #description: 'Pororoca.Test NuGet'
         required: true
         default: true
@@ -11,10 +11,6 @@ on:
       enableDesktopUITesting:
         required: true
         default: false
-        type: boolean
-      sbom-desktop:
-        required: true
-        default: true
         type: boolean
       linux-x64:
         required: true
@@ -46,11 +42,9 @@ on:
         type: boolean
 
 jobs:
-  nuget:
-    if: ${{ inputs.nuget }}
+  nuget-and-sboms:
+    if: ${{ inputs.nuget-and-sboms }}
     uses: ./.github/workflows/generate-nuget-and-sboms-wfw.yml
-    with:
-      generateDesktopSbom: ${{ inputs.sbom-desktop }}
   linux-x64:
     if: ${{ inputs.linux-x64 }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
