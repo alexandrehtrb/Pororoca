@@ -63,7 +63,7 @@ jobs:
         echo "VERSION_NAME=${versionName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
     
     - name: Generate SBOM file
-      run: dotnet CycloneDX ./src/Pororoca.Desktop/Pororoca.Desktop.csproj -o $env:OUTPUT_FOLDER -f sbom_pororoca_test.json -sv $env:VERSION_NAME --json
+      run: dotnet CycloneDX ./src/Pororoca.Desktop/Pororoca.Desktop.csproj -o $env:OUTPUT_FOLDER -f sbom.json -sv $env:VERSION_NAME --json
           
     - name: Generate Pororoca Desktop dlls
       shell: pwsh
