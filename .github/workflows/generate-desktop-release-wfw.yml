@@ -39,11 +39,9 @@ jobs:
       with:
         dotnet-version: 7.0.403
 
-    - name: Install NSIS (Windows installer version only)
-      if: ${{ env.WINDOWS_INSTALLER_RELEASE == 'true' }}
-      uses: alexandrehtrb/install-nsis@v1.2
-      with:
-        nsis-version: 3.09
+    # GitHub Actions Windows Runners come with NSIS pre-installed
+    # https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md
+    # No need to install here
 
     - name: Restore solution
       run: dotnet restore --nologo --verbosity quiet
