@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
@@ -18,7 +19,7 @@ public static class PororocaHttpRequestTranslator
 
     private static readonly JsonDocumentOptions graphQlJsonOptions = new()
     {
-        CommentHandling = JsonCommentHandling.Allow
+        CommentHandling = JsonCommentHandling.Skip
     };
 
     #region TRANSLATE REQUEST
@@ -145,6 +146,8 @@ public static class PororocaHttpRequestTranslator
                 variables = IPororocaVariableResolver.ReplaceTemplates(variables, effectiveVars);
                 try
                 {
+                    // this deserailize-serialize is solely 
+                    // to allow comments in GraphQL variables textbox
                     variablesJsonDoc = JsonDocument.Parse(variables, graphQlJsonOptions);
                 }
                 catch
@@ -152,12 +155,8 @@ public static class PororocaHttpRequestTranslator
                     variablesJsonDoc = JsonDocument.Parse("{}");
                 }
             }
-            PororocaHttpRequestGraphQlBody reqObj = new
-            (
-                reqBody!.GraphQlValues!.Query!,
-                variablesJsonDoc!
-            );
-            string json = JsonSerializer.Serialize(reqObj, MinifyingOptions);
+            string variablesJsonStr = variablesJsonDoc!.RootElement.ToString();
+            string json = "{\"query\":\"" + reqBody!.GraphQlValues!.Query! + "\",\"variables\":" + variablesJsonStr + "}";
 
             return new(json, Encoding.UTF8, MimeTypesDetector.DefaultMimeTypeForJson);
         }
