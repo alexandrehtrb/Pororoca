@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Pororoca.Desktop.Localization;
 
@@ -67,7 +68,7 @@ public sealed class UserPreferences
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
     UseStringEnumConverter = true,
     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-    ReadCommentHandling = System.Text.Json.JsonCommentHandling.Allow,
+    ReadCommentHandling = JsonCommentHandling.Skip,
     AllowTrailingCommas = true)]
 [JsonSerializable(typeof(UserPreferences))]
 internal partial class UserPreferencesJsonSrcGenContext : JsonSerializerContext
