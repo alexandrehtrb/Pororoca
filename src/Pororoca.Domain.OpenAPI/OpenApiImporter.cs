@@ -3,6 +3,7 @@ using System.Text.Json;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Microsoft.OpenApi.Readers;
+using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
@@ -237,7 +238,7 @@ public static class OpenApiImporter
 
         if (contentType?.Contains("json") == true)
         {
-            string rawStr = JsonSerializer.Serialize(obj, options: ViewJsonResponseOptions);
+            string rawStr = JsonUtils.PrettySerializeJson(obj);
             PororocaHttpRequestBody body = new();
             body.SetRawContent(rawStr, contentType);
             return body;

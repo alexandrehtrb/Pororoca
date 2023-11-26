@@ -37,7 +37,7 @@ jobs:
     - name: Install .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 7.0.403
+        dotnet-version: 8.0.100
 
     # GitHub Actions Windows Runners come with NSIS pre-installed
     # https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md
@@ -82,7 +82,7 @@ jobs:
         if ($env:RID -like "*win*")
         {
           # let's copy the msquic.dll file next to the generated .exe
-          Copy-Item -Path "./src/Pororoca.Desktop/bin/Release/net7.0/${env:RID}/msquic.dll" -Destination $env:OUTPUT_FOLDER
+          Copy-Item -Path "./src/Pororoca.Desktop/bin/Release/net8.0/${env:RID}/msquic.dll" -Destination $env:OUTPUT_FOLDER
         }
     
     - name: Rename executable

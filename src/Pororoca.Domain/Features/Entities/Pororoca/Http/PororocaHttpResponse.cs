@@ -29,7 +29,8 @@ public sealed class PororocaHttpResponse
 
     private readonly byte[]? binaryBody;
 
-    private (XmlDocument xmlDoc, XmlNamespaceManager xmlNsm)? cachedXmlDocAndNsm;
+    private XmlDocument? cachedXmlDoc;
+    private XmlNamespaceManager? cachedXmlNsm;
 
     public bool WasCancelled =>
         Exception is TaskCanceledException;
@@ -105,9 +106,7 @@ public sealed class PororocaHttpResponse
             {
                 try
                 {
-                    dynamic? jsonObj = JsonSerializer.Deserialize<dynamic>(bodyStr);
-                    string prettyPrintJson = JsonSerializer.Serialize(jsonObj, options: ViewJsonResponseOptions);
-                    return prettyPrintJson;
+                    return JsonUtils.PrettifyJson(bodyStr);
                 }
                 catch
                 {
@@ -118,7 +117,7 @@ public sealed class PororocaHttpResponse
             {
                 try
                 {
-                    return PrettifyXml(bodyStr);
+                    return XmlUtils.PrettifyXml(bodyStr);
                 }
                 catch
                 {
@@ -188,10 +187,14 @@ public sealed class PororocaHttpResponse
                 // of reading and parsing XML document and namespaces
                 // if cachedXmlDocAndNsm is not null (already loaded), 
                 // then it won't be loaded again
-                this.cachedXmlDocAndNsm ??= PororocaResponseValueCapturer.LoadXmlDocumentAndNamespaceManager(body);
-                if (this.cachedXmlDocAndNsm is not null)
+                if (this.cachedXmlDoc is null || this.cachedXmlNsm is null)
                 {
-                    return PororocaResponseValueCapturer.CaptureXmlValue(capture.Path!, this.cachedXmlDocAndNsm.Value.xmlDoc, this.cachedXmlDocAndNsm.Value.xmlNsm);
+                    XmlUtils.LoadXmlDocumentAndNamespaceManager(body, out this.cachedXmlDoc, out this.cachedXmlNsm);
+                }
+                
+                if (this.cachedXmlDoc is not null && this.cachedXmlNsm is not null)
+                {
+                    return PororocaResponseValueCapturer.CaptureXmlValue(capture.Path!, this.cachedXmlDoc, this.cachedXmlNsm);
                 }
                 else
                 {
@@ -207,49 +210,6 @@ public sealed class PororocaHttpResponse
         {
             return null;
         }
-    }
-
-    private static string PrettifyXml(string xml)
-    {
-        string result = xml;
-
-        using MemoryStream mStream = new();
-        using XmlTextWriter writer = new(mStream, Encoding.UTF8);
-        XmlDocument document = new();
-
-        try
-        {
-            // Load the XmlDocument with the XML.
-            document.LoadXml(xml);
-
-            writer.Formatting = Formatting.Indented;
-
-            // Write the XML into a formatting XmlTextWriter
-            document.WriteContentTo(writer);
-            writer.Flush();
-            mStream.Flush();
-
-            // Have to rewind the MemoryStream in order to read
-            // its contents.
-            mStream.Position = 0;
-
-            // Read MemoryStream contents into a StreamReader.
-            using StreamReader sReader = new(mStream);
-
-            // Extract the text from the StreamReader.
-            string formattedXml = sReader.ReadToEnd();
-
-            result = formattedXml;
-        }
-        catch (XmlException)
-        {
-            // Handle the exception
-        }
-
-        mStream.Close();
-        writer.Close();
-
-        return result;
     }
 
     public static async Task<PororocaHttpResponse> SuccessfulAsync(TimeSpan elapsedTime, HttpResponseMessage responseMessage)

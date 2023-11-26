@@ -16,8 +16,6 @@ internal static class JsonConfiguration
     internal static readonly PororocaJsonSrcGenContext MainJsonCtx =
         MakePororocaJsonContext(false);
 
-    internal static readonly JsonSerializerOptions ViewJsonResponseOptions = SetupViewJsonResponseOptions();
-
     internal static readonly JsonSerializerOptions MinifyingOptions = SetupMinifyingOptions();
 
     private static PororocaJsonSrcGenContext MakePororocaJsonContext(bool includeCustomConverters)
@@ -37,16 +35,6 @@ internal static class JsonConfiguration
         return new(options);
     }
 
-    private static JsonSerializerOptions SetupViewJsonResponseOptions()
-    {
-        JsonSerializerOptions options = new();
-        options.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
-        options.WriteIndented = true;
-        options.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
-        options.PropertyNamingPolicy = null;
-        return options;
-    }
-
     private static JsonSerializerOptions SetupMinifyingOptions()
     {
         JsonSerializerOptions options = new();
@@ -60,8 +48,8 @@ internal static class JsonConfiguration
 
 [JsonSerializable(typeof(PororocaCollection))]
 [JsonSerializable(typeof(PororocaEnvironment))]
-//[JsonSerializable(typeof(PororocaHttpRequest))]
-//[JsonSerializable(typeof(PororocaWebSocketConnection))]
+[JsonSerializable(typeof(PororocaHttpRequest))]
+[JsonSerializable(typeof(PororocaWebSocketConnection))]
 [JsonSerializable(typeof(PostmanCollectionV21))]
 [JsonSerializable(typeof(PostmanEnvironment))]
 internal partial class PororocaJsonSrcGenContext : JsonSerializerContext

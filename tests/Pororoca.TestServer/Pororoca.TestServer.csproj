@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>PororocaTestServer</AssemblyName>
     <RootNamespace>Pororoca.TestServer</RootNamespace>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
