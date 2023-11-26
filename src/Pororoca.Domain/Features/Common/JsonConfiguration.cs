@@ -60,8 +60,8 @@ internal static class JsonConfiguration
 
 [JsonSerializable(typeof(PororocaCollection))]
 [JsonSerializable(typeof(PororocaEnvironment))]
-[JsonSerializable(typeof(PororocaHttpRequest))]
-[JsonSerializable(typeof(PororocaWebSocketConnection))]
+//[JsonSerializable(typeof(PororocaHttpRequest))]
+//[JsonSerializable(typeof(PororocaWebSocketConnection))]
 [JsonSerializable(typeof(PostmanCollectionV21))]
 [JsonSerializable(typeof(PostmanEnvironment))]
 internal partial class PororocaJsonSrcGenContext : JsonSerializerContext
