@@ -70,7 +70,7 @@ jobs:
     if: ${{ inputs.win-x64-installer }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
     with:
-      os: windows-latest
+      os: windows-latest # running on Windows because we need NSIS
       rid: win-x64
       installation: withInstaller
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
@@ -78,7 +78,7 @@ jobs:
     if: ${{ inputs.win-x64-portable }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
     with:
-      os: ubuntu-latest
+      os: ubuntu-latest # .NET 8 allows publishing for Windows on Linux machines
       rid: win-x64
       installation: portable
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
@@ -86,7 +86,7 @@ jobs:
     if: ${{ inputs.win-x86-installer }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
     with:
-      os: windows-latest
+      os: windows-latest # running on Windows because we need NSIS
       rid: win-x86
       installation: withInstaller
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
@@ -94,7 +94,7 @@ jobs:
     if: ${{ inputs.win-x86-portable }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
     with:
-      os: ubuntu-latest
+      os: ubuntu-latest # .NET 8 allows publishing for Windows on Linux machines
       rid: win-x86
       installation: portable
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
