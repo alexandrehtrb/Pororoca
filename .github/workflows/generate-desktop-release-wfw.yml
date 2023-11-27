@@ -69,7 +69,7 @@ jobs:
     - name: Generate Pororoca Desktop dlls
       shell: pwsh
       run: |
-        [void](mkdir $env:OUTPUT_FOLDER -ErrorAction Ignore);
+        [void](New-Item $env:OUTPUT_FOLDER -ItemType Directory -ErrorAction Ignore);
         dotnet publish ./src/Pororoca.Desktop/Pororoca.Desktop.csproj `
         --verbosity quiet `
         --nologo `
