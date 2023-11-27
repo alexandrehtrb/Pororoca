@@ -78,7 +78,7 @@ jobs:
     if: ${{ inputs.win-x64-portable }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
     with:
-      os: windows-latest
+      os: ubuntu-latest
       rid: win-x64
       installation: portable
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
@@ -94,7 +94,7 @@ jobs:
     if: ${{ inputs.win-x86-portable }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
     with:
-      os: windows-latest
+      os: ubuntu-latest
       rid: win-x86
       installation: portable
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
