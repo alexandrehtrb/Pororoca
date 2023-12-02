@@ -67,22 +67,17 @@ public sealed class KeyboardShortcuts : ViewModelBase
             else if (parentVm is CollectionViewModel a)
             {
                 linearizedItems.Add(a);
-                linearizedItems.Add(a.Items[0]);// collection variables
-                linearizedItems.AddRange(((EnvironmentsGroupViewModel)a.Items[1]).Items);// collection environments
-                
-                // small optimization
-                for (int i = 2; i < a.Items.Count; i++)
-                {
-                    var subItem = a.Items[i];
-                    if (subItem is HttpRequestViewModel)
+                linearizedItems.AddRange(
+                    a.Items
+                    .SelectMany(i =>
                     {
-                        linearizedItems.Add(subItem);
-                    }
-                    else
-                    {
-                        linearizedItems.AddRange(GetSubItemsLinearized(subItem));
-                    }
-                }
+                        if (i is HttpRequestViewModel hrvm)
+                            return [ hrvm ];
+                        else if (i is EnvironmentsGroupViewModel egvm)
+                            return egvm.Items.Cast<CollectionOrganizationItemViewModel>().ToList();
+                        else
+                            return GetSubItemsLinearized(i);
+                    }));
             }
             else if (parentVm is CollectionFolderViewModel e)
             {
