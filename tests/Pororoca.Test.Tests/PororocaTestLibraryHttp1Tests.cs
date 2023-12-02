@@ -62,8 +62,8 @@ public class PororocaTestLibraryHttp1Tests
         Assert.Equal(HttpStatusCode.NoContent, res.StatusCode);
 
         Assert.NotNull(res.Headers);
-        Assert.Contains(new("MIRRORED-Header1", "oi"), res.Headers);
-        Assert.Contains(new("MIRRORED-Header2", "ciao"), res.Headers);
+        Assert.Equal("oi", res.Headers["MIRRORED-Header1"]);
+        Assert.Equal("ciao", res.Headers["MIRRORED-Header2"]);
     }
 
     [Fact]

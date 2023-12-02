@@ -54,9 +54,9 @@ public class PororocaTestLibraryHttp2Tests
         Assert.Equal("application/json; charset=utf-8", res.ContentType);
 
         Assert.NotNull(res.Headers);
-        Assert.Contains(new("Trailer", "MyTrailer"), res.Headers);
+        Assert.Equal("MyTrailer", res.Headers["Trailer"]);
         Assert.NotNull(res.Trailers);
-        Assert.Contains(new("mytrailer", "MyTrailerValue"), res.Trailers);
+        Assert.Equal("MyTrailerValue", res.Trailers["mytrailer"]);
 
         var jsonObj = res.GetJsonBodyAs<Dictionary<string, int>>();
         Assert.NotNull(jsonObj);

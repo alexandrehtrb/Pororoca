@@ -1,10 +1,11 @@
+using System.Collections.Frozen;
+using System.Collections.Immutable;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Authentication;
 using System.Text;
 using System.Text.Json;
 using System.Xml;
-using System.Xml.Linq;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.VariableCapture;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
@@ -13,6 +14,8 @@ namespace Pororoca.Domain.Features.Entities.Pororoca.Http;
 
 public sealed class PororocaHttpResponse
 {
+    public PororocaHttpRequest? ResolvedRequest { get; }
+
     public TimeSpan ElapsedTime { get; }
 
     public DateTimeOffset ReceivedAt { get; }
@@ -23,9 +26,9 @@ public sealed class PororocaHttpResponse
 
     public HttpStatusCode? StatusCode { get; }
 
-    public IEnumerable<KeyValuePair<string, string>>? Headers { get; }
+    public FrozenDictionary<string, string>? Headers { get; }
 
-    public IEnumerable<KeyValuePair<string, string>>? Trailers { get; }
+    public FrozenDictionary<string, string>? Trailers { get; }
 
     private readonly byte[]? binaryBody;
 
@@ -53,6 +56,9 @@ public sealed class PororocaHttpResponse
 
     public bool CanDisplayTextBody =>
         MimeTypesDetector.IsTextContent(ContentType);
+
+    private static FrozenDictionary<string, string> MakeKvTable(IEnumerable<KeyValuePair<string, IEnumerable<string>>> input) =>
+        input.ToFrozenDictionary(x => x.Key, x => string.Join(';', x.Value));
 
     public string? GetBodyAsString(string? nonUtf8BodyMessageToShow = null)
     {
@@ -212,37 +218,39 @@ public sealed class PororocaHttpResponse
         }
     }
 
-    public static async Task<PororocaHttpResponse> SuccessfulAsync(TimeSpan elapsedTime, HttpResponseMessage responseMessage)
+    public static async Task<PororocaHttpResponse> SuccessfulAsync(PororocaHttpRequest resolvedReq, TimeSpan elapsedTime, HttpResponseMessage responseMessage)
     {
+        // the binaryBody needs to be read before making the table of headers,
+        // otherwise, the Content-Length header disappears for some reason (???)
         byte[] binaryBody = await responseMessage.Content.ReadAsByteArrayAsync();
-        return new(elapsedTime, responseMessage, binaryBody);
+
+        var nonContentHeaders = responseMessage.Headers;
+        var contentHeaders = responseMessage.Content.Headers;
+
+        var headers = nonContentHeaders.Concat(contentHeaders);
+        var trailers = responseMessage.TrailingHeaders;
+
+        return new(resolvedReq, elapsedTime, responseMessage.StatusCode, MakeKvTable(headers), MakeKvTable(trailers), binaryBody);
     }
 
-    public static PororocaHttpResponse Failed(TimeSpan elapsedTime, Exception ex) =>
-        new(elapsedTime, ex);
+    public static PororocaHttpResponse Failed(PororocaHttpRequest? resolvedReq, TimeSpan elapsedTime, Exception ex) =>
+        new(resolvedReq, elapsedTime, ex);
 
-    private PororocaHttpResponse(TimeSpan elapsedTime, HttpResponseMessage responseMessage, byte[] binaryBody)
+    private PororocaHttpResponse(PororocaHttpRequest? resolvedReq, TimeSpan elapsedTime, HttpStatusCode httpStatusCode, FrozenDictionary<string, string> headers, FrozenDictionary<string, string> trailers, byte[] binaryBody)
     {
-        static KeyValuePair<string, string> ConvertHeaderToKeyValuePair(KeyValuePair<string, IEnumerable<string>> header) =>
-            new(header.Key, string.Join(';', header.Value));
-
+        ResolvedRequest = resolvedReq;
         ElapsedTime = elapsedTime;
         ReceivedAt = DateTimeOffset.Now;
         Successful = true;
-        StatusCode = responseMessage.StatusCode;
-
-        HttpHeaders nonContentHeaders = responseMessage.Headers;
-        HttpHeaders contentHeaders = responseMessage.Content.Headers;
-        HttpHeaders trailingHeaders = responseMessage.TrailingHeaders;
-
-        Headers = nonContentHeaders.Concat(contentHeaders).Select(ConvertHeaderToKeyValuePair);
-        Trailers = trailingHeaders.Select(ConvertHeaderToKeyValuePair);
-
+        StatusCode = httpStatusCode;
+        Headers = headers;
+        Trailers = trailers;
         this.binaryBody = binaryBody;
     }
 
-    private PororocaHttpResponse(TimeSpan elapsedTime, Exception exception)
+    private PororocaHttpResponse(PororocaHttpRequest? resolvedReq, TimeSpan elapsedTime, Exception exception)
     {
+        ResolvedRequest = resolvedReq;
         ElapsedTime = elapsedTime;
         Successful = false;
         Exception = exception;
