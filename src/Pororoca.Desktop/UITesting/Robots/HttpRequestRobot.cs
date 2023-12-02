@@ -61,7 +61,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal Button ResDisableTlsVerification => GetChildView<Button>("btResDisableTlsVerification")!;
     internal ProgressBar ResProgressBar => GetChildView<ProgressBar>("pbResProgressBar")!;
 
-    internal KeyValueParamsDataGridViewModel ReqHeadersVm => ((HttpRequestViewModel)RootView!.DataContext!).RequestHeadersTableVm;
+    internal RequestHeadersDataGridViewModel ReqHeadersVm => ((HttpRequestViewModel)RootView!.DataContext!).RequestHeadersTableVm;
     internal KeyValueParamsDataGridViewModel UrlEncodedParamsVm => ((HttpRequestViewModel)RootView!.DataContext!).UrlEncodedParamsTableVm;
     internal FormDataParamsDataGridViewModel FormDataParamsVm => ((HttpRequestViewModel)RootView!.DataContext!).FormDataParamsTableVm;
     internal KeyValueParamsDataGridViewModel ResHeadersVm => ((HttpRequestViewModel)RootView!.DataContext!).ResponseDataCtx.ResponseHeadersAndTrailersTableVm;
@@ -101,7 +101,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
         await UITestActions.WaitAfterActionAsync();
     }
 
-    internal async Task SelectRequestHeaders(params KeyValueParamViewModel[] headersVms)
+    internal async Task SelectRequestHeaders(params RequestHeaderViewModel[] headersVms)
     {
         ReqHeaders.SelectedItems.Clear();
         foreach (var h in headersVms)

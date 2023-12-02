@@ -104,7 +104,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
 
     #region REQUEST HEADERS
 
-    public KeyValueParamsDataGridViewModel RequestHeadersTableVm { get; }
+    public RequestHeadersDataGridViewModel RequestHeadersTableVm { get; }
 
     #endregion
 

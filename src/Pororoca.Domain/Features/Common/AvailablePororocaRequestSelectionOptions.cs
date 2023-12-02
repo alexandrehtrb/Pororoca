@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using Pororoca.Domain.Features.TranslateRequest;
 
 namespace Pororoca.Domain.Features.Common;
@@ -78,4 +79,90 @@ public static class AvailablePororocaRequestSelectionOptions
             return true;
         }
     }
+
+    public static readonly ObservableCollection<string> MostCommonHeaders =
+        [
+            "Accept",
+            "Accept-Datetime",
+            "Accept-Encoding",
+            "Accept-Language",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers",
+            "Cache-Control",
+            "Connection",
+            "Content-Encoding",
+            "Content-Language",
+            "Cookie",
+            "Date",
+            "From",
+            "Host",
+            "If-Match",
+            "If-Modified-Since",
+            "If-None-Match",
+            "If-Range",
+            "If-Unmodified-Since",
+            "Max-Forwards",
+            "Origin",
+            "Pragma",
+            "Proxy-Authorization",
+            "Range",
+            "Referer",
+            "Prefer",
+            "X-Request-ID",
+            "X-Correlation-ID",
+            "Save-Data",
+            "Sec-GPC",
+            "User-Agent",
+            "Via",
+            "DNT",
+        ];
+
+    public static readonly string[] ExampleLcids =
+        [ "pt-BR", "pt-PT", "en-GB", "en-US", "it-IT", "ru-RU", "uk-UA", "es-ES", "es-AR", "es-MX", "ja-JP" ];
+    
+    private const string sampleValueEncodingHeader = "gzip, br, zstd";
+
+    private static string GetSampleValueForDateHeader() =>
+        DateTime.Now.ToUniversalTime().ToString("r");
+    
+    private static string GetSampleValueForLanguageHeader() =>
+        Random.Shared.GetItems(ExampleLcids, 1)[0];
+
+    public static string ProvideSampleValueForHeader(string headerName) =>
+        headerName switch
+        {
+            "Accept" => MimeTypesDetector.DefaultMimeTypeForJson,
+            "Accept-Datetime" => GetSampleValueForDateHeader(),
+            "Accept-Encoding" => sampleValueEncodingHeader,
+            "Accept-Language" => GetSampleValueForLanguageHeader(),
+            "Access-Control-Request-Method" => "GET",
+            "Access-Control-Request-Headers" => "origin, x-requested-with",
+            "Cache-Control" => "no-cache",
+            "Content-Encoding" => sampleValueEncodingHeader,
+            "Content-Language" => GetSampleValueForLanguageHeader(),
+            "Cookie" => "$Version=1; Skin=new;",
+            "Date" => GetSampleValueForDateHeader(),
+            "From" => "user@example.com",
+            "Host" => "en.wikipedia.org",
+            "If-Match" => string.Empty,
+            "If-Modified-Since" => GetSampleValueForDateHeader(),
+            "If-None-Match" => string.Empty,
+            "If-Range" => string.Empty,
+            "If-Unmodified-Since" => GetSampleValueForDateHeader(),
+            "Max-Forwards" => "10",
+            "Origin" => "http://www.pudim.com.br",
+            "Pragma" => "no-cache",
+            "Proxy-Authorization" => "Basic {{proxy_credentials_here}}",
+            "Range" => "bytes=500-999",
+            "Referer" => "http://en.wikipedia.org/wiki/Main_Page",
+            "Prefer" => "return=representation",
+            "X-Request-ID" => Guid.NewGuid().ToString(),
+            "X-Correlation-ID" => Guid.NewGuid().ToString(),
+            "Save-Data" => "on",
+            "Sec-GPC" => "1",
+            "User-Agent" => "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/119.0",
+            "Via" => "1.0 fred, 1.1 example.com (Apache/1.1)",
+            "DNT" => "1",
+            _ => string.Empty
+        };
 }
