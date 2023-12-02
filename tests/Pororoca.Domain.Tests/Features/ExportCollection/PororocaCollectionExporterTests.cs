@@ -1,7 +1,11 @@
+using System.Text;
+using System.Text.Json;
+using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Xunit;
 using static Pororoca.Domain.Features.ExportCollection.PororocaCollectionExporter;
+using static Pororoca.Domain.Features.ImportCollection.PororocaCollectionImporter;
 
 namespace Pororoca.Domain.Tests.Features.ExportCollection;
 
@@ -10,6 +14,27 @@ public static class PororocaCollectionExporterTests
     private static readonly Guid testGuid = Guid.NewGuid();
     private const string testName = "MyCollection";
 
+    [Fact]
+    public static void Should_export_and_reimport_pororoca_collection_successfully()
+    {
+        static string MinifyJsonString(string json) =>
+            JsonSerializer.Serialize(JsonSerializer.Deserialize<dynamic>(json, JsonConfiguration.MinifyingOptions), JsonConfiguration.MinifyingOptions);
+
+        // GIVEN
+        string json1 = GetTestFileJson("FullCollection.pororoca_collection.json");
+
+        // WHEN AND THEN
+        Assert.True(TryImportPororocaCollection(json1, preserveId: true, out var col));
+
+        // THEN
+        Assert.NotNull(col);
+
+        // WHEN AND THEN
+        string minifiedInputJson = MinifyJsonString(json1);
+        string minifiedOutputJson = MinifyJsonString(ExportAsPororocaCollection(col, false));
+        Assert.Equal(minifiedOutputJson, minifiedInputJson);
+    }
+    
     [Fact]
     public static void Should_hide_pororoca_collection_and_environment_secrets()
     {
@@ -128,5 +153,12 @@ public static class PororocaCollectionExporterTests
         Assert.Equal("Key4", var4.Key);
         Assert.Equal("Value4", var4.Value);
         Assert.False(var4.IsSecret);
+    }
+
+    private static string GetTestFileJson(string fileName)
+    {
+        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
+        string jsonFileInfoPath = Path.Combine(testDataDirInfo.FullName, "TestData", fileName);
+        return File.ReadAllText(jsonFileInfoPath, Encoding.UTF8);
     }
 }

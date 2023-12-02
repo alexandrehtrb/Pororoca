@@ -1,0 +1,376 @@
+{
+    "schema": "Pororoca/1",
+    "id": "36211950-c703-4629-a138-fbd241e8eed0",
+    "name": "COL1",
+    "createdAt": "2023-12-01T11:08:39.9830082-03:00",
+    "variables": [
+      {
+        "enabled": true,
+        "key": "ClientCertificatesDir",
+        "value": "C:\\PROJETOS\\Pororoca\\src\\Pororoca.Desktop\\PororocaUserData\\TestFiles\\ClientCertificates",
+        "isSecret": false
+      },
+      {
+        "enabled": true,
+        "key": "TestFilesDir",
+        "value": "C:\\PROJETOS\\Pororoca\\src\\Pororoca.Desktop\\PororocaUserData\\TestFiles",
+        "isSecret": false
+      },
+      {
+        "enabled": true,
+        "key": "SpecialHeaderKey",
+        "value": "Header2",
+        "isSecret": false
+      },
+      {
+        "enabled": true,
+        "key": "SpecialHeaderValue",
+        "value": "ciao",
+        "isSecret": false
+      },
+      {
+        "enabled": true,
+        "key": "SpecialValue1",
+        "value": "Tailândia",
+        "isSecret": false
+      }
+    ],
+    "collectionScopedAuth": {
+      "mode": "bearer",
+      "bearerToken": "token"
+    },
+    "environments": [
+      {
+        "schema": "Pororoca/1",
+        "id": "bdd5a627-ccf4-4ef6-9aa3-3030ba1a81d0",
+        "createdAt": "2023-12-01T11:08:40.8639007-03:00",
+        "name": "ENV1",
+        "isCurrent": true,
+        "variables": [
+          {
+            "enabled": true,
+            "key": "BaseUrl",
+            "value": "https://localhost:5001",
+            "isSecret": false
+          },
+          {
+            "enabled": true,
+            "key": "BaseUrlWs",
+            "value": "wss://localhost:5001",
+            "isSecret": false
+          },
+          {
+            "enabled": true,
+            "key": "BadSslSelfSignedTestsUrl",
+            "value": "https://self-signed.badssl.com/",
+            "isSecret": false
+          },
+          {
+            "enabled": true,
+            "key": "BadSslClientCertTestsUrl",
+            "value": "https://client.badssl.com",
+            "isSecret": false
+          },
+          {
+            "enabled": true,
+            "key": "BadSslClientCertFilePassword",
+            "value": "badssl.com",
+            "isSecret": false
+          },
+          {
+            "enabled": true,
+            "key": "BasicAuthLogin",
+            "value": "usr",
+            "isSecret": false
+          },
+          {
+            "enabled": true,
+            "key": "BasicAuthPassword",
+            "value": "pwd",
+            "isSecret": false
+          },
+          {
+            "enabled": true,
+            "key": "BearerAuthToken",
+            "value": "token_local",
+            "isSecret": false
+          }
+        ]
+      }
+    ],
+    "folders": [
+      {
+        "name": "DIR1",
+        "folders": [
+          {
+            "name": "DIR2",
+            "folders": [
+              {
+                "name": "DIR3",
+                "folders": [],
+                "requests": [
+                  {
+                    "requestType": "http",
+                    "name": "HTTPURLENCODED",
+                    "httpVersion": 3.0,
+                    "httpMethod": "POST",
+                    "url": "{{BaseUrl}}/test/post/urlencoded",
+                    "body": {
+                      "mode": "urlEncoded",
+                      "urlEncodedValues": [
+                        {
+                          "enabled": true,
+                          "key": "a",
+                          "value": "xyz"
+                        },
+                        {
+                          "enabled": true,
+                          "key": "b",
+                          "value": "123"
+                        },
+                        {
+                          "enabled": false,
+                          "key": "c",
+                          "value": "false"
+                        },
+                        {
+                          "enabled": true,
+                          "key": "c",
+                          "value": "true"
+                        },
+                        {
+                          "enabled": true,
+                          "key": "myIdSecret",
+                          "value": "{{SpecialValue1}}"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "requestType": "http",
+                    "name": "HTTPNONEPEMAUTH",
+                    "httpVersion": 1.1,
+                    "httpMethod": "GET",
+                    "url": "{{BadSslClientCertTestsUrl}}",
+                    "customAuth": {
+                      "mode": "clientCertificate",
+                      "clientCertificate": {
+                        "type": "pem",
+                        "certificateFilePath": "{{ClientCertificatesDir}}/badssl.com-client-certificate-without-private-key.pem",
+                        "privateKeyFilePath": "{{ClientCertificatesDir}}/badssl.com-client-encrypted-private-key.key",
+                        "filePassword": "{{BadSslClientCertFilePassword}}"
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "requests": [
+              {
+                "requestType": "http",
+                "name": "HTTPRAW",
+                "httpVersion": 2.0,
+                "httpMethod": "POST",
+                "url": "{{BaseUrl}}/test/post/json",
+                "body": {
+                  "mode": "raw",
+                  "contentType": "application/json",
+                  "rawContent": "{\"myValue\":\"{{SpecialValue1}}\"}"
+                }
+              },
+              {
+                "requestType": "http",
+                "name": "HTTPFILE",
+                "httpVersion": 2.0,
+                "httpMethod": "POST",
+                "url": "{{BaseUrl}}/test/post/file",
+                "body": {
+                  "mode": "file",
+                  "contentType": "image/jpeg",
+                  "fileSrcPath": "{{TestFilesDir}}/homem_aranha.jpg"
+                }
+              },
+              {
+                "requestType": "websocket",
+                "name": "WS",
+                "httpVersion": 2.0,
+                "url": "{{BaseUrlWs}}/{{WsHttp2Endpoint}}",
+                "headers": [
+                    {
+                      "enabled": false,
+                      "key": "Header1",
+                      "value": "ValueHeader1"
+                    }
+                ],
+                "customAuth": {
+                    "mode": "basic",
+                    "basicAuthLogin": "{{BasicAuthLogin}}",
+                    "basicAuthPassword": "{{BasicAuthPassword}}"
+                },
+                "compressionOptions": {
+                    "clientMaxWindowBits": 11,
+                    "clientContextTakeover": false,
+                    "serverMaxWindowBits": 10,
+                    "serverContextTakeover": true
+                },
+                "subprotocols": [
+                    {
+                      "enabled": true,
+                      "key": "Sub1"
+                    }
+                ],
+                "clientMessages": [
+                  {
+                    "name": "WSMSGJSON",
+                    "contentMode": "raw",
+                    "rawContent": "{\"elemento\":\"{{SpecialValue1}}\"}",
+                    "rawContentSyntax": "json",
+                    "disableCompressionForThis": false,
+                    "direction": "fromClient",
+                    "messageType": "text"
+                  },
+                  {
+                    "name": "WSMSGFILE",
+                    "contentMode": "file",
+                    "fileSrcPath": "{{TestFilesDir}}/homem_aranha.jpg",
+                    "disableCompressionForThis": false,
+                    "direction": "fromClient",
+                    "messageType": "binary"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "requests": [
+          {
+            "requestType": "http",
+            "name": "HTTPNONEBASICAUTH",
+            "httpVersion": 1.1,
+            "httpMethod": "GET",
+            "url": "{{BaseUrl}}/test/auth",
+            "customAuth": {
+              "mode": "basic",
+              "basicAuthLogin": "{{BasicAuthLogin}}",
+              "basicAuthPassword": "{{BasicAuthPassword}}"
+            }
+          },
+          {
+            "requestType": "http",
+            "name": "HTTPNONEBEARERAUTH",
+            "httpVersion": 1.1,
+            "httpMethod": "GET",
+            "url": "{{BaseUrl}}/test/auth",
+            "customAuth": {
+              "mode": "bearer",
+              "bearerToken": "{{BearerAuthToken}}"
+            }
+          },
+          {
+            "requestType": "http",
+            "name": "HTTPNONEWINDOWSAUTH",
+            "httpVersion": 1.1,
+            "httpMethod": "GET",
+            "url": "{{BaseUrl}}/test/auth",
+            "customAuth": {
+              "mode": "windows",
+              "windows": {
+                "useCurrentUser": false,
+                "login": "{{WindowsAuthLogin}}",
+                "password": "{{WindowsAuthPassword}}",
+                "domain": "{{WindowsAuthDomain}}"
+              }
+            }
+          },
+          {
+            "requestType": "http",
+            "name": "HTTPNONEPKCS12AUTH",
+            "httpVersion": 1.1,
+            "httpMethod": "GET",
+            "url": "{{BadSslClientCertTestsUrl}}",
+            "customAuth": {
+              "mode": "clientCertificate",
+              "clientCertificate": {
+                "type": "pkcs12",
+                "certificateFilePath": "{{ClientCertificatesDir}}/badssl.com-client.p12",
+                "filePassword": "{{BadSslClientCertFilePassword}}"
+              }
+            }
+          },
+          {
+            "requestType": "http",
+            "name": "HTTPFORMDATA",
+            "httpVersion": 1.1,
+            "httpMethod": "POST",
+            "url": "{{BaseUrl}}/test/post/multipartformdata",
+            "body": {
+              "mode": "formData",
+              "formDataValues": [
+                {
+                  "enabled": true,
+                  "type": "text",
+                  "key": "a",
+                  "textValue": "xyz{{SpecialValue1}}",
+                  "contentType": "text/plain"
+                },
+                {
+                  "enabled": true,
+                  "type": "text",
+                  "key": "b",
+                  "textValue": "[]",
+                  "contentType": "application/json"
+                },
+                {
+                  "enabled": true,
+                  "type": "file",
+                  "key": "arq",
+                  "contentType": "text/plain",
+                  "fileSrcPath": "{{TestFilesDir}}/arq.txt"
+                }
+              ]
+            }
+          },
+          {
+            "requestType": "http",
+            "name": "HTTPGRAPHQL",
+            "httpVersion": 1.1,
+            "httpMethod": "POST",
+            "url": "{{BaseUrl}}/test/post/graphql",
+            "body": {
+              "mode": "graphQl",
+              "graphQlValues": {
+                "query": "query",
+                "variables": "variables"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "requests": [
+      {
+        "requestType": "http",
+        "name": "HTTPHEADERS",
+        "httpVersion": 1.0,
+        "httpMethod": "GET",
+        "url": "{{BaseUrl}}/test/get/headers",
+        "headers": [
+          {
+            "enabled": false,
+            "key": "Header1",
+            "value": "ValueHeader1"
+          },
+          {
+            "enabled": true,
+            "key": "Header1",
+            "value": "Header1Value"
+          },
+          {
+            "enabled": true,
+            "key": "oi_{{SpecialHeaderKey}}",
+            "value": "oi-{{SpecialHeaderValue}}"
+          }
+        ]
+      }
+    ]
+  }
