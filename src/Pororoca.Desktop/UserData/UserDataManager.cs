@@ -15,18 +15,6 @@ public static class UserDataManager
     private const string appDataProgramFolderName = "Pororoca";
     private const string userDataFolderName = "PororocaUserData";
     private const string userPreferencesFileName = "userPreferences.json";
-    private static readonly JsonSerializerOptions userPreferencesJsonOptions = SetupUserPreferencesJsonOptions();
-
-    private static JsonSerializerOptions SetupUserPreferencesJsonOptions()
-    {
-        JsonSerializerOptions options = new();
-        options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
-        options.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
-        options.WriteIndented = true;
-        options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-        options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-        return options;
-    }
 
     public static UserPreferences? LoadUserPreferences()
     {
