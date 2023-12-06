@@ -19,6 +19,7 @@ using Pororoca.Infrastructure.Features.Requester;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
+using static Pororoca.Domain.Features.Common.HttpVersionFormatter;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -265,8 +266,8 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
 
         ResolvedRequestUrlToolTip = this.requestUrlField = req.Url;
 
-        RequestHttpVersionSelectionOptions = new(AvailableHttpVersionsForHttp.Select(FormatHttpVersionString));
-        int reqHttpVersionSelectionIndex = RequestHttpVersionSelectionOptions.IndexOf(FormatHttpVersionString(req.HttpVersion));
+        RequestHttpVersionSelectionOptions = new(AvailableHttpVersionsForHttp.Select(FormatHttpVersion));
+        int reqHttpVersionSelectionIndex = RequestHttpVersionSelectionOptions.IndexOf(FormatHttpVersion(req.HttpVersion));
         RequestHttpVersionSelectedIndex = reqHttpVersionSelectionIndex >= 0 ? reqHttpVersionSelectionIndex : 0;
 
         RequestHeadersTableVm = new(req.Headers);
@@ -330,16 +331,6 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
         var varResolver = ((IPororocaVariableResolver)this.col);
         ResolvedRequestUrlToolTip = IPororocaVariableResolver.ReplaceTemplates(RequestUrl, varResolver.GetEffectiveVariables());
     }
-
-    private static string FormatHttpVersionString(decimal httpVersion) =>
-        httpVersion switch
-        {
-            1.0m => "HTTP/1.0",
-            1.1m => "HTTP/1.1",
-            2.0m => "HTTP/2",
-            3.0m => "HTTP/3",
-            _ => string.Format(CultureInfo.InvariantCulture, "HTTP/{0:0.0}", httpVersion)
-        };
 
     #endregion
 
