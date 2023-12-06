@@ -435,7 +435,32 @@ public static class PororocaHttpRequestTranslatorTests
     }
 
     [Fact]
-    public static async Task Should_resolve_graphql_content_correctly()
+    public static async Task Should_resolve_graphql_content_without_variables_correctly()
+    {
+        // GIVEN
+        PororocaHttpRequestBody resolvedBody = new();
+        resolvedBody.SetGraphQlContent("myGraphQlQuery", null);
+        Dictionary<string, string> resolvedContentHeaders = new(1)
+        {
+            { "Content-Language", "pt-BR" }
+        };
+
+        // WHEN
+        var resolvedReqContent = MakeRequestContent(resolvedBody, resolvedContentHeaders);
+
+        // THEN
+        Assert.NotNull(resolvedReqContent);
+        Assert.True(resolvedReqContent is StringContent);
+        Assert.NotNull(resolvedReqContent!.Headers.ContentType);
+        Assert.Equal("application/json", resolvedReqContent.Headers.ContentType!.MediaType);
+        Assert.Contains("pt-BR", resolvedReqContent!.Headers.ContentLanguage);
+
+        string? contentText = await resolvedReqContent.ReadAsStringAsync();
+        Assert.Equal("{\"query\":\"myGraphQlQuery\",\"variables\":null}", contentText);
+    }
+
+    [Fact]
+    public static async Task Should_resolve_graphql_content_with_variables_correctly()
     {
         // GIVEN
         PororocaHttpRequestBody resolvedBody = new();

@@ -13,7 +13,7 @@ public static class PororocaHttpRequestTranslator
 {
     public const string AuthOptionsKey = nameof(AuthOptionsKey);
 
-    private static readonly JsonDocumentOptions graphQlJsonOptions = new()
+    private static readonly JsonDocumentOptions GraphQlJsonOptions = new()
     {
         CommentHandling = JsonCommentHandling.Skip
     };
@@ -177,14 +177,17 @@ public static class PororocaHttpRequestTranslator
                 {
                     // this deserailize-serialize is solely 
                     // to allow comments in GraphQL variables textbox
-                    variablesJsonDoc = JsonDocument.Parse(variables, graphQlJsonOptions);
+                    variablesJsonDoc = JsonDocument.Parse(variables, GraphQlJsonOptions);
                 }
                 catch
                 {
                     variablesJsonDoc = JsonDocument.Parse("{}");
                 }
             }
-            string variablesJsonStr = JsonSerializer.Serialize(variablesJsonDoc!.RootElement, JsonConfiguration.MinifyingOptions);
+            string variablesJsonStr = 
+                variablesJsonDoc is null ?
+                "null" :
+                JsonSerializer.Serialize(variablesJsonDoc.RootElement, JsonConfiguration.MinifyingOptions);
             string json = "{\"query\":\"" + resolvedBody!.GraphQlValues!.Query! + "\",\"variables\":" + variablesJsonStr + "}";
 
             return new(json, Encoding.UTF8, MimeTypesDetector.DefaultMimeTypeForJson);
