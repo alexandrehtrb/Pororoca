@@ -1,7 +1,5 @@
 using System.Collections.Frozen;
-using System.Collections.Immutable;
 using System.Net;
-using System.Net.Http.Headers;
 using System.Security.Authentication;
 using System.Text;
 using System.Text.Json;
@@ -9,16 +7,23 @@ using System.Xml;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.VariableCapture;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
+using static Pororoca.Domain.Features.ResponseParsing.PororocaHttpMultipartResponseBodyReader;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca.Http;
+
+public record PororocaHttpResponseMultipartPart(
+    FrozenDictionary<string, string> Headers,
+    byte[] BinaryBody);
 
 public sealed class PororocaHttpResponse
 {
     public PororocaHttpRequest? ResolvedRequest { get; }
 
+    public DateTimeOffset StartedAtUtc { get; }
+
     public TimeSpan ElapsedTime { get; }
 
-    public DateTimeOffset ReceivedAt { get; }
+    public DateTimeOffset ReceivedAt => StartedAtUtc + ElapsedTime;
 
     public Exception? Exception { get; }
 
@@ -29,6 +34,8 @@ public sealed class PororocaHttpResponse
     public FrozenDictionary<string, string>? Headers { get; }
 
     public FrozenDictionary<string, string>? Trailers { get; }
+
+    public PororocaHttpResponseMultipartPart[]? MultipartParts { get; internal set; }
 
     private readonly byte[]? binaryBody;
 
@@ -218,7 +225,7 @@ public sealed class PororocaHttpResponse
         }
     }
 
-    public static async Task<PororocaHttpResponse> SuccessfulAsync(PororocaHttpRequest resolvedReq, TimeSpan elapsedTime, HttpResponseMessage responseMessage)
+    public static async Task<PororocaHttpResponse> SuccessfulAsync(PororocaHttpRequest resolvedReq, DateTimeOffset startedAt, TimeSpan elapsedTime, HttpResponseMessage responseMessage)
     {
         // the binaryBody needs to be read before making the table of headers,
         // otherwise, the Content-Length header disappears for some reason (???)
@@ -230,17 +237,25 @@ public sealed class PororocaHttpResponse
         var headers = nonContentHeaders.Concat(contentHeaders);
         var trailers = responseMessage.TrailingHeaders;
 
-        return new(resolvedReq, elapsedTime, responseMessage.StatusCode, MakeKvTable(headers), MakeKvTable(trailers), binaryBody);
+        PororocaHttpResponse res = new(resolvedReq, startedAt, elapsedTime, responseMessage.StatusCode, MakeKvTable(headers), MakeKvTable(trailers), binaryBody);
+        
+        if (res.ContentType?.StartsWith("multipart") == true)
+        {
+            string boundary = ReadMultipartBoundary(res.ContentType);
+            res.MultipartParts = ReadMultipartResponseParts(binaryBody, boundary);
+        }
+
+        return res;
     }
 
-    public static PororocaHttpResponse Failed(PororocaHttpRequest? resolvedReq, TimeSpan elapsedTime, Exception ex) =>
-        new(resolvedReq, elapsedTime, ex);
+    public static PororocaHttpResponse Failed(PororocaHttpRequest? resolvedReq, DateTimeOffset startedAt, TimeSpan elapsedTime, Exception ex) =>
+        new(resolvedReq, startedAt, elapsedTime, ex);
 
-    private PororocaHttpResponse(PororocaHttpRequest? resolvedReq, TimeSpan elapsedTime, HttpStatusCode httpStatusCode, FrozenDictionary<string, string> headers, FrozenDictionary<string, string> trailers, byte[] binaryBody)
+    internal PororocaHttpResponse(PororocaHttpRequest? resolvedReq, DateTimeOffset startedAt, TimeSpan elapsedTime, HttpStatusCode httpStatusCode, FrozenDictionary<string, string> headers, FrozenDictionary<string, string> trailers, byte[] binaryBody)
     {
         ResolvedRequest = resolvedReq;
+        StartedAtUtc = startedAt;
         ElapsedTime = elapsedTime;
-        ReceivedAt = DateTimeOffset.Now;
         Successful = true;
         StatusCode = httpStatusCode;
         Headers = headers;
@@ -248,8 +263,9 @@ public sealed class PororocaHttpResponse
         this.binaryBody = binaryBody;
     }
 
-    private PororocaHttpResponse(PororocaHttpRequest? resolvedReq, TimeSpan elapsedTime, Exception exception)
+    private PororocaHttpResponse(PororocaHttpRequest? resolvedReq, DateTimeOffset startedAt, TimeSpan elapsedTime, Exception exception)
     {
+        StartedAtUtc = startedAt;
         ResolvedRequest = resolvedReq;
         ElapsedTime = elapsedTime;
         Successful = false;

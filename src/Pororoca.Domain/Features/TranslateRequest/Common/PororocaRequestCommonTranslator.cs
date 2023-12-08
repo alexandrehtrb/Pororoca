@@ -92,7 +92,7 @@ public static class PororocaRequestCommonTranslator
            .Where(h => h.Key != "Content-Type" && headerNameCriteria(h.Key)) // Content-Type header is set by the content, later
            .ToDictionary(h => h.Key, h => h.Value!);
 
-    private static string? MakeCustomAuthHeaderValue(PororocaRequestAuth? resolvedAuth) =>
+    internal static string? MakeCustomAuthHeaderValue(PororocaRequestAuth? resolvedAuth) =>
         resolvedAuth?.Mode switch
         {
             PororocaRequestAuthMode.Bearer => $"Bearer {resolvedAuth!.BearerToken}",

@@ -130,6 +130,8 @@
     "HttpResponse/BodyCouldNotReadAsUTF8",
     "HttpResponse/BodySaveToFile",
     "HttpResponse/BodySaveToFileToolTip",
+    "HttpResponse/ExportLog",
+    "HttpResponse/ExportLogToolTip",
     "HttpResponse/DisableTlsVerification",
     "HttpResponse/ElapsedTimeMillisecondsFormat",
     "HttpResponse/ElapsedTimeMinutesFormat",

@@ -11,6 +11,7 @@ using Pororoca.Domain.Features.VariableCapture;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using static Pororoca.Domain.Features.Common.MimeTypesDetector;
+using static Pororoca.Domain.Features.ExportLog.HttpLogExporter;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -47,7 +48,12 @@ public sealed class HttpResponseViewModel : ViewModelBase
     [Reactive]
     public bool IsSaveResponseBodyToFileVisible { get; set; }
 
+    [Reactive]
+    public bool IsExportLogFileVisible { get; set; }
+
     public ReactiveCommand<Unit, Unit> SaveResponseBodyToFileCmd { get; }
+
+    public ReactiveCommand<Unit, Unit> ExportLogFileCmd { get; }
 
     [Reactive]
     public bool IsDisableTlsVerificationVisible { get; set; }
@@ -62,6 +68,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
         this.parentHttpRequestVm = reqVm;
         ResponseHeadersAndTrailersTableVm = new();
         SaveResponseBodyToFileCmd = ReactiveCommand.CreateFromTask(SaveResponseBodyToFileAsync);
+        ExportLogFileCmd = ReactiveCommand.CreateFromTask(SaveLogFileAsync);
         DisableTlsVerificationCmd = ReactiveCommand.Create(EnableTlsVerification);
         ExecuteCapturesCmd = ReactiveCommand.Create(ExecuteCaptures);
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
@@ -72,17 +79,17 @@ public sealed class HttpResponseViewModel : ViewModelBase
     private void OnLanguageChanged() =>
         UpdateWithResponse(this.res);
 
+    private string GenerateDefaultInitialFileName(string fileExtensionWithoutDot)
+    {
+        var receivedAtDt = this.res!.ReceivedAt.DateTime;
+        string reqName = this.parentHttpRequestVm.Name;
+        string? envName = this.environmentUsedForRequest;
+        string envLabel = envName is not null ? $"-{envName}-" : "-";
+        return $"{reqName}{envLabel}response-{receivedAtDt:yyyyMMdd-HHmmss}.{fileExtensionWithoutDot}";
+    }
+
     public async Task SaveResponseBodyToFileAsync()
     {
-        string GenerateDefaultInitialFileName(string fileExtensionWithoutDot)
-        {
-            var receivedAtDt = this.res.ReceivedAt.DateTime;
-            string reqName = this.parentHttpRequestVm.Name;
-            string? envName = this.environmentUsedForRequest;
-            string envLabel = envName is not null ? $"-{envName}-" : "-";
-            return $"{reqName}{envLabel}response-{receivedAtDt:yyyyMMdd-HHmmss}.{fileExtensionWithoutDot}";
-        }
-
         if (this.res != null && this.res.HasBody)
         {
             string? contentDispositionFileName = this.res.GetContentDispositionFileName();
@@ -109,6 +116,20 @@ public sealed class HttpResponseViewModel : ViewModelBase
             if (saveFileOutputPath != null)
             {
                 await File.WriteAllBytesAsync(saveFileOutputPath, this.res.GetBodyAsBinary()!).ConfigureAwait(false);
+            }
+        }
+    }
+
+    public async Task SaveLogFileAsync()
+    {
+        if (this.res != null)
+        {
+            string initialFileName = GenerateDefaultInitialFileName("log");
+            string? saveFileOutputPath = await FileExporterImporter.SelectPathForFileToBeSavedAsync(initialFileName);
+            if (saveFileOutputPath != null)
+            {
+                string logTxt = ProduceHttpLog(this.res);
+                await File.WriteAllTextAsync(saveFileOutputPath, logTxt).ConfigureAwait(false);
             }
         }
     }
@@ -140,6 +161,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
                                  res.GetBodyAsPrettyText(Localizer.Instance.HttpResponse.BodyCouldNotReadAsUTF8) :
                                  string.Format(Localizer.Instance.HttpResponse.BodyContentBinaryNotShown, res.GetBodyAsBinary()!.Length);
             IsSaveResponseBodyToFileVisible = res.HasBody;
+            IsExportLogFileVisible = true;
             IsDisableTlsVerificationVisible = false;
             CaptureResponseValues(res);
         }
@@ -153,7 +175,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
             ResponseRawContentType = null;
             ResponseRawContent = res.Exception!.ToString();
             IsSaveResponseBodyToFileVisible = false;
-
+            IsExportLogFileVisible = false;
             bool isSslVerificationDisabled = ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled;
             IsDisableTlsVerificationVisible = !isSslVerificationDisabled && res.FailedDueToTlsVerification;
         }

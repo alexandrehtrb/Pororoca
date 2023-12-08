@@ -20,23 +20,24 @@ public sealed class PororocaRequester : IPororocaRequester
         HttpRequestMessage? reqMsg = null;
         HttpResponseMessage? resMsg;
         Stopwatch sw = new();
-        sw.Start();
+        DateTimeOffset? startedAt = null;
         try
         {
             if (!PororocaHttpRequestTranslator.TryTranslateRequest(effectiveVars, collectionScopedAuth, req, out resolvedReq, out reqMsg, out string? errorCode))
             {
-                sw.Stop();
                 reqMsg?.Dispose();
-                return PororocaHttpResponse.Failed(resolvedReq, sw.Elapsed, new Exception("Invalid request. Please, check the resolved URL and the HTTP version compatibility."));
+                return PororocaHttpResponse.Failed(resolvedReq, DateTimeOffset.Now, TimeSpan.Zero, new Exception("Invalid request. Please, check the resolved URL and the HTTP version compatibility."));
             }
             else
             {
                 var resolvedAuth = GetResolvedAuth(reqMsg!);
                 var httpClient = PororocaHttpClientProvider.Singleton.Provide(disableSslVerification, resolvedAuth);
+                startedAt = DateTimeOffset.Now;
+                sw.Start();
                 resMsg = await httpClient.SendAsync(reqMsg!, cancellationToken);
                 sw.Stop();
                 reqMsg?.Dispose();
-                var res = await PororocaHttpResponse.SuccessfulAsync(resolvedReq!, sw.Elapsed, resMsg);
+                var res = await PororocaHttpResponse.SuccessfulAsync(resolvedReq!, (DateTimeOffset)startedAt!, sw.Elapsed, resMsg);
                 // PororocaHttpResponse.SuccessfulAsync uses HttpResponseMessage, so we need to dispose it only after line above
                 resMsg?.Dispose();
                 return res;
@@ -44,9 +45,10 @@ public sealed class PororocaRequester : IPororocaRequester
         }
         catch (Exception ex)
         {
+            startedAt ??= DateTimeOffset.Now;
             sw.Stop();
             reqMsg?.Dispose();
-            return PororocaHttpResponse.Failed(resolvedReq, sw.Elapsed, ex);
+            return PororocaHttpResponse.Failed(resolvedReq, (DateTimeOffset)startedAt!, sw.Elapsed, ex);
         }
     }
 

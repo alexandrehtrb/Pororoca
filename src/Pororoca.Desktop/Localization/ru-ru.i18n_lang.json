@@ -130,6 +130,8 @@
     "HttpResponse/BodyContentWatermark": "(ответ body)",
     "HttpResponse/BodySaveToFile": "Сохранить как…",
     "HttpResponse/BodySaveToFileToolTip": "Сохранить как… (Ctrl+S)",
+    "HttpResponse/ExportLog": "Журнал экспорта…",
+    "HttpResponse/ExportLogToolTip": "Журнал экспорта…",
     "HttpResponse/DisableTlsVerification": "Отключить TLS проверку",
     "HttpResponse/ElapsedTimeMillisecondsFormat": "{0}мс",
     "HttpResponse/ElapsedTimeMinutesFormat": "{0}мин {1}с",

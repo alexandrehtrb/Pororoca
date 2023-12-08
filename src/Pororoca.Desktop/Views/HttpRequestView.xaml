@@ -891,6 +891,15 @@
                     Command="{Binding ResponseDataCtx.SaveResponseBodyToFileCmd}"
                     Classes="Primary"/>
                 <Button
+                    Name="btResExportLogFile"
+                    Content="{Binding i18n.HttpResponse.ExportLog}"
+                    ToolTip.Tip="{Binding i18n.HttpResponse.ExportLogToolTip}"
+                    ToolTip.Placement="Top"
+                    Margin="6,0,6,12"
+                    IsVisible="{Binding ResponseDataCtx.IsExportLogFileVisible}"
+                    Command="{Binding ResponseDataCtx.ExportLogFileCmd}"
+                    Classes="Primary"/>
+                <Button
                     Name="btResDisableTlsVerification"
                     Content="{Binding i18n.HttpResponse.DisableTlsVerification}"
                     Margin="6,0,0,12"

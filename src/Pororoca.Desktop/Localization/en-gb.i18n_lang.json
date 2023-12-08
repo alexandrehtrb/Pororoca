@@ -130,6 +130,8 @@
     "HttpResponse/BodyCouldNotReadAsUTF8": "(could not read body as UTF-8 text, {0} bytes)",
     "HttpResponse/BodySaveToFile": "Save as…",
     "HttpResponse/BodySaveToFileToolTip": "Save as… (Ctrl+S)",
+    "HttpResponse/ExportLog": "Export log…",
+    "HttpResponse/ExportLogToolTip": "Export log…",
     "HttpResponse/DisableTlsVerification": "Disable TLS verification",
     "HttpResponse/ElapsedTimeMillisecondsFormat": "{0}ms",
     "HttpResponse/ElapsedTimeMinutesFormat": "{0}min {1}s",

@@ -16,6 +16,7 @@ public static class TestEndpoints
         app.MapGet("test/get/txt", TestGetTxt);
         app.MapGet("test/get/headers", TestGetHeaders);
         app.MapGet("test/get/trailers", TestGetTrailers);
+        app.MapGet("test/get/multipartformdata", TestGetMultipartFormData);
         app.MapGet("test/auth", TestAuthHeader);
         app.MapGet("test/http1websocket", (Delegate)TestHttp1WebSocket);
         app.MapConnect("test/http2websocket", (Delegate)TestHttp2WebSocket);
@@ -87,6 +88,25 @@ public static class TestEndpoints
         httpRes.AppendTrailer("MyTrailer", new("MyTrailerValue"));
         await httpRes.CompleteAsync();
     }
+
+    private static MultipartFormDataResult TestGetMultipartFormData() =>
+        new()
+        {
+            new MultipartContent()
+            {
+                Name = "a",
+                ContentType = "text/plain",
+                FileName = null,
+                Stream = new MemoryStream("oi"u8.ToArray())
+            },
+            new MultipartContent()
+            {
+                Name = "arq",
+                ContentType = "image/gif",
+                FileName = "pirate.gif",
+                Stream = new FileStream(GetTestFilePath("pirate.gif"), FileMode.Open)
+            }
+        };
 
     #endregion
 
