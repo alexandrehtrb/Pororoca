@@ -1,10 +1,8 @@
 using Avalonia.Controls;
 using Pororoca.Desktop.UITesting.Robots;
-using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.Views;
 using System.Collections.ObjectModel;
 using Pororoca.Desktop.ViewModels.DataGrids;
-using Pororoca.Desktop.UserData;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Desktop.ViewModels;
@@ -543,11 +541,5 @@ public sealed class ExportAndImportUITest : UITest
         parent.Add(new(parent, new(true, "BasicAuthPassword", "pwd", false)));
         parent.Add(new(parent, new(true, "BearerAuthToken", "token_local", false)));
         return parent;
-    }
-
-    private static string GetTestFilesDirPath()
-    {
-        var userDataDir = UserDataManager.GetUserDataFolder();
-        return Path.Combine(userDataDir.FullName, "PororocaUserData", "TestFiles");
     }
 }

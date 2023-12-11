@@ -1,8 +1,5 @@
-using System.Collections.ObjectModel;
-using System.Text;
 using Avalonia.Controls;
 using Pororoca.Desktop.UITesting.Robots;
-using Pororoca.Desktop.UserData;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Common;
@@ -298,11 +295,5 @@ public sealed class HttpRequestValidationsUITest : UITest
         
         await HttpRobot.SetNoAuth();
         AssertIsHidden(HttpRobot.ErrorMsg);
-    }
-
-    private static string GetTestFilePath(string subFolder, string fileName)
-    {
-        var userDataDir = UserDataManager.GetUserDataFolder();
-        return Path.Combine(userDataDir.FullName, "PororocaUserData", "TestFiles", subFolder, fileName);
     }
 }

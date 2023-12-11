@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Text;
+using Pororoca.Desktop.UserData;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.Views;
 
@@ -61,6 +62,15 @@ public abstract partial class UITest
     protected void AppendToLog(string msg) => this.logAppender.AppendLine(msg);
 
     public abstract Task RunAsync();
+
+    protected static string GetTestFilesDirPath()
+    {
+        var userDataDir = UserDataManager.GetUserDataFolder();
+        return Path.Combine(userDataDir.FullName, "TestFiles");
+    }
+
+    protected static string GetTestFilePath(string subFolder, string fileName) =>
+        Path.Combine(GetTestFilesDirPath(), subFolder, fileName);
 }
 
 public sealed class UITestException : Exception

@@ -1,14 +1,10 @@
 using System.Collections.ObjectModel;
-using System.Drawing.Text;
 using Avalonia.Controls;
-using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.UITesting.Robots;
-using Pororoca.Desktop.UserData;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Common;
-using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
@@ -189,11 +185,5 @@ public sealed partial class WebSocketsUITest : UITest
         ObservableCollection<VariableViewModel> parent = new();
         parent.Add(new(parent, new(true, "BaseUrlWs", "wss://localhost:5001", false)));
         return parent;
-    }
-
-    private static string GetTestFilesDirPath()
-    {
-        var userDataDir = UserDataManager.GetUserDataFolder();
-        return Path.Combine(userDataDir.FullName, "PororocaUserData", "TestFiles");
     }
 }

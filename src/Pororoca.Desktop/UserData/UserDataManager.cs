@@ -1,8 +1,6 @@
 using System.Reflection;
 using System.Text;
-using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.ExportCollection;
 using Pororoca.Domain.Features.ImportCollection;
@@ -12,7 +10,7 @@ namespace Pororoca.Desktop.UserData;
 
 public static class UserDataManager
 {
-    private const string appDataProgramFolderName = "Pororoca";
+    private const string appProgramFolderName = "Pororoca";
     private const string userDataFolderName = "PororocaUserData";
     private const string userPreferencesFileName = "userPreferences.json";
 
@@ -21,20 +19,31 @@ public static class UserDataManager
         string userPreferencesFilePath = GetUserDataFilePath(userPreferencesFileName);
         if (!File.Exists(userPreferencesFilePath))
         {
-            return null;
-        }
-        else
-        {
-            try
+            if (NeedsMacOSXUserDataFolderMigrationToV3())
             {
-                string json = File.ReadAllText(userPreferencesFilePath, Encoding.UTF8);
-                return JsonSerializer.Deserialize(json, UserPreferencesJsonSrcGenContext.Default.UserPreferences);
+                // this is to load an old user preferences file for MacOSX, 
+                // in case a migration needs to happen
+                userPreferencesFilePath = Path.Combine(GetUserDataFolderForMacOSX_BeforePororocaV3().FullName, userPreferencesFileName);
+                if (!File.Exists(userPreferencesFilePath))
+                {
+                    return null;
+                }
             }
-            catch
+            else
             {
                 return null;
             }
         }
+        
+        try
+        {
+            string json = File.ReadAllText(userPreferencesFilePath, Encoding.UTF8);
+            return JsonSerializer.Deserialize(json, UserPreferencesJsonSrcGenContext.Default.UserPreferences);
+        }
+        catch
+        {
+            return null;
+        }            
     }
 
     public static PororocaCollection[] LoadUserCollections() =>
@@ -135,34 +144,75 @@ public static class UserDataManager
         }
     }
 
+    // CAREFUL!!! dotnet format may cut parts of this method that should not be removed!!!
+    internal static bool NeedsMacOSXUserDataFolderMigrationToV3() =>
+#if MACOSX
+        OperatingSystem.IsMacOS() && GetUserDataFolderForMacOSX_BeforePororocaV3().Exists;
+#else
+        false;
+#endif
+
+    internal static void ExecuteMacOSXUserDataFolderMigrationToV3()
+    {
+        try
+        {
+            if (OperatingSystem.IsMacOS() == false)
+                return;
+            
+            var oldDir = GetUserDataFolderForMacOSX_BeforePororocaV3();
+            if (oldDir.Exists == false)
+                return;
+
+            var currentDir = GetUserDataFolderForMacOSX();
+            if (currentDir.Exists == false)
+            {
+                currentDir.Create();
+            }
+
+            foreach (var fi in oldDir.EnumerateFiles())
+            {
+                string destFileName = Path.Combine(currentDir.FullName, fi.Name);
+                fi.CopyTo(destFileName, overwrite: true);
+            }
+
+            // let's rename the old dir, so this migration won't be required every time 
+            // if the user forgets to delete the old dir
+            string oldDirRenamedNewPath = Path.Combine(oldDir.Parent!.FullName, "PororocaUserData_old_backup");
+            oldDir.MoveTo(oldDirRenamedNewPath);
+        }
+        catch
+        {
+        }
+    }
+
+    #region GET USER DATA DIRECTORY PATH
+
     public static string GetUserDataFilePath(string fileName)
     {
         var rootDir = GetUserDataFolder();
         string rootPath = rootDir.FullName;
-        return Path.Combine(rootPath, userDataFolderName, fileName);
+        return Path.Combine(rootPath, fileName);
     }
 
     internal static DirectoryInfo GetUserDataFolder() =>
         /*
-            For debugging, the PororocaUserData folder should be located inside the Pororoca.Desktop directory:
-                "Pororoca.Desktop\bin\Debug\net8.0\win-x64\"
+            - For debugging, the PororocaUserData folder should be located inside the Pororoca.Desktop directory:
+                C:\MyProjects\Pororoca\src\Pororoca.Desktop\PororocaUserData\
             
-            For a release executable, the PororocaUserData folder location depends on the OS:
+            - For a release executable, the PororocaUserData folder location depends on the OS:
 
-            -For Linux, it should be on the same level as the executable.
-            Example Linux executable directory: /home/myuser/Programs/MyPororocaDir/
-            Then, user data directory will be:  /home/myuser/Programs/MyPororocaDir/PororocaUserData/
+            - For Linux, it should be on the same level as the executable.
+                Example Linux executable directory: /home/myuser/Programs/MyPororocaDir/
+                Then, user data directory will be:  /home/myuser/Programs/MyPororocaDir/PororocaUserData/
 
-            -For MacOS, it should be on the same level as the .app executable (not the same as above)
-            Example Mac OSX executable directory: /Applications/Pororoca.app/Contents/MacOS/
-            Then, user data directory will be:    /Applications/PororocaUserData/
-            This is because that if the user updates the app, the entire Pororoca.app is replaced
-            and since it is not intuitive to retrieve content from inside the .app folder,
-            the user data folder needs to be outside of the .app.
+            - For MacOS, it should be inside the Application Support directory:
+                /Users/myuser/Library/Application Support/Pororoca/PororocaUserData
 
-            -For Windows:
+            - For Windows:
                 - If it is a portable executable, it should be on the same level as the executable, just like on Linux.
                 - If it is an installed executable, it should be inside the %APPDATA%/Pororoca/ folder. (Roaming folder, not Local or LocalLow)
+            
+            - CAREFUL!!! dotnet format may cut parts of this method that should not be removed!!!
         */
 #if INSTALLED_ON_WINDOWS
         GetUserDataFolderForInstalledOnWindows(); // installed on windows
@@ -184,21 +234,29 @@ public static class UserDataManager
         string currentDirPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location!)!;
         DirectoryInfo currentDir = new(currentDirPath);
         // .NET 7 no longer has runtime identifer divided Debug folder
-        return currentDir.Parent!.Parent!.Parent!;
+        var pororocaDesktopSrcDir = currentDir.Parent!.Parent!.Parent!;
+        return new(Path.Combine(pororocaDesktopSrcDir.FullName, userDataFolderName));
     }
 #endif
 
+    private static DirectoryInfo GetUserDataFolderForMacOSX_BeforePororocaV3()
+    {
+        string currentDirPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        DirectoryInfo currentDir = new(currentDirPath);
+        var applicationsDir = currentDir.Parent!.Parent!.Parent!;
+        return new(Path.Combine(applicationsDir.FullName, userDataFolderName));
+    }
+    
     private static DirectoryInfo GetUserDataFolderForMacOSX()
     {
-        string currentDirPath = Path.GetDirectoryName(Environment.ProcessPath)!;
-        DirectoryInfo currentDir = new(currentDirPath);
-        return currentDir.Parent!.Parent!.Parent!;
+        string applicationsSupportDirPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        return new(Path.Combine(applicationsSupportDirPath, appProgramFolderName, userDataFolderName));
     }
 
     private static DirectoryInfo GetUserDataFolderForPortableExecutable()
     {
         string currentDirPath = Path.GetDirectoryName(Environment.ProcessPath)!;
-        return new(currentDirPath);
+        return new(Path.Combine(currentDirPath, userDataFolderName));
     }
 
     private static DirectoryInfo GetUserDataFolderForInstalledOnWindows()
@@ -206,7 +264,9 @@ public static class UserDataManager
         // we are using "AppData\Roaming" path here, to preserve user data
         // when user logs in on another machine of the same corporate network
         string appDataRoamingPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        string currentDirPath = Path.Combine(appDataRoamingPath, appDataProgramFolderName)!;
-        return new(currentDirPath);
+        string userDataDirPath = Path.Combine(appDataRoamingPath, appProgramFolderName, userDataFolderName)!;
+        return new(userDataDirPath);
     }
+
+    #endregion
 }

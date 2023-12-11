@@ -353,9 +353,9 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     private void LoadUserData()
     {
+        // this needs to be before the migration dialog,
+        // because here we load the localization strings
         UserPrefs = UserDataManager.LoadUserPreferences() ?? GetDefaultUserPrefs();
-        var cols = UserDataManager.LoadUserCollections();
-
         SelectLanguage(UserPrefs.GetLanguage());
         if (UserPrefs.NeedsToShowUpdateReminder())
         {
@@ -367,6 +367,14 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
             UserPrefs.SetUpdateReminderLastShownDateAsToday();
         }
 
+        if (UserDataManager.NeedsMacOSXUserDataFolderMigrationToV3())
+        {
+            // this is a silent migration.
+            // users can manually delete the PororocaUserData_old folder afterwards.
+            UserDataManager.ExecuteMacOSXUserDataFolderMigrationToV3();
+        }
+
+        var cols = UserDataManager.LoadUserCollections();
         foreach (var col in cols)
         {
             AddCollection(col);
