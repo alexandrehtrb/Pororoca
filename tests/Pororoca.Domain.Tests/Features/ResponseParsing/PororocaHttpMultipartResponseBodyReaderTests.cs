@@ -1,6 +1,6 @@
-using Xunit;
-using Pororoca.Domain.Features.ResponseParsing;
 using System.Text;
+using Pororoca.Domain.Features.ResponseParsing;
+using Xunit;
 using static Pororoca.Domain.Features.ResponseParsing.PororocaHttpMultipartResponseBodyReader;
 
 namespace Pororoca.Domain.Tests.Features.ResponseParsing;

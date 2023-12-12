@@ -112,7 +112,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         {
             this.RaiseAndSetIfChanged(ref this.urlField, value);
             // clear invalid warnings if user starts typing to fix them
-            if (HasUrlValidationProblem) ClearInvalidConnectionWarnings();
+            if (HasUrlValidationProblem)
+                ClearInvalidConnectionWarnings();
         }
     }
 
@@ -138,7 +139,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         {
             this.RaiseAndSetIfChanged(ref this.httpVersionSelectedIndexField, value);
             // clear invalid warnings if user starts typing to fix them
-            if (HasHttpVersionValidationProblem) ClearInvalidConnectionWarnings();
+            if (HasHttpVersionValidationProblem)
+                ClearInvalidConnectionWarnings();
         }
     }
 
@@ -187,7 +189,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             RequestAuthDataCtx.HasWindowsAuthPasswordProblem = value == TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank;
             RequestAuthDataCtx.HasWindowsAuthDomainProblem = value == TranslateRequestErrors.WindowsAuthDomainCannotBeBlank;
 
-            RequestAuthDataCtx.HasClientCertificateAuthPkcs12CertificateFilePathProblem = 
+            RequestAuthDataCtx.HasClientCertificateAuthPkcs12CertificateFilePathProblem =
             (value == TranslateRequestErrors.ClientCertificatePkcs12CertificateFileNotFound);
             RequestAuthDataCtx.HasClientCertificateAuthPkcs12FilePasswordProblem =
             (value == TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank);
@@ -260,7 +262,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     [Reactive]
     public bool WasConnectionSuccessful { get; private set; }
-    
+
     [Reactive]
     public string? ConnectionExceptionContent { get; set; }
 
@@ -388,7 +390,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         #endregion
 
         #region CONNECTION REQUEST AUTH
-        RequestAuthDataCtx = new(ws.CustomAuth, true, this.ClearInvalidConnectionWarnings);
+        RequestAuthDataCtx = new(ws.CustomAuth, true, ClearInvalidConnectionWarnings);
         #endregion
 
         #region CONNECTION OPTIONS
@@ -584,7 +586,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         var wsConn = ToWebSocketConnection();
         var effectiveVars = ((IPororocaVariableResolver)this.col).GetEffectiveVariables();
         bool disableTlsVerification = ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled;
-        
+
         if (!IsValidConnection(effectiveVars, this.col.CollectionScopedAuth, wsConn, out var resolvedUri, out string? translateUriErrorCode))
         {
             InvalidConnectionErrorCode = translateUriErrorCode;

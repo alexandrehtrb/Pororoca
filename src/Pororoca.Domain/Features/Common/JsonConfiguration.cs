@@ -12,7 +12,7 @@ internal static class JsonConfiguration
 {
     internal static readonly PororocaJsonSrcGenContext MainJsonCtxWithConverters =
         MakePororocaJsonContext(true);
-    
+
     internal static readonly PororocaJsonSrcGenContext MainJsonCtx =
         MakePororocaJsonContext(false);
 

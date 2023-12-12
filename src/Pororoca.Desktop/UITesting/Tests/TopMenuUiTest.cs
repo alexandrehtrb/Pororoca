@@ -1,4 +1,3 @@
-using System.Text;
 using Avalonia.Controls;
 using Pororoca.Desktop.UITesting.Robots;
 using Pororoca.Desktop.Views;
@@ -11,7 +10,7 @@ public sealed class TopMenuUITest : UITest
 
     public TopMenuUITest()
     {
-        var content = MainWindow.Instance!.Content;
+        object? content = MainWindow.Instance!.Content;
         Robot = new((Control)content!);
     }
 

@@ -12,7 +12,7 @@ public abstract class BaseDataGridDropHandler<T> : DropHandlerBase
     protected abstract T MakeCopy(ObservableCollection<T> parentCollection, T item);
 
     protected abstract bool Validate(DataGrid dg, DragEventArgs e, object? sourceContext, object? targetContext, bool bExecute);
-    
+
     public override bool Validate(object? sender, DragEventArgs e, object? sourceContext, object? targetContext, object? state)
     {
         if (e.Source is Control && sender is DataGrid dg)

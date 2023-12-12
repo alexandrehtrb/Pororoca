@@ -8,8 +8,8 @@ namespace Pororoca.Desktop.UITesting;
 
 public abstract partial class UITest
 {
-    public string TestName => this.GetType().Name;
-    
+    public string TestName => GetType().Name;
+
     public string Log => this.logAppender.ToString();
 
     public bool? Successful { get; private set; }
@@ -18,7 +18,7 @@ public abstract partial class UITest
 
     private readonly Stopwatch stopwatch;
 
-    public int TotalElapsedSeconds => (int) this.stopwatch.Elapsed.TotalSeconds;
+    public int TotalElapsedSeconds => (int)this.stopwatch.Elapsed.TotalSeconds;
 
     public TimeSpan ElapsedTime => this.stopwatch.Elapsed;
 

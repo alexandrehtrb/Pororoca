@@ -184,7 +184,7 @@ public static class PororocaHttpRequestTranslator
                     variablesJsonDoc = JsonDocument.Parse("{}");
                 }
             }
-            string variablesJsonStr = 
+            string variablesJsonStr =
                 variablesJsonDoc is null ?
                 "null" :
                 JsonSerializer.Serialize(variablesJsonDoc.RootElement, JsonConfiguration.MinifyingOptions);

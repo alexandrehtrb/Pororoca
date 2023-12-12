@@ -1,6 +1,4 @@
 using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.Media;
 using AvaloniaEdit;
 using Pororoca.Desktop.Controls;
@@ -15,7 +13,7 @@ public abstract partial class UITest
     internal void AssertIsVisible(Control control) => Assert((control.IsMeasureValid && control.IsEffectivelyVisible) == true);
 
     internal void AssertHasStyleClass(Control control, string className) => Assert(control.Classes.Contains(className));
-    
+
     internal void AssertDoesntHaveStyleClass(Control control, string className) => Assert(control.Classes.Contains(className) == false);
 
     internal void AssertHasText(TextBlock txtBlock, string txt) => Assert(txtBlock.Text == txt);
@@ -23,7 +21,7 @@ public abstract partial class UITest
     internal void AssertHasText(AutoCompleteBox txtBox, string txt) => Assert(txtBox.Text == txt);
 
     internal void AssertHasText(TextBox txtBox, string txt) => Assert(txtBox.Text == txt);
-    
+
     internal void AssertHasText(TextEditor txtEditor, string txt) => Assert(txtEditor.Document.Text == txt);
 
     internal void AssertHasText(ComboBox cb, string txt) => Assert(cb.SelectedItem is string s && s == txt);
@@ -35,21 +33,21 @@ public abstract partial class UITest
     internal void AssertHasText(TreeViewItem tvi, string txt) => Assert(((string)tvi.Header!) == txt);
 
     internal void AssertHasText(CheckBox cb, string txt) => Assert((string)cb.Content! == txt);
-    
+
     internal void AssertHasText(IconButton ib, string txt) => Assert(ib.Text == txt);
 
     internal void AssertContainsText(TextEditor txtEditor, string txt) => Assert(txtEditor.Document.Text.Contains(txt));
-    
+
     internal void AssertContainsText(TextBox txtBox, string txt) => Assert(txtBox.Text?.Contains(txt) == true);
-    
+
     internal void AssertContainsText(TextBlock txtBlock, string txt) => Assert(txtBlock.Text?.Contains(txt) == true);
 
     internal void AssertHasIconVisible(MenuItem menuItem) => Assert(((Image)menuItem.Icon!).IsVisible == true);
 
     internal void AssertHasIconHidden(MenuItem menuItem) => Assert(((Image)menuItem.Icon!).IsVisible == false);
-    
+
     internal void AssertSelection(ComboBox cb, ComboBoxItem cbi) => Assert(cb.SelectedItem == cbi);
-    
+
     internal void AssertBackgroundColor(Panel panel, string hexColor) => Assert(panel.Background is SolidColorBrush scb && ToHexString(scb.Color) == hexColor);
 
     private static string ToHexString(Color c) =>
@@ -62,14 +60,14 @@ public abstract partial class UITest
     internal void AssertTreeItemExists(CollectionsGroupView cgv, string itemPathSeparatedBySlashes)
     {
         var treeView = cgv.FindControl<TreeView>("itemsTree")!;
-        var item = treeView.GetChildView(itemPathSeparatedBySlashes);
+        object? item = treeView.GetChildView(itemPathSeparatedBySlashes);
         Assert(item is not null);
     }
 
     internal void AssertTreeItemNotExists(CollectionsGroupView cgv, string itemPathSeparatedBySlashes)
     {
         var treeView = cgv.FindControl<TreeView>("itemsTree")!;
-        var item = treeView.GetChildView(itemPathSeparatedBySlashes);
+        object? item = treeView.GetChildView(itemPathSeparatedBySlashes);
         Assert(item is null);
     }
 }

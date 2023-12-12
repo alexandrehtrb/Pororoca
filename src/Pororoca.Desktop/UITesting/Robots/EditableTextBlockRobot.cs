@@ -6,7 +6,7 @@ namespace Pororoca.Desktop.UITesting.Robots;
 public sealed class EditableTextBlockRobot : BaseRobot
 {
     public EditableTextBlockRobot(EditableTextBlock rootView) : base(rootView) { }
-    
+
     internal Image IconHttp => GetChildView<Image>("imgIconHttp")!;
     internal Image IconDisconnectedWebSocket => GetChildView<Image>("imgIconDisconnectedWebSocket")!;
     internal Image IconConnectedWebSocket => GetChildView<Image>("imgIconConnectedWebSocket")!;

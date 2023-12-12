@@ -204,7 +204,7 @@ public sealed class PororocaHttpResponse
                 {
                     XmlUtils.LoadXmlDocumentAndNamespaceManager(body, out this.cachedXmlDoc, out this.cachedXmlNsm);
                 }
-                
+
                 if (this.cachedXmlDoc is not null && this.cachedXmlNsm is not null)
                 {
                     return PororocaResponseValueCapturer.CaptureXmlValue(capture.Path!, this.cachedXmlDoc, this.cachedXmlNsm);
@@ -238,7 +238,7 @@ public sealed class PororocaHttpResponse
         var trailers = responseMessage.TrailingHeaders;
 
         PororocaHttpResponse res = new(resolvedReq, startedAt, elapsedTime, responseMessage.StatusCode, MakeKvTable(headers), MakeKvTable(trailers), binaryBody);
-        
+
         if (res.ContentType?.StartsWith("multipart") == true)
         {
             string boundary = ReadMultipartBoundary(res.ContentType);

@@ -144,7 +144,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     private const string DocsWebSiteUrl = "https://pororoca.io/docs";
 
     public ReactiveCommand<Unit, Unit> OpenDocsInWebBrowserCmd { get; }
-    
+
     public ReactiveCommand<Unit, Unit> OpenGitHubRepoInWebBrowserCmd { get; }
 
     #endregion

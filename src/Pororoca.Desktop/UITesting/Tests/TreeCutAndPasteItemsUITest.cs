@@ -19,7 +19,7 @@ public sealed class TreeCutAndPasteItemsUITest : UITest
 
     public TreeCutAndPasteItemsUITest()
     {
-        RootView = (Control) MainWindow.Instance!.Content!;
+        RootView = (Control)MainWindow.Instance!.Content!;
         TopMenuRobot = new(RootView);
         CollectionsGroup = RootView.FindControl<CollectionsGroupView>("mainWindowCollectionsGroup")!;
         TreeRobot = new(CollectionsGroup);
@@ -54,8 +54,8 @@ public sealed class TreeCutAndPasteItemsUITest : UITest
 
         await TreeRobot.Select("COL1/WS1");
         await WsRobot.AddClientMessage.ClickOn();
-        await WsMsgRobot.Name.Edit("WS1_MSG1");        
-        
+        await WsMsgRobot.Name.Edit("WS1_MSG1");
+
         // copy those items
         await TreeRobot.SelectMultiple("COL1/ENVS/ENV1",
                                        "COL1/DIR1",
@@ -79,7 +79,7 @@ public sealed class TreeCutAndPasteItemsUITest : UITest
         AssertTreeItemNotExists(CollectionsGroup, "COL1/HTTP1");
         AssertTreeItemNotExists(CollectionsGroup, "COL1/WS1");
         AssertTreeItemNotExists(CollectionsGroup, "COL1/WS1/WS1_MSG1");
-        
+
         AssertTreeItemExists(CollectionsGroup, "COL2");
         AssertTreeItemExists(CollectionsGroup, "COL2/ENVS/ENV1");
         AssertTreeItemExists(CollectionsGroup, "COL2/DIR1");

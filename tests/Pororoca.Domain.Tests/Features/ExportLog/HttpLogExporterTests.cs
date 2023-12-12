@@ -223,9 +223,9 @@ a=xyz&b=123&c=true+%C3%A0+%C3%A9&myIdSecret=456
         res.ResolvedRequest!.Url = "https://httpbin.org/anything";
         res.ResolvedRequest!.Body = new();
         res.ResolvedRequest!.Body.SetFormDataContent([
-            PororocaHttpRequestFormDataParam.MakeTextParam(true, "a", "xyz", "text/plain"),    
-            PororocaHttpRequestFormDataParam.MakeTextParam(true, "b", "{\"id\":2}", "application/json"),    
-            PororocaHttpRequestFormDataParam.MakeTextParam(true, "myIdSecret", "456", "text/plain"),    
+            PororocaHttpRequestFormDataParam.MakeTextParam(true, "a", "xyz", "text/plain"),
+            PororocaHttpRequestFormDataParam.MakeTextParam(true, "b", "{\"id\":2}", "application/json"),
+            PororocaHttpRequestFormDataParam.MakeTextParam(true, "myIdSecret", "456", "text/plain"),
             PororocaHttpRequestFormDataParam.MakeFileParam(true, "arq", GetTestFilePath("pirate.gif"), "image/gif")
         ]);
         var boundary = Guid.Parse("9e0248d8-f117-404e-a46b-51f0382d00bd");
@@ -274,9 +274,9 @@ R0lGODlhQABAAMQRAAAAAAgIAAgQGBAQEFoAAIRjOZR7Sq0ICLUAAL29vcalY86le+fe3vf39//OnP//
         res.ResolvedRequest!.Url = "https://httpbin.org/anything";
         res.ResolvedRequest!.Body = new();
         res.ResolvedRequest!.Body.SetFormDataContent([
-            PororocaHttpRequestFormDataParam.MakeTextParam(true, "a", "xyz", "text/plain"),    
-            PororocaHttpRequestFormDataParam.MakeTextParam(true, "b", "{\"id\":2}", "application/json"),    
-            PororocaHttpRequestFormDataParam.MakeTextParam(true, "myIdSecret", "456", "text/plain"),    
+            PororocaHttpRequestFormDataParam.MakeTextParam(true, "a", "xyz", "text/plain"),
+            PororocaHttpRequestFormDataParam.MakeTextParam(true, "b", "{\"id\":2}", "application/json"),
+            PororocaHttpRequestFormDataParam.MakeTextParam(true, "myIdSecret", "456", "text/plain"),
             PororocaHttpRequestFormDataParam.MakeFileParam(true, "arq", GetTestFilePath("pirate1.gif"), "image/gif")
         ]);
         var boundary = Guid.Parse("9e0248d8-f117-404e-a46b-51f0382d00bd");
@@ -349,7 +349,7 @@ Content-Length: 41
         res.ResolvedRequest!.HttpMethod = "POST";
         res.ResolvedRequest!.Url = "https://httpbin.org/anything";
         res.ResolvedRequest!.CustomAuth = PororocaRequestAuth.MakeBearerAuth("my_token");
-        res.ResolvedRequest!.Headers = [ new(true, "MyHeader", "MyHeaderValue") ];
+        res.ResolvedRequest!.Headers = [new(true, "MyHeader", "MyHeaderValue")];
         res.ResolvedRequest!.Body = new();
         res.ResolvedRequest!.Body.SetRawContent("oi", "text/plain");
 
@@ -392,7 +392,7 @@ HTTP/1.1 204 NoContent
                             responseHeaders: new() {
                                 {"Date", "Wed, 06 Dec 2023 18:51:53 GMT"},
                                 {"Server", "Kestrel"}
-                            } );
+                            });
 
         // WHEN, THEN
         Assert.Equal(
@@ -467,7 +467,7 @@ R0lGODlhQABAAMQRAAAAAAgIAAgQGBAQEFoAAIRjOZR7Sq0ICLUAAL29vcalY86le+fe3vf39//OnP//
                                 {"Date", "Wed, 06 Dec 2023 18:51:53 GMT"},
                                 {"Server", "Kestrel"},
                                 {"Content-Type", "multipart/form-data; boundary=\"9e0248d8-f117-404e-a46b-51f0382d00bd\""}
-                            },binaryBody: "bytes"u8.ToArray());
+                            }, binaryBody: "bytes"u8.ToArray());
         Dictionary<string, string> headersTxt = new()
         {
             { "Content-Type", "text/plain; charset=utf-8" },

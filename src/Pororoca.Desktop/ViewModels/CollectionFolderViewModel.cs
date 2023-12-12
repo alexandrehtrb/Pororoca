@@ -5,7 +5,6 @@ using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
-using Pororoca.Domain.Features.VariableResolution;
 using ReactiveUI;
 
 namespace Pororoca.Desktop.ViewModels;
@@ -122,7 +121,7 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
         CollectionFolderViewModel folderToAddVm = new(this, this.variableResolver, folderToAdd);
         int indexToInsertAt = Items.GetLastIndexOf<CollectionFolderViewModel>() + 1;
         Items.Insert(indexToInsertAt, folderToAddVm);
-        
+
         IsExpanded = true;
         RefreshSubItemsAvailableMovements();
         SetAsItemInFocus(folderToAddVm, showItemInScreen);

@@ -3,7 +3,6 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaEdit;
 using AvaloniaEdit.TextMate;
-using Pororoca.Desktop.Localization;
 
 namespace Pororoca.Desktop.TextEditorConfig;
 
@@ -28,9 +27,9 @@ internal static class TextEditorConfiguration
             ItemsSource = new List<MenuItem>
             {
                 // TODO: fix text editors' context menu (i18n and actions not working)
-                new MenuItem { Header = "Copy", InputGesture = new KeyGesture(Key.C, KeyModifiers.Control) },
-                new MenuItem { Header = "Paste", InputGesture = new KeyGesture(Key.V, KeyModifiers.Control) },
-                new MenuItem { Header = "Cut", InputGesture = new KeyGesture(Key.X, KeyModifiers.Control) }
+                new() { Header = "Copy", InputGesture = new KeyGesture(Key.C, KeyModifiers.Control) },
+                new() { Header = "Paste", InputGesture = new KeyGesture(Key.V, KeyModifiers.Control) },
+                new() { Header = "Cut", InputGesture = new KeyGesture(Key.X, KeyModifiers.Control) }
             }
         };
         editor.Options.ShowBoxForControlCharacters = true;

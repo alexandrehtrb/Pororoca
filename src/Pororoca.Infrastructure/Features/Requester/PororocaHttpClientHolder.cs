@@ -11,7 +11,7 @@ internal sealed record ClientCertificateUniqueness(
     internal ClientCertificateUniqueness(PororocaRequestAuthClientCertificate? resolvedCert)
         : this(GetFileSha512Hash(resolvedCert?.CertificateFilePath),
                GetFileSha512Hash(resolvedCert?.PrivateKeyFilePath),
-               resolvedCert?.FilePassword){}
+               resolvedCert?.FilePassword) { }
 
     private static string? GetFileSha512Hash(string? filePath)
     {
@@ -49,7 +49,7 @@ internal sealed class PororocaHttpClientHolder : IEquatable<PororocaHttpClientHo
     }
 
     internal void KeepClient(HttpClient client) =>
-        Client = client;    
+        Client = client;
 
     public override bool Equals(object? obj) =>
         obj is PororocaHttpClientHolder other

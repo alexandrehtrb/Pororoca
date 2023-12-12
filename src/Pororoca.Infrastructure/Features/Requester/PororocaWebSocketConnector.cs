@@ -95,7 +95,7 @@ public class PororocaWebSocketConnector
             sw.Start();
             await client.ConnectAsync(uri!, httpClient, cancellationToken);
             sw.Stop();
-            SetupAfterConnected(client,sw.Elapsed);
+            SetupAfterConnected(client, sw.Elapsed);
             SetIsConnected();
         }
         catch (Exception ex)

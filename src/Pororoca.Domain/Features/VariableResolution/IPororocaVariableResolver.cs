@@ -56,7 +56,7 @@ public partial interface IPororocaVariableResolver
         {
             // no need to run regex replacer if there are no effective variables
             return strToReplaceTemplatedVariables;
-		}
+        }
         else
         {
             return PororocaVariableRegex.Replace(strToReplaceTemplatedVariables, match =>

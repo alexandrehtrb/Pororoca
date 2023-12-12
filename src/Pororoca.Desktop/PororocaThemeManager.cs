@@ -52,7 +52,7 @@ public static class PororocaThemeManager
         {
             var textEditorThemeName = MapTextEditorTheme(theme);
             var textEditorTheme = TextEditorConfiguration.DefaultRegistryOptions!.Value!.LoadTheme(textEditorThemeName);
-            TextEditorConfiguration.TextMateInstallations.ForEach(tmi => 
+            TextEditorConfiguration.TextMateInstallations.ForEach(tmi =>
             {
                 tmi.Item1.TextArea.TextView.LinkTextForegroundBrush = MapLinkColourForEditorTheme(theme);
                 tmi.Item2.SetTheme(textEditorTheme);

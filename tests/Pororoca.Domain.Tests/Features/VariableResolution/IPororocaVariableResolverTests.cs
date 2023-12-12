@@ -53,7 +53,6 @@ public static class IPororocaVariableResolverTests
     {
         // GIVEN
         PororocaCollection col = new(string.Empty);
-        IPororocaVariableResolver varResolver = col;
         col.Variables.Add(new(true, "k1", "v1", false));
         col.Variables.Add(new(false, "k2", "v2", false));
         col.Variables.Add(new(true, "k3", "v3", true));
@@ -87,7 +86,6 @@ public static class IPororocaVariableResolverTests
     {
         // GIVEN
         PororocaCollection col = new(string.Empty);
-        IPororocaVariableResolver varResolver = col;
         col.Variables.Add(new(true, "k1", "v1", false));
 
         List<PororocaKeyValueParam> kvps = new();
@@ -111,7 +109,6 @@ public static class IPororocaVariableResolverTests
     {
         // GIVEN
         PororocaCollection col = new(string.Empty);
-        IPororocaVariableResolver varResolver = col;
         col.Variables.Add(new(true, "k1", "v1", false));
         col.Variables.Add(new(false, "k2", "v2", false));
         col.Variables.Add(new(true, "k3", "v3", true));
@@ -134,8 +131,8 @@ public static class IPororocaVariableResolverTests
     public static void Should_return_only_enabled_collection_vars_if_no_env_vars()
     {
         // GIVEN
-        PororocaCollection col = new("col");       
-        PororocaVariable v1, v2; 
+        PororocaCollection col = new("col");
+        PororocaVariable v1, v2;
         col.Variables.Add(v1 = new(true, "k1", "v1", false));
         col.Variables.Add(v2 = new(false, "k2", "v2", false));
         // no active env
@@ -151,11 +148,11 @@ public static class IPororocaVariableResolverTests
     public static void Should_return_only_enabled_collection_vars_if_no_active_env_vars()
     {
         // GIVEN
-        PororocaCollection col = new("col");       
-        PororocaVariable v1, v2, v3, v4; 
+        PororocaCollection col = new("col");
+        PororocaVariable v1, v2, v3, v4;
         col.Variables.Add(v1 = new(true, "k1", "v1", false));
         col.Variables.Add(v2 = new(false, "k2", "v2", false));
-        
+
         PororocaEnvironment env = new("env");
         env.IsCurrent = false;
         env.Variables.Add(v3 = new(true, "k3", "v3", false));
@@ -173,11 +170,11 @@ public static class IPororocaVariableResolverTests
     public static void Should_return_enabled_vars_in_collection_and_selected_env_if_they_dont_coincide()
     {
         // GIVEN
-        PororocaVariable v1,v2,v3,v4;
+        PororocaVariable v1, v2, v3, v4;
         PororocaCollection col = new("col");
         col.Variables.Add(v1 = new(true, "k1", "v1", false));
         col.Variables.Add(v2 = new(false, "k2", "v2", false));
-        
+
         PororocaEnvironment env = new("env");
         env.IsCurrent = true;
         env.Variables.Add(v3 = new(true, "k3", "v3", false));
@@ -197,11 +194,11 @@ public static class IPororocaVariableResolverTests
     public static void Enabled_selected_env_vars_should_override_collection_vars_if_they_coincide_keys()
     {
         // GIVEN
-        PororocaVariable v1c,v2,v1e,v3,v4;
+        PororocaVariable v1c, v2, v1e, v3, v4;
         PororocaCollection col = new("col");
         col.Variables.Add(v1c = new(true, "k1", "v1c", false));
         col.Variables.Add(v2 = new(false, "k2", "v2", false));
-        
+
         PororocaEnvironment env = new("env");
         env.IsCurrent = true;
         env.Variables.Add(v1e = new(true, "k1", "v1e", false));

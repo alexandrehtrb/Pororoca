@@ -15,7 +15,7 @@ internal static partial class PororocaHttpMultipartResponseBodyReader
     internal static List<byte[]> Split(this ReadOnlySpan<byte> input, ReadOnlySpan<byte> splitterSequence)
     {
         List<byte[]> parts = new();
-        ReadOnlySpan<byte> scanning = input;
+        var scanning = input;
         int splitterOffset = splitterSequence.Length;
         while (true)
         {
@@ -34,7 +34,7 @@ internal static partial class PororocaHttpMultipartResponseBodyReader
                 {
                     parts.Add(scanning[..end].ToArray());
                 }
-                scanning = scanning[(end+splitterOffset)..];
+                scanning = scanning[(end + splitterOffset)..];
             }
         }
         return parts;

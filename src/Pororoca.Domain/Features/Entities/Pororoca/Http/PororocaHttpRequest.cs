@@ -63,7 +63,7 @@ public sealed class PororocaHttpRequest : PororocaRequest
 
     public void UpdateBody(PororocaHttpRequestBody? body) =>
         Body = body;
-    
+
     public void UpdateResponseCaptures(List<PororocaHttpResponseValueCapture>? captures) =>
         ResponseCaptures = captures;
 

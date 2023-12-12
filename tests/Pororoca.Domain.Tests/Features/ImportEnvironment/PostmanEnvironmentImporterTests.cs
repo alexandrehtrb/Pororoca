@@ -74,8 +74,8 @@ public static class PostmanEnvironmentImporterTests
             Scope = "environment",
             ExportedAt = "2021-04-01T00:57:06.703Z",
             ExportedUsing = "Postman/8.0.10",
-            Values = new PostmanEnvironmentVariable[]
-            {
+            Values =
+            [
                 new()
                 {
                     Key = "Key1",
@@ -88,6 +88,6 @@ public static class PostmanEnvironmentImporterTests
                     Value = "Value2",
                     Enabled = false
                 }
-            }
+            ]
         };
 }

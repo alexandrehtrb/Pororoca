@@ -115,12 +115,12 @@ public sealed partial class WebSocketsValidationsUITest : UITest
         await WsRobot.DisableTlsVerification.ClickOn();
         AssertIsHidden(WsRobot.DisableTlsVerification);
         await AssertTopMenuTlsVerification(false);
-        
+
         await WsRobot.ClickOnConnectAndWaitForConnection();
         AssertIsHidden(WsRobot.DisableTlsVerification);
         AssertIsVisible(WsRobot.ConnectionRequestException);
         AssertContainsText(WsRobot.ConnectionRequestException, "'101' was expected");
-        
+
         await TopMenuRobot.SwitchTlsVerification(true);
     }
 

@@ -1,6 +1,6 @@
 using Avalonia.Controls;
-using Pororoca.Desktop.UITesting.Robots;
 using Pororoca.Desktop.Controls;
+using Pororoca.Desktop.UITesting.Robots;
 using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.UITesting.Tests;
@@ -12,14 +12,14 @@ public sealed class EditableTextBlockUITest : UITest
 
     public EditableTextBlockUITest()
     {
-        RootView = (Control) MainWindow.Instance!.Content!;
+        RootView = (Control)MainWindow.Instance!.Content!;
         TopMenuRobot = new(RootView);
     }
 
     public override async Task RunAsync()
     {
         await TopMenuRobot.CreateNewCollection();
-        
+
         var collectionView = RootView.FindControl<CollectionView>("collectionView")!;
         var etbView = collectionView.FindControl<EditableTextBlock>("etbName")!;
         EditableTextBlockRobot robot = new(etbView);

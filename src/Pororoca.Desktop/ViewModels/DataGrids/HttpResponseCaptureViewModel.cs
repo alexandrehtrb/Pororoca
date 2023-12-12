@@ -35,7 +35,7 @@ public sealed class HttpResponseCaptureViewModel : ViewModelBase
         CaptureType = c.Type;
         Type = ResolveCaptureTypeText();
         TargetVariable = c.TargetVariable;
-        HeaderNameOrBodyPath = 
+        HeaderNameOrBodyPath =
             c.Type == PororocaHttpResponseValueCaptureType.Header ?
             (c.HeaderName ?? string.Empty) :
             (c.Path ?? string.Empty);

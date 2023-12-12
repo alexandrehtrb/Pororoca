@@ -53,10 +53,10 @@ public static class PororocaHttpRequestTranslatorTests
             HttpVersion = 3.0m,
             HttpMethod = "PUT",
             Url = "{{BaseUrl}}/index.html",
-            Headers = [ new(true, "MyHeader", "{{MyHeaderValue}}") ],
+            Headers = [new(true, "MyHeader", "{{MyHeaderValue}}")],
             Body = unresolvedBody,
             CustomAuth = unresolvedAuth,
-            ResponseCaptures = [ new(PororocaHttpResponseValueCaptureType.Body, "TARGET_VAR", null, "$.id") ]
+            ResponseCaptures = [new(PororocaHttpResponseValueCaptureType.Body, "TARGET_VAR", null, "$.id")]
         };
 
         // WHEN, THEN
@@ -67,10 +67,10 @@ public static class PororocaHttpRequestTranslatorTests
         Assert.Equal(0, reqMsg.Version.Minor);
         Assert.Equal("PUT", reqMsg.Method.ToString());
         Assert.Equal("http://www.pudim.com.br/index.html", reqMsg.RequestUri!.ToString());
-        #pragma warning disable xUnit2012
+#pragma warning disable xUnit2012
         Assert.True(reqMsg.Headers.Any(x => x.Key == "MyHeader" && x.Value.Contains("Value1234")));
         Assert.True(reqMsg.Headers.Any(x => x.Key == "Authorization" && x.Value.Contains("Basic dXNyOnB3ZA==")));
-        #pragma warning restore xUnit2012
+#pragma warning restore xUnit2012
 
         Assert.True(reqMsg.Content is StringContent);
         Assert.NotNull(reqMsg.Content.Headers.ContentType);
@@ -104,10 +104,10 @@ public static class PororocaHttpRequestTranslatorTests
             HttpVersion = 3.0m,
             HttpMethod = "PUT",
             Url = "{{BaseUrl}}/index.html",
-            Headers = [ new(true, "MyHeader", "{{MyHeaderValue}}") ],
+            Headers = [new(true, "MyHeader", "{{MyHeaderValue}}")],
             Body = unresolvedBody,
             CustomAuth = unresolvedAuth,
-            ResponseCaptures = [ new(PororocaHttpResponseValueCaptureType.Body, "TARGET_VAR", null, "$.id") ]
+            ResponseCaptures = [new(PororocaHttpResponseValueCaptureType.Body, "TARGET_VAR", null, "$.id")]
         };
 
         // WHEN
@@ -127,7 +127,7 @@ public static class PororocaHttpRequestTranslatorTests
         Assert.Equal(PororocaRequestAuthMode.Basic, resolvedReq.CustomAuth.Mode);
         Assert.Equal("login", resolvedReq.CustomAuth.BasicAuthLogin);
         Assert.Equal("password", resolvedReq.CustomAuth.BasicAuthPassword);
-        Assert.Equal([ new(PororocaHttpResponseValueCaptureType.Body, "TARGET_VAR", null, "$.id") ], resolvedReq.ResponseCaptures);
+        Assert.Equal([new(PororocaHttpResponseValueCaptureType.Body, "TARGET_VAR", null, "$.id")], resolvedReq.ResponseCaptures);
     }
 
     [Fact]

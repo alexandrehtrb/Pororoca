@@ -1,7 +1,6 @@
 using System.Text;
-using System.Xml;
-using System.Xml.Linq;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace Pororoca.Domain.Features.Common;
 
@@ -12,7 +11,7 @@ internal static partial class XmlUtils
 
     [GeneratedRegex("xmlns=\"(?<Url>[\\w\\d:\\/\\.\\-_]+)\"")]
     private static partial Regex GenerateDefaultXmlNamespaceRegex();
-    
+
     [GeneratedRegex("xmlns:(?<Prefix>\\w+)=\"(?<Url>[\\w\\d:\\/\\.\\-_]+)\"")]
     private static partial Regex GenerateXmlNamespacesRegex();
 

@@ -23,7 +23,7 @@ public sealed record PororocaRequestAuth
 {
     // Parameterless constructor for JSON deserialization
     public PororocaRequestAuth() : this(PororocaRequestAuthMode.Basic, null, null, null, null, null) { }
-    
+
     public static readonly PororocaRequestAuth InheritedFromCollection =
         new(PororocaRequestAuthMode.InheritFromCollection, null, null, null, null, null);
 
@@ -42,7 +42,7 @@ public sealed record PororocaRequestAuth
         bearerToken,
         null,
         null);
-    
+
     public static PororocaRequestAuth MakeWindowsAuth(bool useCurrentUser, string? login, string? password, string? domain) => new(
         PororocaRequestAuthMode.Windows,
         null,

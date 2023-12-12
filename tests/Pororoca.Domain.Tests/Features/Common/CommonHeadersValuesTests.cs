@@ -61,9 +61,7 @@ public static class CommonHeadersValuesTests
     [InlineData("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/119.0")]
     [InlineData("Via", "1.0 fred, 1.1 example.com (Apache/1.1)")]
     [InlineData("DNT", "1")]
-    [InlineData("MyCustomHeader", "")]    
+    [InlineData("MyCustomHeader", "")]
     public static void Should_provide_determined_sample_value_for_other_headers(string headerName, string expectedHeaderValue) =>
         Assert.Equal(expectedHeaderValue, ProvideSampleValueForHeader(headerName));
 }
-
-

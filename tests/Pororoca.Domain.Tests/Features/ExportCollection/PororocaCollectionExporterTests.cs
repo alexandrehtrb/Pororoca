@@ -34,7 +34,7 @@ public static class PororocaCollectionExporterTests
         string minifiedOutputJson = MinifyJsonString(ExportAsPororocaCollection(col, false));
         Assert.Equal(minifiedOutputJson, minifiedInputJson);
     }
-    
+
     [Fact]
     public static void Should_hide_pororoca_collection_and_environment_secrets()
     {

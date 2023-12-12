@@ -1,11 +1,11 @@
+using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using Pororoca.Desktop.UITesting.Robots;
-using Pororoca.Desktop.Views;
-using System.Collections.ObjectModel;
-using Pororoca.Desktop.ViewModels.DataGrids;
-using Pororoca.Domain.Features.Entities.Pororoca.Http;
-using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Desktop.ViewModels;
+using Pororoca.Desktop.ViewModels.DataGrids;
+using Pororoca.Desktop.Views;
+using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.ExportCollection;
 using Pororoca.Domain.Features.ImportCollection;
 
@@ -17,28 +17,28 @@ public sealed class ExportAndImportUITest : UITest
 
     private static readonly ObservableCollection<VariableViewModel> defaultEnvVars = GenerateEnvironmentVariables();
 
-    private static readonly PororocaKeyValueParam[] headers = new PororocaKeyValueParam[]
-    {
+    private static readonly PororocaKeyValueParam[] headers =
+    [
         new(false, "Header1", "ValueHeader1"),
         new(true, "Header1", "Header1Value"),
         new(true, "oi_{{SpecialHeaderKey}}", "oi-{{SpecialHeaderValue}}"),
-    };
+    ];
 
-    private static readonly PororocaKeyValueParam[] urlEncodedParams = new PororocaKeyValueParam[]
-    {
+    private static readonly PororocaKeyValueParam[] urlEncodedParams =
+    [
         new(true, "a", "xyz"),
         new(true, "b", "123"),
         new(false, "c", "false"),
         new(true, "c", "true"),
         new(true, "myIdSecret", "{{SpecialValue1}}")
-    };
+    ];
 
-    private static readonly PororocaHttpRequestFormDataParam[] formDataParams = new[]
-    {
+    private static readonly PororocaHttpRequestFormDataParam[] formDataParams =
+    [
         PororocaHttpRequestFormDataParam.MakeTextParam(true, "a", "xyz{{SpecialValue1}}", "text/plain"),
         PororocaHttpRequestFormDataParam.MakeTextParam(true, "b", "[]", "application/json"),
         PororocaHttpRequestFormDataParam.MakeFileParam(true, "arq", "{{TestFilesDir}}/arq.txt", "text/plain")
-    };
+    ];
 
     private Control RootView { get; }
     private TopMenuRobot TopMenuRobot { get; }
@@ -501,7 +501,7 @@ public sealed class ExportAndImportUITest : UITest
         AssertIsVisible(HttpRobot.Auth.ClientCertificatePemCertificateFilePath);
         AssertIsVisible(HttpRobot.Auth.ClientCertificatePemPrivateKeyFilePath);
         AssertIsVisible(HttpRobot.Auth.ClientCertificatePemPrivateKeyPassword);
-        AssertHasText(HttpRobot.Auth.ClientCertificatePemCertificateFilePath,"{{ClientCertificatesDir}}/badssl.com-client-certificate-without-private-key.pem");
+        AssertHasText(HttpRobot.Auth.ClientCertificatePemCertificateFilePath, "{{ClientCertificatesDir}}/badssl.com-client-certificate-without-private-key.pem");
         AssertHasText(HttpRobot.Auth.ClientCertificatePemPrivateKeyFilePath, "{{ClientCertificatesDir}}/badssl.com-client-encrypted-private-key.key");
         AssertHasText(HttpRobot.Auth.ClientCertificatePemPrivateKeyPassword, "{{BadSslClientCertFilePassword}}");
 

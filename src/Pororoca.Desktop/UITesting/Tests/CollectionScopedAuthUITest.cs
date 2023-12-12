@@ -40,7 +40,7 @@ public sealed partial class CollectionScopedAuthUITest : UITest
 
         await TreeRobot.Select("COL1/VARS");
         await ColVarsRobot.SetVariables(defaultColVars);
-        
+
         await ColRobot.AddEnvironment.ClickOn();
         await EnvRobot.Name.Edit("ENV1");
         await EnvRobot.SetVariables(defaultEnvVars);
@@ -89,7 +89,7 @@ public sealed partial class CollectionScopedAuthUITest : UITest
 
         await TreeRobot.Select("COL1/AUTH");
         await ColAuthRobot.Auth.SetBearerAuth("{{BearerAuthToken}}");
-        
+
         await TreeRobot.Select("COL1/HTTPREQ");
         await HttpRobot.ClickOnSendAndWaitForResponse();
 

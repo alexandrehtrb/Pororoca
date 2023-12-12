@@ -2,8 +2,8 @@ using System.Text;
 using System.Text.Json;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Xunit;
-using static Pororoca.Domain.Features.ImportCollection.OpenApiImporter;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
+using static Pororoca.Domain.Features.ImportCollection.OpenApiImporter;
 
 namespace Pororoca.Domain.Tests.Features.ImportCollection;
 

@@ -21,7 +21,7 @@ public sealed partial class WebSocketsUITest : UITest
     private EnvironmentRobot EnvRobot { get; }
     private WebSocketConnectionRobot WsRobot { get; }
     private WebSocketClientMessageRobot WsMsgRobot { get; }
-    private List<decimal> httpVersionsToTest;
+    private readonly List<decimal> httpVersionsToTest;
 
     public WebSocketsUITest()
     {
@@ -163,7 +163,7 @@ public sealed partial class WebSocketsUITest : UITest
         var vm = ((WebSocketConnectionViewModel)WsRobot.RootView!.DataContext!).ConnectionResponseHeadersTableVm;
         Assert(vm.Items.Any(h => h.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase)));
     }
-    
+
     private void AssertContainsResponseHeader(string key, string value)
     {
         var vm = ((WebSocketConnectionViewModel)WsRobot.RootView!.DataContext!).ConnectionResponseHeadersTableVm;

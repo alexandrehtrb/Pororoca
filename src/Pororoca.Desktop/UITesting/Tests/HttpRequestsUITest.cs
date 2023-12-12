@@ -20,7 +20,7 @@ public sealed partial class HttpRequestsUITest : UITest
     private CollectionVariablesRobot ColVarsRobot { get; }
     private EnvironmentRobot EnvRobot { get; }
     private HttpRequestRobot HttpRobot { get; }
-    private List<decimal> httpVersionsToTest;
+    private readonly List<decimal> httpVersionsToTest;
 
     public HttpRequestsUITest()
     {

@@ -4,9 +4,9 @@ using System.Text;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using static Pororoca.Domain.Features.Common.HttpVersionFormatter;
+using static Pororoca.Domain.Features.ResponseParsing.PororocaHttpMultipartResponseBodyReader;
 using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonTranslator;
 using static Pororoca.Domain.Features.TranslateRequest.Http.PororocaHttpRequestTranslator;
-using static Pororoca.Domain.Features.ResponseParsing.PororocaHttpMultipartResponseBodyReader;
 
 namespace Pororoca.Domain.Features.ExportLog;
 
@@ -14,7 +14,7 @@ public static class HttpLogExporter
 {
     public static string ProduceHttpLog(PororocaHttpResponse res)
     {
-        StringBuilder sb = new();        
+        StringBuilder sb = new();
         sb.Append(ProduceHttpLogPartTop(res));
         sb.Append(ProduceHttpLogPartRequest(res));
         sb.Append(ProduceHttpLogPartResponse(res));
@@ -160,7 +160,7 @@ public static class HttpLogExporter
                 sbTotal.Append(part);
             }
             else if (fdp.Type == PororocaHttpRequestFormDataParamType.File)
-            {                
+            {
                 string fileName = Path.GetFileName(fdp.FileSrcPath!)!;
                 StringBuilder sbPart = new();
                 sbPart.AppendLine(boundary);
@@ -244,7 +244,7 @@ public static class HttpLogExporter
                 sbPart.AppendLine(Encoding.UTF8.GetString(fdp.BinaryBody!));
             }
             else
-            {                
+            {
                 sbPart.AppendLine(Convert.ToBase64String(fdp.BinaryBody!));
             }
             sbTotal.Append(sbPart);

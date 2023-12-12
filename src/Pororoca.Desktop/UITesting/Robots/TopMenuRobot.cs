@@ -1,15 +1,11 @@
-using System.Text;
 using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Interactivity;
-using AvaloniaEdit;
 
 namespace Pororoca.Desktop.UITesting.Robots;
 
 public sealed class TopMenuRobot : BaseRobot
 {
     public TopMenuRobot(Control rootView) : base(rootView) { }
-    
+
     internal MenuItem File => GetChildView<MenuItem>("topMenuItemFile")!;
     internal MenuItem File_NewCollection => GetChildView<MenuItem>("topMenuItemFileNewCollection")!;
     internal MenuItem File_ImportCollectionsFromFile => GetChildView<MenuItem>("topMenuItemFileImportCollectionsFromFile")!;

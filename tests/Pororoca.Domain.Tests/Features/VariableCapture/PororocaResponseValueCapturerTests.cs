@@ -50,7 +50,7 @@ public static partial class PororocaResponseValueCapturerTests
                   <price>39.95</price>
               </book>
           </bookstore>";
-    
+
     private const string testXmlObjWithNamespaces =
         @"<env:Envelope xmlns:env=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:wsa=""http://www.w3.org/2005/08/addressing"">
               <env:Body>
@@ -87,7 +87,7 @@ public static partial class PororocaResponseValueCapturerTests
     [InlineData("2", "$[1][1].myObj.myObj2.arr[1]", testJsonMatrix)]
     [InlineData("[1,2,3]", "$.myObj.myObj2.arr", testJsonObj)]
     [InlineData(testJsonSimpleObj, "$", testJsonSimpleObj)]
-    public static void TestJsonValueCapture(string expectedCapture, string path, string json) =>
+    public static void TestJsonValueCapture(string? expectedCapture, string path, string json) =>
         Assert.Equal(expectedCapture, CaptureJsonValue(path, json));
 
     [Theory]

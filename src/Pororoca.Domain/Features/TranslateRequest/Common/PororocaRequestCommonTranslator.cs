@@ -11,7 +11,7 @@ public static class PororocaRequestCommonTranslator
         reqAuth?.Mode == PororocaRequestAuthMode.InheritFromCollection ?
         collectionScopedAuth : reqAuth;
 
-    private static readonly ImmutableList<string> acceptedUriSchemes = 
+    private static readonly ImmutableList<string> acceptedUriSchemes =
     [
         Uri.UriSchemeHttp,
         Uri.UriSchemeHttps,

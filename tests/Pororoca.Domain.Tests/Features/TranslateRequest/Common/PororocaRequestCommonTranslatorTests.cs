@@ -1,7 +1,5 @@
-using System.Buffers;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.TranslateRequest;
-using Pororoca.Domain.Features.VariableResolution;
 using Xunit;
 using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonTranslator;
 
@@ -462,4 +460,3 @@ public static class PororocaRequestCommonTranslatorTests
 
     #endregion
 }
-

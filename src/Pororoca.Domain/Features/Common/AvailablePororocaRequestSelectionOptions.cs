@@ -118,13 +118,13 @@ public static class AvailablePororocaRequestSelectionOptions
         ];
 
     public static readonly string[] ExampleLcids =
-        [ "pt-BR", "pt-PT", "en-GB", "en-US", "it-IT", "ru-RU", "uk-UA", "es-ES", "es-AR", "es-MX", "ja-JP" ];
-    
+        ["pt-BR", "pt-PT", "en-GB", "en-US", "it-IT", "ru-RU", "uk-UA", "es-ES", "es-AR", "es-MX", "ko-KR", "ja-JP"];
+
     private const string sampleValueEncodingHeader = "gzip, br, zstd";
 
     private static string GetSampleValueForDateHeader() =>
         DateTime.Now.ToUniversalTime().ToString("r");
-    
+
     private static string GetSampleValueForLanguageHeader() =>
         Random.Shared.GetItems(ExampleLcids, 1)[0];
 

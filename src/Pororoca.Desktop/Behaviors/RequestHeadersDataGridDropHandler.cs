@@ -28,5 +28,5 @@ public class RequestHeadersDataGridDropHandler : BaseDataGridDropHandler<Request
 
         var items = vm.RequestHeadersTableVm.Items;
         return RunDropAction(e, bExecute, sourceItem, targetItem, items);
-    }       
+    }
 }

@@ -1,6 +1,5 @@
 using Avalonia.Controls;
 using Pororoca.Desktop.UITesting.Robots;
-using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.UITesting.Tests;
@@ -20,7 +19,7 @@ public sealed class CollectionAndCollectionFolderUITest : UITest
 
     public CollectionAndCollectionFolderUITest()
     {
-        RootView = (Control) MainWindow.Instance!.Content!;
+        RootView = (Control)MainWindow.Instance!.Content!;
         TopMenuRobot = new(RootView);
         CollectionsGroup = RootView.FindControl<CollectionsGroupView>("mainWindowCollectionsGroup")!;
         TreeRobot = new(CollectionsGroup);
@@ -40,7 +39,7 @@ public sealed class CollectionAndCollectionFolderUITest : UITest
 
         AssertIsVisible(ColRobot.RootView);
         await ColRobot.Name.Edit("COL1");
-        
+
         await TreeRobot.Select("COL1");
         await ColRobot.AddEnvironment.ClickOn();
         AssertIsVisible(EnvRobot.RootView);
@@ -96,7 +95,7 @@ public sealed class CollectionAndCollectionFolderUITest : UITest
         await WsRobot.AddClientMessage.ClickOn();
         AssertIsVisible(WsMsgRobot.RootView);
         await WsMsgRobot.Name.Edit("WS_1_MSG1");
-        
+
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR1_1");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR1_1/HTTP_1");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR1_1/WS_1");

@@ -1,5 +1,3 @@
-using Pororoca.Domain.Features.Entities.Pororoca;
-
 namespace Pororoca.Desktop.UITesting.Tests;
 
 public sealed partial class HttpRequestsUITest : UITest
@@ -24,5 +22,5 @@ public sealed partial class HttpRequestsUITest : UITest
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResBody);
         AssertHasText(HttpRobot.ResBodyRawContent, "{" + Environment.NewLine + "  \"id\": 1" + Environment.NewLine + "}");
         AssertIsVisible(HttpRobot.ResBodySaveToFile);
-    }    
+    }
 }

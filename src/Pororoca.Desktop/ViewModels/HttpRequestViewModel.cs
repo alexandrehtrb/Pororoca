@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Reactive;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.Behaviors;
@@ -55,7 +54,8 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
         {
             this.RaiseAndSetIfChanged(ref this.requestUrlField, value);
             // clear invalid warnings if user starts typing to fix them
-            if (HasRequestUrlValidationProblem) ClearInvalidRequestWarnings();
+            if (HasRequestUrlValidationProblem)
+                ClearInvalidRequestWarnings();
         }
     }
 
@@ -79,7 +79,8 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
         {
             this.RaiseAndSetIfChanged(ref this.requestHttpVersionSelectedIndexField, value);
             // clear invalid warnings if user starts typing to fix them
-            if (HasRequestHttpVersionValidationProblem) ClearInvalidRequestWarnings();
+            if (HasRequestHttpVersionValidationProblem)
+                ClearInvalidRequestWarnings();
         }
     }
 
@@ -129,7 +130,8 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
         {
             this.RaiseAndSetIfChanged(ref this.requestRawContentTypeField, value);
             // clear invalid warnings if user starts typing to fix them
-            if (HasRequestRawContentTypeValidationProblem) ClearInvalidRequestWarnings();
+            if (HasRequestRawContentTypeValidationProblem)
+                ClearInvalidRequestWarnings();
         }
     }
 
@@ -157,7 +159,8 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
         {
             this.RaiseAndSetIfChanged(ref this.requestFileContentTypeField, value);
             // clear invalid warnings if user starts typing to fix them
-            if (HasRequestFileContentTypeValidationProblem) ClearInvalidRequestWarnings();
+            if (HasRequestFileContentTypeValidationProblem)
+                ClearInvalidRequestWarnings();
         }
     }
 
@@ -172,7 +175,8 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
         {
             this.RaiseAndSetIfChanged(ref this.requestBodyFileSrcPathField, value);
             // clear invalid warnings if user starts typing to fix them
-            if (HasRequestBodyFileSrcPathValidationProblem) ClearInvalidRequestWarnings();
+            if (HasRequestBodyFileSrcPathValidationProblem)
+                ClearInvalidRequestWarnings();
         }
     }
 
@@ -191,7 +195,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
 
     #region REQUEST BODY FORM DATA
 
-    public FormDataParamsDataGridViewModel FormDataParamsTableVm { get; }    
+    public FormDataParamsDataGridViewModel FormDataParamsTableVm { get; }
 
     #endregion
 
@@ -293,7 +297,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
         #endregion
 
         #region REQUEST AUTH
-        RequestAuthDataCtx = new(req.CustomAuth, true, this.ClearInvalidRequestWarnings);
+        RequestAuthDataCtx = new(req.CustomAuth, true, ClearInvalidRequestWarnings);
         #endregion
 
         #region SEND OR CANCEL REQUEST
@@ -471,9 +475,9 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
         HasRequestUrlValidationProblem = (errorCode == TranslateRequestErrors.InvalidUrl);
         HasRequestHttpVersionValidationProblem =
         (errorCode == TranslateRequestErrors.Http2UnavailableInOSVersion || errorCode == TranslateRequestErrors.Http3UnavailableInOSVersion);
-        HasRequestRawContentTypeValidationProblem = 
+        HasRequestRawContentTypeValidationProblem =
         (errorCode == TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyRaw || errorCode == TranslateRequestErrors.InvalidContentTypeRaw);
-        HasRequestFileContentTypeValidationProblem = 
+        HasRequestFileContentTypeValidationProblem =
         (errorCode == TranslateRequestErrors.ContentTypeCannotBeBlankReqBodyFile || errorCode == TranslateRequestErrors.InvalidContentTypeFile);
         HasRequestBodyFileSrcPathValidationProblem = (errorCode == TranslateRequestErrors.ReqBodyFileNotFound);
 
@@ -493,7 +497,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
         RequestAuthDataCtx.HasWindowsAuthPasswordProblem = errorCode == TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank;
         RequestAuthDataCtx.HasWindowsAuthDomainProblem = errorCode == TranslateRequestErrors.WindowsAuthDomainCannotBeBlank;
 
-        RequestAuthDataCtx.HasClientCertificateAuthPkcs12CertificateFilePathProblem = 
+        RequestAuthDataCtx.HasClientCertificateAuthPkcs12CertificateFilePathProblem =
         (errorCode == TranslateRequestErrors.ClientCertificatePkcs12CertificateFileNotFound);
         RequestAuthDataCtx.HasClientCertificateAuthPkcs12FilePasswordProblem =
         (errorCode == TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank);

@@ -162,9 +162,9 @@ public static class PororocaCollectionImporterTests
         Assert.NotNull(req.Body);
         Assert.Equal(PororocaHttpRequestBodyMode.FormData, req.Body.Mode);
         Assert.Equal([
-            new(true,PororocaHttpRequestFormDataParamType.Text,"a","xyz{{SpecialValue1}}","text/plain", null),
-            new(true,PororocaHttpRequestFormDataParamType.Text,"b","[]","application/json", null),
-            new(true,PororocaHttpRequestFormDataParamType.File,"arq",null,"text/plain","{{TestFilesDir}}/arq.txt")],
+            new(true, PororocaHttpRequestFormDataParamType.Text, "a", "xyz{{SpecialValue1}}", "text/plain", null),
+            new(true, PororocaHttpRequestFormDataParamType.Text, "b", "[]", "application/json", null),
+            new(true, PororocaHttpRequestFormDataParamType.File, "arq", null, "text/plain", "{{TestFilesDir}}/arq.txt")],
             req.Body.FormDataValues);
         Assert.Null(req.CustomAuth);
 
@@ -256,11 +256,11 @@ public static class PororocaCollectionImporterTests
         Assert.NotNull(req.Body);
         Assert.Equal(PororocaHttpRequestBodyMode.UrlEncoded, req.Body.Mode);
         Assert.Equal([
-            new(true,"a","xyz"),
-            new(true,"b","123"),
-            new(false,"c","false"),
-            new(true,"c","true"),
-            new(true,"myIdSecret","{{SpecialValue1}}")],
+            new(true, "a", "xyz"),
+            new(true, "b", "123"),
+            new(false, "c", "false"),
+            new(true, "c", "true"),
+            new(true, "myIdSecret", "{{SpecialValue1}}")],
             req.Body.UrlEncodedValues);
         Assert.Null(req.CustomAuth);
 

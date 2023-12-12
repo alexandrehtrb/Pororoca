@@ -35,7 +35,7 @@ public class MultipartFormDataResult : Collection<MultipartContent>, IResult
                 {
                     content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(item.ContentType);
                 }
-                
+
                 content.Headers.ContentDisposition = new("form-data");
                 content.Headers.ContentDisposition.Name = item.Name;
 
