@@ -12,7 +12,7 @@ public sealed class TopMenuRobot : BaseRobot
     
     internal MenuItem File => GetChildView<MenuItem>("topMenuItemFile")!;
     internal MenuItem File_NewCollection => GetChildView<MenuItem>("topMenuItemFileNewCollection")!;
-    internal MenuItem File_ImportCollection => GetChildView<MenuItem>("topMenuItemFileImportCollection")!;
+    internal MenuItem File_ImportCollectionsFromFile => GetChildView<MenuItem>("topMenuItemFileImportCollectionsFromFile")!;
     internal MenuItem File_Exit => GetChildView<MenuItem>("topMenuItemFileExit")!;
     internal MenuItem Options => GetChildView<MenuItem>("topMenuItemOptions")!;
     internal MenuItem Options_Theme => GetChildView<MenuItem>("topMenuItemOptionsTheme")!;

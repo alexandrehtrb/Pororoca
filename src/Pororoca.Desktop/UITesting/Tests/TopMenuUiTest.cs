@@ -26,7 +26,7 @@ public sealed class TopMenuUITest : UITest
         // otherwise the menu item won't expand
         await Robot.File.ClickOn();
         AssertIsVisible(Robot.File_NewCollection);
-        AssertIsVisible(Robot.File_ImportCollection);
+        AssertIsVisible(Robot.File_ImportCollectionsFromFile);
         AssertIsVisible(Robot.File_Exit);
 
         await Robot.Options.ClickOn();

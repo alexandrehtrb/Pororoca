@@ -58,9 +58,9 @@
               Command="{Binding AddNewCollectionCmd}"/>
           <Separator/>
           <MenuItem
-              x:Name="topMenuItemFileImportCollection"
-              Header="{Binding i18n.TopMenuFile.ImportCollection}"
-              Command="{Binding ImportCollectionsCmd}"/>
+              x:Name="topMenuItemFileImportCollectionsFromFile"
+              Header="{Binding i18n.TopMenuFile.ImportFromFile}"
+              Command="{Binding ImportCollectionsFromFileCmd}"/>
           <Separator/>
           <MenuItem
               Header="{Binding i18n.TopMenuFile.SaveAll}"
@@ -217,12 +217,15 @@
           <MenuItem
             Header="{Binding i18n.TopMenuHelp.ViewKeyboardShortcuts}"
             Command="{Binding HotKeys.ShowHelpCmd}"/>
+          <MenuItem
+            Header="{Binding i18n.TopMenuHelp.OpenDocsWebsite}"
+            Command="{Binding OpenDocsInWebBrowserCmd}"/>
           <Separator/>
           <MenuItem
             Header="{Binding VersionName}"
             IsEnabled="False"/>
           <MenuItem
-            Header="{Binding i18n.TopMenu.RunUITests}"
+            Header="{Binding i18n.TopMenuHelp.RunUITests}"
             IsVisible="{Binding IsRunUITestsVisible}"
             Command="{Binding RunUITestsCmd}"/>
         </MenuItem>        
@@ -250,6 +253,14 @@
         <Grid
             VerticalAlignment="Stretch"
             HorizontalAlignment="Stretch">
+          <Grid
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+            IsVisible="{Binding WelcomeView.Visible}">
+          <v:WelcomeView
+              x:Name="welcomeView"
+              DataContext="{Binding WelcomeView.VM}"/>
+          </Grid>          
           <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"

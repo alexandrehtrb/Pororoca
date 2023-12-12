@@ -33,6 +33,7 @@ public static class UITestsRunner
         // form data add text and file params buttons
         // cut collection, cut and paste to itself
         // save responses to file
+        // welcome screen
     });
 
     private static async Task<string> RunTestsAsync(params UITest[] tests)
