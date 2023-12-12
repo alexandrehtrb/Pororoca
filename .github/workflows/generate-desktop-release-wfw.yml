@@ -21,9 +21,10 @@ jobs:
 
     runs-on: ${{ inputs.os }} # we run many different builds
     
+    # update (2023-12-11): let's try single-file publishing for Linux too
     env:
       OUTPUT_FOLDER: ${{ format('./out/{0}/', inputs.rid) }}
-      PUBLISH_SINGLE_FILE: ${{ startsWith(inputs.rid, 'win') }}
+      PUBLISH_SINGLE_FILE: ${{ startsWith(inputs.rid, 'win') || startsWith(inputs.rid, 'linux') }}
       RID: ${{ inputs.rid }}
       WINDOWS_INSTALLER_RELEASE: ${{ startsWith(inputs.rid, 'win') && inputs.installation == 'withInstaller' }}
       ENABLE_UI_TESTING: ${{ inputs.enableUITesting }}

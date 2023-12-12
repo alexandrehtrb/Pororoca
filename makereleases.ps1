@@ -219,12 +219,13 @@ function Publish-PororocaDesktop
 		[bool]$isInstallOnWindowsRelease = $false
     )
 
-	if ($runtime -like "*win*")
+	if (($runtime -like "*win*") -or ($runtime -like "*linux*"))
 	{
 		# .NET SDK 6.0.3xx and greater allows for single file publishing for Windows 7
 		# for HTTP/3 to work, we cannot ship as single-file application,
 		# unless, and only for Windows, if we include msquic.dll next to the generated .exe file
 		# https://github.com/dotnet/runtime/issues/79727
+		# update (2023-12-11): let's try single-file publishing for Linux too
 		$publishSingleFile = $True #$False
 	}
 	else
