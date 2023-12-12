@@ -11,8 +11,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Pororoca.Domain\Pororoca.Domain.csproj"/>
-    <PackageReference Include="Microsoft.OpenApi" Version="1.6.9" />
-    <PackageReference Include="Microsoft.OpenApi.Readers" Version="1.6.9" />
+    <PackageReference Include="Microsoft.OpenApi" Version="1.6.11" />
+    <PackageReference Include="Microsoft.OpenApi.Readers" Version="1.6.11" />
   </ItemGroup>
 
 </Project>

@@ -12,9 +12,9 @@
     <ProjectReference Include="..\..\src\Pororoca.Domain\Pororoca.Domain.csproj"/>
     <ProjectReference Include="..\..\src\Pororoca.Domain.OpenAPI\Pororoca.Domain.OpenAPI.csproj"/>
     <PackageReference Include="NSubstitute" Version="5.1.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
-    <PackageReference Include="xunit" Version="2.5.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="xunit" Version="2.6.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
