@@ -405,6 +405,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
             // this is a silent migration.
             // users can manually delete the PororocaUserData_old folder afterwards.
             UserDataManager.ExecuteMacOSXUserDataFolderMigrationToV3();
+            ShowMacOSXUserDataFolderMigratedV3Dialog();
         }
 
         var cols = UserDataManager.LoadUserCollections();
@@ -450,6 +451,23 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
                 OpenWebBrowser(GitHubRepoUrl);
             }
         });
+    }
+
+    private void ShowMacOSXUserDataFolderMigratedV3Dialog()
+    {
+        Bitmap bitmap = new(AssetLoader.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
+        string newUserDataDirPath = UserDataManager.GetUserDataFolder().FullName;
+
+        var msgbox = MessageBoxManager.GetMessageBoxStandard(
+            new MessageBoxStandardParams()
+            {
+                ContentTitle = Localizer.Instance.MacOSXUserDataFolderMigratedV3Dialog.Title,
+                ContentMessage = string.Format(Localizer.Instance.MacOSXUserDataFolderMigratedV3Dialog.Message, newUserDataDirPath),
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                WindowIcon = new(bitmap),
+                ButtonDefinitions = ButtonEnum.Ok
+            });
+        Dispatcher.UIThread.Post(async () => await msgbox.ShowAsync());
     }
 
     private static void OpenWebBrowser(string url)

@@ -1,4 +1,6 @@
 {
+    "MacOSXUserDataFolderMigratedV3Dialog/Title": "Pororoca - User data folder migrated",
+    "MacOSXUserDataFolderMigratedV3Dialog/Message": "Your user data directory is now located at:\\n{0}\\nYou can manually delete the PororocaUserData folder inside Applications.",
     "Welcome/Title": "Welcome!",
     "Welcome/NewCollection": "New collection",
     "Welcome/ImportCollection": "Import collection…",

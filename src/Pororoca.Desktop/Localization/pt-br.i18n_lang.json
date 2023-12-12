@@ -1,4 +1,6 @@
 {
+    "MacOSXUserDataFolderMigratedV3Dialog/Title": "Pororoca - Pasta de dados migrada",
+    "MacOSXUserDataFolderMigratedV3Dialog/Message": "Seu diretório de dados de usuário agora é:\\n{0}\\nVocê pode excluir manualmente a pasta PororocaUserData dentro de Aplicações.",
     "Welcome/Title": "Bem-vindo(a)!",
     "Welcome/NewCollection": "Nova coleção",
     "Welcome/ImportCollection": "Importar coleção…",
