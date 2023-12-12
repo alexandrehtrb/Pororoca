@@ -13,7 +13,7 @@ public static class PororocaCollectionImporterTests
     public static void Should_import_valid_empty_pororoca_collection_correctly()
     {
         // GIVEN
-        string json = GetTestFileJson("EmptyCollection.pororoca_collection.json");
+        string json = ReadTestFileText("EmptyCollection.pororoca_collection.json");
 
         // WHEN AND THEN
         Assert.True(TryImportPororocaCollection(json, preserveId: false, out var col));
@@ -42,7 +42,7 @@ public static class PororocaCollectionImporterTests
         // this test also validates the distinguishment between HTTP and WebSocket requestTypes
 
         // GIVEN
-        string json = GetTestFileJson("FullCollection.pororoca_collection.json");
+        string json = ReadTestFileText("FullCollection.pororoca_collection.json");
         const string testFilesDirPath = "C:\\PROJETOS\\Pororoca\\src\\Pororoca.Desktop\\PororocaUserData\\TestFiles";
 
         // WHEN AND THEN
@@ -278,12 +278,5 @@ public static class PororocaCollectionImporterTests
         Assert.Equal("{{ClientCertificatesDir}}/badssl.com-client-certificate-without-private-key.pem", req.CustomAuth.ClientCertificate.CertificateFilePath);
         Assert.Equal("{{ClientCertificatesDir}}/badssl.com-client-encrypted-private-key.key", req.CustomAuth.ClientCertificate.PrivateKeyFilePath);
         Assert.Equal("{{BadSslClientCertFilePassword}}", req.CustomAuth.ClientCertificate.FilePassword);
-    }
-
-    private static string GetTestFileJson(string fileName)
-    {
-        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
-        string jsonFileInfoPath = Path.Combine(testDataDirInfo.FullName, "TestData", fileName);
-        return File.ReadAllText(jsonFileInfoPath, Encoding.UTF8);
     }
 }

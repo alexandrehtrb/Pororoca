@@ -1,5 +1,4 @@
 using System.Net;
-using Pororoca.Test;
 using Xunit;
 
 namespace Pororoca.Test.Tests;
@@ -61,11 +60,5 @@ public class PororocaTestLibraryHttp2Tests
         var jsonObj = res.GetJsonBodyAs<Dictionary<string, int>>();
         Assert.NotNull(jsonObj);
         Assert.Contains(new KeyValuePair<string, int>("id", 1), jsonObj);
-    }
-
-    private static string GetTestCollectionFilePath()
-    {
-        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
-        return Path.Combine(testDataDirInfo.FullName, "PororocaIntegrationTestCollection.pororoca_collection.json");
     }
 }

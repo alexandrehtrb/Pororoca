@@ -13,7 +13,7 @@ public static class OpenApiImporterTests
     public static void Should_import_all_requests_from_valid_openapi_without_tags_correctly()
     {
         // GIVEN
-        string fileContent = GetTestFile("openapi_imgflip.yml");
+        string fileContent = ReadTestFileText("OpenAPI", "openapi_imgflip.yml");
 
         // WHEN AND THEN
         Assert.True(TryImportOpenApi(fileContent, out var col));
@@ -62,7 +62,7 @@ public static class OpenApiImporterTests
     public static void Should_import_all_requests_from_valid_openapi_with_tags_correctly()
     {
         // GIVEN
-        string fileContent = GetTestFile("openapi_pix.yaml");
+        string fileContent = ReadTestFileText("OpenAPI", "openapi_pix.yaml");
 
         // WHEN AND THEN
         Assert.True(TryImportOpenApi(fileContent, out var col));
@@ -258,7 +258,7 @@ public static class OpenApiImporterTests
     public static void Should_read_request_with_raw_json_body_correctly()
     {
         // GIVEN
-        string fileContent = GetTestFile("openapi_pix.yaml");
+        string fileContent = ReadTestFileText("OpenAPI", "openapi_pix.yaml");
 
         // WHEN AND THEN
         Assert.True(TryImportOpenApi(fileContent, out var col));
@@ -287,7 +287,7 @@ public static class OpenApiImporterTests
     public static void Should_read_request_with_query_parameters_and_empty_body_correctly()
     {
         // GIVEN
-        string fileContent = GetTestFile("openapi_petstore.json");
+        string fileContent = ReadTestFileText("OpenAPI", "openapi_petstore.json");
 
         // WHEN AND THEN
         Assert.True(TryImportOpenApi(fileContent, out var col));
@@ -311,7 +311,7 @@ public static class OpenApiImporterTests
     public static void Should_read_request_with_url_encoded_body_correctly()
     {
         // GIVEN
-        string fileContent = GetTestFile("openapi_imgflip.yml");
+        string fileContent = ReadTestFileText("OpenAPI", "openapi_imgflip.yml");
 
         // WHEN AND THEN
         Assert.True(TryImportOpenApi(fileContent, out var col));
@@ -347,7 +347,7 @@ public static class OpenApiImporterTests
     public static void Should_read_request_with_OAuth2_client_credentials_correctly()
     {
         // GIVEN
-        string fileContent = GetTestFile("openapi_pix.yaml");
+        string fileContent = ReadTestFileText("OpenAPI", "openapi_pix.yaml");
 
         // WHEN AND THEN
         Assert.True(TryImportOpenApi(fileContent, out var col));
@@ -385,7 +385,7 @@ public static class OpenApiImporterTests
         // GIVEN
         // the original document had API keys in query params,
         // changed to headers for this test
-        string fileContent = GetTestFile("SHODAN-OPENAPI.json");
+        string fileContent = ReadTestFileText("OpenAPI", "SHODAN-OPENAPI.json");
 
         // WHEN AND THEN
         Assert.True(TryImportOpenApi(fileContent, out var col));
@@ -416,13 +416,5 @@ public static class OpenApiImporterTests
         Assert.NotNull(req.Headers);
         Assert.Equal(new(true, "SHODAN-KEY", "{{SHODAN-KEY}}"), Assert.Single(req.Headers));
         Assert.Null(req.Body);
-    }
-
-
-    private static string GetTestFile(string fileName)
-    {
-        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
-        string jsonFileInfoPath = Path.Combine(testDataDirInfo.FullName, "TestData", "OpenAPI", fileName);
-        return File.ReadAllText(jsonFileInfoPath, Encoding.UTF8);
     }
 }

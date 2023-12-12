@@ -21,7 +21,7 @@ public static class PororocaCollectionExporterTests
             JsonSerializer.Serialize(JsonSerializer.Deserialize<dynamic>(json, JsonConfiguration.MinifyingOptions), JsonConfiguration.MinifyingOptions);
 
         // GIVEN
-        string json1 = GetTestFileJson("FullCollection.pororoca_collection.json");
+        string json1 = ReadTestFileText("FullCollection.pororoca_collection.json");
 
         // WHEN AND THEN
         Assert.True(TryImportPororocaCollection(json1, preserveId: true, out var col));
@@ -153,12 +153,5 @@ public static class PororocaCollectionExporterTests
         Assert.Equal("Key4", var4.Key);
         Assert.Equal("Value4", var4.Value);
         Assert.False(var4.IsSecret);
-    }
-
-    private static string GetTestFileJson(string fileName)
-    {
-        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
-        string jsonFileInfoPath = Path.Combine(testDataDirInfo.FullName, "TestData", fileName);
-        return File.ReadAllText(jsonFileInfoPath, Encoding.UTF8);
     }
 }

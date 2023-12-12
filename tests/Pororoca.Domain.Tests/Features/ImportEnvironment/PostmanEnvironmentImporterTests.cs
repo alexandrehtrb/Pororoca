@@ -15,7 +15,7 @@ public static class PostmanEnvironmentImporterTests
     [Fact]
     public static void Should_import_valid_postman_environment_correctly()
     {
-        string json = GetTestEnvironmentFileJson();
+        string json = ReadTestFileText("TestEnvironment.postman_environment.json");
         Assert.True(TryImportPostmanEnvironment(json, out var env));
         AssertConvertedEnvironment(env!);
     }
@@ -57,13 +57,6 @@ public static class PostmanEnvironmentImporterTests
         Assert.False(var2.IsSecret);
         Assert.Equal("Key2", var2.Key);
         Assert.Equal("Value2", var2.Value);
-    }
-
-    private static string GetTestEnvironmentFileJson()
-    {
-        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
-        string jsonFileInfoPath = Path.Combine(testDataDirInfo.FullName, "TestData", "TestEnvironment.postman_environment.json");
-        return File.ReadAllText(jsonFileInfoPath, Encoding.UTF8);
     }
 
     private static PostmanEnvironment CreateTestPostmanEnvironment() =>

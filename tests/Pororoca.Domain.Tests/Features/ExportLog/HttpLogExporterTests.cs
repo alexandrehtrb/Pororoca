@@ -571,10 +571,4 @@ MyTrailer: MyTrailerValue
         headers: responseHeaders?.ToFrozenDictionary() ?? new Dictionary<string, string>().ToFrozenDictionary(),
         trailers: responseTrailers?.ToFrozenDictionary() ?? new Dictionary<string, string>().ToFrozenDictionary(),
         binaryBody: binaryBody ?? Array.Empty<byte>());
-
-    private static string GetTestFilePath(string fileName)
-    {
-        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
-        return Path.Combine(testDataDirInfo.FullName, "TestData", fileName);
-    }
 }

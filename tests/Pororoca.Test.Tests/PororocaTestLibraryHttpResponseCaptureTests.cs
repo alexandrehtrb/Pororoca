@@ -1,5 +1,4 @@
 using System.Net;
-using Pororoca.Test;
 using Xunit;
 
 namespace Pororoca.Test.Tests;
@@ -49,11 +48,5 @@ public class PororocaTestLibraryHttpResponseCaptureTests
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
         Assert.Equal("123987456", this.pororocaTest.GetEnvironmentVariable("Local", "CapturedXMLValue"));
-    }
-
-    private static string GetTestCollectionFilePath()
-    {
-        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
-        return Path.Combine(testDataDirInfo.FullName, "PororocaIntegrationTestCollection.pororoca_collection.json");
     }
 }

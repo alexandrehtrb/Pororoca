@@ -361,10 +361,4 @@ public static class PororocaHttpResponseTests
 
         return resMsg;
     }
-
-    private static string GetTestFilePath(string fileName)
-    {
-        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
-        return Path.Combine(testDataDirInfo.FullName, "TestData", fileName);
-    }
 }

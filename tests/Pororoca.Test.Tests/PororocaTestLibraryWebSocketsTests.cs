@@ -106,7 +106,7 @@ public class PororocaTestLibraryWebSocketsTests
     public async Task Should_send_and_receive_binary_messages_successfully(string wsConnName)
     {
         // GIVEN
-        this.pororocaTest.SetEnvironmentVariable("Local", "TestFilesDir", GetTestFilesFolderPath());
+        this.pororocaTest.SetEnvironmentVariable("Local", "TestFilesDir", GetTestFilesDir());
         var ws = await this.pororocaTest.ConnectWebSocketAsync(wsConnName);
         Assert.Equal(PororocaWebSocketConnectorState.Connected, ws.State);
         // WHEN
@@ -117,7 +117,7 @@ public class PororocaTestLibraryWebSocketsTests
 
         var sentMsg = Assert.IsType<PororocaWebSocketClientMessageToSend>(ws.ExchangedMessages[0]);
         Assert.Equal(PororocaWebSocketMessageType.Binary, sentMsg.MessageType);
-        Assert.Equal(Path.Combine(GetTestFilesFolderPath(), "homem_aranha.jpg"), ((FileStream)sentMsg.BytesStream).Name);
+        Assert.Equal(Path.Combine(GetTestFilesDir(), "homem_aranha.jpg"), ((FileStream)sentMsg.BytesStream).Name);
         Assert.Equal(DateTime.Now, sentMsg.SentAtUtc.GetValueOrDefault().DateTime, TimeSpan.FromSeconds(3));
 
         var replyMsg = Assert.IsType<PororocaWebSocketServerMessage>(ws.ExchangedMessages[1]);
@@ -127,17 +127,5 @@ public class PororocaTestLibraryWebSocketsTests
 
         // Teardown
         await ws.DisconnectAsync();
-    }
-
-    private static string GetTestFilesFolderPath() =>
-        Path.Combine(GetTestFolderPath(), "TestFiles");
-
-    private static string GetTestCollectionFilePath() =>
-        Path.Combine(GetTestFolderPath(), "PororocaIntegrationTestCollection.pororoca_collection.json");
-
-    private static string GetTestFolderPath()
-    {
-        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
-        return testDataDirInfo.FullName;
     }
 }

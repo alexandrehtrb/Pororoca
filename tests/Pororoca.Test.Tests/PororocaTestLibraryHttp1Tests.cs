@@ -1,5 +1,4 @@
 using System.Net;
-using Pororoca.Test;
 using Xunit;
 
 namespace Pororoca.Test.Tests;
@@ -178,11 +177,5 @@ public class PororocaTestLibraryHttp1Tests
 
         bodyText = res.GetBodyAsPrettyText();
         Assert.Contains("Bearer token_development", bodyText);
-    }
-
-    private static string GetTestCollectionFilePath()
-    {
-        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
-        return Path.Combine(testDataDirInfo.FullName, "PororocaIntegrationTestCollection.pororoca_collection.json");
     }
 }
