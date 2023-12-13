@@ -137,13 +137,14 @@ public static class AvailablePororocaRequestSelectionOptions
     public static string ProvideSampleValueForHeader(string headerName) =>
         headerName switch
         {
-            "Accept" => MimeTypesDetector.DefaultMimeTypeForJson,
+            "Accept" => "*/*",
             "Accept-Datetime" => GetSampleValueForDateHeader(),
             "Accept-Encoding" => sampleValueEncodingHeader,
             "Accept-Language" => GetSampleValueForLanguageHeader(),
             "Access-Control-Request-Method" => "GET",
             "Access-Control-Request-Headers" => "origin, x-requested-with",
             "Cache-Control" => "no-cache",
+            "Connection" => "keep-alive",
             "Content-Encoding" => sampleValueEncodingHeader,
             "Content-Language" => GetSampleValueForLanguageHeader(),
             "Cookie" => "$Version=1; Skin=new;",

@@ -39,10 +39,11 @@ public static class CommonHeadersValuesTests
         Assert.True(Guid.TryParse(ProvideSampleValueForHeader(headerName), out _));
 
     [Theory]
-    [InlineData("Accept", MimeTypesDetector.DefaultMimeTypeForJson)]
+    [InlineData("Accept", "*/*")]
     [InlineData("Access-Control-Request-Method", "GET")]
     [InlineData("Access-Control-Request-Headers", "origin, x-requested-with")]
     [InlineData("Cache-Control", "no-cache")]
+    [InlineData("Connection", "keep-alive")]
     [InlineData("Cookie", "$Version=1; Skin=new;")]
     [InlineData("From", "user@example.com")]
     [InlineData("Host", "en.wikipedia.org")]
