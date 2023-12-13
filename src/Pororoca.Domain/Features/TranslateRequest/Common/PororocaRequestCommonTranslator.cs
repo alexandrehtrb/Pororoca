@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+using System.Collections.Frozen;
 using System.Text;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.VariableResolution;
@@ -11,13 +11,13 @@ public static class PororocaRequestCommonTranslator
         reqAuth?.Mode == PororocaRequestAuthMode.InheritFromCollection ?
         collectionScopedAuth : reqAuth;
 
-    private static readonly ImmutableList<string> acceptedUriSchemes =
-    [
+    private static readonly FrozenSet<string> acceptedUriSchemes = new[]
+    {
         Uri.UriSchemeHttp,
         Uri.UriSchemeHttps,
         Uri.UriSchemeWs,
         Uri.UriSchemeWss
-    ];
+    }.ToFrozenSet();
 
     #region RESOLVE KEY VALUE PARAMS
 

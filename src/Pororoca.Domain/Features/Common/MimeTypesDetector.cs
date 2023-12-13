@@ -1,3 +1,5 @@
+using System.Collections.Frozen;
+
 namespace Pororoca.Domain.Features.Common;
 
 public static class MimeTypesDetector
@@ -14,7 +16,7 @@ public static class MimeTypesDetector
     public const string DefaultMimeTypeForJavascript = "application/javascript";
     public const string DefaultMimeTypeForBinary = "application/octet-stream";
 
-    private static readonly string[] textMimeTypesIndicators;
+    private static readonly FrozenSet<string> textMimeTypesIndicators;
 
     private static readonly List<KeyValuePair<string, string>> mappings;
 
@@ -34,7 +36,7 @@ public static class MimeTypesDetector
         AllMimeTypes.Add(DefaultMimeTypeForDnsMessage);
     }
 
-    private static string[] GetTextMimeTypesIndicators() => new[]
+    private static FrozenSet<string> GetTextMimeTypesIndicators() => new[]
     {
         "json",
         "text",
@@ -44,7 +46,7 @@ public static class MimeTypesDetector
         "ecmascript",
         "css",
         "csv"
-    };
+    }.ToFrozenSet();
 
     /*
     MIME types list extracted from:

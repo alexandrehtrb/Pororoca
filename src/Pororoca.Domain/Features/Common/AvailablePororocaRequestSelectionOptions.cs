@@ -1,12 +1,13 @@
+using System.Collections.Frozen;
 using System.Collections.Immutable;
-using System.Collections.ObjectModel;
 using Pororoca.Domain.Features.TranslateRequest;
 
 namespace Pororoca.Domain.Features.Common;
 
 public static class AvailablePororocaRequestSelectionOptions
 {
-    public static readonly IImmutableList<HttpMethod> AvailableHttpMethods = ImmutableList.Create(
+    public static readonly ImmutableList<HttpMethod> AvailableHttpMethods =
+    [
         HttpMethod.Get,
         HttpMethod.Post,
         HttpMethod.Put,
@@ -15,17 +16,22 @@ public static class AvailablePororocaRequestSelectionOptions
         HttpMethod.Head,
         HttpMethod.Options,
         HttpMethod.Connect,
-        HttpMethod.Trace);
+        HttpMethod.Trace
+    ];
 
-    public static readonly IImmutableList<decimal> AvailableHttpVersionsForHttp = ImmutableList.Create(
+    public static readonly ImmutableList<decimal> AvailableHttpVersionsForHttp =
+    [
         1.0m,
         1.1m,
         2.0m,
-        3.0m);
+        3.0m
+    ];
 
-    public static readonly IImmutableList<decimal> AvailableHttpVersionsForWebSockets = ImmutableList.Create(
+    public static readonly ImmutableList<decimal> AvailableHttpVersionsForWebSockets =
+    [
         1.1m,
-        2.0m);
+        2.0m
+    ];
 
     public static bool IsHttpVersionAvailableInOS(decimal httpVersion, out string? errorCode)
     {
@@ -80,42 +86,42 @@ public static class AvailablePororocaRequestSelectionOptions
         }
     }
 
-    public static readonly ObservableCollection<string> MostCommonHeaders =
-        [
-            "Accept",
-            "Accept-Datetime",
-            "Accept-Encoding",
-            "Accept-Language",
-            "Access-Control-Request-Method",
-            "Access-Control-Request-Headers",
-            "Cache-Control",
-            "Connection",
-            "Content-Encoding",
-            "Content-Language",
-            "Cookie",
-            "Date",
-            "From",
-            "Host",
-            "If-Match",
-            "If-Modified-Since",
-            "If-None-Match",
-            "If-Range",
-            "If-Unmodified-Since",
-            "Max-Forwards",
-            "Origin",
-            "Pragma",
-            "Proxy-Authorization",
-            "Range",
-            "Referer",
-            "Prefer",
-            "X-Request-ID",
-            "X-Correlation-ID",
-            "Save-Data",
-            "Sec-GPC",
-            "User-Agent",
-            "Via",
-            "DNT",
-        ];
+    public static readonly FrozenSet<string> MostCommonHeaders = new[]
+    {
+        "Accept",
+        "Accept-Datetime",
+        "Accept-Encoding",
+        "Accept-Language",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers",
+        "Cache-Control",
+        "Connection",
+        "Content-Encoding",
+        "Content-Language",
+        "Cookie",
+        "Date",
+        "From",
+        "Host",
+        "If-Match",
+        "If-Modified-Since",
+        "If-None-Match",
+        "If-Range",
+        "If-Unmodified-Since",
+        "Max-Forwards",
+        "Origin",
+        "Pragma",
+        "Proxy-Authorization",
+        "Range",
+        "Referer",
+        "Prefer",
+        "X-Request-ID",
+        "X-Correlation-ID",
+        "Save-Data",
+        "Sec-GPC",
+        "User-Agent",
+        "Via",
+        "DNT"
+    }.ToFrozenSet();
 
     public static readonly string[] ExampleLcids =
         ["pt-BR", "pt-PT", "en-GB", "en-US", "it-IT", "ru-RU", "uk-UA", "es-ES", "es-AR", "es-MX", "ko-KR", "ja-JP"];
