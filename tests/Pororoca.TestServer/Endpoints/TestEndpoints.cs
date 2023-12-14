@@ -17,6 +17,7 @@ public static class TestEndpoints
         app.MapGet("test/get/headers", TestGetHeaders);
         app.MapGet("test/get/trailers", TestGetTrailers);
         app.MapGet("test/get/multipartformdata", TestGetMultipartFormData);
+        app.MapGet("test/get/multiparttextonly", TestGetMultipartTextOnly);
         app.MapGet("test/auth", TestAuthHeader);
         app.MapGet("test/http1websocket", (Delegate)TestHttp1WebSocket);
         app.MapConnect("test/http2websocket", (Delegate)TestHttp2WebSocket);
@@ -105,6 +106,25 @@ public static class TestEndpoints
                 ContentType = "image/gif",
                 FileName = "pirate.gif",
                 Stream = new FileStream(GetTestFilePath("pirate.gif"), FileMode.Open)
+            }
+        };
+    
+    private static MultipartFormDataResult TestGetMultipartTextOnly() =>
+        new()
+        {
+            new MultipartContent()
+            {
+                Name = "a",
+                ContentType = "text/plain",
+                FileName = null,
+                Stream = new MemoryStream("oi"u8.ToArray())
+            },
+            new MultipartContent()
+            {
+                Name = "b",
+                ContentType = "application/json",
+                FileName = null,
+                Stream = new MemoryStream("{\"msg\":\"ciao\"}"u8.ToArray())
             }
         };
 

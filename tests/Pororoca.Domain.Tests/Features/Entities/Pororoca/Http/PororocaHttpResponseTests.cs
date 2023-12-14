@@ -296,6 +296,42 @@ public static class PororocaHttpResponseTests
     }
 
     [Fact]
+    public static async Task Should_show_multipart_response_as_text_if_all_parts_are_text()
+    {
+        // GIVEN
+        PororocaHttpRequestBody body = new();
+        body.SetFormDataContent([
+            PororocaHttpRequestFormDataParam.MakeTextParam(true, "a", "oi", "text/plain"),
+            PororocaHttpRequestFormDataParam.MakeTextParam(true, "b", "[\"ciao\",\"bye\"]", "application/json")
+        ]);
+        using HttpResponseMessage resMsg = new(HttpStatusCode.Accepted)
+        {
+            Content = PororocaHttpRequestTranslator.MakeRequestContent(body, new())
+        };
+
+        // WHEN
+        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg);
+
+        // THEN
+        Assert.NotNull(res.MultipartParts);
+        Assert.Equal(2, res.MultipartParts.Length);
+
+        Assert.Equal([
+            new("Content-Type", "text/plain; charset=utf-8"),
+            new("Content-Disposition", "form-data; name=a")],
+            res.MultipartParts[0].Headers.ToArray());
+        Assert.Equal("oi", Encoding.UTF8.GetString(res.MultipartParts[0].BinaryBody));
+
+        Assert.Equal([
+            new("Content-Type", "application/json; charset=utf-8"),
+            new("Content-Disposition", "form-data; name=b")],
+            res.MultipartParts[1].Headers.ToArray());
+        Assert.Equal("[\"ciao\",\"bye\"]", Encoding.UTF8.GetString(res.MultipartParts[1].BinaryBody));
+
+        Assert.True(res.CanDisplayTextBody);
+    }
+
+    [Fact]
     public static async Task Should_capture_response_header_correctly()
     {
         // GIVEN

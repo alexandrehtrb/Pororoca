@@ -13,7 +13,11 @@ namespace Pororoca.Domain.Features.Entities.Pororoca.Http;
 
 public record PororocaHttpResponseMultipartPart(
     FrozenDictionary<string, string> Headers,
-    byte[] BinaryBody);
+    byte[] BinaryBody)
+{
+    public bool IsTextContent =>
+        MimeTypesDetector.IsTextContent(Headers?.FirstOrDefault(h => h.Key == "Content-Type").Value);
+}
 
 public sealed class PororocaHttpResponse
 {
@@ -56,13 +60,14 @@ public sealed class PororocaHttpResponse
     {
         get
         {
-            var contentTypeHeaders = Headers?.FirstOrDefault(h => h.Key == "Content-Type");
+            var contentTypeHeaders = Headers?.FirstOrDefault(h => h.Key.Equals("Content-Type", StringComparison.InvariantCultureIgnoreCase));
             return contentTypeHeaders?.Value;
         }
     }
 
     public bool CanDisplayTextBody =>
-        MimeTypesDetector.IsTextContent(ContentType);
+        MimeTypesDetector.IsTextContent(ContentType)
+     || (MultipartParts is not null && MultipartParts.Length > 0 && MultipartParts.All(p => p.IsTextContent));
 
     private static FrozenDictionary<string, string> MakeKvTable(IEnumerable<KeyValuePair<string, IEnumerable<string>>> input) =>
         input.ToFrozenDictionary(x => x.Key, x => string.Join(';', x.Value));
@@ -159,7 +164,7 @@ public sealed class PororocaHttpResponse
 
     public string? GetContentDispositionFileName()
     {
-        var contentDispositionHeader = Headers?.FirstOrDefault(h => h.Key == "Content-Disposition");
+        var contentDispositionHeader = Headers?.FirstOrDefault(h => h.Key.Equals("Content-Disposition", StringComparison.InvariantCultureIgnoreCase));
         string? contentDispositionValue = contentDispositionHeader?.Value;
         if (contentDispositionValue != null)
         {
