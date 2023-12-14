@@ -68,8 +68,8 @@ public static class PororocaHttpRequestTranslatorTests
         Assert.Equal("PUT", reqMsg.Method.ToString());
         Assert.Equal("http://www.pudim.com.br/index.html", reqMsg.RequestUri!.ToString());
 #pragma warning disable xUnit2012
-        Assert.True(reqMsg.Headers.Any(x => x.Key == "MyHeader" && x.Value.Contains("Value1234")));
-        Assert.True(reqMsg.Headers.Any(x => x.Key == "Authorization" && x.Value.Contains("Basic dXNyOnB3ZA==")));
+        Assert.True(reqMsg.Headers.Any(x => x.Key.Equals("MyHeader", StringComparison.InvariantCultureIgnoreCase) && x.Value.Contains("Value1234")));
+        Assert.True(reqMsg.Headers.Any(x => x.Key.Equals("Authorization", StringComparison.InvariantCultureIgnoreCase) && x.Value.Contains("Basic dXNyOnB3ZA==")));
 #pragma warning restore xUnit2012
 
         Assert.True(reqMsg.Content is StringContent);
