@@ -1,5 +1,6 @@
 using System.Collections.Frozen;
 using System.Collections.Immutable;
+using System.Net.Quic;
 using Pororoca.Domain.Features.TranslateRequest;
 
 namespace Pororoca.Domain.Features.Common;
@@ -35,7 +36,9 @@ public static class AvailablePororocaRequestSelectionOptions
 
     public static bool IsHttpVersionAvailableInOS(decimal httpVersion, out string? errorCode)
     {
-        if (httpVersion == 3.0m && !IsQuicSupported())
+    #pragma warning disable CA1416
+        if (httpVersion == 3.0m && !QuicConnection.IsSupported)
+    #pragma warning restore CA1416
         {
             // https://docs.microsoft.com/en-us/windows/win32/sysinfo/operating-system-version
             // https://en.wikipedia.org/wiki/Windows_11_version_history
@@ -88,13 +91,6 @@ public static class AvailablePororocaRequestSelectionOptions
             return true;
         }
     }
-
-    private static bool IsQuicSupported() =>
-#if WINDOWS || LINUX
-        System.Net.Quic.QuicConnection.IsSupported;
-#else
-        false;
-#endif
 
     public static readonly FrozenSet<string> MostCommonHeaders = new[]
     {
