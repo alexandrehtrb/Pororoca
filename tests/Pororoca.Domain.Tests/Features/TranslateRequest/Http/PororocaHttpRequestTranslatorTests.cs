@@ -60,7 +60,9 @@ public static class PororocaHttpRequestTranslatorTests
         };
 
         // WHEN, THEN
-        Assert.True(TryTranslateRequest(effectiveVars, null, unresolvedReq, out var resolvedReq, out var reqMsg, out string? errorCode));
+        bool valid = TryTranslateRequest(effectiveVars, null, unresolvedReq, out var resolvedReq, out var reqMsg, out string? errorCode);
+        Assert.Null(errorCode);
+        Assert.True(valid);
         Assert.NotNull(resolvedReq);
         Assert.NotNull(reqMsg);
         Assert.Equal(3, reqMsg.Version.Major);
