@@ -37,6 +37,7 @@ public static class AvailablePororocaRequestSelectionOptions
     {
         if (httpVersion == 3.0m && !(OperatingSystem.IsLinux() || OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000)))
         {
+            throw new Exception("OS: " + System.Runtime.InteropServices.RuntimeInformation.OSDescription);
             // https://docs.microsoft.com/en-us/windows/win32/sysinfo/operating-system-version
             // https://en.wikipedia.org/wiki/Windows_11_version_history
             // https://devblogs.microsoft.com/dotnet/http-3-support-in-dotnet-6/#prerequisites
