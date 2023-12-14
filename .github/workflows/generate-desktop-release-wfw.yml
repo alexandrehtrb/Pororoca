@@ -54,7 +54,7 @@ jobs:
       run: dotnet build --no-restore --configuration Release --nologo --verbosity quiet
 
     - name: Execute unit tests
-      run: dotnet test --no-build --configuration Release --nologo --filter FullyQualifiedName!~Pororoca.Test.Tests
+      run: dotnet test --no-build --configuration Release --nologo --verbosity quiet --filter FullyQualifiedName!~Pororoca.Test.Tests
 
     - name: Read release version
       shell: pwsh

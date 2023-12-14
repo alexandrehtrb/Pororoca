@@ -50,7 +50,7 @@ public static class PororocaHttpRequestTranslatorTests
         var unresolvedAuth = PororocaRequestAuth.MakeBasicAuth("{{BasicAuthLogin}}", "{{BasicAuthPassword}}");
         PororocaHttpRequest unresolvedReq = new(string.Empty)
         {
-            HttpVersion = 3.0m,
+            HttpVersion = 2.0m,
             HttpMethod = "PUT",
             Url = "{{BaseUrl}}/index.html",
             Headers = [new(true, "MyHeader", "{{MyHeaderValue}}")],
@@ -65,7 +65,7 @@ public static class PororocaHttpRequestTranslatorTests
         Assert.True(valid);
         Assert.NotNull(resolvedReq);
         Assert.NotNull(reqMsg);
-        Assert.Equal(3, reqMsg.Version.Major);
+        Assert.Equal(2, reqMsg.Version.Major);
         Assert.Equal(0, reqMsg.Version.Minor);
         Assert.Equal("PUT", reqMsg.Method.ToString());
         Assert.Equal("http://www.pudim.com.br/index.html", reqMsg.RequestUri!.ToString());
