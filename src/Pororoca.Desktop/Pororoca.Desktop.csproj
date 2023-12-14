@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <DebugType>embedded</DebugType>
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
     <EmitCompilerGeneratedFiles Condition="'$(Configuration)'=='Debug'">true</EmitCompilerGeneratedFiles>
     <!--
       line below will include INSTALLED_ON_WINDOWS preprocessor directive

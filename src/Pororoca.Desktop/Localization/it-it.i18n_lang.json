@@ -198,7 +198,7 @@
     "RequestValidation/ClientCertificatePemPrivateKeyFileNotFound": "File della chiave privata del certificato client non trovato.",
     "RequestValidation/ContentTypeCannotBeBlankReqBodyRawOrFile": "Il corpo della richiesta richiede un Content-Type.",
     "RequestValidation/Http2Unavailable": "Su Windows, il supporto per HTTP/2 richiede Windows 10 o superiore.",
-    "RequestValidation/Http3Unavailable": "HTTP/3 è disponibile solo per Linux o Windows 11 e versioni successive.",
+    "RequestValidation/Http3Unavailable": "HTTP/3 è disponibile solo per Linux con msquic o Windows 11 e versioni successive.",
     "RequestValidation/InvalidContentTypeFormData": "Uno dei parametri Form Data ha un Content-Type non valido.",
     "RequestValidation/InvalidContentTypeRawOrFile": "Usare uno dei tipi di contenuto disponibili per il corpo della richiesta.",
     "RequestValidation/InvalidUnknownCause": "La richiesta non è valida, controllala e riprova.",

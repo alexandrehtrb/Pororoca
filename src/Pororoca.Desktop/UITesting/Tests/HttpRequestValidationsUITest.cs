@@ -103,7 +103,7 @@ public sealed class HttpRequestValidationsUITest : UITest
             await HttpRobot.Url.ClearAndTypeText(TestValidUrl);
             await HttpRobot.Send.ClickOn();
             AssertIsVisible(HttpRobot.ErrorMsg);
-            AssertHasText(HttpRobot.ErrorMsg, "HTTP/3 is only available for Linux or Windows 11 and greater.");
+            AssertHasText(HttpRobot.ErrorMsg, "HTTP/3 is only available for Linux with msquic or Windows 11 and greater.");
             AssertHasStyleClass(HttpRobot.HttpVersion, "HasValidationProblem");
         }
 

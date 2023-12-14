@@ -35,12 +35,15 @@ public static class AvailablePororocaRequestSelectionOptions
 
     public static bool IsHttpVersionAvailableInOS(decimal httpVersion, out string? errorCode)
     {
-        if (httpVersion == 3.0m && !(OperatingSystem.IsLinux() || IsWindows11AtLeast() || IsWindowsServer2022AtLeast()))
+        if (httpVersion == 3.0m && !IsQuicSupported())
         {
             // https://docs.microsoft.com/en-us/windows/win32/sysinfo/operating-system-version
             // https://en.wikipedia.org/wiki/Windows_11_version_history
             // https://devblogs.microsoft.com/dotnet/http-3-support-in-dotnet-6/#prerequisites
             // Windows 11 Build 22000 still uses major version as 10, but build number is 22000 or higher
+            // Min Windows version retrieved from:
+            // https://github.com/dotnet/runtime/blob/34ea77705ba9a7fe5ecaf752880a310ba8768d5d/src/libraries/System.Net.Quic/src/System/Net/Quic/Internal/MsQuicApi.cs#L19
+            // Windows Server 2022 can use HTTP/3 and Windows version is 10.0.20348
             // If Linux, requires msquic installed
             errorCode = TranslateRequestErrors.Http3UnavailableInOSVersion;
             return false;
@@ -86,30 +89,12 @@ public static class AvailablePororocaRequestSelectionOptions
         }
     }
 
-    // Windows 11 Build 22000 still uses major version as 10, but build number is 22000 or higher
-    private static bool IsWindows11AtLeast() =>
-        OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000);
-
-    private static bool IsWindowsServer2022AtLeast()
-    {
-    #if WINDOWS
-        try
-        {
-            String loc= @"SOFTWARE\Wow6432Node\Microsoft\Windows NT\CurrentVersion";
-            Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine;
-            Microsoft.Win32.RegistryKey skey = key.OpenSubKey(loc);
-            bool isWinServer = skey.GetValue("ProductName").Contains("Server", StringComparison.InvariantCultureIgnoreCase);            
-            bool isWinBuildAtLeast10_0_20348 = OperatingSystem.IsWindowsVersionAtLeast(10, 0, 20348);
-            return isWinServer && isWinBuildAtLeast10_0_20348;
-        }
-        catch
-        {
-            return false;
-        }
-    #else
-        return false;
-    #endif
-    }
+    private static bool IsQuicSupported() =>
+#if WINDOWS || LINUX
+        System.Net.Quic.QuicConnection.IsSupported;
+#else
+        false;
+#endif
 
     public static readonly FrozenSet<string> MostCommonHeaders = new[]
     {
