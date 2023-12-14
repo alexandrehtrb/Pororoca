@@ -50,16 +50,22 @@ jobs:
       run: dotnet pack ./src/Pororoca.Test/Pororoca.Test.csproj --nologo --verbosity quiet --configuration Release
           
     - name: Upload NuGet package artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
+        compression-level: 0
+        name: ${{ format('Pororoca.Test.{0}.nupkg', env.VERSION_NAME) }}
         path: ${{ format('./src/Pororoca.Test/bin/Release/Pororoca.Test.{0}.nupkg', env.VERSION_NAME) }}
 
     - name: Upload Pororoca.Desktop SBOM file artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
+        compression-level: 0
+        name: sbom_pororoca_desktop.json
         path: ./out/sbom_pororoca_desktop.json
     
     - name: Upload Pororoca.Test SBOM file artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
+        compression-level: 0
+        name: sbom_pororoca_test.json
         path: ./out/sbom_pororoca_test.json

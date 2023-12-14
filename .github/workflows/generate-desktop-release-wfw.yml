@@ -133,7 +133,7 @@ jobs:
       run: Copy-Item -Path "./LICENCE.md" -Destination $env:OUTPUT_FOLDER
       
     - name: Compress package
-      if: ${{ inputs.installation != 'withInstaller' }}
+      if: ${{ env.WINDOWS_INSTALLER_RELEASE != 'true' }}
       shell: pwsh
       run: |
         if ($env:RID -like "win*") {
@@ -149,6 +149,7 @@ jobs:
           cd ../..
         }
         Remove-Item $env:OUTPUT_FOLDER -Force -Recurse -ErrorAction Ignore
+        echo "OUTPUT_FILE_NAME=${zipName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
     
     - name: Make installer for Windows
       if: ${{ env.WINDOWS_INSTALLER_RELEASE == 'true' }}
@@ -165,8 +166,11 @@ jobs:
           "/DINPUT_FILES_DIR=${installerFilesDirAbsolutePath}" `
           .\src\Pororoca.Desktop.WindowsInstaller\Installer.nsi
         Remove-Item $env:OUTPUT_FOLDER -Force -Recurse -ErrorAction Ignore
+        echo "OUTPUT_FILE_NAME=${installerFileName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
+        compression-level: 0 # no need to compress because steps above already compress
+        name: ${{ env.OUTPUT_FILE_NAME }}
         path: './out/'
