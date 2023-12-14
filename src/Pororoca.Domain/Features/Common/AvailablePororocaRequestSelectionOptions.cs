@@ -35,9 +35,8 @@ public static class AvailablePororocaRequestSelectionOptions
 
     public static bool IsHttpVersionAvailableInOS(decimal httpVersion, out string? errorCode)
     {
-        if (httpVersion == 3.0m && !(OperatingSystem.IsLinux() || OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000)))
+        if (httpVersion == 3.0m && !(OperatingSystem.IsLinux() || IsWindows11AtLeast() || IsWindowsServer2022AtLeast()))
         {
-            throw new Exception("OS: " + System.Runtime.InteropServices.RuntimeInformation.OSDescription);
             // https://docs.microsoft.com/en-us/windows/win32/sysinfo/operating-system-version
             // https://en.wikipedia.org/wiki/Windows_11_version_history
             // https://devblogs.microsoft.com/dotnet/http-3-support-in-dotnet-6/#prerequisites
@@ -85,6 +84,31 @@ public static class AvailablePororocaRequestSelectionOptions
             errorCode = null;
             return true;
         }
+    }
+
+    // Windows 11 Build 22000 still uses major version as 10, but build number is 22000 or higher
+    private static bool IsWindows11AtLeast() =>
+        OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000);
+
+    private static bool IsWindowsServer2022AtLeast()
+    {
+    #if WINDOWS
+        try
+        {
+            String loc= @"SOFTWARE\Wow6432Node\Microsoft\Windows NT\CurrentVersion";
+            Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine;
+            Microsoft.Win32.RegistryKey skey = key.OpenSubKey(loc);
+            bool isWinServer = skey.GetValue("ProductName").Contains("Server", StringComparison.InvariantCultureIgnoreCase);            
+            bool isWinBuildAtLeast10_0_20348 = OperatingSystem.IsWindowsVersionAtLeast(10, 0, 20348);
+            return isWinServer && isWinBuildAtLeast10_0_20348;
+        }
+        catch
+        {
+            return false;
+        }
+    #else
+        return false;
+    #endif
     }
 
     public static readonly FrozenSet<string> MostCommonHeaders = new[]
