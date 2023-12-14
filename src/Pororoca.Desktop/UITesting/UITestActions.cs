@@ -181,16 +181,22 @@ internal static class UITestActions
 
     internal static async Task TypeText(this TextBox control, string txt)
     {
-        TextInputEventArgs args = new();
-        args.RoutedEvent = InputElement.TextInputEvent;
-        args.Text = txt;
-        control.RaiseEvent(args);
+        foreach (char c in txt)
+        {
+            TextInputEventArgs args = new();
+            args.RoutedEvent = InputElement.TextInputEvent;
+            args.Text = c.ToString();
+            control.RaiseEvent(args);
+        }
         await WaitAfterActionAsync();
     }
 
     internal static async Task TypeText(this TextEditor editor, string txt)
     {
-        editor.Document.Insert(editor.Document.TextLength, txt);
+        foreach (char c in txt)
+        {
+            editor.Document.Insert(editor.Document.TextLength, c.ToString());
+        }
         await WaitAfterActionAsync();
     }
 

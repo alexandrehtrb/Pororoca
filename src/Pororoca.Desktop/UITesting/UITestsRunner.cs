@@ -34,6 +34,7 @@ public static class UITestsRunner
         // cut collection, cut and paste to itself
         // save responses to file
         // welcome screen
+        // http headers names and values autocomplete
     ]);
 
     private static async Task<string> RunTestsAsync(params UITest[] tests)
