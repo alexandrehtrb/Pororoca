@@ -37,7 +37,7 @@ public static class AvailablePororocaRequestSelectionOptions
     public static bool IsHttpVersionAvailableInOS(decimal httpVersion, out string? errorCode)
     {
     #pragma warning disable CA1416
-        if (httpVersion == 3.0m && !QuicConnection.IsSupported)
+        if (httpVersion == 3.0m && !(OperatingSystem.IsLinux() || QuicConnection.IsSupported))
     #pragma warning restore CA1416
         {
             // https://docs.microsoft.com/en-us/windows/win32/sysinfo/operating-system-version
