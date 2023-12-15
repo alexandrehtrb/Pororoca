@@ -55,7 +55,7 @@ jobs:
       run: |
         $projectPath = "./src/Pororoca.Desktop/Pororoca.Desktop.csproj"
         $jsonObj = (dotnet list $projectPath package --vulnerable --include-transitive --format json) | ConvertFrom-Json;
-        $hasAnyVulnerability = ($jsonObj.projects[0].frameworks -eq $null);
+        $hasAnyVulnerability = ($jsonObj.projects[0].frameworks -ne $null);
         if ($hasAnyVulnerability) {
           dotnet list package --vulnerable --include-transitive;
           exit 1;
