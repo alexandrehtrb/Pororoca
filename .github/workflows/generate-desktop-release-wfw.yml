@@ -173,4 +173,4 @@ jobs:
       with:
         compression-level: 0 # no need to compress because steps above already compress
         name: ${{ env.OUTPUT_FILE_NAME }}
-        path: './out/'
+        path: ${{ format('./out/{0}', env.OUTPUT_FILE_NAME) }}

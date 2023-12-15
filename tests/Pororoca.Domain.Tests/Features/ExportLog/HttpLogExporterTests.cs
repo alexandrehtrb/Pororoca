@@ -231,6 +231,7 @@ a=xyz&b=123&c=true+%C3%A0+%C3%A9&myIdSecret=456
         var boundary = Guid.Parse("9e0248d8-f117-404e-a46b-51f0382d00bd");
 
         // WHEN, THEN
+        int contentLength = OperatingSystem.IsWindows() ? 1489 : 1470;
         Assert.Equal(
 @"-------------------- REQUEST ---------------------
 
@@ -238,7 +239,7 @@ POST /anything HTTP/1.1
 Host: httpbin.org
 Accept-Encoding: gzip, deflate, br
 Content-Type: multipart/form-data
-Content-Length: 1489
+Content-Length: "+contentLength+@"
 
 --9e0248d8-f117-404e-a46b-51f0382d00bd
 Content-Type: text/plain; charset=utf-8
@@ -282,6 +283,7 @@ R0lGODlhQABAAMQRAAAAAAgIAAgQGBAQEFoAAIRjOZR7Sq0ICLUAAL29vcalY86le+fe3vf39//OnP//
         var boundary = Guid.Parse("9e0248d8-f117-404e-a46b-51f0382d00bd");
 
         // WHEN, THEN
+        int contentLength = OperatingSystem.IsWindows() ? 603 : 584;
         Assert.Equal(
 @"-------------------- REQUEST ---------------------
 
@@ -289,7 +291,7 @@ POST /anything HTTP/1.1
 Host: httpbin.org
 Accept-Encoding: gzip, deflate, br
 Content-Type: multipart/form-data
-Content-Length: 603
+Content-Length: "+contentLength+@"
 
 --9e0248d8-f117-404e-a46b-51f0382d00bd
 Content-Type: text/plain; charset=utf-8
