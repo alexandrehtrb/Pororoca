@@ -28,7 +28,7 @@ jobs:
     - name: Audit Pororoca.Test project
       shell: pwsh
       run: |
-        $projectPath = "./tests/Pororoca.Domain.Tests/Pororoca.Domain.Tests.csproj"
+        $projectPath = "./src/Pororoca.Test/Pororoca.Test.csproj"
         $jsonObj = (dotnet list $projectPath package --vulnerable --include-transitive --format json) | ConvertFrom-Json;
         $hasAnyVulnerability = ($jsonObj.projects[0].frameworks -ne $null);
         if ($hasAnyVulnerability) {
