@@ -49,6 +49,17 @@ jobs:
 
     - name: Restore solution
       run: dotnet restore --nologo --verbosity quiet
+    
+    - name: Audit Pororoca.Desktop project
+      shell: pwsh
+      run: |
+        $projectPath = "./src/Pororoca.Desktop/Pororoca.Desktop.csproj"
+        $jsonObj = (dotnet list $projectPath package --vulnerable --include-transitive --format json) | ConvertFrom-Json;
+        $hasAnyVulnerability = ($jsonObj.projects[0].frameworks -eq $null);
+        if ($hasAnyVulnerability) {
+          dotnet list package --vulnerable --include-transitive;
+          exit 1;
+        }
       
     - name: Build solution
       run: dotnet build --no-restore --configuration Release --nologo --verbosity quiet

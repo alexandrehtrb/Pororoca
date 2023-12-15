@@ -13,6 +13,7 @@ function Run-Pipeline
 	Show-Greeting -VersionName $versionName -Now $now
 	Clean-Solution -Stopwatch $sw
 	Restore-Solution -Stopwatch $sw
+	Audit-Solution -Stopwatch $sw
 	Build-Solution -Stopwatch $sw
 	Run-UnitTests -Stopwatch $sw
 	Clean-OutputFolder -Stopwatch $sw
@@ -99,6 +100,33 @@ function Restore-Solution
 	dotnet restore --nologo --verbosity quiet
 	$stopwatch.Stop()
 	Write-Host "Solution restored ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
+}
+
+function Audit-Solution
+{
+	param (
+        [System.Diagnostics.Stopwatch]$stopwatch
+    )
+
+	Write-Host "Auditting the solution..." -ForegroundColor DarkYellow
+	$stopwatch.Restart()
+	$jsonObj = (dotnet list package --vulnerable --include-transitive --format json) | ConvertFrom-Json;
+	$stopwatch.Stop()
+	$hasAnyVulnerability = $false;
+	foreach ($project in $jsonObj.projects)
+	{
+		if ($project.frameworks -ne $null) { $hasAnyVulnerability = $true; Break; }
+	}
+	if ($hasAnyVulnerability)
+	{
+		Write-Host "Vulnerabilities found ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor Magenta
+		Write-Host "They can be ignored if they are only in test projects." -ForegroundColor DarkGray
+		dotnet list package --vulnerable --include-transitive
+	}
+	else
+	{
+		Write-Host "No vulnerabilities found ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
+	}
 }
 
 function Build-Solution
