@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.0.0](#300-????-??-??)
 * [2.5.0](#240-2023-11-13)
 * [2.4.0](#240-2023-10-15)
 * [2.3.1](#231-2023-09-28)
@@ -15,6 +16,49 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.0.0](https://github.com/alexandrehtrb/Pororoca/tree/3.0.0) (????-??-??)
+
+### Features
+
+* SBOMs are now included with the releases. A SBOM (software bill of materials) is a document that describes which components are used to make a software, in order to keep track and audit for vulnerabilities and licenses complicances.
+* Autocomplete for HTTP headers names and values.
+* HTTP log export. You can now export a file that details exactly what was sent in a request and what was received in a response, when it began and how much time elapsed.
+* Multipart responses when all parts are text can now be seen in response body.
+* Multipart response part can be retrieved in `Pororoca.Test` tests.
+* User data folder for MacOSX is now located inside Application Support, no longer inside Applications folder.
+* A welcome page shows up for new users.
+* A *Go to docs* item has been added inside Help menu.
+* Added request body MIME types for DNS+JSON, FHIR, SOAP, AVIF, CBOR, JSON-PATCH, JXL and SQL.
+
+### Bug Fixes
+
+* Fixed bug when pressing <kbd>Ctrl</kbd>+<kbd>PageUp</kbd> or <kbd>Ctrl</kbd>+<kbd>PageDown</kbd>.
+* HTTP/3 requests can now run in Windows Server 2022 machines (fixed detection of QUIC support on Windows).
+
+### Refactors
+
+* Collections and environments are now exported and imported using source generated JSON serializers, with better performance.
+* Skips variable resolution if there are no effective variables, also for performance.
+* Unified `FormatHttpVersion()` methods.
+* Unified `GetTestFilePath()` methods in unit tests.
+* Linux releases now are single-file published, meaning they have less files inside the folder.
+* `FrozenSet` and `FrozenDictionary` used in many parts of the code, for faster speed.
+
+### CI/CD
+
+* Removed unnecessary setup of NSIS, as it comes pre-installed on GitHub Actions Windows runners.
+* Windows portable releases are now generated in Linux runners.
+* Upgraded `actions/upload-artifact` to v4.
+
+### Others
+
+* Pororoca.Test NuGet package now comes with a README.
+* Fixed `rununittests.ps1` report to ignore source generated files.
+* Added unit tests for collections and environments JSON serialization and deserialization.
+* Raised .NET SDK to 8.0.100.
+* Raised AvaloniaEdit to 11.0.5.
+* Raised Microsoft.OpenApi to 1.6.11.
 
 ## [2.5.0](https://github.com/alexandrehtrb/Pororoca/tree/2.5.0) (2023-11-13)
 
