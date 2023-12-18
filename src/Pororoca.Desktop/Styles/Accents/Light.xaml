@@ -18,7 +18,7 @@
       <Color x:Key="SystemInvertedAccentColorLight1">#780736</Color>
       <Color x:Key="SystemInvertedAccentColorLight2">#a90a4c</Color>
       <Color x:Key="MainWindowMenuColor">#b2b2b2</Color>
-      <Color x:Key="MainWindowBackgroundColor">Gainsboro</Color>
+      <Color x:Key="MainWindowBackgroundColor">#D0DDDD</Color>
       <Color x:Key="MainWindowDarkerBackgroundColor">Silver</Color>
       <Color x:Key="MainWindowSidebarColor">Silver</Color>
       <Color x:Key="MainWindowSeparatorsColor">Silver</Color>
