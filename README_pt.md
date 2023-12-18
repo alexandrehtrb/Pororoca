@@ -28,7 +28,7 @@ Leia as [instruções](https://pororoca.io/pt/docs/installation) e baixe o progr
 
 Confira a [documentação](https://pororoca.io/pt/docs/) para saber mais.
 
-*Nota*: No Windows, suporte ao HTTP/2 requer Windows 10 ou acima. Suporte ao HTTP/3 requer Linux ou Windows 11 e acima. HTTP/3 está em fase experimental.
+*Nota*: No Windows, suporte ao HTTP/2 requer Windows 10 ou acima. Suporte ao HTTP/3 requer Linux ou Windows 11 e acima.
 
 ### HTTP/3 e privacidade
 
