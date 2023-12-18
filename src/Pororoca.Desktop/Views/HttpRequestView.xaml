@@ -897,7 +897,7 @@
                     Margin="0,0,6,12"
                     IsVisible="{Binding ResponseDataCtx.IsSaveResponseBodyToFileVisible}"
                     Command="{Binding ResponseDataCtx.SaveResponseBodyToFileCmd}"
-                    Classes="Primary"/>
+                    Classes="Secondary"/>
                 <Button
                     Name="btResExportLogFile"
                     Content="{Binding i18n.HttpResponse.ExportLog}"
@@ -906,7 +906,7 @@
                     Margin="6,0,6,12"
                     IsVisible="{Binding ResponseDataCtx.IsExportLogFileVisible}"
                     Command="{Binding ResponseDataCtx.ExportLogFileCmd}"
-                    Classes="Primary"/>
+                    Classes="Secondary"/>
                 <Button
                     Name="btResDisableTlsVerification"
                     Content="{Binding i18n.HttpResponse.DisableTlsVerification}"
