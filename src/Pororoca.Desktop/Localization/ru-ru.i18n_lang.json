@@ -1,6 +1,6 @@
 {
     "MacOSXUserDataFolderMigratedV3Dialog/Title": "Pororoca - Перенесенная папка с пользовательскими данными",
-    "MacOSXUserDataFolderMigratedV3Dialog/Message": "Каталог пользовательских данных теперь находится по адресу:\\n{0}\\nВы можете вручную удалить папку PororocaUserData в Приложениях.",
+    "MacOSXUserDataFolderMigratedV3Dialog/Message": "Каталог пользовательских данных теперь находится по адресу:\\n{0}\\nВы можете сделать резервную копию и вручную удалить папку PororocaUserData в Приложениях.",
     "Welcome/Title": "Добро пожаловать!",
     "Welcome/NewCollection": "Новая коллекция",
     "Welcome/ImportCollection": "Импорт коллекции…",

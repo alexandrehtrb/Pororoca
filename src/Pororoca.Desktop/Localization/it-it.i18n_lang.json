@@ -1,6 +1,6 @@
 {
     "MacOSXUserDataFolderMigratedV3Dialog/Title": "Pororoca - Cartella dei dati utente migrata",
-    "MacOSXUserDataFolderMigratedV3Dialog/Message": "La cartella dei dati utente si trova ora in:\\n{0}\\nÈ possibile eliminare manualmente la cartella PororocaUserData all'interno di Applicazioni.",
+    "MacOSXUserDataFolderMigratedV3Dialog/Message": "La cartella dei dati utente si trova ora in:\\n{0}\\nÈ possibile eseguire un backup ed eliminare manualmente la cartella PororocaUserData all'interno di Applicazioni.",
     "Welcome/Title": "Benvenuto(a)!",
     "Welcome/NewCollection": "Nuova collezione",
     "Welcome/ImportCollection": "Importa collezione…",
