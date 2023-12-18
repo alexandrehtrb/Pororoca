@@ -5,31 +5,31 @@
   <ResourceDictionary.ThemeDictionaries>
     <ResourceDictionary x:Key="{x:Static local:PororocaThemeManager.Pampa}">
       <!-- System colours overrides below -->
-      <Color x:Key="SystemAccentColorDark3">#4881ea</Color>
-      <Color x:Key="SystemAccentColorDark2">#76A0EF</Color>
-      <Color x:Key="SystemAccentColorDark1">#8db0f2</Color>
-      <Color x:Key="SystemAccentColor">#bbd0f7</Color>
-      <Color x:Key="SystemAccentColorLight1">#e8effc</Color>
+      <Color x:Key="SystemAccentColorDark3">#519BF5</Color>
+      <Color x:Key="SystemAccentColorDark2">#65A6F6</Color>
+      <Color x:Key="SystemAccentColorDark1">#8CBCF8</Color>
+      <Color x:Key="SystemAccentColor">#9AC4F8</Color>
+      <Color x:Key="SystemAccentColorLight1">#B3D3FA</Color>
       <Color x:Key="SystemAccentColorLight2">White</Color>
       <Color x:Key="SystemAccentColorLight3">White</Color>
       <Color x:Key="SystemErrorTextColor">Red</Color>
       <!-- Custom colours below -->
       <Color x:Key="InputBackgroundValidationProblemColor">#99FECADA</Color>
-      <Color x:Key="SystemInvertedAccentColor">#6b4400</Color>
-      <Color x:Key="SystemInvertedAccentColorLight1">#805100</Color>
-      <Color x:Key="SystemInvertedAccentColorLight2">#996100</Color>
+      <Color x:Key="SystemInvertedAccentColor">#1D231A</Color>
+      <Color x:Key="SystemInvertedAccentColorLight1">#272F23</Color>
+      <Color x:Key="SystemInvertedAccentColorLight2">#3A4832</Color>
       <Color x:Key="MainWindowMenuColor">#B8B261</Color>
       <Color x:Key="MainWindowBackgroundColor">PaleGoldenrod</Color>
       <Color x:Key="MainWindowDarkerBackgroundColor">DarkKhaki</Color>
       <Color x:Key="MainWindowSidebarColor">DarkKhaki</Color>
       <Color x:Key="MainWindowSeparatorsColor">DarkKhaki</Color>
-      <Color x:Key="CurrentEnvironmentLabelColor">#2265f7</Color>
+      <Color x:Key="CurrentEnvironmentLabelColor">#0743c5</Color>
       <Color x:Key="ListBoxBackgroundColor">DarkKhaki</Color>
       <Color x:Key="ListBoxItemSelectedBackgroundColor">PaleGoldenrod</Color>
       <Color x:Key="DragAndDropDataGridItemDraggingColor">Black</Color>
       
       <Color x:Key="ButtonSecondaryBackgroundColor">DarkKhaki</Color>
-      <Color x:Key="ButtonSecondaryHighlightBackgroundColor">#b0a94f</Color>
+      <Color x:Key="ButtonSecondaryHighlightBackgroundColor">#d0cc95</Color>
 
       <Color x:Key="WebSocketConnectedColor">CornflowerBlue</Color>
       <Color x:Key="WebSocketMessageFromClientPrimaryColor">Black</Color>
