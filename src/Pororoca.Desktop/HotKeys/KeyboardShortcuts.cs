@@ -38,6 +38,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
     public ReactiveCommand<Unit, Unit> CyclePreviousEnvironmentToActiveCmd { get; }
     public ReactiveCommand<Unit, Unit> CycleNextEnvironmentToActiveCmd { get; }
     public ReactiveCommand<Unit, Unit> SaveResponseToFileCmd { get; }
+    public ReactiveCommand<Unit, Unit> ExportHttpLogToFileCmd { get; }
     public ReactiveCommand<Unit, Unit> FocusOnUrlCmd { get; }
 
     #region HELPER PROPERTIES
@@ -131,6 +132,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
         CyclePreviousEnvironmentToActiveCmd = ReactiveCommand.Create(() => CycleActiveEnvironments(false));
         CycleNextEnvironmentToActiveCmd = ReactiveCommand.Create(() => CycleActiveEnvironments(true));
         SaveResponseToFileCmd = ReactiveCommand.Create(SaveResponseToFile);
+        ExportHttpLogToFileCmd = ReactiveCommand.Create(ExportHttpLogToFile);
     }
 
     #region COPY AND CUT
@@ -578,6 +580,15 @@ public sealed class KeyboardShortcuts : ViewModelBase
         else if (mwvm.WebSocketConnectionView.Visible && mwvm.WebSocketConnectionView.VM?.IsSaveSelectedExchangedMessageToFileVisible == true)
         {
             Dispatcher.UIThread.Post(async () => await mwvm.WebSocketConnectionView.VM.SaveSelectedExchangedMessageToFileAsync());
+        }
+    }
+
+    internal void ExportHttpLogToFile()
+    {
+        var mwvm = MainWindowVm;
+        if (mwvm.HttpRequestView.Visible && mwvm.HttpRequestView.VM?.ResponseDataCtx?.IsExportLogFileVisible == true)
+        {
+            Dispatcher.UIThread.Post(async () => await mwvm.HttpRequestView.VM.ResponseDataCtx.ExportLogToFileAsync());
         }
     }
 

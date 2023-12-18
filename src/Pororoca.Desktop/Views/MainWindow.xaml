@@ -28,7 +28,8 @@
     <KeyBinding Command="{Binding HotKeys.CancelRequestOrDisconnectWebSocketCmd}" Gesture="F6"/>
     <KeyBinding Command="{Binding HotKeys.CyclePreviousEnvironmentToActiveCmd}" Gesture="F7"/>
     <KeyBinding Command="{Binding HotKeys.CycleNextEnvironmentToActiveCmd}" Gesture="F8"/>
-    <KeyBinding Command="{Binding HotKeys.SaveResponseToFileCmd}" Gesture="Ctrl+S"/>
+    <KeyBinding Command="{Binding HotKeys.SaveResponseToFileCmd}" Gesture="F9"/>
+    <KeyBinding Command="{Binding HotKeys.ExportHttpLogToFileCmd}" Gesture="F10"/>
     <KeyBinding Command="{Binding HotKeys.MoveUpCmd}" Gesture="Alt+Up"/>
     <KeyBinding Command="{Binding HotKeys.MoveDownCmd}" Gesture="Alt+Down"/>
     <KeyBinding Command="{Binding HotKeys.SwitchToPreviousItemCmd}" Gesture="Ctrl+PageUp"/>

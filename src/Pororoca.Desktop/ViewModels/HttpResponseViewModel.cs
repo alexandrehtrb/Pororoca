@@ -68,7 +68,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
         this.parentHttpRequestVm = reqVm;
         ResponseHeadersAndTrailersTableVm = new();
         SaveResponseBodyToFileCmd = ReactiveCommand.CreateFromTask(SaveResponseBodyToFileAsync);
-        ExportLogFileCmd = ReactiveCommand.CreateFromTask(SaveLogFileAsync);
+        ExportLogFileCmd = ReactiveCommand.CreateFromTask(ExportLogToFileAsync);
         DisableTlsVerificationCmd = ReactiveCommand.Create(EnableTlsVerification);
         ExecuteCapturesCmd = ReactiveCommand.Create(ExecuteCaptures);
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
@@ -120,7 +120,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
         }
     }
 
-    public async Task SaveLogFileAsync()
+    public async Task ExportLogToFileAsync()
     {
         if (this.res != null)
         {

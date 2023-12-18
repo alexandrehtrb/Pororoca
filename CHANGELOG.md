@@ -19,13 +19,18 @@
 
 ## [3.0.0](https://github.com/alexandrehtrb/Pororoca/tree/3.0.0) (????-??-??)
 
+### Breaking changes
+
+* Shortcut for saving HTTP response body changed to <kbd>F9</kbd> key.
+* User data folder for MacOSX moved to inside Application Support, no longer inside Applications folder.
+* Test projects that use Pororoca.Test now require .NET 8 and enabled preview features in their .csproj files. Read more about it in the docs.
+
 ### Features
 
 * Autocomplete for HTTP headers names and values.
 * HTTP log export. You can now export a file that details exactly what was sent in a request and what was received in a response, when it began and how much time elapsed.
 * Multipart responses when all parts are text can now be seen in response body.
 * Multipart response part can be retrieved in `Pororoca.Test` tests.
-* User data folder for MacOSX is now located inside Application Support, no longer inside Applications folder.
 * A welcome page shows up for new users.
 * A *Go to docs* item has been added inside Help menu.
 * Added request body MIME types for DNS+JSON, FHIR, SOAP, AVIF, CBOR, JSON-PATCH, JXL and SQL.
