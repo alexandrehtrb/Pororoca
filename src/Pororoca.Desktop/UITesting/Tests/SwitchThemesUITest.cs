@@ -68,6 +68,6 @@ public sealed class SwitchThemesUITest : UITest
         AssertHasIconHidden(Robot.Options_Theme_Pampa);
         AssertHasIconVisible(Robot.Options_Theme_AmazonianNight);
 
-        AssertBackgroundColor(MainWindowPanel, "#0F263F");
+        AssertBackgroundColor(MainWindowPanel, "#04538B");
     }
 }
