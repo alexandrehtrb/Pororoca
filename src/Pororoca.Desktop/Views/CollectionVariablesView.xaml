@@ -33,11 +33,10 @@
         Grid.Row="0"
         Text="{Binding i18n.CollectionVariables.Title}"
         Margin="0,24,0,0"
-        FontSize="32"
-        FontWeight="Light"
         HorizontalAlignment="Left"
         VerticalAlignment="Top"
-        TextWrapping="Wrap"/>
+        TextWrapping="Wrap"
+        Classes="PageTitle"/>
 
     <Button
         Name="btAddVariable"
@@ -49,7 +48,7 @@
         VerticalContentAlignment="Center"
         Padding="2"
         Margin="0,36,0,0"
-        Classes="Primary"
+        Classes="Secondary"
         ToolTip.Tip="{Binding i18n.CollectionVariables.AddVariable}"
         Command="{Binding VariablesTableVm.AddNewCmd}">
 

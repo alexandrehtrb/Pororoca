@@ -12,6 +12,7 @@ public class WebSocketClientMessageView : UserControl
 {
     private readonly AvaloniaEdit.TextMate.TextMate.Installation rawContentEditorTextMateInstallation;
     private string? currentRawContentSyntaxLangId;
+    //private readonly ComboBox syntaxThemeCombo;
 
     public WebSocketClientMessageView()
     {
@@ -24,9 +25,9 @@ public class WebSocketClientMessageView : UserControl
         rawContentSyntaxSelector.SelectionChanged += OnRawContentSyntaxChanged;
 
         // This is for testing syntax colour themes
-        /*this.syntaxThemeCombo = this.FindControl<ComboBox>("RawContentThemeSelector");
-        this.syntaxThemeCombo.Items = Enum.GetNames(typeof(ThemeName));
-        this.syntaxThemeCombo.SelectedItem = ThemeName.DarkPlus;
+        /*this.syntaxThemeCombo = this.FindControl<ComboBox>("RawContentThemeSelector")!;
+        this.syntaxThemeCombo.ItemsSource = Enum.GetNames(typeof(TextMateSharp.Grammars.ThemeName));
+        this.syntaxThemeCombo.SelectedItem = TextMateSharp.Grammars.ThemeName.DarkPlus;
         this.syntaxThemeCombo.SelectionChanged += SyntaxThemeCombo_SelectionChanged;*/
     }
 
@@ -38,9 +39,9 @@ public class WebSocketClientMessageView : UserControl
     {
         string themeNameStr = (string)this.syntaxThemeCombo.SelectedItem!;
 
-        var theme = Enum.Parse<ThemeName>(themeNameStr);
+        var theme = Enum.Parse<TextMateSharp.Grammars.ThemeName>(themeNameStr);
 
-        this.rawContentEditorTextMateInstallation.SetTheme(TextEditorConfiguration.DefaultRegistryOptions!.LoadTheme(theme));
+        this.rawContentEditorTextMateInstallation.SetTheme(TextEditorConfiguration.DefaultRegistryOptions!.Value.LoadTheme(theme));
     }*/
 
     #endregion

@@ -69,10 +69,9 @@
         <TextBlock
             x:Name="tbText"
             Text="{Binding Txt}"
-            FontSize="32"
-            FontWeight="Light"
             HorizontalAlignment="Stretch"
-            VerticalAlignment="Center"/>
+            VerticalAlignment="Center"
+            Classes="PageTitle"/>
       </StackPanel>
 
       <TextBox

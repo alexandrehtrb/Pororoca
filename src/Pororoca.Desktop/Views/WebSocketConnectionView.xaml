@@ -751,7 +751,7 @@
                 VerticalContentAlignment="Center"
                 Padding="2"
                 Margin="0,0,12,0"
-                Classes="Primary"
+                Classes="Secondary"
                 ToolTip.Tip="{Binding i18n.WebSocketClientMessage.NewMessage}"
                 Command="{Binding AddNewWebSocketClientMessageCmd}">
               <Button.Content>
@@ -863,7 +863,7 @@
             Margin="12,0,12,24"
             IsVisible="{Binding IsSaveSelectedExchangedMessageToFileVisible}"
             Command="{Binding SaveSelectedExchangedMessageToFileCmd}"
-            Classes="Primary"/>
+            Classes="Secondary"/>
       </Grid>
     </Grid>
   </Grid>

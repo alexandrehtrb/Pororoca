@@ -23,11 +23,10 @@
     <TextBlock
       Text="{Binding i18n.Welcome.Title}"
       Margin="0,24,0,0"
-      FontSize="32"
-      FontWeight="Light"
       HorizontalAlignment="Left"
       VerticalAlignment="Top"
-      TextWrapping="Wrap" />
+      TextWrapping="Wrap"
+      Classes="PageTitle"/>
 
     <StackPanel
       Orientation="Vertical"

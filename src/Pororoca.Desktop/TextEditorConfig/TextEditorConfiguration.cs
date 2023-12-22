@@ -48,6 +48,7 @@ internal static class TextEditorConfiguration
             PororocaVariableColorizingTransformer transformer = new(initialVarHighlightBrush);
             PororocaVariableHighlightingTransformers.Add(transformer);
             editor.TextArea.TextView.LineTransformers.Add(transformer);
+            editor.TextArea.SelectionBrush = PororocaThemeManager.MapTextEditorSelectionForegroundBrush(PororocaThemeManager.CurrentTheme);
         }
 
         editor.Document = new(string.Empty);

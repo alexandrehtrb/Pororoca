@@ -14,11 +14,11 @@
       <Color x:Key="SystemErrorTextColor">Red</Color>
       <!-- Custom colours below -->
       <Color x:Key="InputBackgroundValidationProblemColor">#99FECADA</Color>
-      <Color x:Key="SystemInvertedAccentColor">#550527</Color>
-      <Color x:Key="SystemInvertedAccentColorLight1">#780736</Color>
-      <Color x:Key="SystemInvertedAccentColorLight2">#a90a4c</Color>
+      <Color x:Key="SystemInvertedAccentColor">#A90A4C</Color>
+      <Color x:Key="SystemInvertedAccentColorLight1">#C10B57</Color>
+      <Color x:Key="SystemInvertedAccentColorLight2">#D90D62</Color>
       <Color x:Key="MainWindowMenuColor">#b2b2b2</Color>
-      <Color x:Key="MainWindowBackgroundColor">#D0DDDD</Color>
+      <Color x:Key="MainWindowBackgroundColor">Gainsboro</Color>
       <Color x:Key="MainWindowDarkerBackgroundColor">Silver</Color>
       <Color x:Key="MainWindowSidebarColor">Silver</Color>
       <Color x:Key="MainWindowSeparatorsColor">Silver</Color>
@@ -27,6 +27,9 @@
       <Color x:Key="ListBoxItemSelectedBackgroundColor">Gainsboro</Color>
       <Color x:Key="DragAndDropDataGridItemDraggingColor">Black</Color>
       
+      <Thickness x:Key="ButtonSecondaryBorderThickness">0</Thickness>
+      <Color x:Key="ButtonSecondaryBorderBrush">Transparent</Color>
+      <Color x:Key="ButtonSecondaryHighlightBorderBrush">Transparent</Color>
       <Color x:Key="ButtonSecondaryBackgroundColor">Silver</Color>
       <Color x:Key="ButtonSecondaryHighlightBackgroundColor">#a6a6a6</Color>
 
@@ -34,17 +37,18 @@
       <Color x:Key="WebSocketMessageFromClientPrimaryColor">#780736</Color>
       <Color x:Key="WebSocketMessageFromServerPrimaryColor">Green</Color>
       <Color x:Key="DefaultIconsColor">Black</Color>
+      <Color x:Key="DefaultTextForegroundColor">#CC000000</Color>
       <Color x:Key="TextEditorBackgroundColor">White</Color>
       <Color x:Key="TextEditorForegroundColor">Black</Color>
       <Color x:Key="ResponseCapturedValueTextColor">#a90a4c</Color>
       <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="Black"/>
       <SolidColorBrush x:Key="CheckBoxBorderBrushCheckedPointerOver" Color="Black"/>
       <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPointerOver" Color="Black"/>
-      <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="#550527"/>
+      <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="#A90A4C"/>
       <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="#dbf66f"/>
       <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#cff33f"/>
       <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPressed" Color="#c4f00f"/>
-      <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="#f99fc4"/>
+      <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="#DBF66F"/>
     </ResourceDictionary>
   </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

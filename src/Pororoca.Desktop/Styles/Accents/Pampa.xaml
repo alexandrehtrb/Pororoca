@@ -5,19 +5,19 @@
   <ResourceDictionary.ThemeDictionaries>
     <ResourceDictionary x:Key="{x:Static local:PororocaThemeManager.Pampa}">
       <!-- System colours overrides below -->
-      <Color x:Key="SystemAccentColorDark3">#519BF5</Color>
-      <Color x:Key="SystemAccentColorDark2">#65A6F6</Color>
-      <Color x:Key="SystemAccentColorDark1">#8CBCF8</Color>
-      <Color x:Key="SystemAccentColor">#9AC4F8</Color>
-      <Color x:Key="SystemAccentColorLight1">#B3D3FA</Color>
+      <Color x:Key="SystemAccentColorDark3">#EBEB47</Color>
+      <Color x:Key="SystemAccentColorDark2">#F0F075</Color>
+      <Color x:Key="SystemAccentColorDark1">#F5F5A3</Color>
+      <Color x:Key="SystemAccentColor">LightGoldenRodYellow</Color>
+      <Color x:Key="SystemAccentColorLight1">White</Color>
       <Color x:Key="SystemAccentColorLight2">White</Color>
       <Color x:Key="SystemAccentColorLight3">White</Color>
       <Color x:Key="SystemErrorTextColor">Red</Color>
       <!-- Custom colours below -->
       <Color x:Key="InputBackgroundValidationProblemColor">#99FECADA</Color>
-      <Color x:Key="SystemInvertedAccentColor">#1D231A</Color>
-      <Color x:Key="SystemInvertedAccentColorLight1">#272F23</Color>
-      <Color x:Key="SystemInvertedAccentColorLight2">#3A4832</Color>
+      <Color x:Key="SystemInvertedAccentColor">CornflowerBlue</Color>
+      <Color x:Key="SystemInvertedAccentColorLight1">#4881EA</Color>
+      <Color x:Key="SystemInvertedAccentColorLight2">#3271E7</Color>
       <Color x:Key="MainWindowMenuColor">#B8B261</Color>
       <Color x:Key="MainWindowBackgroundColor">PaleGoldenrod</Color>
       <Color x:Key="MainWindowDarkerBackgroundColor">DarkKhaki</Color>
@@ -28,20 +28,24 @@
       <Color x:Key="ListBoxItemSelectedBackgroundColor">PaleGoldenrod</Color>
       <Color x:Key="DragAndDropDataGridItemDraggingColor">Black</Color>
       
+      <Thickness x:Key="ButtonSecondaryBorderThickness">0</Thickness>
+      <SolidColorBrush x:Key="ButtonSecondaryBorderBrush" Color="Transparent" />
+      <SolidColorBrush x:Key="ButtonSecondaryHighlightBorderBrush" Color="Transparent" />
       <Color x:Key="ButtonSecondaryBackgroundColor">DarkKhaki</Color>
-      <Color x:Key="ButtonSecondaryHighlightBackgroundColor">#d0cc95</Color>
+      <Color x:Key="ButtonSecondaryHighlightBackgroundColor">#C8C384</Color>
 
-      <Color x:Key="WebSocketConnectedColor">CornflowerBlue</Color>
+      <Color x:Key="WebSocketConnectedColor">#3271E7</Color>
       <Color x:Key="WebSocketMessageFromClientPrimaryColor">Black</Color>
-      <Color x:Key="WebSocketMessageFromServerPrimaryColor">#2265f7</Color>
+      <Color x:Key="WebSocketMessageFromServerPrimaryColor">#0743C5</Color>
       <Color x:Key="DefaultIconsColor">Black</Color>
+      <Color x:Key="DefaultTextForegroundColor">Black</Color>
       <Color x:Key="TextEditorBackgroundColor">White</Color>
       <Color x:Key="TextEditorForegroundColor">Black</Color>
-      <Color x:Key="ResponseCapturedValueTextColor">#00487C</Color>
+      <Color x:Key="ResponseCapturedValueTextColor">#0743C5</Color>
       <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="Black"/>
       <SolidColorBrush x:Key="CheckBoxBorderBrushCheckedPointerOver" Color="Black"/>
       <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPointerOver" Color="Black"/>
-      <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="#7DA4FA"/>
+      <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="#3271E7"/>
       <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="#eae395"/>
       <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#e2d86a"/>
       <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPressed" Color="#d9cc3f"/>
