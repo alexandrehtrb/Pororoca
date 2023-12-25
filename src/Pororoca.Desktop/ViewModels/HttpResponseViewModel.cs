@@ -79,13 +79,22 @@ public sealed class HttpResponseViewModel : ViewModelBase
     private void OnLanguageChanged() =>
         UpdateWithResponse(this.res);
 
-    private string GenerateDefaultInitialFileName(string fileExtensionWithoutDot)
+    private string GenerateDefaultResponseInitialFileName(string fileExtensionWithoutDot)
     {
         var receivedAtDt = this.res!.ReceivedAt.DateTime;
         string reqName = this.parentHttpRequestVm.Name;
         string? envName = this.environmentUsedForRequest;
-        string envLabel = envName is not null ? $"-{envName}-" : "-";
-        return $"{reqName}{envLabel}response-{receivedAtDt:yyyyMMdd-HHmmss}.{fileExtensionWithoutDot}";
+        string envLabel = envName is not null ? $"-{envName}" : string.Empty;
+        return $"response-{reqName}{envLabel}-{receivedAtDt:yyyyMMdd-HHmmss}.{fileExtensionWithoutDot}";
+    }
+
+    private string GenerateDefaultLogInitialFileName()
+    {
+        var receivedAtDt = this.res!.ReceivedAt.DateTime;
+        string reqName = this.parentHttpRequestVm.Name;
+        string? envName = this.environmentUsedForRequest;
+        string envLabel = envName is not null ? $"-{envName}" : string.Empty;
+        return $"log-{reqName}{envLabel}-{receivedAtDt:yyyyMMdd-HHmmss}.log";
     }
 
     public async Task SaveResponseBodyToFileAsync()
@@ -103,13 +112,13 @@ public sealed class HttpResponseViewModel : ViewModelBase
             // Otherwise, use response's Content-Type header for file extension
             else if (contentType != null && TryFindFileExtensionForContentType(contentType, out string? fileExtensionWithoutDot))
             {
-                initialFileName = GenerateDefaultInitialFileName(fileExtensionWithoutDot!);
+                initialFileName = GenerateDefaultResponseInitialFileName(fileExtensionWithoutDot!);
             }
             // If there is no Content-Type header in the response, let the user choose the filename and extension
             else
             {
                 fileExtensionWithoutDot = "txt";
-                initialFileName = GenerateDefaultInitialFileName(fileExtensionWithoutDot);
+                initialFileName = GenerateDefaultResponseInitialFileName(fileExtensionWithoutDot);
             }
 
             string? saveFileOutputPath = await FileExporterImporter.SelectPathForFileToBeSavedAsync(initialFileName);
@@ -124,7 +133,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
     {
         if (this.res != null)
         {
-            string initialFileName = GenerateDefaultInitialFileName("log");
+            string initialFileName = GenerateDefaultLogInitialFileName();
             string? saveFileOutputPath = await FileExporterImporter.SelectPathForFileToBeSavedAsync(initialFileName);
             if (saveFileOutputPath != null)
             {
