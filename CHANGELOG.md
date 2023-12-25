@@ -28,12 +28,13 @@
 ### Features
 
 * Autocomplete for HTTP headers names and values.
-* HTTP log export. You can now export a file that details exactly what was sent in a request and what was received in a response, when it began and how much time elapsed.
+* HTTP log export. You can now export a file that details exactly what was sent in a request and what was received in a response, when it began and how much time elapsed. Hotkey is <kbd>F10</kbd>.
 * Multipart responses when all parts are text can now be seen in response body.
 * Multipart response part can be retrieved in `Pororoca.Test` tests.
 * A welcome page shows up for new users.
 * A *Go to docs* item has been added inside Help menu.
 * Added request body MIME types for DNS+JSON, FHIR, SOAP, AVIF, CBOR, JSON-PATCH, JXL and SQL.
+* Packaging available for Debian / Ubuntu in `.deb` files.
 * Security audit in CI/CD (`dotnet list package --vulnerable --include-transitive`).
 * SBOMs are now included with the releases. A SBOM (software bill of materials) is a document that describes which components are used to make a software, in order to keep track and audit for vulnerabilities and licenses compliances.
 
