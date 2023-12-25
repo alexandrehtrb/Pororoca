@@ -1,0 +1,9 @@
+Package: pororoca
+Version: 3.0.0
+Section: devel
+Priority: optional
+Architecture: amd64
+Maintainer: Alexandre H. T. R. Bonfitto <alexandrehtrb@outlook.com>
+Homepage: https://pororoca.io
+Description: This is Pororoca, a HTTP inspection tool, for Debian-related distros.
+Copyright: 2022-2024 Alexandre H. T. R. Bonfitto <alexandrehtrb@outlook.com>

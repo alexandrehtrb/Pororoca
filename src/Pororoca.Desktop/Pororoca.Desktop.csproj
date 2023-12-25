@@ -13,6 +13,7 @@
       when "-p:PublishForInstallOnWindows" is specified in dotnet build, run or publish
     -->
     <DefineConstants Condition=" '$(PublishForInstallOnWindows)' == 'true' ">$(DefineConstants);INSTALLED_ON_WINDOWS</DefineConstants>
+    <DefineConstants Condition=" '$(PublishForInstallOnDebian)' == 'true' ">$(DefineConstants);INSTALLED_ON_DEBIAN</DefineConstants>
     <DefineConstants Condition=" '$(UITestsEnabled)' == 'true' ">$(DefineConstants);UI_TESTS_ENABLED</DefineConstants>
     <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
     <PublishReadyToRun>True</PublishReadyToRun>

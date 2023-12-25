@@ -34,6 +34,7 @@ function Get-RuntimesToPublishFor
 	# osx-arm64 is now supported (2022-11-30), thanks to AvaloniaEdit version 11.0.0-preview2
 	$unixRuntimes = @(`
 		'linux-x64' ` 
+		,'debian-x64' ` 
 		#,'linux-arm64' `
 		,'osx-x64' `
 		,'osx-arm64' `
@@ -55,7 +56,7 @@ function Get-RuntimesToPublishFor
 	# Windows releases should be built on a Windows machine, because of dotnet
 	# Linux and Mac OS releases should be built on one of those OSs, because of chmod and zip
 	#return $IsWindows ? $windowsRuntimes : $unixRuntimes
-	return @("win-x64_installer")
+	return @("debian-x64")
 }
 
 #################### Pre-release build and tests ####################
@@ -108,7 +109,7 @@ function Audit-Solution
         [System.Diagnostics.Stopwatch]$stopwatch
     )
 
-	Write-Host "Auditting the solution..." -ForegroundColor DarkYellow
+	Write-Host "Auditing the solution..." -ForegroundColor DarkYellow
 	$stopwatch.Restart()
 	$jsonObj = (dotnet list package --vulnerable --include-transitive --format json) | ConvertFrom-Json;
 	$stopwatch.Stop()
@@ -161,7 +162,7 @@ function Clean-OutputFolder
         [System.Diagnostics.Stopwatch]$stopwatch
     )
 
-	Write-Host "Deleting and creating 'out' folder..." -ForegroundColor DarkYellow
+	Write-Host "Cleaning 'out' folder..." -ForegroundColor DarkYellow
 	$stopwatch.Restart()
 	[void](Remove-Item "./out/" -Recurse -ErrorAction Ignore)
 	[void](mkdir "out")
@@ -208,13 +209,14 @@ function Generate-PororocaDesktopRelease {
 	$outputFolder = "./out/${fullAppReleaseName}"
 	$zipName = "${fullAppReleaseName}.zip"
 	$isInstallOnWindowsRelease = ($runtime -like "*_installer")
-	$dotnetPublishRuntime = $runtime.Replace("_installer","").Replace("_portable","")
+	$isDebianDpkgRelease = ($runtime -like "debian*")
+	$dotnetPublishRuntime = $runtime.Replace("_installer","").Replace("_portable","").Replace("debian","linux")
 	
 	Write-Host "Publishing Pororoca.Desktop for ${runtime}..." -ForegroundColor DarkYellow
 
 	$stopwatch.Restart()
 	
-	Publish-PororocaDesktop -Runtime $dotnetPublishRuntime -IsInstallOnWindowsRelease $isInstallOnWindowsRelease -OutputFolder $outputFolder
+	Publish-PororocaDesktop -Runtime $dotnetPublishRuntime -IsInstallOnWindowsRelease $isInstallOnWindowsRelease -IsInstallOnDebianRelease $isDebianDpkgRelease -OutputFolder $outputFolder
 	Rename-Executable -Runtime $runtime -OutputFolder $outputFolder
 	Set-ExecutableAttributesIfUnix -Runtime $runtime -OutputFolder $outputFolder
 	Make-AppFolderIfMacOS -Runtime $runtime -OutputFolder $outputFolder
@@ -229,14 +231,20 @@ function Generate-PororocaDesktopRelease {
 		$stopwatch.Stop()
 		Write-Host "Windows installer for ${dotnetPublishRuntime} created: ./out/${fullAppReleaseName}.exe ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
 	}
+	elseif ($isDebianDpkgRelease)
+	{
+		Write-Host "Generating Debian package for ${runtime}..." -ForegroundColor DarkYellow
+		Pack-ReleaseInDebianDpkg -GeneralOutFolder "./out" -InstallerFilesFolder $outputFolder -InstallerFileName "${fullAppReleaseName}.dpkg" -VersionName $versionName
+		$stopwatch.Stop()
+		Write-Host "Debian package for ${dotnetPublishRuntime} created: ./out/${fullAppReleaseName}.deb ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
+	}
 	else
 	{
 		Compress-Package -OutputFolder $outputFolder -ZipName $zipName
 		$stopwatch.Stop()
 		Write-Host "Package created on ./out/${zipName} ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
 		Write-Host "SHA256 hash for package ${runtime}: $((Get-FileHash ./out/${zipName} -Algorithm SHA256).Hash)" -ForegroundColor DarkGreen
-	}
-	
+	}	
 }
 
 function Publish-PororocaDesktop
@@ -244,7 +252,8 @@ function Publish-PororocaDesktop
 	param (
 		[string]$runtime,
 		[string]$outputFolder,
-		[bool]$isInstallOnWindowsRelease = $false
+		[bool]$isInstallOnWindowsRelease = $false,
+		[bool]$isInstallOnDebianRelease = $false
     )
 
 	if (($runtime -like "*win*") -or ($runtime -like "*linux*"))
@@ -263,6 +272,7 @@ function Publish-PororocaDesktop
 
 	$publishSingleFileArg = $(${publishSingleFile}.ToString().ToLower())
 	$isInstallOnWindowsReleaseArg = $(${isInstallOnWindowsRelease}.ToString().ToLower())
+	$isInstallOnDebianReleaseArg = $(${isInstallOnDebianRelease}.ToString().ToLower())
 	
 	# set UITestsEnabled to false to hide 'Run UI tests'
 	dotnet publish ./src/Pororoca.Desktop/Pororoca.Desktop.csproj `
@@ -271,6 +281,7 @@ function Publish-PororocaDesktop
 		--configuration Release `
 		-p:PublishSingleFile=${publishSingleFileArg} `
 		-p:PublishForInstallOnWindows=${isInstallOnWindowsReleaseArg} `
+		-p:PublishForInstallOnDebian=${isInstallOnDebianReleaseArg} `
 		-p:UITestsEnabled=false `
 		--self-contained true `
 		--runtime $runtime `
@@ -444,6 +455,53 @@ function Pack-ReleaseInWindowsInstaller
 		.\src\Pororoca.Desktop.WindowsInstaller\Installer.nsi
 
 	Remove-Item $installerFilesFolder -Force -Recurse -ErrorAction Ignore
+}
+
+function Pack-ReleaseInDebianDpkg
+{
+	param (
+		[string]$generalOutFolder, # the "./out" folder
+		[string]$installerFilesFolder, # the "./out/Pororoca_x.y.z_debian-x64/" folder
+		[string]$installerFileName,
+		[string]$versionName
+    )
+	
+	[void](mkdir "${generalOutFolder}/deb")
+	# Debian control file
+	[void](mkdir "${generalOutFolder}/deb/DEBIAN")
+	Copy-Item -Path "./src/Pororoca.Desktop.Debian/control" -Destination "${generalOutFolder}/deb/DEBIAN"
+	# Executable file
+	[void](mkdir "${generalOutFolder}/deb/usr")
+	[void](mkdir "${generalOutFolder}/deb/usr/bin")
+	Copy-Item -Path "./${installerFilesFolder}/Pororoca" -Destination "${generalOutFolder}/deb/usr/bin/pororoca"
+	# Shared libraries
+	# chmod 644 --> set read-only attributes 
+	[void](mkdir "${generalOutFolder}/deb/usr/lib")
+	[void](mkdir "${generalOutFolder}/deb/usr/lib/pororoca")
+	Get-ChildItem $installerFilesFolder -File -Filter "*.so" | Copy-Item -Destination "${generalOutFolder}/deb/usr/lib/pororoca" -Force
+	Get-ChildItem "${generalOutFolder}/deb/usr/lib/pororoca" -File -Filter "*.so" | % { chmod 644 $_.FullName }
+	# Desktop shortcut
+	[void](mkdir "${generalOutFolder}/deb/usr/share")
+	[void](mkdir "${generalOutFolder}/deb/usr/share/applications")
+	Copy-Item -Path "./src/Pororoca.Desktop.Debian/Pororoca.desktop" -Destination "${generalOutFolder}/deb/usr/share/applications/Pororoca.desktop"
+	# Desktop icon
+	[void](mkdir "${generalOutFolder}/deb/usr/share/pixmaps")
+	Copy-Item -Path "./pororoca.png" -Destination "${generalOutFolder}/deb/usr/share/pixmaps/pororoca.png"
+
+	# Make .deb file
+	dpkg-deb --root-owner-group --build "./out/deb/" "./out/Pororoca_${versionName}_amd64.deb"
+
+	# To run Pororoca from the Terminal, on Debian-installed version:
+	# LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/pororoca pororoca	
+
+	# To install Pororoca .deb package:
+	# sudo apt install ./out/pororoca_3.0.0_amd64.deb
+
+	# To uninstall Pororoca:
+	# sudo apt remove pororoca
+
+	Remove-Item $installerFilesFolder -Force -Recurse -ErrorAction Ignore
+	Remove-Item "./out/deb" -Force -Recurse -ErrorAction Ignore
 }
 
 ########################## Execute #############################

@@ -200,6 +200,9 @@ public static class UserDataManager
             - For Linux, it should be on the same level as the executable.
                 Example Linux executable directory: /home/myuser/Programs/MyPororocaDir/
                 Then, user data directory will be:  /home/myuser/Programs/MyPororocaDir/PororocaUserData/
+            
+            - For installed on Debian-related distros:
+                /home/myuser/.config/Pororoca/PororocaUserData
 
             - For MacOS, it should be inside the Application Support directory:
                 /Users/myuser/Library/Application Support/Pororoca/PororocaUserData
@@ -212,6 +215,8 @@ public static class UserDataManager
         */
 #if INSTALLED_ON_WINDOWS
         GetUserDataFolderForInstalledOnWindows(); // installed on windows
+#elif INSTALLED_ON_DEBIAN
+        GetUserDataFolderForInstalledOnDebian(); // installed on debian / ubuntu
 #elif DEBUG
         GetUserDataFolderForDebug(); // debug, for any OS
 #else
@@ -261,6 +266,15 @@ public static class UserDataManager
         // when user logs in on another machine of the same corporate network
         string appDataRoamingPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         string userDataDirPath = Path.Combine(appDataRoamingPath, appProgramFolderName, userDataFolderName)!;
+        return new(userDataDirPath);
+    }
+
+    private static DirectoryInfo GetUserDataFolderForInstalledOnDebian()
+    {
+        // we are using "/home/myuser/.config/" path here, to preserve user data
+        // when user logs in on another machine of the same corporate network
+        string userConfigPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        string userDataDirPath = Path.Combine(userConfigPath, appProgramFolderName, userDataFolderName)!;
         return new(userDataDirPath);
     }
 

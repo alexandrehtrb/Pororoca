@@ -16,6 +16,10 @@ on:
         required: true
         default: true
         type: boolean
+      linux-x64-debian:
+        required: true
+        default: true
+        type: boolean
       osx-x64:
         required: true
         default: true
@@ -52,6 +56,14 @@ jobs:
       os: ubuntu-latest
       rid: linux-x64
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
+  linux-x64-debian:
+    if: ${{ inputs.linux-x64-debian }}
+    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    with:
+      os: ubuntu-latest
+      rid: linux-x64
+      packaging: debian
+      enableUITesting: ${{ inputs.enableDesktopUITesting }}
   osx-x64:
     if: ${{ inputs.osx-x64 }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
@@ -72,7 +84,7 @@ jobs:
     with:
       os: windows-latest # running on Windows because we need NSIS
       rid: win-x64
-      installation: withInstaller
+      packaging: nsis
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
   win-x64-portable:
     if: ${{ inputs.win-x64-portable }}
@@ -80,7 +92,6 @@ jobs:
     with:
       os: ubuntu-latest # .NET 8 allows publishing for Windows on Linux machines
       rid: win-x64
-      installation: portable
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
   win-x86-installer:
     if: ${{ inputs.win-x86-installer }}
@@ -88,7 +99,7 @@ jobs:
     with:
       os: windows-latest # running on Windows because we need NSIS
       rid: win-x86
-      installation: withInstaller
+      packaging: nsis
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
   win-x86-portable:
     if: ${{ inputs.win-x86-portable }}
@@ -96,5 +107,4 @@ jobs:
     with:
       os: ubuntu-latest # .NET 8 allows publishing for Windows on Linux machines
       rid: win-x86
-      installation: portable
       enableUITesting: ${{ inputs.enableDesktopUITesting }}

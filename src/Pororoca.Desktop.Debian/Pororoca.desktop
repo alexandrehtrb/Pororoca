@@ -1,0 +1,22 @@
+# The command
+# LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/pororoca
+# is necessary to add Pororoca .so libraries to LD_LIBRARY_PATH,
+# in order to make them available for main Pororoca executable 
+# during initialization.
+# This makes this environment variable set in a command scope only.
+# To run Pororoca from the Terminal:
+# LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/pororoca pororoca
+# https://unix.stackexchange.com/a/285206
+# https://stackoverflow.com/a/68299178
+# https://stackoverflow.com/a/18549117
+
+[Desktop Entry]
+Name=Pororoca
+Comment=HTTP inspection tool
+Icon=pororoca
+Exec=LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/pororoca pororoca
+Terminal=false
+Type=Application
+Categories=Development
+GenericName=Pororoca
+Keywords=http; websocket; api
