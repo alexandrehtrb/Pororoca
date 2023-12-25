@@ -146,11 +146,7 @@ public static class UserDataManager
 
     // CAREFUL!!! dotnet format may cut parts of this method that should not be removed!!!
     internal static bool NeedsMacOSXUserDataFolderMigrationToV3() =>
-#if MACOSX
         OperatingSystem.IsMacOS() && GetUserDataFolderForMacOSX_BeforePororocaV3().Exists;
-#else
-        false;
-#endif
 
     internal static void ExecuteMacOSXUserDataFolderMigrationToV3()
     {
