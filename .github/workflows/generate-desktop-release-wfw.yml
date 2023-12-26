@@ -193,12 +193,12 @@ jobs:
         # Executable file
         [void](mkdir "./out/deb/usr")
         [void](mkdir "./out/deb/usr/bin")
-        Copy-Item -Path "./${installerFilesFolder}/Pororoca" -Destination "./out/deb/usr/bin/pororoca"
+        Copy-Item -Path "./${env:OUTPUT_FOLDER}/Pororoca" -Destination "./out/deb/usr/bin/pororoca"
         # Shared libraries
         # chmod 644 --> set read-only attributes 
         [void](mkdir "./out/deb/usr/lib")
         [void](mkdir "./out/deb/usr/lib/pororoca")
-        Get-ChildItem $installerFilesFolder -File -Filter "*.so" | Copy-Item -Destination "./out/deb/usr/lib/pororoca" -Force
+        Get-ChildItem $env:OUTPUT_FOLDER -File -Filter "*.so" | Copy-Item -Destination "./out/deb/usr/lib/pororoca" -Force
         Get-ChildItem "./out/deb/usr/lib/pororoca" -File -Filter "*.so" | % { chmod 644 $_.FullName }
         # Desktop shortcut
         [void](mkdir "./out/deb/usr/share")
