@@ -194,6 +194,20 @@
           "httpVersion": 1.1,
           "httpMethod": "GET",
           "url": "{{HttpBinUrl}}/gzip"
+        },
+        {
+          "requestType": "http",
+          "name": "MULTIPART TEXT AND BINARY",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BaseUrlHttps}}/test/get/multipartformdata"
+        },
+        {
+          "requestType": "http",
+          "name": "MULTIPART TEXT ONLY",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "{{BaseUrlHttps}}/test/get/multiparttextonly"
         }
       ]
     },
@@ -337,6 +351,60 @@
             "mode": "bearer",
             "bearerToken": "{{BearerAuthToken}}"
           }
+        }
+      ]
+    },
+    {
+      "name": "CAPTURES",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "name": "PASSIONFRUIT JSON",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "https://www.fruityvice.com/api/fruit/passionfruit",
+          "responseCaptures": [
+            {
+              "type": "body",
+              "targetVariable": "FruitId",
+              "path": "$.id"
+            },
+            {
+              "type": "body",
+              "targetVariable": "FruitName",
+              "path": "$.name"
+            },
+            {
+              "type": "body",
+              "targetVariable": "FruitFamily",
+              "path": "$.family"
+            }
+          ]
+        },
+        {
+          "requestType": "http",
+          "name": "WEATHER REPORT XML",
+          "httpVersion": 1.1,
+          "httpMethod": "GET",
+          "url": "https://www.nhc.noaa.gov/xml/TWOEP.xml",
+          "responseCaptures": [
+            {
+              "type": "body",
+              "targetVariable": "WeatherReportPublishedDate",
+              "path": "/rss/channel/pubDate"
+            },
+            {
+              "type": "body",
+              "targetVariable": "WeatherReportTitle",
+              "path": "/rss/channel/title"
+            },
+            {
+              "type": "body",
+              "targetVariable": "WeatherReportSiteLink",
+              "path": "/rss/channel/link"
+            }
+          ]
         }
       ]
     },
@@ -698,8 +766,6 @@
         {
           "name": "Spiderman",
           "contentMode": "file",
-          "rawContent": "",
-          "rawContentSyntax": "json",
           "fileSrcPath": "C:\\Projetos\\Pororoca\\tests\\Pororoca.Test.Tests\\TestFiles\\homem_aranha.jpg",
           "disableCompressionForThis": false,
           "direction": "fromClient",
@@ -752,8 +818,6 @@
         {
           "name": "Spiderman",
           "contentMode": "file",
-          "rawContent": "",
-          "rawContentSyntax": "json",
           "fileSrcPath": "C:\\Projetos\\Pororoca\\tests\\Pororoca.Test.Tests\\TestFiles\\homem_aranha.jpg",
           "disableCompressionForThis": false,
           "direction": "fromClient",
