@@ -53,6 +53,52 @@ public class PororocaTestLibraryHttp1Tests
     }
 
     [Fact]
+    public async Task Should_get_multipart_text_and_binary_with_http_1_1_successfully()
+    {
+        var res = await this.pororocaTest.SendHttpRequestAsync("Get multipart text and binary");
+
+        Assert.NotNull(res);
+        Assert.Equal(HttpStatusCode.OK, res.StatusCode);
+        Assert.Contains("multipart/form-data", res.ContentType);
+        Assert.NotNull(res.MultipartParts);
+        Assert.Equal(2, res.MultipartParts.Length);
+
+        Assert.Contains(new KeyValuePair<string, string>("Content-Type", "text/plain"), res.MultipartParts[0].Headers);
+        Assert.Contains(new KeyValuePair<string, string>("Content-Disposition", "form-data; name=a"), res.MultipartParts[0].Headers);
+        Assert.True(res.MultipartParts[0].IsTextContent);
+        Assert.Equal("oi"u8, res.MultipartParts[0].BinaryBody);
+
+        Assert.Contains(new KeyValuePair<string, string>("Content-Type", "image/gif"), res.MultipartParts[1].Headers);
+        Assert.Contains(new KeyValuePair<string, string>("Content-Disposition", "form-data; name=arq; filename=pirate.gif"), res.MultipartParts[1].Headers);
+        Assert.False(res.MultipartParts[1].IsTextContent);
+        Assert.Equal(
+            Convert.FromBase64String("R0lGODlhQABAAMQRAAAAAAgIAAgQGBAQEFoAAIRjOZR7Sq0ICLUAAL29vcalY86le+fe3vf39//OnP//AP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQFDwARACwAAAAAQABAAAAF/iAkjmRpnmiqrmzrvnAsz3Rt33iu7zPg/z9eDkgEwnxCUXFpZPkcyB1zGk0BoFiAbjriop7X8JAJ0ZrJpt9iAWBDcd4uutRmr9fvG7VcjpPaDnd4WjVUVYaEXQ6BeHk9e31BkXNli5ZshYh0mkqAlomPXkSdoglAi6AyiKtFZQkMsLCjegZXlre4uAC1f6+xvwypoVO5n7xdvsCycLbFq73Jv1U0np8/1qeXoAAECMrCqmu2AAUiBeNEqIHb3d7SQ26LfRDY11CYf+0ICADBUrfz6j1BRUffvmlDLAVElc5RF4MEwOkpdiubwzL7MvJLUinXgkUKnP3RmFEiHGfN/iqOJIkgIseBFHNFAcCypUkbNFOmVPeJH02WBFwK+QkTSkOGNfcFvUmtXURcgnQZ1Lg0CTeq1YopuFqz6tCp/Xx8xLU1bFehQ1mGDbYkWDCgaHlw1djPrTK7PzN6tVqzrl1psfK2jJsWqF+/f+fufUky6FJZgIMFVUqYb0nKEX1I8+G4M1M4evN6ltYZ82c9oak+DuxY9WmcqdVKO/u6UOx9Dx7wm53bNceVNjX2Rkyzt97KhYPLDkz7d5fbCIbz1n28NjXo0pkbp2y9B/SSs+F2V4VdN/Ho1Lk7V1J+t/b0g8fHEC0YPPOu8o+0P79daf4XfpmSV3ayoNfYfy0gS8aAKcsViN96CjKIm3nTHQghMBIayB91nkG4RGsHhTdYhxCu09mJxJ1IonNXsMEZisRxA+N6XdgBhGMKSrZUEzSW4SIrPwjAI0chAAAh+QQFDwARACwTAAcAGwAeAAAFhGAkjmQpAoAIQWbbok66rm4NxM44s3U53DfdrFdCLRaRRXBHHAGUyGSM2YzcjsnIdFi9OY4Lx5bXaD7FuRM30A2LreuqdS7kyQEJholqzhf5RHh6JACAPYKDalx9eYmFNHJWBAgRBwiPkHeTTouRf3aef6GjpKUjBKapqqusra49B6EhAAA7"),
+            res.MultipartParts[1].BinaryBody);
+    }
+
+    [Fact]
+    public async Task Should_get_multipart_text_only_with_http_1_1_successfully()
+    {
+        var res = await this.pororocaTest.SendHttpRequestAsync("Get multipart text only");
+
+        Assert.NotNull(res);
+        Assert.Equal(HttpStatusCode.OK, res.StatusCode);
+        Assert.Contains("multipart/form-data", res.ContentType);
+        Assert.NotNull(res.MultipartParts);
+        Assert.Equal(2, res.MultipartParts.Length);
+
+        Assert.Contains(new KeyValuePair<string, string>("Content-Type", "text/plain"), res.MultipartParts[0].Headers);
+        Assert.Contains(new KeyValuePair<string, string>("Content-Disposition", "form-data; name=a"), res.MultipartParts[0].Headers);
+        Assert.True(res.MultipartParts[0].IsTextContent);
+        Assert.Equal("oi"u8, res.MultipartParts[0].BinaryBody);
+
+        Assert.Contains(new KeyValuePair<string, string>("Content-Type", "application/json"), res.MultipartParts[1].Headers);
+        Assert.Contains(new KeyValuePair<string, string>("Content-Disposition", "form-data; name=b"), res.MultipartParts[1].Headers);
+        Assert.True(res.MultipartParts[1].IsTextContent);
+        Assert.Equal("{\"msg\":\"ciao\"}"u8, res.MultipartParts[1].BinaryBody);
+    }
+
+    [Fact]
     public async Task Should_get_headers_with_http_1_1_successfully()
     {
         var res = await this.pororocaTest.SendHttpRequestAsync("Get headers");
