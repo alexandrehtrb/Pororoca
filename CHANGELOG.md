@@ -27,10 +27,11 @@
 
 ### Features
 
+* Improved visual interface and themes, with better distinction between primary and secondary actions and better colour contrast.
 * Autocomplete for HTTP headers names and values.
 * HTTP log export. You can now export a file that details exactly what was sent in a request and what was received in a response, when it began and how much time elapsed. Hotkey is <kbd>F10</kbd>.
 * Multipart responses when all parts are text can now be seen in response body.
-* Multipart response part can be retrieved in `Pororoca.Test` tests.
+* Multipart response parts can be retrieved in `Pororoca.Test` tests.
 * A welcome page shows up for new users.
 * A *Go to docs* item has been added inside Help menu.
 * Added request body MIME types for DNS+JSON, FHIR, SOAP, AVIF, CBOR, JSON-PATCH, JXL and SQL.
@@ -41,7 +42,7 @@
 ### Bug Fixes
 
 * Fixed bug when pressing <kbd>Ctrl</kbd>+<kbd>PageUp</kbd> or <kbd>Ctrl</kbd>+<kbd>PageDown</kbd>.
-* HTTP/3 requests can now run in Windows Server 2022 machines (fixed detection of QUIC support on Windows).
+* HTTP/3 requests can now run on Windows Server 2022 machines (fixed detection of QUIC support on Windows).
 
 ### Refactors
 
