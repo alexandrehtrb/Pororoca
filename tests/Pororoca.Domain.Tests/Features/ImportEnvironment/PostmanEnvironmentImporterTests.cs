@@ -54,7 +54,7 @@ public static class PostmanEnvironmentImporterTests
 
         var var2 = env.Variables[1];
         Assert.False(var2.Enabled);
-        Assert.False(var2.IsSecret);
+        Assert.True(var2.IsSecret);
         Assert.Equal("Key2", var2.Key);
         Assert.Equal("Value2", var2.Value);
     }
@@ -79,6 +79,7 @@ public static class PostmanEnvironmentImporterTests
                 {
                     Key = "Key2",
                     Value = "Value2",
+                    Type = "secret",
                     Enabled = false
                 }
             ]

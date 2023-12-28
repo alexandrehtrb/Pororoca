@@ -20,6 +20,7 @@ public static class PostmanEnvironmentExporter
                         {
                             Key = v.Key,
                             Value = shouldHideSecrets && v.IsSecret ? string.Empty : v.Value,
+                            Type = v.IsSecret ? "secret" : null,
                             Enabled = v.Enabled
                         })
                         .ToArray(),
