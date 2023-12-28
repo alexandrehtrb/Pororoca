@@ -24,10 +24,10 @@ on:
         required: true
         default: true
         type: boolean
-      osx-arm64:
-        required: true
-        default: true
-        type: boolean
+      # osx-arm64:
+      #   required: true
+      #   default: true
+      #   type: boolean
       win-x64-installer:
         required: true
         default: true

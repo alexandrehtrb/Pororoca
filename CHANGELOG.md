@@ -24,6 +24,7 @@
 * Shortcut for saving HTTP response body changed to <kbd>F9</kbd> key.
 * User data folder for MacOSX moved to inside Application Support, no longer inside Applications folder.
 * Test projects that use Pororoca.Test now require .NET 8 and enabled preview features in their .csproj files. Read more about it in the docs.
+* `osx-arm64` releases are halted for now, may return in the future. `osx-x64` releases work perfectly fine on Mac OSX computers with ARM64 architectures (Apple Silicon).
 
 ### Features
 
