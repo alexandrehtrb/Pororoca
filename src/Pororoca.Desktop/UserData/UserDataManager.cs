@@ -242,7 +242,7 @@ public static class UserDataManager
 
     private static DirectoryInfo GetUserDataFolderForMacOSX_BeforePororocaV3()
     {
-        string currentDirPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        string currentDirPath = Path.GetDirectoryName(Environment.ProcessPath)!;
         DirectoryInfo currentDir = new(currentDirPath);
         var applicationsDir = currentDir.Parent!.Parent!.Parent!;
         return new(Path.Combine(applicationsDir.FullName, userDataFolderName));
