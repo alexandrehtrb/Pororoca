@@ -71,13 +71,15 @@ jobs:
       os: ubuntu-latest
       rid: osx-x64
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
-  osx-arm64:
-    if: ${{ inputs.osx-arm64 }}
-    uses: ./.github/workflows/generate-desktop-release-wfw.yml
-    with:
-      os: ubuntu-latest
-      rid: osx-arm64
-      enableUITesting: ${{ inputs.enableDesktopUITesting }}
+  # osx-arm64 doesn't work for some reason,
+  # but osx-x64 releases work on Mac OSes with Apple Silicon (arm64)
+  # osx-arm64:
+  #   if: ${{ inputs.osx-arm64 }}
+  #   uses: ./.github/workflows/generate-desktop-release-wfw.yml
+  #   with:
+  #     os: ubuntu-latest
+  #     rid: osx-arm64
+  #     enableUITesting: ${{ inputs.enableDesktopUITesting }}
   win-x64-installer:
     if: ${{ inputs.win-x64-installer }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
