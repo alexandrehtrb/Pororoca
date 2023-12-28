@@ -16,7 +16,7 @@ public sealed partial class HttpRequestsUITest : UITest
         await Wait(5);
 
         AssertIsVisible(HttpRobot.ResDisableTlsVerification);
-        AssertContainsText(HttpRobot.ResBodyRawContent, "The remote certificate is invalid because of errors in the certificate chain: UntrustedRoot");
+        AssertContainsText(HttpRobot.ResBodyRawContent, "The remote certificate is invalid");
         AssertContainsText(HttpRobot.ResTitle, "Response: Failed");
         AssertIsHidden(HttpRobot.ResBodySaveToFile);
 

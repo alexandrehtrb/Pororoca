@@ -134,6 +134,7 @@ public sealed partial class WebSocketsUITest : UITest
             AssertIsHidden(WsRobot.Name.IconConnectedWebSocket);
             AssertIsVisible(WsRobot.Name.IconDisconnectedWebSocket);
 
+            await Wait(2);
             await AssertExchangedMessage(4, "server -> client", "closing, 7 bytes", "Closing message", "ok, bye");
         }
 

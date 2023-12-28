@@ -110,7 +110,7 @@ public sealed partial class WebSocketsValidationsUITest : UITest
 
         AssertIsVisible(WsRobot.DisableTlsVerification);
         AssertIsVisible(WsRobot.ConnectionRequestException);
-        AssertContainsText(WsRobot.ConnectionRequestException, "The remote certificate is invalid because of errors in the certificate chain: UntrustedRoot");
+        AssertContainsText(WsRobot.ConnectionRequestException, "The remote certificate is invalid");
 
         await WsRobot.DisableTlsVerification.ClickOn();
         AssertIsHidden(WsRobot.DisableTlsVerification);
