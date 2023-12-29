@@ -20,7 +20,7 @@ on:
         required: true
         default: true
         type: boolean
-      osx-x64:
+      osx:
         required: true
         default: true
         type: boolean
@@ -64,8 +64,8 @@ jobs:
       rid: linux-x64
       packaging: debian
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
-  osx-x64:
-    if: ${{ inputs.osx-x64 }}
+  osx:
+    if: ${{ inputs.osx }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
     with:
       os: ubuntu-latest

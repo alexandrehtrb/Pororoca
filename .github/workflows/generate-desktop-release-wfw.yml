@@ -151,6 +151,11 @@ jobs:
       run: |
         if ($env:RID -like "win*") {
           $zipName = "Pororoca_${env:VERSION_NAME}_${env:RID}_portable.zip";
+        }
+        elseif ($env:RID -like "osx*") {
+          # temporary renaming while osx-arm64 doesn't work
+          # osx-x64 works on Mac OSX ARM64
+          $zipName = "Pororoca_${env:VERSION_NAME}_osx.zip";
         } else {
           $zipName = "Pororoca_${env:VERSION_NAME}_${env:RID}.zip";
         }
