@@ -21,6 +21,7 @@ Leia as [instruções](https://pororoca.io/pt/docs/installation) e baixe o progr
 * Coleções e ambientes podem ser exportados juntos em um mesmo arquivo.
 * Compatibilidade total com o Postman ao importar ou exportar.
 * Consumo muito menor de memória - duas a três vezes menos do que o Postman.
+* Suporte a idiomas.
 * Testes automatizados.
 * WebSockets.
 * Inicialização rápida.

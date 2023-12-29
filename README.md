@@ -21,6 +21,7 @@ Read the [instructions](https://pororoca.io/docs/installation) and download the 
 * Collections and environments can be exported together in a single file.
 * Full export and import compatibility with Postman.
 * Much lower memory usage - two to three times less than Postman.
+* Multilanguage support.
 * Automated testing.
 * WebSockets.
 * Fast startup time.
