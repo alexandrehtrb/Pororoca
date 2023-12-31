@@ -29,6 +29,7 @@
 ### Features
 
 * Improved visual interface and themes, with better distinction between primary and secondary actions and better colour contrast.
+* Added highlight effect for drag-and-drop on tables.
 * Autocomplete for HTTP headers names and values.
 * HTTP log export. You can now export a file that details exactly what was sent in a request and what was received in a response, when it began and how much time elapsed. Hotkey is <kbd>F10</kbd>.
 * Multipart responses when all parts are text can now be seen in response body.
@@ -45,6 +46,7 @@
 
 * Fixed bug when pressing <kbd>Ctrl</kbd>+<kbd>PageUp</kbd> or <kbd>Ctrl</kbd>+<kbd>PageDown</kbd>.
 * HTTP/3 requests can now run on Windows Server 2022 machines (fixed detection of QUIC support on Windows).
+* Fixed wrong selected row on DataGrid after drag-and-drop.
 
 ### Refactors
 

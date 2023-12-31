@@ -23,6 +23,6 @@ public sealed class ResponseCapturesDataGridDropHandler : BaseDataGridDropHandle
         }
 
         var items = vm.ResCapturesTableVm.Items;
-        return RunDropAction(e, bExecute, sourceItem, targetItem, items);
+        return RunDropAction(dg, e, bExecute, sourceItem, targetItem, items);
     }
 }

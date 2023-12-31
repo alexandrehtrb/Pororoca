@@ -12,6 +12,14 @@
       Value="24" />
   </Style>
 
+  <Style Selector="DataGrid.DragAndDrop DataGridRow.Dragging">
+    <Setter Property="AdornerLayer.Adorner">
+      <Template>
+        <Border BorderThickness="0 2 0 2" BorderBrush="{DynamicResource DragAndDropDataGridItemDraggingBrush}"/>
+      </Template>
+    </Setter>
+  </Style>
+
   <Style Selector="DataGrid.DragAndDrop DataGridRowHeader">
     <Setter Property="(i:Interaction.Behaviors)">
       <i:BehaviorCollectionTemplate>
