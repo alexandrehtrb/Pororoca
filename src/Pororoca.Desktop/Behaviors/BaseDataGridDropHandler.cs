@@ -13,7 +13,8 @@ namespace Pororoca.Desktop.Behaviors;
 public abstract class BaseDataGridDropHandler<T> : DropHandlerBase
     where T : ViewModelBase
 {
-    private const string dataGridRowDraggingStyleClass = "Dragging";
+    private const string rowDraggingUpStyleClass = "DraggingUp";
+    private const string rowDraggingDownStyleClass = "DraggingDown";
 
     protected abstract T MakeCopy(ObservableCollection<T> parentCollection, T item);
 
@@ -28,7 +29,8 @@ public abstract class BaseDataGridDropHandler<T> : DropHandlerBase
             if (valid)
             {
                 var row = FindDataGridRowFromChildView(c);
-                ApplyDraggingStyleToRow(row!);
+                string direction = e.Data.Contains("direction") ? (string) e.Data.Get("direction")! : "down";
+                ApplyDraggingStyleToRow(row!, direction);
             }
             return valid;
         }
@@ -135,14 +137,18 @@ public abstract class BaseDataGridDropHandler<T> : DropHandlerBase
 
             foreach (var r in presenter.Children)
             {
-                if (r.Classes.Contains(dataGridRowDraggingStyleClass))
+                if (r!.Classes.Contains(rowDraggingUpStyleClass))
                 {
-                    r?.Classes?.Remove(dataGridRowDraggingStyleClass);
+                    r?.Classes?.Remove(rowDraggingUpStyleClass);
+                }
+                if (r!.Classes.Contains(rowDraggingDownStyleClass))
+                {
+                    r?.Classes?.Remove(rowDraggingDownStyleClass);
                 }
             }
         }
     }
 
-    private static void ApplyDraggingStyleToRow(DataGridRow row) =>
-        row?.Classes?.Add(dataGridRowDraggingStyleClass);
+    private static void ApplyDraggingStyleToRow(DataGridRow row, string direction) =>
+        row?.Classes?.Add(direction == "up" ? rowDraggingUpStyleClass : rowDraggingDownStyleClass);
 }
