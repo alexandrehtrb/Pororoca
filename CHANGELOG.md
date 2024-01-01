@@ -24,12 +24,12 @@
 * Shortcut for saving HTTP response body changed to <kbd>F9</kbd> key.
 * User data folder for MacOSX moved to inside Application Support, no longer inside Applications folder.
 * Test projects that use Pororoca.Test now require .NET 8 and enabled preview features in their .csproj files. Read more about it in the docs.
-* `osx-arm64` releases are halted for now. `osx` releases work on Mac OSX computers with both x64 and ARM64 architectures (Apple Silicon).
+* `osx` releases work on Mac OSX computers with both x64 and ARM64 architectures (Apple Silicon).
 
 ### Features
 
 * Improved visual interface and themes, with better distinction between primary and secondary actions and better colour contrast.
-* Added highlight effect for drag-and-drop on tables.
+* Drag-and-drop on tables has been greatly improved with highlighting borders and row selection.
 * Autocomplete for HTTP headers names and values.
 * HTTP log export. You can now export a file that details exactly what was sent in a request and what was received in a response, when it began and how much time elapsed. Hotkey is <kbd>F10</kbd>.
 * Multipart responses when all parts are text can now be seen in response body.
@@ -44,9 +44,8 @@
 
 ### Bug Fixes
 
-* Fixed bug when pressing <kbd>Ctrl</kbd>+<kbd>PageUp</kbd> or <kbd>Ctrl</kbd>+<kbd>PageDown</kbd>.
 * HTTP/3 requests can now run on Windows Server 2022 machines (fixed detection of QUIC support on Windows).
-* Fixed wrong selected row on DataGrid after drag-and-drop.
+* Fixed bug when pressing <kbd>Ctrl</kbd>+<kbd>PageUp</kbd> or <kbd>Ctrl</kbd>+<kbd>PageDown</kbd>.
 
 ### Refactors
 
