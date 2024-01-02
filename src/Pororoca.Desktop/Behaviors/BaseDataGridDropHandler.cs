@@ -22,7 +22,6 @@ public abstract class BaseDataGridDropHandler<T> : DropHandlerBase
 
     public override bool Validate(object? sender, DragEventArgs e, object? sourceContext, object? targetContext, object? state)
     {
-        ClearDraggingStyleFromAllRows(sender);
         if (e.Source is Control c && sender is DataGrid dg)
         {
             bool valid = Validate(dg, e, sourceContext, targetContext, false);
@@ -31,9 +30,11 @@ public abstract class BaseDataGridDropHandler<T> : DropHandlerBase
                 var row = FindDataGridRowFromChildView(c);
                 string direction = e.Data.Contains("direction") ? (string) e.Data.Get("direction")! : "down";
                 ApplyDraggingStyleToRow(row!, direction);
+                ClearDraggingStyleFromAllRows(sender, exceptThis: row);
             }
             return valid;
         }
+        ClearDraggingStyleFromAllRows(sender);
         return false;
     }
 
@@ -128,7 +129,7 @@ public abstract class BaseDataGridDropHandler<T> : DropHandlerBase
         return null;
     }
 
-    private static void ClearDraggingStyleFromAllRows(object? sender)
+    private static void ClearDraggingStyleFromAllRows(object? sender, DataGridRow? exceptThis = null)
     {
         if (sender is DataGrid dg)
         {
@@ -137,6 +138,8 @@ public abstract class BaseDataGridDropHandler<T> : DropHandlerBase
 
             foreach (var r in presenter.Children)
             {
+                if (r == exceptThis) continue;
+
                 if (r!.Classes.Contains(rowDraggingUpStyleClass))
                 {
                     r?.Classes?.Remove(rowDraggingUpStyleClass);
@@ -149,6 +152,29 @@ public abstract class BaseDataGridDropHandler<T> : DropHandlerBase
         }
     }
 
-    private static void ApplyDraggingStyleToRow(DataGridRow row, string direction) =>
-        row?.Classes?.Add(direction == "up" ? rowDraggingUpStyleClass : rowDraggingDownStyleClass);
+    private static void ApplyDraggingStyleToRow(DataGridRow row, string direction)
+    {
+        if (direction == "up")
+        {
+            if (row.Classes.Contains(rowDraggingDownStyleClass) == true)
+            {
+                row.Classes.Remove(rowDraggingDownStyleClass);
+            }
+            if (row.Classes.Contains(rowDraggingUpStyleClass) == false)
+            {
+                row.Classes.Add(rowDraggingUpStyleClass);
+            }
+        }
+        else if (direction == "down")
+        {
+            if (row.Classes.Contains(rowDraggingUpStyleClass) == true)
+            {
+                row.Classes.Remove(rowDraggingUpStyleClass);
+            }
+            if (row.Classes.Contains(rowDraggingDownStyleClass) == false)
+            {
+                row.Classes.Add(rowDraggingDownStyleClass);
+            }
+        }
+    }
 }
