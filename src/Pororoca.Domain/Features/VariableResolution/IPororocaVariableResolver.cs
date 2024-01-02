@@ -26,7 +26,7 @@ public partial interface IPororocaVariableResolver
         return effectiveEnvVars.Concat(effectiveColVarsNotInEnv);
     }
 
-    public static IDictionary<string, string> ResolveKeyValueParams(IEnumerable<PororocaKeyValueParam>? kvParams, IEnumerable<PororocaVariable> effectiveVars) =>
+    public static Dictionary<string, string> ResolveKeyValueParams(IEnumerable<PororocaKeyValueParam>? kvParams, IEnumerable<PororocaVariable> effectiveVars) =>
         kvParams == null ?
         new() :
         kvParams.Where(h => h.Enabled)
@@ -51,6 +51,11 @@ public partial interface IPororocaVariableResolver
         if (string.IsNullOrEmpty(strToReplaceTemplatedVariables))
         {
             return strToReplaceTemplatedVariables ?? string.Empty;
+        }
+        else if (effectiveVars.Any() == false)
+        {
+            // no need to run regex replacer if there are no effective variables
+            return strToReplaceTemplatedVariables;
         }
         else
         {

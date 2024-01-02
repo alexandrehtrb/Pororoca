@@ -4,9 +4,11 @@ root = true
 charset = utf-8
 indent_style = space
 indent_size = 4
+tab_width = 4
 insert_final_newline = false
 trim_trailing_whitespace = true
 max_line_length = 100
+end_of_line = crlf
 
 [*.yml]
 indent_size = 2
@@ -22,7 +24,7 @@ trim_trailing_whitespace = false
 [*.cs]
 # New line preferences
 csharp_new_line_before_open_brace = all
-csharp_new_line_before_else = true
+csharp_new_line_before_else = true:silent
 csharp_new_line_before_catch = true
 csharp_new_line_before_finally = true
 csharp_new_line_before_members_in_object_initializers = true
@@ -92,10 +94,15 @@ csharp_preserve_single_line_statements = false
 csharp_prefer_static_local_function = true:suggestion
 csharp_prefer_simple_using_statement = true:suggestion
 csharp_style_prefer_switch_expression = true:suggestion
+csharp_style_deconstructed_variable_declaration = true:suggestion
 dotnet_style_readonly_field = true:suggestion
 csharp_style_namespace_declarations = file_scoped:suggestion
 dotnet_diagnostic.IDE0017.severity = none # Object initialization can be simplified
 dotnet_diagnostic.IDE0028.severity = none # Collection initialization can be simplified
+dotnet_diagnostic.IDE0290.severity = none # Use primary constructor
+dotnet_diagnostic.IDE0300.severity = suggestion # Collection initialization can be simplified
+dotnet_diagnostic.IDE0301.severity = none # Collection initialization can be simplified
+dotnet_diagnostic.IDE0305.severity = none # Collection initialization can be simplified
 dotnet_diagnostic.CA1822.severity = none # Member can be marked as static
 
 # Expression-level preferences

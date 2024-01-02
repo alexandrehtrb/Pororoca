@@ -42,15 +42,4 @@ public class PororocaTestLibraryClientCertificatesTests
         Assert.Equal("text/html", res.ContentType);
         Assert.Contains("client-authenticated</a> TLS handshake", res.GetBodyAsPrettyText());
     }
-
-    private static string GetTestCollectionFilePath()
-    {
-        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
-        return Path.Combine(testDataDirInfo.FullName, "PororocaIntegrationTestCollection.pororoca_collection.json");
-    }
-    private static string GetTestClientCertificatesDir()
-    {
-        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
-        return Path.Combine(testDataDirInfo.FullName, "BadSslClientCertificates");
-    }
 }

@@ -3,7 +3,7 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
-      nuget:
+      nuget-and-sboms:
         #description: 'Pororoca.Test NuGet'
         required: true
         default: true
@@ -16,14 +16,18 @@ on:
         required: true
         default: true
         type: boolean
-      osx-x64:
+      linux-x64-debian:
         required: true
         default: true
         type: boolean
-      osx-arm64:
+      osx:
         required: true
         default: true
         type: boolean
+      # osx-arm64:
+      #   required: true
+      #   default: true
+      #   type: boolean
       win-x64-installer:
         required: true
         default: true
@@ -42,9 +46,9 @@ on:
         type: boolean
 
 jobs:
-  nuget:
-    if: ${{ inputs.nuget }}
-    uses: ./.github/workflows/generate-pororoca-test-nuget-wfw.yml
+  nuget-and-sboms:
+    if: ${{ inputs.nuget-and-sboms }}
+    uses: ./.github/workflows/generate-nuget-and-sboms-wfw.yml
   linux-x64:
     if: ${{ inputs.linux-x64 }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
@@ -52,49 +56,57 @@ jobs:
       os: ubuntu-latest
       rid: linux-x64
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
-  osx-x64:
-    if: ${{ inputs.osx-x64 }}
+  linux-x64-debian:
+    if: ${{ inputs.linux-x64-debian }}
+    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    with:
+      os: ubuntu-latest
+      rid: linux-x64
+      packaging: debian
+      enableUITesting: ${{ inputs.enableDesktopUITesting }}
+  osx:
+    if: ${{ inputs.osx }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
     with:
       os: ubuntu-latest
       rid: osx-x64
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
-  osx-arm64:
-    if: ${{ inputs.osx-arm64 }}
-    uses: ./.github/workflows/generate-desktop-release-wfw.yml
-    with:
-      os: ubuntu-latest
-      rid: osx-arm64
-      enableUITesting: ${{ inputs.enableDesktopUITesting }}
+  # osx-arm64 doesn't work for some reason,
+  # but osx-x64 releases work on Mac OSes with Apple Silicon (arm64)
+  # osx-arm64:
+  #   if: ${{ inputs.osx-arm64 }}
+  #   uses: ./.github/workflows/generate-desktop-release-wfw.yml
+  #   with:
+  #     os: ubuntu-latest
+  #     rid: osx-arm64
+  #     enableUITesting: ${{ inputs.enableDesktopUITesting }}
   win-x64-installer:
     if: ${{ inputs.win-x64-installer }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
     with:
-      os: windows-latest
+      os: windows-latest # running on Windows because we need NSIS
       rid: win-x64
-      installation: withInstaller
+      packaging: nsis
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
   win-x64-portable:
     if: ${{ inputs.win-x64-portable }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
     with:
-      os: windows-latest
+      os: ubuntu-latest # .NET 8 allows publishing for Windows on Linux machines
       rid: win-x64
-      installation: portable
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
   win-x86-installer:
     if: ${{ inputs.win-x86-installer }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
     with:
-      os: windows-latest
+      os: windows-latest # running on Windows because we need NSIS
       rid: win-x86
-      installation: withInstaller
+      packaging: nsis
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
   win-x86-portable:
     if: ${{ inputs.win-x86-portable }}
     uses: ./.github/workflows/generate-desktop-release-wfw.yml
     with:
-      os: windows-latest
+      os: ubuntu-latest # .NET 8 allows publishing for Windows on Linux machines
       rid: win-x86
-      installation: portable
       enableUITesting: ${{ inputs.enableDesktopUITesting }}

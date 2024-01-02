@@ -415,6 +415,20 @@
     },
     {
       "requestType": "http",
+      "name": "Get multipart text and binary",
+      "httpVersion": 1.1,
+      "httpMethod": "GET",
+      "url": "{{BaseUrl}}/test/get/multipartformdata"
+    },
+    {
+      "requestType": "http",
+      "name": "Get multipart text only",
+      "httpVersion": 1.1,
+      "httpMethod": "GET",
+      "url": "{{BaseUrl}}/test/get/multiparttextonly"
+    },
+    {
+      "requestType": "http",
       "name": "Get headers",
       "httpVersion": 1.1,
       "httpMethod": "GET",

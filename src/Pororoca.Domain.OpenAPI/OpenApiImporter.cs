@@ -3,6 +3,7 @@ using System.Text.Json;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Microsoft.OpenApi.Readers;
+using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
@@ -13,7 +14,7 @@ public static class OpenApiImporter
 {
     private static string ToPororocaTemplateStyle(this string input) =>
         input.Replace("{", "{{").Replace("}", "}}");
-    
+
     private static string Untemplatize(this string s) =>
         s.Replace("{{", string.Empty).Replace("}}", string.Empty);
 
@@ -122,7 +123,7 @@ public static class OpenApiImporter
         var reqHeaders = reqParams.Where(p => p.In == ParameterLocation.Header)
                                   .Select(p => new PororocaKeyValueParam(true, p.Name, ConvertOpenApiSchemaToObject(p.Schema)?.ToString()))
                                   .ToList();
-        
+
         if (colScopedApiKeyHeaders is not null)
         {
             reqHeaders.AddRange(colScopedApiKeyHeaders.Select(kv => new PororocaKeyValueParam(true, kv.Key, kv.Value)));
@@ -143,7 +144,7 @@ public static class OpenApiImporter
             parameters.Where(p => p.In == ParameterLocation.Query)
                       .Select(p => (p.Name, ConvertOpenApiSchemaToObject(p.Schema)?.ToString()))
                       .ToList();
-        
+
         var reqApiKeyQueryParams = ReadApiKeys(reqSecurity, ParameterLocation.Query);
         if (reqApiKeyQueryParams is not null)
         {
@@ -237,7 +238,7 @@ public static class OpenApiImporter
 
         if (contentType?.Contains("json") == true)
         {
-            string rawStr = JsonSerializer.Serialize(obj, options: ViewJsonResponseOptions);
+            string rawStr = JsonUtils.PrettySerializeJson(obj);
             PororocaHttpRequestBody body = new();
             body.SetRawContent(rawStr, contentType);
             return body;
@@ -280,7 +281,7 @@ public static class OpenApiImporter
 
     private static void AddCollectionScopedAuthVariables(PororocaCollection col)
     {
-        
+
 
         if (col.CollectionScopedAuth is null)
             return;
@@ -340,7 +341,7 @@ public static class OpenApiImporter
                     authFolder.AddFolder(GenerateOAuth2ClientCredentialsRequestsFolder(scheme.Flows.ClientCredentials));
                 }
                 col.Folders.Add(authFolder);
-            }        
+            }
         }
     }
 
@@ -558,7 +559,7 @@ public static class OpenApiImporter
         else if (schema.Type == "array")
         {
             object? innerObj = ConvertOpenApiSchemaToObject(schema.Items);
-            return innerObj is not null ? new[] { innerObj } : Array.Empty<object>();
+            return innerObj is not null ? [innerObj] : Array.Empty<object>();
         }
         else if (schema.Type == "object")
         {

@@ -127,8 +127,7 @@
         </ComboBox>
 
         <!-- This is for testing syntax colour themes -->
-        <!--ComboBox
-        Name="RawContentThemeSelector" Height="36" Width="120" Margin="12,0,0,0" /-->
+        <!--ComboBox Name="RawContentThemeSelector" Height="36" Width="120" Margin="12,0,0,0" /-->
 
       </StackPanel>
 

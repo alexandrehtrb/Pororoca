@@ -1,0 +1,82 @@
+name: Generate Pororoca.Test NuGet
+
+on:
+  workflow_call:
+
+jobs:
+
+  generatePororocaTestNuget:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Install .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.100
+    
+    - name: Install CycloneDX SBOM tool
+      run: dotnet tool install --global CycloneDX
+
+    - name: Restore solution
+      run: dotnet restore --nologo --verbosity quiet
+
+    - name: Audit Pororoca.Test project
+      shell: pwsh
+      run: |
+        $projectPath = "./src/Pororoca.Test/Pororoca.Test.csproj"
+        $jsonObj = (dotnet list $projectPath package --vulnerable --include-transitive --format json) | ConvertFrom-Json;
+        $hasAnyVulnerability = ($jsonObj.projects[0].frameworks -ne $null);
+        if ($hasAnyVulnerability) {
+          dotnet list package --vulnerable --include-transitive;
+          exit 1;
+        }
+      
+    - name: Build solution
+      run: dotnet build --no-restore --configuration Release --nologo --verbosity quiet
+
+    - name: Execute unit tests
+      run: dotnet test --no-build --configuration Release --nologo --verbosity quiet --filter FullyQualifiedName!~Pororoca.Test.Tests
+
+    - name: Read package version
+      shell: pwsh
+      run: |
+        ([XML]$nugetCsprojXml = Get-Content ./src/Pororoca.Test/Pororoca.Test.csproj)
+        $versionName = $nugetCsprojXml.Project.PropertyGroup.PackageVersion
+        echo "VERSION_NAME=${versionName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+    
+    - name: Generate Pororoca.Test SBOM file
+      shell: pwsh
+      run: dotnet CycloneDX ./src/Pororoca.Test/Pororoca.Test.csproj -o ./out/ -f sbom_pororoca_test.json -sv $env:VERSION_NAME --json
+    
+    - name: Generate Pororoca.Desktop SBOM file
+      shell: pwsh
+      run: dotnet CycloneDX ./src/Pororoca.Desktop/Pororoca.Desktop.csproj -o ./out/ -f sbom_pororoca_desktop.json -sv $env:VERSION_NAME --json
+    
+    - name: Pack NuGet
+      run: dotnet pack ./src/Pororoca.Test/Pororoca.Test.csproj --nologo --verbosity quiet --configuration Release
+          
+    - name: Upload NuGet package artifact
+      uses: actions/upload-artifact@v4
+      with:
+        compression-level: 0
+        name: ${{ format('Pororoca.Test.{0}.nupkg', env.VERSION_NAME) }}
+        path: ${{ format('./src/Pororoca.Test/bin/Release/Pororoca.Test.{0}.nupkg', env.VERSION_NAME) }}
+
+    - name: Upload Pororoca.Desktop SBOM file artifact
+      uses: actions/upload-artifact@v4
+      with:
+        compression-level: 0
+        name: sbom_pororoca_desktop.json
+        path: ./out/sbom_pororoca_desktop.json
+    
+    - name: Upload Pororoca.Test SBOM file artifact
+      uses: actions/upload-artifact@v4
+      with:
+        compression-level: 0
+        name: sbom_pororoca_test.json
+        path: ./out/sbom_pororoca_test.json

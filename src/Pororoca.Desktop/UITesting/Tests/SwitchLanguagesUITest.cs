@@ -1,4 +1,3 @@
-using System.Text;
 using Avalonia.Controls;
 using Pororoca.Desktop.UITesting.Robots;
 using Pororoca.Desktop.Views;
@@ -11,7 +10,7 @@ public sealed class SwitchLanguagesUITest : UITest
 
     public SwitchLanguagesUITest()
     {
-        Control content = (Control) MainWindow.Instance!.Content!;
+        var content = (Control)MainWindow.Instance!.Content!;
         Robot = new(content);
     }
 

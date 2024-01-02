@@ -23,6 +23,6 @@ public sealed class FormDataParamsDataGridDropHandler : BaseDataGridDropHandler<
         }
 
         var items = vm.FormDataParamsTableVm.Items;
-        return RunDropAction(e, bExecute, sourceItem, targetItem, items);
+        return RunDropAction(dg, e, bExecute, sourceItem, targetItem, items);
     }
 }

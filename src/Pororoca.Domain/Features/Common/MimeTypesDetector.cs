@@ -1,3 +1,5 @@
+using System.Collections.Frozen;
+
 namespace Pororoca.Domain.Features.Common;
 
 public static class MimeTypesDetector
@@ -8,12 +10,13 @@ public static class MimeTypesDetector
     public const string DefaultMimeTypeForJson = "application/json";
     public const string DefaultMimeTypeForProblemJson = "application/problem+json";
     public const string DefaultMimeTypeForProblemXml = "application/problem+xml";
-    public const string DefaultMimeTypeForDnsJson = "application/dns-json";
+    public const string DefaultMimeTypeForDnsJson1 = "application/dns-json";
+    public const string DefaultMimeTypeForDnsJson2 = "application/dns+json";
     public const string DefaultMimeTypeForDnsMessage = "application/dns-message";
     public const string DefaultMimeTypeForJavascript = "application/javascript";
     public const string DefaultMimeTypeForBinary = "application/octet-stream";
 
-    private static readonly string[] textMimeTypesIndicators;
+    private static readonly FrozenSet<string> textMimeTypesIndicators;
 
     private static readonly List<KeyValuePair<string, string>> mappings;
 
@@ -28,11 +31,12 @@ public static class MimeTypesDetector
                                .ToList();
         // extra MIME types not with no corresponding file extension
         // will be added below:
-        AllMimeTypes.Add(DefaultMimeTypeForDnsJson);
+        AllMimeTypes.Add(DefaultMimeTypeForDnsJson1);
+        AllMimeTypes.Add(DefaultMimeTypeForDnsJson2);
         AllMimeTypes.Add(DefaultMimeTypeForDnsMessage);
     }
 
-    private static string[] GetTextMimeTypesIndicators() => new[]
+    private static FrozenSet<string> GetTextMimeTypesIndicators() => new[]
     {
         "json",
         "text",
@@ -42,7 +46,7 @@ public static class MimeTypesDetector
         "ecmascript",
         "css",
         "csv"
-    };
+    }.ToFrozenSet();
 
     /*
     MIME types list extracted from:
@@ -59,6 +63,8 @@ public static class MimeTypesDetector
             new("xml", "text/xml"), // XML - Extensible Markup Language
             new("xml", "application/xml"),
             new("xml", "application/problem+xml"),
+            new("xml", "application/fhir+xml"),
+            new("xml", "application/soap+xml"),
             new("jpeg", "image/jpeg"), // JPEG Image
             new("jpg", "image/jpeg"), // JPEG Image
 
@@ -126,6 +132,7 @@ public static class MimeTypesDetector
             new("avi", "video/avi"),
             new("avi", "video/msvideo"),
             new("avi", "video/x-msvideo"), // Audio Video Interleave (AVI)
+            new("avif", "image/avif"), // AVIF image
             new("avs", "video/avs-video"),
             new("aw", "application/applixware"), // Applixware
             new("azf", "application/vnd.airzip.filesecure.azf"), // AirZip FileSECURE
@@ -162,6 +169,8 @@ public static class MimeTypesDetector
             new("cab", "application/vnd.ms-cab-compressed"), // Microsoft Cabinet File
             new("car", "application/vnd.curl.car"), // CURL Applet
             new("cat", "application/vnd.ms-pki.seccat"), // Microsoft Trust UI Provider - Security Catalog
+            new("cbor", "application/cbor"), // CBOR - Concise Binary Object Representation
+            new("cbor", "application/cbor-seq"), // CBOR - Concise Binary Object Representation
             new("cc", "text/plain"),
             new("cc", "text/x-c"),
             new("ccad", "application/clariscad"),
@@ -496,7 +505,10 @@ public static class MimeTypesDetector
             new("js", "text/javascript"),
             new("json", "application/json"), // JavaScript Object Notation (JSON)
             new("json", "application/problem+json"),
+            new("json", "application/fhir+json"),
+            new("json", "application/json-patch+json"),
             new("jut", "image/jutvision"),
+            new("jxl", "image/jxl"),
             new("kar", "audio/midi"),
             new("kar", "music/x-karaoke"),
             new("karbon", "application/vnd.kde.karbon"), // KDE KOffice Office Suite - Karbon
@@ -986,6 +998,7 @@ public static class MimeTypesDetector
             new("spq", "application/scvp-vp-request"), // Server-Based Certificate Validation Protocol - Validation Policies - Request
             new("spr", "application/x-sprite"),
             new("sprite", "application/x-sprite"),
+            new("sql", "application/sql"),
             new("src", "application/x-wais-source"), // WAIS Source
             new("sru", "application/sru+xml"), // Search/Retrieve via URL Response Format
             new("srx", "application/sparql-results+xml"), // SPARQL - Results

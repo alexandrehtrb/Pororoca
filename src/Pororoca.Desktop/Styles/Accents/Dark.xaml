@@ -21,22 +21,26 @@
       <Color x:Key="MainWindowBackgroundColor">#080808</Color>
       <Color x:Key="MainWindowDarkerBackgroundColor">Black</Color>
       <Color x:Key="MainWindowSidebarColor">#181818</Color>
-      <Color x:Key="MainWindowSeparatorsColor">#262626</Color>
+      <Color x:Key="MainWindowSeparatorsColor">#2A2A2A</Color>
       <Color x:Key="CurrentEnvironmentLabelColor">#38C7AD</Color>
       <Color x:Key="ListBoxBackgroundColor">Black</Color>
-      <Color x:Key="ListBoxItemSelectedBackgroundColor">#080808</Color>
+      <Color x:Key="ListBoxItemSelectedBackgroundColor">#292929</Color>
       <Color x:Key="DragAndDropDataGridItemDraggingColor">White</Color>
       
-      <Color x:Key="ButtonSecondaryBackgroundColor">#41240c</Color>
-      <Color x:Key="ButtonSecondaryHighlightBackgroundColor">#6c3b14</Color>
+      <Thickness x:Key="ButtonSecondaryBorderThickness">2</Thickness>
+      <Color x:Key="ButtonSecondaryBorderBrush">#656565</Color>
+      <Color x:Key="ButtonSecondaryHighlightBorderBrush">#CECECE</Color>
+      <Color x:Key="ButtonSecondaryBackgroundColor">Transparent</Color>
+      <Color x:Key="ButtonSecondaryHighlightBackgroundColor">Transparent</Color>
 
       <Color x:Key="WebSocketConnectedColor">#38C7AD</Color>
       <Color x:Key="WebSocketMessageFromClientPrimaryColor">#D77728</Color>
       <Color x:Key="WebSocketMessageFromServerPrimaryColor">#88DDCE</Color>
-      <Color x:Key="DefaultIconsColor">White</Color>
+      <Color x:Key="DefaultIconsColor">#CECECE</Color>
+      <Color x:Key="DefaultTextForegroundColor">#CECECE</Color>
       <Color x:Key="TextEditorBackgroundColor">#181818</Color>
       <Color x:Key="TextEditorForegroundColor">#D4D4D4</Color>
-      <Color x:Key="ResponseCapturedValueTextColor">#38C7AD</Color>
+      <Color x:Key="ResponseCapturedValueTextColor">#99E3D5</Color>
     </ResourceDictionary>
   </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

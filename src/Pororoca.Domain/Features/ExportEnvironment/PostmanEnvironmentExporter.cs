@@ -8,7 +8,7 @@ namespace Pororoca.Domain.Features.ExportEnvironment;
 public static class PostmanEnvironmentExporter
 {
     public static string ExportAsPostmanEnvironment(PororocaEnvironment env, bool shouldHideSecrets) =>
-        JsonSerializer.Serialize(ConvertToPostmanEnvironment(env, shouldHideSecrets), options: ExporterImporterJsonOptions);
+        JsonSerializer.Serialize(ConvertToPostmanEnvironment(env, shouldHideSecrets), MainJsonCtx.PostmanEnvironment);
 
     internal static PostmanEnvironment ConvertToPostmanEnvironment(PororocaEnvironment env, bool shouldHideSecrets) =>
         new()
@@ -20,6 +20,7 @@ public static class PostmanEnvironmentExporter
                         {
                             Key = v.Key,
                             Value = shouldHideSecrets && v.IsSecret ? string.Empty : v.Value,
+                            Type = v.IsSecret ? "secret" : null,
                             Enabled = v.Enabled
                         })
                         .ToArray(),

@@ -1,6 +1,4 @@
-using System.Text;
 using Avalonia.Controls;
-using Avalonia.Media;
 using Pororoca.Desktop.UITesting.Robots;
 using Pororoca.Desktop.Views;
 
@@ -13,7 +11,7 @@ public sealed class SwitchThemesUITest : UITest
 
     public SwitchThemesUITest()
     {
-        var content = (Control) MainWindow.Instance!.Content!;
+        var content = (Control)MainWindow.Instance!.Content!;
         Robot = new(content);
         MainWindowPanel = content.FindControl<Panel>("mainWindowPanel")!;
     }
@@ -70,6 +68,6 @@ public sealed class SwitchThemesUITest : UITest
         AssertHasIconHidden(Robot.Options_Theme_Pampa);
         AssertHasIconVisible(Robot.Options_Theme_AmazonianNight);
 
-        AssertBackgroundColor(MainWindowPanel, "#0F263F");
+        AssertBackgroundColor(MainWindowPanel, "#04538B");
     }
 }

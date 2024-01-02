@@ -7,7 +7,7 @@ namespace Pororoca.Desktop.UITesting.Robots;
 public sealed class ItemsTreeRobot : BaseRobot
 {
     public ItemsTreeRobot(CollectionsGroupView rootView) : base(rootView) { }
-    
+
     private TreeView Tree => GetChildView<TreeView>("itemsTree")!;
 
     internal Task Select(string pathSeparatedBySlashes) => Tree.Select(pathSeparatedBySlashes);
@@ -25,7 +25,7 @@ public sealed class ItemsTreeRobot : BaseRobot
         KeyboardShortcuts.Instance.CopySelectedItems();
         await UITestActions.WaitAfterActionAsync();
     }
-    
+
     internal async Task Paste()
     {
         KeyboardShortcuts.Instance.PasteCopiedItems();

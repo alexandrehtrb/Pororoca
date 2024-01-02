@@ -13,7 +13,7 @@ public static class PostmanCollectionV21Importer
     {
         try
         {
-            var postmanCollection = JsonSerializer.Deserialize<PostmanCollectionV21>(postmanCollectionFileContent, options: ExporterImporterJsonOptions);
+            var postmanCollection = JsonSerializer.Deserialize(postmanCollectionFileContent, MainJsonCtx.PostmanCollectionV21);
             if (postmanCollection == null
              || postmanCollection.Info?.Name == null)
             {
@@ -141,7 +141,7 @@ public static class PostmanCollectionV21Importer
         {
             if (je.ValueKind == JsonValueKind.Object)
             {
-                return je.Deserialize<PostmanRequestUrl>(options: ExporterImporterJsonOptions)?.Raw ?? string.Empty;
+                return je.Deserialize<PostmanRequestUrl>(options: MinifyingOptions)?.Raw ?? string.Empty;
             }
             else
             {

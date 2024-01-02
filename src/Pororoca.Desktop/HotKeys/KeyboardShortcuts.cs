@@ -1,17 +1,17 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
 using Avalonia.Controls;
-using Avalonia.Threading;
-using Pororoca.Desktop.ViewModels;
-using Pororoca.Desktop.Views;
-using ReactiveUI;
-using Avalonia.Platform;
-using Pororoca.Desktop.Localization;
 using Avalonia.Media.Imaging;
-using ReactiveUI.Fody.Helpers;
+using Avalonia.Platform;
+using Avalonia.Threading;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
+using Pororoca.Desktop.Localization;
+using Pororoca.Desktop.ViewModels;
+using Pororoca.Desktop.Views;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.HotKeys;
 
@@ -38,14 +38,15 @@ public sealed class KeyboardShortcuts : ViewModelBase
     public ReactiveCommand<Unit, Unit> CyclePreviousEnvironmentToActiveCmd { get; }
     public ReactiveCommand<Unit, Unit> CycleNextEnvironmentToActiveCmd { get; }
     public ReactiveCommand<Unit, Unit> SaveResponseToFileCmd { get; }
+    public ReactiveCommand<Unit, Unit> ExportHttpLogToFileCmd { get; }
     public ReactiveCommand<Unit, Unit> FocusOnUrlCmd { get; }
 
     #region HELPER PROPERTIES
 
-    private MainWindowViewModel MainWindowVm => 
+    private MainWindowViewModel MainWindowVm =>
         ((MainWindowViewModel)MainWindow.Instance!.DataContext!);
 
-    private CollectionsGroupViewModel CollectionsGroupVm => 
+    private CollectionsGroupViewModel CollectionsGroupVm =>
         MainWindowVm.CollectionsGroupViewDataCtx;
 
     private CollectionOrganizationItemViewModel? SelectedItem =>
@@ -53,7 +54,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
 
     private ObservableCollection<CollectionOrganizationItemViewModel> SelectedItems =>
         CollectionsGroupVm.CollectionGroupSelectedItems;
-    
+
     private List<CollectionOrganizationItemViewModel> GetItemsTreeLinearized()
     {
         static List<CollectionOrganizationItemViewModel> GetSubItemsLinearized(CollectionOrganizationItemViewModel parentVm)
@@ -67,22 +68,17 @@ public sealed class KeyboardShortcuts : ViewModelBase
             else if (parentVm is CollectionViewModel a)
             {
                 linearizedItems.Add(a);
-                linearizedItems.Add(a.Items[0]);// collection variables
-                linearizedItems.AddRange(((EnvironmentsGroupViewModel)a.Items[1]).Items);// collection environments
-                
-                // small optimization
-                for (int i = 2; i < a.Items.Count; i++)
-                {
-                    var subItem = a.Items[i];
-                    if (subItem is HttpRequestViewModel)
+                linearizedItems.AddRange(
+                    a.Items
+                    .SelectMany(i =>
                     {
-                        linearizedItems.Add(subItem);
-                    }
-                    else
-                    {
-                        linearizedItems.AddRange(GetSubItemsLinearized(subItem));
-                    }
-                }
+                        if (i is HttpRequestViewModel hrvm)
+                            return [hrvm];
+                        else if (i is EnvironmentsGroupViewModel egvm)
+                            return egvm.Items.Cast<CollectionOrganizationItemViewModel>().ToList();
+                        else
+                            return GetSubItemsLinearized(i);
+                    }));
             }
             else if (parentVm is CollectionFolderViewModel e)
             {
@@ -136,6 +132,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
         CyclePreviousEnvironmentToActiveCmd = ReactiveCommand.Create(() => CycleActiveEnvironments(false));
         CycleNextEnvironmentToActiveCmd = ReactiveCommand.Create(() => CycleActiveEnvironments(true));
         SaveResponseToFileCmd = ReactiveCommand.Create(SaveResponseToFile);
+        ExportHttpLogToFileCmd = ReactiveCommand.Create(ExportHttpLogToFile);
     }
 
     #region COPY AND CUT
@@ -328,7 +325,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
         Bitmap bitmap = new(AssetLoader.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
 
         string dialogMsg;
-        
+
         if (HasMultipleItemsSelected)
         {
             dialogMsg = Localizer.Instance.DeleteItemsDialog.MessageMultipleItems;
@@ -386,7 +383,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
     }
 
     #endregion
-    
+
     #region MOVE UP AND DOWN
 
     private void MoveSelectedItemUp() => SelectedItem?.MoveThisUp();
@@ -583,6 +580,15 @@ public sealed class KeyboardShortcuts : ViewModelBase
         else if (mwvm.WebSocketConnectionView.Visible && mwvm.WebSocketConnectionView.VM?.IsSaveSelectedExchangedMessageToFileVisible == true)
         {
             Dispatcher.UIThread.Post(async () => await mwvm.WebSocketConnectionView.VM.SaveSelectedExchangedMessageToFileAsync());
+        }
+    }
+
+    internal void ExportHttpLogToFile()
+    {
+        var mwvm = MainWindowVm;
+        if (mwvm.HttpRequestView.Visible && mwvm.HttpRequestView.VM?.ResponseDataCtx?.IsExportLogFileVisible == true)
+        {
+            Dispatcher.UIThread.Post(async () => await mwvm.HttpRequestView.VM.ResponseDataCtx.ExportLogToFileAsync());
         }
     }
 

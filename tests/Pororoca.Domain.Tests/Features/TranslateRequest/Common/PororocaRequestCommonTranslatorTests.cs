@@ -1,7 +1,5 @@
 using Pororoca.Domain.Features.Entities.Pororoca;
-using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.TranslateRequest;
-using Pororoca.Domain.Features.VariableResolution;
 using Xunit;
 using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonTranslator;
 
@@ -9,8 +7,42 @@ namespace Pororoca.Domain.Tests.Features.TranslateRequest.Common;
 
 public static class PororocaRequestCommonTranslatorTests
 {
-    private static IEnumerable<PororocaVariable> GetEffectiveVariables(this PororocaCollection col) =>
-        ((IPororocaVariableResolver)col).GetEffectiveVariables();
+    #region RESOLVE KEY VALUE PARAMS
+
+    [Fact]
+    public static void Should_resolve_null_key_value_params_correctly() =>
+        // GIVEN, WHEN AND THEN
+        Assert.Equal([], ResolveKVParams([], null));
+
+    [Fact]
+    public static void Should_resolve_non_null_key_value_params_correctly()
+    {
+        // GIVEN
+        PororocaVariable[] effectiveVars =
+        [
+            new(true, "K1", "V1", false),
+            new(true, "K2", "V2", false),
+            new(true, "K3", "P3", true),
+            new(true, "V3", "+V3+", true),
+        ];
+        List<PororocaKeyValueParam> unresolvedParams = [
+            new(false, "P0", "V0"),
+            new(true, "P1", "{{K1}}"),
+            new(true, "P2", "{{K2}}"),
+            new(true, "{{K3}}", "{{V3}}"),
+            new(true, "P4", "V4"),
+        ];
+
+        // WHEN AND THEN
+        Assert.Equal([
+            new(true, "P1", "V1"),
+            new(true, "P2", "V2"),
+            new(true, "P3", "+V3+"),
+            new(true, "P4", "V4")],
+            ResolveKVParams(effectiveVars, unresolvedParams));
+    }
+
+    #endregion
 
     #region REQUEST URL
 
@@ -18,11 +50,13 @@ public static class PororocaRequestCommonTranslatorTests
     public static void Should_make_uri_if_valid_url_is_resolved_from_variable()
     {
         // GIVEN
-        PororocaCollection col = new(string.Empty);
-        col.Variables.Add(new(true, "BaseUrl", "http://www.pudim.com.br", false));
+        PororocaVariable[] effectiveVars =
+        [
+            new(true, "BaseUrl", "http://www.pudim.com.br", false)
+        ];
 
         // WHEN
-        bool valid = TryResolveRequestUri(col.GetEffectiveVariables(), "{{BaseUrl}}", out var uri, out string? errorCode);
+        bool valid = TryResolveAndMakeRequestUri(effectiveVars, "{{BaseUrl}}", out var uri, out string? errorCode);
 
         // THEN
         Assert.True(valid);
@@ -35,11 +69,13 @@ public static class PororocaRequestCommonTranslatorTests
     public static void Should_make_uri_if_valid_url_but_not_resolved_from_variable()
     {
         // GIVEN
-        PororocaCollection col = new(string.Empty);
-        col.Variables.Add(new(true, "BaseUrl", "http://www.pudim.com.br", false));
+        PororocaVariable[] effectiveVars =
+        [
+            new(true, "BaseUrl", "http://www.pudim.com.br", false)
+        ];
 
         // WHEN
-        bool valid = TryResolveRequestUri(col.GetEffectiveVariables(), "https://www.miniclip.com", out var uri, out string? errorCode);
+        bool valid = TryResolveAndMakeRequestUri(effectiveVars, "https://www.miniclip.com", out var uri, out string? errorCode);
 
         // THEN
         Assert.True(valid);
@@ -56,13 +92,14 @@ public static class PororocaRequestCommonTranslatorTests
     public static void Should_return_error_and_not_make_uri_if_invalid_url_pure_or_from_variable(string unresolvedUrl)
     {
         // GIVEN
-        PororocaCollection col = new(string.Empty);
-        col.Variables.Add(new(true, "BaseUrl", "http://www.pudim.com.br", false));
-        col.Variables.Add(new(false, "BaseUrl2", "https://www.pudim.com.br", false));
-        col.Variables.Add(new(true, "BaseUrl3", "https:/www.aaa.gov", false));
+        PororocaVariable[] effectiveVars =
+        [
+            new(true, "BaseUrl", "http://www.pudim.com.br", false),
+            new(true, "BaseUrl3", "https:/www.aaa.gov", false),
+        ];
 
         // WHEN
-        bool valid = TryResolveRequestUri(col.GetEffectiveVariables(), unresolvedUrl, out var uri, out string? errorCode);
+        bool valid = TryResolveAndMakeRequestUri(effectiveVars, unresolvedUrl, out var uri, out string? errorCode);
 
         // THEN
         Assert.False(valid);
@@ -76,10 +113,10 @@ public static class PororocaRequestCommonTranslatorTests
     public static void Should_return_error_and_not_make_uri_if_url_is_not_http_or_websocket(string unresolvedUrl)
     {
         // GIVEN
-        PororocaCollection col = new(string.Empty);
+        PororocaVariable[] effectiveVars = [];
 
         // WHEN
-        bool valid = TryResolveRequestUri(col.GetEffectiveVariables(), unresolvedUrl, out var uri, out string? errorCode);
+        bool valid = TryResolveAndMakeRequestUri(effectiveVars, unresolvedUrl, out var uri, out string? errorCode);
 
         // THEN
         Assert.False(valid);
@@ -101,7 +138,7 @@ public static class PororocaRequestCommonTranslatorTests
         // GIVEN
 
         // WHEN
-        var v = ResolveHttpVersion(httpVersion);
+        var v = MakeHttpVersion(httpVersion);
 
         // THEN
         Assert.Equal(versionMajor, v.Major);
@@ -134,26 +171,17 @@ public static class PororocaRequestCommonTranslatorTests
         Assert.False(IsContentHeader(headerName));
 
     [Fact]
-    public static void Should_resolve_content_headers_correctly()
+    public static void Should_make_content_headers_correctly()
     {
         // GIVEN
-        PororocaCollection col = new("VarResolver");
-        col.Variables.Add(new(true, "ExpiresHeader", "Expires", false));
-        col.Variables.Add(new(true, "ExpiresAt", "2021-12-02", false));
-
-        var headers = new PororocaKeyValueParam[]
-        {
-            new(true, "Content-Type", "application/json"),
+        PororocaKeyValueParam[] resolvedHeaders =
+        [
             new(true, "Content-Language", "pt-BR"),
-            new(false, "Content-MD5", "md5"),
-            new(false, "{{ExpiresHeader}}", "2020-05-01"),
-            new(true, "{{ExpiresHeader}}", "{{ExpiresAt}}"),
-            new(true, "{{ExpiresHeader}}", "{{ExpiresAt2}}"),
-            new(true, "Date", "2021-12-01")
-        };
+            new(true, "Expires", "2021-12-02")
+        ];
 
         // WHEN
-        var contentHeaders = ResolveContentHeaders(col.GetEffectiveVariables(), headers);
+        var contentHeaders = MakeContentHeaders(resolvedHeaders);
 
         // THEN
         Assert.Equal(2, contentHeaders.Count);
@@ -164,25 +192,17 @@ public static class PororocaRequestCommonTranslatorTests
     }
 
     [Fact]
-    public static void Should_resolve_non_content_headers_no_auth_correctly()
+    public static void Should_make_non_content_headers_no_auth_correctly()
     {
         // GIVEN
-        PororocaCollection col = new("VarResolver");
-        col.Variables.Add(new(true, "CookieHeader", "Cookie", false));
-        col.Variables.Add(new(true, "TestCookie2", "cookie2", false));
-
-        var headers = new PororocaKeyValueParam[]
-        {
-            new(true, "Content-Type", "application/json"),
-            new(true, "Content-Language", "pt-BR"),
+        PororocaKeyValueParam[] resolvedHeaders =
+        [
             new(true, "If-Modified-Since", "2021-10-03"),
-            new(false, "{{CookieHeader}}", "{{TestCookie1}}"),
-            new(true, "{{CookieHeader}}", "{{TestCookie2}}"),
-            new(true, "{{CookieHeader}}", "{{TestCookie3}}")
-        };
+            new(true, "Cookie", "cookie2"),
+        ];
 
         // WHEN
-        var contentHeaders = ResolveNonContentHeaders(col.GetEffectiveVariables(), col.CollectionScopedAuth, null, headers);
+        var contentHeaders = MakeNonContentHeaders(null, resolvedHeaders);
 
         // THEN
         Assert.Equal(2, contentHeaders.Count);
@@ -193,28 +213,18 @@ public static class PororocaRequestCommonTranslatorTests
     }
 
     [Fact]
-    public static void Should_resolve_non_content_headers_auth_but_not_custom_correctly()
+    public static void Should_make_non_content_headers_auth_but_not_custom_correctly()
     {
         // GIVEN
-        PororocaCollection col = new("VarResolver");
-        col.Variables.Add(new(true, "CookieHeader", "Cookie", false));
-        col.Variables.Add(new(true, "TestCookie2", "cookie2", false));
-        col.Variables.Add(new(true, "MyAuthHeader", "Authorization", false));
-        col.Variables.Add(new(true, "MyAuthToken", "tkn", false));
-
-        var headers = new PororocaKeyValueParam[]
-        {
-            new(true, "Content-Type", "application/json"),
-            new(true, "Content-Language", "pt-BR"),
+        PororocaKeyValueParam[] resolvedHeaders =
+        [
             new(true, "If-Modified-Since", "2021-10-03"),
-            new(false, "{{CookieHeader}}", "{{TestCookie1}}"),
-            new(true, "{{CookieHeader}}", "{{TestCookie2}}"),
-            new(true, "{{CookieHeader}}", "{{TestCookie3}}"),
-            new(true, "{{MyAuthHeader}}", "{{MyAuthToken}}")
-        };
+            new(true, "Cookie", "cookie2"),
+            new(true, "Authorization", "tkn")
+        ];
 
         // WHEN
-        var contentHeaders = ResolveNonContentHeaders(col.GetEffectiveVariables(), col.CollectionScopedAuth, null, headers);
+        var contentHeaders = MakeNonContentHeaders(null, resolvedHeaders);
 
         // THEN
         Assert.Equal(3, contentHeaders.Count);
@@ -227,29 +237,19 @@ public static class PororocaRequestCommonTranslatorTests
     }
 
     [Fact]
-    public static void Should_resolve_non_content_headers_with_custom_basic_auth_correctly()
+    public static void Should_make_non_content_headers_with_custom_basic_auth_correctly()
     {
         // GIVEN
-        PororocaCollection col = new("VarResolver");
-        col.Variables.Add(new(true, "CookieHeader", "Cookie", false));
-        col.Variables.Add(new(true, "TestCookie2", "cookie2", false));
-        col.Variables.Add(new(true, "Username", "usr", false));
-        col.Variables.Add(new(true, "Password", "pwd", false));
-
-        var headers = new PororocaKeyValueParam[]
-        {
-            new(true, "Content-Type", "application/json"),
-            new(true, "Content-Language", "pt-BR"),
+        PororocaKeyValueParam[] resolvedHeaders =
+        [
             new(true, "If-Modified-Since", "2021-10-03"),
-            new(false, "{{CookieHeader}}", "{{TestCookie1}}"),
-            new(true, "{{CookieHeader}}", "{{TestCookie2}}"),
-            new(true, "{{CookieHeader}}", "{{TestCookie3}}")
-        };
+            new(true, "Cookie", "cookie2")
+        ];
 
-        var reqAuth = PororocaRequestAuth.MakeBasicAuth("{{Username}}", "{{Password}}");
+        var resolvedAuth = PororocaRequestAuth.MakeBasicAuth("usr", "pwd");
 
         // WHEN
-        var contentHeaders = ResolveNonContentHeaders(col.GetEffectiveVariables(), col.CollectionScopedAuth, reqAuth, headers);
+        var contentHeaders = MakeNonContentHeaders(resolvedAuth, resolvedHeaders);
 
         // THEN
         Assert.Equal(3, contentHeaders.Count);
@@ -262,65 +262,19 @@ public static class PororocaRequestCommonTranslatorTests
     }
 
     [Fact]
-    public static void Should_resolve_non_content_headers_with_custom_bearer_auth_correctly()
+    public static void Should_make_non_content_headers_with_custom_bearer_auth_correctly()
     {
         // GIVEN
-        PororocaCollection col = new("VarResolver");
-        col.Variables.Add(new(true, "CookieHeader", "Cookie", false));
-        col.Variables.Add(new(true, "TestCookie2", "cookie2", false));
-        col.Variables.Add(new(true, "BearerToken", "tkn", false));
-
-        var headers = new PororocaKeyValueParam[]
-        {
-            new(true, "Content-Type", "application/json"),
-            new(true, "Content-Language", "pt-BR"),
+        PororocaKeyValueParam[] resolvedHeaders =
+        [
             new(true, "If-Modified-Since", "2021-10-03"),
-            new(false, "{{CookieHeader}}", "{{TestCookie1}}"),
-            new(true, "{{CookieHeader}}", "{{TestCookie2}}"),
-            new(true, "{{CookieHeader}}", "{{TestCookie3}}")
-        };
+            new(true, "Cookie", "cookie2")
+        ];
 
-        var reqAuth = PororocaRequestAuth.MakeBearerAuth("{{BearerToken}}");
+        var resolvedAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
 
         // WHEN
-        var contentHeaders = ResolveNonContentHeaders(col.GetEffectiveVariables(), col.CollectionScopedAuth, reqAuth, headers);
-
-        // THEN
-        Assert.Equal(3, contentHeaders.Count);
-        Assert.True(contentHeaders.ContainsKey("If-Modified-Since"));
-        Assert.Equal("2021-10-03", contentHeaders["If-Modified-Since"]);
-        Assert.True(contentHeaders.ContainsKey("Cookie"));
-        Assert.Equal("cookie2", contentHeaders["Cookie"]);
-        Assert.True(contentHeaders.ContainsKey("Authorization"));
-        Assert.Equal("Bearer tkn", contentHeaders["Authorization"]);
-    }
-
-    [Fact]
-    public static void Should_resolve_non_content_headers_with_custom_inherited_from_collection_auth_correctly()
-    {
-        // GIVEN
-        PororocaCollection col = new("VarResolver")
-        {
-            CollectionScopedAuth = PororocaRequestAuth.MakeBearerAuth("{{BearerToken}}")
-        };
-        col.Variables.Add(new(true, "CookieHeader", "Cookie", false));
-        col.Variables.Add(new(true, "TestCookie2", "cookie2", false));
-        col.Variables.Add(new(true, "BearerToken", "tkn", false));
-
-        var headers = new PororocaKeyValueParam[]
-        {
-            new(true, "Content-Type", "application/json"),
-            new(true, "Content-Language", "pt-BR"),
-            new(true, "If-Modified-Since", "2021-10-03"),
-            new(false, "{{CookieHeader}}", "{{TestCookie1}}"),
-            new(true, "{{CookieHeader}}", "{{TestCookie2}}"),
-            new(true, "{{CookieHeader}}", "{{TestCookie3}}")
-        };
-
-        var reqAuth = PororocaRequestAuth.InheritedFromCollection;
-
-        // WHEN
-        var contentHeaders = ResolveNonContentHeaders(col.GetEffectiveVariables(), col.CollectionScopedAuth, reqAuth, headers);
+        var contentHeaders = MakeNonContentHeaders(resolvedAuth, resolvedHeaders);
 
         // THEN
         Assert.Equal(3, contentHeaders.Count);
@@ -337,179 +291,171 @@ public static class PororocaRequestCommonTranslatorTests
     #region AUTH
 
     [Fact]
-    public static void Should_use_no_auth_if_specified()
+    public static void Should_resolve_no_auth_to_null()
     {
         // GIVEN
-        PororocaCollection col = new("VarResolver");
+        PororocaVariable[] effectiveVars = [];
         // WHEN
-        var resolvedAuth = ResolveRequestAuth(col.GetEffectiveVariables(), col.CollectionScopedAuth, reqAuth: null);
+        var resolvedAuth = ResolveRequestAuth(effectiveVars, collectionScopedAuth: null, reqAuth: null);
         // THEN
         Assert.Null(resolvedAuth);
     }
 
     [Fact]
-    public static void Should_use_request_custom_auth_if_specified()
+    public static void Should_resolve_to_collection_scoped_auth_if_request_inherits()
     {
         // GIVEN
-        PororocaCollection col = new("VarResolver");
-        col.Variables.Add(new(true, "CertificateFilePath", "./cert.p12", false));
-        col.Variables.Add(new(true, "PrivateKeyFilePassword", "my_pwd", false));
-
-        var reqAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "{{PrivateKeyFilePassword}}");
+        var collectionScopedAuth = PororocaRequestAuth.MakeBearerAuth("{{BearerAuthToken}}");
+        var reqAuth = PororocaRequestAuth.InheritedFromCollection;
+        PororocaVariable[] effectiveVars =
+        [
+            new(true, "BearerAuthToken", "tkn", false),
+        ];
 
         // WHEN
-        var resolvedAuth = ResolveRequestAuth(col.GetEffectiveVariables(), col.CollectionScopedAuth, reqAuth);
+        var resolvedAuth = ResolveRequestAuth(effectiveVars, collectionScopedAuth, reqAuth);
 
         // THEN
         Assert.NotNull(resolvedAuth);
-        Assert.Equal(PororocaRequestAuthMode.ClientCertificate, resolvedAuth!.Mode);
-        Assert.Equal(PororocaRequestAuthClientCertificateType.Pkcs12, resolvedAuth.ClientCertificate!.Type);
+        Assert.Equal(PororocaRequestAuthMode.Bearer, resolvedAuth.Mode);
+        Assert.Equal("tkn", resolvedAuth.BearerToken);
+    }
+
+    [Fact]
+    public static void Should_resolve_basic_auth_if_specified()
+    {
+        // GIVEN
+        var reqAuth = PororocaRequestAuth.MakeBasicAuth("{{BasicAuthLogin}}", "{{BasicAuthPassword}}");
+        PororocaVariable[] effectiveVars =
+        [
+            new(true, "BasicAuthLogin", "usr", false),
+            new(true, "BasicAuthPassword", "pwd", false)
+        ];
+
+        // WHEN
+        var resolvedAuth = ResolveRequestAuth(effectiveVars, null, reqAuth);
+
+        // THEN
+        Assert.NotNull(resolvedAuth);
+        Assert.Equal(PororocaRequestAuthMode.Basic, resolvedAuth.Mode);
+        Assert.Equal("usr", resolvedAuth.BasicAuthLogin);
+        Assert.Equal("pwd", resolvedAuth.BasicAuthPassword);
+    }
+
+    [Fact]
+    public static void Should_resolve_bearer_auth_if_specified()
+    {
+        // GIVEN
+        var reqAuth = PororocaRequestAuth.MakeBearerAuth("{{BearerAuthToken}}");
+        PororocaVariable[] effectiveVars =
+        [
+            new(true, "BearerAuthToken", "tkn", false),
+        ];
+
+        // WHEN
+        var resolvedAuth = ResolveRequestAuth(effectiveVars, null, reqAuth);
+
+        // THEN
+        Assert.NotNull(resolvedAuth);
+        Assert.Equal(PororocaRequestAuthMode.Bearer, resolvedAuth.Mode);
+        Assert.Equal("tkn", resolvedAuth.BearerToken);
+    }
+
+    [Fact]
+    public static void Should_resolve_PKCS12_client_certificate_auth_if_specified()
+    {
+        // GIVEN
+        var reqAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "{{PrivateKeyFilePassword}}");
+        PororocaVariable[] effectiveVars =
+        [
+            new(true, "CertificateFilePath", "./cert.p12", false),
+            new(true, "PrivateKeyFilePassword", "my_pwd", false)
+        ];
+
+        // WHEN
+        var resolvedAuth = ResolveRequestAuth(effectiveVars, null, reqAuth);
+
+        // THEN
+        Assert.NotNull(resolvedAuth);
+        Assert.NotNull(resolvedAuth.ClientCertificate);
+        Assert.Equal(PororocaRequestAuthMode.ClientCertificate, resolvedAuth.Mode);
+        Assert.Equal(PororocaRequestAuthClientCertificateType.Pkcs12, resolvedAuth.ClientCertificate.Type);
         Assert.Equal("./cert.p12", resolvedAuth.ClientCertificate.CertificateFilePath);
         Assert.Null(resolvedAuth.ClientCertificate.PrivateKeyFilePath);
         Assert.Equal("my_pwd", resolvedAuth.ClientCertificate.FilePassword);
     }
 
     [Fact]
-    public static void Should_use_collection_scoped_auth_if_specified()
-    {
-        // GIVEN
-        PororocaCollection col = new("VarResolver")
-        {
-            CollectionScopedAuth = PororocaRequestAuth.MakeWindowsAuth(false, "{{win_login}}", "{{win_pwd}}", "{{win_domain}}")
-        };
-        col.Variables.Add(new(true, "win_login", "alexandre123", false));
-        col.Variables.Add(new(true, "win_pwd", "my_pwd", false));
-        col.Variables.Add(new(true, "win_domain", "alexandre.mydomain.net", false));
-
-        // WHEN
-        var resolvedAuth = ResolveRequestAuth(col.GetEffectiveVariables(), col.CollectionScopedAuth, PororocaRequestAuth.InheritedFromCollection);
-
-        // THEN
-        Assert.NotNull(resolvedAuth);
-        Assert.Equal(PororocaRequestAuthMode.Windows, resolvedAuth!.Mode);
-        Assert.Equal("alexandre123", resolvedAuth!.Windows!.Login);
-        Assert.Equal("my_pwd", resolvedAuth!.Windows!.Password);
-        Assert.Equal("alexandre.mydomain.net", resolvedAuth!.Windows!.Domain);
-    }
-
-    #endregion
-
-    #region CLIENT CERTIFICATES
-
-    [Fact]
-    public static void Should_resolve_PKCS12_client_certificate_params_correctly()
-    {
-        // GIVEN
-        PororocaCollection col = new("VarResolver");
-        col.Variables.Add(new(true, "CertificateFilePath", "./cert.p12", false));
-        col.Variables.Add(new(true, "PrivateKeyFilePassword", "my_pwd", false));
-
-        var reqAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "{{PrivateKeyFilePassword}}");
-
-        PororocaHttpRequest req = new();
-        req.UpdateUrl("http://www.pudim.com.br");
-        req.UpdateCustomAuth(reqAuth);
-
-        // WHEN
-        var resolvedCert = ResolveClientCertificate(col.GetEffectiveVariables(), reqAuth.ClientCertificate!);
-
-        // THEN
-        Assert.NotNull(resolvedCert);
-        Assert.Equal(PororocaRequestAuthClientCertificateType.Pkcs12, resolvedCert!.Type);
-        Assert.Equal("./cert.p12", resolvedCert.CertificateFilePath);
-        Assert.Null(resolvedCert.PrivateKeyFilePath);
-        Assert.Equal("my_pwd", resolvedCert.FilePassword);
-    }
-
-    [Fact]
     public static void Should_resolve_PEM_client_certificate_params_correctly_separate_private_key()
     {
         // GIVEN
-        PororocaCollection col = new("VarResolver");
-        col.Variables.Add(new(true, "CertificateFilePath", "./cert.pem", false));
-        col.Variables.Add(new(true, "PrivateKeyFilePath", "./private_key.key", false));
-        col.Variables.Add(new(true, "PrivateKeyFilePassword", "my_pwd", false));
-
         var reqAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", "{{PrivateKeyFilePath}}", "{{PrivateKeyFilePassword}}");
-
-        PororocaHttpRequest req = new();
-        req.UpdateUrl("http://www.pudim.com.br");
-        req.UpdateCustomAuth(reqAuth);
+        PororocaVariable[] effectiveVars =
+        [
+            new(true, "CertificateFilePath", "./cert.pem", false),
+            new(true, "PrivateKeyFilePath", "./private_key.key", false),
+            new(true, "PrivateKeyFilePassword", "my_pwd", false)
+        ];
 
         // WHEN
-        var resolvedCert = ResolveClientCertificate(col.GetEffectiveVariables(), reqAuth.ClientCertificate!);
+        var resolvedAuth = ResolveRequestAuth(effectiveVars, null, reqAuth);
 
         // THEN
-        Assert.NotNull(resolvedCert);
-        Assert.Equal(PororocaRequestAuthClientCertificateType.Pem, resolvedCert!.Type);
-        Assert.Equal("./cert.pem", resolvedCert.CertificateFilePath);
-        Assert.Equal("./private_key.key", resolvedCert.PrivateKeyFilePath);
-        Assert.Equal("my_pwd", resolvedCert.FilePassword);
+        Assert.NotNull(resolvedAuth);
+        Assert.Equal(PororocaRequestAuthMode.ClientCertificate, resolvedAuth!.Mode);
+        Assert.Equal(PororocaRequestAuthClientCertificateType.Pem, resolvedAuth.ClientCertificate!.Type);
+        Assert.Equal("./cert.pem", resolvedAuth.ClientCertificate.CertificateFilePath);
+        Assert.Equal("./private_key.key", resolvedAuth.ClientCertificate.PrivateKeyFilePath);
+        Assert.Equal("my_pwd", resolvedAuth.ClientCertificate.FilePassword);
     }
 
     [Fact]
     public static void Should_resolve_PEM_client_certificate_params_correctly_conjoined_private_key()
     {
         // GIVEN
-        PororocaCollection col = new("VarResolver");
-        col.Variables.Add(new(true, "CertificateFilePath", "./cert.pem", false));
-        col.Variables.Add(new(true, "FilePassword", "my_pwd", false));
-
-        var reqAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", null, "{{FilePassword}}");
-
-        PororocaHttpRequest req = new();
-        req.UpdateUrl("http://www.pudim.com.br");
-        req.UpdateCustomAuth(reqAuth);
+        var reqAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", null, "{{PrivateKeyFilePassword}}");
+        PororocaVariable[] effectiveVars =
+        [
+            new(true, "CertificateFilePath", "./cert.pem", false),
+            new(true, "PrivateKeyFilePassword", "my_pwd", false)
+        ];
 
         // WHEN
-        var resolvedCert = ResolveClientCertificate(col.GetEffectiveVariables(), reqAuth.ClientCertificate!);
+        var resolvedAuth = ResolveRequestAuth(effectiveVars, null, reqAuth);
 
         // THEN
-        Assert.NotNull(resolvedCert);
-        Assert.Equal(PororocaRequestAuthClientCertificateType.Pem, resolvedCert!.Type);
-        Assert.Equal("./cert.pem", resolvedCert.CertificateFilePath);
-        Assert.Null(resolvedCert.PrivateKeyFilePath);
-        Assert.Equal("my_pwd", resolvedCert.FilePassword);
+        Assert.NotNull(resolvedAuth);
+        Assert.Equal(PororocaRequestAuthMode.ClientCertificate, resolvedAuth!.Mode);
+        Assert.Equal(PororocaRequestAuthClientCertificateType.Pem, resolvedAuth.ClientCertificate!.Type);
+        Assert.Equal("./cert.pem", resolvedAuth.ClientCertificate.CertificateFilePath);
+        Assert.Null(resolvedAuth.ClientCertificate.PrivateKeyFilePath);
+        Assert.Equal("my_pwd", resolvedAuth.ClientCertificate.FilePassword);
     }
 
-    #endregion
 
-    #region WINDOWS AUTHENTICATION
-
-    [Theory]
-    [InlineData(false)]
-    [InlineData(true)]
-    public static void Should_resolve_windows_authentication_values(bool useCurrentUser)
+    [Fact]
+    public static void Should_resolve_windows_auth_different_user_if_specified()
     {
         // GIVEN
-        PororocaCollection col = new("VarResolver");
-        col.Variables.Add(new(true, "win_login", "alexandre123", false));
-        col.Variables.Add(new(true, "win_pwd", "my_pwd", false));
-        col.Variables.Add(new(true, "win_domain", "alexandre.mydomain.net", false));
-
-        var reqAuth = PororocaRequestAuth.MakeWindowsAuth(useCurrentUser, "{{win_login}}", "{{win_pwd}}", "{{win_domain}}");
-
-        PororocaHttpRequest req = new();
-        req.UpdateCustomAuth(reqAuth);
+        var reqAuth = PororocaRequestAuth.MakeWindowsAuth(false, "{{win_login}}", "{{win_pwd}}", "{{win_domain}}");
+        PororocaVariable[] effectiveVars =
+        [
+            new(true, "win_login", "alexandre123", false),
+            new(true, "win_pwd", "my_pwd", false),
+            new(true, "win_domain", "alexandre.mydomain.net", false)
+        ];
 
         // WHEN
-        var resolvedWinAuth = ResolveWindowsAuth(col.GetEffectiveVariables(), reqAuth.Windows!);
+        var resolvedAuth = ResolveRequestAuth(effectiveVars, null, reqAuth);
 
         // THEN
-        Assert.NotNull(resolvedWinAuth);
-        Assert.Equal(useCurrentUser, resolvedWinAuth!.UseCurrentUser);
-        if (useCurrentUser == true)
-        {
-            Assert.Null(resolvedWinAuth.Login);
-            Assert.Null(resolvedWinAuth.Password);
-            Assert.Null(resolvedWinAuth.Domain);
-        }
-        else
-        {
-            Assert.Equal("alexandre123", resolvedWinAuth.Login);
-            Assert.Equal("my_pwd", resolvedWinAuth.Password);
-            Assert.Equal("alexandre.mydomain.net", resolvedWinAuth.Domain);
-        }
+        Assert.NotNull(resolvedAuth);
+        Assert.Equal(PororocaRequestAuthMode.Windows, resolvedAuth!.Mode);
+        Assert.NotNull(resolvedAuth.Windows);
+        Assert.False(resolvedAuth.Windows.UseCurrentUser);
+        Assert.Equal("alexandre123", resolvedAuth.Windows.Login);
+        Assert.Equal("my_pwd", resolvedAuth.Windows.Password);
+        Assert.Equal("alexandre.mydomain.net", resolvedAuth.Windows.Domain);
     }
 
     #endregion

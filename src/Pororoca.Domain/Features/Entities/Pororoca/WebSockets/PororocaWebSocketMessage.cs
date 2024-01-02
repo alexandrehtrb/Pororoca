@@ -18,10 +18,10 @@ public enum PororocaWebSocketMessageType
 public abstract class PororocaWebSocketMessage
 {
     [JsonInclude]
-    public PororocaWebSocketMessageDirection Direction { get; }
+    public PororocaWebSocketMessageDirection Direction { get; internal set; }
 
     [JsonInclude]
-    public PororocaWebSocketMessageType MessageType { get; private set; }
+    public PororocaWebSocketMessageType MessageType { get; internal set; }
 
 #nullable disable warnings
     protected PororocaWebSocketMessage() : this(PororocaWebSocketMessageDirection.FromClient, PororocaWebSocketMessageType.Text)

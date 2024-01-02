@@ -1,5 +1,3 @@
-using Pororoca.Domain.Features.Entities.Pororoca;
-
 namespace Pororoca.Desktop.UITesting.Tests;
 
 public sealed partial class HttpRequestsUITest : UITest
@@ -7,7 +5,7 @@ public sealed partial class HttpRequestsUITest : UITest
     private async Task TestCaptureResponseXmlBody()
     {
         await HttpRobot.HttpMethod.Select("GET");
-        await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/get/xml");        
+        await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/get/xml");
         await HttpRobot.SetEmptyBody();
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResCapture);
         await HttpRobot.ResAddCaptureBody.ClickOn();
@@ -22,7 +20,7 @@ public sealed partial class HttpRequestsUITest : UITest
         Assert(envVar.Value == "123987456");
         Assert(envVar.IsSecret == true);
         envVar.RemoveVariable();
-        
+
         await TreeRobot.Select("COL1/HTTPREQ");
         HttpRobot.ResCapturesVm.Items.Clear();
     }

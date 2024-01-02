@@ -16,9 +16,11 @@ public static class TestEndpoints
         app.MapGet("test/get/txt", TestGetTxt);
         app.MapGet("test/get/headers", TestGetHeaders);
         app.MapGet("test/get/trailers", TestGetTrailers);
+        app.MapGet("test/get/multipartformdata", TestGetMultipartFormData);
+        app.MapGet("test/get/multiparttextonly", TestGetMultipartTextOnly);
         app.MapGet("test/auth", TestAuthHeader);
-        app.MapGet("test/http1websocket", TestHttp1WebSocket);
-        app.MapConnect("test/http2websocket", TestHttp2WebSocket);
+        app.MapGet("test/http1websocket", (Delegate)TestHttp1WebSocket);
+        app.MapConnect("test/http2websocket", (Delegate)TestHttp2WebSocket);
 
         // HttpContext as a parameter makes some endpoints hidden in Swagger (?)
         app.MapPost("test/post/none", TestPostNone);
@@ -70,7 +72,7 @@ public static class TestEndpoints
     {
         foreach (var reqHeader in httpCtx.Request.Headers)
         {
-            httpCtx.Response.Headers.Add($"MIRRORED-{reqHeader.Key}", reqHeader.Value);
+            httpCtx.Response.Headers.Append($"MIRRORED-{reqHeader.Key}", reqHeader.Value);
         }
         return Results.NoContent();
     }
@@ -87,6 +89,44 @@ public static class TestEndpoints
         httpRes.AppendTrailer("MyTrailer", new("MyTrailerValue"));
         await httpRes.CompleteAsync();
     }
+
+    private static MultipartFormDataResult TestGetMultipartFormData() =>
+        new()
+        {
+            new MultipartContent()
+            {
+                Name = "a",
+                ContentType = "text/plain",
+                FileName = null,
+                Stream = new MemoryStream("oi"u8.ToArray())
+            },
+            new MultipartContent()
+            {
+                Name = "arq",
+                ContentType = "image/gif",
+                FileName = "pirate.gif",
+                Stream = new FileStream(GetTestFilePath("pirate.gif"), FileMode.Open)
+            }
+        };
+    
+    private static MultipartFormDataResult TestGetMultipartTextOnly() =>
+        new()
+        {
+            new MultipartContent()
+            {
+                Name = "a",
+                ContentType = "text/plain",
+                FileName = null,
+                Stream = new MemoryStream("oi"u8.ToArray())
+            },
+            new MultipartContent()
+            {
+                Name = "b",
+                ContentType = "application/json",
+                FileName = null,
+                Stream = new MemoryStream("{\"msg\":\"ciao\"}"u8.ToArray())
+            }
+        };
 
     #endregion
 

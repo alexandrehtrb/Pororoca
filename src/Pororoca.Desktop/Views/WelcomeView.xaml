@@ -1,0 +1,69 @@
+<UserControl
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:v="using:Pororoca.Desktop.Views"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:controls="clr-namespace:Pororoca.Desktop.Controls;assembly=Pororoca.Desktop"
+  mc:Ignorable="d"
+  d:DesignWidth="1350"
+  d:DesignHeight="700"
+  x:Class="Pororoca.Desktop.Views.WelcomeView"
+  x:CompileBindings="True"
+  x:DataType="vm:WelcomeViewModel"
+  FontSize="16">
+
+  <StackPanel
+    Spacing="36"
+    HorizontalAlignment="Stretch"
+    VerticalAlignment="Stretch"
+    Margin="24,0,24,24">
+
+    <TextBlock
+      Text="{Binding i18n.Welcome.Title}"
+      Margin="0,24,0,0"
+      HorizontalAlignment="Left"
+      VerticalAlignment="Top"
+      TextWrapping="Wrap"
+      Classes="PageTitle"/>
+
+    <StackPanel
+      Orientation="Vertical"
+      Spacing="16"
+      Margin="0,12,0,0">
+
+      <controls:IconButton
+        x:Name="btAddCollection"
+        Icon="{StaticResource IconAddGeometry}"
+        Text="{Binding i18n.Welcome.NewCollection}"
+        Command="{Binding AddNewCollectionCmd}" />
+
+      <controls:IconButton
+        x:Name="btImportCollection"
+        Icon="{StaticResource IconImportGeometry}"
+        Text="{Binding i18n.Welcome.ImportCollection}"
+        Command="{Binding ImportCollectionCmd}" />
+
+      <controls:IconButton
+        x:Name="btImportOpenAPI"
+        Icon="{StaticResource IconImportGeometry}"
+        Text="{Binding i18n.Welcome.ImportOpenAPI}"
+        Command="{Binding ImportOpenAPICmd}" />
+
+      <controls:IconButton
+        x:Name="btGoToWebsite"
+        Icon="{StaticResource IconHttpGeometry}"
+        Text="{Binding i18n.Welcome.OpenDocsWebsite}"
+        Command="{Binding GoToDocsWebSiteCmd}" />
+
+      <controls:IconButton
+        x:Name="btVisitGitHubRepo"
+        Icon="{StaticResource IconGitHubGeometry}"
+        Text="{Binding i18n.Welcome.VisitGitHubRepo}"
+        Command="{Binding VisitGitHubRepoCmd}" />
+
+    </StackPanel>
+
+  </StackPanel>
+</UserControl>

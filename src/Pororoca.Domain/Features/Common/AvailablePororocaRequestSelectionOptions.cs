@@ -1,11 +1,14 @@
+using System.Collections.Frozen;
 using System.Collections.Immutable;
+using System.Net.Quic;
 using Pororoca.Domain.Features.TranslateRequest;
 
 namespace Pororoca.Domain.Features.Common;
 
 public static class AvailablePororocaRequestSelectionOptions
 {
-    public static readonly IImmutableList<HttpMethod> AvailableHttpMethods = ImmutableList.Create(
+    public static readonly ImmutableList<HttpMethod> AvailableHttpMethods =
+    [
         HttpMethod.Get,
         HttpMethod.Post,
         HttpMethod.Put,
@@ -14,26 +17,36 @@ public static class AvailablePororocaRequestSelectionOptions
         HttpMethod.Head,
         HttpMethod.Options,
         HttpMethod.Connect,
-        HttpMethod.Trace);
+        HttpMethod.Trace
+    ];
 
-    public static readonly IImmutableList<decimal> AvailableHttpVersionsForHttp = ImmutableList.Create(
+    public static readonly ImmutableList<decimal> AvailableHttpVersionsForHttp =
+    [
         1.0m,
         1.1m,
         2.0m,
-        3.0m);
+        3.0m
+    ];
 
-    public static readonly IImmutableList<decimal> AvailableHttpVersionsForWebSockets = ImmutableList.Create(
+    public static readonly ImmutableList<decimal> AvailableHttpVersionsForWebSockets =
+    [
         1.1m,
-        2.0m);
+        2.0m
+    ];
 
     public static bool IsHttpVersionAvailableInOS(decimal httpVersion, out string? errorCode)
     {
-        if (httpVersion == 3.0m && !(OperatingSystem.IsLinux() || OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000)))
+    #pragma warning disable CA1416
+        if (httpVersion == 3.0m && !(OperatingSystem.IsLinux() || QuicConnection.IsSupported))
+    #pragma warning restore CA1416
         {
             // https://docs.microsoft.com/en-us/windows/win32/sysinfo/operating-system-version
             // https://en.wikipedia.org/wiki/Windows_11_version_history
             // https://devblogs.microsoft.com/dotnet/http-3-support-in-dotnet-6/#prerequisites
             // Windows 11 Build 22000 still uses major version as 10, but build number is 22000 or higher
+            // Min Windows version retrieved from:
+            // https://github.com/dotnet/runtime/blob/34ea77705ba9a7fe5ecaf752880a310ba8768d5d/src/libraries/System.Net.Quic/src/System/Net/Quic/Internal/MsQuicApi.cs#L19
+            // Windows Server 2022 can use HTTP/3 and Windows version is 10.0.20348
             // If Linux, requires msquic installed
             errorCode = TranslateRequestErrors.Http3UnavailableInOSVersion;
             return false;
@@ -78,4 +91,91 @@ public static class AvailablePororocaRequestSelectionOptions
             return true;
         }
     }
+
+    public static readonly FrozenSet<string> MostCommonHeaders = new[]
+    {
+        "Accept",
+        "Accept-Datetime",
+        "Accept-Encoding",
+        "Accept-Language",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers",
+        "Cache-Control",
+        "Connection",
+        "Content-Encoding",
+        "Content-Language",
+        "Cookie",
+        "Date",
+        "From",
+        "Host",
+        "If-Match",
+        "If-Modified-Since",
+        "If-None-Match",
+        "If-Range",
+        "If-Unmodified-Since",
+        "Max-Forwards",
+        "Origin",
+        "Pragma",
+        "Proxy-Authorization",
+        "Range",
+        "Referer",
+        "Prefer",
+        "X-Request-ID",
+        "X-Correlation-ID",
+        "Save-Data",
+        "Sec-GPC",
+        "User-Agent",
+        "Via",
+        "DNT"
+    }.ToFrozenSet();
+
+    public static readonly string[] ExampleLcids =
+        ["pt-BR", "pt-PT", "en-GB", "en-US", "it-IT", "ru-RU", "uk-UA", "es-ES", "es-AR", "es-MX", "ko-KR", "ja-JP"];
+
+    private const string sampleValueEncodingHeader = "gzip, br, zstd";
+
+    private static string GetSampleValueForDateHeader() =>
+        DateTime.Now.ToUniversalTime().ToString("r");
+
+    private static string GetSampleValueForLanguageHeader() =>
+        Random.Shared.GetItems(ExampleLcids, 1)[0];
+
+    public static string ProvideSampleValueForHeader(string headerName) =>
+        headerName switch
+        {
+            "Accept" => "*/*",
+            "Accept-Datetime" => GetSampleValueForDateHeader(),
+            "Accept-Encoding" => sampleValueEncodingHeader,
+            "Accept-Language" => GetSampleValueForLanguageHeader(),
+            "Access-Control-Request-Method" => "GET",
+            "Access-Control-Request-Headers" => "origin, x-requested-with",
+            "Cache-Control" => "no-cache",
+            "Connection" => "keep-alive",
+            "Content-Encoding" => sampleValueEncodingHeader,
+            "Content-Language" => GetSampleValueForLanguageHeader(),
+            "Cookie" => "$Version=1; Skin=new;",
+            "Date" => GetSampleValueForDateHeader(),
+            "From" => "user@example.com",
+            "Host" => "en.wikipedia.org",
+            "If-Match" => string.Empty,
+            "If-Modified-Since" => GetSampleValueForDateHeader(),
+            "If-None-Match" => string.Empty,
+            "If-Range" => string.Empty,
+            "If-Unmodified-Since" => GetSampleValueForDateHeader(),
+            "Max-Forwards" => "10",
+            "Origin" => "http://www.pudim.com.br",
+            "Pragma" => "no-cache",
+            "Proxy-Authorization" => "Basic {{proxy_credentials_here}}",
+            "Range" => "bytes=500-999",
+            "Referer" => "http://en.wikipedia.org/wiki/Main_Page",
+            "Prefer" => "return=representation",
+            "X-Request-ID" => Guid.NewGuid().ToString(),
+            "X-Correlation-ID" => Guid.NewGuid().ToString(),
+            "Save-Data" => "on",
+            "Sec-GPC" => "1",
+            "User-Agent" => "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/119.0",
+            "Via" => "1.0 fred, 1.1 example.com (Apache/1.1)",
+            "DNT" => "1",
+            _ => string.Empty
+        };
 }

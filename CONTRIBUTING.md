@@ -6,11 +6,11 @@ Remember to fork this repo and develop your code starting from the `develop` bra
 
 ## I want to translate Pororoca to my language
 
-1) In the `Pororoca.Desktop.Localization.SourceGeneration` project, add your language to the enum and extensions.
+1) In the **Pororoca.Desktop.Localization.SourceGeneration** project, add your language to the enum and extensions.
 
-2) In the `Pororoca.Desktop` project, create a new JSON file with your language strings, inside the Localization folder.
+2) In the **Pororoca.Desktop** project, create a new JSON file with your language strings, inside the Localization folder, and reference in AdditionalFiles inside `Pororoca.Desktop.csproj`.
 
-3) Insert a new key in the `i18n_keys.json` file, of your language name, like: `"TopMenuLanguage/YourLanguage",`.
+3) Insert a new key in the `i18n_keys.json` file, of your language name, like: `"TopMenuLanguage/YourLanguage",`. The other languages files will need a translation for this key.
 
 4) Edit `MainWindow.xaml` and `MainWindowViewModel.cs` to add your language to the top menu.
 

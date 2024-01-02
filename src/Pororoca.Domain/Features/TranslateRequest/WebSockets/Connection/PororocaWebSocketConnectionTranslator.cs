@@ -2,7 +2,6 @@ using System.Net.WebSockets;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.Requester;
-using Pororoca.Domain.Features.TranslateRequest.Common;
 using Pororoca.Domain.Features.VariableResolution;
 using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
 using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonTranslator;
@@ -47,12 +46,14 @@ public static class PororocaWebSocketConnectionTranslator
             try
             {
                 var resolvedAuth = ResolveRequestAuth(effectiveVars, collectionScopedAuth, wsConn.CustomAuth);
+                var resolvedHeaders = ResolveKVParams(effectiveVars, wsConn.Headers);
+                var resolvedSubprotocols = ResolveSubprotocols(effectiveVars, wsConn);
                 var httpCli = httpClientProvider.Provide(disableTlsVerification, resolvedAuth);
 
                 var wsCli = new ClientWebSocket();
                 SetHttpVersion(wsConn, wsCli);
-                SetConnectionRequestHeaders(effectiveVars, collectionScopedAuth, wsConn, wsCli);
-                SetSubprotocols(effectiveVars, wsConn, wsCli);
+                SetConnectionRequestHeaders(resolvedAuth, resolvedHeaders, wsCli);
+                SetSubprotocols(resolvedSubprotocols, wsCli);
                 SetCompressionOptions(wsConn, wsCli);
                 SetCollectHttpResponseDetails(wsCli);
 
@@ -68,25 +69,34 @@ public static class PororocaWebSocketConnectionTranslator
         }
     }
 
+    #region RESOLUTION / REPLACE VARIABLE TEMPLATES
+
+    private static PororocaKeyValueParam[] ResolveSubprotocols(IEnumerable<PororocaVariable> effectiveVars, PororocaWebSocketConnection wsConn) =>
+        wsConn.Subprotocols?
+              .Where(x => x.Enabled)
+              .Select(x => new PororocaKeyValueParam(true, IPororocaVariableResolver.ReplaceTemplates(x.Key, effectiveVars), null))
+              .ToArray() ?? Array.Empty<PororocaKeyValueParam>();
+
+    #endregion
+
     private static void SetHttpVersion(PororocaWebSocketConnection wsConn, ClientWebSocket wsCli)
     {
         wsCli.Options.HttpVersionPolicy = HttpVersionPolicy.RequestVersionExact;
-        wsCli.Options.HttpVersion = PororocaRequestCommonTranslator.ResolveHttpVersion(wsConn.HttpVersion);
+        wsCli.Options.HttpVersion = MakeHttpVersion(wsConn.HttpVersion);
     }
 
-
-    private static void SetConnectionRequestHeaders(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaWebSocketConnection wsConn, ClientWebSocket wsCli)
+    private static void SetConnectionRequestHeaders(PororocaRequestAuth? resolvedAuth, List<PororocaKeyValueParam> resolvedHeaders, ClientWebSocket wsCli)
     {
-        var resolvedNonContentHeaders = ResolveNonContentHeaders(effectiveVars, collectionScopedAuth, wsConn.CustomAuth, wsConn.Headers);
+        var resolvedNonContentHeaders = MakeNonContentHeaders(resolvedAuth, resolvedHeaders);
         foreach (var header in resolvedNonContentHeaders)
         {
             wsCli.Options.SetRequestHeader(header.Key, header.Value);
         }
     }
 
-    private static void SetSubprotocols(IEnumerable<PororocaVariable> effectiveVars, PororocaWebSocketConnection wsConn, ClientWebSocket wsCli)
+    private static void SetSubprotocols(PororocaKeyValueParam[] resolvedSubprotocols, ClientWebSocket wsCli)
     {
-        var subprotocols = IPororocaVariableResolver.ResolveKeyValueParams(wsConn.Subprotocols, effectiveVars).Select(kv => kv.Key);
+        var subprotocols = resolvedSubprotocols.Select(kv => kv.Key);
         foreach (string subprotocol in subprotocols)
         {
             wsCli.Options.AddSubProtocol(subprotocol);

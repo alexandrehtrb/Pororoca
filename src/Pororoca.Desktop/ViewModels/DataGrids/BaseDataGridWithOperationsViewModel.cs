@@ -76,7 +76,7 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
             }
         }
     }
-    
+
     private void DuplicateSelected()
     {
         if (SelectedItems is not null && SelectedItems.Count > 0)

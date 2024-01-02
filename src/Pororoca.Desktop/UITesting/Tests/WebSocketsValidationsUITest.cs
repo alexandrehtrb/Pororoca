@@ -1,7 +1,6 @@
 using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using Pororoca.Desktop.UITesting.Robots;
-using Pororoca.Desktop.UserData;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Common;
@@ -111,17 +110,17 @@ public sealed partial class WebSocketsValidationsUITest : UITest
 
         AssertIsVisible(WsRobot.DisableTlsVerification);
         AssertIsVisible(WsRobot.ConnectionRequestException);
-        AssertContainsText(WsRobot.ConnectionRequestException, "The remote certificate is invalid because of errors in the certificate chain: UntrustedRoot");
+        AssertContainsText(WsRobot.ConnectionRequestException, "The remote certificate is invalid");
 
         await WsRobot.DisableTlsVerification.ClickOn();
         AssertIsHidden(WsRobot.DisableTlsVerification);
         await AssertTopMenuTlsVerification(false);
-        
+
         await WsRobot.ClickOnConnectAndWaitForConnection();
         AssertIsHidden(WsRobot.DisableTlsVerification);
         AssertIsVisible(WsRobot.ConnectionRequestException);
         AssertContainsText(WsRobot.ConnectionRequestException, "'101' was expected");
-        
+
         await TopMenuRobot.SwitchTlsVerification(true);
     }
 
@@ -156,11 +155,5 @@ public sealed partial class WebSocketsValidationsUITest : UITest
         ObservableCollection<VariableViewModel> parent = new();
         parent.Add(new(parent, new(true, "BaseUrlWs", "wss://localhost:5001", false)));
         return parent;
-    }
-
-    private static string GetTestFilesDirPath()
-    {
-        var userDataDir = UserDataManager.GetUserDataFolder();
-        return Path.Combine(userDataDir.FullName, "PororocaUserData", "TestFiles");
     }
 }

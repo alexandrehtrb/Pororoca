@@ -19,25 +19,29 @@
       <Color x:Key="SystemInvertedAccentColorLight1">#88DDCE</Color>
       <Color x:Key="SystemInvertedAccentColorLight2">#98E2D4</Color>
       <Color x:Key="MainWindowMenuColor">Black</Color>
-      <Color x:Key="MainWindowBackgroundColor">#0F263F</Color>
-      <Color x:Key="MainWindowDarkerBackgroundColor">#0A1929</Color>
+      <Color x:Key="MainWindowBackgroundColor">#04538B</Color>
+      <Color x:Key="MainWindowDarkerBackgroundColor">Black</Color>
       <Color x:Key="MainWindowSidebarColor">Black</Color>
       <Color x:Key="MainWindowSeparatorsColor">Black</Color>
-      <Color x:Key="CurrentEnvironmentLabelColor">#38C7AD</Color>
-      <Color x:Key="ListBoxBackgroundColor">#0A1929</Color>
-      <Color x:Key="ListBoxItemSelectedBackgroundColor">#0F263F</Color>
+      <Color x:Key="CurrentEnvironmentLabelColor">#99E3D5</Color>
+      <Color x:Key="ListBoxBackgroundColor">Black</Color>
+      <Color x:Key="ListBoxItemSelectedBackgroundColor">#292929</Color>
       <Color x:Key="DragAndDropDataGridItemDraggingColor">White</Color>
       
+      <Thickness x:Key="ButtonSecondaryBorderThickness">0</Thickness>
+      <Color x:Key="ButtonSecondaryBorderBrush">Transparent</Color>
+      <Color x:Key="ButtonSecondaryHighlightBorderBrush">Transparent</Color>
       <Color x:Key="ButtonSecondaryBackgroundColor">Black</Color>
-      <Color x:Key="ButtonSecondaryHighlightBackgroundColor">#0A1929</Color>
+      <Color x:Key="ButtonSecondaryHighlightBackgroundColor">#292929</Color>
 
-      <Color x:Key="WebSocketConnectedColor">Lime</Color>
-      <Color x:Key="WebSocketMessageFromClientPrimaryColor">#D77728</Color>
-      <Color x:Key="WebSocketMessageFromServerPrimaryColor">#88DDCE</Color>
-      <Color x:Key="DefaultIconsColor">White</Color>
+      <Color x:Key="WebSocketConnectedColor">#99E3D5</Color>
+      <Color x:Key="WebSocketMessageFromClientPrimaryColor">#FF83D8</Color>
+      <Color x:Key="WebSocketMessageFromServerPrimaryColor">Lime</Color>
+      <Color x:Key="DefaultIconsColor">#F2F2F2</Color>
+      <Color x:Key="DefaultTextForegroundColor">#F2F2F2</Color>
       <Color x:Key="TextEditorBackgroundColor">#1E1E1E</Color>
       <Color x:Key="TextEditorForegroundColor">#D4D4D4</Color>
-      <Color x:Key="ResponseCapturedValueTextColor">#38C7AD</Color>
+      <Color x:Key="ResponseCapturedValueTextColor">#99E3D5</Color>
     </ResourceDictionary>
   </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

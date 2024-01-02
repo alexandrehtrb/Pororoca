@@ -1,4 +1,6 @@
 using System.Globalization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Pororoca.Desktop.Localization;
 
 namespace Pororoca.Desktop.UserData;
@@ -59,4 +61,16 @@ public sealed class UserPreferences
 
     public void SetUpdateReminderLastShownDateAsToday() =>
         UpdateReminderLastShownAt = DateTime.Now.ToString("yyyy-MM-dd");
+}
+
+[JsonSourceGenerationOptions(
+    WriteIndented = true,
+    PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
+    UseStringEnumConverter = true,
+    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+    ReadCommentHandling = JsonCommentHandling.Skip,
+    AllowTrailingCommas = true)]
+[JsonSerializable(typeof(UserPreferences))]
+internal partial class UserPreferencesJsonSrcGenContext : JsonSerializerContext
+{
 }

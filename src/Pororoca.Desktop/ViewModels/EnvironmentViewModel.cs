@@ -27,7 +27,7 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel, 
 
     [Reactive]
     public VariablesDataGridViewModel VariablesTableVm { get; set; }
-    
+
     [Reactive]
     public bool IsCurrentEnvironment { get; set; }
 

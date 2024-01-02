@@ -31,7 +31,7 @@ public sealed partial class UrlEncodedParamsCutCopyPasteDeleteUITest : UITest
         await TreeRobot.Select("COL1");
         await ColRobot.AddHttpReq.ClickOn();
         await HttpRobot.Name.Edit("HTTP1");
-        
+
         await HttpRobot.SetUrlEncodedBody(Array.Empty<PororocaKeyValueParam>());
         await HttpRobot.ReqBodyUrlEncodedAddParam.ClickOn();
         await HttpRobot.ReqBodyUrlEncodedAddParam.ClickOn();
@@ -72,7 +72,7 @@ public sealed partial class UrlEncodedParamsCutCopyPasteDeleteUITest : UITest
 
         await TreeRobot.Select("COL1/HTTP2");
         await HttpRobot.PasteUrlEncodedParams();
-        
+
         ueps = HttpRobot.UrlEncodedParamsVm.Items.Select(x => x.ToKeyValueParam()).ToArray();
         Assert(ueps.Length == 4);
         Assert(ueps.Contains(new(false, "k3", "v3")));

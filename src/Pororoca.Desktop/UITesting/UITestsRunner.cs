@@ -5,8 +5,8 @@ namespace Pororoca.Desktop.UITesting;
 
 public static class UITestsRunner
 {
-    public static Task<string> RunAllTestsAsync() => RunTestsAsync(new UITest[]
-    {
+    public static Task<string> RunAllTestsAsync() => RunTestsAsync(
+    [
         new TopMenuUITest(),
         new SwitchLanguagesUITest(),
         new SwitchThemesUITest(),
@@ -33,7 +33,9 @@ public static class UITestsRunner
         // form data add text and file params buttons
         // cut collection, cut and paste to itself
         // save responses to file
-    });
+        // welcome screen
+        // http headers names and values autocomplete
+    ]);
 
     private static async Task<string> RunTestsAsync(params UITest[] tests)
     {

@@ -1,14 +1,10 @@
 using System.Collections.ObjectModel;
-using System.Drawing.Text;
 using Avalonia.Controls;
-using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.UITesting.Robots;
-using Pororoca.Desktop.UserData;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Common;
-using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
@@ -25,7 +21,7 @@ public sealed partial class WebSocketsUITest : UITest
     private EnvironmentRobot EnvRobot { get; }
     private WebSocketConnectionRobot WsRobot { get; }
     private WebSocketClientMessageRobot WsMsgRobot { get; }
-    private List<decimal> httpVersionsToTest;
+    private readonly List<decimal> httpVersionsToTest;
 
     public WebSocketsUITest()
     {
@@ -138,6 +134,7 @@ public sealed partial class WebSocketsUITest : UITest
             AssertIsHidden(WsRobot.Name.IconConnectedWebSocket);
             AssertIsVisible(WsRobot.Name.IconDisconnectedWebSocket);
 
+            await Wait(2);
             await AssertExchangedMessage(4, "server -> client", "closing, 7 bytes", "Closing message", "ok, bye");
         }
 
@@ -167,7 +164,7 @@ public sealed partial class WebSocketsUITest : UITest
         var vm = ((WebSocketConnectionViewModel)WsRobot.RootView!.DataContext!).ConnectionResponseHeadersTableVm;
         Assert(vm.Items.Any(h => h.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase)));
     }
-    
+
     private void AssertContainsResponseHeader(string key, string value)
     {
         var vm = ((WebSocketConnectionViewModel)WsRobot.RootView!.DataContext!).ConnectionResponseHeadersTableVm;
@@ -189,11 +186,5 @@ public sealed partial class WebSocketsUITest : UITest
         ObservableCollection<VariableViewModel> parent = new();
         parent.Add(new(parent, new(true, "BaseUrlWs", "wss://localhost:5001", false)));
         return parent;
-    }
-
-    private static string GetTestFilesDirPath()
-    {
-        var userDataDir = UserDataManager.GetUserDataFolder();
-        return Path.Combine(userDataDir.FullName, "PororocaUserData", "TestFiles");
     }
 }

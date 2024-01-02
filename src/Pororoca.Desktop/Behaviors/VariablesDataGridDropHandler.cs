@@ -27,6 +27,6 @@ public class VariablesDataGridDropHandler : BaseDataGridDropHandler<VariableView
         }
 
         var items = vm.VariablesTableVm.Items;
-        return RunDropAction(e, bExecute, sourceItem, targetItem, items);
-    }       
+        return RunDropAction(dg, e, bExecute, sourceItem, targetItem, items);
+    }
 }

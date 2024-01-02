@@ -1,12 +1,9 @@
 using System.Collections.ObjectModel;
-using System.Drawing.Text;
 using Avalonia.Controls;
 using Pororoca.Desktop.UITesting.Robots;
-using Pororoca.Desktop.UserData;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
-using Pororoca.Domain.Features.Common;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
@@ -43,7 +40,7 @@ public sealed partial class CollectionScopedAuthUITest : UITest
 
         await TreeRobot.Select("COL1/VARS");
         await ColVarsRobot.SetVariables(defaultColVars);
-        
+
         await ColRobot.AddEnvironment.ClickOn();
         await EnvRobot.Name.Edit("ENV1");
         await EnvRobot.SetVariables(defaultEnvVars);
@@ -92,7 +89,7 @@ public sealed partial class CollectionScopedAuthUITest : UITest
 
         await TreeRobot.Select("COL1/AUTH");
         await ColAuthRobot.Auth.SetBearerAuth("{{BearerAuthToken}}");
-        
+
         await TreeRobot.Select("COL1/HTTPREQ");
         await HttpRobot.ClickOnSendAndWaitForResponse();
 
@@ -163,11 +160,5 @@ public sealed partial class CollectionScopedAuthUITest : UITest
         parent.Add(new(parent, new(true, "BasicAuthPassword", "pwd", false)));
         parent.Add(new(parent, new(true, "BearerAuthToken", "token_local", false)));
         return parent;
-    }
-
-    private static string GetTestFilesDirPath()
-    {
-        var userDataDir = UserDataManager.GetUserDataFolder();
-        return Path.Combine(userDataDir.FullName, "PororocaUserData", "TestFiles");
     }
 }

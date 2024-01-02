@@ -23,6 +23,6 @@ public class SubprotocolsDataGridDropHandler : BaseDataGridDropHandler<KeyValueP
         }
 
         var items = vm.SubprotocolsTableVm.Items;
-        return RunDropAction(e, bExecute, sourceItem, targetItem, items);
-    }       
+        return RunDropAction(dg, e, bExecute, sourceItem, targetItem, items);
+    }
 }

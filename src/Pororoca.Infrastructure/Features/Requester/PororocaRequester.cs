@@ -3,15 +3,12 @@ using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Requester;
 using Pororoca.Domain.Features.TranslateRequest.Http;
-using Pororoca.Domain.Features.VariableResolution;
 
 namespace Pororoca.Infrastructure.Features.Requester;
 
 public sealed class PororocaRequester : IPororocaRequester
 {
-    public static readonly PororocaRequester Singleton;
-
-    static PororocaRequester() => Singleton = new();
+    public static readonly PororocaRequester Singleton = new();
 
     private PororocaRequester()
     {
@@ -19,34 +16,39 @@ public sealed class PororocaRequester : IPororocaRequester
 
     public async Task<PororocaHttpResponse> RequestAsync(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaHttpRequest req, bool disableSslVerification, CancellationToken cancellationToken = default)
     {
+        PororocaHttpRequest? resolvedReq = null;
         HttpRequestMessage? reqMsg = null;
-        HttpResponseMessage resMsg;
+        HttpResponseMessage? resMsg;
         Stopwatch sw = new();
-        sw.Start();
+        DateTimeOffset? startedAt = null;
         try
         {
-            if (!PororocaHttpRequestTranslator.TryTranslateRequest(effectiveVars, collectionScopedAuth, req, out reqMsg, out string? errorCode))
+            if (!PororocaHttpRequestTranslator.TryTranslateRequest(effectiveVars, collectionScopedAuth, req, out resolvedReq, out reqMsg, out string? errorCode))
             {
                 reqMsg?.Dispose();
-                sw.Stop();
-                return PororocaHttpResponse.Failed(sw.Elapsed, new Exception("Invalid request. Please, check the resolved URL and the HTTP version compatibility."));
+                return PororocaHttpResponse.Failed(resolvedReq, DateTimeOffset.Now, TimeSpan.Zero, new Exception("Invalid request. Please, check the resolved URL and the HTTP version compatibility."));
             }
             else
             {
                 var resolvedAuth = GetResolvedAuth(reqMsg!);
                 var httpClient = PororocaHttpClientProvider.Singleton.Provide(disableSslVerification, resolvedAuth);
-
+                startedAt = DateTimeOffset.Now;
+                sw.Start();
                 resMsg = await httpClient.SendAsync(reqMsg!, cancellationToken);
-                reqMsg?.Dispose();
                 sw.Stop();
-                return await PororocaHttpResponse.SuccessfulAsync(sw.Elapsed, resMsg);
+                reqMsg?.Dispose();
+                var res = await PororocaHttpResponse.SuccessfulAsync(resolvedReq!, (DateTimeOffset)startedAt!, sw.Elapsed, resMsg);
+                // PororocaHttpResponse.SuccessfulAsync uses HttpResponseMessage, so we need to dispose it only after line above
+                resMsg?.Dispose();
+                return res;
             }
         }
         catch (Exception ex)
         {
-            reqMsg?.Dispose();
+            startedAt ??= DateTimeOffset.Now;
             sw.Stop();
-            return PororocaHttpResponse.Failed(sw.Elapsed, ex);
+            reqMsg?.Dispose();
+            return PororocaHttpResponse.Failed(resolvedReq, (DateTimeOffset)startedAt!, sw.Elapsed, ex);
         }
     }
 

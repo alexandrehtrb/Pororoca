@@ -11,7 +11,7 @@ public static class PororocaEnvironmentImporterTests
     public static void Should_import_valid_pororoca_environment_correctly()
     {
         // GIVEN
-        string json = GetTestFileJson("EmptyEnvironment.pororoca_environment.json");
+        string json = ReadTestFileText("EmptyEnvironment.pororoca_environment.json");
 
         // WHEN AND THEN
         Assert.True(TryImportPororocaEnvironment(json, out var env));
@@ -24,12 +24,5 @@ public static class PororocaEnvironmentImporterTests
         Assert.False(env.IsCurrent); // Must always be non current environment, despite what is in JSON
         Assert.NotNull(env.Variables);
         Assert.Empty(env.Variables);
-    }
-
-    private static string GetTestFileJson(string fileName)
-    {
-        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
-        string jsonFileInfoPath = Path.Combine(testDataDirInfo.FullName, "TestData", fileName);
-        return File.ReadAllText(jsonFileInfoPath, Encoding.UTF8);
     }
 }

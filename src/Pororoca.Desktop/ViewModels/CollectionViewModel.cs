@@ -117,7 +117,7 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
         {
             var colItemVm = Items[x];
             int indexOfLastSubfolder = Items.GetLastIndexOf<CollectionFolderViewModel>();
-            if (colItemVm is CollectionVariablesViewModel|| colItemVm is CollectionScopedAuthViewModel || colItemVm is EnvironmentsGroupViewModel)
+            if (colItemVm is CollectionVariablesViewModel || colItemVm is CollectionScopedAuthViewModel || colItemVm is EnvironmentsGroupViewModel)
             {
                 // Variables and Environments must remain at their positions
                 colItemVm.CanMoveUp = colItemVm.CanMoveDown = false;

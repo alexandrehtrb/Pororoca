@@ -7,17 +7,9 @@ namespace Pororoca.Domain.Features.VariableCapture;
 public static partial class PororocaResponseValueCapturer
 {
     private static readonly Regex arrayElementRegex = GenerateArrayElementRegex();
-    private static readonly Regex defaultXmlNamespaceRegex = GenerateDefaultXmlNamespaceRegex();
-    private static readonly Regex xmlNamespacesRegex = GenerateXmlNamespacesRegex();
 
     [GeneratedRegex("\\[(\\d+)\\]")]
     private static partial Regex GenerateArrayElementRegex();
-
-    [GeneratedRegex("xmlns=\"(?<Url>[\\w\\d:\\/\\.\\-_]+)\"")]
-    private static partial Regex GenerateDefaultXmlNamespaceRegex();
-    
-    [GeneratedRegex("xmlns:(?<Prefix>\\w+)=\"(?<Url>[\\w\\d:\\/\\.\\-_]+)\"")]
-    private static partial Regex GenerateXmlNamespacesRegex();
 
     public static string? CaptureXmlValue(string xpath, XmlDocument? doc, XmlNamespaceManager? nsm)
     {
@@ -37,56 +29,13 @@ public static partial class PororocaResponseValueCapturer
         }
     }
 
-    internal static (XmlDocument, XmlNamespaceManager)? LoadXmlDocumentAndNamespaceManager(string xml)
-    {
-        if (string.IsNullOrWhiteSpace(xml))
-            return null;
-
-        try
-        {
-            XmlDocument doc = new();
-            doc.LoadXml(xml);
-            XmlNamespaceManager nsm = new(doc.NameTable);
-            var namespaces = GetXmlNamespaces(xml);
-            foreach ((string prefix, string url) in namespaces)
-            {
-                nsm.AddNamespace(prefix, url);
-            }
-            return (doc, nsm);
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    private static (string Prefix, string Url)[] GetXmlNamespaces(string xml)
-    {
-        var matches = xmlNamespacesRegex.Matches(xml);
-        var list = matches.Select(m =>
-        {
-            string prefix = m.Groups["Prefix"].Value;
-            string url = m.Groups["Url"].Value;
-            return (prefix, url);
-        }).Distinct().ToList();
-
-        list.AddRange(defaultXmlNamespaceRegex.Matches(xml).Select(m =>
-        {
-            string prefix = string.Empty;
-            string url = m.Groups["Url"].Value;
-            return (prefix, url);
-        }).Distinct());
-
-        return list.ToArray();
-    }
-
     public static string? CaptureJsonValue(string path, string json)
     {
         try
         {
             string[] subpaths = path.Split('.');
             var jsonNode = JsonNode.Parse(json);
-            
+
             foreach (string subpath in subpaths)
             {
                 if (IsArrayElementSubpath(subpath, out string? elementName, out int? index1, out int? index2))

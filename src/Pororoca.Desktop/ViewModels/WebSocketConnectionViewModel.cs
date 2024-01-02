@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Globalization;
 using System.Net;
 using System.Reactive;
 using System.Security.Authentication;
@@ -21,6 +19,7 @@ using Pororoca.Infrastructure.Features.Requester;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
+using static Pororoca.Domain.Features.Common.HttpVersionFormatter;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage.PororocaWebSocketClientMessageTranslator;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage.PororocaWebSocketClientMessageValidator;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection.PororocaWebSocketConnectionTranslator;
@@ -113,7 +112,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         {
             this.RaiseAndSetIfChanged(ref this.urlField, value);
             // clear invalid warnings if user starts typing to fix them
-            if (HasUrlValidationProblem) ClearInvalidConnectionWarnings();
+            if (HasUrlValidationProblem)
+                ClearInvalidConnectionWarnings();
         }
     }
 
@@ -139,7 +139,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         {
             this.RaiseAndSetIfChanged(ref this.httpVersionSelectedIndexField, value);
             // clear invalid warnings if user starts typing to fix them
-            if (HasHttpVersionValidationProblem) ClearInvalidConnectionWarnings();
+            if (HasHttpVersionValidationProblem)
+                ClearInvalidConnectionWarnings();
         }
     }
 
@@ -188,7 +189,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             RequestAuthDataCtx.HasWindowsAuthPasswordProblem = value == TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank;
             RequestAuthDataCtx.HasWindowsAuthDomainProblem = value == TranslateRequestErrors.WindowsAuthDomainCannotBeBlank;
 
-            RequestAuthDataCtx.HasClientCertificateAuthPkcs12CertificateFilePathProblem = 
+            RequestAuthDataCtx.HasClientCertificateAuthPkcs12CertificateFilePathProblem =
             (value == TranslateRequestErrors.ClientCertificatePkcs12CertificateFileNotFound);
             RequestAuthDataCtx.HasClientCertificateAuthPkcs12FilePasswordProblem =
             (value == TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank);
@@ -219,7 +220,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region CONNECTION OPTION HEADERS
 
-    public KeyValueParamsDataGridViewModel RequestHeadersTableVm { get; }
+    public RequestHeadersDataGridViewModel RequestHeadersTableVm { get; }
 
     #endregion
 
@@ -261,7 +262,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     [Reactive]
     public bool WasConnectionSuccessful { get; private set; }
-    
+
     [Reactive]
     public string? ConnectionExceptionContent { get; set; }
 
@@ -383,13 +384,13 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         #region CONNECTION REQUEST HTTP VERSION AND URL
         ResolvedUrlToolTip = this.urlField = ws.Url;
 
-        HttpVersionSelectionOptions = new(AvailableHttpVersionsForWebSockets.Select(FormatHttpVersionString));
-        int httpVersionSelectionIndex = HttpVersionSelectionOptions.IndexOf(FormatHttpVersionString(ws.HttpVersion));
+        HttpVersionSelectionOptions = new(AvailableHttpVersionsForWebSockets.Select(FormatHttpVersion));
+        int httpVersionSelectionIndex = HttpVersionSelectionOptions.IndexOf(FormatHttpVersion(ws.HttpVersion));
         HttpVersionSelectedIndex = httpVersionSelectionIndex >= 0 ? httpVersionSelectionIndex : 0;
         #endregion
 
         #region CONNECTION REQUEST AUTH
-        RequestAuthDataCtx = new(ws.CustomAuth, true, this.ClearInvalidConnectionWarnings);
+        RequestAuthDataCtx = new(ws.CustomAuth, true, ClearInvalidConnectionWarnings);
         #endregion
 
         #region CONNECTION OPTIONS
@@ -504,16 +505,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     public void UpdateResolvedUrlToolTip() =>
         ResolvedUrlToolTip = IPororocaVariableResolver.ReplaceTemplates(Url, ((IPororocaVariableResolver)this.col).GetEffectiveVariables());
 
-    private static string FormatHttpVersionString(decimal httpVersion) =>
-        httpVersion switch
-        {
-            1.0m => "HTTP/1.0",
-            1.1m => "HTTP/1.1",
-            2.0m => "HTTP/2",
-            3.0m => "HTTP/3",
-            _ => string.Format(CultureInfo.InvariantCulture, "HTTP/{0:0.0}", httpVersion)
-        };
-
     #endregion
 
     #region CONNECTION REQUEST HEADERS
@@ -595,7 +586,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         var wsConn = ToWebSocketConnection();
         var effectiveVars = ((IPororocaVariableResolver)this.col).GetEffectiveVariables();
         bool disableTlsVerification = ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled;
-        
+
         if (!IsValidConnection(effectiveVars, this.col.CollectionScopedAuth, wsConn, out var resolvedUri, out string? translateUriErrorCode))
         {
             InvalidConnectionErrorCode = translateUriErrorCode;

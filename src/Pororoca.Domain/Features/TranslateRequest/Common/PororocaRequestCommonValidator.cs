@@ -28,7 +28,7 @@ internal static class PororocaRequestCommonValidator
             return true;
         }
 
-        validation:
+validation:
         string resolvedCertificateFilePath = IPororocaVariableResolver.ReplaceTemplates(customAuth!.ClientCertificate!.CertificateFilePath, effectiveVars);
         string resolvedPrivateKeyFilePath = IPororocaVariableResolver.ReplaceTemplates(customAuth!.ClientCertificate!.PrivateKeyFilePath, effectiveVars);
         string resolvedFilePassword = IPororocaVariableResolver.ReplaceTemplates(customAuth!.ClientCertificate!.FilePassword, effectiveVars);
@@ -78,7 +78,7 @@ internal static class PororocaRequestCommonValidator
             return true;
         }
 
-        validation:
+validation:
         if (customAuth.Windows.UseCurrentUser)
         {
             errorCode = null;

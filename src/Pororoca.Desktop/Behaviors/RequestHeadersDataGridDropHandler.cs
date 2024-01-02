@@ -8,25 +8,25 @@ namespace Pororoca.Desktop.Behaviors;
 
 public interface IRequestHeadersDataGridOwner
 {
-    KeyValueParamsDataGridViewModel RequestHeadersTableVm { get; }
+    RequestHeadersDataGridViewModel RequestHeadersTableVm { get; }
 }
 
-public class RequestHeadersDataGridDropHandler : BaseDataGridDropHandler<KeyValueParamViewModel>
+public class RequestHeadersDataGridDropHandler : BaseDataGridDropHandler<RequestHeaderViewModel>
 {
-    protected override KeyValueParamViewModel MakeCopy(ObservableCollection<KeyValueParamViewModel> parentCollection, KeyValueParamViewModel item) =>
+    protected override RequestHeaderViewModel MakeCopy(ObservableCollection<RequestHeaderViewModel> parentCollection, RequestHeaderViewModel item) =>
         new(parentCollection, item.ToKeyValueParam());
 
     protected override bool Validate(DataGrid dg, DragEventArgs e, object? sourceContext, object? targetContext, bool bExecute)
     {
-        if (sourceContext is not KeyValueParamViewModel sourceItem
+        if (sourceContext is not RequestHeaderViewModel sourceItem
          || targetContext is not IRequestHeadersDataGridOwner vm
          || dg.GetVisualAt(e.GetPosition(dg)) is not Control targetControl
-         || targetControl.DataContext is not KeyValueParamViewModel targetItem)
+         || targetControl.DataContext is not RequestHeaderViewModel targetItem)
         {
             return false;
         }
 
         var items = vm.RequestHeadersTableVm.Items;
-        return RunDropAction(e, bExecute, sourceItem, targetItem, items);
-    }       
+        return RunDropAction(dg, e, bExecute, sourceItem, targetItem, items);
+    }
 }

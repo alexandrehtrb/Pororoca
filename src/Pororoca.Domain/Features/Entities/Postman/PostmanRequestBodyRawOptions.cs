@@ -1,14 +1,13 @@
 #nullable disable warnings
 
-using System.Collections.Immutable;
+using System.Collections.Frozen;
 
 namespace Pororoca.Domain.Features.Entities.Postman;
 
 internal class PostmanRequestBodyRawOptions
 {
-    public static readonly ImmutableList<string> PostmanRequestBodyRawLanguages = ImmutableList.Create<string>(
-        "json", "javascript", "html", "xml", "text"
-    );
+    public static readonly FrozenSet<string> PostmanRequestBodyRawLanguages =
+        new[] {"json", "javascript", "html", "xml", "text"}.ToFrozenSet();
 
     public string Language { get; set; }
 }

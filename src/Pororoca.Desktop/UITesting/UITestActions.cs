@@ -2,7 +2,6 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaEdit;
-using AvaloniaEdit.Document;
 using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.ViewModels;
 
@@ -16,7 +15,7 @@ internal static class UITestActions
     internal static Task WaitAfterActionAsync() => Task.Delay(defaultWaitingTimeAfterActions);
 
     internal static TreeViewItem? GetTreeViewItemViewAtIndex(this TreeView parentView, int index) =>
-        (TreeViewItem?) parentView.ItemsView[index];
+        (TreeViewItem?)parentView.ItemsView[index];
 
     internal static async Task ClickOn(this Button control)
     {
@@ -124,9 +123,9 @@ internal static class UITestActions
         tree.SelectedItem = null;
         foreach (string pathSeparatedBySlashes in pathsSeparatedBySlashes)
         {
-            var item = (CollectionOrganizationItemViewModel)(await tree.Select(pathSeparatedBySlashes)); 
+            var item = (CollectionOrganizationItemViewModel)(await tree.Select(pathSeparatedBySlashes));
             items.Add(item);
-        }        
+        }
         tree.SelectedItems.Clear();
         foreach (var item in items)
         {
@@ -140,7 +139,7 @@ internal static class UITestActions
     {
         cb.IsDropDownOpen = true;
         cb.SelectedIndex = cb.Items.IndexOf(
-            cb.Items.First(x => 
+            cb.Items.First(x =>
                 (x is string s && s == item)
              || (x is CollectionOrganizationItemViewModel vm && vm.Name == item)
             ));
@@ -182,16 +181,22 @@ internal static class UITestActions
 
     internal static async Task TypeText(this TextBox control, string txt)
     {
-        TextInputEventArgs args = new();
-        args.RoutedEvent = InputElement.TextInputEvent;
-        args.Text = txt;
-        control.RaiseEvent(args);
+        foreach (char c in txt)
+        {
+            TextInputEventArgs args = new();
+            args.RoutedEvent = InputElement.TextInputEvent;
+            args.Text = c.ToString();
+            control.RaiseEvent(args);
+        }
         await WaitAfterActionAsync();
     }
 
     internal static async Task TypeText(this TextEditor editor, string txt)
     {
-        editor.Document.Insert(editor.Document.TextLength, txt);
+        foreach (char c in txt)
+        {
+            editor.Document.Insert(editor.Document.TextLength, c.ToString());
+        }
         await WaitAfterActionAsync();
     }
 

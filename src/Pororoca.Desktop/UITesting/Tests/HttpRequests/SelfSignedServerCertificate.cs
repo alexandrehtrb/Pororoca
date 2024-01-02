@@ -16,21 +16,21 @@ public sealed partial class HttpRequestsUITest : UITest
         await Wait(5);
 
         AssertIsVisible(HttpRobot.ResDisableTlsVerification);
-        AssertContainsText(HttpRobot.ResBodyRawContent, "The remote certificate is invalid because of errors in the certificate chain: UntrustedRoot");
+        AssertContainsText(HttpRobot.ResBodyRawContent, "The remote certificate is invalid");
         AssertContainsText(HttpRobot.ResTitle, "Response: Failed");
         AssertIsHidden(HttpRobot.ResBodySaveToFile);
 
         await HttpRobot.ResDisableTlsVerification.ClickOn();
         AssertIsHidden(HttpRobot.ResDisableTlsVerification);
         await AssertTopMenuTlsVerification(false);
-        
+
         await HttpRobot.ClickOnSendAndWaitForResponse();
         await Wait(5);
         AssertIsHidden(HttpRobot.ResDisableTlsVerification);
         AssertContainsText(HttpRobot.ResBodyRawContent, "<html>");
         AssertContainsText(HttpRobot.ResTitle, "Response: 200 OK");
         AssertIsVisible(HttpRobot.ResBodySaveToFile);
-        
+
         await TopMenuRobot.SwitchTlsVerification(true);
     }
 

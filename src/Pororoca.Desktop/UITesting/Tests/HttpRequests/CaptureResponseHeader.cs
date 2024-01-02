@@ -7,7 +7,7 @@ public sealed partial class HttpRequestsUITest : UITest
     private async Task TestCaptureResponseHeader()
     {
         await HttpRobot.HttpMethod.Select("GET");
-        await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/get/headers");        
+        await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/get/headers");
         await HttpRobot.SetEmptyBody();
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqHeaders);
         await HttpRobot.SetRequestHeaders(new PororocaKeyValueParam[]
@@ -27,7 +27,7 @@ public sealed partial class HttpRequestsUITest : UITest
         Assert(envVar.Value == "oi");
         Assert(envVar.IsSecret == true);
         envVar.RemoveVariable();
-        
+
         await TreeRobot.Select("COL1/HTTPREQ");
         HttpRobot.ResCapturesVm.Items.Clear();
     }

@@ -1,4 +1,3 @@
-using System.Globalization;
 using Avalonia.Controls;
 using AvaloniaEdit;
 using Pororoca.Desktop.ViewModels;
@@ -6,6 +5,7 @@ using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using static Pororoca.Domain.Features.Common.HttpVersionFormatter;
 
 namespace Pororoca.Desktop.UITesting.Robots;
 
@@ -61,7 +61,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal Button ResDisableTlsVerification => GetChildView<Button>("btResDisableTlsVerification")!;
     internal ProgressBar ResProgressBar => GetChildView<ProgressBar>("pbResProgressBar")!;
 
-    internal KeyValueParamsDataGridViewModel ReqHeadersVm => ((HttpRequestViewModel)RootView!.DataContext!).RequestHeadersTableVm;
+    internal RequestHeadersDataGridViewModel ReqHeadersVm => ((HttpRequestViewModel)RootView!.DataContext!).RequestHeadersTableVm;
     internal KeyValueParamsDataGridViewModel UrlEncodedParamsVm => ((HttpRequestViewModel)RootView!.DataContext!).UrlEncodedParamsTableVm;
     internal FormDataParamsDataGridViewModel FormDataParamsVm => ((HttpRequestViewModel)RootView!.DataContext!).FormDataParamsTableVm;
     internal KeyValueParamsDataGridViewModel ResHeadersVm => ((HttpRequestViewModel)RootView!.DataContext!).ResponseDataCtx.ResponseHeadersAndTrailersTableVm;
@@ -69,14 +69,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
 
     internal Task SetHttpVersion(decimal version)
     {
-        string ver = version switch
-        {
-            1.0m => "HTTP/1.0",
-            1.1m => "HTTP/1.1",
-            2.0m => "HTTP/2",
-            3.0m => "HTTP/3",
-            _ => string.Format(CultureInfo.InvariantCulture, "HTTP/{0:0.0}", version)
-        };
+        string ver = FormatHttpVersion(version);
         return HttpVersion.Select(ver);
     }
 
@@ -101,7 +94,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
         await UITestActions.WaitAfterActionAsync();
     }
 
-    internal async Task SelectRequestHeaders(params KeyValueParamViewModel[] headersVms)
+    internal async Task SelectRequestHeaders(params RequestHeaderViewModel[] headersVms)
     {
         ReqHeaders.SelectedItems.Clear();
         foreach (var h in headersVms)

@@ -1,4 +1,4 @@
-using Pororoca.Domain.Features.VariableCapture;
+using Pororoca.Domain.Features.Common;
 using Xunit;
 using static Pororoca.Domain.Features.VariableCapture.PororocaResponseValueCapturer;
 
@@ -50,7 +50,7 @@ public static partial class PororocaResponseValueCapturerTests
                   <price>39.95</price>
               </book>
           </bookstore>";
-    
+
     private const string testXmlObjWithNamespaces =
         @"<env:Envelope xmlns:env=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:wsa=""http://www.w3.org/2005/08/addressing"">
               <env:Body>
@@ -87,7 +87,7 @@ public static partial class PororocaResponseValueCapturerTests
     [InlineData("2", "$[1][1].myObj.myObj2.arr[1]", testJsonMatrix)]
     [InlineData("[1,2,3]", "$.myObj.myObj2.arr", testJsonObj)]
     [InlineData(testJsonSimpleObj, "$", testJsonSimpleObj)]
-    public static void TestJsonValueCapture(string expectedCapture, string path, string json) =>
+    public static void TestJsonValueCapture(string? expectedCapture, string path, string json) =>
         Assert.Equal(expectedCapture, CaptureJsonValue(path, json));
 
     [Theory]
@@ -99,7 +99,7 @@ public static partial class PororocaResponseValueCapturerTests
     [InlineData("123987456", "/env:Envelope/env:Body/xsi:response/xsi:Value/wsa:MyVal2", testXmlObjWithNamespaces)]
     public static void TestXmlValueCapture(string expectedCapture, string xpath, string xml)
     {
-        var docAndNsm = LoadXmlDocumentAndNamespaceManager(xml);
-        Assert.Equal(expectedCapture, CaptureXmlValue(xpath, docAndNsm!.Value.Item1, docAndNsm!.Value.Item2));
+        XmlUtils.LoadXmlDocumentAndNamespaceManager(xml, out var doc, out var nsm);
+        Assert.Equal(expectedCapture, CaptureXmlValue(xpath, doc, nsm));
     }
 }

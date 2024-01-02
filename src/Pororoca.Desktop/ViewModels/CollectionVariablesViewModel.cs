@@ -11,10 +11,8 @@ public sealed class CollectionVariablesViewModel : CollectionOrganizationItemVie
     public VariablesDataGridViewModel VariablesTableVm { get; set; }
 
     public CollectionVariablesViewModel(ICollectionOrganizationItemParentViewModel parentVm,
-                                        PororocaCollection col) : base(parentVm, col.Name)
-    {
+                                        PororocaCollection col) : base(parentVm, col.Name) =>
         VariablesTableVm = new(col.Variables);
-    }
 
     #region COLLECTION ORGANIZATION
 

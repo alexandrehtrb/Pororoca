@@ -20,7 +20,7 @@ public abstract class SimpleClipboardArea<T> : ViewModelBase
     {
         this.copied.Clear();
         this.copied.AddRange(itemsToCopy);
-        CanPaste = this.copied.Any();
+        CanPaste = this.copied.Count > 0;
     }
 
     public abstract List<T> FetchCopies();

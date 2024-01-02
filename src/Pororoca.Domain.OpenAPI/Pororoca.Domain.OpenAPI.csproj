@@ -2,17 +2,18 @@
 
   <PropertyGroup>
     <RootNamespace>Pororoca.Domain</RootNamespace>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <DebugType>embedded</DebugType>
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
     <!-- Licence also available at https://github.com/alexandrehtrb/Pororoca/LICENCE.md -->
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Pororoca.Domain\Pororoca.Domain.csproj"/>
-    <PackageReference Include="Microsoft.OpenApi" Version="1.6.9" />
-    <PackageReference Include="Microsoft.OpenApi.Readers" Version="1.6.9" />
+    <PackageReference Include="Microsoft.OpenApi" Version="1.6.11" />
+    <PackageReference Include="Microsoft.OpenApi.Readers" Version="1.6.11" />
   </ItemGroup>
 
 </Project>

@@ -1,21 +1,33 @@
+using System.Collections.Frozen;
 using System.Net;
-using System.Net.Http.Headers;
 using System.Security.Authentication;
 using System.Text;
 using System.Text.Json;
 using System.Xml;
-using System.Xml.Linq;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.VariableCapture;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
+using static Pororoca.Domain.Features.ResponseParsing.PororocaHttpMultipartResponseBodyReader;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca.Http;
 
+public record PororocaHttpResponseMultipartPart(
+    FrozenDictionary<string, string> Headers,
+    byte[] BinaryBody)
+{
+    public bool IsTextContent =>
+        MimeTypesDetector.IsTextContent(Headers?.FirstOrDefault(h => h.Key == "Content-Type").Value);
+}
+
 public sealed class PororocaHttpResponse
 {
+    public PororocaHttpRequest? ResolvedRequest { get; }
+
+    public DateTimeOffset StartedAtUtc { get; }
+
     public TimeSpan ElapsedTime { get; }
 
-    public DateTimeOffset ReceivedAt { get; }
+    public DateTimeOffset ReceivedAt => StartedAtUtc + ElapsedTime;
 
     public Exception? Exception { get; }
 
@@ -23,13 +35,16 @@ public sealed class PororocaHttpResponse
 
     public HttpStatusCode? StatusCode { get; }
 
-    public IEnumerable<KeyValuePair<string, string>>? Headers { get; }
+    public FrozenDictionary<string, string>? Headers { get; }
 
-    public IEnumerable<KeyValuePair<string, string>>? Trailers { get; }
+    public FrozenDictionary<string, string>? Trailers { get; }
+
+    public PororocaHttpResponseMultipartPart[]? MultipartParts { get; internal set; }
 
     private readonly byte[]? binaryBody;
 
-    private (XmlDocument xmlDoc, XmlNamespaceManager xmlNsm)? cachedXmlDocAndNsm;
+    private XmlDocument? cachedXmlDoc;
+    private XmlNamespaceManager? cachedXmlNsm;
 
     public bool WasCancelled =>
         Exception is TaskCanceledException;
@@ -45,13 +60,17 @@ public sealed class PororocaHttpResponse
     {
         get
         {
-            var contentTypeHeaders = Headers?.FirstOrDefault(h => h.Key == "Content-Type");
+            var contentTypeHeaders = Headers?.FirstOrDefault(h => h.Key.Equals("Content-Type", StringComparison.InvariantCultureIgnoreCase));
             return contentTypeHeaders?.Value;
         }
     }
 
     public bool CanDisplayTextBody =>
-        MimeTypesDetector.IsTextContent(ContentType);
+        MimeTypesDetector.IsTextContent(ContentType)
+     || (MultipartParts is not null && MultipartParts.Length > 0 && MultipartParts.All(p => p.IsTextContent));
+
+    private static FrozenDictionary<string, string> MakeKvTable(IEnumerable<KeyValuePair<string, IEnumerable<string>>> input) =>
+        input.ToFrozenDictionary(x => x.Key, x => string.Join(';', x.Value));
 
     public string? GetBodyAsString(string? nonUtf8BodyMessageToShow = null)
     {
@@ -105,9 +124,7 @@ public sealed class PororocaHttpResponse
             {
                 try
                 {
-                    dynamic? jsonObj = JsonSerializer.Deserialize<dynamic>(bodyStr);
-                    string prettyPrintJson = JsonSerializer.Serialize(jsonObj, options: ViewJsonResponseOptions);
-                    return prettyPrintJson;
+                    return JsonUtils.PrettifyJson(bodyStr);
                 }
                 catch
                 {
@@ -118,7 +135,7 @@ public sealed class PororocaHttpResponse
             {
                 try
                 {
-                    return PrettifyXml(bodyStr);
+                    return XmlUtils.PrettifyXml(bodyStr);
                 }
                 catch
                 {
@@ -147,7 +164,7 @@ public sealed class PororocaHttpResponse
 
     public string? GetContentDispositionFileName()
     {
-        var contentDispositionHeader = Headers?.FirstOrDefault(h => h.Key == "Content-Disposition");
+        var contentDispositionHeader = Headers?.FirstOrDefault(h => h.Key.Equals("Content-Disposition", StringComparison.InvariantCultureIgnoreCase));
         string? contentDispositionValue = contentDispositionHeader?.Value;
         if (contentDispositionValue != null)
         {
@@ -188,10 +205,14 @@ public sealed class PororocaHttpResponse
                 // of reading and parsing XML document and namespaces
                 // if cachedXmlDocAndNsm is not null (already loaded), 
                 // then it won't be loaded again
-                this.cachedXmlDocAndNsm ??= PororocaResponseValueCapturer.LoadXmlDocumentAndNamespaceManager(body);
-                if (this.cachedXmlDocAndNsm is not null)
+                if (this.cachedXmlDoc is null || this.cachedXmlNsm is null)
                 {
-                    return PororocaResponseValueCapturer.CaptureXmlValue(capture.Path!, this.cachedXmlDocAndNsm.Value.xmlDoc, this.cachedXmlDocAndNsm.Value.xmlNsm);
+                    XmlUtils.LoadXmlDocumentAndNamespaceManager(body, out this.cachedXmlDoc, out this.cachedXmlNsm);
+                }
+
+                if (this.cachedXmlDoc is not null && this.cachedXmlNsm is not null)
+                {
+                    return PororocaResponseValueCapturer.CaptureXmlValue(capture.Path!, this.cachedXmlDoc, this.cachedXmlNsm);
                 }
                 else
                 {
@@ -209,80 +230,48 @@ public sealed class PororocaHttpResponse
         }
     }
 
-    private static string PrettifyXml(string xml)
+    public static async Task<PororocaHttpResponse> SuccessfulAsync(PororocaHttpRequest resolvedReq, DateTimeOffset startedAt, TimeSpan elapsedTime, HttpResponseMessage responseMessage)
     {
-        string result = xml;
-
-        using MemoryStream mStream = new();
-        using XmlTextWriter writer = new(mStream, Encoding.UTF8);
-        XmlDocument document = new();
-
-        try
-        {
-            // Load the XmlDocument with the XML.
-            document.LoadXml(xml);
-
-            writer.Formatting = Formatting.Indented;
-
-            // Write the XML into a formatting XmlTextWriter
-            document.WriteContentTo(writer);
-            writer.Flush();
-            mStream.Flush();
-
-            // Have to rewind the MemoryStream in order to read
-            // its contents.
-            mStream.Position = 0;
-
-            // Read MemoryStream contents into a StreamReader.
-            using StreamReader sReader = new(mStream);
-
-            // Extract the text from the StreamReader.
-            string formattedXml = sReader.ReadToEnd();
-
-            result = formattedXml;
-        }
-        catch (XmlException)
-        {
-            // Handle the exception
-        }
-
-        mStream.Close();
-        writer.Close();
-
-        return result;
-    }
-
-    public static async Task<PororocaHttpResponse> SuccessfulAsync(TimeSpan elapsedTime, HttpResponseMessage responseMessage)
-    {
+        // the binaryBody needs to be read before making the table of headers,
+        // otherwise, the Content-Length header disappears for some reason (???)
         byte[] binaryBody = await responseMessage.Content.ReadAsByteArrayAsync();
-        return new(elapsedTime, responseMessage, binaryBody);
+
+        var nonContentHeaders = responseMessage.Headers;
+        var contentHeaders = responseMessage.Content.Headers;
+
+        var headers = nonContentHeaders.Concat(contentHeaders);
+        var trailers = responseMessage.TrailingHeaders;
+
+        PororocaHttpResponse res = new(resolvedReq, startedAt, elapsedTime, responseMessage.StatusCode, MakeKvTable(headers), MakeKvTable(trailers), binaryBody);
+
+        if (res.ContentType?.StartsWith("multipart") == true)
+        {
+            string boundary = ReadMultipartBoundary(res.ContentType);
+            res.MultipartParts = ReadMultipartResponseParts(binaryBody, boundary);
+        }
+
+        return res;
     }
 
-    public static PororocaHttpResponse Failed(TimeSpan elapsedTime, Exception ex) =>
-        new(elapsedTime, ex);
+    public static PororocaHttpResponse Failed(PororocaHttpRequest? resolvedReq, DateTimeOffset startedAt, TimeSpan elapsedTime, Exception ex) =>
+        new(resolvedReq, startedAt, elapsedTime, ex);
 
-    private PororocaHttpResponse(TimeSpan elapsedTime, HttpResponseMessage responseMessage, byte[] binaryBody)
+    internal PororocaHttpResponse(PororocaHttpRequest? resolvedReq, DateTimeOffset startedAt, TimeSpan elapsedTime, HttpStatusCode httpStatusCode, FrozenDictionary<string, string> headers, FrozenDictionary<string, string> trailers, byte[] binaryBody)
     {
-        static KeyValuePair<string, string> ConvertHeaderToKeyValuePair(KeyValuePair<string, IEnumerable<string>> header) =>
-            new(header.Key, string.Join(';', header.Value));
-
+        ResolvedRequest = resolvedReq;
+        StartedAtUtc = startedAt;
         ElapsedTime = elapsedTime;
-        ReceivedAt = DateTimeOffset.Now;
         Successful = true;
-        StatusCode = responseMessage.StatusCode;
-
-        HttpHeaders nonContentHeaders = responseMessage.Headers;
-        HttpHeaders contentHeaders = responseMessage.Content.Headers;
-        HttpHeaders trailingHeaders = responseMessage.TrailingHeaders;
-
-        Headers = nonContentHeaders.Concat(contentHeaders).Select(ConvertHeaderToKeyValuePair);
-        Trailers = trailingHeaders.Select(ConvertHeaderToKeyValuePair);
-
+        StatusCode = httpStatusCode;
+        Headers = headers;
+        Trailers = trailers;
         this.binaryBody = binaryBody;
     }
 
-    private PororocaHttpResponse(TimeSpan elapsedTime, Exception exception)
+    private PororocaHttpResponse(PororocaHttpRequest? resolvedReq, DateTimeOffset startedAt, TimeSpan elapsedTime, Exception exception)
     {
+        StartedAtUtc = startedAt;
+        ResolvedRequest = resolvedReq;
         ElapsedTime = elapsedTime;
         Successful = false;
         Exception = exception;

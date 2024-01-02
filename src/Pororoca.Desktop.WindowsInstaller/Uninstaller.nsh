@@ -38,6 +38,7 @@ Section "un.$(SectionProgramFiles)" SectionUninstallProgram
 	${endif}
 	!insertmacro DeleteRetryAbort "$INSTDIR\msquic.dll"
 	!insertmacro DeleteRetryAbort "$INSTDIR\pororoca_icon.ico"
+	!insertmacro DeleteRetryAbort "$INSTDIR\sbom.json"
 	
 	!ifdef LICENSE_FILE
 		!insertmacro DeleteRetryAbort "$INSTDIR\${LICENSE_FILE}"

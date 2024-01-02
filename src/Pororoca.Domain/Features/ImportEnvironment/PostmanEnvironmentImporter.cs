@@ -11,7 +11,7 @@ public static class PostmanEnvironmentImporter
     {
         try
         {
-            var postmanEnvironment = JsonSerializer.Deserialize<PostmanEnvironment>(postmanEnvironmentFileContent, options: ExporterImporterJsonOptions);
+            var postmanEnvironment = JsonSerializer.Deserialize(postmanEnvironmentFileContent, MainJsonCtx.PostmanEnvironment);
             if (postmanEnvironment == null
              || postmanEnvironment.Name == null)
             {
@@ -53,5 +53,5 @@ public static class PostmanEnvironmentImporter
     }
 
     private static PororocaVariable ConvertPostmanEnvironmentVariable(PostmanEnvironmentVariable envVar) =>
-        new(envVar.Enabled, envVar.Key, envVar.Value, false);
+        new(envVar.Enabled, envVar.Key, envVar.Value, envVar.Type == "secret");
 }

@@ -1,6 +1,6 @@
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
-using Pororoca.Domain.Features.VariableResolution;
+using Pororoca.Domain.Features.TranslateRequest;
 using Xunit;
 using static Pororoca.Domain.Features.TranslateRequest.Http.PororocaHttpRequestTranslator;
 
@@ -8,16 +8,266 @@ namespace Pororoca.Domain.Tests.Features.TranslateRequest.Http;
 
 public static class PororocaHttpRequestTranslatorTests
 {
-    private static IEnumerable<PororocaVariable> GetEffectiveVariables(this PororocaCollection col) =>
-        ((IPororocaVariableResolver)col).GetEffectiveVariables();
+    #region TRANSLATE REQUEST
 
-    #region MOCKERS
-
-    private static IPororocaVariableResolver MockVariableResolver(string key, string value)
+    [Fact]
+    public static void Should_not_translate_request_if_it_has_invalid_URL()
     {
-        PororocaCollection col = new("col");
-        col.Variables.Add(new(true, key, value, false));
-        return col;
+        // GIVEN
+        PororocaVariable[] effectiveVars = [];
+        PororocaHttpRequest unresolvedReq = new(string.Empty)
+        {
+            HttpVersion = 3.0m,
+            HttpMethod = "PUT",
+            Url = "{{BaseUrl}}/index.html",
+            Headers = null,
+            Body = null,
+            CustomAuth = null,
+            ResponseCaptures = null
+        };
+
+        // WHEN, THEN
+        Assert.False(TryTranslateRequest(effectiveVars, null, unresolvedReq, out var resolvedReq, out var reqMsg, out string? errorCode));
+        Assert.Null(resolvedReq);
+        Assert.Null(reqMsg);
+        Assert.Equal(TranslateRequestErrors.InvalidUrl, errorCode);
+    }
+
+    [Fact]
+    public static async Task Should_translate_valid_HTTP_request()
+    {
+        // GIVEN
+        PororocaVariable[] effectiveVars =
+        [
+            new(true, "BaseUrl", "http://www.pudim.com.br", true),
+            new(true, "MyHeaderValue", "Value1234", false),
+            new(true, "K1", "17", false),
+            new(true, "BasicAuthLogin", "usr", false),
+            new(true, "BasicAuthPassword", "pwd", true)
+        ];
+        PororocaHttpRequestBody unresolvedBody = new();
+        unresolvedBody.SetRawContent("{\"id\":{{K1}}}", "application/json");
+        var unresolvedAuth = PororocaRequestAuth.MakeBasicAuth("{{BasicAuthLogin}}", "{{BasicAuthPassword}}");
+        PororocaHttpRequest unresolvedReq = new(string.Empty)
+        {
+            HttpVersion = OperatingSystem.IsMacOS() ? 2.0m : 3.0m,
+            HttpMethod = "PUT",
+            Url = "{{BaseUrl}}/index.html",
+            Headers = [new(true, "MyHeader", "{{MyHeaderValue}}")],
+            Body = unresolvedBody,
+            CustomAuth = unresolvedAuth,
+            ResponseCaptures = [new(PororocaHttpResponseValueCaptureType.Body, "TARGET_VAR", null, "$.id")]
+        };
+
+        // WHEN, THEN
+        bool valid = TryTranslateRequest(effectiveVars, null, unresolvedReq, out var resolvedReq, out var reqMsg, out string? errorCode);
+        Assert.Null(errorCode);
+        Assert.True(valid);
+        Assert.NotNull(resolvedReq);
+        Assert.NotNull(reqMsg);
+        if (OperatingSystem.IsMacOS())
+            Assert.Equal(2, reqMsg.Version.Major);
+        else
+            Assert.Equal(3, reqMsg.Version.Major);
+        Assert.Equal(0, reqMsg.Version.Minor);
+        Assert.Equal("PUT", reqMsg.Method.ToString());
+        Assert.Equal("http://www.pudim.com.br/index.html", reqMsg.RequestUri!.ToString());
+#pragma warning disable xUnit2012
+        Assert.True(reqMsg.Headers.Any(x => x.Key.Equals("MyHeader", StringComparison.InvariantCultureIgnoreCase) && x.Value.Contains("Value1234")));
+        Assert.True(reqMsg.Headers.Any(x => x.Key.Equals("Authorization", StringComparison.InvariantCultureIgnoreCase) && x.Value.Contains("Basic dXNyOnB3ZA==")));
+#pragma warning restore xUnit2012
+
+        Assert.True(reqMsg.Content is StringContent);
+        Assert.NotNull(reqMsg.Content.Headers.ContentType);
+        Assert.Equal("application/json", reqMsg.Content.Headers.ContentType!.MediaType);
+        Assert.Equal("utf-8", reqMsg.Content.Headers.ContentType!.CharSet);
+        string? contentText = await reqMsg.Content.ReadAsStringAsync();
+        Assert.Equal("{\"id\":17}", contentText);
+    }
+
+    #endregion
+
+    #region RESOLUTION / REPLACE VARIABLE TEMPLATES
+
+    [Fact]
+    public static void Should_resolve_HTTP_request()
+    {
+        // GIVEN
+        PororocaVariable[] effectiveVars =
+        [
+            new(true, "BaseUrl", "http://www.pudim.com.br", true),
+            new(true, "MyHeaderValue", "Value1234", false),
+            new(true, "K1", "17", false),
+            new(true, "BasicAuthLogin", "login", false),
+            new(true, "BasicAuthPassword", "password", true)
+        ];
+        PororocaHttpRequestBody unresolvedBody = new();
+        unresolvedBody.SetRawContent("{\"id\":{{K1}}}", "application/json");
+        var unresolvedAuth = PororocaRequestAuth.MakeBasicAuth("{{BasicAuthLogin}}", "{{BasicAuthPassword}}");
+        PororocaHttpRequest unresolvedReq = new(string.Empty)
+        {
+            HttpVersion = 3.0m,
+            HttpMethod = "PUT",
+            Url = "{{BaseUrl}}/index.html",
+            Headers = [new(true, "MyHeader", "{{MyHeaderValue}}")],
+            Body = unresolvedBody,
+            CustomAuth = unresolvedAuth,
+            ResponseCaptures = [new(PororocaHttpResponseValueCaptureType.Body, "TARGET_VAR", null, "$.id")]
+        };
+
+        // WHEN
+        var resolvedReq = ResolveRequest(effectiveVars, null, unresolvedReq);
+
+        // THEN
+        Assert.NotNull(resolvedReq);
+        Assert.Equal(3.0m, resolvedReq.HttpVersion);
+        Assert.Equal("PUT", resolvedReq.HttpMethod);
+        Assert.Equal("http://www.pudim.com.br/index.html", resolvedReq.Url);
+        Assert.Equal([new(true, "MyHeader", "Value1234")], resolvedReq.Headers);
+        Assert.NotNull(resolvedReq.Body);
+        Assert.Equal(PororocaHttpRequestBodyMode.Raw, resolvedReq.Body.Mode);
+        Assert.Equal("application/json", resolvedReq.Body.ContentType);
+        Assert.Equal("{\"id\":17}", resolvedReq.Body.RawContent);
+        Assert.NotNull(resolvedReq.CustomAuth);
+        Assert.Equal(PororocaRequestAuthMode.Basic, resolvedReq.CustomAuth.Mode);
+        Assert.Equal("login", resolvedReq.CustomAuth.BasicAuthLogin);
+        Assert.Equal("password", resolvedReq.CustomAuth.BasicAuthPassword);
+        Assert.Equal([new(PororocaHttpResponseValueCaptureType.Body, "TARGET_VAR", null, "$.id")], resolvedReq.ResponseCaptures);
+    }
+
+    [Fact]
+    public static void Should_resolve_empty_body_to_null() =>
+        // GIVEN, WHEN AND THEN
+        Assert.Null(ResolveRequestBody([], null));
+
+    [Fact]
+    public static void Should_resolve_raw_body()
+    {
+        // GIVEN
+        PororocaVariable[] effectiveVars =
+        [
+            new(true, "K1", "4577", true)
+        ];
+        PororocaHttpRequestBody unresolvedBody = new();
+        unresolvedBody.SetRawContent("{\"id\":{{K1}}}", "application/json");
+
+        // WHEN
+        var resolvedBody = ResolveRequestBody(effectiveVars, unresolvedBody);
+
+        // THEN
+        Assert.NotNull(resolvedBody);
+        Assert.Equal(PororocaHttpRequestBodyMode.Raw, resolvedBody.Mode);
+        Assert.Equal("application/json", resolvedBody.ContentType);
+        Assert.Equal("{\"id\":4577}", resolvedBody.RawContent);
+    }
+
+    [Fact]
+    public static void Should_resolve_file_body()
+    {
+        // GIVEN
+        PororocaVariable[] effectiveVars =
+        [
+            new(true, "FolderPath", "C:\\MYFILES", true),
+            new(true, "FileName", "file.txt", true)
+        ];
+        PororocaHttpRequestBody unresolvedBody = new();
+        unresolvedBody.SetFileContent("{{FolderPath}}\\{{FileName}}", "text/plain");
+
+        // WHEN
+        var resolvedBody = ResolveRequestBody(effectiveVars, unresolvedBody);
+
+        // THEN
+        Assert.NotNull(resolvedBody);
+        Assert.Equal(PororocaHttpRequestBodyMode.File, resolvedBody.Mode);
+        Assert.Equal("text/plain", resolvedBody.ContentType);
+        Assert.Equal("C:\\MYFILES\\file.txt", resolvedBody.FileSrcPath);
+    }
+
+    [Fact]
+    public static void Should_resolve_form_URL_encoded_body()
+    {
+        // GIVEN
+        PororocaVariable[] effectiveVars =
+        [
+            new(true, "K1", "4577", true),
+            new(true, "K3", "4354", true),
+        ];
+        PororocaKeyValueParam[] unresolvedUrlEncodedParams =
+        [
+            new(false, "key0", "v0"),
+            new(true, "key1", "{{K1}}"),
+            new(true, "{{K3}}", "value3")
+        ];
+        PororocaHttpRequestBody unresolvedBody = new();
+        unresolvedBody.SetUrlEncodedContent(unresolvedUrlEncodedParams);
+
+        // WHEN
+        var resolvedBody = ResolveRequestBody(effectiveVars, unresolvedBody);
+
+        // THEN
+        Assert.NotNull(resolvedBody);
+        Assert.Equal(PororocaHttpRequestBodyMode.UrlEncoded, resolvedBody.Mode);
+        Assert.Null(resolvedBody.ContentType);
+        Assert.Equal([
+            new(true, "key1", "4577"),
+            new(true, "4354", "value3")],
+            resolvedBody.UrlEncodedValues);
+    }
+
+    [Fact]
+    public static void Should_resolve_multipart_form_data_encoded_body()
+    {
+        // GIVEN
+        PororocaVariable[] effectiveVars =
+        [
+            new(true, "K1", "4577", true),
+            new(true, "K3", "4354", true),
+            new(true, "FolderPath", "C:\\MYFILES", true),
+            new(true, "FileName", "file.xml", true)
+        ];
+        var p0 = PororocaHttpRequestFormDataParam.MakeTextParam(false, "key0", "value0", "text/plain");
+        var p1 = PororocaHttpRequestFormDataParam.MakeTextParam(true, "key1", "oi{{K1}}", "text/plain");
+        var p2 = PororocaHttpRequestFormDataParam.MakeTextParam(true, "key2", "oi2", "text/plain");
+        var p3 = PororocaHttpRequestFormDataParam.MakeTextParam(true, "key{{K3}}", "[{{K1}}]", "application/json");
+        var p4 = PororocaHttpRequestFormDataParam.MakeFileParam(true, "key4", "{{FolderPath}}\\{{FileName}}", "text/xml");
+        PororocaHttpRequestBody unresolvedBody = new();
+        unresolvedBody.SetFormDataContent([p0, p1, p2, p3, p4]);
+
+        // WHEN
+        var resolvedBody = ResolveRequestBody(effectiveVars, unresolvedBody);
+
+        // THEN
+        Assert.NotNull(resolvedBody);
+        Assert.Equal(PororocaHttpRequestBodyMode.FormData, resolvedBody.Mode);
+        Assert.Null(resolvedBody.ContentType);
+        Assert.Equal([
+            new(true, PororocaHttpRequestFormDataParamType.Text, "key1", "oi4577", "text/plain", string.Empty),
+            new(true, PororocaHttpRequestFormDataParamType.Text, "key2", "oi2", "text/plain", string.Empty),
+            new(true, PororocaHttpRequestFormDataParamType.Text, "key4354", "[4577]", "application/json", string.Empty),
+            new(true, PororocaHttpRequestFormDataParamType.File, "key4", string.Empty, "text/xml", "C:\\MYFILES\\file.xml")],
+            resolvedBody.FormDataValues);
+    }
+
+    [Fact]
+    public static void Should_resolve_GraphQL_body()
+    {
+        // GIVEN
+        PororocaVariable[] effectiveVars =
+        [
+            new(true, "K1", "18", true)
+        ];
+        PororocaHttpRequestBody unresolvedBody = new();
+        unresolvedBody.SetGraphQlContent("myGraphQlQuery{{K1}}", "{\"id\":\n// some comment inside GraphQL variables\n{{K1}}}");
+
+        // WHEN
+        var resolvedBody = ResolveRequestBody(effectiveVars, unresolvedBody);
+
+        // THEN
+        Assert.NotNull(resolvedBody);
+        Assert.Equal(PororocaHttpRequestBodyMode.GraphQl, resolvedBody.Mode);
+        Assert.NotNull(resolvedBody.GraphQlValues);
+        Assert.Equal("myGraphQlQuery{{K1}}", resolvedBody.GraphQlValues.Query);
+        Assert.Equal("{\"id\":\n// some comment inside GraphQL variables\n18}", resolvedBody.GraphQlValues.Variables);
     }
 
     #endregion
@@ -25,70 +275,29 @@ public static class PororocaHttpRequestTranslatorTests
     #region HTTP BODY
 
     [Fact]
-    public static void Should_resolve_form_url_encoded_key_values_correctly()
+    public static void Should_make_no_content_correctly()
     {
         // GIVEN
-        PororocaCollection col = new("VarResolver");
-        col.Variables.Add(new(true, "keyX", "key3", false));
-        col.Variables.Add(new(true, "keyXvalue", "value3", false));
-
-        var formUrlEncodedParams = new PororocaKeyValueParam[]
-        {
-            new(true, "key1", "abc"),
-            new(true, "key1", "def"),
-            new(false, "key2", "ghi"),
-            new(true, "{{keyX}}", "{{keyXvalue}}")
-        };
-
-        PororocaHttpRequest req = new();
-        PororocaHttpRequestBody body = new();
-        body.SetUrlEncodedContent(formUrlEncodedParams);
-        req.UpdateBody(body);
-
         // WHEN
-        var resolvedUrlEncoded = ResolveFormUrlEncodedKeyValues(col.GetEffectiveVariables(), req.Body!);
-
-        // THEN
-        Assert.Equal(2, resolvedUrlEncoded.Count);
-        Assert.True(resolvedUrlEncoded.ContainsKey("key1"));
-        Assert.Equal("abc", resolvedUrlEncoded["key1"]);
-        Assert.True(resolvedUrlEncoded.ContainsKey("key3"));
-        Assert.Equal("value3", resolvedUrlEncoded["key3"]);
-    }
-
-    [Fact]
-    public static void Should_resolve_no_content_correctly()
-    {
-        // GIVEN
-        PororocaCollection col = new("VarResolver");
-        Dictionary<string, string> resolvedContentHeaders = new();
-
-        PororocaHttpRequest req = new();
-
-        // WHEN
-        var resolvedReqContent = ResolveRequestContent(col.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
+        var resolvedReqContent = MakeRequestContent(null, new());
 
         // THEN
         Assert.Null(resolvedReqContent);
     }
 
     [Fact]
-    public static async Task Should_resolve_raw_content_correctly()
+    public static async Task Should_make_raw_content_correctly()
     {
         // GIVEN
-        var varResolver = MockVariableResolver("myID", "3162");
+        PororocaHttpRequestBody resolvedBody = new();
+        resolvedBody.SetRawContent("{\"id\":3162}", "application/json");
         Dictionary<string, string> resolvedContentHeaders = new(1)
         {
             { "Content-Language", "pt-BR" }
         };
 
-        PororocaHttpRequest req = new();
-        PororocaHttpRequestBody body = new();
-        body.SetRawContent("{\"id\":{{myID}}}", "application/json");
-        req.UpdateBody(body);
-
         // WHEN
-        var resolvedReqContent = ResolveRequestContent(varResolver.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
+        var resolvedReqContent = MakeRequestContent(resolvedBody, resolvedContentHeaders);
 
         // THEN
         Assert.NotNull(resolvedReqContent);
@@ -103,23 +312,19 @@ public static class PororocaHttpRequestTranslatorTests
     }
 
     [Fact]
-    public static async Task Should_resolve_file_content_correctly()
+    public static async Task Should_make_file_content_correctly()
     {
         // GIVEN
         string testFilePath = GetTestFilePath("testfilecontent1.json");
-        var varResolver = MockVariableResolver("MyFilePath", testFilePath);
+        PororocaHttpRequestBody resolvedBody = new();
+        resolvedBody.SetFileContent(testFilePath, "application/json");
         Dictionary<string, string> resolvedContentHeaders = new(1)
         {
             { "Content-Language", "pt-BR" }
         };
 
-        PororocaHttpRequest req = new();
-        PororocaHttpRequestBody body = new();
-        body.SetFileContent("{{MyFilePath}}", "application/json");
-        req.UpdateBody(body);
-
         // WHEN
-        var resolvedReqContent = ResolveRequestContent(varResolver.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
+        var resolvedReqContent = MakeRequestContent(resolvedBody, resolvedContentHeaders);
 
         // THEN
         Assert.NotNull(resolvedReqContent);
@@ -133,63 +338,24 @@ public static class PororocaHttpRequestTranslatorTests
     }
 
     [Fact]
-    public static async Task Should_resolve_graphql_content_correctly()
-    {
-        // GIVEN
-        const string qry = "myGraphQlQuery";
-        const string variables = "{\"id\":{{CocoId}}}";
-        var varResolver = MockVariableResolver("CocoId", "19");
-        Dictionary<string, string> resolvedContentHeaders = new(1)
-        {
-            { "Content-Language", "pt-BR" }
-        };
-
-        PororocaHttpRequest req = new();
-        PororocaHttpRequestBody body = new();
-        body.SetGraphQlContent(qry, variables);
-        req.UpdateBody(body);
-
-        // WHEN
-        var resolvedReqContent = ResolveRequestContent(varResolver.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
-
-        // THEN
-        Assert.NotNull(resolvedReqContent);
-        Assert.True(resolvedReqContent is StringContent);
-        Assert.NotNull(resolvedReqContent!.Headers.ContentType);
-        Assert.Equal("application/json", resolvedReqContent.Headers.ContentType!.MediaType);
-        Assert.Contains("pt-BR", resolvedReqContent!.Headers.ContentLanguage);
-
-        string? contentText = await resolvedReqContent.ReadAsStringAsync();
-        Assert.Equal("{\"query\":\"myGraphQlQuery\",\"variables\":{\"id\":19}}", contentText);
-    }
-
-    [Fact]
     public static async Task Should_resolve_form_url_encoded_content_correctly()
     {
         // GIVEN
-        PororocaCollection col = new("VarResolver");
-        col.Variables.Add(new(true, "keyX", "key3", false));
-        col.Variables.Add(new(true, "keyXvalue", "value3", false));
+        PororocaKeyValueParam[] resolvedUrlEncodedParams =
+        [
+            new(true, "key1", "abc"),
+            new(true, "key3", "value3")
+        ];
         Dictionary<string, string> resolvedContentHeaders = new(1)
         {
             { "Content-Language", "pt-BR" }
         };
 
-        var formUrlEncodedParams = new PororocaKeyValueParam[]
-        {
-            new(true, "key1", "abc"),
-            new(true, "key1", "def"),
-            new(false, "key2", "ghi"),
-            new(true, "{{keyX}}", "{{keyXvalue}}")
-        };
-
-        PororocaHttpRequest req = new();
-        PororocaHttpRequestBody body = new();
-        body.SetUrlEncodedContent(formUrlEncodedParams);
-        req.UpdateBody(body);
+        PororocaHttpRequestBody resolvedBody = new();
+        resolvedBody.SetUrlEncodedContent(resolvedUrlEncodedParams);
 
         // WHEN
-        var resolvedReqContent = ResolveRequestContent(col.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
+        var resolvedReqContent = MakeRequestContent(resolvedBody, resolvedContentHeaders);
 
         // THEN
         Assert.NotNull(resolvedReqContent);
@@ -201,37 +367,27 @@ public static class PororocaHttpRequestTranslatorTests
         Assert.Equal("key1=abc&key3=value3", contentText);
     }
 
-
     [Fact]
     public static async Task Should_resolve_form_data_content_correctly()
     {
         // GIVEN
-        PororocaCollection col = new("VarResolver");
-        col.Variables.Add(new(true, "keyX", "key3", false));
-        col.Variables.Add(new(true, "keyXvalue", "value3", false));
         string fileName = "testfilecontent2.json";
-        col.Variables.Add(new(true, "MyFileName", fileName, false));
+        string testFilePath = GetTestFilePath(fileName);
+        var p1 = PororocaHttpRequestFormDataParam.MakeTextParam(true, "key1", "oi", "text/plain");
+        var p2 = PororocaHttpRequestFormDataParam.MakeTextParam(true, "key1", "oi2", "text/plain");
+        var p3 = PororocaHttpRequestFormDataParam.MakeTextParam(true, "key3", "value3", "application/json");
+        var p4 = PororocaHttpRequestFormDataParam.MakeFileParam(true, "key4", testFilePath, "application/json");
         Dictionary<string, string> resolvedContentHeaders = new(1)
         {
             { "Content-Language", "pt-BR" }
         };
+        var resolvedFormDataParams = new[] { p1, p2, p3, p4 };
 
-        var p1 = PororocaHttpRequestFormDataParam.MakeTextParam(true, "key1", "oi", "text/plain");
-        var p2 = PororocaHttpRequestFormDataParam.MakeTextParam(true, "key1", "oi2", "text/plain");
-        var p3 = PororocaHttpRequestFormDataParam.MakeTextParam(false, "key2", "oi2", "text/plain");
-        var p4 = PororocaHttpRequestFormDataParam.MakeTextParam(true, "{{keyX}}", "{{keyXvalue}}", "application/json");
-        string testFilePath = GetTestFilePath(fileName);
-        var p5 = PororocaHttpRequestFormDataParam.MakeFileParam(true, "key4", testFilePath.Replace("testfilecontent2.json", "{{MyFileName}}"), "application/json");
-
-        var formDataParams = new[] { p1, p2, p3, p4, p5 };
-
-        PororocaHttpRequest req = new();
-        PororocaHttpRequestBody body = new();
-        body.SetFormDataContent(formDataParams);
-        req.UpdateBody(body);
+        PororocaHttpRequestBody resolvedBody = new();
+        resolvedBody.SetFormDataContent(resolvedFormDataParams);
 
         // WHEN
-        var resolvedReqContent = ResolveRequestContent(col.GetEffectiveVariables(), req.Body, resolvedContentHeaders);
+        var resolvedReqContent = MakeRequestContent(resolvedBody, resolvedContentHeaders);
 
         // THEN
         Assert.NotNull(resolvedReqContent);
@@ -283,11 +439,55 @@ public static class PororocaHttpRequestTranslatorTests
         Assert.Equal("application/json", p4Content.Headers.ContentType!.MediaType);
     }
 
-    #endregion
-
-    private static string GetTestFilePath(string fileName)
+    [Fact]
+    public static async Task Should_resolve_graphql_content_without_variables_correctly()
     {
-        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
-        return Path.Combine(testDataDirInfo.FullName, "TestData", fileName);
+        // GIVEN
+        PororocaHttpRequestBody resolvedBody = new();
+        resolvedBody.SetGraphQlContent("myGraphQlQuery", null);
+        Dictionary<string, string> resolvedContentHeaders = new(1)
+        {
+            { "Content-Language", "pt-BR" }
+        };
+
+        // WHEN
+        var resolvedReqContent = MakeRequestContent(resolvedBody, resolvedContentHeaders);
+
+        // THEN
+        Assert.NotNull(resolvedReqContent);
+        Assert.True(resolvedReqContent is StringContent);
+        Assert.NotNull(resolvedReqContent!.Headers.ContentType);
+        Assert.Equal("application/json", resolvedReqContent.Headers.ContentType!.MediaType);
+        Assert.Contains("pt-BR", resolvedReqContent!.Headers.ContentLanguage);
+
+        string? contentText = await resolvedReqContent.ReadAsStringAsync();
+        Assert.Equal("{\"query\":\"myGraphQlQuery\",\"variables\":null}", contentText);
     }
+
+    [Fact]
+    public static async Task Should_resolve_graphql_content_with_variables_correctly()
+    {
+        // GIVEN
+        PororocaHttpRequestBody resolvedBody = new();
+        resolvedBody.SetGraphQlContent("myGraphQlQuery", "{\"id\":\n// some comment inside GraphQL variables\n19}");
+        Dictionary<string, string> resolvedContentHeaders = new(1)
+        {
+            { "Content-Language", "pt-BR" }
+        };
+
+        // WHEN
+        var resolvedReqContent = MakeRequestContent(resolvedBody, resolvedContentHeaders);
+
+        // THEN
+        Assert.NotNull(resolvedReqContent);
+        Assert.True(resolvedReqContent is StringContent);
+        Assert.NotNull(resolvedReqContent!.Headers.ContentType);
+        Assert.Equal("application/json", resolvedReqContent.Headers.ContentType!.MediaType);
+        Assert.Contains("pt-BR", resolvedReqContent!.Headers.ContentLanguage);
+
+        string? contentText = await resolvedReqContent.ReadAsStringAsync();
+        Assert.Equal("{\"query\":\"myGraphQlQuery\",\"variables\":{\"id\":19}}", contentText);
+    }
+
+    #endregion
 }

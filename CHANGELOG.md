@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.0.0](#300-2024-01-02)
 * [2.5.0](#240-2023-11-13)
 * [2.4.0](#240-2023-10-15)
 * [2.3.1](#231-2023-09-28)
@@ -15,6 +16,60 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.0.0](https://github.com/alexandrehtrb/Pororoca/tree/3.0.0) (2024-01-02)
+
+### Breaking changes
+
+* Shortcut for saving HTTP response body changed to <kbd>F9</kbd> key.
+* User data folder for MacOSX moved to inside Application Support, no longer inside Applications folder.
+* Test projects that use Pororoca.Test now require .NET 8 and enabled preview features in their .csproj files. Read more about it in the docs.
+* `osx` releases work on Mac OSX computers with both x64 and ARM64 architectures (Apple Silicon).
+
+### Features
+
+* Improved visual interface and themes, with better distinction between primary and secondary actions and better colour contrast.
+* Drag-and-drop on tables has been greatly improved with highlighting borders and row selection.
+* Autocomplete for HTTP headers names and values.
+* HTTP log export. You can now export a file that details exactly what was sent in a request and what was received in a response, when it began and how much time elapsed. Hotkey is <kbd>F10</kbd>.
+* Multipart responses when all parts are text can now be seen in response body.
+* Multipart response parts can be retrieved in `Pororoca.Test` tests.
+* A welcome page shows up for new users.
+* A *Go to docs* item has been added inside Help menu.
+* Added request body MIME types for DNS+JSON, FHIR, SOAP, AVIF, CBOR, JSON-PATCH, JXL and SQL.
+* Compatibility with Postman environment secret variables, for import and export.
+* Packaging available for Debian / Ubuntu in `.deb` files.
+* Security audit in CI/CD (`dotnet list package --vulnerable --include-transitive`).
+* SBOMs are now included with the releases. A SBOM (software bill of materials) is a document that describes which components are used to make a software, in order to keep track and audit for vulnerabilities and licenses compliances.
+
+### Bug Fixes
+
+* HTTP/3 requests can now run on Windows Server 2022 machines (fixed detection of QUIC support on Windows).
+* Fixed bug when pressing <kbd>Ctrl</kbd>+<kbd>PageUp</kbd> or <kbd>Ctrl</kbd>+<kbd>PageDown</kbd>.
+
+### Refactors
+
+* Collections and environments are now exported and imported using source generated JSON serializers, with better performance.
+* Skips variable resolution if there are no effective variables, also for performance.
+* Unified `FormatHttpVersion()` methods.
+* Unified `GetTestFilePath()` methods in unit tests.
+* Linux releases now are single-file published, meaning they have less files inside the folder.
+* `FrozenSet` and `FrozenDictionary` used in many parts of the code, for faster speed.
+
+### CI/CD
+
+* Removed unnecessary setup of NSIS, as it comes pre-installed on GitHub Actions Windows runners.
+* Windows portable releases are now generated in Linux runners.
+* Upgraded `actions/upload-artifact` to v4.
+
+### Others
+
+* Pororoca.Test NuGet package now comes with a README.
+* Fixed `rununittests.ps1` report to ignore source generated files.
+* Added unit tests for collections and environments JSON serialization and deserialization.
+* Raised .NET SDK to 8.0.100.
+* Raised AvaloniaEdit to 11.0.5.
+* Raised Microsoft.OpenApi to 1.6.11.
 
 ## [2.5.0](https://github.com/alexandrehtrb/Pororoca/tree/2.5.0) (2023-11-13)
 

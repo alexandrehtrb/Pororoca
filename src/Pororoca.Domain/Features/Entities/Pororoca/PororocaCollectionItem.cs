@@ -6,7 +6,7 @@ public abstract class PororocaCollectionItem : ICloneable
 {
     [JsonPropertyOrder(-1)]
     [JsonInclude]
-    public string Name { get; protected set; }
+    public string Name { get; internal set; }
 
     protected PororocaCollectionItem(string name) => Name = name;
 

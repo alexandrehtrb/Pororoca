@@ -28,8 +28,6 @@ public abstract class EnumMatchConverter<TEnum> : IValueConverter
         (parameter?.ToString()?.Trim('\'')?.Split(',') ?? Array.Empty<string>())
         .Select(x => Enum.Parse<TEnum>(x)).ToList();
 
-    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        return new BindingNotification(new NotSupportedException(), BindingErrorType.Error);
-    }
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>
+        new BindingNotification(new NotSupportedException(), BindingErrorType.Error);
 }

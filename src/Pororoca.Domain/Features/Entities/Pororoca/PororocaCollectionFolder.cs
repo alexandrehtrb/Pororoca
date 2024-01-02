@@ -7,10 +7,10 @@ namespace Pororoca.Domain.Features.Entities.Pororoca;
 public sealed class PororocaCollectionFolder : PororocaCollectionItem, ICloneable
 {
     [JsonInclude]
-    public IReadOnlyList<PororocaCollectionFolder> Folders { get; private set; }
+    public IReadOnlyList<PororocaCollectionFolder> Folders { get; internal set; }
 
     [JsonInclude]
-    public IReadOnlyList<PororocaRequest> Requests { get; private set; }
+    public IReadOnlyList<PororocaRequest> Requests { get; internal set; }
 
     [JsonIgnore] // JSON IGNORE
     public IReadOnlyList<PororocaHttpRequest> HttpRequests =>

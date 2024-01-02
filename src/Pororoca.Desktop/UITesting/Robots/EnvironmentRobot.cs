@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.ViewModels.DataGrids;
@@ -8,7 +7,7 @@ namespace Pororoca.Desktop.UITesting.Robots;
 
 public sealed class EnvironmentRobot : BaseNamedRobot, IVariablesEditorRobot
 {
-    public EnvironmentRobot(EnvironmentView rootView) : base(rootView){}
+    public EnvironmentRobot(EnvironmentView rootView) : base(rootView) { }
 
     internal Button SetAsCurrentEnvironment => GetChildView<Button>("btSetAsCurrentEnvironment")!;
     internal Button AddVariable => GetChildView<Button>("btAddVariable")!;

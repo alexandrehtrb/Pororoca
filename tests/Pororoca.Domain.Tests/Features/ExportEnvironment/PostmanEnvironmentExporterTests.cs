@@ -40,6 +40,7 @@ public static class PostmanEnvironmentExporterTests
         Assert.True(var1.Enabled);
         Assert.Equal("Key1", var1.Key);
         Assert.Equal("Value1", var1.Value);
+        Assert.Null(var1.Type);
 
         var var2 = env.Values[1];
         Assert.False(var2.Enabled);
@@ -48,6 +49,7 @@ public static class PostmanEnvironmentExporterTests
             Assert.Equal(string.Empty, var2.Value);
         else
             Assert.Equal("Value2", var2.Value);
+        Assert.Equal("secret", var2.Type);
     }
 
     private static PororocaEnvironment CreateTestPororocaEnvironment()

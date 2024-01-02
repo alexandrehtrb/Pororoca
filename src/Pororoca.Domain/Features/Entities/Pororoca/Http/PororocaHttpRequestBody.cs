@@ -14,25 +14,25 @@ public enum PororocaHttpRequestBodyMode
 public sealed class PororocaHttpRequestBody : ICloneable
 {
     [JsonInclude]
-    public PororocaHttpRequestBodyMode Mode { get; private set; }
+    public PororocaHttpRequestBodyMode Mode { get; internal set; }
 
     [JsonInclude]
-    public string? ContentType { get; private set; }
+    public string? ContentType { get; internal set; }
 
     [JsonInclude]
-    public string? RawContent { get; private set; }
+    public string? RawContent { get; internal set; }
 
     [JsonInclude]
-    public string? FileSrcPath { get; private set; }
+    public string? FileSrcPath { get; internal set; }
 
     [JsonInclude]
-    public List<PororocaKeyValueParam>? UrlEncodedValues { get; private set; }
+    public List<PororocaKeyValueParam>? UrlEncodedValues { get; internal set; }
 
     [JsonInclude]
-    public List<PororocaHttpRequestFormDataParam>? FormDataValues { get; private set; }
+    public List<PororocaHttpRequestFormDataParam>? FormDataValues { get; internal set; }
 
     [JsonInclude]
-    public PororocaHttpRequestBodyGraphQl? GraphQlValues { get; private set; }
+    public PororocaHttpRequestBodyGraphQl? GraphQlValues { get; internal set; }
 
     public PororocaHttpRequestBody()
     {

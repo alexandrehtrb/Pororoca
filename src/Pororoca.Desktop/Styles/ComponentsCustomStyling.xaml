@@ -124,6 +124,24 @@
         Value="True"/>
   </Style>
 
+  <Style Selector="CheckBox">
+    <Setter
+        Property="Foreground"
+        Value="{DynamicResource DefaultTextForegroundColor}"/>
+  </Style>
+  
+  <Style Selector="TextBlock.PageTitle">
+    <Setter
+        Property="FontSize"
+        Value="32"/>
+    <Setter
+        Property="FontWeight"
+        Value="Light"/>
+    <Setter
+        Property="Foreground"
+        Value="{DynamicResource DefaultTextForegroundColor}"/>
+  </Style>
+
   <Style Selector="TextBlock.SectionTitle">
     <Setter
         Property="FontSize"
@@ -131,6 +149,9 @@
     <Setter
         Property="FontWeight"
         Value="Light"/>
+        <Setter
+        Property="Foreground"
+        Value="{DynamicResource DefaultTextForegroundColor}"/>
     <Setter
         Property="HorizontalAlignment"
         Value="Left"/>
@@ -243,6 +264,12 @@
 
   <Style Selector="Button.Secondary">
     <Setter
+        Property="BorderThickness"
+        Value="{DynamicResource ButtonSecondaryBorderThickness}"/>
+    <Setter
+        Property="BorderBrush"
+        Value="{DynamicResource ButtonSecondaryBorderBrush}"/>
+    <Setter
         Property="Background"
         Value="{DynamicResource ButtonSecondaryBackgroundBrush}"/>
     <Setter
@@ -251,6 +278,12 @@
   </Style>
 
   <Style Selector="Button.Secondary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter
+        Property="BorderThickness"
+        Value="{DynamicResource ButtonSecondaryBorderThickness}"/>
+    <Setter
+        Property="BorderBrush"
+        Value="{DynamicResource ButtonSecondaryHighlightBorderBrush}"/>
     <Setter
         Property="Background"
         Value="{DynamicResource ButtonSecondaryHighlightBackgroundBrush}"/>

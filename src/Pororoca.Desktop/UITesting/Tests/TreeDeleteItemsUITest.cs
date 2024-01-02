@@ -12,7 +12,7 @@ public sealed class TreeDeleteItemsUITest : UITest
 
     public TreeDeleteItemsUITest()
     {
-        RootView = (Control) MainWindow.Instance!.Content!;
+        RootView = (Control)MainWindow.Instance!.Content!;
         CollectionsGroup = RootView.FindControl<CollectionsGroupView>("mainWindowCollectionsGroup")!;
         TreeRobot = new(CollectionsGroup);
     }
@@ -41,7 +41,7 @@ public sealed class TreeDeleteItemsUITest : UITest
         AssertTreeItemExists(CollectionsGroup, "COL1/WS1");
         AssertTreeItemExists(CollectionsGroup, "COL1/WS1/WS1_MSG1");
         AssertTreeItemExists(CollectionsGroup, "COL1/WS1/WS2_MSG1");
-        
+
         AssertTreeItemNotExists(CollectionsGroup, "COL2");
         AssertTreeItemNotExists(CollectionsGroup, "COL2/ENVS/ENV2");
         AssertTreeItemNotExists(CollectionsGroup, "COL2/DIR2");
@@ -91,8 +91,8 @@ public sealed class TreeDeleteItemsUITest : UITest
         AssertTreeItemExists(CollectionsGroup, "COL1/HTTP1");
         AssertTreeItemExists(CollectionsGroup, "COL1/WS1");
         AssertTreeItemExists(CollectionsGroup, "COL1/WS1/WS1_MSG1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/WS1/WS2_MSG1");        
-        
+        AssertTreeItemExists(CollectionsGroup, "COL1/WS1/WS2_MSG1");
+
         // when deleting a parent and a child selected, siblings should be removed too
         await TreeRobot.SelectMultiple("COL1/WS1", "COL1/WS1/WS1_MSG1");
         await TreeRobot.Delete();
@@ -112,7 +112,7 @@ public sealed class TreeDeleteItemsUITest : UITest
         AssertTreeItemExists(CollectionsGroup, "COL1/HTTP1");
         AssertTreeItemNotExists(CollectionsGroup, "COL1/WS1");
         AssertTreeItemNotExists(CollectionsGroup, "COL1/WS1/WS1_MSG1");
-        AssertTreeItemNotExists(CollectionsGroup, "COL1/WS1/WS2_MSG1");  
+        AssertTreeItemNotExists(CollectionsGroup, "COL1/WS1/WS2_MSG1");
 
         // delete everything else with a multiple selection
         await TreeRobot.SelectMultiple("COL1", "COL1/ENVS/ENVS1", "COL1/DIR1", "COL1/HTTP0", "COL1/WS0", "COL1/WS0/WS2_MSG1", "COL1/HTTP1");
@@ -133,6 +133,6 @@ public sealed class TreeDeleteItemsUITest : UITest
         AssertTreeItemNotExists(CollectionsGroup, "COL1/HTTP1");
         AssertTreeItemNotExists(CollectionsGroup, "COL1/WS1");
         AssertTreeItemNotExists(CollectionsGroup, "COL1/WS1/WS1_MSG1");
-        AssertTreeItemNotExists(CollectionsGroup, "COL1/WS1/WS2_MSG1");  
+        AssertTreeItemNotExists(CollectionsGroup, "COL1/WS1/WS2_MSG1");
     }
 }

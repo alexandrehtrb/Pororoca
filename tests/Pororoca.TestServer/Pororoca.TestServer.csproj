@@ -3,11 +3,12 @@
   <PropertyGroup>
     <AssemblyName>PororocaTestServer</AssemblyName>
     <RootNamespace>Pororoca.TestServer</RootNamespace>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
     <PublishReadyToRun>true</PublishReadyToRun>
+    <NoWarn>AD0001</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />

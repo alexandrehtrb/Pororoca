@@ -1,8 +1,5 @@
-using System.Collections.ObjectModel;
-using System.Text;
 using Avalonia.Controls;
 using Pororoca.Desktop.UITesting.Robots;
-using Pororoca.Desktop.UserData;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Common;
@@ -11,7 +8,7 @@ using Pororoca.Domain.Features.Entities.Pororoca.Http;
 namespace Pororoca.Desktop.UITesting.Tests;
 
 public sealed class HttpRequestValidationsUITest : UITest
-{    
+{
     private const string TestValidUrl = "https://localhost:5001";
 
     private Control RootView { get; }
@@ -23,7 +20,7 @@ public sealed class HttpRequestValidationsUITest : UITest
 
     public HttpRequestValidationsUITest()
     {
-        RootView = (Control) MainWindow.Instance!.Content!;
+        RootView = (Control)MainWindow.Instance!.Content!;
         TopMenuRobot = new(RootView);
         TreeRobot = new(RootView.FindControl<CollectionsGroupView>("mainWindowCollectionsGroup")!);
         ColRobot = new(RootView.FindControl<CollectionView>("collectionView")!);
@@ -78,7 +75,7 @@ public sealed class HttpRequestValidationsUITest : UITest
         // bad url, with variable
         // variable resolving will be checked in other tests
         await TestBadUrl("{{MyDomain}}");
-        
+
         await HttpRobot.Url.ClearAndTypeText(TestValidUrl);
         AssertIsHidden(HttpRobot.ErrorMsg);
         AssertDoesntHaveStyleClass(HttpRobot.Url, "HasValidationProblem");
@@ -106,7 +103,7 @@ public sealed class HttpRequestValidationsUITest : UITest
             await HttpRobot.Url.ClearAndTypeText(TestValidUrl);
             await HttpRobot.Send.ClickOn();
             AssertIsVisible(HttpRobot.ErrorMsg);
-            AssertHasText(HttpRobot.ErrorMsg, "HTTP/3 is only available for Linux or Windows 11 and greater.");
+            AssertHasText(HttpRobot.ErrorMsg, "HTTP/3 is only available for Linux with msquic or Windows 11 and greater.");
             AssertHasStyleClass(HttpRobot.HttpVersion, "HasValidationProblem");
         }
 
@@ -190,7 +187,7 @@ public sealed class HttpRequestValidationsUITest : UITest
         await HttpRobot.SetFormDataBody(Array.Empty<PororocaHttpRequestFormDataParam>());
         await HttpRobot.ReqBodyFormDataAddTextParam.ClickOn();
         var paramVm = HttpRobot.ReqBodyFormDataParams.ItemsSource.Cast<FormDataParamViewModel>().First();
-        
+
         paramVm.ContentType = string.Empty;
         await UITestActions.WaitAfterActionAsync();
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqHeaders);
@@ -295,14 +292,8 @@ public sealed class HttpRequestValidationsUITest : UITest
 
         await HttpRobot.SetWindowsAuthCurrentUser();
         AssertIsHidden(HttpRobot.ErrorMsg);
-        
+
         await HttpRobot.SetNoAuth();
         AssertIsHidden(HttpRobot.ErrorMsg);
-    }
-
-    private static string GetTestFilePath(string subFolder, string fileName)
-    {
-        var userDataDir = UserDataManager.GetUserDataFolder();
-        return Path.Combine(userDataDir.FullName, "PororocaUserData", "TestFiles", subFolder, fileName);
     }
 }

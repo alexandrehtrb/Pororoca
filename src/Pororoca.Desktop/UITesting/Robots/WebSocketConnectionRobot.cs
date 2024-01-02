@@ -1,8 +1,8 @@
-using System.Globalization;
 using Avalonia.Controls;
 using AvaloniaEdit;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.Views;
+using static Pororoca.Domain.Features.Common.HttpVersionFormatter;
 
 namespace Pororoca.Desktop.UITesting.Robots;
 
@@ -43,14 +43,7 @@ public sealed class WebSocketConnectionRobot : BaseNamedRobot
 
     internal Task SetHttpVersion(decimal version)
     {
-        string ver = version switch
-        {
-            1.0m => "HTTP/1.0",
-            1.1m => "HTTP/1.1",
-            2.0m => "HTTP/2",
-            3.0m => "HTTP/3",
-            _ => string.Format(CultureInfo.InvariantCulture, "HTTP/{0:0.0}", version)
-        };
+        string ver = FormatHttpVersion(version);
         return HttpVersion.Select(ver);
     }
 

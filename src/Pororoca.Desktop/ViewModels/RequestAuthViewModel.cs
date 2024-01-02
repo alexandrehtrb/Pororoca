@@ -21,7 +21,8 @@ public sealed class RequestAuthViewModel : ViewModelBase
         {
             this.RaiseAndSetIfChanged(ref this.authModeSelectedIndexField, value);
             // clear invalid warnings if user starts typing to fix them
-            if (HasValidationProblem) this.clearInvalidWarningsCallback();
+            if (HasValidationProblem)
+                this.clearInvalidWarningsCallback();
         }
     }
 
@@ -65,7 +66,8 @@ public sealed class RequestAuthViewModel : ViewModelBase
         {
             this.RaiseAndSetIfChanged(ref this.clientCertificateAuthPkcs12CertificateFilePathField, value);
             // clear invalid warnings if user starts typing to fix them
-            if (HasClientCertificateAuthPkcs12CertificateFilePathProblem) this.clearInvalidWarningsCallback();
+            if (HasClientCertificateAuthPkcs12CertificateFilePathProblem)
+                this.clearInvalidWarningsCallback();
         }
     }
 
@@ -77,7 +79,8 @@ public sealed class RequestAuthViewModel : ViewModelBase
         {
             this.RaiseAndSetIfChanged(ref this.clientCertificateAuthPkcs12FilePasswordField, value);
             // clear invalid warnings if user starts typing to fix them
-            if (HasClientCertificateAuthPkcs12FilePasswordProblem) this.clearInvalidWarningsCallback();
+            if (HasClientCertificateAuthPkcs12FilePasswordProblem)
+                this.clearInvalidWarningsCallback();
         }
     }
 
@@ -101,7 +104,8 @@ public sealed class RequestAuthViewModel : ViewModelBase
         {
             this.RaiseAndSetIfChanged(ref this.clientCertificateAuthPemCertificateFilePathField, value);
             // clear invalid warnings if user starts typing to fix them
-            if (HasClientCertificateAuthPemCertificateFilePathProblem) this.clearInvalidWarningsCallback();
+            if (HasClientCertificateAuthPemCertificateFilePathProblem)
+                this.clearInvalidWarningsCallback();
         }
     }
 
@@ -113,7 +117,8 @@ public sealed class RequestAuthViewModel : ViewModelBase
         {
             this.RaiseAndSetIfChanged(ref this.clientCertificateAuthPemPrivateKeyFilePathField, value);
             // clear invalid warnings if user starts typing to fix them
-            if (HasClientCertificateAuthPemPrivateKeyFilePathProblem) this.clearInvalidWarningsCallback();
+            if (HasClientCertificateAuthPemPrivateKeyFilePathProblem)
+                this.clearInvalidWarningsCallback();
         }
     }
 
@@ -144,7 +149,8 @@ public sealed class RequestAuthViewModel : ViewModelBase
         {
             this.RaiseAndSetIfChanged(ref this.windowsAuthUseCurrentUserField, value);
             // clear invalid warnings if user starts typing to fix them
-            if (HasWindowsAuthLoginProblem || HasWindowsAuthPasswordProblem || HasWindowsAuthDomainProblem) this.clearInvalidWarningsCallback();
+            if (HasWindowsAuthLoginProblem || HasWindowsAuthPasswordProblem || HasWindowsAuthDomainProblem)
+                this.clearInvalidWarningsCallback();
         }
     }
 
@@ -156,7 +162,8 @@ public sealed class RequestAuthViewModel : ViewModelBase
         {
             this.RaiseAndSetIfChanged(ref this.windowsAuthLoginField, value);
             // clear invalid warnings if user starts typing to fix them
-            if (HasWindowsAuthLoginProblem) this.clearInvalidWarningsCallback();
+            if (HasWindowsAuthLoginProblem)
+                this.clearInvalidWarningsCallback();
         }
     }
 
@@ -168,7 +175,8 @@ public sealed class RequestAuthViewModel : ViewModelBase
         {
             this.RaiseAndSetIfChanged(ref this.windowsAuthPasswordField, value);
             // clear invalid warnings if user starts typing to fix them
-            if (HasWindowsAuthPasswordProblem) this.clearInvalidWarningsCallback();
+            if (HasWindowsAuthPasswordProblem)
+                this.clearInvalidWarningsCallback();
         }
     }
 
@@ -180,7 +188,8 @@ public sealed class RequestAuthViewModel : ViewModelBase
         {
             this.RaiseAndSetIfChanged(ref this.windowsAuthDomainField, value);
             // clear invalid warnings if user starts typing to fix them
-            if (HasWindowsAuthDomainProblem) this.clearInvalidWarningsCallback();
+            if (HasWindowsAuthDomainProblem)
+                this.clearInvalidWarningsCallback();
         }
     }
 

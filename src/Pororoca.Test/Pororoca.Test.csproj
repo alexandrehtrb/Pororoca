@@ -4,21 +4,23 @@
     <!-- To generate the package: 'dotnet pack -c Release' -->
     <PackageId>Pororoca.Test</PackageId>
     <PackageIcon>pororoca.png</PackageIcon>
-    <PackageVersion>2.5.0</PackageVersion>
+    <PackageVersion>3.0.0</PackageVersion>
     <Description>Package for running Pororoca requests from tests.</Description>
     <RepositoryUrl>https://github.com/alexandrehtrb/Pororoca.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Authors>Alexandre H. T. R. Bonfitto</Authors>
     <Copyright>AlexandreHTRB</Copyright>
     <PackageLicenseFile>LICENCE.md</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
 
     <RootNamespace>Pororoca.Test</RootNamespace>
     <OutputType>Library</OutputType>
     <IsPackable>True</IsPackable>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <DebugType>embedded</DebugType>
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
     <!-- Including other projects as part of the package -->
     <!-- https://yer.ac/blog/2019/09/05/dotnet-pack-project-reference-and-nuget-dependency/ -->
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
@@ -28,6 +30,7 @@
   <ItemGroup>
     <None Include="..\..\pororoca.png" Pack="true" PackagePath="\"/>
     <None Include="..\..\LICENCE.md" Pack="true" PackagePath="\"/>
+    <None Include="README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Pororoca.Domain\Pororoca.Domain.csproj">

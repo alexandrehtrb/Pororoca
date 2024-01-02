@@ -35,7 +35,7 @@ public static class PostmanCollectionV21ImporterTests
         PostmanVariable p2 = new() { Disabled = true, Key = "Key2", Value = "Value2" };
 
         // WHEN
-        var hdrs = ConvertToPororocaHeaders(new[] { p1, p2 });
+        var hdrs = ConvertToPororocaHeaders([p1, p2]);
 
         // THEN
         Assert.NotNull(hdrs);
@@ -162,7 +162,7 @@ public static class PostmanCollectionV21ImporterTests
         PostmanRequestBody postmanBody = new()
         {
             Mode = PostmanRequestBodyMode.Urlencoded,
-            Urlencoded = new[] { p1, p2 }
+            Urlencoded = [p1, p2]
         };
 
         // WHEN
@@ -243,7 +243,7 @@ public static class PostmanCollectionV21ImporterTests
         PostmanRequestBody postmanBody = new()
         {
             Mode = PostmanRequestBodyMode.Formdata,
-            Formdata = new[] { p1t, p2t, p1f, p2f }
+            Formdata = [p1t, p2t, p1f, p2f]
         };
 
         // WHEN
@@ -422,11 +422,11 @@ public static class PostmanCollectionV21ImporterTests
                 }
             },
             Method = "POST",
-            Header = new PostmanVariable[]
-            {
+            Header =
+            [
                 new() { Disabled = null, Key = "Key1", Value = "Value1" },
                 new() { Disabled = true, Key = "Key2", Value = "Value2" }
-            },
+            ],
             Body = new()
             {
                 Mode = PostmanRequestBodyMode.Raw,
@@ -534,11 +534,11 @@ public static class PostmanCollectionV21ImporterTests
                 Name = testName,
                 Schema = "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
             },
-            Variable = new PostmanVariable[]
-            {
+            Variable =
+            [
                 new() { Key = "Key1", Value = "Value1" },
                 new() { Key = "Key2", Value = "Value2", Disabled = true }
-            },
+            ],
             Auth = new()
             {
                 Type = PostmanAuthType.bearer,
@@ -547,13 +547,13 @@ public static class PostmanCollectionV21ImporterTests
                     new() { Key = "token", Value = "tkn", Type = "string" }
                 }
             },
-            Items = new PostmanCollectionItem[]
-            {
+            Items =
+            [
                 new()
                 {
                     Name = "Folder1",
-                    Items = new PostmanCollectionItem[]
-                    {
+                    Items =
+                    [
                         new()
                         {
                             Name = "Req1",
@@ -564,7 +564,7 @@ public static class PostmanCollectionV21ImporterTests
                                 Url = new PostmanRequestUrl() { Raw = "http://www.abc.com.br" }
                             }
                         }
-                    }
+                    ]
                 },
                 new()
                 {
@@ -576,7 +576,7 @@ public static class PostmanCollectionV21ImporterTests
                         Url = new PostmanRequestUrl() { Raw = "http://www.def.com.br" }
                     }
                 }
-            }
+            ]
         };
 
     private static void AssertConvertedCollection(PororocaCollection? pororocaCollection)

@@ -46,7 +46,7 @@ internal interface IVariablesEditorRobot
         variablesVm.CutOrCopySelected(false);
         await UITestActions.WaitAfterActionAsync();
     }
-    
+
     protected static async Task CopySelectedVariables(VariablesDataGridViewModel variablesVm)
     {
         variablesVm.CutOrCopySelected(true);

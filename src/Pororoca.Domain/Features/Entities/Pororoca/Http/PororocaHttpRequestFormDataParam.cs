@@ -13,7 +13,8 @@ public sealed record PororocaHttpRequestFormDataParam(
     string? TextValue,
     string ContentType,
     string? FileSrcPath
-) {
+)
+{
     // Parameterless constructor for JSON deserialization
     public PororocaHttpRequestFormDataParam() : this(true, PororocaHttpRequestFormDataParamType.Text, string.Empty, string.Empty, string.Empty, null) { }
 

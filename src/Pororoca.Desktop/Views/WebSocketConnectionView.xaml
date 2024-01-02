@@ -339,13 +339,21 @@
                         <TextBlock Text="{Binding i18n.WebSocketConnection.ConnectionRequestHeaderEnabled}"/>
                       </DataGridCheckBoxColumn.Header>
                     </DataGridCheckBoxColumn>
-                    <DataGridTextColumn
-                        Width="0.33*"
-                        Binding="{Binding Key}">
-                      <DataGridTextColumn.Header>
+                    <DataGridTemplateColumn Width="0.33*">
+                      <DataGridTemplateColumn.Header>
                         <TextBlock Text="{Binding i18n.WebSocketConnection.ConnectionRequestHeaderName}"/>
-                      </DataGridTextColumn.Header>
-                    </DataGridTextColumn>
+                      </DataGridTemplateColumn.Header>
+                      <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                          <TextBlock Text="{Binding Key}" VerticalAlignment="Center" Padding="12,0,12,0"/>
+                        </DataTemplate>
+                      </DataGridTemplateColumn.CellTemplate>
+                      <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                          <controls:HeaderNameTextBox Text="{Binding Key}" VerticalContentAlignment="Center" Padding="12,0,12,0"/>
+                        </DataTemplate>
+                      </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn
                         Width="0.45*"
                         Binding="{Binding Value}">
@@ -743,7 +751,7 @@
                 VerticalContentAlignment="Center"
                 Padding="2"
                 Margin="0,0,12,0"
-                Classes="Primary"
+                Classes="Secondary"
                 ToolTip.Tip="{Binding i18n.WebSocketClientMessage.NewMessage}"
                 Command="{Binding AddNewWebSocketClientMessageCmd}">
               <Button.Content>
@@ -855,7 +863,7 @@
             Margin="12,0,12,24"
             IsVisible="{Binding IsSaveSelectedExchangedMessageToFileVisible}"
             Command="{Binding SaveSelectedExchangedMessageToFileCmd}"
-            Classes="Primary"/>
+            Classes="Secondary"/>
       </Grid>
     </Grid>
   </Grid>

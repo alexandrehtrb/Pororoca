@@ -29,7 +29,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     Action ICollectionOrganizationItemParentViewModel.OnAfterItemDeleted => onAfterItemDeleted;
 
     public ReactiveCommand<Unit, Unit> AddNewCollectionCmd { get; }
-    public ReactiveCommand<Unit, Unit> ImportCollectionsCmd { get; }
+    public ReactiveCommand<Unit, Unit> ImportCollectionsFromFileCmd { get; }
 
     [Reactive]
     public bool IsSavedLabelVisible { get; set; }
@@ -39,6 +39,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     #endregion
 
     #region SCREENS
+
+    public PageHolder<WelcomeViewModel> WelcomeView { get; }
 
     public PageHolder<CollectionViewModel> CollectionView { get; }
 
@@ -136,11 +138,22 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #endregion
 
+    #region WEBSITES
+
+    private const string GitHubRepoUrl = "https://github.com/alexandrehtrb/Pororoca";
+    private const string DocsWebSiteUrl = "https://pororoca.io/docs";
+
+    public ReactiveCommand<Unit, Unit> OpenDocsInWebBrowserCmd { get; }
+
+    public ReactiveCommand<Unit, Unit> OpenGitHubRepoInWebBrowserCmd { get; }
+
+    #endregion
+
     public MainWindowViewModel()
     {
         #region COLLECTIONS ORGANIZATION
         CollectionsGroupViewDataCtx = new(this, OnCollectionsGroupItemSelected);
-        ImportCollectionsCmd = ReactiveCommand.CreateFromTask(ImportCollectionsAsync);
+        ImportCollectionsFromFileCmd = ReactiveCommand.CreateFromTask(ImportCollectionsAsync);
         AddNewCollectionCmd = ReactiveCommand.Create(AddNewCollection);
         IsSavedLabelVisible = false;
         SaveAllCmd = ReactiveCommand.CreateFromTask(SaveAllAsync);
@@ -148,6 +161,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
         #region SCREENS
         this.pages = new();
+        this.pages.Add(WelcomeView = new());
         this.pages.Add(CollectionView = new());
         this.pages.Add(CollectionVariablesView = new());
         this.pages.Add(CollectionScopedAuthView = new());
@@ -179,6 +193,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
         #region USER DATA
         LoadUserData();
+        ShowWelcomeIfNoCollectionsExist();
         #endregion
 
         #region UI TESTS
@@ -187,6 +202,11 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
         #region VERSION NAME
         VersionName = "v" + Assembly.GetExecutingAssembly().GetName().Version?.ToString(3);
+        #endregion
+
+        #region WEBSITES
+        OpenDocsInWebBrowserCmd = ReactiveCommand.Create(() => OpenWebBrowser(DocsWebSiteUrl));
+        OpenGitHubRepoInWebBrowserCmd = ReactiveCommand.Create(() => OpenWebBrowser(GitHubRepoUrl));
         #endregion
     }
 
@@ -213,6 +233,18 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         else
         {
             this.pages.ForEach(p => p.Visible = false);
+        }
+    }
+
+    private void ShowWelcomeIfNoCollectionsExist()
+    {
+        if (CollectionsGroupViewDataCtx.Items.Count == 0)
+        {
+            if (WelcomeView.VM is null)
+            {
+                WelcomeView.SetVM(WelcomeViewModel.Instance);
+            }
+            WelcomeView.Visible = true;
         }
     }
 
@@ -254,12 +286,13 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         CollectionsGroupViewDataCtx.Items.Remove((CollectionViewModel)item);
         CollectionsGroupViewDataCtx.RefreshSubItemsAvailableMovements();
         onAfterItemDeleted();
+        ShowWelcomeIfNoCollectionsExist();
     }
 
     private void onAfterItemDeleted() =>
         this.pages.ForEach(p => p.Visible = false);
 
-    private Task ImportCollectionsAsync() =>
+    public Task ImportCollectionsAsync() =>
         FileExporterImporter.ImportCollectionsAsync(this);
 
     private async Task SaveAllAsync()
@@ -353,9 +386,9 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     private void LoadUserData()
     {
+        // this needs to be before the migration dialog,
+        // because here we load the localization strings
         UserPrefs = UserDataManager.LoadUserPreferences() ?? GetDefaultUserPrefs();
-        var cols = UserDataManager.LoadUserCollections();
-
         SelectLanguage(UserPrefs.GetLanguage());
         if (UserPrefs.NeedsToShowUpdateReminder())
         {
@@ -367,6 +400,15 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
             UserPrefs.SetUpdateReminderLastShownDateAsToday();
         }
 
+        if (UserDataManager.NeedsMacOSXUserDataFolderMigrationToV3())
+        {
+            // this is a silent migration.
+            // users can manually delete the PororocaUserData_old folder afterwards.
+            UserDataManager.ExecuteMacOSXUserDataFolderMigrationToV3();
+            ShowMacOSXUserDataFolderMigratedV3Dialog();
+        }
+
+        var cols = UserDataManager.LoadUserCollections();
         foreach (var col in cols)
         {
             AddCollection(col);
@@ -406,14 +448,30 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
             var buttonResult = await msgbox.ShowAsync();
             if (buttonResult == ButtonResult.Ok)
             {
-                OpenPororocaSiteInWebBrowser();
+                OpenWebBrowser(GitHubRepoUrl);
             }
         });
     }
 
-    private static void OpenPororocaSiteInWebBrowser()
+    private void ShowMacOSXUserDataFolderMigratedV3Dialog()
     {
-        const string url = "https://github.com/alexandrehtrb/Pororoca";
+        Bitmap bitmap = new(AssetLoader.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
+        string newUserDataDirPath = UserDataManager.GetUserDataFolder().FullName;
+
+        var msgbox = MessageBoxManager.GetMessageBoxStandard(
+            new MessageBoxStandardParams()
+            {
+                ContentTitle = Localizer.Instance.MacOSXUserDataFolderMigratedV3Dialog.Title,
+                ContentMessage = string.Format(Localizer.Instance.MacOSXUserDataFolderMigratedV3Dialog.Message, newUserDataDirPath),
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                WindowIcon = new(bitmap),
+                ButtonDefinitions = ButtonEnum.Ok
+            });
+        Dispatcher.UIThread.Post(async () => await msgbox.ShowAsync());
+    }
+
+    private static void OpenWebBrowser(string url)
+    {
         try
         {
             if (OperatingSystem.IsWindows())

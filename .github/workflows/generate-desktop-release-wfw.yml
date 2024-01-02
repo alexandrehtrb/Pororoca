@@ -9,7 +9,7 @@ on:
       rid:
         required: true
         type: string
-      installation:
+      packaging:
         required: false
         type: string
       enableUITesting:
@@ -21,11 +21,13 @@ jobs:
 
     runs-on: ${{ inputs.os }} # we run many different builds
     
+    # update (2023-12-11): let's try single-file publishing for Linux too
     env:
       OUTPUT_FOLDER: ${{ format('./out/{0}/', inputs.rid) }}
-      PUBLISH_SINGLE_FILE: ${{ startsWith(inputs.rid, 'win') }}
+      PUBLISH_SINGLE_FILE: ${{ startsWith(inputs.rid, 'win') || startsWith(inputs.rid, 'linux') }}
       RID: ${{ inputs.rid }}
-      WINDOWS_INSTALLER_RELEASE: ${{ startsWith(inputs.rid, 'win') && inputs.installation == 'withInstaller' }}
+      WINDOWS_INSTALLER_RELEASE: ${{ startsWith(inputs.rid, 'win') && inputs.packaging == 'nsis' }}
+      DEBIAN_INSTALLER_RELEASE: ${{ startsWith(inputs.rid, 'linux') && inputs.packaging == 'debian' }}
       ENABLE_UI_TESTING: ${{ inputs.enableUITesting }}
       
     steps:
@@ -37,27 +39,28 @@ jobs:
     - name: Install .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 7.0.403
+        dotnet-version: 8.0.100
 
-    - name: Install NSIS (Windows installer version only)
-      if: ${{ env.WINDOWS_INSTALLER_RELEASE == 'true' }}
-      uses: repolevedavaj/install-nsis@v1.0.0
-      with:
-        nsis-version: 3.09
-    
-    - name: Add NSIS to PATH (Windows installer version only)
-      if: ${{ env.WINDOWS_INSTALLER_RELEASE == 'true' }}
-      shell: pwsh
-      run: |
-        echo "${env:ProgramFiles(x86)}\NSIS" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+    # GitHub Actions Windows Runners come with NSIS pre-installed
+    # https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md
+    # No need to install here
 
-    - name: Check if NSIS was added to PATH (Windows installer version only)
-      if: ${{ env.WINDOWS_INSTALLER_RELEASE == 'true' }}
-      shell: pwsh
-      run: makensis /VERSION
+    - name: Install CycloneDX SBOM tool
+      run: dotnet tool install --global CycloneDX
 
     - name: Restore solution
       run: dotnet restore --nologo --verbosity quiet
+    
+    - name: Audit Pororoca.Desktop project
+      shell: pwsh
+      run: |
+        $projectPath = "./src/Pororoca.Desktop/Pororoca.Desktop.csproj"
+        $jsonObj = (dotnet list $projectPath package --vulnerable --include-transitive --format json) | ConvertFrom-Json;
+        $hasAnyVulnerability = ($jsonObj.projects[0].frameworks -ne $null);
+        if ($hasAnyVulnerability) {
+          dotnet list package --vulnerable --include-transitive;
+          exit 1;
+        }
       
     - name: Build solution
       run: dotnet build --no-restore --configuration Release --nologo --verbosity quiet
@@ -71,17 +74,22 @@ jobs:
         ([XML]$desktopCsprojXml = Get-Content ./src/Pororoca.Desktop/Pororoca.Desktop.csproj)
         $versionName = $desktopCsprojXml.Project.PropertyGroup.Version
         echo "VERSION_NAME=${versionName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+    
+    - name: Generate SBOM file
+      shell: pwsh
+      run: dotnet CycloneDX ./src/Pororoca.Desktop/Pororoca.Desktop.csproj -o $env:OUTPUT_FOLDER -f sbom.json -sv $env:VERSION_NAME --json
           
     - name: Generate Pororoca Desktop dlls
       shell: pwsh
       run: |
-        [void](mkdir $env:OUTPUT_FOLDER);
+        [void](New-Item $env:OUTPUT_FOLDER -ItemType Directory -ErrorAction Ignore);
         dotnet publish ./src/Pororoca.Desktop/Pororoca.Desktop.csproj `
         --verbosity quiet `
         --nologo `
         --configuration Release `
         -p:PublishSingleFile=${env:PUBLISH_SINGLE_FILE} `
         -p:PublishForInstallOnWindows=${env:WINDOWS_INSTALLER_RELEASE} `
+        -p:PublishForInstallOnDebian=${env:DEBIAN_INSTALLER_RELEASE} `
         -p:UITestsEnabled=${env:ENABLE_UI_TESTING} `
         --self-contained true `
         --runtime ${env:RID} `
@@ -89,7 +97,7 @@ jobs:
         if ($env:RID -like "*win*")
         {
           # let's copy the msquic.dll file next to the generated .exe
-          Copy-Item -Path "./src/Pororoca.Desktop/bin/Release/net7.0/${env:RID}/msquic.dll" -Destination $env:OUTPUT_FOLDER
+          Copy-Item -Path "./src/Pororoca.Desktop/bin/Release/net8.0/${env:RID}/msquic.dll" -Destination $env:OUTPUT_FOLDER
         }
     
     - name: Rename executable
@@ -138,11 +146,16 @@ jobs:
       run: Copy-Item -Path "./LICENCE.md" -Destination $env:OUTPUT_FOLDER
       
     - name: Compress package
-      if: ${{ inputs.installation != 'withInstaller' }}
+      if: ${{ inputs.packaging == null }}
       shell: pwsh
       run: |
         if ($env:RID -like "win*") {
           $zipName = "Pororoca_${env:VERSION_NAME}_${env:RID}_portable.zip";
+        }
+        elseif ($env:RID -like "osx*") {
+          # temporary renaming while osx-arm64 doesn't work
+          # osx-x64 works on Mac OSX ARM64
+          $zipName = "Pororoca_${env:VERSION_NAME}_osx.zip";
         } else {
           $zipName = "Pororoca_${env:VERSION_NAME}_${env:RID}.zip";
         }
@@ -154,9 +167,10 @@ jobs:
           cd ../..
         }
         Remove-Item $env:OUTPUT_FOLDER -Force -Recurse -ErrorAction Ignore
+        echo "OUTPUT_FILE_NAME=${zipName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
     
     - name: Make installer for Windows
-      if: ${{ env.WINDOWS_INSTALLER_RELEASE == 'true' }}
+      if: ${{ inputs.packaging == 'nsis' }}
       shell: pwsh
       run: |
         $installerFileName = "Pororoca_${env:VERSION_NAME}_${env:RID}_installer.exe";
@@ -170,8 +184,43 @@ jobs:
           "/DINPUT_FILES_DIR=${installerFilesDirAbsolutePath}" `
           .\src\Pororoca.Desktop.WindowsInstaller\Installer.nsi
         Remove-Item $env:OUTPUT_FOLDER -Force -Recurse -ErrorAction Ignore
+        echo "OUTPUT_FILE_NAME=${installerFileName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+
+    - name: Make Debian .deb package
+      if: ${{ inputs.packaging == 'debian' }}
+      shell: pwsh
+      run: |
+        $debPackageName = "Pororoca_${env:VERSION_NAME}_amd64.deb";        
+        [void](mkdir "./out/deb")
+        # Debian control file
+        [void](mkdir "./out/deb/DEBIAN")
+        Copy-Item -Path "./src/Pororoca.Desktop.Debian/control" -Destination "./out/deb/DEBIAN"
+        # Executable file
+        [void](mkdir "./out/deb/usr")
+        [void](mkdir "./out/deb/usr/bin")
+        Copy-Item -Path "./${env:OUTPUT_FOLDER}/Pororoca" -Destination "./out/deb/usr/bin/pororoca"
+        # Shared libraries
+        # chmod 644 --> set read-only attributes 
+        [void](mkdir "./out/deb/usr/lib")
+        [void](mkdir "./out/deb/usr/lib/pororoca")
+        Get-ChildItem $env:OUTPUT_FOLDER -File -Filter "*.so" | Copy-Item -Destination "./out/deb/usr/lib/pororoca" -Force
+        Get-ChildItem "./out/deb/usr/lib/pororoca" -File -Filter "*.so" | % { chmod 644 $_.FullName }
+        # Desktop shortcut
+        [void](mkdir "./out/deb/usr/share")
+        [void](mkdir "./out/deb/usr/share/applications")
+        Copy-Item -Path "./src/Pororoca.Desktop.Debian/Pororoca.desktop" -Destination "./out/deb/usr/share/applications/Pororoca.desktop"
+        # Desktop icon
+        [void](mkdir "./out/deb/usr/share/pixmaps")
+        Copy-Item -Path "./pororoca.png" -Destination "./out/deb/usr/share/pixmaps/pororoca.png"
+        # Make .deb file
+        dpkg-deb --root-owner-group --build "./out/deb/" "./out/${debPackageName}"
+        Remove-Item "./out/deb" -Force -Recurse -ErrorAction Ignore
+        Remove-Item $env:OUTPUT_FOLDER -Force -Recurse -ErrorAction Ignore
+        echo "OUTPUT_FILE_NAME=${debPackageName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        path: './out/'
+        compression-level: 0 # no need to compress because steps above already compress
+        name: ${{ env.OUTPUT_FILE_NAME }}
+        path: ${{ format('./out/{0}', env.OUTPUT_FILE_NAME) }}

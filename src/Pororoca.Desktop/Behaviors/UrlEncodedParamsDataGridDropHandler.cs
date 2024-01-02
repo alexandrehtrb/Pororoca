@@ -23,6 +23,6 @@ public sealed class UrlEncodedParamsDataGridDropHandler : BaseDataGridDropHandle
         }
 
         var items = vm.UrlEncodedParamsTableVm.Items;
-        return RunDropAction(e, bExecute, sourceItem, targetItem, items);
+        return RunDropAction(dg, e, bExecute, sourceItem, targetItem, items);
     }
 }

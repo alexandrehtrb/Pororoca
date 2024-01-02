@@ -53,18 +53,12 @@ public class PororocaTestLibraryHttp3Tests
         Assert.Equal("application/json; charset=utf-8", res.ContentType);
 
         Assert.NotNull(res.Headers);
-        Assert.Contains(new("Trailer", "MyTrailer"), res.Headers);
+        Assert.Equal("MyTrailer", res.Headers["Trailer"]);
         Assert.NotNull(res.Trailers);
-        Assert.Contains(new("mytrailer", "MyTrailerValue"), res.Trailers);
+        Assert.Equal("MyTrailerValue", res.Trailers["mytrailer"]);
 
         var jsonObj = res.GetJsonBodyAs<Dictionary<string, int>>();
         Assert.NotNull(jsonObj);
         Assert.Contains(new KeyValuePair<string, int>("id", 1), jsonObj);
-    }
-
-    private static string GetTestCollectionFilePath()
-    {
-        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
-        return Path.Combine(testDataDirInfo.FullName, "PororocaIntegrationTestCollection.pororoca_collection.json");
     }
 }

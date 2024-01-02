@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Text;
+using Pororoca.Desktop.UserData;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.Views;
 
@@ -7,8 +8,8 @@ namespace Pororoca.Desktop.UITesting;
 
 public abstract partial class UITest
 {
-    public string TestName => this.GetType().Name;
-    
+    public string TestName => GetType().Name;
+
     public string Log => this.logAppender.ToString();
 
     public bool? Successful { get; private set; }
@@ -17,7 +18,7 @@ public abstract partial class UITest
 
     private readonly Stopwatch stopwatch;
 
-    public int TotalElapsedSeconds => (int) this.stopwatch.Elapsed.TotalSeconds;
+    public int TotalElapsedSeconds => (int)this.stopwatch.Elapsed.TotalSeconds;
 
     public TimeSpan ElapsedTime => this.stopwatch.Elapsed;
 
@@ -61,6 +62,15 @@ public abstract partial class UITest
     protected void AppendToLog(string msg) => this.logAppender.AppendLine(msg);
 
     public abstract Task RunAsync();
+
+    protected static string GetTestFilesDirPath()
+    {
+        var userDataDir = UserDataManager.GetUserDataFolder();
+        return Path.Combine(userDataDir.FullName, "TestFiles");
+    }
+
+    protected static string GetTestFilePath(string subFolder, string fileName) =>
+        Path.Combine(GetTestFilesDirPath(), subFolder, fileName);
 }
 
 public sealed class UITestException : Exception
