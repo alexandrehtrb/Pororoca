@@ -1,8 +1,8 @@
-﻿; ---------------------------------------- 
+﻿; ----------------------------------------
 ; This NSIS installer and uninstaller is based on the NSIS_Full demo
 ; from NsisMultiUser (https://github.com/Drizin/NsisMultiUser)
 ; this file needs to be saved with UTF-8 with BOM encoding
-; ---------------------------------------- 
+; ----------------------------------------
 
 
 ; ---------------------------------------- INSTALLER IMPORTS
@@ -15,7 +15,7 @@
 !include NsisMultiUser.nsh
 !include LogicLib.nsh
 !include StdUtils.nsh
-; ---------------------------------------- 
+; ----------------------------------------
 
 ; ---------------------------------------- INSTALLER DEFINES
 ; uncomment the 3 lines below to test this script using NSIS GUI
@@ -49,11 +49,11 @@
 	!define MULTIUSER_INSTALLMODE_64_BIT 1
 !endif
 !define MULTIUSER_INSTALLMODE_DISPLAYNAME "${PRODUCT_NAME}" ; "${PRODUCT_NAME} ${VERSION} ${PLATFORM}"
-; ---------------------------------------- 
+; ----------------------------------------
 
-; ----------------------------------------  INSTALLER ATTRIBUTES 
+; ----------------------------------------  INSTALLER ATTRIBUTES
 Name "${PRODUCT_NAME} ${SHORT_VERSION}"
-BrandingText "©2023 ${COMPANY_NAME}"
+BrandingText "©2024 ${COMPANY_NAME}"
 Icon "${INPUT_FILES_DIR}\pororoca_icon.ico"
 VIProductVersion "${PRODUCT_VERSION}"
 VIFileVersion "${VERSION}"
@@ -68,13 +68,13 @@ SetCompressor /SOLID lzma ; TODO: Decide whether to use compression or not
 XPStyle on
 
 !include Utils.nsh ; This declaration needs to be at this line
-; ---------------------------------------- 
+; ----------------------------------------
 
 ; ---------------------------------------- REMEMBER INSTALLER LANGUAGE
 !define LANGDLL_REGISTRY_ROOT SHCTX
 !define LANGDLL_REGISTRY_KEY "${SETTINGS_REG_KEY}"
 !define LANGDLL_REGISTRY_VALUENAME "Language"
-; ---------------------------------------- 
+; ----------------------------------------
 
 ; ---------------------------------------- PAGES
 PageEx license
@@ -112,88 +112,88 @@ LicenseLangString langLicenseData ${LANG_RUSSIAN} "${INPUT_FILES_DIR}\LICENCE.md
 
 LangString InstallationTypical ${LANG_ENGLISH} "Typical"
 LangString InstallationTypical ${LANG_PORTUGUESEBR} "Típica"
-LangString InstallationTypical ${LANG_ITALIAN} "Tipica" 
+LangString InstallationTypical ${LANG_ITALIAN} "Tipica"
 LangString InstallationTypical ${LANG_RUSSIAN} "Типичный"
 
 LangString InstallationMinimal ${LANG_ENGLISH} "Minimal"
 LangString InstallationMinimal ${LANG_PORTUGUESEBR} "Mínima"
-LangString InstallationMinimal ${LANG_ITALIAN} "Minima" 
+LangString InstallationMinimal ${LANG_ITALIAN} "Minima"
 LangString InstallationMinimal ${LANG_RUSSIAN} "Минимальный"
 
 LangString InstallationFull ${LANG_ENGLISH} "Full"
 LangString InstallationFull ${LANG_PORTUGUESEBR} "Completa"
-LangString InstallationFull ${LANG_ITALIAN} "Completa" 
+LangString InstallationFull ${LANG_ITALIAN} "Completa"
 LangString InstallationFull ${LANG_RUSSIAN} "Полный"
 
 LangString SectionProgramFiles ${LANG_ENGLISH} "Program files"
 LangString SectionProgramFiles ${LANG_PORTUGUESEBR} "Arquivos do programa"
-LangString SectionProgramFiles ${LANG_ITALIAN} "File di programma" 
+LangString SectionProgramFiles ${LANG_ITALIAN} "File di programma"
 LangString SectionProgramFiles ${LANG_RUSSIAN} "Программные файлы"
 
 LangString SectionDocumentation ${LANG_ENGLISH} "Documentation"
 LangString SectionDocumentation ${LANG_PORTUGUESEBR} "Documentação"
-LangString SectionDocumentation ${LANG_ITALIAN} "Documentazione" 
+LangString SectionDocumentation ${LANG_ITALIAN} "Documentazione"
 LangString SectionDocumentation ${LANG_RUSSIAN} "Документация"
 
 LangString SectionGroupShortcuts ${LANG_ENGLISH} "Shortcuts"
-LangString SectionGroupShortcuts ${LANG_PORTUGUESEBR} "Atalhos" 
-LangString SectionGroupShortcuts ${LANG_ITALIAN} "Scelta rapida" 
-LangString SectionGroupShortcuts ${LANG_RUSSIAN} "Ярлыки" 
+LangString SectionGroupShortcuts ${LANG_PORTUGUESEBR} "Atalhos"
+LangString SectionGroupShortcuts ${LANG_ITALIAN} "Scelta rapida"
+LangString SectionGroupShortcuts ${LANG_RUSSIAN} "Ярлыки"
 
 LangString SectionStartMenuGroup ${LANG_ENGLISH} "Start Menu group"
 LangString SectionStartMenuGroup ${LANG_PORTUGUESEBR} "Grupo no Menu Iniciar"
-LangString SectionStartMenuGroup ${LANG_ITALIAN} "Gruppo Menu Start" 
-LangString SectionStartMenuGroup ${LANG_RUSSIAN} "Группа меню «Пуск»" 
+LangString SectionStartMenuGroup ${LANG_ITALIAN} "Gruppo Menu Start"
+LangString SectionStartMenuGroup ${LANG_RUSSIAN} "Группа меню «Пуск»"
 
 LangString SectionStartMenuHighlight ${LANG_ENGLISH} "Start Menu highlight"
 LangString SectionStartMenuHighlight ${LANG_PORTUGUESEBR} "Destaque no Menu Iniciar"
-LangString SectionStartMenuHighlight ${LANG_ITALIAN} "Evidenziazione del menu Start" 
-LangString SectionStartMenuHighlight ${LANG_RUSSIAN} "Выделение меню «Пуск»" 
+LangString SectionStartMenuHighlight ${LANG_ITALIAN} "Evidenziazione del menu Start"
+LangString SectionStartMenuHighlight ${LANG_RUSSIAN} "Выделение меню «Пуск»"
 
 LangString SectionQuickLaunchShortcut ${LANG_ENGLISH} "Quick Launch icon"
 LangString SectionQuickLaunchShortcut ${LANG_PORTUGUESEBR} "Inicialização Rápida"
-LangString SectionQuickLaunchShortcut ${LANG_ITALIAN} "Icona Avvio veloce" 
-LangString SectionQuickLaunchShortcut ${LANG_RUSSIAN} "Значок быстрого запуска" 
+LangString SectionQuickLaunchShortcut ${LANG_ITALIAN} "Icona Avvio veloce"
+LangString SectionQuickLaunchShortcut ${LANG_RUSSIAN} "Значок быстрого запуска"
 
 LangString SectionDesktopShortcut ${LANG_ENGLISH} "Desktop icon"
 LangString SectionDesktopShortcut ${LANG_PORTUGUESEBR} "Ícone na Área de Trabalho"
-LangString SectionDesktopShortcut ${LANG_ITALIAN} "Icona del desktop" 
-LangString SectionDesktopShortcut ${LANG_RUSSIAN} "Значок на рабочем столе" 
+LangString SectionDesktopShortcut ${LANG_ITALIAN} "Icona del desktop"
+LangString SectionDesktopShortcut ${LANG_RUSSIAN} "Значок на рабочем столе"
 
 LangString CurrentUserOnly ${LANG_ENGLISH} "(current user only)"
 LangString CurrentUserOnly ${LANG_PORTUGUESEBR} "(apenas para o usuário atual)"
-LangString CurrentUserOnly ${LANG_ITALIAN} "(solo utente corrente)" 
-LangString CurrentUserOnly ${LANG_RUSSIAN} "(только для текущего пользователя)" 
+LangString CurrentUserOnly ${LANG_ITALIAN} "(solo utente corrente)"
+LangString CurrentUserOnly ${LANG_RUSSIAN} "(только для текущего пользователя)"
 
 LangString ExitSetupQuestion ${LANG_ENGLISH} "Are you sure you want to quit the installation?"
 LangString ExitSetupQuestion ${LANG_PORTUGUESEBR} "Tem certeza de que quer sair da instalação?"
-LangString ExitSetupQuestion ${LANG_ITALIAN} "Sei sicuro di voler uscire dall'installazione?" 
-LangString ExitSetupQuestion ${LANG_RUSSIAN} "Вы уверены, что хотите выйти из настройки?" 
+LangString ExitSetupQuestion ${LANG_ITALIAN} "Sei sicuro di voler uscire dall'installazione?"
+LangString ExitSetupQuestion ${LANG_RUSSIAN} "Вы уверены, что хотите выйти из настройки?"
 
 LangString ExitUninstallQuestion ${LANG_ENGLISH} "Are you sure you want to quit the uninstall?"
 LangString ExitUninstallQuestion ${LANG_PORTUGUESEBR} "Tem certeza de que quer sair da desinstalação?"
-LangString ExitUninstallQuestion ${LANG_ITALIAN} "Sei sicuro di voler uscire dalla disinstallazione?" 
-LangString ExitUninstallQuestion ${LANG_RUSSIAN} "Вы уверены, что хотите выйти из удаления?" 
+LangString ExitUninstallQuestion ${LANG_ITALIAN} "Sei sicuro di voler uscire dalla disinstallazione?"
+LangString ExitUninstallQuestion ${LANG_RUSSIAN} "Вы уверены, что хотите выйти из удаления?"
 
 LangString CouldNotBeInstalledPleaseRestart ${LANG_ENGLISH} "could not be fully installed.$\r$\nPlease, restart Windows and run the setup program again."
 LangString CouldNotBeInstalledPleaseRestart ${LANG_PORTUGUESEBR} "não pôde ser completamente instalado.$\r$\nPor favor, reinicie o Windows e execute o instalador novamente."
-LangString CouldNotBeInstalledPleaseRestart ${LANG_ITALIAN} "non è stato possibile installarlo completamente.$\r$\nRiavvia Windows ed esegui nuovamente il programma di installazione." 
-LangString CouldNotBeInstalledPleaseRestart ${LANG_RUSSIAN} "не удалось установить полностью.$\r$\nПожалуйста, перезагрузите Windows и снова запустите программу установки." 
+LangString CouldNotBeInstalledPleaseRestart ${LANG_ITALIAN} "non è stato possibile installarlo completamente.$\r$\nRiavvia Windows ed esegui nuovamente il programma di installazione."
+LangString CouldNotBeInstalledPleaseRestart ${LANG_RUSSIAN} "не удалось установить полностью.$\r$\nПожалуйста, перезагрузите Windows и снова запустите программу установки."
 
 LangString CouldNotBeUninstalledPleaseRestart ${LANG_ENGLISH} "could not be fully uninstalled.$\r$\nPlease, restart Windows and run the uninstaller again."
 LangString CouldNotBeUninstalledPleaseRestart ${LANG_PORTUGUESEBR} "não pôde ser completamente desinstalado.$\r$\nPor favor, reinicie o Windows e execute o desisntalador novamente."
-LangString CouldNotBeUninstalledPleaseRestart ${LANG_ITALIAN} "non è stato possibile disinstallarlo completamente.$\r$\nRiavvia Windows ed esegui nuovamente il programma di disinstallazione." 
-LangString CouldNotBeUninstalledPleaseRestart ${LANG_RUSSIAN} "не удалось полностью удалить.$\r$\nПожалуйста, перезагрузите Windows и снова запустите деинсталлятор." 
+LangString CouldNotBeUninstalledPleaseRestart ${LANG_ITALIAN} "non è stato possibile disinstallarlo completamente.$\r$\nRiavvia Windows ed esegui nuovamente il programma di disinstallazione."
+LangString CouldNotBeUninstalledPleaseRestart ${LANG_RUSSIAN} "не удалось полностью удалить.$\r$\nПожалуйста, перезагрузите Windows и снова запустите деинсталлятор."
 
 LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_ENGLISH} "Your collections and preferences will not be deleted. They are located at: 'Users\{you}\AppData\Roaming\Pororoca\PororocaUserData\'."
 LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_PORTUGUESEBR} "Suas coleções e preferências não serão excluídas. Elas estão em: 'Users\{você}\AppData\Roaming\Pororoca\PororocaUserData\'."
-LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_ITALIAN} "Le tue collezione e preferenze non verranno eliminate. Si trovano in: 'Utenti\{tu}\AppData\Roaming\Pororoca\PororocaUserData\'." 
-LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_RUSSIAN} "Ваши коллекции и предпочтения не будут удалены. Они находятся по адресу: 'Users\{ты}\AppData\Roaming\Pororoca\PororocaUserData\'." 
+LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_ITALIAN} "Le tue collezione e preferenze non verranno eliminate. Si trovano in: 'Utenti\{tu}\AppData\Roaming\Pororoca\PororocaUserData\'."
+LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_RUSSIAN} "Ваши коллекции и предпочтения не будут удалены. Они находятся по адресу: 'Users\{ты}\AppData\Roaming\Pororoca\PororocaUserData\'."
 
 LangString InstallationCompleted ${LANG_ENGLISH} "Installation successful!"
 LangString InstallationCompleted ${LANG_PORTUGUESEBR} "Instalação concluída com sucesso!"
-LangString InstallationCompleted ${LANG_ITALIAN} "Installazione riuscita!" 
-LangString InstallationCompleted ${LANG_RUSSIAN} "Установка прошла успешно!" 
+LangString InstallationCompleted ${LANG_ITALIAN} "Installazione riuscita!"
+LangString InstallationCompleted ${LANG_RUSSIAN} "Установка прошла успешно!"
 CompletedText $(InstallationCompleted)
 
 
@@ -229,7 +229,7 @@ ReserveFile /plugin LangDLL.dll
 ; ----------------------------------------
 
 ; ---------------------------------------- MULTIUSER HELPER FUNCTIONS
-Function CheckInstallation 
+Function CheckInstallation
 	; if there's an installed version, uninstall it first (I chose not to start the uninstaller silently, so that user sees what failed)
 	; if both per-user and per-machine versions are installed, unistall the one that matches $MultiUser.InstallMode
 	StrCpy $0 ""
@@ -265,7 +265,7 @@ Function RunUninstaller
 	StrCpy $0 0
 	ExecWait '$1 /SS $2 _?=$3' $0 ; $1 is quoted in registry; the _? param stops the uninstaller from copying itself to the temporary directory, which is the only way for ExecWait to work
 FunctionEnd
-; ---------------------------------------- 
+; ----------------------------------------
 
 ; ---------------------------------------- SECTIONS
 InstType $(InstallationTypical)
@@ -320,13 +320,13 @@ Section !$(SectionProgramFiles) SectionCoreFiles
 	WriteRegStr "${LANGDLL_REGISTRY_ROOT}" "${LANGDLL_REGISTRY_KEY}" "${LANGDLL_REGISTRY_VALUENAME}" $LANGUAGE ; write language
 
 	File /r "${INPUT_FILES_DIR}\*.*"
-	
+
 SectionEnd
 
 ; TODO: Add documentation as an optional installation feature
 ; Section /o $(SectionDocumentation) SectionDocumentation
 ; 	SectionIn 3
-; 
+;
 ; 	SetOutPath $INSTDIR
 ; 	File "${INPUT_FILES_DIR}\LICENCE.md"
 ; SectionEnd
@@ -438,7 +438,7 @@ Function PageInstFilesPre
 	GetDlgItem $0 $HWNDPARENT 1
 	SendMessage $0 ${BCM_SETSHIELD} 0 0 ; hide SHIELD (Windows Vista and above)
 FunctionEnd
-; ---------------------------------------- 
+; ----------------------------------------
 
 ; ---------------------------------------- ON INIT / ON USER CALLBACKS
 Function .onInit
@@ -450,7 +450,7 @@ Function .onInit
 	${endif}
 
 	!insertmacro MULTIUSER_INIT
-	
+
 	${if} $IsInnerInstance = 0
 		!insertmacro LANGDLL_DISPLAY
 	${endif}
