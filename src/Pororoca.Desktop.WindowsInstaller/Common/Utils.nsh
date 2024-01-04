@@ -1,8 +1,6 @@
+﻿!include WinCore.nsh
 !include LogicLib.nsh
 !include x64.nsh
-
-!define ERROR_ALREADY_EXISTS 0x000000b7
-!define ERROR_ACCESS_DENIED 0x5
 
 !macro CheckPlatform PLATFORM
 	${if} ${RunningX64}
@@ -15,14 +13,14 @@
 			MessageBox MB_ICONSTOP "Please, run the 32-bit installer of ${PRODUCT_NAME} on this version of Windows." /SD IDOK
 			Quit ; will SetErrorLevel 2 - Installation aborted by script
 		!endif
-	${endif}		
+	${endif}
 !macroend
 
 !macro CheckMinWinVer MIN_WIN_VER
-	${ifnot} ${AtLeastWin${MIN_WIN_VER}}	
+	${ifnot} ${AtLeastWin${MIN_WIN_VER}}
 		MessageBox MB_ICONSTOP "This program requires at least Windows ${MIN_WIN_VER}." /SD IDOK
 		Quit ; will SetErrorLevel 2 - Installation aborted by script
-	${endif}	
+	${endif}
 !macroend
 
 !macro CheckSingleInstanceFunc UNINSTALLER_PREFIX
@@ -89,14 +87,14 @@
 
 !macro DeleteRetryAbort FILE_NAME
 	Push $0
-	
+
 	StrCpy $0 "${FILE_NAME}"
 	!ifndef __UNINSTALL__
 		Call DeleteRetryAbort
 	!else
 	    Call un.DeleteRetryAbort
 	!endif
-	
+
 	Pop $0
 !macroend
 
@@ -104,7 +102,7 @@
 	Push $0
 	Push $1
 	Push $2
-	
+
 	StrCpy $0 "${TYPE}"
 	StrCpy $1 "${SCOPE}"
 	StrCpy $2 "${MUTEX_NAME}"
@@ -113,7 +111,7 @@
 	!else
 		Call un.CheckSingleInstance
 	!endif
-	
+
 	Pop $2
 	Pop $1
 	Pop $0
