@@ -29,6 +29,7 @@
 
 ### Others
 
+* Raised .NET SDK to 8.0.101.
 * Updated year to 2024 in licence and installer.
 * Added italian README.
 
