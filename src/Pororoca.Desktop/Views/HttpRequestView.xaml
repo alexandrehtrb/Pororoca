@@ -972,13 +972,10 @@
                     Command="{Binding ResCapturesTableVm.AddNewBodyCaptureCmd}"
                     Classes="Secondary"/>
                 <TextBlock
-                    TextWrapping="Wrap"
-                    FontSize="16"
-                    FontWeight="Bold"
                     VerticalAlignment="Center"
                     Margin="6,0,0,0"
-                    Text="(?)"
-                    ToolTip.Tip="{Binding i18n.HttpResponse.CaptureTip}"/>
+                    ToolTip.Tip="{Binding i18n.HttpResponse.CaptureTip}"
+                    Classes="TipQuestionMark"/>
                 <!-- Adding a TextBlock Tip at the end of the Grid causes the separator GridSplitter to "jam" while resizing -->
               </StackPanel>
               <DataGrid

@@ -247,7 +247,6 @@
     "WebSocketClientMessage/ContentRawWatermark": "(qui il contenuto grezzo)",
     "WebSocketClientMessage/DisableCompressionExplanation": "Fai attenzione quando usi la compressione con dati crittografati - attento agli attacchi CRIME / BREACH.",
     "WebSocketClientMessage/DisableCompressionForThisMessage": "Disabilita la compressione per questo messaggio",
-    "WebSocketClientMessage/DisableCompressionForThisMessageTip": "(?)",
     "WebSocketClientMessage/MessageTypeBinary": "Binario",
     "WebSocketClientMessage/MessageTypeClose": "Messaggio di chiusura",
     "WebSocketClientMessage/MessageTypeText": "Testo",

@@ -154,11 +154,10 @@
     <TextBlock
         Grid.Column="0"
         Grid.Row="3"
-        TextWrapping="Wrap"
-        FontSize="12"
         HorizontalAlignment="Stretch"
         Margin="0,24,0,24"
-        Text="{Binding i18n.CollectionVariables.Tip}"/>
+        Text="{Binding i18n.CollectionVariables.Tip}"
+        Classes="TipText"/>
 
   </Grid>
 </UserControl>

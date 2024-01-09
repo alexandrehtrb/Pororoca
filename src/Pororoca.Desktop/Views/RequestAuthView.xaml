@@ -283,10 +283,10 @@
         </StackPanel>
         <TextBlock
             TextWrapping="Wrap"
-            FontSize="12"
             HorizontalAlignment="Stretch"
             Margin="0,24,0,24"
-            Text="{Binding i18n.RequestAuth.PemClientCertificatesTip}"/>
+            Text="{Binding i18n.RequestAuth.PemClientCertificatesTip}"
+            Classes="TipText"/>
       </StackPanel>
     </Grid>
 
