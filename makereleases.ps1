@@ -498,7 +498,7 @@ function Pack-ReleaseInDebianDpkg
 	# LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/pororoca pororoca	
 
 	# To install Pororoca .deb package:
-	# sudo apt install ./out/pororoca_3.0.0_amd64.deb
+	# sudo apt install ./out/pororoca_version_amd64.deb
 
 	# To uninstall Pororoca:
 	# sudo apt remove pororoca
