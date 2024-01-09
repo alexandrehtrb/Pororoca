@@ -3,6 +3,7 @@ Version: 3.0.1
 Section: devel
 Priority: optional
 Architecture: amd64
+Installed-Size: 68279
 Maintainer: Alexandre H. T. R. Bonfitto <alexandrehtrb@outlook.com>
 Homepage: https://pororoca.io
 Description: This is Pororoca, a HTTP inspection tool, for Debian-related distros.
