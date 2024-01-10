@@ -27,6 +27,7 @@
 * Rescaled icon for Mac OSX, looks better now.
 * Improved image quality of icon and logos.
 * Added installation size of Debian package.
+* Reduced brightness and standardized style for tips question marks and texts.
 
 ### Others
 
