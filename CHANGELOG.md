@@ -26,6 +26,7 @@
 * Italian and russian translations for Windows installers.
 * Rescaled icon for Mac OSX, looks better now.
 * Improved image quality of icon and logos.
+* Added installation size of Debian package.
 
 ### Others
 
