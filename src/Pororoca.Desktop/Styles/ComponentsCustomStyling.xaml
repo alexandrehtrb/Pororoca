@@ -142,6 +142,36 @@
         Value="{DynamicResource DefaultTextForegroundColor}"/>
   </Style>
 
+  <Style Selector="TextBlock.TipQuestionMark">
+    <Setter
+        Property="FontSize"
+        Value="16"/>
+    <Setter
+        Property="FontWeight"
+        Value="Bold"/>
+    <Setter
+        Property="Foreground"
+        Value="{DynamicResource DefaultTextForegroundColor}"/>
+    <Setter
+        Property="Text"
+        Value="(?)"/>
+    <Setter
+        Property="TextWrapping"
+        Value="Wrap"/>
+  </Style>
+
+  <Style Selector="TextBlock.TipText">
+    <Setter
+        Property="FontSize"
+        Value="12"/>
+    <Setter
+        Property="Foreground"
+        Value="{DynamicResource DefaultTextForegroundColor}"/>
+    <Setter
+        Property="TextWrapping"
+        Value="Wrap"/>
+  </Style>
+
   <Style Selector="TextBlock.SectionTitle">
     <Setter
         Property="FontSize"
