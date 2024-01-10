@@ -290,7 +290,6 @@
     "WebSocketClientMessage/MessageTypeBinary": "Двоичный",
     "WebSocketClientMessage/MessageTypeClose": "Сообщение о закрытии",
     "WebSocketClientMessage/DisableCompressionForThisMessage": "Отключить сжатие для этого сообщения",
-    "WebSocketClientMessage/DisableCompressionForThisMessageTip": "(?)",
     "WebSocketClientMessage/DisableCompressionExplanation": "Будьте осторожны при использовании сжатия с зашифрованными данными - следите за преступлениями / взломами.",
     "WebSocketClientMessage/ContentModeRaw": "Raw",
     "WebSocketClientMessage/ContentModeFile": "Файл",

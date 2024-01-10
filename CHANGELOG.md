@@ -1,6 +1,7 @@
 # Changelog
 
-* [3.0.0](#300-2024-01-02)
+* [3.0.1](#300-2024-01-09)
+* [3.0.0](#300-2024-01-01)
 * [2.5.0](#240-2023-11-13)
 * [2.4.0](#240-2023-10-15)
 * [2.3.1](#231-2023-09-28)
@@ -17,7 +18,24 @@
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
 
-## [3.0.0](https://github.com/alexandrehtrb/Pororoca/tree/3.0.0) (2024-01-02)
+## [3.0.1](https://github.com/alexandrehtrb/Pororoca/tree/3.0.1) (2024-01-09)
+
+### Features
+
+* Windows installers now support using a different user account for elevation (fetched from [Drizin/MultiUser](https://github.com/Drizin/NsisMultiUser)).
+* Italian and russian translations for Windows installers.
+* Rescaled icon for Mac OSX, looks better now.
+* Improved image quality of icon and logos.
+* Added installation size of Debian package.
+* Reduced brightness and standardized style for tips question marks and texts.
+
+### Others
+
+* Raised .NET SDK to 8.0.101.
+* Updated year to 2024 in licence and installer.
+* Added italian README.
+
+## [3.0.0](https://github.com/alexandrehtrb/Pororoca/tree/3.0.0) (2024-01-01)
 
 ### Breaking changes
 

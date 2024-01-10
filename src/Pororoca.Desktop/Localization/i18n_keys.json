@@ -247,7 +247,6 @@
     "WebSocketClientMessage/ContentRawWatermark",
     "WebSocketClientMessage/DisableCompressionExplanation",
     "WebSocketClientMessage/DisableCompressionForThisMessage",
-    "WebSocketClientMessage/DisableCompressionForThisMessageTip",
     "WebSocketClientMessage/MessageTypeBinary",
     "WebSocketClientMessage/MessageTypeClose",
     "WebSocketClientMessage/MessageTypeText",

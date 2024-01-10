@@ -17,7 +17,7 @@ jobs:
     - name: Install .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 8.0.100
+        dotnet-version: 8.0.101
     
     - name: Install CycloneDX SBOM tool
       run: dotnet tool install --global CycloneDX
