@@ -468,6 +468,8 @@ function Pack-ReleaseInDebianDpkg
 		[string]$installerFileName,
 		[string]$versionName
     )
+	# https://wiki.freepascal.org/Debian_package_structure
+	# https://martin.hoppenheit.info/blog/2016/where-to-put-application-icons-on-linux/
 	
 	[void](mkdir "${generalOutFolder}/deb")
 	# Debian control file
@@ -488,9 +490,45 @@ function Pack-ReleaseInDebianDpkg
 	[void](mkdir "${generalOutFolder}/deb/usr/share/applications")
 	Copy-Item -Path "./src/Pororoca.Desktop.Debian/Pororoca.desktop" -Destination "${generalOutFolder}/deb/usr/share/applications/Pororoca.desktop"
 	# Desktop icon
+	# A 32x32 px XPM file in /usr/share/pixmaps/ (using 1024x1024 px PNG instead, like VS Code uses for its icon)
 	[void](mkdir "${generalOutFolder}/deb/usr/share/pixmaps")
-	Copy-Item -Path "./pororoca.png" -Destination "${generalOutFolder}/deb/usr/share/pixmaps/pororoca.png"
-
+	Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_1024px.png" -Destination "${generalOutFolder}/deb/usr/share/pixmaps/pororoca.png"
+	# Hicolor icons
+	[void](mkdir "${generalOutFolder}/deb/usr/share/icons")
+	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor")
+	# A 16x16 px PNG file in /usr/share/icons/hicolor/16x16/apps/
+	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/16x16")
+	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/16x16/apps")
+	Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_16px.png" -Destination "${generalOutFolder}/deb/usr/share/icons/hicolor/16x16/apps/pororoca.png"
+	# A 32x32 px PNG file in /usr/share/icons/hicolor/32x32/apps/
+	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/32x32")
+	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/32x32/apps")
+	Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_32px.png" -Destination "${generalOutFolder}/deb/usr/share/icons/hicolor/32x32/apps/pororoca.png"
+	# A 48x48 px PNG file in /usr/share/icons/hicolor/48x48/apps/
+	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/48x48")
+	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/48x48/apps")
+	Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_48px.png" -Destination "${generalOutFolder}/deb/usr/share/icons/hicolor/48x48/apps/pororoca.png"
+	# A 64x64 px PNG file in /usr/share/icons/hicolor/64x64/apps/
+	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/64x64")
+	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/64x64/apps")
+	Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_64px.png" -Destination "${generalOutFolder}/deb/usr/share/icons/hicolor/64x64/apps/pororoca.png"
+	# A 128x128 px PNG file in /usr/share/icons/hicolor/128x128/apps/
+	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/128x128")
+	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/128x128/apps")
+	Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_128px.png" -Destination "${generalOutFolder}/deb/usr/share/icons/hicolor/128x128/apps/pororoca.png"
+	# A 256x256 px PNG file in /usr/share/icons/hicolor/256x256/apps/
+	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/256x256")
+	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/256x256/apps")
+	Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_256px.png" -Destination "${generalOutFolder}/deb/usr/share/icons/hicolor/256x256/apps/pororoca.png"
+	# A 512x512 px PNG file in /usr/share/icons/hicolor/512x512/apps/
+	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/512x512")
+	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/512x512/apps")
+	Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_512px.png" -Destination "${generalOutFolder}/deb/usr/share/icons/hicolor/512x512/apps/pororoca.png"
+	# Optionally, an SVG file in /usr/share/icons/hicolor/scalable/apps/
+	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/scalable")
+	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/scalable/apps")
+	Copy-Item -Path "./misc/pororoca_logo.svg" -Destination "${generalOutFolder}/deb/usr/share/icons/hicolor/scalable/apps/pororoca.svg"
+	
 	# Make .deb file
 	dpkg-deb --root-owner-group --build "./out/deb/" "./out/Pororoca_${versionName}_amd64.deb"
 
