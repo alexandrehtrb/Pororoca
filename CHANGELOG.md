@@ -18,6 +18,13 @@
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
 
+## [3.0.1.1](https://github.com/alexandrehtrb/Pororoca/tree/3.0.1) (2024-01-17)
+
+### Bug Fix
+
+* Fixes desktop shortcut for GNOME and start-up via Terminal (issues #73 and #74)
+* This release is only for fixing Debian / Ubuntu packaging, the main version 3.0.1 remains. 3.0.1.1 is for tagging purposes.
+
 ## [3.0.1](https://github.com/alexandrehtrb/Pororoca/tree/3.0.1) (2024-01-09)
 
 ### Features
