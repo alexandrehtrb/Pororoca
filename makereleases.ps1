@@ -475,10 +475,12 @@ function Pack-ReleaseInDebianDpkg
 	# Debian control file
 	[void](mkdir "${generalOutFolder}/deb/DEBIAN")
 	Copy-Item -Path "./src/Pororoca.Desktop.Debian/control" -Destination "${generalOutFolder}/deb/DEBIAN"
-	# Executable file
+	# Executable file and script
 	[void](mkdir "${generalOutFolder}/deb/usr")
 	[void](mkdir "${generalOutFolder}/deb/usr/bin")
-	Copy-Item -Path "./${installerFilesFolder}/Pororoca" -Destination "${generalOutFolder}/deb/usr/bin/pororoca"
+	Copy-Item -Path "./${installerFilesFolder}/Pororoca" -Destination "${generalOutFolder}/deb/usr/bin/pororoca_executable"
+	Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca.sh" -Destination "${generalOutFolder}/deb/usr/bin/pororoca"
+	chmod +x "${generalOutFolder}/deb/usr/bin/pororoca" # set executable permissions to starter script
 	# Shared libraries
 	# chmod 644 --> set read-only attributes 
 	[void](mkdir "${generalOutFolder}/deb/usr/lib")

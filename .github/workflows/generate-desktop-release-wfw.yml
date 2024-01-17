@@ -195,10 +195,12 @@ jobs:
         # Debian control file
         [void](mkdir "./out/deb/DEBIAN")
         Copy-Item -Path "./src/Pororoca.Desktop.Debian/control" -Destination "./out/deb/DEBIAN"
-        # Executable file
+        # Executable file and script
         [void](mkdir "./out/deb/usr")
         [void](mkdir "./out/deb/usr/bin")
-        Copy-Item -Path "./${env:OUTPUT_FOLDER}/Pororoca" -Destination "./out/deb/usr/bin/pororoca"
+        Copy-Item -Path "./${env:OUTPUT_FOLDER}/Pororoca" -Destination "./out/deb/usr/bin/pororoca_executable"
+        Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca.sh" -Destination "./out/deb/usr/bin/pororoca"
+        chmod +x "./out/deb/usr/bin/pororoca" # set executable permissions to starter script
         # Shared libraries
         # chmod 644 --> set read-only attributes 
         [void](mkdir "./out/deb/usr/lib")
