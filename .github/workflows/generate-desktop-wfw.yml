@@ -15,12 +15,19 @@ on:
       enableUITesting:
         required: true
         type: boolean
+      uploadArtifactToRelease:
+        required: false
+        default: false
+        type: boolean
+      releaseName:
+        required: false
+        type: string
 
 jobs:
   generatePororocaDesktop:
 
     runs-on: ${{ inputs.os }} # we run many different builds
-    
+
     # update (2023-12-11): let's try single-file publishing for Linux too
     env:
       OUTPUT_FOLDER: ${{ format('./out/{0}/', inputs.rid) }}
@@ -29,7 +36,7 @@ jobs:
       WINDOWS_INSTALLER_RELEASE: ${{ startsWith(inputs.rid, 'win') && inputs.packaging == 'nsis' }}
       DEBIAN_INSTALLER_RELEASE: ${{ startsWith(inputs.rid, 'linux') && inputs.packaging == 'debian' }}
       ENABLE_UI_TESTING: ${{ inputs.enableUITesting }}
-      
+
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -50,7 +57,7 @@ jobs:
 
     - name: Restore solution
       run: dotnet restore --nologo --verbosity quiet
-    
+
     - name: Audit Pororoca.Desktop project
       shell: pwsh
       run: |
@@ -61,7 +68,7 @@ jobs:
           dotnet list package --vulnerable --include-transitive;
           exit 1;
         }
-      
+
     - name: Build solution
       run: dotnet build --no-restore --configuration Release --nologo --verbosity quiet
 
@@ -74,11 +81,11 @@ jobs:
         ([XML]$desktopCsprojXml = Get-Content ./src/Pororoca.Desktop/Pororoca.Desktop.csproj)
         $versionName = $desktopCsprojXml.Project.PropertyGroup.Version
         echo "VERSION_NAME=${versionName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-    
+
     - name: Generate SBOM file
       shell: pwsh
       run: dotnet CycloneDX ./src/Pororoca.Desktop/Pororoca.Desktop.csproj -o $env:OUTPUT_FOLDER -f sbom.json -sv $env:VERSION_NAME --json
-          
+
     - name: Generate Pororoca Desktop dlls
       shell: pwsh
       run: |
@@ -99,7 +106,7 @@ jobs:
           # let's copy the msquic.dll file next to the generated .exe
           Copy-Item -Path "./src/Pororoca.Desktop/bin/Release/net8.0/${env:RID}/msquic.dll" -Destination $env:OUTPUT_FOLDER
         }
-    
+
     - name: Rename executable
       shell: pwsh
       run: |
@@ -111,12 +118,12 @@ jobs:
         {
           Rename-Item "${env:OUTPUT_FOLDER}/Pororoca.Desktop" -NewName "Pororoca"
         }
-    
+
     - name: Set executable attributes (UNIX only)
       if: ${{ startsWith(inputs.rid, 'linux') || startsWith(inputs.rid, 'osx') }}
       shell: pwsh
       run: chmod +x "${env:OUTPUT_FOLDER}/Pororoca"
-      
+
     - name: Make Pororoca.app structure (Mac OSX only)
       if: ${{ startsWith(inputs.rid, 'osx') }}
       shell: pwsh
@@ -129,22 +136,22 @@ jobs:
         Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/pororoca.icns" -Destination "${env:OUTPUT_FOLDER}/Pororoca.app/Contents/Resources/"
         Get-ChildItem $env:OUTPUT_FOLDER -File | Copy-Item -Destination "${env:OUTPUT_FOLDER}/Pororoca.app/Contents/MacOS/" -Force
         Get-ChildItem $env:OUTPUT_FOLDER -File | Remove-Item
-    
+
     # so Linux users can create desktop launchers
     - name: Copy logo (Linux only)
       if: ${{ startsWith(inputs.rid, 'linux') }}
       shell: pwsh
       run: Copy-Item -Path "./pororoca.png" -Destination $env:OUTPUT_FOLDER
-      
+
     - name: Copy icon for Windows installer
       if: ${{ env.WINDOWS_INSTALLER_RELEASE == 'true' }}
       shell: pwsh
       run: Copy-Item -Path "./src/Pororoca.Desktop/Assets/pororoca_icon.ico" -Destination $env:OUTPUT_FOLDER
-   
+
     - name: Copy licence
       shell: pwsh
       run: Copy-Item -Path "./LICENCE.md" -Destination $env:OUTPUT_FOLDER
-      
+
     - name: Compress package
       if: ${{ inputs.packaging == null }}
       shell: pwsh
@@ -160,7 +167,7 @@ jobs:
           $zipName = "Pororoca_${env:VERSION_NAME}_${env:RID}.zip";
         }
         if ($IsWindows) {
-          Compress-Archive -CompressionLevel Optimal -Path $env:OUTPUT_FOLDER -DestinationPath "./out/${zipName}"	
+          Compress-Archive -CompressionLevel Optimal -Path $env:OUTPUT_FOLDER -DestinationPath "./out/${zipName}"
         } else {
           cd $env:OUTPUT_FOLDER
           zip -9 -r ../${zipName} *
@@ -168,7 +175,7 @@ jobs:
         }
         Remove-Item $env:OUTPUT_FOLDER -Force -Recurse -ErrorAction Ignore
         echo "OUTPUT_FILE_NAME=${zipName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-    
+
     - name: Make installer for Windows
       if: ${{ inputs.packaging == 'nsis' }}
       shell: pwsh
@@ -190,7 +197,7 @@ jobs:
       if: ${{ inputs.packaging == 'debian' }}
       shell: pwsh
       run: |
-        $debPackageName = "Pororoca_${env:VERSION_NAME}_amd64.deb";        
+        $debPackageName = "Pororoca_${env:VERSION_NAME}_amd64.deb";
         [void](mkdir "./out/deb")
         # Debian control file
         [void](mkdir "./out/deb/DEBIAN")
@@ -202,7 +209,7 @@ jobs:
         Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca.sh" -Destination "./out/deb/usr/bin/pororoca"
         chmod +x "./out/deb/usr/bin/pororoca" # set executable permissions to starter script
         # Shared libraries
-        # chmod 644 --> set read-only attributes 
+        # chmod 644 --> set read-only attributes
         [void](mkdir "./out/deb/usr/lib")
         [void](mkdir "./out/deb/usr/lib/pororoca")
         Get-ChildItem $env:OUTPUT_FOLDER -File -Filter "*.so" | Copy-Item -Destination "./out/deb/usr/lib/pororoca" -Force
@@ -256,9 +263,18 @@ jobs:
         Remove-Item $env:OUTPUT_FOLDER -Force -Recurse -ErrorAction Ignore
         echo "OUTPUT_FILE_NAME=${debPackageName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
-    - name: Upload build artifacts
+    - name: Upload artifact to workflow results
       uses: actions/upload-artifact@v4
       with:
         compression-level: 0 # no need to compress because steps above already compress
         name: ${{ env.OUTPUT_FILE_NAME }}
         path: ${{ format('./out/{0}', env.OUTPUT_FILE_NAME) }}
+
+    - name: Upload artifact to release
+      if: ${{ inputs.uploadArtifactToRelease }}
+      shell: pwsh
+      run: gh release upload $env:RELEASE_NAME $env:FILE_PATH --clobber
+      env:
+        GH_TOKEN: ${{ secrets.POROROCA_GITHUB_TOKEN }}
+        RELEASE_NAME: ${{ inputs.releaseName }}
+        FILE_PATH: ${{ format('./out/{0}', env.OUTPUT_FILE_NAME) }}

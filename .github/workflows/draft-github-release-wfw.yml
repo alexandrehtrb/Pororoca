@@ -1,0 +1,99 @@
+name: Draft GitHub release
+
+on:
+  workflow_dispatch:
+    inputs:
+      releaseName:
+        required: true
+        type: string
+
+jobs:
+
+  draft-github-release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Draft GitHub release
+      run: gh release create $RELEASE_NAME --draft --latest --title $RELEASE_NAME --notes "include notes here"
+      env:
+        GH_TOKEN: ${{ secrets.POROROCA_GITHUB_TOKEN }}
+        RELEASE_NAME: ${{ inputs.releaseName }}
+
+  nuget-and-sboms:
+    needs: draft-github-release
+    uses: ./.github/workflows/generate-nuget-and-sboms-wfw.yml
+    with:
+      uploadArtifactToRelease: true
+      releaseName: ${{ inputs.releaseName }}
+
+  linux-x64:
+    needs: draft-github-release
+    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    with:
+      os: ubuntu-latest
+      rid: linux-x64
+      enableUITesting: false
+      uploadArtifactToRelease: true
+      releaseName: ${{ inputs.releaseName }}
+
+  linux-x64-debian:
+    needs: draft-github-release
+    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    with:
+      os: ubuntu-latest
+      rid: linux-x64
+      packaging: debian
+      enableUITesting: false
+      uploadArtifactToRelease: true
+      releaseName: ${{ inputs.releaseName }}
+
+  osx:
+    needs: draft-github-release
+    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    with:
+      os: ubuntu-latest
+      rid: osx-x64
+      enableUITesting: false
+      uploadArtifactToRelease: true
+      releaseName: ${{ inputs.releaseName }}
+
+  win-x64-installer:
+    needs: draft-github-release
+    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    with:
+      os: windows-latest # running on Windows because we need NSIS
+      rid: win-x64
+      packaging: nsis
+      enableUITesting: false
+      uploadArtifactToRelease: true
+      releaseName: ${{ inputs.releaseName }}
+
+  win-x64-portable:
+    needs: draft-github-release
+    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    with:
+      os: ubuntu-latest # .NET 8 allows publishing for Windows on Linux machines
+      rid: win-x64
+      enableUITesting: false
+      uploadArtifactToRelease: true
+      releaseName: ${{ inputs.releaseName }}
+
+  win-x86-installer:
+    needs: draft-github-release
+    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    with:
+      os: windows-latest # running on Windows because we need NSIS
+      rid: win-x86
+      packaging: nsis
+      enableUITesting: false
+      uploadArtifactToRelease: true
+      releaseName: ${{ inputs.releaseName }}
+
+  win-x86-portable:
+    needs: draft-github-release
+    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    with:
+      os: ubuntu-latest # .NET 8 allows publishing for Windows on Linux machines
+      rid: win-x86
+      enableUITesting: false
+      uploadArtifactToRelease: true
+      releaseName: ${{ inputs.releaseName }}
