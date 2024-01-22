@@ -27,7 +27,7 @@ jobs:
 
   linux-x64:
     needs: draft-github-release
-    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    uses: ./.github/workflows/generate-desktop-wfw.yml
     with:
       os: ubuntu-latest
       rid: linux-x64
@@ -37,7 +37,7 @@ jobs:
 
   linux-x64-debian:
     needs: draft-github-release
-    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    uses: ./.github/workflows/generate-desktop-wfw.yml
     with:
       os: ubuntu-latest
       rid: linux-x64
@@ -48,7 +48,7 @@ jobs:
 
   osx:
     needs: draft-github-release
-    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    uses: ./.github/workflows/generate-desktop-wfw.yml
     with:
       os: ubuntu-latest
       rid: osx-x64
@@ -58,7 +58,7 @@ jobs:
 
   win-x64-installer:
     needs: draft-github-release
-    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    uses: ./.github/workflows/generate-desktop-wfw.yml
     with:
       os: windows-latest # running on Windows because we need NSIS
       rid: win-x64
@@ -69,7 +69,7 @@ jobs:
 
   win-x64-portable:
     needs: draft-github-release
-    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    uses: ./.github/workflows/generate-desktop-wfw.yml
     with:
       os: ubuntu-latest # .NET 8 allows publishing for Windows on Linux machines
       rid: win-x64
@@ -79,7 +79,7 @@ jobs:
 
   win-x86-installer:
     needs: draft-github-release
-    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    uses: ./.github/workflows/generate-desktop-wfw.yml
     with:
       os: windows-latest # running on Windows because we need NSIS
       rid: win-x86
@@ -90,7 +90,7 @@ jobs:
 
   win-x86-portable:
     needs: draft-github-release
-    uses: ./.github/workflows/generate-desktop-release-wfw.yml
+    uses: ./.github/workflows/generate-desktop-wfw.yml
     with:
       os: ubuntu-latest # .NET 8 allows publishing for Windows on Linux machines
       rid: win-x86
