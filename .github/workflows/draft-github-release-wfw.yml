@@ -22,7 +22,7 @@ jobs:
     needs: draft-github-release
     uses: ./.github/workflows/generate-nuget-and-sboms-wfw.yml
     with:
-      uploadArtifactToRelease: true
+      uploadArtifactsToRelease: true
       releaseName: ${{ inputs.releaseName }}
 
   linux-x64:

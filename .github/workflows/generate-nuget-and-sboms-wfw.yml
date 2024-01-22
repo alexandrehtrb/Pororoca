@@ -2,6 +2,14 @@ name: Generate SBOMs and Pororoca.Test NuGet
 
 on:
   workflow_call:
+    inputs:
+      uploadArtifactsToRelease:
+        required: false
+        default: false
+        type: boolean
+      releaseName:
+        required: false
+        type: string
 
 jobs:
 
@@ -60,23 +68,34 @@ jobs:
     - name: Pack NuGet
       run: dotnet pack ./src/Pororoca.Test/Pororoca.Test.csproj --nologo --verbosity quiet --configuration Release
 
-    - name: Upload NuGet package artifact
+    - name: Upload NuGet package to workflow results
       uses: actions/upload-artifact@v4
       with:
         compression-level: 0
         name: ${{ format('Pororoca.Test.{0}.nupkg', env.VERSION_NAME) }}
         path: ${{ format('./src/Pororoca.Test/bin/Release/Pororoca.Test.{0}.nupkg', env.VERSION_NAME) }}
 
-    - name: Upload Pororoca.Desktop SBOM file artifact
+    - name: Upload Pororoca.Desktop SBOM file to workflow results
       uses: actions/upload-artifact@v4
       with:
         compression-level: 0
         name: sbom_pororoca_desktop.json
         path: ./out/sbom_pororoca_desktop.json
 
-    - name: Upload Pororoca.Test SBOM file artifact
+    - name: Upload Pororoca.Test SBOM file to workflow results
       uses: actions/upload-artifact@v4
       with:
         compression-level: 0
         name: sbom_pororoca_test.json
         path: ./out/sbom_pororoca_test.json
+
+    - name: Upload artifacts to release
+      if: ${{ inputs.uploadArtifactsToRelease }}
+      shell: pwsh
+      run: gh release upload $env:RELEASE_NAME $env:NUGET_FILE_PATH $env:DESKTOP_SBOM_FILE_PATH $env:NUGET_SBOM_FILE_PATH --clobber
+      env:
+        GH_TOKEN: ${{ secrets.POROROCA_GITHUB_TOKEN }}
+        RELEASE_NAME: ${{ inputs.releaseName }}
+        NUGET_FILE_PATH: ${{ format('./src/Pororoca.Test/bin/Release/Pororoca.Test.{0}.nupkg', env.VERSION_NAME) }}
+        DESKTOP_SBOM_FILE_PATH: ./out/sbom_pororoca_desktop.json
+        NUGET_SBOM_FILE_PATH: ./out/sbom_pororoca_test.json
