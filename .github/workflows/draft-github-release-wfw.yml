@@ -19,7 +19,7 @@ jobs:
     - name: Draft GitHub release
       run: gh release create $RELEASE_NAME --draft --latest --title $RELEASE_NAME --notes "include notes here"
       env:
-        GH_TOKEN: ${{ secrets.POROROCA_GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         RELEASE_NAME: ${{ inputs.releaseName }}
 
   nuget-and-sboms:

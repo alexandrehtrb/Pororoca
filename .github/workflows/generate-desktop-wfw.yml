@@ -275,6 +275,6 @@ jobs:
       shell: pwsh
       run: gh release upload $env:RELEASE_NAME $env:FILE_PATH --clobber
       env:
-        GH_TOKEN: ${{ secrets.POROROCA_GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         RELEASE_NAME: ${{ inputs.releaseName }}
         FILE_PATH: ${{ format('./out/{0}', env.OUTPUT_FILE_NAME) }}
