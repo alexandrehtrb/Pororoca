@@ -69,6 +69,7 @@ jobs:
       run: dotnet pack ./src/Pororoca.Test/Pororoca.Test.csproj --nologo --verbosity quiet --configuration Release
 
     - name: Upload NuGet package to workflow results
+      if: ${{ inputs.uploadArtifactsToRelease == false }} # no need if is uploading to release
       uses: actions/upload-artifact@v4
       with:
         compression-level: 0
@@ -76,6 +77,7 @@ jobs:
         path: ${{ format('./src/Pororoca.Test/bin/Release/Pororoca.Test.{0}.nupkg', env.VERSION_NAME) }}
 
     - name: Upload Pororoca.Desktop SBOM file to workflow results
+      if: ${{ inputs.uploadArtifactsToRelease == false }} # no need if is uploading to release
       uses: actions/upload-artifact@v4
       with:
         compression-level: 0
@@ -83,6 +85,7 @@ jobs:
         path: ./out/sbom_pororoca_desktop.json
 
     - name: Upload Pororoca.Test SBOM file to workflow results
+      if: ${{ inputs.uploadArtifactsToRelease == false }} # no need if is uploading to release
       uses: actions/upload-artifact@v4
       with:
         compression-level: 0
@@ -90,7 +93,7 @@ jobs:
         path: ./out/sbom_pororoca_test.json
 
     - name: Upload artifacts to release
-      if: ${{ inputs.uploadArtifactsToRelease }}
+      if: ${{ inputs.uploadArtifactsToRelease == true }}
       run: gh release upload $RELEASE_NAME $NUGET_FILE_PATH $DESKTOP_SBOM_FILE_PATH $NUGET_SBOM_FILE_PATH --clobber
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
