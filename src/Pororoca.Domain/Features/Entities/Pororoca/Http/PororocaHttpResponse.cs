@@ -50,8 +50,10 @@ public sealed class PororocaHttpResponse
         Exception is TaskCanceledException;
 
     public bool FailedDueToTlsVerification =>
-        Exception?.InnerException is AuthenticationException aex
-        && aex.Message.Contains("remote certificate is invalid", StringComparison.InvariantCultureIgnoreCase);
+        // for HTTP/1.1 and HTTP/2, inner exception is AuthenticationException
+        // for HTTP/3, inner exception is HttpRequestException
+        Exception?.InnerException is Exception iex
+        && iex.Message.Contains("remote certificate is invalid", StringComparison.InvariantCultureIgnoreCase);
 
     public bool HasBody =>
         this.binaryBody?.Length > 0;
@@ -201,9 +203,9 @@ public sealed class PororocaHttpResponse
             else if (isXmlBody)
             {
                 string body = GetBodyAsString() ?? string.Empty;
-                // holding the doc and nsm here to spare processing 
+                // holding the doc and nsm here to spare processing
                 // of reading and parsing XML document and namespaces
-                // if cachedXmlDocAndNsm is not null (already loaded), 
+                // if cachedXmlDocAndNsm is not null (already loaded),
                 // then it won't be loaded again
                 if (this.cachedXmlDoc is null || this.cachedXmlNsm is null)
                 {
