@@ -453,7 +453,7 @@
           "repetitionMode": "simple",
           "numberOfRepetitions": 25,
           "maxDop": 3
-        },        
+        },
         {
           "requestType": "httpRepetition",
           "name": "REPETITION HTTP1 SEQUENTIAL FROM FILE",
@@ -584,6 +584,48 @@
           "inputData": {
             "type": "rawJsonArray",
             "rawJsonArray": "[\n  // comentários são permitidos\n  {\"MyTxt\": \"ABC\", \"MyInt\": \"{{KEY_123}}\"},\n  {\"MyTxt\": \"DEF\", \"MyInt\": \"456\"},\n  {\"MyTxt\": \"GHI\", \"MyInt\": \"789\"},\n  {\"MyTxt\": \"JKL\", \"MyInt\": \"{{KEY_123}}\"},\n  {\"MyTxt\": \"MNO\", \"MyInt\": \"456\"},\n  {\"MyTxt\": \"PQR\", \"MyInt\": \"789\"},\n  {\"MyTxt\": \"STU\", \"MyInt\": \"012\"},\n  {\"MyTxt\": \"VWX\", \"MyInt\": \"345\"},\n  {\"MyTxt\": \"YZA\", \"MyInt\": \"678\"},\n  {\"MyTxt\": \"BCD\", \"MyInt\": \"901\"},\n  //{\"MyTxt\": \"ZZZ\", \"MyInt\": \"999\"},\n]"
+          }
+        }
+      ]
+    },
+    {
+      "name": "MASSIVE REPS",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "httpRepetition",
+          "name": "MASSIVE REPS HTTP1",
+          "baseRequestPath": "REPETITION/POST HTTP1",
+          "repetitionMode": "random",
+          "numberOfRepetitions": 100000,
+          "maxDop": 20,
+          "inputData": {
+            "type": "rawJsonArray",
+            "rawJsonArray": "[\n  // comentários são permitidos\n  {\"MyTxt\":\"ABC\", \"MyInt\":\"123\"},\n  {\"MyTxt\":\"DEF\", \"MyInt\":\"456\"},\n  {\"MyTxt\":\"GHI\", \"MyInt\":\"789\", \"Var3\":\"\\\"oi\\\"\"},\n]\n"
+          }
+        },
+        {
+          "requestType": "httpRepetition",
+          "name": "MASSIVE REPS HTTP2",
+          "baseRequestPath": "REPETITION/POST HTTP2",
+          "repetitionMode": "random",
+          "numberOfRepetitions": 100000,
+          "maxDop": 20,
+          "inputData": {
+            "type": "rawJsonArray",
+            "rawJsonArray": "[\n  // comentários são permitidos\n  {\"MyTxt\":\"ABC\", \"MyInt\":\"123\"},\n  {\"MyTxt\":\"DEF\", \"MyInt\":\"456\"},\n  {\"MyTxt\":\"GHI\", \"MyInt\":\"789\", \"Var3\":\"\\\"oi\\\"\"},\n]\n"
+          }
+        },
+        {
+          "requestType": "httpRepetition",
+          "name": "MASSIVE REPS HTTP3",
+          "baseRequestPath": "REPETITION/POST HTTP3",
+          "repetitionMode": "random",
+          "numberOfRepetitions": 100000,
+          "maxDop": 20,
+          "inputData": {
+            "type": "rawJsonArray",
+            "rawJsonArray": "[\n  // comentários são permitidos\n  {\"MyTxt\":\"ABC\", \"MyInt\":\"123\"},\n  {\"MyTxt\":\"DEF\", \"MyInt\":\"456\"},\n  {\"MyTxt\":\"GHI\", \"MyInt\":\"789\", \"Var3\":\"\\\"oi\\\"\"},\n]\n"
           }
         }
       ]
