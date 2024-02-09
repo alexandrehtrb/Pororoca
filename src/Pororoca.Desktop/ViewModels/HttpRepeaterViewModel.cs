@@ -50,7 +50,7 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref this.baseRequestPathField, value);
-            HasBaseHttpRequestValidationProblem = false;
+            InvalidRepetitionErrorCode = null;
         }
     }
 
@@ -85,6 +85,15 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
     public bool HasBaseHttpRequestValidationProblem { get; set; }
 
     [Reactive]
+    public bool HasDelayValidationProblem { get; set; }
+
+    [Reactive]
+    public bool HasNumberOfRepetitionsValidationProblem { get; set; }
+
+    [Reactive]
+    public bool HasMaxDopValidationProblem { get; set; }
+
+    [Reactive]
     public bool HasInputDataFileSrcPathValidationProblem { get; set; }
 
     private string? invalidRepetitionErrorCodeField;
@@ -99,14 +108,31 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
             {
                 TranslateRepetitionErrors.BaseHttpRequestNotSelected => Localizer.Instance.RequestValidation.RepetitionBaseHttpRequestNotSelected,
                 TranslateRepetitionErrors.BaseHttpRequestNotFound => Localizer.Instance.RequestValidation.RepetitionBaseHttpRequestNotFound,
+                TranslateRepetitionErrors.DelayCantBeNegative => Localizer.Instance.RequestValidation.RepetitionDelayCantBeNegative,
+                TranslateRepetitionErrors.NumberOfRepetitionsMustBeAtLeast1 => Localizer.Instance.RequestValidation.RepetitionNumberOfRepetitionsMustBeAtLeast1,
+                TranslateRepetitionErrors.MaxDopMustBeAtLeast1 => Localizer.Instance.RequestValidation.RepetitionMaxDopMustBeAtLeast1,
                 TranslateRepetitionErrors.InputDataFileNotFound => Localizer.Instance.RequestValidation.RepetitionInputDataFileNotFound,
                 TranslateRepetitionErrors.InputDataInvalid => Localizer.Instance.RequestValidation.RepetitionInputDataInvalid,
+                TranslateRepetitionErrors.InputDataAtLeastOneLine => Localizer.Instance.RequestValidation.RepetitionInputDataAtLeastOneLine,
+                null => string.Empty,
                 _ => Localizer.Instance.RequestValidation.InvalidUnknownCause
             };
             HasBaseHttpRequestValidationProblem = (value == TranslateRepetitionErrors.BaseHttpRequestNotSelected
                                                  || value == TranslateRepetitionErrors.BaseHttpRequestNotFound);
 
+            HasDelayValidationProblem = value == TranslateRepetitionErrors.DelayCantBeNegative;
+            HasNumberOfRepetitionsValidationProblem = value == TranslateRepetitionErrors.NumberOfRepetitionsMustBeAtLeast1;
+            HasMaxDopValidationProblem = value == TranslateRepetitionErrors.MaxDopMustBeAtLeast1;
+
             HasInputDataFileSrcPathValidationProblem = (value == TranslateRepetitionErrors.InputDataFileNotFound);
+
+            if (value == TranslateRepetitionErrors.DelayCantBeNegative
+             || value == TranslateRepetitionErrors.NumberOfRepetitionsMustBeAtLeast1
+             || value == TranslateRepetitionErrors.MaxDopMustBeAtLeast1)
+            {
+                // TODO: Improve this, do not use fixed values to resolve index
+                RepetitionTabSelectedIndex = 0;
+            }
 
             if (value == TranslateRepetitionErrors.InputDataFileNotFound
              || value == TranslateRepetitionErrors.InputDataInvalid)
@@ -126,17 +152,34 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref this.numberOfRepetitionsToExecuteField, value);
+            InvalidRepetitionErrorCode = null;
             const int minigunThreshold = 600;
             NameEditableVm.IsHttpMinigun = value >= minigunThreshold;
             NameEditableVm.IsHttpRepetition = value < minigunThreshold;
         }
     }
 
-    [Reactive]
-    public int MaxDop { get; set; }
+    private int maxDopField;
+    public int MaxDop
+    {
+        get => this.maxDopField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.maxDopField, value);
+            InvalidRepetitionErrorCode = null;
+        }
+    }
 
-    [Reactive]
-    public int DelayInMs { get; set; }
+    private int delayInMsField;
+    public int DelayInMs
+    {
+        get => this.delayInMsField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.delayInMsField, value);
+            InvalidRepetitionErrorCode = null;
+        }
+    }
 
     [Reactive]
     public bool RunInBackground { get; set; }
@@ -164,7 +207,7 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref this.inputDataFileSrcPathField, value);
-            HasInputDataFileSrcPathValidationProblem = false;
+            InvalidRepetitionErrorCode = null;
         }
     }
 
@@ -288,25 +331,27 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
 
     public async Task StartRepetitionAsync()
     {
-        this.cancellationTokenSource = new();
-        NumberOfRepetitionsExecuted = 0;
-        IsRepetitionRunning = true;
-        HasFinishedRepetition = false;
-        RepetitionStatusText = null;
-        RepetitionResults.Clear();
-        SelectedRepetitionResult = null;
-
         var effectiveVars = ((IPororocaVariableResolver)this.Collection).GetEffectiveVariables();
-        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effectiveVars, BaseRequest, ToHttpRepetition(), this.cancellationTokenSource.Token);
+        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effectiveVars, BaseRequest, ToHttpRepetition(), default);
 
         if (!valid)
         {
+            RepetitionStatusText = null;
             InvalidRepetitionErrorCode = errorCode;
         }
         else
         {
+            InvalidRepetitionErrorCode = null;
+            this.cancellationTokenSource = new();
+            NumberOfRepetitionsExecuted = 0;
+            IsRepetitionRunning = true;
+            HasFinishedRepetition = false;
+            RepetitionStatusText = null;
+            RepetitionResults.Clear();
+            SelectedRepetitionResult = null;
             this.nameOfEnvironmentUsed = this.Collection.GetCurrentEnvironment()?.Name;
             this.nameOfBaseHttpRequestUsed = BaseRequest?.Name;
+
             var channelReader = StartRepetition(this.requester, effectiveVars, resolvedInputData, Collection.CollectionScopedAuth, ToHttpRepetition(), BaseRequest!, this.cancellationTokenSource.Token);
             Dispatcher.UIThread.Post(async () => await CollectRepetitionResultsAsync(channelReader));
         }
@@ -375,13 +420,16 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
 
     private async Task ExportReportAsync()
     {
-        var firstRequestStartedAt = RepetitionResults[0].Result?.Response?.StartedAtUtc ?? DateTimeOffset.Now;
-        string env = this.nameOfEnvironmentUsed is not null ? $"_{this.nameOfEnvironmentUsed}" : string.Empty;
-        string reportInitialFileName = $"report_{Name}{env}_{firstRequestStartedAt:yyyyMMdd-HHmmss}.csv";
-        string? destinationFilePath = await FileExporterImporter.SelectPathForFileToBeSavedAsync(reportInitialFileName);
-        if (destinationFilePath is not null)
+        if (RepetitionResults.Any())
         {
-            await WriteReportAsync(RepetitionResults.Select(x => x.Result), destinationFilePath);
+            var firstRequestStartedAt = RepetitionResults[0].Result?.Response?.StartedAtUtc ?? DateTimeOffset.Now;
+            string env = this.nameOfEnvironmentUsed is not null ? $"_{this.nameOfEnvironmentUsed}" : string.Empty;
+            string reportInitialFileName = $"report_{Name}{env}_{firstRequestStartedAt:yyyyMMdd-HHmmss}.csv";
+            string? destinationFilePath = await FileExporterImporter.SelectPathForFileToBeSavedAsync(reportInitialFileName);
+            if (destinationFilePath is not null)
+            {
+                await Task.Run(async () => await WriteReportAsync(RepetitionResults.Select(x => x.Result), destinationFilePath).ConfigureAwait(false));
+            }
         }
     }
 

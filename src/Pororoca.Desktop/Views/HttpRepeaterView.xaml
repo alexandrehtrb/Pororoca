@@ -247,7 +247,8 @@
                     Increment="1"
                     Minimum="1"
                     Value="{Binding NumberOfRepetitionsToExecute, Mode=TwoWay}"
-                    IsEnabled="{Binding !IsRepetitionRunning}"/>
+                    IsEnabled="{Binding !IsRepetitionRunning}"
+                    Classes.HasValidationProblem="{Binding HasNumberOfRepetitionsValidationProblem}"/>
               </StackPanel>
 
               <StackPanel
@@ -271,7 +272,8 @@
                     Increment="1"
                     Minimum="1"
                     Value="{Binding MaxDop, Mode=TwoWay}"
-                    IsEnabled="{Binding !IsRepetitionRunning}"/>
+                    IsEnabled="{Binding !IsRepetitionRunning}"
+                    Classes.HasValidationProblem="{Binding HasMaxDopValidationProblem}"/>
               </StackPanel>
 
               <StackPanel
@@ -296,7 +298,8 @@
                     Increment="1"
                     Minimum="0"
                     Value="{Binding DelayInMs, Mode=TwoWay}"
-                    IsEnabled="{Binding !IsRepetitionRunning}"/>
+                    IsEnabled="{Binding !IsRepetitionRunning}"
+                    Classes.HasValidationProblem="{Binding HasDelayValidationProblem}"/>
               </StackPanel>
             </StackPanel>
           </TabItem>
