@@ -66,6 +66,30 @@
             <DrawingImage Drawing="{StaticResource IconWebsocketConnected}"/>
           </Image.Source>
         </Image>
+        <Image
+            x:Name="imgIconHttpRepetition"
+            Margin="0,0,12,0"
+            IsVisible="{Binding IsHttpRepetition}"
+            Width="32"
+            Height="32"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center">
+          <Image.Source>
+            <DrawingImage Drawing="{StaticResource IconRifleGun}"/>
+          </Image.Source>
+        </Image>
+        <Image
+            x:Name="imgIconHttpMinigun"
+            Margin="0,0,12,0"
+            IsVisible="{Binding IsHttpMinigun}"
+            Width="32"
+            Height="32"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center">
+          <Image.Source>
+            <DrawingImage Drawing="{StaticResource IconMinigun}"/>
+          </Image.Source>
+        </Image>
         <TextBlock
             x:Name="tbText"
             Text="{Binding Txt}"

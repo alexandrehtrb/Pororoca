@@ -12,6 +12,7 @@ using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.UserData;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Infrastructure.Features.Requester;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -57,6 +58,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     public PageHolder<WebSocketConnectionViewModel> WebSocketConnectionView { get; }
 
     public PageHolder<WebSocketClientMessageViewModel> WebSocketClientMessageView { get; }
+
+    public PageHolder<HttpRepeaterViewModel> HttpRepeaterView { get; }
 
     private readonly List<PageHolder> pages;
 
@@ -170,6 +173,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         this.pages.Add(HttpRequestView = new());
         this.pages.Add(WebSocketConnectionView = new());
         this.pages.Add(WebSocketClientMessageView = new());
+        this.pages.Add(HttpRepeaterView = new());
         #endregion
 
         #region LANGUAGE
@@ -374,8 +378,11 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #region GLOBAL OPTIONS
 
-    private void ToggleSslVerification() =>
+    private void ToggleSslVerification()
+    {
         IsSslVerificationDisabled = !IsSslVerificationDisabled;
+        PororocaRequester.Singleton.DisableSslVerification = IsSslVerificationDisabled;
+    }
 
     #endregion
 
@@ -503,8 +510,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     {
         /*
         IMPORTANT:
-        To run the UI tests, run Pororoca.TestServer in localhost and 
-        have the TestFiles directory inside the PororocaUserData folder.        
+        To run the UI tests, run Pororoca.TestServer in localhost and
+        have the TestFiles directory inside the PororocaUserData folder.
         */
 
         // making a backup of the items' tree and clearing it before the tests

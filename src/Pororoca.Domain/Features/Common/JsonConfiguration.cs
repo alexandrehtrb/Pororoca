@@ -1,6 +1,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Pororoca.Domain.Feature.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
@@ -42,6 +43,8 @@ internal static class JsonConfiguration
         options.WriteIndented = false;
         options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.AllowTrailingCommas = true;
+        options.ReadCommentHandling = JsonCommentHandling.Skip;
         return options;
     }
 }
@@ -50,6 +53,7 @@ internal static class JsonConfiguration
 [JsonSerializable(typeof(PororocaEnvironment))]
 [JsonSerializable(typeof(PororocaHttpRequest))]
 [JsonSerializable(typeof(PororocaWebSocketConnection))]
+[JsonSerializable(typeof(PororocaHttpRepetition))]
 [JsonSerializable(typeof(PostmanCollectionV21))]
 [JsonSerializable(typeof(PostmanEnvironment))]
 internal partial class PororocaJsonSrcGenContext : JsonSerializerContext

@@ -389,6 +389,204 @@
           ]
         }
       ]
+    },
+    {
+      "name": "REPETITION",
+      "folders": [],
+      "requests": [
+        {
+          "requestType": "http",
+          "name": "POST HTTP1",
+          "httpVersion": 1.1,
+          "httpMethod": "POST",
+          "url": "{{BaseUrl}}/test/post/json",
+          "body": {
+            "mode": "raw",
+            "contentType": "application/json",
+            "rawContent": "{\"MyTxt\":\"{{MyTxt}}\",\"MyInt\":{{MyInt}}}"
+          }
+        },
+        {
+          "requestType": "http",
+          "name": "POST HTTP2",
+          "httpVersion": 2.0,
+          "httpMethod": "POST",
+          "url": "{{BaseUrlHttps}}/test/post/json",
+          "body": {
+            "mode": "raw",
+            "contentType": "application/json",
+            "rawContent": "{\"MyTxt\":\"{{MyTxt}}\",\"MyInt\":{{MyInt}}}"
+          }
+        },
+        {
+          "requestType": "http",
+          "name": "POST HTTP3",
+          "httpVersion": 3.0,
+          "httpMethod": "POST",
+          "url": "{{BaseUrlHttps}}/test/post/json",
+          "body": {
+            "mode": "raw",
+            "contentType": "application/json",
+            "rawContent": "{\"MyTxt\":\"{{MyTxt}}\",\"MyInt\":{{MyInt}}}"
+          }
+        },
+        {
+          "requestType": "httpRepetition",
+          "name": "REPETITION HTTP1 SIMPLE",
+          "baseRequestPath": "REPETITION/POST HTTP1",
+          "repetitionMode": "simple",
+          "numberOfRepetitions": 25,
+          "maxDop": 3
+        },
+        {
+          "requestType": "httpRepetition",
+          "name": "REPETITION HTTP2 SIMPLE",
+          "baseRequestPath": "REPETITION/POST HTTP2",
+          "repetitionMode": "simple",
+          "numberOfRepetitions": 25,
+          "maxDop": 3
+        },
+        {
+          "requestType": "httpRepetition",
+          "name": "REPETITION HTTP3 SIMPLE",
+          "baseRequestPath": "REPETITION/POST HTTP3",
+          "repetitionMode": "simple",
+          "numberOfRepetitions": 25,
+          "maxDop": 3
+        },        
+        {
+          "requestType": "httpRepetition",
+          "name": "REPETITION HTTP1 SEQUENTIAL FROM FILE",
+          "baseRequestPath": "REPETITION/POST HTTP1",
+          "repetitionMode": "sequential",
+          "inputData": {
+            "type": "file",
+            "inputFilePath": "{{InputDataDir}}/InputData1.json"
+          }
+        },
+        {
+          "requestType": "httpRepetition",
+          "name": "REPETITION HTTP1 SEQUENTIAL FROM RAW JSON ARRAY",
+          "baseRequestPath": "REPETITION/POST HTTP1",
+          "repetitionMode": "sequential",
+          "inputData": {
+            "type": "rawJsonArray",
+            "rawJsonArray": "[\n  // comentários são permitidos\n  {\"MyTxt\": \"ABC\", \"MyInt\": \"{{KEY_123}}\"},\n  {\"MyTxt\": \"DEF\", \"MyInt\": \"456\"},\n  {\"MyTxt\": \"GHI\", \"MyInt\": \"789\"},\n  {\"MyTxt\": \"JKL\", \"MyInt\": \"{{KEY_123}}\"},\n  {\"MyTxt\": \"MNO\", \"MyInt\": \"456\"},\n  {\"MyTxt\": \"PQR\", \"MyInt\": \"789\"},\n  {\"MyTxt\": \"STU\", \"MyInt\": \"012\"},\n  {\"MyTxt\": \"VWX\", \"MyInt\": \"345\"},\n  {\"MyTxt\": \"YZA\", \"MyInt\": \"678\"},\n  {\"MyTxt\": \"BCD\", \"MyInt\": \"901\"},\n  //{\"MyTxt\": \"ZZZ\", \"MyInt\": \"999\"},\n]"
+          }
+        },
+        {
+          "requestType": "httpRepetition",
+          "name": "REPETITION HTTP2 SEQUENTIAL FROM FILE",
+          "baseRequestPath": "REPETITION/POST HTTP2",
+          "repetitionMode": "sequential",
+          "inputData": {
+            "type": "file",
+            "inputFilePath": "{{InputDataDir}}/InputData1.json"
+          }
+        },
+        {
+          "requestType": "httpRepetition",
+          "name": "REPETITION HTTP2 SEQUENTIAL FROM RAW JSON ARRAY",
+          "baseRequestPath": "REPETITION/POST HTTP2",
+          "repetitionMode": "sequential",
+          "inputData": {
+            "type": "rawJsonArray",
+            "rawJsonArray": "[\n  // comentários são permitidos\n  {\"MyTxt\": \"ABC\", \"MyInt\": \"{{KEY_123}}\"},\n  {\"MyTxt\": \"DEF\", \"MyInt\": \"456\"},\n  {\"MyTxt\": \"GHI\", \"MyInt\": \"789\"},\n  {\"MyTxt\": \"JKL\", \"MyInt\": \"{{KEY_123}}\"},\n  {\"MyTxt\": \"MNO\", \"MyInt\": \"456\"},\n  {\"MyTxt\": \"PQR\", \"MyInt\": \"789\"},\n  {\"MyTxt\": \"STU\", \"MyInt\": \"012\"},\n  {\"MyTxt\": \"VWX\", \"MyInt\": \"345\"},\n  {\"MyTxt\": \"YZA\", \"MyInt\": \"678\"},\n  {\"MyTxt\": \"BCD\", \"MyInt\": \"901\"},\n  //{\"MyTxt\": \"ZZZ\", \"MyInt\": \"999\"},\n]"
+          }
+        },
+        {
+          "requestType": "httpRepetition",
+          "name": "REPETITION HTTP3 SEQUENTIAL FROM FILE",
+          "baseRequestPath": "REPETITION/POST HTTP3",
+          "repetitionMode": "sequential",
+          "inputData": {
+            "type": "file",
+            "inputFilePath": "{{InputDataDir}}/InputData1.json"
+          }
+        },
+        {
+          "requestType": "httpRepetition",
+          "name": "REPETITION HTTP3 SEQUENTIAL FROM RAW JSON ARRAY",
+          "baseRequestPath": "REPETITION/POST HTTP3",
+          "repetitionMode": "sequential",
+          "inputData": {
+            "type": "rawJsonArray",
+            "rawJsonArray": "[\n  // comentários são permitidos\n  {\"MyTxt\": \"ABC\", \"MyInt\": \"{{KEY_123}}\"},\n  {\"MyTxt\": \"DEF\", \"MyInt\": \"456\"},\n  {\"MyTxt\": \"GHI\", \"MyInt\": \"789\"},\n  {\"MyTxt\": \"JKL\", \"MyInt\": \"{{KEY_123}}\"},\n  {\"MyTxt\": \"MNO\", \"MyInt\": \"456\"},\n  {\"MyTxt\": \"PQR\", \"MyInt\": \"789\"},\n  {\"MyTxt\": \"STU\", \"MyInt\": \"012\"},\n  {\"MyTxt\": \"VWX\", \"MyInt\": \"345\"},\n  {\"MyTxt\": \"YZA\", \"MyInt\": \"678\"},\n  {\"MyTxt\": \"BCD\", \"MyInt\": \"901\"},\n  //{\"MyTxt\": \"ZZZ\", \"MyInt\": \"999\"},\n]"
+          }
+        },
+        {
+          "requestType": "httpRepetition",
+          "name": "REPETITION HTTP1 RANDOM FROM FILE",
+          "baseRequestPath": "REPETITION/POST HTTP1",
+          "repetitionMode": "random",
+          "numberOfRepetitions": 25,
+          "maxDop": 3,
+          "inputData": {
+            "type": "file",
+            "inputFilePath": "{{InputDataDir}}/InputData1.json"
+          }
+        },
+        {
+          "requestType": "httpRepetition",
+          "name": "REPETITION HTTP1 RANDOM FROM RAW JSON ARRAY",
+          "baseRequestPath": "REPETITION/POST HTTP1",
+          "repetitionMode": "random",
+          "numberOfRepetitions": 25,
+          "maxDop": 3,
+          "inputData": {
+            "type": "rawJsonArray",
+            "rawJsonArray": "[\n  // comentários são permitidos\n  {\"MyTxt\": \"ABC\", \"MyInt\": \"{{KEY_123}}\"},\n  {\"MyTxt\": \"DEF\", \"MyInt\": \"456\"},\n  {\"MyTxt\": \"GHI\", \"MyInt\": \"789\"},\n  {\"MyTxt\": \"JKL\", \"MyInt\": \"{{KEY_123}}\"},\n  {\"MyTxt\": \"MNO\", \"MyInt\": \"456\"},\n  {\"MyTxt\": \"PQR\", \"MyInt\": \"789\"},\n  {\"MyTxt\": \"STU\", \"MyInt\": \"012\"},\n  {\"MyTxt\": \"VWX\", \"MyInt\": \"345\"},\n  {\"MyTxt\": \"YZA\", \"MyInt\": \"678\"},\n  {\"MyTxt\": \"BCD\", \"MyInt\": \"901\"},\n  //{\"MyTxt\": \"ZZZ\", \"MyInt\": \"999\"},\n]"
+          }
+        },
+        {
+          "requestType": "httpRepetition",
+          "name": "REPETITION HTTP2 RANDOM FROM FILE",
+          "baseRequestPath": "REPETITION/POST HTTP2",
+          "repetitionMode": "random",
+          "numberOfRepetitions": 25,
+          "maxDop": 3,
+          "inputData": {
+            "type": "file",
+            "inputFilePath": "{{InputDataDir}}/InputData1.json"
+          }
+        },
+        {
+          "requestType": "httpRepetition",
+          "name": "REPETITION HTTP2 RANDOM FROM RAW JSON ARRAY",
+          "baseRequestPath": "REPETITION/POST HTTP2",
+          "repetitionMode": "random",
+          "numberOfRepetitions": 25,
+          "maxDop": 3,
+          "inputData": {
+            "type": "rawJsonArray",
+            "rawJsonArray": "[\n  // comentários são permitidos\n  {\"MyTxt\": \"ABC\", \"MyInt\": \"{{KEY_123}}\"},\n  {\"MyTxt\": \"DEF\", \"MyInt\": \"456\"},\n  {\"MyTxt\": \"GHI\", \"MyInt\": \"789\"},\n  {\"MyTxt\": \"JKL\", \"MyInt\": \"{{KEY_123}}\"},\n  {\"MyTxt\": \"MNO\", \"MyInt\": \"456\"},\n  {\"MyTxt\": \"PQR\", \"MyInt\": \"789\"},\n  {\"MyTxt\": \"STU\", \"MyInt\": \"012\"},\n  {\"MyTxt\": \"VWX\", \"MyInt\": \"345\"},\n  {\"MyTxt\": \"YZA\", \"MyInt\": \"678\"},\n  {\"MyTxt\": \"BCD\", \"MyInt\": \"901\"},\n  //{\"MyTxt\": \"ZZZ\", \"MyInt\": \"999\"},\n]"
+          }
+        },
+        {
+          "requestType": "httpRepetition",
+          "name": "REPETITION HTTP3 RANDOM FROM FILE",
+          "baseRequestPath": "REPETITION/POST HTTP3",
+          "repetitionMode": "random",
+          "numberOfRepetitions": 25,
+          "maxDop": 3,
+          "inputData": {
+            "type": "file",
+            "inputFilePath": "{{InputDataDir}}/InputData1.json"
+          }
+        },
+        {
+          "requestType": "httpRepetition",
+          "name": "REPETITION HTTP3 RANDOM FROM RAW JSON ARRAY",
+          "baseRequestPath": "REPETITION/POST HTTP3",
+          "repetitionMode": "random",
+          "numberOfRepetitions": 25,
+          "maxDop": 3,
+          "inputData": {
+            "type": "rawJsonArray",
+            "rawJsonArray": "[\n  // comentários são permitidos\n  {\"MyTxt\": \"ABC\", \"MyInt\": \"{{KEY_123}}\"},\n  {\"MyTxt\": \"DEF\", \"MyInt\": \"456\"},\n  {\"MyTxt\": \"GHI\", \"MyInt\": \"789\"},\n  {\"MyTxt\": \"JKL\", \"MyInt\": \"{{KEY_123}}\"},\n  {\"MyTxt\": \"MNO\", \"MyInt\": \"456\"},\n  {\"MyTxt\": \"PQR\", \"MyInt\": \"789\"},\n  {\"MyTxt\": \"STU\", \"MyInt\": \"012\"},\n  {\"MyTxt\": \"VWX\", \"MyInt\": \"345\"},\n  {\"MyTxt\": \"YZA\", \"MyInt\": \"678\"},\n  {\"MyTxt\": \"BCD\", \"MyInt\": \"901\"},\n  //{\"MyTxt\": \"ZZZ\", \"MyInt\": \"999\"},\n]"
+          }
+        }
+      ]
     }
   ],
   "requests": [

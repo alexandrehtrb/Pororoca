@@ -5,7 +5,8 @@ namespace Pororoca.Domain.Features.Entities.Pororoca;
 public enum PororocaRequestType
 {
     Http,
-    Websocket
+    Websocket,
+    HttpRepetition
 }
 
 public abstract class PororocaRequest : PororocaCollectionItem

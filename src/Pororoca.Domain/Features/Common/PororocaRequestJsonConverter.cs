@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Pororoca.Domain.Feature.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
@@ -45,6 +46,7 @@ public sealed class PororocaRequestJsonConverter : JsonConverter<PororocaRequest
         {
             PororocaRequestType.Websocket => JsonSerializer.Deserialize(ref readerAtStart, MainJsonCtx.PororocaWebSocketConnection)!,
             PororocaRequestType.Http => JsonSerializer.Deserialize(ref readerAtStart, MainJsonCtx.PororocaHttpRequest)!,
+            PororocaRequestType.HttpRepetition => JsonSerializer.Deserialize(ref readerAtStart, MainJsonCtx.PororocaHttpRepetition)!,
             _ => JsonSerializer.Deserialize(ref readerAtStart, MainJsonCtx.PororocaHttpRequest)!
         };
     }
@@ -57,5 +59,7 @@ public sealed class PororocaRequestJsonConverter : JsonConverter<PororocaRequest
             JsonSerializer.Serialize(writer, httpReq, MainJsonCtx.PororocaHttpRequest);
         else if (req is PororocaWebSocketConnection wsConn)
             JsonSerializer.Serialize(writer, wsConn, MainJsonCtx.PororocaWebSocketConnection);
+        else if (req is PororocaHttpRepetition rep)
+            JsonSerializer.Serialize(writer, rep, MainJsonCtx.PororocaHttpRepetition);
     }
 }

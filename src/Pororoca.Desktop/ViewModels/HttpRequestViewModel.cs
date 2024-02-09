@@ -306,7 +306,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
         #endregion
 
         #region RESPONSE
-        ResponseDataCtx = new(this.col, this);
+        ResponseDataCtx = new(this.col);
         #region RESPONSE CAPTURES
         ResCapturesTableVm = new(req.ResponseCaptures);
         #endregion
@@ -324,6 +324,20 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
         {
             ShowInvalidRequestWarnings();
         }
+    }
+
+    protected override void OnNameUpdated(string newName)
+    {
+        base.OnNameUpdated(newName);
+        // IMPORTANT: always update list of http reqs paths after renaming HTTP request
+        this.col.UpdateListOfHttpRequestsPaths();
+    }
+
+    public override void DeleteThis()
+    {
+        base.DeleteThis();
+        // IMPORTANT: always update list of http reqs paths after deleting HTTP request
+        this.col.UpdateListOfHttpRequestsPaths();
     }
 
     #endregion
@@ -428,7 +442,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
         {
             ShowSendingRequestUI();
             var res = await SendRequestAsync(generatedReq, effectiveVars);
-            ResponseDataCtx.UpdateWithResponse(res);
+            ResponseDataCtx.UpdateWithResponse(Name, res, ResCapturesTableVm.Items);
             ShowNotSendingRequestUI();
         }
     }
@@ -527,13 +541,12 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
 
     private Task<PororocaHttpResponse> SendRequestAsync(PororocaHttpRequest generatedReq, IEnumerable<PororocaVariable> effectiveVars)
     {
-        bool disableSslVerification = ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled;
         this.sendRequestCancellationTokenSourceField = new();
         // This needs to be done in a different thread.
         // Awaiting the request.RequestAsync() here, or simply returning its Task,
         // causes the UI to freeze for a few seconds, especially when performing the first request to a server.
         // That is why we are invoking the code to run in a new thread, like below.
-        return Task.Run(async () => await this.requester.RequestAsync(effectiveVars, this.col.CollectionScopedAuth, generatedReq, disableSslVerification, this.sendRequestCancellationTokenSourceField.Token));
+        return Task.Run(async () => await this.requester.RequestAsync(effectiveVars, this.col.CollectionScopedAuth, generatedReq, this.sendRequestCancellationTokenSourceField.Token));
     }
 
     #endregion

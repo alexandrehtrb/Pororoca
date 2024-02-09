@@ -50,6 +50,12 @@
           Text="{Binding i18n.CollectionFolder.AddWebSocketConnection}"
           Command="{Binding AddNewWebSocketConnectionCmd}"/>
 
+      <controls:IconButton
+          x:Name="btAddHttpRep"
+          Icon="{StaticResource IconRifleGunGeometry}"
+          Text="{Binding i18n.CollectionFolder.AddHttpRepeater}"
+          Command="{Binding AddNewHttpRepeaterCmd}"/>
+
     </StackPanel>
 
   </StackPanel>

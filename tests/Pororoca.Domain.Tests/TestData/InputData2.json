@@ -1,0 +1,6 @@
+[
+  // comments are allowed
+  {"Var1":"ABC", "Var2":"123"},
+  {"Var1":"DEF", "Var2":"456"},
+  {"Var1":"GHI", "Var2":"789"},
+]

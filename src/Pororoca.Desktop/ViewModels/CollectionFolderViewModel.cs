@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Reactive;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
+using Pororoca.Domain.Feature.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
@@ -18,12 +19,13 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
     public ReactiveCommand<Unit, Unit> AddNewFolderCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewHttpRequestCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewWebSocketConnectionCmd { get; }
+    public ReactiveCommand<Unit, Unit> AddNewHttpRepeaterCmd { get; }
 
     #endregion
 
     #region COLLECTION FOLDER
 
-    private readonly CollectionViewModel variableResolver;
+    internal CollectionViewModel Collection { get; }
     public override ObservableCollection<CollectionOrganizationItemViewModel> Items { get; }
 
     #endregion
@@ -37,12 +39,13 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
         AddNewFolderCmd = ReactiveCommand.Create(AddNewFolder);
         AddNewHttpRequestCmd = ReactiveCommand.Create(AddNewHttpRequest);
         AddNewWebSocketConnectionCmd = ReactiveCommand.Create(AddNewWebSocketConnection);
+        AddNewHttpRepeaterCmd = ReactiveCommand.Create(AddNewHttpRepeater);
 
         #endregion
 
         #region COLLECTION FOLDER
 
-        this.variableResolver = variableResolver;
+        this.Collection = variableResolver;
 
         Items = new();
         foreach (var subFolder in folder.Folders)
@@ -53,6 +56,8 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
                 Items.Add(new HttpRequestViewModel(this, variableResolver, httpReq));
             else if (req is PororocaWebSocketConnection ws)
                 Items.Add(new WebSocketConnectionViewModel(this, variableResolver, ws));
+            else if (req is PororocaHttpRepetition rep)
+                Items.Add(new HttpRepeaterViewModel(this, variableResolver, rep));
         }
 
         RefreshSubItemsAvailableMovements();
@@ -108,6 +113,8 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
     {
         PororocaHttpRequest newReq = new(Localizer.Instance.HttpRequest.NewRequest);
         AddHttpRequest(newReq, showItemInScreen: true);
+        // IMPORTANT: always update list of http reqs paths after adding a new HTTP request
+        Collection.UpdateListOfHttpRequestsPaths();
     }
 
     private void AddNewWebSocketConnection()
@@ -116,9 +123,15 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
         AddWebSocketConnection(newWs, showItemInScreen: true);
     }
 
+    private void AddNewHttpRepeater()
+    {
+        PororocaHttpRepetition newRep = new(Localizer.Instance.HttpRepeater.NewRepeater, Localizer.Instance.HttpRepeater.InputDataTypeRawComment);
+        AddHttpRepeater(newRep, showItemInScreen: true);
+    }
+
     public void AddFolder(PororocaCollectionFolder folderToAdd, bool showItemInScreen = false)
     {
-        CollectionFolderViewModel folderToAddVm = new(this, this.variableResolver, folderToAdd);
+        CollectionFolderViewModel folderToAddVm = new(this, this.Collection, folderToAdd);
         int indexToInsertAt = Items.GetLastIndexOf<CollectionFolderViewModel>() + 1;
         Items.Insert(indexToInsertAt, folderToAddVm);
 
@@ -129,7 +142,7 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
 
     public void AddHttpRequest(PororocaHttpRequest reqToAdd, bool showItemInScreen = false)
     {
-        HttpRequestViewModel reqToAddVm = new(this, this.variableResolver, reqToAdd);
+        HttpRequestViewModel reqToAddVm = new(this, this.Collection, reqToAdd);
         Items.Add(reqToAddVm); // always at the end
 
         IsExpanded = true;
@@ -139,12 +152,22 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
 
     public void AddWebSocketConnection(PororocaWebSocketConnection wsToAdd, bool showItemInScreen = false)
     {
-        WebSocketConnectionViewModel wsToAddVm = new(this, this.variableResolver, wsToAdd);
+        WebSocketConnectionViewModel wsToAddVm = new(this, this.Collection, wsToAdd);
         Items.Add(wsToAddVm); // always at the end
 
         IsExpanded = true;
         RefreshSubItemsAvailableMovements();
         SetAsItemInFocus(wsToAddVm, showItemInScreen);
+    }
+
+    public void AddHttpRepeater(PororocaHttpRepetition repToAdd, bool showItemInScreen = false)
+    {
+        HttpRepeaterViewModel repToAddVm = new(this, this.Collection, repToAdd);
+        Items.Add(repToAddVm); // always at the end
+
+        IsExpanded = true;
+        RefreshSubItemsAvailableMovements();
+        SetAsItemInFocus(repToAddVm, showItemInScreen);
     }
 
     #endregion
@@ -162,6 +185,8 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
                 newFolder.AddRequest(reqVm.ToHttpRequest());
             else if (colItemVm is WebSocketConnectionViewModel wsVm)
                 newFolder.AddRequest(wsVm.ToWebSocketConnection());
+            else if (colItemVm is HttpRepeaterViewModel repVm)
+                newFolder.AddRequest(repVm.ToHttpRepetition());
         }
         return newFolder;
     }

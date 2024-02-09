@@ -18,6 +18,12 @@ public sealed class EditableTextBlockViewModel : ViewModelBase
     public bool IsConnectedWebSocket { get; set; }
 
     [Reactive]
+    public bool IsHttpRepetition { get; set; }
+
+    [Reactive]
+    public bool IsHttpMinigun { get; set; }
+
+    [Reactive]
     public string Txt { get; set; }
 
     private bool isEditingField;

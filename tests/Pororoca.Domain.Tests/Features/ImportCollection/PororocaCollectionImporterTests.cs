@@ -1,4 +1,5 @@
 using System.Text;
+using Pororoca.Domain.Feature.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
@@ -39,7 +40,7 @@ public static class PororocaCollectionImporterTests
     [Fact]
     public static void Should_import_valid_full_pororoca_collection_correctly()
     {
-        // this test also validates the distinguishment between HTTP and WebSocket requestTypes
+        // this test also validates the distinguishment between HTTP, WebSocket and HttpRepetition requestTypes
 
         // GIVEN
         string json = ReadTestFileText("FullCollection.pororoca_collection.json");
@@ -99,7 +100,7 @@ public static class PororocaCollectionImporterTests
 
         var dir1 = Assert.Single(col.Folders);
         Assert.Equal("DIR1", dir1.Name);
-        Assert.Equal(6, dir1.Requests.Count);
+        Assert.Equal(7, dir1.Requests.Count);
 
         req = dir1.HttpRequests[0];
         Assert.Equal("HTTPNONEBASICAUTH", req.Name);
@@ -181,6 +182,15 @@ public static class PororocaCollectionImporterTests
         Assert.Equal("variables", req.Body.GraphQlValues.Variables);
         Assert.Null(req.CustomAuth);
 
+        var rep1 = Assert.IsType<PororocaHttpRepetition>(dir1.Requests[6]);
+        Assert.Equal("REPETITION HTTP1 SIMPLE", rep1.Name);
+        Assert.Equal("REPETITION/POST HTTP1", rep1.BaseRequestPath);
+        Assert.Equal(PororocaRepetitionMode.Simple, rep1.RepetitionMode);
+        Assert.Equal(25, rep1.NumberOfRepetitions);
+        Assert.Equal(3, rep1.MaxDop);
+        Assert.Null(rep1.DelayInMs);
+        Assert.Null(rep1.InputData);
+
         var dir2 = Assert.Single(dir1.Folders);
         Assert.Equal("DIR2", dir2.Name);
         Assert.Equal(2, dir2.HttpRequests.Count);
@@ -243,6 +253,17 @@ public static class PororocaCollectionImporterTests
         Assert.Equal(PororocaWebSocketMessageDirection.FromClient, wsmsg.Direction);
         Assert.Equal(PororocaWebSocketMessageType.Binary, wsmsg.MessageType);
 
+        var rep2 = Assert.IsType<PororocaHttpRepetition>(dir2.Requests[3]);
+        Assert.Equal("REPETITION HTTP2 SEQUENTIAL FROM RAW JSON ARRAY", rep2.Name);
+        Assert.Equal("REPETITION/POST HTTP2", rep2.BaseRequestPath);
+        Assert.Equal(PororocaRepetitionMode.Sequential, rep2.RepetitionMode);
+        Assert.Null(rep2.NumberOfRepetitions);
+        Assert.Null(rep2.MaxDop);
+        Assert.Null(rep2.DelayInMs);
+        Assert.NotNull(rep2.InputData);
+        Assert.Equal(PororocaRepetitionInputDataType.RawJsonArray, rep2.InputData.Type);
+        Assert.Equal("myrawjsonarray", rep2.InputData.RawJsonArray);
+
         var dir3 = Assert.Single(dir2.Folders);
         Assert.Equal("DIR3", dir3.Name);
         Assert.Equal(2, dir3.HttpRequests.Count);
@@ -278,5 +299,16 @@ public static class PororocaCollectionImporterTests
         Assert.Equal("{{ClientCertificatesDir}}/badssl.com-client-certificate-without-private-key.pem", req.CustomAuth.ClientCertificate.CertificateFilePath);
         Assert.Equal("{{ClientCertificatesDir}}/badssl.com-client-encrypted-private-key.key", req.CustomAuth.ClientCertificate.PrivateKeyFilePath);
         Assert.Equal("{{BadSslClientCertFilePassword}}", req.CustomAuth.ClientCertificate.FilePassword);
+
+        var rep3 = Assert.IsType<PororocaHttpRepetition>(dir3.Requests[2]);
+        Assert.Equal("REPETITION HTTP3 RANDOM FROM FILE", rep3.Name);
+        Assert.Equal("REPETITION/POST HTTP3", rep3.BaseRequestPath);
+        Assert.Equal(PororocaRepetitionMode.Random, rep3.RepetitionMode);
+        Assert.Equal(25, rep3.NumberOfRepetitions);
+        Assert.Equal(3, rep3.MaxDop);
+        Assert.Equal(100, rep3.DelayInMs);
+        Assert.NotNull(rep3.InputData);
+        Assert.Equal(PororocaRepetitionInputDataType.File, rep3.InputData.Type);
+        Assert.Equal("{{InputDataDir}}/InputData1.json", rep3.InputData.InputFilePath);
     }
 }

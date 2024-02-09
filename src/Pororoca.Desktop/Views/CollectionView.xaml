@@ -51,6 +51,12 @@
           Command="{Binding AddNewWebSocketConnectionCmd}"/>
 
       <controls:IconButton
+          x:Name="btAddHttpRep"
+          Icon="{StaticResource IconRifleGunGeometry}"
+          Text="{Binding i18n.Collection.AddHttpRepeater}"
+          Command="{Binding AddNewHttpRepeaterCmd}"/>
+
+      <controls:IconButton
           x:Name="btAddEnvironment"
           Icon="{StaticResource IconLeafGeometry}"
           Text="{Binding i18n.Collection.AddEnvironment}"

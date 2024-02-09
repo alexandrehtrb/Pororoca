@@ -18,12 +18,14 @@ using Pororoca.Domain.Features.VariableResolution;
 using Pororoca.Infrastructure.Features.Requester;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using static Pororoca.Desktop.Localization.TimeTextFormatter;
 using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
 using static Pororoca.Domain.Features.Common.HttpVersionFormatter;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage.PororocaWebSocketClientMessageTranslator;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage.PororocaWebSocketClientMessageValidator;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection.PororocaWebSocketConnectionTranslator;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection.PororocaWebSocketConnectionValidator;
+using static Pororoca.Domain.Features.Common.HttpStatusCodeFormatter;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -642,18 +644,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     private static string FormatResponseTitle(TimeSpan elapsedTime, HttpStatusCode statusCode) =>
         string.Format("{0} ({1})",
-            FormatHttpStatusCode(statusCode),
-            FormatElapsedTime(elapsedTime));
-
-    private static string FormatHttpStatusCode(HttpStatusCode statusCode) =>
-        $"{(int)statusCode} {Enum.GetName(statusCode)}";
-
-    private static string FormatElapsedTime(TimeSpan elapsedTime) =>
-        elapsedTime < oneSecond ?
-            string.Format(Localizer.Instance.HttpResponse.ElapsedTimeMillisecondsFormat, (int)elapsedTime.TotalMilliseconds) :
-            elapsedTime < oneMinute ? // More or equal than one second, but less than one minute
-                string.Format(Localizer.Instance.HttpResponse.ElapsedTimeSecondsFormat, elapsedTime.TotalSeconds) : // TODO: Format digit separator according to language
-                string.Format(Localizer.Instance.HttpResponse.ElapsedTimeMinutesFormat, elapsedTime.Minutes, elapsedTime.Seconds);
+            FormatHttpStatusCodeText(statusCode),
+            FormatTimeText(elapsedTime));
 
     #endregion
 
