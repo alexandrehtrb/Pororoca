@@ -107,8 +107,16 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #region GLOBAL OPTIONS
 
-    [Reactive]
-    public bool IsSslVerificationDisabled { get; set; }
+    private bool isSslVerificationDisabledField;
+    public bool IsSslVerificationDisabled
+    {
+        get => this.isSslVerificationDisabledField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.isSslVerificationDisabledField, value);
+            PororocaRequester.Singleton.DisableSslVerification = value;
+        }
+    }
 
     public ReactiveCommand<Unit, Unit> ToggleSSLVerificationCmd { get; }
 
@@ -378,11 +386,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #region GLOBAL OPTIONS
 
-    private void ToggleSslVerification()
-    {
+    private void ToggleSslVerification() =>
         IsSslVerificationDisabled = !IsSslVerificationDisabled;
-        PororocaRequester.Singleton.DisableSslVerification = IsSslVerificationDisabled;
-    }
 
     #endregion
 

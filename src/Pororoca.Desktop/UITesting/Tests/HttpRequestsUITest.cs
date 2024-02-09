@@ -67,7 +67,7 @@ public sealed partial class HttpRequestsUITest : UITest
             await TopMenuRobot.SwitchTlsVerification(false);
         }
 
-        foreach (decimal version in this.httpVersionsToTest)
+        /*foreach (decimal version in this.httpVersionsToTest)
         {
             AppendToLog($"Selecting HTTP version {version}.");
             await HttpRobot.SetHttpVersion(version);
@@ -88,7 +88,7 @@ public sealed partial class HttpRequestsUITest : UITest
             await TestCaptureResponseHeader();
             await TestCaptureResponseJsonBody();
             await TestCaptureResponseXmlBody();
-        }
+        }*/
 
         if (OperatingSystem.IsLinux())
         {

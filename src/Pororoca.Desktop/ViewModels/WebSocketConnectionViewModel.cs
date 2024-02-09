@@ -379,7 +379,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         CancelConnectCmd = ReactiveCommand.Create(CancelConnect);
         DisconnectCmd = ReactiveCommand.CreateFromTask(DisconnectAsync);
         CancelDisconnectCmd = ReactiveCommand.Create(CancelDisconnect);
-        DisableTlsVerificationCmd = ReactiveCommand.Create(EnableTlsVerification);
+        DisableTlsVerificationCmd = ReactiveCommand.Create(DisableTlsVerification);
 
         #endregion
 
@@ -636,7 +636,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     private void CancelDisconnect() =>
         this.cancelDisconnectionAttemptTokenSource?.Cancel();
 
-    private void EnableTlsVerification()
+    private void DisableTlsVerification()
     {
         ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled = true;
         IsDisableTlsVerificationVisible = false;
