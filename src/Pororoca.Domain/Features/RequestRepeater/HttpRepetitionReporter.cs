@@ -83,7 +83,7 @@ public static class HttpRepetitionReporter
     }
 
     private static string GetStartedAtText(PororocaHttpRepetitionResult result) =>
-        result.Response?.StartedAtUtc.TimeOfDay.ToString() ?? string.Empty;
+        result.Response?.StartedAtUtc.TimeOfDay.ToString(@"hh':'mm':'ss") ?? string.Empty;
 
     private static long GetDurationInMs(PororocaHttpRepetitionResult result) =>
         ((long?) result.Response?.ElapsedTime.TotalMilliseconds) ?? 0L;

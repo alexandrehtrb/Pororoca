@@ -29,10 +29,10 @@ public static class HttpRepetitionReporterTests
         StringBuilder sb = new();
         sb.AppendLine(@"""iteration"",""result"",""startedAt"",""durationInMs"",");
         sb.AppendLine(@"""1"",""TranslateRequest_InvalidUrl"","""",""0"",");
-        sb.AppendLine(@"""2"",""200 OK"",""19:05:17.1581236"",""187"",");
-        sb.AppendLine(@"""3"",""500 InternalServerError"",""19:05:17.1581236"",""187"",");
-        sb.AppendLine(@"""4"",""cancelled"",""19:05:17.1581236"",""187"",");
-        sb.AppendLine(@"""5"",""exception"",""19:05:17.1581236"",""187"",");
+        sb.AppendLine(@"""2"",""200 OK"",""19:05:17"",""187"",");
+        sb.AppendLine(@"""3"",""500 InternalServerError"",""19:05:17"",""187"",");
+        sb.AppendLine(@"""4"",""cancelled"",""19:05:17"",""187"",");
+        sb.AppendLine(@"""5"",""exception"",""19:05:17"",""187"",");
         Assert.Equal(sb.ToString(), csv);
     }
 
@@ -45,7 +45,7 @@ public static class HttpRepetitionReporterTests
         var results = await MakeExampleResultsAsync();
         results[0] = results[0] with { InputLine = [new(true, "Z", "1", true), new(true, "Elemento", "Hidrogênio", true)] };
         results[1] = results[1] with { InputLine = [new(true, "Z", "7", true), new(true, "Elemento", "Nitrogênio", true)] };
-        results[2] = results[2] with { InputLine = [new(true, "Z", "10", true), new(true, "Elemento", "Neônio", true)] };
+        results[2] = results[2] with { InputLine = [new(true, "Z", "10", true), new(true, "Elemento", "\"Neônio\"", true)] };
         results[3] = results[3] with { InputLine = [new(true, "Z", "15", true), new(true, "Elemento", "Fósforo", true)] };
         results[4] = results[4] with { InputLine = [new(true, "Z", "80", true), new(true, "Elemento", "Mercúrio", true)] };
 
@@ -58,10 +58,10 @@ public static class HttpRepetitionReporterTests
         StringBuilder sb = new();
         sb.AppendLine(@"""iteration"",""result"",""startedAt"",""durationInMs"",""Z"",""Elemento"",");
         sb.AppendLine(@"""1"",""TranslateRequest_InvalidUrl"","""",""0"",""1"",""Hidrogênio"",");
-        sb.AppendLine(@"""2"",""200 OK"",""19:05:17.1581236"",""187"",""7"",""Nitrogênio"",");
-        sb.AppendLine(@"""3"",""500 InternalServerError"",""19:05:17.1581236"",""187"",""10"",""Neônio"",");
-        sb.AppendLine(@"""4"",""cancelled"",""19:05:17.1581236"",""187"",""15"",""Fósforo"",");
-        sb.AppendLine(@"""5"",""exception"",""19:05:17.1581236"",""187"",""80"",""Mercúrio"",");
+        sb.AppendLine(@"""2"",""200 OK"",""19:05:17"",""187"",""7"",""Nitrogênio"",");
+        sb.AppendLine(@"""3"",""500 InternalServerError"",""19:05:17"",""187"",""10"",""""""Neônio"""""",");
+        sb.AppendLine(@"""4"",""cancelled"",""19:05:17"",""187"",""15"",""Fósforo"",");
+        sb.AppendLine(@"""5"",""exception"",""19:05:17"",""187"",""80"",""Mercúrio"",");
         Assert.Equal(sb.ToString(), csv);
     }
 
@@ -74,7 +74,7 @@ public static class HttpRepetitionReporterTests
         var results = await MakeExampleResultsAsync();
         results[0] = results[0] with { InputLine = [] };
         results[1] = results[1] with { InputLine = [new(true, "Z", "7", true), new(true, "Elemento", "Nitrogênio", true)] };
-        results[2] = results[2] with { InputLine = [new(true, "Elemento", "Neônio", true)] };
+        results[2] = results[2] with { InputLine = [new(true, "Elemento", "\"Neônio\"", true)] };
         results[3] = results[3] with { InputLine = [new(true, "Z", "15", true), new(true, "Elemento", "Fósforo", true)] };
         results[4] = results[4] with { InputLine = [new(true, "Elemento", "Mercúrio", true), new(true, "Z", "80", true)] };
 
@@ -87,10 +87,10 @@ public static class HttpRepetitionReporterTests
         StringBuilder sb = new();
         sb.AppendLine(@"""iteration"",""result"",""startedAt"",""durationInMs"",""Z"",""Elemento"",");
         sb.AppendLine(@"""1"",""TranslateRequest_InvalidUrl"","""",""0"","""","""",");
-        sb.AppendLine(@"""2"",""200 OK"",""19:05:17.1581236"",""187"",""7"",""Nitrogênio"",");
-        sb.AppendLine(@"""3"",""500 InternalServerError"",""19:05:17.1581236"",""187"","""",""Neônio"",");
-        sb.AppendLine(@"""4"",""cancelled"",""19:05:17.1581236"",""187"",""15"",""Fósforo"",");
-        sb.AppendLine(@"""5"",""exception"",""19:05:17.1581236"",""187"",""80"",""Mercúrio"",");
+        sb.AppendLine(@"""2"",""200 OK"",""19:05:17"",""187"",""7"",""Nitrogênio"",");
+        sb.AppendLine(@"""3"",""500 InternalServerError"",""19:05:17"",""187"","""",""""""Neônio"""""",");
+        sb.AppendLine(@"""4"",""cancelled"",""19:05:17"",""187"",""15"",""Fósforo"",");
+        sb.AppendLine(@"""5"",""exception"",""19:05:17"",""187"",""80"",""Mercúrio"",");
         Assert.Equal(sb.ToString(), csv);
     }
 
