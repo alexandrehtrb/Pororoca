@@ -129,7 +129,7 @@
         Property="Foreground"
         Value="{DynamicResource DefaultTextForegroundColor}"/>
   </Style>
-  
+
   <Style Selector="TextBlock.PageTitle">
     <Setter
         Property="FontSize"
@@ -256,6 +256,12 @@
         Value="{DynamicResource MainWindowSeparatorsBrush}"/>
   </Style>
 
+  <Style Selector="ProgressBar.Separator">
+    <Setter
+        Property="Background"
+        Value="{DynamicResource MainWindowSeparatorsBrush}"/>
+  </Style>
+
   <Style Selector="Button.Primary">
     <Setter
         Property="Background"
@@ -369,7 +375,7 @@
       </DrawingBrush>
     </Setter>
   </Style>
-  
+
   <Style Selector="Button.MoveUp">
     <Setter Property="Background">
       <DrawingBrush>

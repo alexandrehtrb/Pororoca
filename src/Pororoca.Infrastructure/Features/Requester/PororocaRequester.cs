@@ -10,11 +10,13 @@ public sealed class PororocaRequester : IPororocaRequester
 {
     public static readonly PororocaRequester Singleton = new();
 
+    public bool DisableSslVerification { get; set; }
+
     private PororocaRequester()
     {
     }
 
-    public async Task<PororocaHttpResponse> RequestAsync(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaHttpRequest req, bool disableSslVerification, CancellationToken cancellationToken = default)
+    public async Task<PororocaHttpResponse> RequestAsync(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaHttpRequest req, CancellationToken cancellationToken = default)
     {
         PororocaHttpRequest? resolvedReq = null;
         HttpRequestMessage? reqMsg = null;
@@ -31,7 +33,7 @@ public sealed class PororocaRequester : IPororocaRequester
             else
             {
                 var resolvedAuth = GetResolvedAuth(reqMsg!);
-                var httpClient = PororocaHttpClientProvider.Singleton.Provide(disableSslVerification, resolvedAuth);
+                var httpClient = PororocaHttpClientProvider.Singleton.Provide(DisableSslVerification, resolvedAuth);
                 startedAt = DateTimeOffset.Now;
                 sw.Start();
                 resMsg = await httpClient.SendAsync(reqMsg!, cancellationToken);

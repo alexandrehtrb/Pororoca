@@ -48,6 +48,10 @@ public abstract partial class UITest
 
     internal void AssertSelection(ComboBox cb, ComboBoxItem cbi) => Assert(cb.SelectedItem == cbi);
 
+    internal void AssertSelection(ComboBox cb, string txt) => Assert(cb.SelectedItem is string s && s == txt);
+
+    internal void AssertValue(NumericUpDown nud, int val) => Assert(nud.Value is decimal d && ((int)d) == val);
+
     internal void AssertBackgroundColor(Panel panel, string hexColor) => Assert(panel.Background is SolidColorBrush scb && ToHexString(scb.Color) == hexColor);
 
     private static string ToHexString(Color c) =>

@@ -8,7 +8,7 @@ public sealed class VariablesDataGridViewModel : BaseDataGridWithOperationsViewM
     public override SimpleClipboardArea<PororocaVariable> InnerClipboardArea =>
         VariablesClipboardArea.Instance;
 
-    public VariablesDataGridViewModel(List<PororocaVariable> initialValues) : base(initialValues)
+    public VariablesDataGridViewModel(List<PororocaVariable>? initialValues = null) : base(initialValues)
     {
     }
 

@@ -212,6 +212,12 @@ internal static class UITestActions
         await editor.TypeText(newTxt);
     }
 
+    internal static async Task SetValue(this NumericUpDown nud, int val)
+    {
+        nud.Value = val;
+        await WaitAfterActionAsync();
+    }
+
     internal static async Task PressKey(this Control control, Key key, KeyModifiers keyModifiers = KeyModifiers.None)
     {
         KeyEventArgs args = new() { Key = key, KeyModifiers = keyModifiers };

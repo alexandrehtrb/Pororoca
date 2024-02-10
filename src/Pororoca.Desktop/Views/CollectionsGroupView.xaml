@@ -83,6 +83,10 @@
                   Command="{Binding AddNewWebSocketConnectionCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
+                  Header="{Binding i18n.ContextMenu.NewHttpRepeater}"
+                  Command="{Binding AddNewHttpRepeaterCmd}"
+                  IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
+              <MenuItem
                   Header="{Binding i18n.ContextMenu.Duplicate}"
                   Command="{Binding HotKeys.DuplicateCmd}"
                   InputGesture="Ctrl+D"
@@ -134,6 +138,10 @@
               <MenuItem
                   Header="{Binding i18n.ContextMenu.NewWebSocketConnection}"
                   Command="{Binding AddNewWebSocketConnectionCmd}"
+                  IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
+              <MenuItem
+                  Header="{Binding i18n.ContextMenu.NewHttpRepeater}"
+                  Command="{Binding AddNewHttpRepeaterCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
                   Header="{Binding i18n.ContextMenu.Cut}"
@@ -201,6 +209,43 @@
         </StackPanel>
       </TreeDataTemplate>
       <DataTemplate DataType="{x:Type vm:HttpRequestViewModel}">
+        <TextBlock Text="{Binding Name}">
+          <TextBlock.ContextMenu>
+            <ContextMenu>
+              <MenuItem
+                  Header="{Binding i18n.ContextMenu.Cut}"
+                  Command="{Binding HotKeys.CutCmd}"
+                  InputGesture="Ctrl+X"/>
+              <MenuItem
+                  Header="{Binding i18n.ContextMenu.Copy}"
+                  Command="{Binding HotKeys.CopyCmd}"
+                  InputGesture="Ctrl+C"/>
+              <MenuItem
+                  Header="{Binding i18n.ContextMenu.Rename}"
+                  Command="{Binding HotKeys.RenameCmd}"
+                  InputGesture="F2"
+                  IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
+              <MenuItem
+                  Header="{Binding i18n.ContextMenu.MoveUp}"
+                  Command="{Binding HotKeys.MoveUpCmd}"
+                  InputGesture="Alt+Up"
+                  IsEnabled="{Binding CanMoveUp}"
+                  IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
+              <MenuItem
+                  Header="{Binding i18n.ContextMenu.MoveDown}"
+                  Command="{Binding HotKeys.MoveDownCmd}"
+                  InputGesture="Alt+Down"
+                  IsEnabled="{Binding CanMoveDown}"
+                  IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
+              <MenuItem
+                  Header="{Binding i18n.ContextMenu.Delete}"
+                  Command="{Binding HotKeys.DeleteCmd}"
+                  InputGesture="Delete"/>
+            </ContextMenu>
+          </TextBlock.ContextMenu>
+        </TextBlock>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type vm:HttpRepeaterViewModel}">
         <TextBlock Text="{Binding Name}">
           <TextBlock.ContextMenu>
             <ContextMenu>

@@ -229,7 +229,7 @@
             Header="{Binding i18n.TopMenuHelp.RunUITests}"
             IsVisible="{Binding IsRunUITestsVisible}"
             Command="{Binding RunUITestsCmd}"/>
-        </MenuItem>        
+        </MenuItem>
         <MenuItem
             Header="{Binding i18n.TopMenu.Saved}"
             HorizontalAlignment="Right"
@@ -261,7 +261,7 @@
           <v:WelcomeView
               x:Name="welcomeView"
               DataContext="{Binding WelcomeView.VM}"/>
-          </Grid>          
+          </Grid>
           <Grid
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
@@ -325,6 +325,14 @@
             <v:WebSocketClientMessageView
                 x:Name="wsClientMsgView"
                 DataContext="{Binding WebSocketClientMessageView.VM}"/>
+          </Grid>
+          <Grid
+              VerticalAlignment="Stretch"
+              HorizontalAlignment="Stretch"
+              IsVisible="{Binding HttpRepeaterView.Visible}">
+            <v:HttpRepeaterView
+                x:Name="httpRepView"
+                DataContext="{Binding HttpRepeaterView.VM}"/>
           </Grid>
         </Grid>
       </Panel>

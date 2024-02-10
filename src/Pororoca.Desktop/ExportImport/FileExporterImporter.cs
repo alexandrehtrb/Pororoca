@@ -407,5 +407,23 @@ internal static partial class FileExporterImporter
         }
     }
 
+    internal static async Task<string?> SelectFolderAsync()
+    {
+        FolderPickerOpenOptions options = new()
+        {
+            AllowMultiple = false,
+            Title = Localizer.Instance.SelectFolderDialog.Title
+        };
+
+        var selectedFolders = await MainWindow.Instance!.StorageProvider.OpenFolderPickerAsync(options);
+
+        var selectedFolder = selectedFolders.Count > 0 ? selectedFolders[0] : null;
+
+        // uri.LocalPath returns the correct path in Linux and Windows
+        // careful with file paths with whitespaces in them
+        // TODO: confirm behavior for MacOSX
+        return selectedFolder?.Path?.LocalPath;
+    }
+
     #endregion
 }

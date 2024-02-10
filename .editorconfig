@@ -14,13 +14,15 @@ end_of_line = crlf
 indent_size = 2
 quote_type = single
 
-[*.csproj]
+[*.{csproj,xml,xaml,axaml}]
+indent_style = space
 indent_size = 2
+tab_width = 2
 
 [*.md]
 trim_trailing_whitespace = false
 
-# C# files	  
+# C# files
 [*.cs]
 # New line preferences
 csharp_new_line_before_open_brace = all

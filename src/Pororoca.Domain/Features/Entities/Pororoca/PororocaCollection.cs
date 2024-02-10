@@ -52,4 +52,105 @@ public sealed record PororocaCollection
         Environments = Environments.Select(e => preserveIds ? e.ClonePreservingId() : (PororocaEnvironment)e.Clone()).ToList(),
         CollectionScopedAuth = CollectionScopedAuth?.Copy()
     };
+
+    public T? FindRequestInCollection<T>(Func<T, bool> criteria) where T : PororocaRequest
+    {
+        static T? FindRequestInFolder(PororocaCollectionFolder folder, Func<T, bool> criteria)
+        {
+            var reqInFolder = folder.Requests.FirstOrDefault(x => x is T t && criteria(t));
+            if (reqInFolder != null)
+            {
+                return (T)reqInFolder;
+            }
+            else
+            {
+                foreach (var subFolder in folder.Folders)
+                {
+                    var reqInSubfolder = FindRequestInFolder(subFolder, criteria);
+                    if (reqInSubfolder != null)
+                    {
+                        return reqInSubfolder;
+                    }
+                }
+                return null;
+            }
+        }
+
+        var reqInCol = Requests.FirstOrDefault(x => x is T t && criteria(t));
+        if (reqInCol != null)
+        {
+            return (T)reqInCol;
+        }
+        else
+        {
+            foreach (var folder in Folders)
+            {
+                var reqInFolder = FindRequestInFolder(folder, criteria);
+                if (reqInFolder != null)
+                {
+                    return reqInFolder;
+                }
+            }
+            return null;
+        }
+    }
+
+    public PororocaHttpRequest? GetHttpRequestByPath(string? path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return null;
+        }
+
+        string[] parts = path.Split('/');
+        if (parts.Length == 1)
+        {
+            return HttpRequests.FirstOrDefault(x => x.Name == parts[0]);
+        }
+        else
+        {
+            PororocaCollectionFolder? folder = null;
+            for (int i = 0; i < parts.Length; i++)
+            {
+                string part = parts[i];
+                if (i == parts.Length - 1)
+                {
+                    return folder!.HttpRequests.FirstOrDefault(x => x.Name.Replace("/",string.Empty) == part);
+                }
+                else if (i == 0)
+                {
+                    folder = Folders.FirstOrDefault(f => f.Name.Replace("/",string.Empty) == part);
+                    if (folder is null) return null;
+                }
+                else
+                {
+                    folder = folder?.Folders?.FirstOrDefault(f => f.Name.Replace("/",string.Empty) == part);
+                    if (folder is null) return null;
+                }
+            }
+        }
+        return null;
+    }
+
+    public List<string> ListHttpRequestsPathsInCollection()
+    {
+        static IEnumerable<string> ListHttpRequestsPathsInFolder(string basePath, PororocaCollectionFolder folder)
+        {
+            // '/' needs to removed from the name to avoid problem when splitting path by '/'
+            string folderBasePath = basePath + folder.Name.Replace("/", string.Empty) + "/";
+            var paths = folder.HttpRequests.Select(r => folderBasePath + r.Name.Replace("/", string.Empty)).ToList();
+            foreach (var subFolder in folder.Folders)
+            {
+                paths.AddRange(ListHttpRequestsPathsInFolder(folderBasePath, subFolder));
+            }
+            return paths;
+        }
+
+        var paths = HttpRequests.Select(r => r.Name.Replace("/", string.Empty)).ToList();
+        foreach (var folder in Folders)
+        {
+            paths.AddRange(ListHttpRequestsPathsInFolder(string.Empty, folder));
+        }
+        return paths;
+    }
 }

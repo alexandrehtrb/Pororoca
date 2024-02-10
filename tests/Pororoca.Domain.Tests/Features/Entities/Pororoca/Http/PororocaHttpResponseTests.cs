@@ -373,7 +373,7 @@ public static class PororocaHttpResponseTests
         Assert.Equal("100", res.CaptureValue(capture));
     }
 
-    private static HttpResponseMessage CreateTestHttpResponseMessage(string? body, string? contentType, string? contentDisposition)
+    internal static HttpResponseMessage CreateTestHttpResponseMessage(string? body, string? contentType, string? contentDisposition)
     {
         ByteArrayContent? content = null;
         if (body != null)

@@ -1,0 +1,660 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:v="using:Pororoca.Desktop.Views"
+    xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
+    xmlns:controls="clr-namespace:Pororoca.Desktop.Controls;assembly=Pororoca.Desktop"
+    xmlns:conv="clr-namespace:Pororoca.Desktop.Converters;assembly=Pororoca.Desktop"
+    xmlns:AvaloniaEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+    x:Class="Pororoca.Desktop.Views.HttpRepeaterView"
+    x:CompileBindings="True"
+    x:DataType="vm:HttpRepeaterViewModel"
+    mc:Ignorable="d"
+    d:DesignWidth="1350"
+    d:DesignHeight="700"
+    FontSize="14">
+
+  <UserControl.Resources>
+    <conv:RepetitionModeMatchConverter x:Key="repetitionModeMatch"/>
+    <conv:RepetitionInputDataTypeMatchConverter x:Key="repetitionInputDataTypeMatch"/>
+  </UserControl.Resources>
+
+  <UserControl.Styles>
+    <Style Selector="TabItem">
+      <Setter
+          Property="FontSize"
+          Value="20"/>
+    </Style>
+  </UserControl.Styles>
+
+  <Grid
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Stretch">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <StackPanel
+        Grid.Column="0"
+        Grid.Row="0"
+        Margin="0,24,0,0"
+        Orientation="Vertical"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch">
+
+      <Grid
+          Margin="24,0,24,0"
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Top">
+        <controls:EditableTextBlock
+            x:Name="etbName"
+            DataContext="{Binding NameEditableVm}"/>
+      </Grid>
+
+      <Grid
+          ShowGridLines="False"
+          Height="40"
+          Margin="24,40,24,16"
+          ColumnDefinitions="*, Auto, Auto">
+
+        <StackPanel
+            Grid.Column="0"
+            Grid.Row="0"
+            Margin="0,0,6,0"
+            Orientation="Vertical"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+
+          <ComboBox
+              Name="cbBaseHttpRequest"
+              Height="40"
+              HorizontalAlignment="Stretch"
+              IsEnabled="{Binding !IsRepetitionRunning}"
+              Classes.HasValidationProblem="{Binding HasBaseHttpRequestValidationProblem}"
+              PlaceholderText="{Binding i18n.HttpRepeater.SelectBaseRequest}"
+              ItemsSource="{Binding CollectionHttpRequestsPaths}"
+              SelectedItem="{Binding BaseRequestPath, Mode=TwoWay}"/>
+
+          <TextBlock
+              Name="tbErrorMsg"
+              Margin="12,8,12,0"
+              Classes="ErrorMessage"
+              Text="{Binding InvalidRepetitionError}"
+              IsVisible="{Binding IsInvalidRepetitionErrorVisible}"/>
+
+          <TextBlock
+              Name="tbRepetitionStatus"
+              Margin="12,8,12,0"
+              Classes="TipText"
+              FontSize="14"
+              Text="{Binding RepetitionStatusText}"
+              IsVisible="{Binding !IsInvalidRepetitionErrorVisible}"/>
+
+        </StackPanel>
+
+        <Button
+            x:Name="btRefreshBaseHttpRequestsList"
+            Grid.Column="1"
+            Grid.Row="0"
+            Width="40"
+            Margin="6,0,6,0"
+            Command="{Binding RefreshBaseRequestsListCmd}"
+            IsEnabled="{Binding !IsRepetitionRunning}"
+            ToolTip.Tip="{Binding i18n.HttpRepeater.RefreshBaseRequestsListTip}"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            VerticalAlignment="Stretch"
+            Classes="Secondary">
+          <Panel>
+            <Image
+                Width="16"
+                Height="16"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center">
+              <Image.Source>
+                <DrawingImage Drawing="{StaticResource IconRefresh}"/>
+              </Image.Source>
+            </Image>
+          </Panel>
+        </Button>
+
+        <Button
+            Name="btStartRepetition"
+            Grid.Column="2"
+            Grid.Row="0"
+            Height="40"
+            Width="104"
+            Margin="6,0,0,0"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            IsVisible="{Binding !IsRepetitionRunning}"
+            Command="{Binding StartRepetitionCmd}"
+            Content="{Binding i18n.HttpRepeater.Start}"
+            ToolTip.Tip="{Binding i18n.HttpRepeater.StartTip}"
+            Classes="Primary"/>
+
+        <Button
+            Name="btStopRepetition"
+            Grid.Column="2"
+            Grid.Row="0"
+            Height="40"
+            Width="104"
+            Margin="6,0,0,0"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            IsVisible="{Binding IsRepetitionRunning}"
+            Command="{Binding StopRepetitionCmd}"
+            Content="{Binding i18n.HttpRepeater.Stop}"
+            ToolTip.Tip="{Binding i18n.HttpRepeater.StopTip}"
+            Classes="PrimaryInverted"/>
+
+      </Grid>
+
+      <!-- REPETITION PROGRESS BAR (ACTS AS A SEPARATOR) -->
+      <ProgressBar
+          Margin="-2,20,-2,0"
+          Height="6"
+          Classes="Separator"
+          IsIndeterminate="False"
+          Minimum="0"
+          Maximum="{Binding NumberOfRepetitionsToExecute}"
+          Value="{Binding NumberOfRepetitionsExecuted}"
+          VerticalAlignment="Stretch"
+          HorizontalAlignment="Stretch"/>
+    </StackPanel>
+
+    <Grid
+        Grid.Column="0"
+        Grid.Row="1"
+        Margin="12,0,12,0"
+        VerticalAlignment="Stretch"
+        ColumnDefinitions="* , Auto , * , Auto , *">
+
+      <!-- REPETITION -->
+      <Grid
+          Grid.Column="0"
+          Grid.Row="0"
+          RowDefinitions="Auto, *">
+
+        <TextBlock
+            Grid.Column="0"
+            Grid.Row="0"
+            Margin="12,28,12,0"
+            Classes="SectionTitle"
+            Text="{Binding i18n.HttpRepeater.RepetitionSectionTitle}"/>
+        <TabControl
+            Name="tabControlRepetition"
+            Grid.Column="0"
+            Grid.Row="1"
+            Margin="12,24,12,12"
+            TabStripPlacement="Top"
+            SelectedIndex="{Binding RepetitionTabSelectedIndex, Mode=TwoWay}">
+          <!-- REPETITION MODE -->
+          <TabItem Name="tabItemRepetitionMode">
+            <TabItem.Header>
+              <TextBlock
+                  Classes="TabItemHeader"
+                  Text="{Binding i18n.HttpRepeater.RepetitionMode}"/>
+            </TabItem.Header>
+
+            <StackPanel
+                Margin="0,12,0,0"
+                Orientation="Vertical">
+
+              <ComboBox
+                  x:Name="cbRepetitionMode"
+                  Height="36"
+                  Width="190"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Stretch"
+                  IsEnabled="{Binding !IsRepetitionRunning}"
+                  SelectedIndex="{Binding RepetitionModeSelectedIndex, Mode=TwoWay}">
+                <ComboBoxItem
+                    x:Name="cbiRepetitionModeSimple"
+                    Content="{Binding i18n.HttpRepeater.RepetitionModeSimple}"/>
+                <ComboBoxItem
+                    x:Name="cbiRepetitionModeSequential"
+                    Content="{Binding i18n.HttpRepeater.RepetitionModeSequential}"/>
+                <ComboBoxItem
+                    x:Name="cbiRepetitionModeRandom"
+                    Content="{Binding i18n.HttpRepeater.RepetitionModeRandom}"/>
+              </ComboBox>
+
+              <StackPanel
+                  Orientation="Horizontal"
+                  Margin="0,12,0,0"
+                  IsVisible="{Binding RepetitionModeSelectedIndex,
+                              Mode=OneWay,
+                              Converter={StaticResource repetitionModeMatch},
+                              ConverterParameter='Simple,Random'}">
+                <TextBlock
+                    TextWrapping="Wrap"
+                    FontSize="14"
+                    Classes="TipText"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Margin="0,0,6,0"
+                    Text="{Binding i18n.HttpRepeater.NumberOfRepetitions}"/>
+                <NumericUpDown
+                    Name="nudNumberOfRepetitions"
+                    Margin="6,0,0,0"
+                    VerticalAlignment="Center"
+                    Increment="1"
+                    Minimum="1"
+                    Value="{Binding NumberOfRepetitionsToExecute, Mode=TwoWay}"
+                    IsEnabled="{Binding !IsRepetitionRunning}"
+                    Classes.HasValidationProblem="{Binding HasNumberOfRepetitionsValidationProblem}"/>
+              </StackPanel>
+
+              <StackPanel
+                  Orientation="Horizontal"
+                  Margin="0,12,0,0"
+                  IsVisible="{Binding RepetitionModeSelectedIndex,
+                              Mode=OneWay,
+                              Converter={StaticResource repetitionModeMatch},
+                              ConverterParameter='Simple,Random'}">
+                <TextBlock
+                    TextWrapping="Wrap"
+                    FontSize="14"
+                    Classes="TipText"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Margin="0,0,6,0"
+                    Text="{Binding i18n.HttpRepeater.MaxDOP}"/>
+                <NumericUpDown
+                    Name="nudMaxDop"
+                    Margin="6,0,0,0"
+                    VerticalAlignment="Center"
+                    Increment="1"
+                    Minimum="1"
+                    Value="{Binding MaxDop, Mode=TwoWay}"
+                    IsEnabled="{Binding !IsRepetitionRunning}"
+                    Classes.HasValidationProblem="{Binding HasMaxDopValidationProblem}"/>
+              </StackPanel>
+
+              <StackPanel
+                  Orientation="Horizontal"
+                  Margin="0,12,0,0">
+                <TextBlock
+                    TextWrapping="Wrap"
+                    FontSize="14"
+                    Classes="TipText"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Margin="0,0,2,0"
+                    Text="{Binding i18n.HttpRepeater.Delay}"/>
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Margin="2,0,6,0"
+                    ToolTip.Tip="{Binding i18n.HttpRepeater.DelayTip}"
+                    Classes="TipQuestionMark"/>
+                <NumericUpDown
+                    Name="nudDelayInMs"
+                    Margin="6,0,0,0"
+                    VerticalAlignment="Center"
+                    Increment="1"
+                    Minimum="0"
+                    Value="{Binding DelayInMs, Mode=TwoWay}"
+                    IsEnabled="{Binding !IsRepetitionRunning}"
+                    Classes.HasValidationProblem="{Binding HasDelayValidationProblem}"/>
+              </StackPanel>
+            </StackPanel>
+          </TabItem>
+          <!-- REPETITION INPUT DATA -->
+          <TabItem
+              Name="tabItemRepetitionInputData"
+              IsVisible="{Binding RepetitionModeSelectedIndex,
+                          Mode=OneWay,
+                          Converter={StaticResource repetitionModeMatch},
+                          ConverterParameter='Sequential,Random'}">
+            <TabItem.Header>
+              <TextBlock
+                  Classes="TabItemHeader"
+                  Text="{Binding i18n.HttpRepeater.InputData}"/>
+            </TabItem.Header>
+
+            <Grid
+                Margin="0,12,0,12"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                RowDefinitions="Auto , *">
+
+              <ComboBox
+                  Grid.Column="0"
+                  Grid.Row="0"
+                  Margin="0,0,0,12"
+                  x:Name="cbRepetitionInputDataType"
+                  Height="36"
+                  Width="190"
+                  HorizontalAlignment="Left"
+                  SelectedIndex="{Binding InputDataTypeSelectedIndex, Mode=TwoWay}">
+                <ComboBoxItem
+                    x:Name="cbiRepetitionInputDataTypeRaw"
+                    Content="{Binding i18n.HttpRepeater.InputDataTypeRaw}"/>
+                <ComboBoxItem
+                    x:Name="cbiRepetitionInputDataTypeFile"
+                    Content="{Binding i18n.HttpRepeater.InputDataTypeFile}"/>
+              </ComboBox>
+
+              <AvaloniaEdit:TextEditor
+                  Grid.Column="0"
+                  Grid.Row="1"
+                  Margin="-12,0,-12,0"
+                  x:Name="teRepetitionInputDataRaw"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  IsReadOnly="{Binding IsRepetitionRunning}"
+                  Document="{Binding InputDataRawTextDocument, Mode=TwoWay}"
+                  IsVisible="{Binding InputDataTypeSelectedIndex,
+                              Mode=OneWay,
+                              Converter={StaticResource repetitionInputDataTypeMatch},
+                              ConverterParameter=RawJsonArray}"/>
+
+              <StackPanel
+                  Grid.Column="0"
+                  Grid.Row="1"
+                  Orientation="Vertical"
+                  IsVisible="{Binding InputDataTypeSelectedIndex,
+                              Mode=OneWay,
+                              Converter={StaticResource repetitionInputDataTypeMatch},
+                              ConverterParameter=File}">
+                <TextBox
+                    Name="tbRepetitionInputDataFileSrcPath"
+                    Watermark="{Binding i18n.HttpRepeater.InputDataFileSrcPathWatermark}"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Center"
+                    Classes="SingleLine"
+                    Classes.HasValidationProblem="{Binding HasInputDataFileSrcPathValidationProblem}"
+                    Text="{Binding InputDataFileSrcPath}"/>
+                <Button
+                    Name="btRepetitionInputDataFileSearch"
+                    Content="{Binding i18n.HttpRepeater.InputDataFileSearch}"
+                    Margin="0,12,0,0"
+                    Command="{Binding SearchInputDataFileCmd}"
+                    Classes="Secondary"/>
+              </StackPanel>
+
+            </Grid>
+          </TabItem>
+        </TabControl>
+      </Grid>
+      <Rectangle
+          Margin="12,0,12,0"
+          Grid.Column="1"
+          Grid.Row="0"
+          Width="6"
+          VerticalAlignment="Stretch"
+          Classes="Separator"/>
+      <!-- REPETITION RESULTS -->
+      <Grid
+          Grid.Column="2"
+          Grid.Row="0"
+          Margin="12,0,12,24"
+          RowDefinitions="Auto, * , Auto, Auto">
+
+        <TextBlock
+            Grid.Column="0"
+            Grid.Row="0"
+            Margin="0,28,0,0"
+            Classes="SectionTitle"
+            Text="{Binding i18n.HttpRepeater.Results}"/>
+
+        <ListBox
+            Name="lbRepetitionResults"
+            Grid.Column="0"
+            Grid.Row="1"
+            Margin="0,24,0,0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            ItemsSource="{Binding RepetitionResults, Mode=TwoWay}"
+            SelectedItem="{Binding SelectedRepetitionResult, Mode=TwoWay}">
+
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <StackPanel
+                  Margin="0,2"
+                  Orientation="Vertical"
+                  Height="40">
+                <TextBlock
+                    HorizontalAlignment="Left"
+                    Text="{Binding IterationNumber, StringFormat='i = {0}'}"
+                    FontSize="14"
+                    FontWeight="Regular"
+                    TextAlignment="Left"
+                    TextWrapping="NoWrap"
+                    TextTrimming="CharacterEllipsis"/>
+                <TextBlock
+                    HorizontalAlignment="Left"
+                    Margin="4,6,4,0"
+                    MinWidth="160"
+                    Text="{Binding ErrorDescriptionOrStatusCode}"
+                    Classes.RepetitionResultError="{Binding !Successful}"
+                    FontFamily="{StaticResource CodeFontFamily}"
+                    FontSize="12"
+                    FontWeight="Light"
+                    TextAlignment="Left"
+                    TextWrapping="NoWrap"
+                    TextTrimming="CharacterEllipsis"/>
+              </StackPanel>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Button
+            Name="btExportReport"
+            Grid.Column="0"
+            Grid.Row="2"
+            Margin="0,12,0,0"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            IsVisible="{Binding HasFinishedRepetition}"
+            Command="{Binding ExportReportCmd}"
+            Content="{Binding i18n.HttpRepeater.ExportReport}"
+            Classes="Secondary"/>
+
+        <StackPanel
+            Margin="0,12,0,0"
+            Orientation="Horizontal"
+            Grid.Column="0"
+            Grid.Row="3"
+            IsVisible="{Binding HasFinishedRepetition}">
+
+          <Button
+              Name="btSaveAllResponses"
+              Margin="0,0,6,0"
+              HorizontalContentAlignment="Center"
+              VerticalContentAlignment="Center"
+              Command="{Binding SaveAllResponsesCmd}"
+              Content="{Binding i18n.HttpRepeater.SaveAllResponses}"
+              Classes="Secondary"/>
+
+          <Button
+              Name="btExportAllLogs"
+              Margin="0,0,6,0"
+              HorizontalContentAlignment="Center"
+              VerticalContentAlignment="Center"
+              Command="{Binding ExportAllLogsCmd}"
+              Content="{Binding i18n.HttpRepeater.ExportAllLogs}"
+              Classes="Secondary"/>
+        </StackPanel>
+      </Grid>
+      <Rectangle
+          Margin="12,0,12,0"
+          Grid.Column="3"
+          Grid.Row="0"
+          Width="6"
+          VerticalAlignment="Stretch"
+          Classes="Separator"/>
+      <!-- REPETITION RESULT DETAIL -->
+      <Grid
+          Grid.Column="4"
+          Grid.Row="0"
+          RowDefinitions="Auto, *">
+
+        <TextBlock
+            Name="tbResTitle"
+            Grid.Column="0"
+            Grid.Row="0"
+            Margin="12,28,12,0"
+            Classes="SectionTitle"
+            Text="{Binding ResponseDataCtx.ResponseStatusCodeElapsedTimeTitle}"/>
+
+        <TabControl
+            Name="tabControlRes"
+            Grid.Column="0"
+            Grid.Row="1"
+            Margin="12,24,12,12"
+            TabStripPlacement="Top"
+            VerticalAlignment="Stretch"
+            SelectedIndex="{Binding ResponseDataCtx.ResponseTabsSelectedIndex}">
+          <!-- RESPONSE HEADERS AND TRAILERS -->
+          <TabItem Name="tabItemResHeaders">
+            <TabItem.Header>
+              <TextBlock
+                  Classes="TabItemHeader"
+                  Text="{Binding i18n.HttpResponse.Headers}"/>
+            </TabItem.Header>
+            <DataGrid
+                Name="dgResHeaders"
+                Margin="-12,12,-12,12"
+                VerticalAlignment="Stretch"
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.Items}"
+                SelectionChanged="OnSelectedResponseHeadersAndTrailersChanged"
+                CanUserResizeColumns="True">
+              <!--DataGrid.KeyBindings>
+                <KeyBinding Command="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.CopyCmd}"
+                            Gesture="Ctrl+C" />
+              </DataGrid.KeyBindings-->
+              <DataGrid.ContextMenu>
+                <ContextMenu>
+                  <MenuItem
+                      Header="{Binding i18n.ContextMenu.Copy}"
+                      Command="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.CopyCmd}"
+                      InputGesture="Ctrl+C"/>
+                </ContextMenu>
+              </DataGrid.ContextMenu>
+              <DataGrid.Columns>
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Key}">
+                  <DataGridTextColumn.Header>
+                    <TextBlock Text="{Binding i18n.HttpResponse.HeaderName}"/>
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Value}">
+                  <DataGridTextColumn.Header>
+                    <TextBlock Text="{Binding i18n.HttpResponse.HeaderValue}"/>
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+              </DataGrid.Columns>
+            </DataGrid>
+          </TabItem>
+          <!-- RESPONSE BODY -->
+          <TabItem Name="tabItemResBody">
+            <TabItem.Header>
+              <TextBlock
+                  Classes="TabItemHeader"
+                  Text="{Binding i18n.HttpResponse.Body}"/>
+            </TabItem.Header>
+            <Grid
+                Margin="-12,12,-12,0"
+                VerticalAlignment="Stretch">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+              </Grid.RowDefinitions>
+
+              <!-- AcceptsReturn="True" allows for horizontal scrollbar -->
+              <AvaloniaEdit:TextEditor
+                  Name="ResponseBodyRawContentEditor"
+                  Grid.Column="0"
+                  Grid.Row="0"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  Margin="0,0,0,0"
+                  IsReadOnly="True"
+                  Document="{Binding ResponseDataCtx.ResponseRawContentTextDocument, Mode=TwoWay}"/>
+              <StackPanel
+                  Grid.Column="0"
+                  Grid.Row="1"
+                  Orientation="Horizontal"
+                  Margin="0,12,0,0">
+                <Button
+                    Name="btResBodySaveToFile"
+                    Content="{Binding i18n.HttpResponse.BodySaveToFile}"
+                    ToolTip.Tip="{Binding i18n.HttpResponse.BodySaveToFileToolTip}"
+                    ToolTip.Placement="Top"
+                    Margin="0,0,6,12"
+                    IsVisible="{Binding ResponseDataCtx.IsSaveResponseBodyToFileVisible}"
+                    Command="{Binding ResponseDataCtx.SaveResponseBodyToFileCmd}"
+                    Classes="Secondary"/>
+                <Button
+                    Name="btResExportLogFile"
+                    Content="{Binding i18n.HttpResponse.ExportLog}"
+                    ToolTip.Tip="{Binding i18n.HttpResponse.ExportLogToolTip}"
+                    ToolTip.Placement="Top"
+                    Margin="6,0,6,12"
+                    IsVisible="{Binding ResponseDataCtx.IsExportLogFileVisible}"
+                    Command="{Binding ResponseDataCtx.ExportLogFileCmd}"
+                    Classes="Secondary"/>
+                <Button
+                    Name="btResDisableTlsVerification"
+                    Content="{Binding i18n.HttpResponse.DisableTlsVerification}"
+                    Margin="6,0,0,12"
+                    IsVisible="{Binding ResponseDataCtx.IsDisableTlsVerificationVisible}"
+                    Command="{Binding ResponseDataCtx.DisableTlsVerificationCmd}"
+                    Classes="Primary"/>
+              </StackPanel>
+
+            </Grid>
+          </TabItem>
+          <!-- RESPONSE INPUT LINE -->
+          <TabItem Name="tabItemResInputLine">
+            <TabItem.Header>
+              <TextBlock
+                  Classes="TabItemHeader"
+                  Text="{Binding i18n.HttpRepeater.InputLine}"/>
+            </TabItem.Header>
+            <DataGrid
+                Name="dgResInputLine"
+                Margin="-12,12,-12,12"
+                VerticalAlignment="Stretch"
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding InputLineTableVm.Items}"
+                CanUserResizeColumns="True">
+              <DataGrid.Columns>
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Key}">
+                  <DataGridTextColumn.Header>
+                    <TextBlock Text="{Binding i18n.HttpRepeater.InputLineKey}"/>
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Value}">
+                  <DataGridTextColumn.Header>
+                    <TextBlock Text="{Binding i18n.HttpRepeater.InputLineValue}"/>
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+              </DataGrid.Columns>
+            </DataGrid>
+          </TabItem>
+        </TabControl>
+      </Grid>
+    </Grid>
+  </Grid>
+</UserControl>

@@ -6,23 +6,24 @@ namespace Pororoca.Domain.Tests;
 
 internal static class TestFilesLoader
 {
-    internal static string GetTestFilePath(string fileName)
+    internal static string GetTestFilesDirPath()
     {
         var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
-        return Path.Combine(testDataDirInfo.FullName, "TestData", fileName);
+        return Path.Combine(testDataDirInfo.FullName, "TestData");
     }
+
+    internal static string GetTestFilePath(string fileName) =>
+        Path.Combine(GetTestFilesDirPath(), fileName);
 
     internal static string ReadTestFileText(string fileName)
     {
-        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
-        string path = Path.Combine(testDataDirInfo.FullName, "TestData", fileName);
+        string path = GetTestFilePath(fileName);
         return File.ReadAllText(path, Encoding.UTF8);
     }
 
     internal static string ReadTestFileText(string subfolder, string fileName)
     {
-        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
-        string path = Path.Combine(testDataDirInfo.FullName, "TestData", subfolder, fileName);
+        string path = Path.Combine(GetTestFilesDirPath(), subfolder, fileName);
         return File.ReadAllText(path, Encoding.UTF8);
     }
 }

@@ -5,24 +5,23 @@ using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
-using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
-using Pororoca.Domain.Features.VariableCapture;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using static Pororoca.Domain.Features.Common.MimeTypesDetector;
 using static Pororoca.Domain.Features.ExportLog.HttpLogExporter;
+using static Pororoca.Desktop.Localization.TimeTextFormatter;
+using static Pororoca.Domain.Features.Common.HttpStatusCodeFormatter;
 
 namespace Pororoca.Desktop.ViewModels;
 
 public sealed class HttpResponseViewModel : ViewModelBase
 {
-    private static readonly TimeSpan oneSecond = TimeSpan.FromSeconds(1);
-    private static readonly TimeSpan oneMinute = TimeSpan.FromMinutes(1);
     private PororocaHttpResponse? res;
     private string? environmentUsedForRequest;
     private readonly CollectionViewModel colVm;
-    private readonly HttpRequestViewModel parentHttpRequestVm;
+    private string? requestName;
+    private IEnumerable<HttpResponseCaptureViewModel>? responseCaptures;
 
     [Reactive]
     public string? ResponseStatusCodeElapsedTimeTitle { get; set; }
@@ -62,39 +61,48 @@ public sealed class HttpResponseViewModel : ViewModelBase
 
     public ReactiveCommand<Unit, Unit> ExecuteCapturesCmd { get; }
 
-    public HttpResponseViewModel(CollectionViewModel colVm, HttpRequestViewModel reqVm)
+    public HttpResponseViewModel(CollectionViewModel colVm)
     {
         this.colVm = colVm;
-        this.parentHttpRequestVm = reqVm;
         ResponseHeadersAndTrailersTableVm = new();
         SaveResponseBodyToFileCmd = ReactiveCommand.CreateFromTask(SaveResponseBodyToFileAsync);
         ExportLogFileCmd = ReactiveCommand.CreateFromTask(ExportLogToFileAsync);
-        DisableTlsVerificationCmd = ReactiveCommand.Create(EnableTlsVerification);
-        ExecuteCapturesCmd = ReactiveCommand.Create(ExecuteCaptures);
+        DisableTlsVerificationCmd = ReactiveCommand.Create(DisableTlsVerification);
+        ExecuteCapturesCmd = ReactiveCommand.Create(ExecuteResponseCaptures);
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
 
-        UpdateWithResponse(this.res);
+        UpdateWithResponse(string.Empty, this.res, null);
     }
 
     private void OnLanguageChanged() =>
-        UpdateWithResponse(this.res);
+        UpdateWithResponse(this.requestName ?? string.Empty, this.res, this.responseCaptures);
 
     private string GenerateDefaultResponseInitialFileName(string fileExtensionWithoutDot)
     {
         var receivedAtDt = this.res!.ReceivedAt.DateTime;
-        string reqName = this.parentHttpRequestVm.Name;
         string? envName = this.environmentUsedForRequest;
         string envLabel = envName is not null ? $"-{envName}" : string.Empty;
-        return $"response-{reqName}{envLabel}-{receivedAtDt:yyyyMMdd-HHmmss}.{fileExtensionWithoutDot}";
+        return $"response-{this.requestName!}{envLabel}-{receivedAtDt:yyyyMMdd-HHmmss}.{fileExtensionWithoutDot}";
     }
 
     private string GenerateDefaultLogInitialFileName()
     {
         var receivedAtDt = this.res!.ReceivedAt.DateTime;
-        string reqName = this.parentHttpRequestVm.Name;
         string? envName = this.environmentUsedForRequest;
         string envLabel = envName is not null ? $"-{envName}" : string.Empty;
-        return $"log-{reqName}{envLabel}-{receivedAtDt:yyyyMMdd-HHmmss}.log";
+        return $"log-{this.requestName!}{envLabel}-{receivedAtDt:yyyyMMdd-HHmmss}.log";
+    }
+
+    public string? GetFileExtensionForResponseBody()
+    {
+        if (this.res != null && this.res.HasBody && this.res.ContentType is not null && TryFindFileExtensionForContentType(this.res.ContentType, out string? fileExtensionWithoutDot))
+        {
+            return fileExtensionWithoutDot;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public async Task SaveResponseBodyToFileAsync()
@@ -143,14 +151,17 @@ public sealed class HttpResponseViewModel : ViewModelBase
         }
     }
 
-    private void EnableTlsVerification()
+    private void DisableTlsVerification()
     {
         ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled = true;
         IsDisableTlsVerificationVisible = false;
     }
 
-    public void UpdateWithResponse(PororocaHttpResponse? res)
+    public void UpdateWithResponse(string requestName, PororocaHttpResponse? res, IEnumerable<HttpResponseCaptureViewModel>? responseCaptures)
     {
+        this.requestName = requestName;
+        this.responseCaptures = responseCaptures;
+
         if (res != null && res.Successful)
         {
             if (this.res != res)
@@ -172,7 +183,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
             IsSaveResponseBodyToFileVisible = res.HasBody;
             IsExportLogFileVisible = true;
             IsDisableTlsVerificationVisible = false;
-            CaptureResponseValues(res);
+            ExecuteResponseCaptures();
         }
         else if (res != null && !res.WasCancelled) // Not success, but also not cancelled. If cancelled, do nothing.
         {
@@ -188,10 +199,11 @@ public sealed class HttpResponseViewModel : ViewModelBase
             bool isSslVerificationDisabled = ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled;
             IsDisableTlsVerificationVisible = !isSslVerificationDisabled && res.FailedDueToTlsVerification;
         }
-        else if (this.res == null) // No response obtained yet.
+        else if (this.res == null || res == null) // No response obtained yet, or clearing up.
         {
             ResponseStatusCodeElapsedTimeTitle = Localizer.Instance.HttpResponse.SectionTitle;
             IsDisableTlsVerificationVisible = false;
+            UpdateHeadersAndTrailers(null, null);
             ResponseRawContentType = null;
             ResponseRawContent = string.Empty;
         }
@@ -217,22 +229,16 @@ public sealed class HttpResponseViewModel : ViewModelBase
         }
     }
 
-    private void ExecuteCaptures()
+    private void ExecuteResponseCaptures()
     {
-        if (this.res != null && this.res.Successful)
-        {
-            CaptureResponseValues(this.res);
-        }
-    }
+        if (this.res == null || !this.res.Successful || this.responseCaptures is null)
+            return;
 
-    private void CaptureResponseValues(PororocaHttpResponse res)
-    {
         var egvm = (EnvironmentsGroupViewModel)this.colVm.Items.First(i => i is EnvironmentsGroupViewModel);
         var env = egvm.Items.FirstOrDefault(e => e.Name == this.environmentUsedForRequest);
         if (env is not null)
         {
-            var captures = this.parentHttpRequestVm.ResCapturesTableVm.Items;
-            foreach (var capture in captures)
+            foreach (var capture in this.responseCaptures!)
             {
                 var envVar = env.VariablesTableVm.Items.FirstOrDefault(v => v.Key == capture.TargetVariable);
                 string? capturedValue = res?.CaptureValue(capture.ToResponseCapture());
@@ -255,21 +261,10 @@ public sealed class HttpResponseViewModel : ViewModelBase
 
     private static string FormatSuccessfulResponseTitle(TimeSpan elapsedTime, HttpStatusCode statusCode) =>
         string.Format(Localizer.Instance.HttpResponse.SectionTitleSuccessfulFormat,
-                      FormatHttpStatusCode(statusCode),
-                      FormatElapsedTime(elapsedTime));
+                      FormatHttpStatusCodeText(statusCode),
+                      FormatTimeText(elapsedTime));
 
     private static string FormatFailedResponseTitle(TimeSpan elapsedTime) =>
         string.Format(Localizer.Instance.HttpResponse.SectionTitleFailedFormat,
-                      FormatElapsedTime(elapsedTime));
-
-    private static string FormatHttpStatusCode(HttpStatusCode statusCode) =>
-        $"{(int)statusCode} {Enum.GetName(statusCode)}";
-
-    private static string FormatElapsedTime(TimeSpan elapsedTime) =>
-        elapsedTime < oneSecond ?
-        string.Format(Localizer.Instance.HttpResponse.ElapsedTimeMillisecondsFormat, (int)elapsedTime.TotalMilliseconds) :
-        elapsedTime < oneMinute ? // More or equal than one second, but less than one minute
-        string.Format(Localizer.Instance.HttpResponse.ElapsedTimeSecondsFormat, elapsedTime.TotalSeconds) : // TODO: Format digit separator according to language
-        string.Format(Localizer.Instance.HttpResponse.ElapsedTimeMinutesFormat, elapsedTime.Minutes, elapsedTime.Seconds);
-
+                      FormatTimeText(elapsedTime));
 }
