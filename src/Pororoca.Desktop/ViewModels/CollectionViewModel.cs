@@ -1,30 +1,17 @@
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Reactive;
 using Pororoca.Desktop.ExportImport;
-using Pororoca.Desktop.HotKeys;
-using Pororoca.Desktop.Localization;
-using Pororoca.Domain.Feature.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Entities.Pororoca;
-using Pororoca.Domain.Features.Entities.Pororoca.Http;
-using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.VariableResolution;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using static Pororoca.Domain.Features.VariableResolution.IPororocaVariableResolver;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class CollectionViewModel : CollectionOrganizationItemParentViewModel<CollectionOrganizationItemViewModel>, IPororocaVariableResolver
+public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPororocaVariableResolver
 {
     #region COLLECTION ORGANIZATION
 
-    public override Action OnAfterItemDeleted => Parent.OnAfterItemDeleted;
-    public override Action<CollectionOrganizationItemViewModel> OnRenameSubItemSelected => Parent.OnRenameSubItemSelected;
-    public ReactiveCommand<Unit, Unit> AddNewFolderCmd { get; }
-    public ReactiveCommand<Unit, Unit> AddNewHttpRequestCmd { get; }
-    public ReactiveCommand<Unit, Unit> AddNewWebSocketConnectionCmd { get; }
-    public ReactiveCommand<Unit, Unit> AddNewHttpRepeaterCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewEnvironmentCmd { get; }
     public ReactiveCommand<Unit, Unit> ImportEnvironmentsCmd { get; }
     public ReactiveCommand<Unit, Unit> ExportCollectionCmd { get; }
@@ -41,8 +28,6 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
 
     [Reactive]
     public bool IncludeSecretVariables { get; set; }
-
-    public override ObservableCollection<CollectionOrganizationItemViewModel> Items { get; }
 
     public ObservableCollection<string> HttpRequestsPaths { get; }
 
@@ -77,10 +62,6 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
 
         #region COLLECTION ORGANIZATION
 
-        AddNewFolderCmd = ReactiveCommand.Create(AddNewFolder);
-        AddNewHttpRequestCmd = ReactiveCommand.Create(AddNewHttpRequest);
-        AddNewWebSocketConnectionCmd = ReactiveCommand.Create(AddNewWebSocketConnection);
-        AddNewHttpRepeaterCmd = ReactiveCommand.Create(AddNewHttpRepeater);
         AddNewEnvironmentCmd = ReactiveCommand.Create(AddNewEnvironment);
         ImportEnvironmentsCmd = ReactiveCommand.CreateFromTask(ImportEnvironmentsAsync);
         ExportCollectionCmd = ReactiveCommand.CreateFromTask(ExportCollectionAsync);
@@ -93,29 +74,14 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
 
         this.colId = col.Id;
         this.colCreatedAt = col.CreatedAt;
+
         // IMPORTANT: this needs to be done before instantiating HttpRepeaterViewModels
         HttpRequestsPaths = new(col.ListHttpRequestsPathsInCollection());
-        Items = new()
-        {
-            new CollectionVariablesViewModel(this, col),
-            new CollectionScopedAuthViewModel(this, col),
-            new EnvironmentsGroupViewModel(this, col.Environments)
-        };
-        foreach (var folder in col.Folders)
-        {
-            Items.Add(new CollectionFolderViewModel(this, this, folder));
-        }
-        foreach (var req in col.Requests)
-        {
-            if (req is PororocaHttpRequest httpReq)
-                Items.Add(new HttpRequestViewModel(this, this, httpReq));
-            else if (req is PororocaWebSocketConnection ws)
-                Items.Add(new WebSocketConnectionViewModel(this, this, ws));
-            else if (req is PororocaHttpRepetition rep)
-                Items.Add(new HttpRepeaterViewModel(this, this, rep));
-        }
 
-        RefreshSubItemsAvailableMovements();
+        Items.Add(new CollectionVariablesViewModel(this, col));
+        Items.Add(new CollectionScopedAuthViewModel(this, col));
+        Items.Add(new EnvironmentsGroupViewModel(this, col.Environments));
+        AddInitialFoldersAndRequests(col.Folders, col.Requests);
 
         #endregion
     }
@@ -147,32 +113,6 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
         }
     }
 
-    private void AddNewFolder()
-    {
-        PororocaCollectionFolder newFolder = new(Localizer.Instance.Folder.NewFolder);
-        AddFolder(newFolder, showItemInScreen: true);
-    }
-
-    private void AddNewHttpRequest()
-    {
-        PororocaHttpRequest newReq = new(Localizer.Instance.HttpRequest.NewRequest);
-        AddHttpRequest(newReq, showItemInScreen: true);
-        // IMPORTANT: always update list of http reqs paths after adding a new HTTP request
-        UpdateListOfHttpRequestsPaths();
-    }
-
-    private void AddNewWebSocketConnection()
-    {
-        PororocaWebSocketConnection newWs = new(Localizer.Instance.WebSocketConnection.NewConnection);
-        AddWebSocketConnection(newWs, showItemInScreen: true);
-    }
-
-    private void AddNewHttpRepeater()
-    {
-        PororocaHttpRepetition newRep = new(Localizer.Instance.HttpRepeater.NewRepeater, Localizer.Instance.HttpRepeater.InputDataTypeRawComment);
-        AddHttpRepeater(newRep, showItemInScreen: true);
-    }
-
     private void AddNewEnvironment()
     {
         var environmentsGroup = (EnvironmentsGroupViewModel)Items.First(i => i is EnvironmentsGroupViewModel);
@@ -185,66 +125,12 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
         return environmentsGroup.ImportEnvironmentsAsync();
     }
 
-    public void AddFolder(PororocaCollectionFolder folderToAdd, bool showItemInScreen = false)
-    {
-        const int numberOfFixedItems = 3; // variables, auth, environments
-        CollectionFolderViewModel folderToAddVm = new(this, this, folderToAdd);
-
-        int indexOfLastFolder = Items.GetLastIndexOf<CollectionFolderViewModel>();
-        int indexToInsertAt = indexOfLastFolder == -1 ? numberOfFixedItems : (indexOfLastFolder + 1);
-        Items.Insert(indexToInsertAt, folderToAddVm);
-
-        IsExpanded = true;
-        RefreshSubItemsAvailableMovements();
-        SetAsItemInFocus(folderToAddVm, showItemInScreen);
-    }
-
-    public void AddHttpRequest(PororocaHttpRequest reqToAdd, bool showItemInScreen = false)
-    {
-        HttpRequestViewModel reqToAddVm = new(this, this, reqToAdd);
-        Items.Add(reqToAddVm); // always at the end
-
-        IsExpanded = true;
-        RefreshSubItemsAvailableMovements();
-        SetAsItemInFocus(reqToAddVm, showItemInScreen);
-    }
-
-    public void AddWebSocketConnection(PororocaWebSocketConnection wsToAdd, bool showItemInScreen = false)
-    {
-        WebSocketConnectionViewModel wsToAddVm = new(this, this, wsToAdd);
-        Items.Add(wsToAddVm); // always at the end
-
-        IsExpanded = true;
-        RefreshSubItemsAvailableMovements();
-        SetAsItemInFocus(wsToAddVm, showItemInScreen);
-    }
-
-    public void AddHttpRepeater(PororocaHttpRepetition repToAdd, bool showItemInScreen = false)
-    {
-        HttpRepeaterViewModel repToAddVm = new(this, this, repToAdd);
-        Items.Add(repToAddVm); // always at the end
-
-        IsExpanded = true;
-        RefreshSubItemsAvailableMovements();
-        SetAsItemInFocus(repToAddVm, showItemInScreen);
-    }
-
     protected override void CopyThis() =>
         throw new NotImplementedException();
 
     public override void PasteToThis()
     {
-        var itemsToPaste = ClipboardArea.Instance.FetchCopiesOfFoldersAndReqs();
-        foreach (var itemToPaste in itemsToPaste)
-        {
-            if (itemToPaste is PororocaCollectionFolder folderToPaste)
-                AddFolder(folderToPaste);
-            else if (itemToPaste is PororocaHttpRequest httpReqToPaste)
-                AddHttpRequest(httpReqToPaste);
-            else if (itemToPaste is PororocaWebSocketConnection wsToPaste)
-                AddWebSocketConnection(wsToPaste);
-        }
-
+        base.PasteToThis();
         var envGpVm = (EnvironmentsGroupViewModel)Items.First(i => i is EnvironmentsGroupViewModel);
         envGpVm.PasteToThis();
     }
@@ -290,6 +176,8 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
         ((EnvironmentsGroupViewModel)Items.First(i => i is EnvironmentsGroupViewModel))
         .Items.FirstOrDefault(evm => evm.IsCurrentEnvironment);
 
+    #region HTTP REQUESTS PATHS
+
     internal void UpdateListOfHttpRequestsPaths()
     {
         var updatedList = ListHttpRequestsPathsInCollection();
@@ -304,31 +192,42 @@ public sealed class CollectionViewModel : CollectionOrganizationItemParentViewMo
         }
     }
 
+    internal void AddHttpRequestPathToList(string path)
+    {
+        if (!HttpRequestsPaths.Contains(path))
+        {
+            HttpRequestsPaths.Add(path);
+        }
+    }
+
+    internal void RemoveHttpRequestPathFromList(string path) =>
+        HttpRequestsPaths.Remove(path);
+
     private List<string> ListHttpRequestsPathsInCollection()
     {
-        static IEnumerable<string> ListHttpRequestsPathsInFolder(string basePath, CollectionFolderViewModel folder)
+        static IEnumerable<string> ListHttpRequestsPathsInFolder(CollectionFolderViewModel folder)
         {
-            // '/' needs to removed from the name to avoid problem when splitting path by '/'
-            string folderBasePath = basePath + folder.Name.Replace("/", string.Empty) + "/";
             var httpReqs = folder.Items.Where(i => i is HttpRequestViewModel).Cast<HttpRequestViewModel>();
             var subFolders = folder.Items.Where(i => i is CollectionFolderViewModel).Cast<CollectionFolderViewModel>();
-            var paths = httpReqs.Select(r => folderBasePath + r.Name).ToList();
+            var paths = httpReqs.Select(r => r.GetRequestPathInCollection()).ToList();
             foreach (var subFolder in subFolders)
             {
-                paths.AddRange(ListHttpRequestsPathsInFolder(folderBasePath, subFolder));
+                paths.AddRange(ListHttpRequestsPathsInFolder(subFolder));
             }
             return paths;
         }
 
         var httpReqs = Items.Where(i => i is HttpRequestViewModel).Cast<HttpRequestViewModel>();
         var folders = Items.Where(i => i is CollectionFolderViewModel).Cast<CollectionFolderViewModel>();
-        var paths = httpReqs.Select(r => r.Name.Replace("/", string.Empty)).ToList();
+        var paths = httpReqs.Select(r => r.GetRequestPathInCollection()).ToList();
         foreach (var folder in folders)
         {
-            paths.AddRange(ListHttpRequestsPathsInFolder(string.Empty, folder));
+            paths.AddRange(ListHttpRequestsPathsInFolder(folder));
         }
         return paths;
     }
+
+    #endregion
 
     #endregion
 }

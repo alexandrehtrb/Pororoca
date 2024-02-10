@@ -1,66 +1,17 @@
-using System.Collections.ObjectModel;
-using System.Reactive;
 using Pororoca.Desktop.HotKeys;
-using Pororoca.Desktop.Localization;
-using Pororoca.Domain.Feature.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Entities.Pororoca;
-using Pororoca.Domain.Features.Entities.Pororoca.Http;
-using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
-using ReactiveUI;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class CollectionFolderViewModel : CollectionOrganizationItemParentViewModel<CollectionOrganizationItemViewModel>
+public sealed class CollectionFolderViewModel : RequestsAndFoldersParentViewModel
 {
-    #region COLLECTION ORGANIZATION
-
-    public override Action OnAfterItemDeleted => Parent.OnAfterItemDeleted;
-    public override Action<CollectionOrganizationItemViewModel> OnRenameSubItemSelected => Parent.OnRenameSubItemSelected;
-    public ReactiveCommand<Unit, Unit> AddNewFolderCmd { get; }
-    public ReactiveCommand<Unit, Unit> AddNewHttpRequestCmd { get; }
-    public ReactiveCommand<Unit, Unit> AddNewWebSocketConnectionCmd { get; }
-    public ReactiveCommand<Unit, Unit> AddNewHttpRepeaterCmd { get; }
-
-    #endregion
-
-    #region COLLECTION FOLDER
-
-    internal CollectionViewModel Collection { get; }
-    public override ObservableCollection<CollectionOrganizationItemViewModel> Items { get; }
-
-    #endregion
 
     public CollectionFolderViewModel(ICollectionOrganizationItemParentViewModel parentVm,
-                                     CollectionViewModel variableResolver,
                                      PororocaCollectionFolder folder) : base(parentVm, folder.Name)
     {
-        #region COLLECTION ORGANIZATION
-
-        AddNewFolderCmd = ReactiveCommand.Create(AddNewFolder);
-        AddNewHttpRequestCmd = ReactiveCommand.Create(AddNewHttpRequest);
-        AddNewWebSocketConnectionCmd = ReactiveCommand.Create(AddNewWebSocketConnection);
-        AddNewHttpRepeaterCmd = ReactiveCommand.Create(AddNewHttpRepeater);
-
-        #endregion
-
         #region COLLECTION FOLDER
 
-        this.Collection = variableResolver;
-
-        Items = new();
-        foreach (var subFolder in folder.Folders)
-            Items.Add(new CollectionFolderViewModel(this, variableResolver, subFolder));
-        foreach (var req in folder.Requests)
-        {
-            if (req is PororocaHttpRequest httpReq)
-                Items.Add(new HttpRequestViewModel(this, variableResolver, httpReq));
-            else if (req is PororocaWebSocketConnection ws)
-                Items.Add(new WebSocketConnectionViewModel(this, variableResolver, ws));
-            else if (req is PororocaHttpRepetition rep)
-                Items.Add(new HttpRepeaterViewModel(this, variableResolver, rep));
-        }
-
-        RefreshSubItemsAvailableMovements();
+        AddInitialFoldersAndRequests(folder.Folders, folder.Requests);
 
         #endregion
     }
@@ -88,87 +39,6 @@ public sealed class CollectionFolderViewModel : CollectionOrganizationItemParent
 
     protected override void CopyThis() =>
         ClipboardArea.Instance.PushToCopy(ToCollectionFolder());
-
-    public override void PasteToThis()
-    {
-        var itemsToPaste = ClipboardArea.Instance.FetchCopiesOfFoldersAndReqs();
-        foreach (var itemToPaste in itemsToPaste)
-        {
-            if (itemToPaste is PororocaCollectionFolder folderToPaste)
-                AddFolder(folderToPaste);
-            else if (itemToPaste is PororocaHttpRequest httpReqToPaste)
-                AddHttpRequest(httpReqToPaste);
-            else if (itemToPaste is PororocaWebSocketConnection wsToPaste)
-                AddWebSocketConnection(wsToPaste);
-        }
-    }
-
-    private void AddNewFolder()
-    {
-        PororocaCollectionFolder newFolder = new(Localizer.Instance.Folder.NewFolder);
-        AddFolder(newFolder, showItemInScreen: true);
-    }
-
-    private void AddNewHttpRequest()
-    {
-        PororocaHttpRequest newReq = new(Localizer.Instance.HttpRequest.NewRequest);
-        AddHttpRequest(newReq, showItemInScreen: true);
-        // IMPORTANT: always update list of http reqs paths after adding a new HTTP request
-        Collection.UpdateListOfHttpRequestsPaths();
-    }
-
-    private void AddNewWebSocketConnection()
-    {
-        PororocaWebSocketConnection newWs = new(Localizer.Instance.WebSocketConnection.NewConnection);
-        AddWebSocketConnection(newWs, showItemInScreen: true);
-    }
-
-    private void AddNewHttpRepeater()
-    {
-        PororocaHttpRepetition newRep = new(Localizer.Instance.HttpRepeater.NewRepeater, Localizer.Instance.HttpRepeater.InputDataTypeRawComment);
-        AddHttpRepeater(newRep, showItemInScreen: true);
-    }
-
-    public void AddFolder(PororocaCollectionFolder folderToAdd, bool showItemInScreen = false)
-    {
-        CollectionFolderViewModel folderToAddVm = new(this, this.Collection, folderToAdd);
-        int indexToInsertAt = Items.GetLastIndexOf<CollectionFolderViewModel>() + 1;
-        Items.Insert(indexToInsertAt, folderToAddVm);
-
-        IsExpanded = true;
-        RefreshSubItemsAvailableMovements();
-        SetAsItemInFocus(folderToAddVm, showItemInScreen);
-    }
-
-    public void AddHttpRequest(PororocaHttpRequest reqToAdd, bool showItemInScreen = false)
-    {
-        HttpRequestViewModel reqToAddVm = new(this, this.Collection, reqToAdd);
-        Items.Add(reqToAddVm); // always at the end
-
-        IsExpanded = true;
-        RefreshSubItemsAvailableMovements();
-        SetAsItemInFocus(reqToAddVm, showItemInScreen);
-    }
-
-    public void AddWebSocketConnection(PororocaWebSocketConnection wsToAdd, bool showItemInScreen = false)
-    {
-        WebSocketConnectionViewModel wsToAddVm = new(this, this.Collection, wsToAdd);
-        Items.Add(wsToAddVm); // always at the end
-
-        IsExpanded = true;
-        RefreshSubItemsAvailableMovements();
-        SetAsItemInFocus(wsToAddVm, showItemInScreen);
-    }
-
-    public void AddHttpRepeater(PororocaHttpRepetition repToAdd, bool showItemInScreen = false)
-    {
-        HttpRepeaterViewModel repToAddVm = new(this, this.Collection, repToAdd);
-        Items.Add(repToAddVm); // always at the end
-
-        IsExpanded = true;
-        RefreshSubItemsAvailableMovements();
-        SetAsItemInFocus(repToAddVm, showItemInScreen);
-    }
 
     #endregion
 

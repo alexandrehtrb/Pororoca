@@ -259,43 +259,25 @@ public sealed class KeyboardShortcuts : ViewModelBase
 
     private void PasteCopiedItemsToSpecificVm()
     {
-        if (SelectedItem is CollectionViewModel cvm)
+        if (SelectedItem is RequestsAndFoldersParentViewModel rafpvm)
         {
-            cvm.PasteToThis();
+            rafpvm.PasteToThis();
         }
         else if (SelectedItem is EnvironmentsGroupViewModel egvm)
         {
             egvm.PasteToThis();
         }
-        else if (SelectedItem is CollectionFolderViewModel cfvm)
-        {
-            cfvm.PasteToThis();
-        }
         else if (SelectedItem is EnvironmentViewModel evm)
         {
             ((EnvironmentsGroupViewModel)evm.Parent).PasteToThis();
         }
-        else if (SelectedItem is HttpRequestViewModel hrvm)
+        else if (SelectedItem is HttpRequestViewModel hrvm && hrvm.Parent is RequestsAndFoldersParentViewModel rafpvm2)
         {
-            if (hrvm.Parent is CollectionViewModel cvm3)
-            {
-                cvm3.PasteToThis();
-            }
-            else if (hrvm.Parent is CollectionFolderViewModel cfvm3)
-            {
-                cfvm3.PasteToThis();
-            }
+            rafpvm2.PasteToThis();
         }
-        else if (SelectedItem is HttpRepeaterViewModel hrvm2)
+        else if (SelectedItem is HttpRepeaterViewModel hrvm2 && hrvm2.Parent is RequestsAndFoldersParentViewModel rafpvm3)
         {
-            if (hrvm2.Parent is CollectionViewModel cvm4)
-            {
-                cvm4.PasteToThis();
-            }
-            else if (hrvm2.Parent is CollectionFolderViewModel cfvm4)
-            {
-                cfvm4.PasteToThis();
-            }
+            rafpvm3.PasteToThis();
         }
         else if (SelectedItem is WebSocketConnectionViewModel wscvm)
         {
@@ -303,13 +285,9 @@ public sealed class KeyboardShortcuts : ViewModelBase
             {
                 wscvm.PasteToThis();
             }
-            else if (wscvm.Parent is CollectionViewModel cvm2)
+            else if (wscvm.Parent is RequestsAndFoldersParentViewModel rafpvm4)
             {
-                cvm2.PasteToThis();
-            }
-            else if (wscvm.Parent is CollectionFolderViewModel cfvm2)
-            {
-                cfvm2.PasteToThis();
+                rafpvm4.PasteToThis();
             }
         }
         else if (SelectedItem is WebSocketClientMessageViewModel wscmvm)
@@ -377,8 +355,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
 
     private void DeleteMultiple(ICollection<CollectionOrganizationItemViewModel> itemsToDelete) =>
         itemsToDelete
-        .Where(i => i is CollectionViewModel
-                 || i is CollectionFolderViewModel
+        .Where(i => i is RequestsAndFoldersParentViewModel
                  || i is EnvironmentViewModel
                  || i is HttpRequestViewModel
                  || i is HttpRepeaterViewModel

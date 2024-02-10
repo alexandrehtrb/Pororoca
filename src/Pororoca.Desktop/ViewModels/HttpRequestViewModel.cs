@@ -328,16 +328,33 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
 
     protected override void OnNameUpdated(string newName)
     {
-        base.OnNameUpdated(newName);
         // IMPORTANT: always update list of http reqs paths after renaming HTTP request
-        this.col.UpdateListOfHttpRequestsPaths();
+        this.col.RemoveHttpRequestPathFromList(GetRequestPathInCollection());
+        base.OnNameUpdated(newName);
+        this.col.AddHttpRequestPathToList(GetRequestPathInCollection());
     }
 
     public override void DeleteThis()
     {
         base.DeleteThis();
-        // IMPORTANT: always update list of http reqs paths after deleting HTTP request
-        this.col.UpdateListOfHttpRequestsPaths();
+        // IMPORTANT: always update list of http reqs paths after renaming HTTP request
+        this.col.RemoveHttpRequestPathFromList(GetRequestPathInCollection());
+    }
+
+    public string GetRequestPathInCollection()
+    {
+        List<string> parts = new();
+
+        CollectionOrganizationItemViewModel vm = this;
+        do
+        {
+            // '/' needs to removed from the name to avoid problem when splitting path by '/'
+            parts.Add(vm.Name.Replace("/", string.Empty));
+        }
+        while (vm.Parent is CollectionOrganizationItemViewModel parent && ((vm = parent) is not CollectionViewModel));
+
+        parts.Reverse();
+        return string.Join('/', parts);
     }
 
     #endregion
