@@ -242,6 +242,7 @@
                     Margin="0,0,6,0"
                     Text="{Binding i18n.HttpRepeater.NumberOfRepetitions}"/>
                 <NumericUpDown
+                    Name="nudNumberOfRepetitions"
                     Margin="6,0,0,0"
                     VerticalAlignment="Center"
                     Increment="1"
@@ -267,6 +268,7 @@
                     Margin="0,0,6,0"
                     Text="{Binding i18n.HttpRepeater.MaxDOP}"/>
                 <NumericUpDown
+                    Name="nudMaxDop"
                     Margin="6,0,0,0"
                     VerticalAlignment="Center"
                     Increment="1"
@@ -293,6 +295,7 @@
                     ToolTip.Tip="{Binding i18n.HttpRepeater.DelayTip}"
                     Classes="TipQuestionMark"/>
                 <NumericUpDown
+                    Name="nudDelayInMs"
                     Margin="6,0,0,0"
                     VerticalAlignment="Center"
                     Increment="1"

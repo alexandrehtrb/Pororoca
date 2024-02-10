@@ -52,6 +52,7 @@ public sealed class ExportAndImportUITest : UITest
     private HttpRequestRobot HttpRobot { get; }
     private WebSocketConnectionRobot WsRobot { get; }
     private WebSocketClientMessageRobot WsMsgRobot { get; }
+    private HttpRepeaterRobot RepeaterRobot { get; }
 
     public ExportAndImportUITest()
     {
@@ -67,6 +68,7 @@ public sealed class ExportAndImportUITest : UITest
         HttpRobot = new(RootView.FindControl<HttpRequestView>("httpReqView")!);
         WsRobot = new(RootView.FindControl<WebSocketConnectionView>("wsConnView")!);
         WsMsgRobot = new(RootView.FindControl<WebSocketClientMessageView>("wsClientMsgView")!);
+        RepeaterRobot = new(RootView.FindControl<HttpRepeaterView>("httpRepView")!);
     }
 
     public override async Task RunAsync()
@@ -188,6 +190,17 @@ public sealed class ExportAndImportUITest : UITest
         await WsMsgRobot.SetFileBinaryContent("{{TestFilesDir}}/homem_aranha.jpg");
 
         await TreeRobot.Select("COL1/DIR1/DIR2");
+        await DirRobot.AddRepeater.ClickOn();
+        await RepeaterRobot.Name.Edit("REPSEQUENTIAL");
+        await RepeaterRobot.BaseHttpRequest.Select("DIR1/DIR2/HTTPFILE");
+        await RepeaterRobot.TabControlRepetition.Select(RepeaterRobot.TabItemRepetitionMode);
+        await RepeaterRobot.RepetitionMode.Select(RepeaterRobot.OptionRepetitionModeSequential);
+        await RepeaterRobot.DelayInMs.SetValue(0);
+        await RepeaterRobot.TabControlRepetition.Select(RepeaterRobot.TabItemRepetitionInputData);
+        await RepeaterRobot.InputDataType.Select(RepeaterRobot.OptionInputDataTypeRaw);
+        await RepeaterRobot.InputDataRawEditor.ClearAndTypeText("[{\"V1\":\"1\",\"VA\":\"A\"}]");
+
+        await TreeRobot.Select("COL1/DIR1/DIR2");
         await DirRobot.AddFolder.ClickOn();
         await DirRobot.Name.Edit("DIR3");
 
@@ -210,6 +223,19 @@ public sealed class ExportAndImportUITest : UITest
                                               "{{ClientCertificatesDir}}/badssl.com-client-encrypted-private-key.key",
                                               "{{BadSslClientCertFilePassword}}");
 
+        await TreeRobot.Select("COL1/DIR1/DIR2/DIR3");
+        await DirRobot.AddRepeater.ClickOn();
+        await RepeaterRobot.Name.Edit("REPRANDOM");
+        await RepeaterRobot.BaseHttpRequest.Select("DIR1/DIR2/DIR3/HTTPNONEPEMAUTH");
+        await RepeaterRobot.TabControlRepetition.Select(RepeaterRobot.TabItemRepetitionMode);
+        await RepeaterRobot.RepetitionMode.Select(RepeaterRobot.OptionRepetitionModeRandom);
+        await RepeaterRobot.NumberOfRepetitions.SetValue(25);
+        await RepeaterRobot.MaxDop.SetValue(3);
+        await RepeaterRobot.DelayInMs.SetValue(10);
+        await RepeaterRobot.TabControlRepetition.Select(RepeaterRobot.TabItemRepetitionInputData);
+        await RepeaterRobot.InputDataType.Select(RepeaterRobot.OptionInputDataTypeFile);
+        await RepeaterRobot.InputDataFileSrcPath.ClearAndTypeText("inputdata.json");
+
         await TreeRobot.Select("COL1");
         await ColRobot.AddHttpReq.ClickOn();
         await HttpRobot.Name.Edit("HTTPHEADERS");
@@ -218,6 +244,16 @@ public sealed class ExportAndImportUITest : UITest
         await HttpRobot.SetHttpVersion(1.0m);
         await HttpRobot.SetRequestHeaders(headers);
         await HttpRobot.SetEmptyBody();
+
+        await TreeRobot.Select("COL1");
+        await ColRobot.AddRepeater.ClickOn();
+        await RepeaterRobot.Name.Edit("REPSIMPLE");
+        await RepeaterRobot.BaseHttpRequest.Select("HTTPHEADERS");
+        await RepeaterRobot.TabControlRepetition.Select(RepeaterRobot.TabItemRepetitionMode);
+        await RepeaterRobot.RepetitionMode.Select(RepeaterRobot.OptionRepetitionModeSimple);
+        await RepeaterRobot.NumberOfRepetitions.SetValue(200);
+        await RepeaterRobot.MaxDop.SetValue(10);
+        await RepeaterRobot.DelayInMs.SetValue(12);
 
         /* collection:
         COL1
@@ -229,11 +265,13 @@ public sealed class ExportAndImportUITest : UITest
                     DIR3
                         HTTPURLENCODED
                         HTTPNONEPEMAUTH
+                        REPRANDOM
                     HTTPRAW
                     HTTPFILE
                     WS
                         WSMSGJSON
                         WSMSGFILE
+                    REPSEQUENTIAL
                 HTTPNONEBASICAUTH
                 HTTPNONEBEARERAUTH
                 HTTPNONEWINDOWSAUTH
@@ -241,6 +279,7 @@ public sealed class ExportAndImportUITest : UITest
                 HTTPFORMDATA
                 HTTPGRAPHQL
             HTTPHEADERS
+            REPSIMPLE
         */
 
         AssertTreeItemExists(CollectionsGroup, "COL1");
@@ -259,10 +298,13 @@ public sealed class ExportAndImportUITest : UITest
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR2/WS");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR2/WS/WSMSGJSON");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR2/WS/WSMSGFILE");
+        AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR2/REPSEQUENTIAL");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR2/DIR3");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR2/DIR3/HTTPURLENCODED");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR2/DIR3/HTTPNONEPEMAUTH");
+        AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR2/DIR3/REPRANDOM");
         AssertTreeItemExists(CollectionsGroup, "COL1/HTTPHEADERS");
+        AssertTreeItemExists(CollectionsGroup, "COL1/REPSIMPLE");
     }
 
     private async Task ExportAndReimportCollection()
@@ -298,9 +340,13 @@ public sealed class ExportAndImportUITest : UITest
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR2/WS");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR2/WS/WSMSGJSON");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR2/WS/WSMSGFILE");
+        AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR2/REPSEQUENTIAL");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR2/DIR3");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR2/DIR3/HTTPURLENCODED");
-        AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR2/DIR3/HTTPNONEPEMAUTH");
+        AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR2/DIR3/HTTPURLENCODED");
+        AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR2/DIR3/REPRANDOM");
+        AssertTreeItemExists(CollectionsGroup, "COL1/HTTPHEADERS");
+        AssertTreeItemExists(CollectionsGroup, "COL1/REPSIMPLE");
 
         await TreeRobot.Select("COL1");
         AssertIsVisible(ColRobot.RootView);
@@ -472,6 +518,15 @@ public sealed class ExportAndImportUITest : UITest
         AssertIsVisible(WsMsgRobot.ContentFileSrcPath);
         AssertIsHidden(WsMsgRobot.ContentRaw);
 
+        await TreeRobot.Select("COL1/DIR1/DIR2/REPSEQUENTIAL");
+        AssertIsVisible(RepeaterRobot.RootView);
+        AssertSelection(RepeaterRobot.BaseHttpRequest, "DIR1/DIR2/HTTPFILE");
+        await RepeaterRobot.TabControlRepetition.Select(RepeaterRobot.TabItemRepetitionMode);
+        AssertValue(RepeaterRobot.DelayInMs, 0);
+        await RepeaterRobot.TabControlRepetition.Select(RepeaterRobot.TabItemRepetitionInputData);
+        AssertSelection(RepeaterRobot.InputDataType, RepeaterRobot.OptionInputDataTypeRaw);
+        AssertHasText(RepeaterRobot.InputDataRawEditor, "[{\"V1\":\"1\",\"VA\":\"A\"}]");
+
         await TreeRobot.Select("COL1/DIR1/DIR2/DIR3");
         AssertIsVisible(DirRobot.RootView);
 
@@ -505,6 +560,17 @@ public sealed class ExportAndImportUITest : UITest
         AssertHasText(HttpRobot.Auth.ClientCertificatePemPrivateKeyFilePath, "{{ClientCertificatesDir}}/badssl.com-client-encrypted-private-key.key");
         AssertHasText(HttpRobot.Auth.ClientCertificatePemPrivateKeyPassword, "{{BadSslClientCertFilePassword}}");
 
+        await TreeRobot.Select("COL1/DIR1/DIR2/DIR3/REPRANDOM");
+        AssertIsVisible(RepeaterRobot.RootView);
+        AssertSelection(RepeaterRobot.BaseHttpRequest, "DIR1/DIR2/DIR3/HTTPNONEPEMAUTH");
+        await RepeaterRobot.TabControlRepetition.Select(RepeaterRobot.TabItemRepetitionMode);
+        AssertValue(RepeaterRobot.NumberOfRepetitions, 25);
+        AssertValue(RepeaterRobot.MaxDop, 3);
+        AssertValue(RepeaterRobot.DelayInMs, 10);
+        await RepeaterRobot.TabControlRepetition.Select(RepeaterRobot.TabItemRepetitionInputData);
+        AssertSelection(RepeaterRobot.InputDataType, RepeaterRobot.OptionInputDataTypeFile);
+        AssertHasText(RepeaterRobot.InputDataFileSrcPath, "inputdata.json");
+
         await TreeRobot.Select("COL1/HTTPHEADERS");
         AssertIsVisible(HttpRobot.RootView);
         AssertHasText(HttpRobot.HttpMethod, "GET");
@@ -516,6 +582,14 @@ public sealed class ExportAndImportUITest : UITest
         Assert(Enumerable.SequenceEqual(headers, actualHeaders));
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqAuth);
         AssertSelection(HttpRobot.Auth.AuthType, HttpRobot.Auth.AuthTypeOptionNone);
+
+        await TreeRobot.Select("COL1/REPSIMPLE");
+        AssertIsVisible(RepeaterRobot.RootView);
+        AssertSelection(RepeaterRobot.BaseHttpRequest, "HTTPHEADERS");
+        await RepeaterRobot.TabControlRepetition.Select(RepeaterRobot.TabItemRepetitionMode);
+        AssertValue(RepeaterRobot.NumberOfRepetitions, 200);
+        AssertValue(RepeaterRobot.MaxDop, 10);
+        AssertValue(RepeaterRobot.DelayInMs, 12);
     }
 
     private static ObservableCollection<VariableViewModel> GenerateCollectionVariables()
