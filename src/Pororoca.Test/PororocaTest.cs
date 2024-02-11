@@ -231,27 +231,29 @@ public sealed class PororocaTest
 
     private void CaptureResponseValues(PororocaHttpRequest req, PororocaHttpResponse res)
     {
-        var env = Collection.Environments.FirstOrDefault(e => e.IsCurrent);
-        if (env is not null)
+        // if an environment is selected, then save captures into its variables
+        // otherwise, save captures into collection variables
+        var colVars = Collection.Variables;
+        var envVars = Collection.Environments.FirstOrDefault(e => e.IsCurrent)?.Variables;
+        var targetVars = envVars ?? colVars;
+
+        var captures = req.ResponseCaptures ?? new();
+        foreach (var capture in captures)
         {
-            var captures = req.ResponseCaptures ?? new();
-            foreach (var capture in captures)
+            var targetVar = targetVars.FirstOrDefault(v => v.Key == capture.TargetVariable);
+            string? capturedValue = res.CaptureValue(capture);
+            if (capturedValue is not null)
             {
-                var envVar = env.Variables.FirstOrDefault(v => v.Key == capture.TargetVariable);
-                string? capturedValue = res.CaptureValue(capture);
-                if (capturedValue is not null)
+                if (targetVar is null)
                 {
-                    if (envVar is null)
-                    {
-                        envVar = new(true, capture.TargetVariable, capturedValue, true);
-                        env.Variables.Add(envVar);
-                    }
-                    else
-                    {
-                        var newEnvVar = envVar with { Value = capturedValue };
-                        env.Variables.Remove(envVar);
-                        env.Variables.Add(newEnvVar);
-                    }
+                    targetVar = new(true, capture.TargetVariable, capturedValue, true);
+                    targetVars.Add(targetVar);
+                }
+                else
+                {
+                    var targetVarUpdated = targetVar with { Value = capturedValue };
+                    targetVars.Remove(targetVar);
+                    targetVars.Add(targetVarUpdated);
                 }
             }
         }

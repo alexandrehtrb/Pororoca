@@ -567,8 +567,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
                 return;
             }
         }
-        var cvm = (CollectionViewModel)x;
-        var egvm = (EnvironmentsGroupViewModel)cvm.Items.First(y => y is EnvironmentsGroupViewModel);
+        var egvm = ((CollectionViewModel)x).EnvironmentsGroupVm;
         egvm.CycleActiveEnvironment(trueIfNextFalseIfPrevious);
     }
 

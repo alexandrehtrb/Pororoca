@@ -349,7 +349,7 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
             RepetitionStatusText = null;
             RepetitionResults.Clear();
             SelectedRepetitionResult = null;
-            this.nameOfEnvironmentUsed = this.Collection.GetCurrentEnvironment()?.Name;
+            this.nameOfEnvironmentUsed = this.Collection.CurrentEnvironmentVm?.Name;
             this.nameOfBaseHttpRequestUsed = BaseRequest?.Name;
 
             var channelReader = StartRepetition(this.requester, effectiveVars, resolvedInputData, Collection.CollectionScopedAuth, ToHttpRepetition(), BaseRequest!, this.cancellationTokenSource.Token);

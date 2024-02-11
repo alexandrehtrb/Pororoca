@@ -169,7 +169,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
                 this.res = res;
                 // this is because the user might change the environment after the response was received,
                 // and we need to preserve the name of the environment used for the request
-                this.environmentUsedForRequest = this.colVm.GetCurrentEnvironment()?.Name;
+                this.environmentUsedForRequest = this.colVm.CurrentEnvironmentVm?.Name;
             }
             ResponseStatusCodeElapsedTimeTitle = FormatSuccessfulResponseTitle(res.ElapsedTime, (HttpStatusCode)res.StatusCode!);
             UpdateHeadersAndTrailers(res.Headers, res.Trailers);
@@ -234,26 +234,27 @@ public sealed class HttpResponseViewModel : ViewModelBase
         if (this.res == null || !this.res.Successful || this.responseCaptures is null)
             return;
 
-        var egvm = (EnvironmentsGroupViewModel)this.colVm.Items.First(i => i is EnvironmentsGroupViewModel);
-        var env = egvm.Items.FirstOrDefault(e => e.Name == this.environmentUsedForRequest);
-        if (env is not null)
+        var colVarsVm = this.colVm.CollectionVariablesVm;
+        var envVm = this.colVm.CurrentEnvironmentVm;
+        // if an environment is selected, then save captures into its variables
+        // otherwise, save captures into collection variables
+        var targetVars = (envVm?.VariablesTableVm ?? colVarsVm.VariablesTableVm).Items;
+
+        foreach (var capture in this.responseCaptures!)
         {
-            foreach (var capture in this.responseCaptures!)
+            var targetVar = targetVars.FirstOrDefault(v => v.Key == capture.TargetVariable);
+            string? capturedValue = this.res?.CaptureValue(capture.ToResponseCapture());
+            if (capturedValue is not null)
             {
-                var envVar = env.VariablesTableVm.Items.FirstOrDefault(v => v.Key == capture.TargetVariable);
-                string? capturedValue = res?.CaptureValue(capture.ToResponseCapture());
-                if (capturedValue is not null)
+                capture.CapturedValue = capturedValue;
+                if (targetVar is null)
                 {
-                    capture.CapturedValue = capturedValue;
-                    if (envVar is null)
-                    {
-                        envVar = new(env.VariablesTableVm.Items, new(true, capture.TargetVariable, capturedValue, true));
-                        env.VariablesTableVm.Items.Add(envVar);
-                    }
-                    else
-                    {
-                        envVar.Value = capturedValue;
-                    }
+                    targetVar = new(targetVars, new(true, capture.TargetVariable, capturedValue, true));
+                    targetVars.Add(targetVar);
+                }
+                else
+                {
+                    targetVar.Value = capturedValue;
                 }
             }
         }

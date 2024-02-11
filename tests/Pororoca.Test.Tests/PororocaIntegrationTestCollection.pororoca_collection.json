@@ -29,7 +29,7 @@
       "id": "d1ad7eee-0163-41d2-b63b-72f96b62384d",
       "createdAt": "2022-03-13T18:15:28.1693033-03:00",
       "name": "Local",
-      "isCurrent": true,
+      "isCurrent": false,
       "variables": [
         {
           "enabled": true,

@@ -32,16 +32,23 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
     public ObservableCollection<string> HttpRequestsPaths { get; }
 
     public List<PororocaVariable> Variables =>
-        ((CollectionVariablesViewModel)Items.First(x => x is CollectionVariablesViewModel))
-        .ToVariables().ToList(); // collection variables
+        CollectionVariablesVm.ToVariables().ToList(); // collection variables
 
     public PororocaRequestAuth? CollectionScopedAuth =>
         ((CollectionScopedAuthViewModel)Items.First(x => x is CollectionScopedAuthViewModel))
         .AuthVm.ToCustomAuth();
 
     public List<PororocaEnvironment> Environments =>
-        ((EnvironmentsGroupViewModel)Items.First(x => x is EnvironmentsGroupViewModel))
-        .ToEnvironments().ToList(); // collection environments
+        EnvironmentsGroupVm.ToEnvironments().ToList(); // collection environments
+
+    internal CollectionVariablesViewModel CollectionVariablesVm =>
+        (CollectionVariablesViewModel)Items.First(x => x is CollectionVariablesViewModel);
+
+    internal EnvironmentsGroupViewModel EnvironmentsGroupVm =>
+        (EnvironmentsGroupViewModel)Items.First(x => x is EnvironmentsGroupViewModel);
+
+    public EnvironmentViewModel? CurrentEnvironmentVm =>
+        EnvironmentsGroupVm.Items.FirstOrDefault(evm => evm.IsCurrentEnvironment);
 
     #endregion
 
@@ -113,17 +120,11 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
         }
     }
 
-    private void AddNewEnvironment()
-    {
-        var environmentsGroup = (EnvironmentsGroupViewModel)Items.First(i => i is EnvironmentsGroupViewModel);
-        environmentsGroup.AddNewEnvironment();
-    }
+    private void AddNewEnvironment() =>
+        EnvironmentsGroupVm.AddNewEnvironment();
 
-    private Task ImportEnvironmentsAsync()
-    {
-        var environmentsGroup = (EnvironmentsGroupViewModel)Items.First(i => i is EnvironmentsGroupViewModel);
-        return environmentsGroup.ImportEnvironmentsAsync();
-    }
+    private Task ImportEnvironmentsAsync() =>
+        EnvironmentsGroupVm.ImportEnvironmentsAsync();
 
     protected override void CopyThis() =>
         throw new NotImplementedException();
@@ -131,8 +132,7 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
     public override void PasteToThis()
     {
         base.PasteToThis();
-        var envGpVm = (EnvironmentsGroupViewModel)Items.First(i => i is EnvironmentsGroupViewModel);
-        envGpVm.PasteToThis();
+        EnvironmentsGroupVm.PasteToThis();
     }
 
     #region EXPORT COLLECTION
@@ -171,10 +171,6 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
 
         return new PororocaCollection(this.colId, Name, this.colCreatedAt, Variables, CollectionScopedAuth, Environments, folders, reqs);
     }
-
-    public EnvironmentViewModel? GetCurrentEnvironment() =>
-        ((EnvironmentsGroupViewModel)Items.First(i => i is EnvironmentsGroupViewModel))
-        .Items.FirstOrDefault(evm => evm.IsCurrentEnvironment);
 
     #region HTTP REQUESTS PATHS
 

@@ -26,7 +26,8 @@ public static class UITestsRunner
         new ExportAndImportUITest(),
         new CollectionScopedAuthUITest(),
         new HttpRepeaterUITest(),
-        new HttpRepeaterValidationsUITest()
+        new HttpRepeaterValidationsUITest(),
+        new ResponseCapturesUITest(),
         // Out of scope of automated UI tests:
         // some keybindings
         // all dialogs
