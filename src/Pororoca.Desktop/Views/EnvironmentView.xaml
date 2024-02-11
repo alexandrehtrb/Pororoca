@@ -48,9 +48,15 @@
       <Button
           Name="btSetAsCurrentEnvironment"
           Content="{Binding i18n.Environment.SetAsCurrentEnvironment}"
-          IsEnabled="{Binding !IsCurrentEnvironment}"
-          Command="{Binding SetAsCurrentEnvironmentCmd}"
-          Classes="Secondary"/>
+          IsVisible="{Binding !IsCurrentEnvironment}"
+          Command="{Binding ToggleEnabledEnvironmentCmd}"
+          Classes="Secondary TextButton"/>
+      <Button
+          Name="btUnsetAsCurrentEnvironment"
+          Content="{Binding i18n.Environment.UnsetAsCurrentEnvironment}"
+          IsVisible="{Binding IsCurrentEnvironment}"
+          Command="{Binding ToggleEnabledEnvironmentCmd}"
+          Classes="Secondary TextButton"/>
       <controls:IconButton
           IsVisible="{Binding !IsOperatingSystemMacOsx}"
           Margin="12,0,0,0"

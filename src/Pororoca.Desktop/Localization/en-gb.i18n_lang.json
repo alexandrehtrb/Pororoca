@@ -83,6 +83,7 @@
     "Environment/PostmanEnvironmentFormat": "Postman environment",
     "Environment/RemoveVariable": "Remove variable",
     "Environment/SetAsCurrentEnvironment": "Set as current environment",
+    "Environment/UnsetAsCurrentEnvironment": "Disable as current environment",
     "Environment/Tip": "Tip: If an environment variable has the same name of an other collection variable, the value of the environment variable will be the one applied.",
     "Environment/VariableEnabled": "ENABLED",
     "Environment/VariableIsSecret": "IS SECRET",

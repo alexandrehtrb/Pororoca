@@ -83,6 +83,7 @@
     "Environment/PostmanEnvironmentFormat": "Ambiente do Postman",
     "Environment/RemoveVariable": "Remover variável",
     "Environment/SetAsCurrentEnvironment": "Definir como ambiente atual",
+    "Environment/UnsetAsCurrentEnvironment": "Desativar como ambiente atual",
     "Environment/Tip": "Dica: Se uma variável de ambiente tiver o mesmo nome que uma variável de coleção, o valor da variável de ambiente é o que será usado.",
     "Environment/VariableEnabled": "HABILITADA",
     "Environment/VariableIsSecret": "SECRETA",

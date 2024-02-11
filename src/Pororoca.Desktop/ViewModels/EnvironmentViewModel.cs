@@ -23,7 +23,6 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel, 
 
     private readonly Guid envId;
     private readonly DateTimeOffset envCreatedAt;
-    private readonly Action<EnvironmentViewModel> onEnvironmentSetAsCurrent;
 
     [Reactive]
     public VariablesDataGridViewModel VariablesTableVm { get; set; }
@@ -34,7 +33,7 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel, 
     [Reactive]
     public bool IncludeSecretVariables { get; set; }
 
-    public ReactiveCommand<Unit, Unit> SetAsCurrentEnvironmentCmd { get; }
+    public ReactiveCommand<Unit, Unit> ToggleEnabledEnvironmentCmd { get; }
 
     #endregion
 
@@ -47,7 +46,7 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel, 
 
     public EnvironmentViewModel(ICollectionOrganizationItemParentViewModel parentVm,
                                 PororocaEnvironment env,
-                                Action<EnvironmentViewModel> onEnvironmentSetAsCurrent,
+                                Action<EnvironmentViewModel> onToggleEnabledEnvironment,
                                 Func<bool>? isOperatingSystemMacOsx = null) : base(parentVm, env.Name)
     {
         #region OTHERS
@@ -66,10 +65,9 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel, 
 
         this.envId = env.Id;
         this.envCreatedAt = env.CreatedAt;
-        this.onEnvironmentSetAsCurrent = onEnvironmentSetAsCurrent;
         VariablesTableVm = new(env.Variables);
         IsCurrentEnvironment = env.IsCurrent;
-        SetAsCurrentEnvironmentCmd = ReactiveCommand.Create(SetAsCurrentEnvironment);
+        ToggleEnabledEnvironmentCmd = ReactiveCommand.Create(() => onToggleEnabledEnvironment(this));
         #endregion
     }
 
@@ -109,9 +107,6 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel, 
     #endregion
 
     #region ENVIRONMENT
-
-    private void SetAsCurrentEnvironment() =>
-        this.onEnvironmentSetAsCurrent(this);
 
     public PororocaEnvironment ToEnvironment()
     {

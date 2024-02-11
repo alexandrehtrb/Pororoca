@@ -373,7 +373,7 @@
             <ContextMenu>
               <MenuItem
                   Header="{Binding i18n.ContextMenu.SetAsCurrentEnvironment}"
-                  Command="{Binding SetAsCurrentEnvironmentCmd}"
+                  Command="{Binding ToggleEnabledEnvironmentCmd}"
                   IsEnabled="{Binding !IsCurrentEnvironment}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem

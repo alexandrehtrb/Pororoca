@@ -83,6 +83,7 @@
     "Environment/PostmanEnvironmentFormat",
     "Environment/RemoveVariable",
     "Environment/SetAsCurrentEnvironment",
+    "Environment/UnsetAsCurrentEnvironment",
     "Environment/Tip",
     "Environment/VariableEnabled",
     "Environment/VariableIsSecret",
