@@ -200,7 +200,7 @@
     "HttpResponse/CaptureHeaderNameOrBodyPath": "HEADER NAME / BODY PATH",
     "HttpResponse/CaptureCapturedValue": "ЗНАЧЕНИЕ",
     "HttpResponse/ExecuteCapturesTooltip": "Выполнение захватов",
-    "HttpResponse/CaptureTip": "Совет: Для захвата значений JSON: $.myProp[0].myProp2 ($ означает корень, [0] означает array element). Для захвата значений XML используйте синтаксис XPath 1.0. Захваченные значения сохраняются как переменные активной среды.",
+    "HttpResponse/CaptureTip": "Совет: Для захвата значений JSON: $.myProp[0].myProp2 ($ означает корень, [0] означает array element). Для захвата значений XML используйте синтаксис XPath 1.0.\\n\\nПерехваченные значения сохраняются в текущих переменных среды. Если ни одна среда не активна, то они будут сохранены в переменных коллекции.",
     "RequestAuth/AuthModeInheritFromCollection": "Наследовать из коллекции",
     "RequestAuth/AuthModeBasic": "Basic",
     "RequestAuth/AuthModeBasicLoginWatermark": "(basic auth логин)",

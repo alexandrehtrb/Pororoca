@@ -200,7 +200,7 @@
     "HttpResponse/CaptureHeaderNameOrBodyPath": "CABEÇALHO / CAMINHO NO CORPO",
     "HttpResponse/CaptureCapturedValue": "VALOR",
     "HttpResponse/ExecuteCapturesTooltip": "Executar capturas",
-    "HttpResponse/CaptureTip": "Dica: Para captura de valor JSON: $.myProp[0].myProp2 ($ significa raíz, [0] significa elemento de lista). Para captura de valor XML, use a sintaxe XPath 1.0. Os valores capturados são salvos como variáveis do ambiente ativo.",
+    "HttpResponse/CaptureTip": "Dica: Para captura de valor JSON: $.myProp[0].myProp2 ($ significa raíz, [0] significa elemento de lista). Para captura de valor XML, use a sintaxe XPath 1.0.\\n\\nOs valores capturados são salvos como variáveis do ambiente atual. Se não houver um ambiente ativo, então serão salvos em variáveis da coleção.",
     "RequestAuth/AuthModeInheritFromCollection": "Herdar da coleção",
     "RequestAuth/AuthModeBasic": "Basic",
     "RequestAuth/AuthModeBasicLoginWatermark": "(basic auth login)",
