@@ -258,7 +258,7 @@ public static class HttpRepeaterTests
         }
         sw.Stop();
 
-        Assert.True(sw.Elapsed > TimeSpan.FromMilliseconds(delayInMs));
+        Assert.True(sw.Elapsed >= TimeSpan.FromMilliseconds(delayInMs));
     }
 
     [Theory]
