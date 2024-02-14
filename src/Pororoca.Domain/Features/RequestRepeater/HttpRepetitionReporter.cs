@@ -22,16 +22,19 @@ public static class HttpRepetitionReporter
     {
         string[] allInputDataKeys = results.SelectMany(r => (r.InputLine ?? []).Select(x => x.Key))
                                            .Distinct().ToArray();
+        StringBuilder sbCsv = new();
+        sbCsv.Append(MakeCsvHeaderLine(allInputDataKeys));
+        sbCsv.AppendLine();
 
-        var headerLine = MakeCsvHeaderLine(allInputDataKeys);
-        await sw.WriteLineAsync(headerLine);
-
-        for (int i = 0; i < results.Count(); i++)
+        int count = results.Count();
+        for (int i = 0; i < count; i++)
         {
             var r = results.ElementAt(i);
-            var dataLine = MakeCsvDataLine(allInputDataKeys, i, r);
-            await sw.WriteLineAsync(dataLine);
+            sbCsv.Append(MakeCsvDataLine(allInputDataKeys, i, r));
+            sbCsv.AppendLine();
         }
+
+        await sw.WriteAsync(sbCsv);
     }
 
     private static StringBuilder MakeCsvHeaderLine(string[] allInputDataKeys)
