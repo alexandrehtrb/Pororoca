@@ -74,6 +74,8 @@ public sealed class KeyboardShortcuts : ViewModelBase
                     {
                         if (i is HttpRequestViewModel hrvm)
                             return [hrvm];
+                        else if (i is HttpRepeaterViewModel hrvm2)
+                            return [hrvm2];
                         else if (i is EnvironmentsGroupViewModel egvm)
                             return egvm.Items.Cast<CollectionOrganizationItemViewModel>().ToList();
                         else
@@ -83,7 +85,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
             else if (parentVm is CollectionFolderViewModel e)
             {
                 linearizedItems.Add(e);
-                if (e.Items.All(x => x is HttpRequestViewModel))
+                if (e.Items.All(x => x is HttpRequestViewModel || x is HttpRepeaterViewModel))
                 {
                     // small optimization
                     linearizedItems.AddRange(e.Items);
@@ -127,8 +129,8 @@ public sealed class KeyboardShortcuts : ViewModelBase
         ShowHelpCmd = ReactiveCommand.Create(ShowHelpDialog);
         RenameCmd = ReactiveCommand.Create(RenameSelectedItem);
         FocusOnUrlCmd = ReactiveCommand.Create(FocusOnUrl);
-        SendRequestOrConnectWebSocketCmd = ReactiveCommand.Create(SendRequestOrConnectWebSocket);
-        CancelRequestOrDisconnectWebSocketCmd = ReactiveCommand.Create(CancelRequestOrDisconnectWebSocket);
+        SendRequestOrConnectWebSocketCmd = ReactiveCommand.Create(SendRequestConnectWebSocketOrStartRepetition);
+        CancelRequestOrDisconnectWebSocketCmd = ReactiveCommand.Create(CancelRequestDisconnectWebSocketOrStopRepetition);
         CyclePreviousEnvironmentToActiveCmd = ReactiveCommand.Create(() => CycleActiveEnvironments(false));
         CycleNextEnvironmentToActiveCmd = ReactiveCommand.Create(() => CycleActiveEnvironments(true));
         SaveResponseToFileCmd = ReactiveCommand.Create(SaveResponseToFile);
@@ -140,6 +142,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
     private bool HasAnyParentAlsoSelected(CollectionOrganizationItemViewModel itemVm)
     {
         if (itemVm is not HttpRequestViewModel
+         && itemVm is not HttpRepeaterViewModel
          && itemVm is not WebSocketConnectionViewModel
          && itemVm is not WebSocketClientMessageViewModel
          && itemVm is not CollectionFolderViewModel)
@@ -161,7 +164,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
     public void CutSelectedItems()
     {
         // IMPORTANT: needs to be a new list, not just a reference
-        // IMPORTANT: Collections can not be marked for cut deletion (after pasting), 
+        // IMPORTANT: Collections can not be marked for cut deletion (after pasting),
         // because they cannot be pasted into other collections
         if (AreAnyCollectionsBeingCopiedOrCut())
         {
@@ -211,6 +214,9 @@ public sealed class KeyboardShortcuts : ViewModelBase
         var reqsToCopy = SelectedItems
                          .Where(i => i is HttpRequestViewModel reqVm && !HasAnyParentAlsoSelected(reqVm))
                          .Select(r => (ICloneable)((HttpRequestViewModel)r).ToHttpRequest());
+        var repsToCopy = SelectedItems
+                         .Where(i => i is HttpRepeaterViewModel repVm && !HasAnyParentAlsoSelected(repVm))
+                         .Select(r => (ICloneable)((HttpRepeaterViewModel)r).ToHttpRepetition());
         var wssToCopy = SelectedItems
                          .Where(i => i is WebSocketConnectionViewModel wsVm && !HasAnyParentAlsoSelected(wsVm))
                          .Select(wsVm => (ICloneable)((WebSocketConnectionViewModel)wsVm).ToWebSocketConnection());
@@ -224,7 +230,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
                          .Where(i => i is EnvironmentViewModel)
                          .Select(e => (ICloneable)((EnvironmentViewModel)e).ToEnvironment());
 
-        var itemsToCopy = reqsToCopy.Concat(wssToCopy).Concat(wsMsgsToCopy).Concat(foldersToCopy).Concat(envsToCopy).ToArray();
+        var itemsToCopy = reqsToCopy.Concat(repsToCopy).Concat(wssToCopy).Concat(wsMsgsToCopy).Concat(foldersToCopy).Concat(envsToCopy).ToArray();
 
         ClipboardArea.Instance.PushToCopy(itemsToCopy);
     }
@@ -253,32 +259,25 @@ public sealed class KeyboardShortcuts : ViewModelBase
 
     private void PasteCopiedItemsToSpecificVm()
     {
-        if (SelectedItem is CollectionViewModel cvm)
+        if (SelectedItem is RequestsAndFoldersParentViewModel rafpvm)
         {
-            cvm.PasteToThis();
+            rafpvm.PasteToThis();
         }
         else if (SelectedItem is EnvironmentsGroupViewModel egvm)
         {
             egvm.PasteToThis();
         }
-        else if (SelectedItem is CollectionFolderViewModel cfvm)
-        {
-            cfvm.PasteToThis();
-        }
         else if (SelectedItem is EnvironmentViewModel evm)
         {
             ((EnvironmentsGroupViewModel)evm.Parent).PasteToThis();
         }
-        else if (SelectedItem is HttpRequestViewModel hrvm)
+        else if (SelectedItem is HttpRequestViewModel hrvm && hrvm.Parent is RequestsAndFoldersParentViewModel rafpvm2)
         {
-            if (hrvm.Parent is CollectionViewModel cvm3)
-            {
-                cvm3.PasteToThis();
-            }
-            else if (hrvm.Parent is CollectionFolderViewModel cfvm3)
-            {
-                cfvm3.PasteToThis();
-            }
+            rafpvm2.PasteToThis();
+        }
+        else if (SelectedItem is HttpRepeaterViewModel hrvm2 && hrvm2.Parent is RequestsAndFoldersParentViewModel rafpvm3)
+        {
+            rafpvm3.PasteToThis();
         }
         else if (SelectedItem is WebSocketConnectionViewModel wscvm)
         {
@@ -286,13 +285,9 @@ public sealed class KeyboardShortcuts : ViewModelBase
             {
                 wscvm.PasteToThis();
             }
-            else if (wscvm.Parent is CollectionViewModel cvm2)
+            else if (wscvm.Parent is RequestsAndFoldersParentViewModel rafpvm4)
             {
-                cvm2.PasteToThis();
-            }
-            else if (wscvm.Parent is CollectionFolderViewModel cfvm2)
-            {
-                cfvm2.PasteToThis();
+                rafpvm4.PasteToThis();
             }
         }
         else if (SelectedItem is WebSocketClientMessageViewModel wscmvm)
@@ -360,10 +355,10 @@ public sealed class KeyboardShortcuts : ViewModelBase
 
     private void DeleteMultiple(ICollection<CollectionOrganizationItemViewModel> itemsToDelete) =>
         itemsToDelete
-        .Where(i => i is CollectionViewModel
-                 || i is CollectionFolderViewModel
+        .Where(i => i is RequestsAndFoldersParentViewModel
                  || i is EnvironmentViewModel
                  || i is HttpRequestViewModel
+                 || i is HttpRepeaterViewModel
                  || i is WebSocketConnectionViewModel
                  || i is WebSocketClientMessageViewModel)
         .Cast<CollectionOrganizationItemViewModel>()
@@ -499,17 +494,24 @@ public sealed class KeyboardShortcuts : ViewModelBase
 
     #endregion
 
-    #region SEND REQUEST OR CONNECT WEBSOCKET
+    #region SEND REQUEST, CONNECT WEBSOCKET OR START REPETITION
 
-    internal void SendRequestOrConnectWebSocket()
+    internal void SendRequestConnectWebSocketOrStartRepetition()
     {
         var mwvm = MainWindowVm;
         if (mwvm.HttpRequestView.Visible && mwvm.HttpRequestView.VM?.IsRequesting == false)
         {
             // This needs to be done via Dispatcher.UIThread.Post() instead of Task.Run
-            // because it happens on UI thread. Task.Run also causes a weird bug 
+            // because it happens on UI thread. Task.Run also causes a weird bug
             // that CancellationTokenSource becomes null, even after sending the request.
             Dispatcher.UIThread.Post(async () => await mwvm.HttpRequestView.VM.SendRequestAsync());
+        }
+        else if (mwvm.HttpRepeaterView.Visible && mwvm.HttpRepeaterView.VM?.IsRepetitionRunning == false)
+        {
+            // This needs to be done via Dispatcher.UIThread.Post() instead of Task.Run
+            // because it happens on UI thread. Task.Run also causes a weird bug
+            // that CancellationTokenSource becomes null, even after sending the request.
+            Dispatcher.UIThread.Post(async () => await mwvm.HttpRepeaterView.VM.StartRepetitionAsync());
         }
         else if (mwvm.WebSocketConnectionView.Visible
               && mwvm.WebSocketConnectionView.VM?.IsConnected == false
@@ -521,14 +523,18 @@ public sealed class KeyboardShortcuts : ViewModelBase
 
     #endregion
 
-    #region CANCEL REQUEST OR DISCONNECT WEBSOCKET
+    #region CANCEL REQUEST, DISCONNECT WEBSOCKET OR STOP REPETITION
 
-    internal void CancelRequestOrDisconnectWebSocket()
+    internal void CancelRequestDisconnectWebSocketOrStopRepetition()
     {
         var mwvm = MainWindowVm;
         if (mwvm.HttpRequestView.Visible && mwvm.HttpRequestView.VM?.IsRequesting == true)
         {
             mwvm.HttpRequestView.VM.CancelRequest();
+        }
+        else if (mwvm.HttpRepeaterView.Visible && mwvm.HttpRepeaterView.VM?.IsRepetitionRunning == true)
+        {
+            mwvm.HttpRepeaterView.VM.StopRepetition();
         }
         else if (mwvm.WebSocketConnectionView.Visible)
         {
@@ -561,8 +567,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
                 return;
             }
         }
-        var cvm = (CollectionViewModel)x;
-        var egvm = (EnvironmentsGroupViewModel)cvm.Items.First(y => y is EnvironmentsGroupViewModel);
+        var egvm = ((CollectionViewModel)x).EnvironmentsGroupVm;
         egvm.CycleActiveEnvironment(trueIfNextFalseIfPrevious);
     }
 
@@ -577,6 +582,10 @@ public sealed class KeyboardShortcuts : ViewModelBase
         {
             Dispatcher.UIThread.Post(async () => await mwvm.HttpRequestView.VM.ResponseDataCtx.SaveResponseBodyToFileAsync());
         }
+        else if (mwvm.HttpRepeaterView.Visible && mwvm.HttpRepeaterView.VM?.ResponseDataCtx?.IsSaveResponseBodyToFileVisible == true)
+        {
+            Dispatcher.UIThread.Post(async () => await mwvm.HttpRepeaterView.VM.ResponseDataCtx.SaveResponseBodyToFileAsync());
+        }
         else if (mwvm.WebSocketConnectionView.Visible && mwvm.WebSocketConnectionView.VM?.IsSaveSelectedExchangedMessageToFileVisible == true)
         {
             Dispatcher.UIThread.Post(async () => await mwvm.WebSocketConnectionView.VM.SaveSelectedExchangedMessageToFileAsync());
@@ -589,6 +598,10 @@ public sealed class KeyboardShortcuts : ViewModelBase
         if (mwvm.HttpRequestView.Visible && mwvm.HttpRequestView.VM?.ResponseDataCtx?.IsExportLogFileVisible == true)
         {
             Dispatcher.UIThread.Post(async () => await mwvm.HttpRequestView.VM.ResponseDataCtx.ExportLogToFileAsync());
+        }
+        else if (mwvm.HttpRepeaterView.Visible && mwvm.HttpRepeaterView.VM?.ResponseDataCtx?.IsExportLogFileVisible == true)
+        {
+            Dispatcher.UIThread.Post(async () => await mwvm.HttpRepeaterView.VM.ResponseDataCtx.ExportLogToFileAsync());
         }
     }
 

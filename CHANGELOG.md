@@ -1,6 +1,8 @@
 # Changelog
 
-* [3.0.1](#300-2024-01-09)
+* [3.1.0](#310-2024-02-14)
+* [3.0.1.1](#3011-2024-01-17)
+* [3.0.1](#301-2024-01-09)
 * [3.0.0](#300-2024-01-01)
 * [2.5.0](#240-2023-11-13)
 * [2.4.0](#240-2023-10-15)
@@ -17,6 +19,34 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.1.0](https://github.com/alexandrehtrb/Pororoca/tree/3.1.0) (2024-02-14)
+
+### Features
+
+* Repeaters. You can now send many HTTP requests in a row from a single template. Read more about in our [docs](https://pororoca.io/docs/repeaters). (issue [#40](https://github.com/alexandrehtrb/Pororoca/issues/40))
+* Response captures can now be saved into collection variables. (issue [#76](https://github.com/alexandrehtrb/Pororoca/issues/76))
+* Environments can be disabled, leaving no active environment.
+
+### Bug Fixes
+
+* Better detection of SSL certificate problems for HTTP/3.
+
+### Refactors
+
+* CollectionViewModel and CollectionFolderViewModel now inherit from RequestsAndFoldersParentViewModel.
+
+### CI/CD
+
+* Upgraded `actions/setup-dotnet` and `actions/checkout` to v4.
+* `actions/checkout` now uses fetch-depth of 1 (only most recent commit), faster cloning.
+* Workflow for drafting releases.
+
+### Others
+
+* Editorconfig formatting for XML files.
+* Raised .NET SDK to 8.0.200.
+* Changed some italian and russian texts to be more succinct.
 
 ## [3.0.1.1](https://github.com/alexandrehtrb/Pororoca/tree/3.0.1) (2024-01-17)
 

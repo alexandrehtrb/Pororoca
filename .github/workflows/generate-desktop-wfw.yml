@@ -39,14 +39,14 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
-        fetch-depth: 0
+        fetch-depth: 1
 
     - name: Install .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.101
+        dotnet-version: 8.0.200
 
     # GitHub Actions Windows Runners come with NSIS pre-installed
     # https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md
@@ -264,6 +264,7 @@ jobs:
         echo "OUTPUT_FILE_NAME=${debPackageName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Upload artifact to workflow results
+      if: ${{ inputs.uploadArtifactToRelease == false }} # no need if is uploading to release
       uses: actions/upload-artifact@v4
       with:
         compression-level: 0 # no need to compress because steps above already compress
@@ -271,10 +272,10 @@ jobs:
         path: ${{ format('./out/{0}', env.OUTPUT_FILE_NAME) }}
 
     - name: Upload artifact to release
-      if: ${{ inputs.uploadArtifactToRelease }}
+      if: ${{ inputs.uploadArtifactToRelease == true }}
       shell: pwsh
       run: gh release upload $env:RELEASE_NAME $env:FILE_PATH --clobber
       env:
-        GH_TOKEN: ${{ secrets.POROROCA_GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         RELEASE_NAME: ${{ inputs.releaseName }}
         FILE_PATH: ${{ format('./out/{0}', env.OUTPUT_FILE_NAME) }}

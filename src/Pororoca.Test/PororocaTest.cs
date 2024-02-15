@@ -1,13 +1,18 @@
 using System.Text;
+using System.Threading.Channels;
+using Pororoca.Domain.Feature.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.ImportCollection;
 using Pororoca.Domain.Features.Requester;
+using Pororoca.Domain.Features.RequestRepeater;
 using Pororoca.Domain.Features.TranslateRequest.Http;
 using Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection;
 using Pororoca.Domain.Features.VariableResolution;
 using Pororoca.Infrastructure.Features.Requester;
+using static Pororoca.Domain.Features.RequestRepeater.HttpRepeater;
+using static Pororoca.Domain.Features.RequestRepeater.HttpRepetitionValidator;
 
 namespace Pororoca.Test;
 
@@ -59,6 +64,7 @@ public sealed class PororocaTest
     public PororocaTest AndDontCheckTlsCertificate()
     {
         ShouldCheckTlsCertificate = false;
+        PororocaRequester.Singleton.DisableSslVerification = !ShouldCheckTlsCertificate;
         return this;
     }
 
@@ -106,89 +112,14 @@ public sealed class PororocaTest
         }
     }
 
-    public PororocaHttpRequest? FindHttpRequestInCollection(Func<PororocaHttpRequest, bool> criteria)
-    {
-        static PororocaHttpRequest? FindHttpRequestInFolder(PororocaCollectionFolder folder, Func<PororocaHttpRequest, bool> criteria)
-        {
-            var reqInFolder = folder.HttpRequests.FirstOrDefault(criteria);
-            if (reqInFolder != null)
-            {
-                return reqInFolder;
-            }
-            else
-            {
-                foreach (var subFolder in folder.Folders)
-                {
-                    var reqInSubfolder = FindHttpRequestInFolder(subFolder, criteria);
-                    if (reqInSubfolder != null)
-                    {
-                        return reqInSubfolder;
-                    }
-                }
-                return null;
-            }
-        }
+    public PororocaHttpRequest? FindHttpRequestInCollection(Func<PororocaHttpRequest, bool> criteria) =>
+        Collection.FindRequestInCollection(criteria);
 
-        var reqInCol = Collection.HttpRequests.FirstOrDefault(criteria);
-        if (reqInCol != null)
-        {
-            return reqInCol;
-        }
-        else
-        {
-            foreach (var folder in Collection.Folders)
-            {
-                var reqInFolder = FindHttpRequestInFolder(folder, criteria);
-                if (reqInFolder != null)
-                {
-                    return reqInFolder;
-                }
-            }
-            return null;
-        }
-    }
+    public PororocaWebSocketConnection? FindWebSocketInCollection(Func<PororocaWebSocketConnection, bool> criteria) =>
+        Collection.FindRequestInCollection(criteria);
 
-    public PororocaWebSocketConnection? FindWebSocketInCollection(Func<PororocaWebSocketConnection, bool> criteria)
-    {
-        static PororocaWebSocketConnection? FindWebSocketInFolder(PororocaCollectionFolder folder, Func<PororocaWebSocketConnection, bool> criteria)
-        {
-            var wsInFolder = folder.WebSocketConnections.FirstOrDefault(criteria);
-            if (wsInFolder != null)
-            {
-                return wsInFolder;
-            }
-            else
-            {
-                foreach (var subFolder in folder.Folders)
-                {
-                    var wsInSubfolder = FindWebSocketInFolder(subFolder, criteria);
-                    if (wsInSubfolder != null)
-                    {
-                        return wsInSubfolder;
-                    }
-                }
-                return null;
-            }
-        }
-
-        var wsInCol = Collection.WebSocketConnections.FirstOrDefault(criteria);
-        if (wsInCol != null)
-        {
-            return wsInCol;
-        }
-        else
-        {
-            foreach (var folder in Collection.Folders)
-            {
-                var wsInFolder = FindWebSocketInFolder(folder, criteria);
-                if (wsInFolder != null)
-                {
-                    return wsInFolder;
-                }
-            }
-            return null;
-        }
-    }
+    public PororocaHttpRepetition? FindHttpRepetitionInCollection(Func<PororocaHttpRepetition, bool> criteria) =>
+        Collection.FindRequestInCollection(criteria);
 
     public Task<PororocaHttpResponse> SendHttpRequestAsync(string requestName, CancellationToken cancellationToken = default)
     {
@@ -216,7 +147,7 @@ public sealed class PororocaTest
         else
         {
             IPororocaRequester requester = PororocaRequester.Singleton;
-            var res = await requester.RequestAsync(effectiveVars, Collection.CollectionScopedAuth, req, !ShouldCheckTlsCertificate, cancellationToken);
+            var res = await requester.RequestAsync(effectiveVars, Collection.CollectionScopedAuth, req, cancellationToken);
             CaptureResponseValues(req, res);
             return res;
         }
@@ -268,29 +199,61 @@ public sealed class PororocaTest
         }
     }
 
+    public Task<ChannelReader<PororocaHttpRepetitionResult>> StartHttpRepetitionAsync(string repName, CancellationToken cancellationToken = default)
+    {
+        var rep = FindHttpRepetitionInCollection(r => r.Name == repName);
+        if (rep != null)
+        {
+            return StartHttpRepetitionAsync(rep!, cancellationToken);
+        }
+        else
+        {
+            throw new Exception($"Error: Repetition with the name '{repName}' was not found.");
+        }
+    }
+
+    public async Task<ChannelReader<PororocaHttpRepetitionResult>> StartHttpRepetitionAsync(PororocaHttpRepetition rep, CancellationToken cancellationToken = default)
+    {
+        var colEffectiveVars = ((IPororocaVariableResolver)Collection).GetEffectiveVariables();
+        var baseReq = Collection.GetHttpRequestByPath(rep.BaseRequestPath);
+        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(colEffectiveVars, baseReq, rep, cancellationToken);
+
+        if (!valid)
+        {
+            throw new Exception($"Error: Repetition could not be started. Cause: '{errorCode}'.");
+        }
+        else
+        {
+            IPororocaRequester requester = PororocaRequester.Singleton;
+            return StartRepetition(requester, colEffectiveVars, resolvedInputData, Collection.CollectionScopedAuth, rep, baseReq!, cancellationToken);
+        }
+    }
+
     private void CaptureResponseValues(PororocaHttpRequest req, PororocaHttpResponse res)
     {
-        var env = Collection.Environments.FirstOrDefault(e => e.IsCurrent);
-        if (env is not null)
+        // if an environment is selected, then save captures into its variables
+        // otherwise, save captures into collection variables
+        var colVars = Collection.Variables;
+        var envVars = Collection.Environments.FirstOrDefault(e => e.IsCurrent)?.Variables;
+        var targetVars = envVars ?? colVars;
+
+        var captures = req.ResponseCaptures ?? new();
+        foreach (var capture in captures)
         {
-            var captures = req.ResponseCaptures ?? new();
-            foreach (var capture in captures)
+            var targetVar = targetVars.FirstOrDefault(v => v.Key == capture.TargetVariable);
+            string? capturedValue = res.CaptureValue(capture);
+            if (capturedValue is not null)
             {
-                var envVar = env.Variables.FirstOrDefault(v => v.Key == capture.TargetVariable);
-                string? capturedValue = res.CaptureValue(capture);
-                if (capturedValue is not null)
+                if (targetVar is null)
                 {
-                    if (envVar is null)
-                    {
-                        envVar = new(true, capture.TargetVariable, capturedValue, true);
-                        env.Variables.Add(envVar);
-                    }
-                    else
-                    {
-                        var newEnvVar = envVar with { Value = capturedValue };
-                        env.Variables.Remove(envVar);
-                        env.Variables.Add(newEnvVar);
-                    }
+                    targetVar = new(true, capture.TargetVariable, capturedValue, true);
+                    targetVars.Add(targetVar);
+                }
+                else
+                {
+                    var targetVarUpdated = targetVar with { Value = capturedValue };
+                    targetVars.Remove(targetVar);
+                    targetVars.Add(targetVarUpdated);
                 }
             }
         }

@@ -1,0 +1,14 @@
+[
+// comentários são permitidos
+{"MyTxt": "ABC", "MyInt": "123"},
+{"MyTxt": "DEF", "MyInt": "456"},
+{"MyTxt": "GHI", "MyInt": "789"},
+{"MyTxt": "JKL", "MyInt": "123"},
+{"MyTxt": "MNO", "MyInt": "456"},
+{"MyTxt": "PQR", "MyInt": "789"},
+{"MyTxt": "STU", "MyInt": "012"},
+{"MyTxt": "VWX", "MyInt": "345"},
+{"MyTxt": "YZA", "MyInt": "678"},
+{"MyTxt": "BCD", "MyInt": "901"},
+//{"MyTxt": "ZZZ", "MyInt": "999"},
+]

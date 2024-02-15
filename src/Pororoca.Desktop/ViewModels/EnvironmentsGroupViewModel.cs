@@ -49,7 +49,7 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
         #endregion
 
         #region ENVIRONMENTS GROUP
-        Items = new(envs.Select(e => new EnvironmentViewModel(this, e, SetEnvironmentAsCurrent)));
+        Items = new(envs.Select(e => new EnvironmentViewModel(this, e, ToggleEnabledEnvironment)));
         UpdateSelectedEnvironmentName();
         RefreshSubItemsAvailableMovements();
         #endregion
@@ -65,7 +65,7 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
 
     internal void AddEnvironment(PororocaEnvironment envToAdd, bool showItemInScreen = false)
     {
-        EnvironmentViewModel envToAddVm = new(this, envToAdd, SetEnvironmentAsCurrent);
+        EnvironmentViewModel envToAddVm = new(this, envToAdd, ToggleEnabledEnvironment);
         // When adding an environment, set the environment
         // as non-current, to not have two current environments
         // when pasting.
@@ -93,11 +93,18 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
 
     #region ENVIRONMENTS GROUP
 
-    private void SetEnvironmentAsCurrent(EnvironmentViewModel envVm)
+    private void ToggleEnabledEnvironment(EnvironmentViewModel envVm)
     {
-        foreach (var evm in Items)
+        if (envVm.IsCurrentEnvironment)
         {
-            evm.IsCurrentEnvironment = evm == envVm;
+            envVm.IsCurrentEnvironment = false;
+        }
+        else
+        {
+            foreach (var evm in Items)
+            {
+                evm.IsCurrentEnvironment = evm == envVm;
+            }
         }
         UpdateSelectedEnvironmentName();
     }
@@ -130,7 +137,7 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
             }
         }
         var nextEnv = Items[nextIndex];
-        SetEnvironmentAsCurrent(nextEnv);
+        ToggleEnabledEnvironment(nextEnv);
     }
 
     public void UpdateSelectedEnvironmentName()

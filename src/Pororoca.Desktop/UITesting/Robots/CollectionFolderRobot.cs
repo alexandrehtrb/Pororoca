@@ -10,4 +10,5 @@ public sealed class CollectionFolderRobot : BaseNamedRobot
     internal IconButton AddFolder => GetChildView<IconButton>("btAddFolder")!;
     internal IconButton AddHttpReq => GetChildView<IconButton>("btAddHttpReq")!;
     internal IconButton AddWebSocket => GetChildView<IconButton>("btAddWebSocket")!;
+    internal IconButton AddRepeater => GetChildView<IconButton>("btAddHttpRep")!;
 }

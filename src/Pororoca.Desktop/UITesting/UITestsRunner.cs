@@ -24,8 +24,10 @@ public static class UITestsRunner
         new WebSocketsValidationsUITest(),
         new WebSocketsUITest(),
         new ExportAndImportUITest(),
-        new CollectionScopedAuthUITest()
-        // TODO: UI tests to be made:
+        new CollectionScopedAuthUITest(),
+        new HttpRepeaterUITest(),
+        new HttpRepeaterValidationsUITest(),
+        new ResponseCapturesUITest(),
         // Out of scope of automated UI tests:
         // some keybindings
         // all dialogs

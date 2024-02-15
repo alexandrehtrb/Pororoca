@@ -2,9 +2,9 @@ using Pororoca.Domain.Features.Entities.Pororoca;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed partial class HttpRequestsUITest : UITest
+public sealed partial class ResponseCapturesUITest : UITest
 {
-    private async Task TestCaptureResponseHeader()
+    private async Task TestCaptureResponseHeader(bool saveCapturesInCurrentEnvironment)
     {
         await HttpRobot.HttpMethod.Select("GET");
         await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/get/headers");
@@ -22,11 +22,22 @@ public sealed partial class HttpRequestsUITest : UITest
         var capture = HttpRobot.ResCapturesVm.Items[0];
         Assert(capture.CapturedValue == "oi");
 
-        await TreeRobot.Select("COL1/ENVS/ENV1");
-        var envVar = EnvRobot.VariablesVm.Items.First(x => x.Key == "MyCapturedHeaderValue");
-        Assert(envVar.Value == "oi");
-        Assert(envVar.IsSecret == true);
-        envVar.RemoveVariable();
+        if (saveCapturesInCurrentEnvironment)
+        {
+            await TreeRobot.Select("COL1/ENVS/ENV1");
+            var targetVar = EnvRobot.VariablesVm.Items.First(x => x.Key == "MyCapturedHeaderValue");
+            Assert(targetVar.Value == "oi");
+            Assert(targetVar.IsSecret == true);
+            targetVar.RemoveVariable();
+        }
+        else
+        {
+            await TreeRobot.Select("COL1/VARS");
+            var targetVar = ColVarsRobot.VariablesVm.Items.First(x => x.Key == "MyCapturedHeaderValue");
+            Assert(targetVar.Value == "oi");
+            Assert(targetVar.IsSecret == true);
+            targetVar.RemoveVariable();
+        }
 
         await TreeRobot.Select("COL1/HTTPREQ");
         HttpRobot.ResCapturesVm.Items.Clear();

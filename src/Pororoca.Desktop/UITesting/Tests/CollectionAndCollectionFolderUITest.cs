@@ -16,6 +16,7 @@ public sealed class CollectionAndCollectionFolderUITest : UITest
     private HttpRequestRobot HttpRobot { get; }
     private WebSocketConnectionRobot WsRobot { get; }
     private WebSocketClientMessageRobot WsMsgRobot { get; }
+    private HttpRepeaterRobot RepeaterRobot { get; }
 
     public CollectionAndCollectionFolderUITest()
     {
@@ -29,6 +30,7 @@ public sealed class CollectionAndCollectionFolderUITest : UITest
         HttpRobot = new(RootView.FindControl<HttpRequestView>("httpReqView")!);
         WsRobot = new(RootView.FindControl<WebSocketConnectionView>("wsConnView")!);
         WsMsgRobot = new(RootView.FindControl<WebSocketClientMessageView>("wsClientMsgView")!);
+        RepeaterRobot = new(RootView.FindControl<HttpRepeaterView>("httpRepView")!);
     }
 
     public override async Task RunAsync()
@@ -65,12 +67,18 @@ public sealed class CollectionAndCollectionFolderUITest : UITest
         AssertIsVisible(WsMsgRobot.RootView);
         await WsMsgRobot.Name.Edit("WS_MSG1");
 
+        await TreeRobot.Select("COL1");
+        await ColRobot.AddRepeater.ClickOn();
+        AssertIsVisible(RepeaterRobot.RootView);
+        await RepeaterRobot.Name.Edit("REP1");
+
         AssertTreeItemExists(CollectionsGroup, "COL1");
         AssertTreeItemExists(CollectionsGroup, "COL1/ENVS/ENV1");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1");
         AssertTreeItemExists(CollectionsGroup, "COL1/HTTP1");
         AssertTreeItemExists(CollectionsGroup, "COL1/WS1");
         AssertTreeItemExists(CollectionsGroup, "COL1/WS1/WS_MSG1");
+        AssertTreeItemExists(CollectionsGroup, "COL1/REP1");
 
         // folder
 
@@ -96,9 +104,16 @@ public sealed class CollectionAndCollectionFolderUITest : UITest
         AssertIsVisible(WsMsgRobot.RootView);
         await WsMsgRobot.Name.Edit("WS_1_MSG1");
 
+        await TreeRobot.Select("COL1/DIR1/DIR1_1");
+        AssertIsVisible(DirRobot.RootView);
+        await DirRobot.AddRepeater.ClickOn();
+        AssertIsVisible(RepeaterRobot.RootView);
+        await RepeaterRobot.Name.Edit("REP_1");
+
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR1_1");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR1_1/HTTP_1");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR1_1/WS_1");
         AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR1_1/WS_1/WS_1_MSG1");
+        AssertTreeItemExists(CollectionsGroup, "COL1/DIR1/DIR1_1/REP_1");
     }
 }
