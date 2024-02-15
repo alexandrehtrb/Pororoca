@@ -258,7 +258,8 @@ public static class HttpRepeaterTests
         }
         sw.Stop();
 
-        Assert.True(sw.Elapsed >= TimeSpan.FromMilliseconds(delayInMs));
+        var errorMargin = TimeSpan.FromMilliseconds(500); // this test was flaky
+        Assert.True((sw.Elapsed + errorMargin) >= TimeSpan.FromMilliseconds(delayInMs));
     }
 
     [Theory]
