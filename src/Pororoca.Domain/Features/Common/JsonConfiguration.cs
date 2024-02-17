@@ -64,7 +64,6 @@ internal static class JsonConfiguration
 [JsonSerializable(typeof(PostmanAuthBearer))]
 [JsonSerializable(typeof(PostmanAuthNtlm))]
 [JsonSerializable(typeof(PostmanVariable[]))]
-[JsonSerializable(typeof(JsonElement))] // GraphQL json
 internal partial class PororocaJsonSrcGenContext : JsonSerializerContext
 {
 }
