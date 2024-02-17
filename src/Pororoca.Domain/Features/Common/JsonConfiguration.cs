@@ -56,6 +56,15 @@ internal static class JsonConfiguration
 [JsonSerializable(typeof(PororocaHttpRepetition))]
 [JsonSerializable(typeof(PostmanCollectionV21))]
 [JsonSerializable(typeof(PostmanEnvironment))]
+[JsonSerializable(typeof(PostmanAuthType))]
+[JsonSerializable(typeof(PostmanRequestBodyMode))]
+[JsonSerializable(typeof(PostmanRequestBodyFormDataParamType))]
+[JsonSerializable(typeof(PostmanRequestUrl))]
+[JsonSerializable(typeof(PostmanAuthBasic))]
+[JsonSerializable(typeof(PostmanAuthBearer))]
+[JsonSerializable(typeof(PostmanAuthNtlm))]
+[JsonSerializable(typeof(PostmanVariable[]))]
+[JsonSerializable(typeof(JsonElement))] // GraphQL json
 internal partial class PororocaJsonSrcGenContext : JsonSerializerContext
 {
 }
