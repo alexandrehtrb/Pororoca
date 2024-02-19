@@ -1,5 +1,7 @@
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Microsoft.OpenApi.Readers;
@@ -12,6 +14,8 @@ namespace Pororoca.Domain.Features.ImportCollection;
 
 public static class OpenApiImporter
 {
+    internal static readonly JsonSerializerOptions prettifyJsonOptions = MakePrettifyJsonContext();
+
     private static string ToPororocaTemplateStyle(this string input) =>
         input.Replace("{", "{{").Replace("}", "}}");
 
@@ -238,7 +242,7 @@ public static class OpenApiImporter
 
         if (contentType?.Contains("json") == true)
         {
-            string rawStr = JsonUtils.PrettySerializeJson(obj);
+            string rawStr = PrettySerializeJson(obj);
             PororocaHttpRequestBody body = new();
             body.SetRawContent(rawStr, contentType);
             return body;
@@ -567,6 +571,19 @@ public static class OpenApiImporter
         }
 
         return null;
+    }
+
+    private static string PrettySerializeJson(object? objToSerialize) =>
+        JsonSerializer.Serialize(objToSerialize, options: prettifyJsonOptions);
+
+    private static JsonSerializerOptions MakePrettifyJsonContext()
+    {
+        JsonSerializerOptions options = new();
+        options.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+        options.WriteIndented = true;
+        options.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
+        options.PropertyNamingPolicy = null;
+        return options;
     }
 
     #endregion

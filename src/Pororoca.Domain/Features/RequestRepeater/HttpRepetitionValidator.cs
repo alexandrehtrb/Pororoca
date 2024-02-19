@@ -78,12 +78,12 @@ public static class HttpRepetitionValidator
             string resolvedFilePath = IPororocaVariableResolver.ReplaceTemplates(inputData.InputFilePath, colEffectiveVariables);
 
             using FileStream fs = new(resolvedFilePath!, FileMode.Open, FileAccess.Read, FileShare.Read, 65536, useAsync: true);
-            inputLines = (await JsonSerializer.DeserializeAsync<Dictionary<string, string>[]>(fs, MinifyingOptions, cancellationToken))!;
+            inputLines = (await JsonSerializer.DeserializeAsync(fs, MinifyingJsonCtx.DictionaryStringStringArray, cancellationToken))!;
         }
         else
         {
             string resolvedRawJsonArray = IPororocaVariableResolver.ReplaceTemplates(inputData.RawJsonArray, colEffectiveVariables);
-            inputLines = JsonSerializer.Deserialize<Dictionary<string, string>[]>(resolvedRawJsonArray!, MinifyingOptions)!;
+            inputLines = JsonSerializer.Deserialize(resolvedRawJsonArray!, MinifyingJsonCtx.DictionaryStringStringArray)!;
         }
 
         return inputLines.Select(il => il.Select(kvp => new PororocaVariable(true, kvp.Key, kvp.Value, true)).ToArray()).ToArray();

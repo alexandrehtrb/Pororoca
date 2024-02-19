@@ -4,6 +4,7 @@ using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.VariableResolution;
+using static Pororoca.Domain.Features.Common.JsonConfiguration;
 using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
 using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonTranslator;
 
@@ -175,7 +176,7 @@ public static class PororocaHttpRequestTranslator
             {
                 try
                 {
-                    // this deserailize-serialize is solely 
+                    // this deserailize-serialize is solely
                     // to allow comments in GraphQL variables textbox
                     variablesJsonDoc = JsonDocument.Parse(variables, GraphQlJsonOptions);
                 }
@@ -187,7 +188,7 @@ public static class PororocaHttpRequestTranslator
             string variablesJsonStr =
                 variablesJsonDoc is null ?
                 "null" :
-                JsonSerializer.Serialize(variablesJsonDoc.RootElement, JsonConfiguration.MinifyingOptions);
+                JsonSerializer.Serialize(variablesJsonDoc.RootElement, MinifyingJsonCtx.JsonElement);
             string json = "{\"query\":\"" + resolvedBody!.GraphQlValues!.Query! + "\",\"variables\":" + variablesJsonStr + "}";
 
             return new(json, Encoding.UTF8, MimeTypesDetector.DefaultMimeTypeForJson);
