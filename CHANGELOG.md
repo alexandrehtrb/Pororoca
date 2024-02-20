@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.1.0.1](#3101-2024-02-19)
 * [3.1.0](#310-2024-02-14)
 * [3.0.1.1](#3011-2024-01-17)
 * [3.0.1](#301-2024-01-09)
@@ -19,6 +20,13 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.1.0.1](https://github.com/alexandrehtrb/Pororoca/tree/3.1.0.1) (2024-02-19)
+
+### Hot Fix
+
+* Forgot to update version in Debian control file...
+* This release is only for fixing Debian / Ubuntu packaging, the main version 3.1.0 remains. 3.1.0.1 is for tagging purposes.
 
 ## [3.1.0](https://github.com/alexandrehtrb/Pororoca/tree/3.1.0) (2024-02-14)
 
