@@ -1,0 +1,65 @@
+ <h1>Pororoca <img style="margin: 4px 0 0 4px" height="32" src="pororoca.png" alt="Pororoca Logo"/></h1>
+
+[Read in english](README.md) | [Ler em português](README_pt.md) | [Читать на русском](README_ru.md) | [Leggi in italiano](README_it.md)
+
+Pororoca 是一款灵感来源于 Postman 的 HTTP 测试工具，但做了许多改进。
+
+支持 Windows、macOS 和 Linux 等操作系统。
+
+![ExampleScreen](./misc/example_screen_en.png)
+
+## 安装
+
+阅读[安装指引](https://pororoca.io/docs/installation)并从[这里](https://github.com/alexandrehtrb/Pororoca/releases)下载应用程序。
+
+## 功能特性
+
+* [HTTP/2](https://http2.github.io/) 和 [HTTP/3](https://developers.cloudflare.com/http3/) 协议支持。
+* 作用于集合范围的环境。
+* 简单易用的变量管理。
+* 私密变量。
+* 集合与环境可导出至单文件。
+* 导入、导出功能与 Postman 完全兼容。
+* 超低内存占用，仅为 Postman 的 30% ~ 50%。
+* 多语言支持。
+* 自动化测试。
+* WebSocket 协议支持。
+* 启动速度快。
+* 免费和开源。
+
+更多内容请查看[文档](https://pororoca.io/docs/)。
+
+*注意：*对于 Windows 系统, HTTP/2 的支持需要 Windows 10 及以上版本。HTTP/3 的支持需要 Linux 或 Windows 11 及以上版本。
+
+### HTTP/3 与隐私
+
+HTTP/3 使用 QUIC 传输协议，因此存在一些隐私问题。不过，对于内部网络通信和大多数业务应用程序来说，这可能不算问题。可以阅读[这篇文章](https://svs.informatik.uni-hamburg.de/publications/2019/2019-02-26-Sy-PET_Symposium-A_QUIC_Look_at_Web_Tracking.pdf)了解详情。
+
+## 数据保护政策
+
+Pororoca 不会将用户数据（例如设置、集合、环境、硬件信息或遥测数据）同步到任何远程服务器。用户设置和集合以文件形式保存在用户本地。
+
+## 设计
+
+徽标和美术设计由 [Anderson Martins](https://www.behance.net/am-dsgn) 提供。
+
+## 贡献
+
+你可以通过提交拉取请求、新开问题、报告错误和提出改进建议等方式来为此项目做出贡献。如果你喜欢 Pororoca，请告诉你的朋友们！
+
+请阅读[代码贡献教程](CONTRIBUTING.md)。
+
+如果你需要更高级的支持、特殊定制或教学，请联系我们。
+
+## 捐赠
+
+你也可以通过捐款来帮助我们。
+
+| ![通过 Pix 捐款](./misc/pix_botao_doacao.png) | [![通过 PayPal 捐款](./misc/paypal_donation_button.png)](https://www.paypal.com/donate/?hosted_button_id=NUADRWF3WNYQ2) |
+|--|--|
+| [查看二维码](./misc/pix_doacao_qr_code.png) | [查看二维码](./misc/paypal_donation_qr_code.png) |
+
+## 联系方式
+
+* 作者：Alexandre H. T. R. Bonfitto
+* 邮箱：alexandrehtrb@outlook.com
