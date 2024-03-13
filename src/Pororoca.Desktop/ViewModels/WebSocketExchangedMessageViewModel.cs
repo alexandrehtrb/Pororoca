@@ -126,11 +126,17 @@ public sealed class WebSocketExchangedMessageViewModel : ViewModelBase
 
         MessageSizeDescription = string.Format(format, lengthInBytes);
 
-        TextContent = txtContent ?? MessageSizeDescription;
-
-        if (txtContent is not null)
+        if (txtContent is null)
         {
-            IsJsonTextContent = JsonUtils.IsValidJson(TextContent);
+            IsJsonTextContent = false;
+            TextContent = MessageSizeDescription;
+        }
+        else
+        {
+            IsJsonTextContent = JsonUtils.IsValidJson(txtContent);
+            TextContent = IsJsonTextContent ?
+                          JsonUtils.PrettifyJson(txtContent) :
+                          txtContent;
         }
     }
 }

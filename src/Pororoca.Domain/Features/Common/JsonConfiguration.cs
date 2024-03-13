@@ -17,7 +17,9 @@ internal static class JsonConfiguration
     internal static readonly PororocaJsonSrcGenContext MainJsonCtx =
         MakePororocaJsonContext(false);
 
-    internal static readonly JsonSerializerOptions MinifyingOptions = SetupMinifyingOptions();
+    internal static readonly MinifyJsonSrcGenContext MinifyingJsonCtx = MakeMinifyJsonContext();
+
+    internal static readonly PrettifyJsonSrcGenContext PrettifyJsonCtx = MakePrettifyJsonContext();
 
     private static PororocaJsonSrcGenContext MakePororocaJsonContext(bool includeCustomConverters)
     {
@@ -36,7 +38,7 @@ internal static class JsonConfiguration
         return new(options);
     }
 
-    private static JsonSerializerOptions SetupMinifyingOptions()
+    private static MinifyJsonSrcGenContext MakeMinifyJsonContext()
     {
         JsonSerializerOptions options = new();
         options.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
@@ -45,7 +47,17 @@ internal static class JsonConfiguration
         options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         options.AllowTrailingCommas = true;
         options.ReadCommentHandling = JsonCommentHandling.Skip;
-        return options;
+        return new(options);
+    }
+
+    private static PrettifyJsonSrcGenContext MakePrettifyJsonContext()
+    {
+        JsonSerializerOptions options = new();
+        options.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+        options.WriteIndented = true;
+        options.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
+        options.PropertyNamingPolicy = null;
+        return new(options);
     }
 }
 
@@ -56,6 +68,26 @@ internal static class JsonConfiguration
 [JsonSerializable(typeof(PororocaHttpRepetition))]
 [JsonSerializable(typeof(PostmanCollectionV21))]
 [JsonSerializable(typeof(PostmanEnvironment))]
+[JsonSerializable(typeof(PostmanAuthType))]
+[JsonSerializable(typeof(PostmanRequestBodyMode))]
+[JsonSerializable(typeof(PostmanRequestBodyFormDataParamType))]
+[JsonSerializable(typeof(PostmanRequestUrl))]
+[JsonSerializable(typeof(PostmanAuthBasic))]
+[JsonSerializable(typeof(PostmanAuthBearer))]
+[JsonSerializable(typeof(PostmanAuthNtlm))]
+[JsonSerializable(typeof(PostmanVariable[]))]
 internal partial class PororocaJsonSrcGenContext : JsonSerializerContext
+{
+}
+
+[JsonSerializable(typeof(JsonDocument))]
+[JsonSerializable(typeof(JsonElement))]
+[JsonSerializable(typeof(Dictionary<string, string>[]))]
+internal partial class MinifyJsonSrcGenContext : JsonSerializerContext
+{
+}
+
+[JsonSerializable(typeof(JsonDocument))]
+internal partial class PrettifyJsonSrcGenContext : JsonSerializerContext
 {
 }

@@ -17,9 +17,6 @@ public static class PororocaCollectionExporterTests
     [Fact]
     public static void Should_export_and_reimport_pororoca_collection_successfully()
     {
-        static string MinifyJsonString(string json) =>
-            JsonSerializer.Serialize(JsonSerializer.Deserialize<dynamic>(json, JsonConfiguration.MinifyingOptions), JsonConfiguration.MinifyingOptions);
-
         // GIVEN
         string json1 = ReadTestFileText("FullCollection.pororoca_collection.json");
 

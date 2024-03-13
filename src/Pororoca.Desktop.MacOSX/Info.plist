@@ -11,9 +11,9 @@
     <key>CFBundleDisplayName</key>
     <string>Pororoca</string>
     <key>CFBundleVersion</key>
-    <string>3.1.0</string>
+    <string>3.1.1</string>
     <key>CFBundleShortVersionString</key>
-    <string>3.1.0</string>
+    <string>3.1.1</string>
     <key>LSMinimumSystemVersion</key>
     <string>10.12</string>
     <key>CFBundleExecutable</key>

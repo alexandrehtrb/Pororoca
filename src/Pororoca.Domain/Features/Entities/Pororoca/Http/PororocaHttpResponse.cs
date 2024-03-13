@@ -158,12 +158,6 @@ public sealed class PororocaHttpResponse
     public byte[]? GetBodyAsBinary() =>
         this.binaryBody;
 
-    public T? GetJsonBodyAs<T>() =>
-        GetJsonBodyAs<T>(MinifyingOptions);
-
-    public T? GetJsonBodyAs<T>(JsonSerializerOptions jsonOptions) =>
-        JsonSerializer.Deserialize<T>(this.binaryBody, jsonOptions);
-
     public string? GetContentDispositionFileName()
     {
         var contentDispositionHeader = Headers?.FirstOrDefault(h => h.Key.Equals("Content-Disposition", StringComparison.InvariantCultureIgnoreCase));

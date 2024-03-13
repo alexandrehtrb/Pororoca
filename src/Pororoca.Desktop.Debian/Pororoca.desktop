@@ -3,6 +3,7 @@ Name=Pororoca
 Comment=HTTP inspection tool
 Icon=pororoca
 Exec=pororoca
+StartupWMClass=pororoca
 Terminal=false
 Type=Application
 Categories=Development

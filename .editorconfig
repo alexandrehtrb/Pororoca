@@ -8,7 +8,13 @@ tab_width = 4
 insert_final_newline = false
 trim_trailing_whitespace = true
 max_line_length = 100
+end_of_line = unset
+
+[*.sln]
 end_of_line = crlf
+
+[*.sh]
+end_of_line = lf
 
 [*.yml]
 indent_size = 2

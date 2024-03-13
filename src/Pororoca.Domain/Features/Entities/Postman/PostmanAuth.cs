@@ -41,12 +41,12 @@ internal class PostmanAuth
         {
             if (je.ValueKind == JsonValueKind.Object)
             {
-                var basic = je.Deserialize<PostmanAuthBasic>(options: MinifyingOptions);
+                var basic = je.Deserialize(MainJsonCtx.PostmanAuthBasic);
                 return (basic.Username ?? string.Empty, basic.Password ?? string.Empty);
             }
             else if (je.ValueKind == JsonValueKind.Array)
             {
-                var basic = je.Deserialize<PostmanVariable[]>();
+                var basic = je.Deserialize(MainJsonCtx.PostmanVariableArray);
                 return ParseFromVariableArray(basic);
             }
         }
@@ -67,12 +67,12 @@ internal class PostmanAuth
         {
             if (je.ValueKind == JsonValueKind.Object)
             {
-                var bearer = je.Deserialize<PostmanAuthBearer>(options: MinifyingOptions);
+                var bearer = je.Deserialize(MainJsonCtx.PostmanAuthBearer);
                 return bearer.Token ?? string.Empty;
             }
             else if (je.ValueKind == JsonValueKind.Array)
             {
-                var bearer = je.Deserialize<PostmanVariable[]>();
+                var bearer = je.Deserialize(MainJsonCtx.PostmanVariableArray);
                 return ParseFromVariableArray(bearer);
             }
         }
@@ -96,12 +96,12 @@ internal class PostmanAuth
         {
             if (je.ValueKind == JsonValueKind.Object)
             {
-                var ntlm = je.Deserialize<PostmanAuthNtlm>(options: MinifyingOptions);
+                var ntlm = je.Deserialize(MainJsonCtx.PostmanAuthNtlm);
                 return (ntlm.Username ?? string.Empty, ntlm.Password ?? string.Empty, ntlm.Domain ?? string.Empty, ntlm.Workstation ?? string.Empty);
             }
             else if (je.ValueKind == JsonValueKind.Array)
             {
-                var vars = je.Deserialize<PostmanVariable[]>();
+                var vars = je.Deserialize(MainJsonCtx.PostmanVariableArray);
                 return ParseFromVariableArray(vars);
             }
         }

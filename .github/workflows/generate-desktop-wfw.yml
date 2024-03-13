@@ -46,7 +46,7 @@ jobs:
     - name: Install .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.200
+        dotnet-version: 8.0.202
 
     # GitHub Actions Windows Runners come with NSIS pre-installed
     # https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md
@@ -202,18 +202,17 @@ jobs:
         # Debian control file
         [void](mkdir "./out/deb/DEBIAN")
         Copy-Item -Path "./src/Pororoca.Desktop.Debian/control" -Destination "./out/deb/DEBIAN"
-        # Executable file and script
+        # Starter script
         [void](mkdir "./out/deb/usr")
         [void](mkdir "./out/deb/usr/bin")
-        Copy-Item -Path "./${env:OUTPUT_FOLDER}/Pororoca" -Destination "./out/deb/usr/bin/pororoca_executable"
         Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca.sh" -Destination "./out/deb/usr/bin/pororoca"
         chmod +x "./out/deb/usr/bin/pororoca" # set executable permissions to starter script
-        # Shared libraries
-        # chmod 644 --> set read-only attributes
+        # Other files
         [void](mkdir "./out/deb/usr/lib")
         [void](mkdir "./out/deb/usr/lib/pororoca")
-        Get-ChildItem $env:OUTPUT_FOLDER -File -Filter "*.so" | Copy-Item -Destination "./out/deb/usr/lib/pororoca" -Force
-        Get-ChildItem "./out/deb/usr/lib/pororoca" -File -Filter "*.so" | % { chmod 644 $_.FullName }
+        Copy-Item -Path "${env:OUTPUT_FOLDER}/*" -Destination "./out/deb/usr/lib/pororoca" -Recurse -Force
+        chmod -R a+rX "./out/deb/usr/lib/pororoca/" # set read permissions to all files
+        chmod +x "./out/deb/usr/lib/pororoca/Pororoca" # set executable permissions to main executable
         # Desktop shortcut
         [void](mkdir "./out/deb/usr/share")
         [void](mkdir "./out/deb/usr/share/applications")

@@ -1,6 +1,8 @@
 global using static Pororoca.Domain.Tests.TestFilesLoader;
 
 using System.Text;
+using System.Text.Json;
+using static Pororoca.Domain.Features.Common.JsonConfiguration;
 
 namespace Pororoca.Domain.Tests;
 
@@ -26,4 +28,7 @@ internal static class TestFilesLoader
         string path = Path.Combine(GetTestFilesDirPath(), subfolder, fileName);
         return File.ReadAllText(path, Encoding.UTF8);
     }
+
+    internal static string MinifyJsonString(string json) =>
+        JsonSerializer.Serialize(JsonSerializer.Deserialize(json, MinifyingJsonCtx.JsonDocument), MinifyingJsonCtx.JsonDocument!)!;
 }

@@ -141,11 +141,11 @@ public static class PostmanCollectionV21Importer
         {
             if (je.ValueKind == JsonValueKind.Object)
             {
-                return je.Deserialize<PostmanRequestUrl>(options: MinifyingOptions)?.Raw ?? string.Empty;
+                return je.Deserialize(MainJsonCtx.PostmanRequestUrl)?.Raw ?? string.Empty;
             }
             else
             {
-                return je.Deserialize<string>() ?? string.Empty;
+                return je.Deserialize(MainJsonCtx.String) ?? string.Empty;
             }
         }
         else if (postmanRequestUrl is PostmanRequestUrl reqUrl)
@@ -253,11 +253,11 @@ public static class PostmanCollectionV21Importer
             {
                 if (je.ValueKind == JsonValueKind.Array)
                 {
-                    fileSrcPath = je.Deserialize<string[]>()?.FirstOrDefault();
+                    fileSrcPath = je.Deserialize(MainJsonCtx.StringArray)?.FirstOrDefault();
                 }
                 else
                 {
-                    fileSrcPath = je.Deserialize<string>();
+                    fileSrcPath = je.Deserialize(MainJsonCtx.String);
                 }
             }
             return PororocaHttpRequestFormDataParam.MakeFileParam(IsEnabledInPostman(f.Disabled), f.Key, fileSrcPath ?? string.Empty, f.ContentType ?? string.Empty);

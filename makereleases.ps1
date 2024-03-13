@@ -36,14 +36,14 @@ function Get-RuntimesToPublishFor
 	# osx-arm64 doesn't work for some reason,
 	# but osx-x64 works on Mac OSes with Apple Silicon (arm64)
 	$unixRuntimes = @(`
-		'linux-x64' ` 
-		,'debian-x64' ` 
+		'linux-x64' `
+		,'debian-x64' `
 		#,'linux-arm64' `
 		,'osx-x64' `
 		#,'osx-arm64' `
 	)
 	$windowsRuntimes = @(`
-		#'win7-x64' ` 
+		#'win7-x64' `
 		#,'win7-x86' `
 		'win-x64_portable' `
 		,'win-x86_portable' `
@@ -194,7 +194,7 @@ function Generate-PororocaTestRelease {
 		--nologo `
 		--verbosity quiet `
 		--configuration Release
-	
+
 	Copy-Item -Path "./src/Pororoca.Test/bin/Release/Pororoca.Test.${versionName}.nupkg" `
 	          -Destination "./out/Pororoca.Test.${versionName}.nupkg"
 
@@ -214,11 +214,11 @@ function Generate-PororocaDesktopRelease {
 	$isInstallOnWindowsRelease = ($runtime -like "*_installer")
 	$isDebianDpkgRelease = ($runtime -like "debian*")
 	$dotnetPublishRuntime = $runtime.Replace("_installer","").Replace("_portable","").Replace("debian","linux")
-	
+
 	Write-Host "Publishing Pororoca.Desktop for ${runtime}..." -ForegroundColor DarkYellow
 
 	$stopwatch.Restart()
-	
+
 	Publish-PororocaDesktop -Runtime $dotnetPublishRuntime -IsInstallOnWindowsRelease $isInstallOnWindowsRelease -IsInstallOnDebianRelease $isDebianDpkgRelease -OutputFolder $outputFolder
 	Rename-Executable -Runtime $runtime -OutputFolder $outputFolder
 	Set-ExecutableAttributesIfUnix -Runtime $runtime -OutputFolder $outputFolder
@@ -247,7 +247,7 @@ function Generate-PororocaDesktopRelease {
 		$stopwatch.Stop()
 		Write-Host "Package created on ./out/${zipName} ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
 		Write-Host "SHA256 hash for package ${runtime}: $((Get-FileHash ./out/${zipName} -Algorithm SHA256).Hash)" -ForegroundColor DarkGreen
-	}	
+	}
 }
 
 function Publish-PororocaDesktop
@@ -266,7 +266,7 @@ function Publish-PororocaDesktop
 		# unless, and only for Windows, if we include msquic.dll next to the generated .exe file
 		# https://github.com/dotnet/runtime/issues/79727
 		# update (2023-12-11): let's try single-file publishing for Linux too
-		$publishSingleFile = $True #$False
+		$publishSingleFile = $True
 	}
 	else
 	{
@@ -276,7 +276,7 @@ function Publish-PororocaDesktop
 	$publishSingleFileArg = $(${publishSingleFile}.ToString().ToLower())
 	$isInstallOnWindowsReleaseArg = $(${isInstallOnWindowsRelease}.ToString().ToLower())
 	$isInstallOnDebianReleaseArg = $(${isInstallOnDebianRelease}.ToString().ToLower())
-	
+
 	# set UITestsEnabled to false to hide 'Run UI tests'
 	dotnet publish ./src/Pororoca.Desktop/Pororoca.Desktop.csproj `
 		--verbosity quiet `
@@ -289,7 +289,7 @@ function Publish-PororocaDesktop
 		--self-contained true `
 		--runtime $runtime `
 		--output $outputFolder
-	
+
 	if ($runtime -like "*win*")
 	{
 		# let's copy the msquic.dll file next to the generated .exe
@@ -425,7 +425,7 @@ function Compress-Package
 		Compress-Archive `
 			-CompressionLevel Optimal `
 			-Path $outputFolder `
-			-DestinationPath "./out/${zipName}"	
+			-DestinationPath "./out/${zipName}"
 	}
 	else
 	{
@@ -470,23 +470,22 @@ function Pack-ReleaseInDebianDpkg
     )
 	# https://wiki.freepascal.org/Debian_package_structure
 	# https://martin.hoppenheit.info/blog/2016/where-to-put-application-icons-on-linux/
-	
+
 	[void](mkdir "${generalOutFolder}/deb")
 	# Debian control file
 	[void](mkdir "${generalOutFolder}/deb/DEBIAN")
 	Copy-Item -Path "./src/Pororoca.Desktop.Debian/control" -Destination "${generalOutFolder}/deb/DEBIAN"
-	# Executable file and script
+	# Starter script
 	[void](mkdir "${generalOutFolder}/deb/usr")
 	[void](mkdir "${generalOutFolder}/deb/usr/bin")
-	Copy-Item -Path "./${installerFilesFolder}/Pororoca" -Destination "${generalOutFolder}/deb/usr/bin/pororoca_executable"
 	Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca.sh" -Destination "${generalOutFolder}/deb/usr/bin/pororoca"
 	chmod +x "${generalOutFolder}/deb/usr/bin/pororoca" # set executable permissions to starter script
-	# Shared libraries
-	# chmod 644 --> set read-only attributes 
+	# Other files
 	[void](mkdir "${generalOutFolder}/deb/usr/lib")
 	[void](mkdir "${generalOutFolder}/deb/usr/lib/pororoca")
-	Get-ChildItem $installerFilesFolder -File -Filter "*.so" | Copy-Item -Destination "${generalOutFolder}/deb/usr/lib/pororoca" -Force
-	Get-ChildItem "${generalOutFolder}/deb/usr/lib/pororoca" -File -Filter "*.so" | % { chmod 644 $_.FullName }
+    Copy-Item -Path "${installerFilesFolder}/*" -Destination "${generalOutFolder}/deb/usr/lib/pororoca" -Recurse -Force
+    chmod -R a+rX "${generalOutFolder}/deb/usr/lib/pororoca/" # set read permissions to all files
+    chmod +x "${generalOutFolder}/deb/usr/lib/pororoca/Pororoca" # set executable permissions to main executable
 	# Desktop shortcut
 	[void](mkdir "${generalOutFolder}/deb/usr/share")
 	[void](mkdir "${generalOutFolder}/deb/usr/share/applications")
@@ -530,12 +529,12 @@ function Pack-ReleaseInDebianDpkg
 	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/scalable")
 	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/scalable/apps")
 	Copy-Item -Path "./misc/pororoca_logo.svg" -Destination "${generalOutFolder}/deb/usr/share/icons/hicolor/scalable/apps/pororoca.svg"
-	
+
 	# Make .deb file
 	dpkg-deb --root-owner-group --build "./out/deb/" "./out/Pororoca_${versionName}_amd64.deb"
 
 	# To run Pororoca from the Terminal, on Debian-installed version:
-	# LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/pororoca pororoca	
+	# LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/pororoca pororoca
 
 	# To install Pororoca .deb package:
 	# sudo apt install ./out/pororoca_version_amd64.deb

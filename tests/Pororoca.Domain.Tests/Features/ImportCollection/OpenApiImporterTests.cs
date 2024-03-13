@@ -1,8 +1,5 @@
-using System.Text;
-using System.Text.Json;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Xunit;
-using static Pororoca.Domain.Features.Common.JsonConfiguration;
 using static Pororoca.Domain.Features.ImportCollection.OpenApiImporter;
 
 namespace Pororoca.Domain.Tests.Features.ImportCollection;
@@ -278,7 +275,7 @@ public static class OpenApiImporterTests
         Assert.Equal("application/json", req.Body.ContentType);
         Assert.Equal(
             "{\"calendario\":{\"dataDeVencimento\":\"2020-12-31\",\"validadeAposVencimento\":\"30\"},\"loc\":{\"id\":\"789\"},\"devedor\":{\"logradouro\":\"Alameda Souza, Numero 80, Bairro Braz\",\"cidade\":\"Recife\",\"uf\":\"PE\",\"cep\":\"70011750\",\"cpf\":\"12345678909\",\"nome\":\"Francisco da Silva\"},\"valor\":{\"original\":\"123.45\",\"multa\":{\"modalidade\":\"2\",\"valorPerc\":\"15.00\"},\"juros\":{\"modalidade\":\"2\",\"valorPerc\":\"2.00\"},\"desconto\":{\"modalidade\":\"1\",\"descontoDataFixa\":[{\"data\":\"2020-11-30\",\"valorPerc\":\"30.00\"}]}},\"chave\":\"5f84a4c5-c5cb-4599-9f13-7eb4d419dacc\",\"solicitacaoPagador\":\"Cobrança dos serviços prestados.\"}",
-            JsonSerializer.Serialize(JsonSerializer.Deserialize<dynamic>(req.Body.RawContent!), options: MinifyingOptions));
+            MinifyJsonString(req.Body.RawContent!));
 
         #endregion
     }
