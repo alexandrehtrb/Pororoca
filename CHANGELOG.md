@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.1.1](#311-2024-03-13)
 * [3.1.0.1](#3101-2024-02-19)
 * [3.1.0](#310-2024-02-14)
 * [3.0.1.1](#3011-2024-01-17)
@@ -20,6 +21,27 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.1.1](https://github.com/alexandrehtrb/Pororoca/tree/3.1.1) (2024-03-13)
+
+### Features
+
+* Prettify WebSocket JSON messages. (issue [#83](https://github.com/alexandrehtrb/Pororoca/issues/83))
+* Improves Debian packaging to specify dependencies.
+
+### Refactors
+
+* JSON source generators for Postman collection, HTTP repeaters input data and GraphQL request body.
+
+### Others
+
+* Raised .NET SDK to 8.0.202.
+* Raised Microsoft.OpenApi, xunit and coverlet dependencies versions.
+* Added simplified chinese README.
+
+### New Contributors
+
+* [@francis-zhao](https://github.com/francis-zhao) made his first contribution in PR [#84](https://github.com/alexandrehtrb/Pororoca/pull/84)
 
 ## [3.1.0.1](https://github.com/alexandrehtrb/Pororoca/tree/3.1.0.1) (2024-02-19)
 
