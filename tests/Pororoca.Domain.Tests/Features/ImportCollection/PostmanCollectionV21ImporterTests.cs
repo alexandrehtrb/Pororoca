@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
@@ -232,10 +233,11 @@ public static class PostmanCollectionV21ImporterTests
             ContentType = "text/plain",
             Type = PostmanRequestBodyFormDataParamType.File
         };
+
         PostmanRequestBodyFormDataParam p2f = new()
         {
             Key = "Key2File",
-            Src = @"C:\Pasta1\arq2.jpg",
+            Src = JsonDocument.Parse("[\"C:/Pasta1/arq2.jpg\"]").RootElement,
             ContentType = "image/jpeg",
             Type = PostmanRequestBodyFormDataParamType.File,
             Disabled = true
@@ -280,7 +282,7 @@ public static class PostmanCollectionV21ImporterTests
         Assert.False(f2f.Enabled);
         Assert.Equal(PororocaHttpRequestFormDataParamType.File, f2f.Type);
         Assert.Equal("Key2File", f2f.Key);
-        Assert.Equal(@"C:\Pasta1\arq2.jpg", f2f.FileSrcPath);
+        Assert.Equal(@"C:/Pasta1/arq2.jpg", f2f.FileSrcPath);
         Assert.Equal("image/jpeg", f2f.ContentType);
     }
 
@@ -325,7 +327,7 @@ public static class PostmanCollectionV21ImporterTests
     }
 
     [Fact]
-    public static void Should_convert_postman_req_basic_auth_to_pororoca_req_auth_correctly()
+    public static void Should_convert_postman_req_basic_auth_to_pororoca_req_auth_correctly_basic_is_postmanvararray()
     {
         // GIVEN
         PostmanAuth? postmanAuth = new()
@@ -350,7 +352,49 @@ public static class PostmanCollectionV21ImporterTests
     }
 
     [Fact]
-    public static void Should_convert_postman_req_bearer_auth_to_pororoca_req_auth_correctly()
+    public static void Should_convert_postman_req_basic_auth_to_pororoca_req_auth_correctly_basic_is_postmanauthbasicjsonobj()
+    {
+        // GIVEN
+        PostmanAuth? postmanAuth = new()
+        {
+            Type = PostmanAuthType.basic,
+            Basic = JsonDocument.Parse("{\"username\":\"usr\",\"password\":\"pwd\"}").RootElement
+        };
+
+        // WHEN
+        var reqAuth = ConvertToPororocaAuth(postmanAuth);
+
+        // THEN
+        Assert.NotNull(reqAuth);
+        Assert.Equal(PororocaRequestAuthMode.Basic, reqAuth!.Mode);
+        Assert.Equal("usr", reqAuth.BasicAuthLogin);
+        Assert.Equal("pwd", reqAuth.BasicAuthPassword);
+        Assert.Null(reqAuth.BearerToken);
+    }
+
+    [Fact]
+    public static void Should_convert_postman_req_basic_auth_to_pororoca_req_auth_correctly_basic_is_postmanauthbasicjsonarray()
+    {
+        // GIVEN
+        PostmanAuth? postmanAuth = new()
+        {
+            Type = PostmanAuthType.basic,
+            Basic = JsonDocument.Parse("[ {\"key\":\"username\", \"value\":\"usr\"}, {\"key\":\"password\",\"value\":\"pwd\"} ]").RootElement
+        };
+
+        // WHEN
+        var reqAuth = ConvertToPororocaAuth(postmanAuth);
+
+        // THEN
+        Assert.NotNull(reqAuth);
+        Assert.Equal(PororocaRequestAuthMode.Basic, reqAuth!.Mode);
+        Assert.Equal("usr", reqAuth.BasicAuthLogin);
+        Assert.Equal("pwd", reqAuth.BasicAuthPassword);
+        Assert.Null(reqAuth.BearerToken);
+    }
+
+    [Fact]
+    public static void Should_convert_postman_req_bearer_auth_to_pororoca_req_auth_correctly_bearer_is_postmanvararray()
     {
         // GIVEN
         PostmanAuth? postmanAuth = new()
@@ -360,6 +404,48 @@ public static class PostmanCollectionV21ImporterTests
             {
                 new() { Key = "token", Value = "tkn", Type = "string" }
             }
+        };
+
+        // WHEN
+        var reqAuth = ConvertToPororocaAuth(postmanAuth);
+
+        // THEN
+        Assert.NotNull(reqAuth);
+        Assert.Equal(PororocaRequestAuthMode.Bearer, reqAuth!.Mode);
+        Assert.Null(reqAuth.BasicAuthLogin);
+        Assert.Null(reqAuth.BasicAuthPassword);
+        Assert.Equal("tkn", reqAuth.BearerToken);
+    }
+
+    [Fact]
+    public static void Should_convert_postman_req_bearer_auth_to_pororoca_req_auth_correctly_bearer_is_postmanauthbearerjsonobj()
+    {
+        // GIVEN
+        PostmanAuth? postmanAuth = new()
+        {
+            Type = PostmanAuthType.bearer,
+            Bearer = JsonDocument.Parse("{\"token\":\"tkn\"}").RootElement
+        };
+
+        // WHEN
+        var reqAuth = ConvertToPororocaAuth(postmanAuth);
+
+        // THEN
+        Assert.NotNull(reqAuth);
+        Assert.Equal(PororocaRequestAuthMode.Bearer, reqAuth!.Mode);
+        Assert.Null(reqAuth.BasicAuthLogin);
+        Assert.Null(reqAuth.BasicAuthPassword);
+        Assert.Equal("tkn", reqAuth.BearerToken);
+    }
+
+    [Fact]
+    public static void Should_convert_postman_req_bearer_auth_to_pororoca_req_auth_correctly_bearer_is_postmanauthbearerjsonarray()
+    {
+        // GIVEN
+        PostmanAuth? postmanAuth = new()
+        {
+            Type = PostmanAuthType.bearer,
+            Bearer = JsonDocument.Parse("[ {\"key\":\"token\",\"value\":\"tkn\"} ]").RootElement
         };
 
         // WHEN
@@ -403,6 +489,55 @@ public static class PostmanCollectionV21ImporterTests
         Assert.Equal("usr", reqAuth.Windows.Login);
         Assert.Equal("pwd", reqAuth.Windows.Password);
         Assert.Equal("dom", reqAuth.Windows.Domain);
+    }
+
+    #endregion
+
+    #region REQUEST URL
+
+    [Fact]
+    public static void Should_convert_postman_req_url_correctly_when_url_is_jsonobject()
+    {
+        // GIVEN
+        var postmanRequest = CreateTestRequestWithAuth();
+        postmanRequest.Url = JsonDocument.Parse("{\"raw\": \"http://www.abc.com.br\"}").RootElement;
+
+        // WHEN
+        var req = ConvertToPororocaHttpRequest(string.Empty, postmanRequest);
+
+        // THEN
+        Assert.NotNull(req);
+        Assert.Equal("http://www.abc.com.br", req.Url);
+    }
+
+    [Fact]
+    public static void Should_convert_postman_req_url_correctly_when_url_is_jsonstring()
+    {
+        // GIVEN
+        var postmanRequest = CreateTestRequestWithAuth();
+        postmanRequest.Url = JsonDocument.Parse("\"http://www.abc.com.br\"").RootElement;
+
+        // WHEN
+        var req = ConvertToPororocaHttpRequest(string.Empty, postmanRequest);
+
+        // THEN
+        Assert.NotNull(req);
+        Assert.Equal("http://www.abc.com.br", req.Url);
+    }
+
+    [Fact]
+    public static void Should_convert_postman_req_url_correctly_when_url_is_postmanrequrl_parsedobj()
+    {
+        // GIVEN
+        var postmanRequest = CreateTestRequestWithAuth();
+        postmanRequest.Url = new PostmanRequestUrl() { Raw = "http://www.abc.com.br" };
+
+        // WHEN
+        var req = ConvertToPororocaHttpRequest(string.Empty, postmanRequest);
+
+        // THEN
+        Assert.NotNull(req);
+        Assert.Equal("http://www.abc.com.br", req.Url);
     }
 
     #endregion
