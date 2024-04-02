@@ -42,6 +42,8 @@ public static partial class PororocaResponseValueCapturer
                     return GetCount(jsonNode!);
                 if (subpath.Equals("first()", StringComparison.InvariantCultureIgnoreCase))
                     return GetFirstArrayElement(jsonNode!);
+                if (subpath.Equals("last()", StringComparison.InvariantCultureIgnoreCase))
+                    return GetLastArrayElement(jsonNode!);
                 if (IsArrayElementSubpath(subpath, out string? elementName, out int? index1, out int? index2))
                 {
                     if (elementName?.Equals("$", StringComparison.InvariantCultureIgnoreCase) == true)
@@ -118,6 +120,12 @@ public static partial class PororocaResponseValueCapturer
     private static string GetFirstArrayElement(JsonNode node)
     {
         var firstElement = node.AsArray().First();
+        return firstElement.ToString();
+    }
+
+    private static string GetLastArrayElement(JsonNode node)
+    {
+        var firstElement = node.AsArray().Last();
         return firstElement.ToString();
     }
 }

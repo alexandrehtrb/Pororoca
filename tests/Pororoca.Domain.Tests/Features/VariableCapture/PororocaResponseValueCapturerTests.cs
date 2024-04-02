@@ -104,6 +104,12 @@ public static partial class PororocaResponseValueCapturerTests
         Assert.Equal(expectedCapture, CaptureJsonValue(path, json));
 
     [Theory]
+    [InlineData("3", "$.myObj.myObj2.arr.last()", testJsonObj)]
+    [InlineData(null, "$.myObj.last()", testJsonObj)]
+    public static void TestJsonValueCaptureLastFunction(string? expectedCapture, string path, string json) =>
+        Assert.Equal(expectedCapture, CaptureJsonValue(path, json));
+
+    [Theory]
     [InlineData("ABC", "/a", "<a>ABC</a>")]
     [InlineData("ENG", "/SessionInfo/Language", testXmlSimpleObj)]
     [InlineData("1", "/SessionInfo/Version", testXmlSimpleObj)]
