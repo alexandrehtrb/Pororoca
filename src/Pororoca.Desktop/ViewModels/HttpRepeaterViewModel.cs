@@ -126,20 +126,18 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
 
             HasInputDataFileSrcPathValidationProblem = (value == TranslateRepetitionErrors.InputDataFileNotFound);
 
-            if (value == TranslateRepetitionErrors.DelayCantBeNegative
-             || value == TranslateRepetitionErrors.NumberOfRepetitionsMustBeAtLeast1
-             || value == TranslateRepetitionErrors.MaxDopMustBeAtLeast1)
+            // TODO: Improve this, do not use fixed values to resolve index
+            RepetitionTabSelectedIndex = value switch
             {
-                // TODO: Improve this, do not use fixed values to resolve index
-                RepetitionTabSelectedIndex = 0;
-            }
+                TranslateRepetitionErrors.NumberOfRepetitionsMustBeAtLeast1 or
+                TranslateRepetitionErrors.DelayCantBeNegative or
+                TranslateRepetitionErrors.MaxDopMustBeAtLeast1 => 0,
 
-            if (value == TranslateRepetitionErrors.InputDataFileNotFound
-             || value == TranslateRepetitionErrors.InputDataInvalid)
-            {
-                // TODO: Improve this, do not use fixed values to resolve index
-                RepetitionTabSelectedIndex = 1;
-            }
+                TranslateRepetitionErrors.InputDataFileNotFound or
+                TranslateRepetitionErrors.InputDataInvalid => 1,
+
+                _ => RepetitionTabSelectedIndex
+            };
         }
     }
 

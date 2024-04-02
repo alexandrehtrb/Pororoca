@@ -144,24 +144,30 @@ public static class AvailablePororocaRequestSelectionOptions
         headerName switch
         {
             "Accept" => "*/*",
-            "Accept-Datetime" => GetSampleValueForDateHeader(),
-            "Accept-Encoding" => sampleValueEncodingHeader,
-            "Accept-Language" => GetSampleValueForLanguageHeader(),
+
+            "Accept-Datetime" or
+            "Date" or
+            "If-Modified-Since" or
+            "If-Unmodified-Since" => GetSampleValueForDateHeader(),
+
+            "Accept-Encoding" or
+            "Content-Encoding" => sampleValueEncodingHeader,
+
+            "Accept-Language" or
+            "Content-Language" => GetSampleValueForLanguageHeader(),
+
             "Access-Control-Request-Method" => "GET",
             "Access-Control-Request-Headers" => "origin, x-requested-with",
             "Cache-Control" => "no-cache",
             "Connection" => "keep-alive",
-            "Content-Encoding" => sampleValueEncodingHeader,
-            "Content-Language" => GetSampleValueForLanguageHeader(),
             "Cookie" => "$Version=1; Skin=new;",
-            "Date" => GetSampleValueForDateHeader(),
             "From" => "user@example.com",
             "Host" => "en.wikipedia.org",
-            "If-Match" => string.Empty,
-            "If-Modified-Since" => GetSampleValueForDateHeader(),
-            "If-None-Match" => string.Empty,
+
+            "If-Match" or
+            "If-None-Match" or
             "If-Range" => string.Empty,
-            "If-Unmodified-Since" => GetSampleValueForDateHeader(),
+
             "Max-Forwards" => "10",
             "Origin" => "http://www.pudim.com.br",
             "Pragma" => "no-cache",
@@ -169,8 +175,10 @@ public static class AvailablePororocaRequestSelectionOptions
             "Range" => "bytes=500-999",
             "Referer" => "http://en.wikipedia.org/wiki/Main_Page",
             "Prefer" => "return=representation",
-            "X-Request-ID" => Guid.NewGuid().ToString(),
+
+            "X-Request-ID" or
             "X-Correlation-ID" => Guid.NewGuid().ToString(),
+
             "Save-Data" => "on",
             "Sec-GPC" => "1",
             "User-Agent" => "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/119.0",

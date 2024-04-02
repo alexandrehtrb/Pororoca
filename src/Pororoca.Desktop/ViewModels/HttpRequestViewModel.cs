@@ -524,18 +524,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
         if (RequestAuthDataCtx.AuthMode == PororocaRequestAuthMode.InheritFromCollection)
             return;
 
-        RequestAuthDataCtx.HasWindowsAuthLoginProblem = errorCode == TranslateRequestErrors.WindowsAuthLoginCannotBeBlank;
-        RequestAuthDataCtx.HasWindowsAuthPasswordProblem = errorCode == TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank;
-        RequestAuthDataCtx.HasWindowsAuthDomainProblem = errorCode == TranslateRequestErrors.WindowsAuthDomainCannotBeBlank;
-
-        RequestAuthDataCtx.HasClientCertificateAuthPkcs12CertificateFilePathProblem =
-        (errorCode == TranslateRequestErrors.ClientCertificatePkcs12CertificateFileNotFound);
-        RequestAuthDataCtx.HasClientCertificateAuthPkcs12FilePasswordProblem =
-        (errorCode == TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank);
-        RequestAuthDataCtx.HasClientCertificateAuthPemCertificateFilePathProblem =
-        (errorCode == TranslateRequestErrors.ClientCertificatePemCertificateFileNotFound);
-        RequestAuthDataCtx.HasClientCertificateAuthPemPrivateKeyFilePathProblem =
-        (errorCode == TranslateRequestErrors.ClientCertificatePemPrivateKeyFileNotFound);
+        RequestAuthDataCtx.HighlightValidationProblems(errorCode);
 
         if (RequestAuthDataCtx.HasValidationProblem)
         {
