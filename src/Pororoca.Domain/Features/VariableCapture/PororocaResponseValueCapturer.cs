@@ -38,12 +38,9 @@ public static partial class PororocaResponseValueCapturer
 
             foreach (string subpath in subpaths)
             {
-                if (subpath.Equals("count()", StringComparison.InvariantCultureIgnoreCase))
-                    return GetCount(jsonNode!);
-                if (subpath.Equals("first()", StringComparison.InvariantCultureIgnoreCase))
-                    return GetFirstArrayElement(jsonNode!);
-                if (subpath.Equals("last()", StringComparison.InvariantCultureIgnoreCase))
-                    return GetLastArrayElement(jsonNode!);
+                if (IsFunction(subpath, jsonNode, out string result))
+                    return result;
+
                 if (IsArrayElementSubpath(subpath, out string? elementName, out int? index1, out int? index2))
                 {
                     if (elementName?.Equals("$", StringComparison.InvariantCultureIgnoreCase) == true)
@@ -108,6 +105,32 @@ public static partial class PororocaResponseValueCapturer
             elementName = null;
             index1 = index2 = null;
             return false;
+        }
+    }
+
+    private static bool IsFunction(string subpath, JsonNode? jsonNode, out string result)
+    {
+        if (string.IsNullOrWhiteSpace(subpath) || jsonNode is null)
+        {
+            result = null;
+            return false;
+        }
+
+        switch (subpath)
+        {
+            case "count()":
+                result = GetCount(jsonNode);
+                return true;
+            case "first()":
+                result = GetFirstArrayElement(jsonNode);
+                return true;
+            case "last()":
+                result = GetLastArrayElement(jsonNode);
+                return true;
+
+            default:
+                result = null;
+                return false;
         }
     }
 
