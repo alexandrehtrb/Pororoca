@@ -148,7 +148,7 @@ public static partial class PororocaResponseValueCapturer
 
     private static string GetLastArrayElement(JsonNode node)
     {
-        var firstElement = node.AsArray().Last();
-        return firstElement.ToString();
+        var lastElement = node.AsArray().Last();
+        return lastElement.ToString();
     }
 }
