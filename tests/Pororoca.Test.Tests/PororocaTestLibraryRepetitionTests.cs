@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Net;
 using System.Threading.Channels;
-using Pororoca.Domain.Feature.Entities.Pororoca.Repetition;
+using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Xunit;
 using Xunit.Abstractions;

@@ -1,4 +1,4 @@
-using Pororoca.Domain.Feature.Entities.Pororoca.Repetition;
+using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 
 namespace Pororoca.Desktop.Converters;
 

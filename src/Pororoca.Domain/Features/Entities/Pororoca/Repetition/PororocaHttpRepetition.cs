@@ -1,9 +1,9 @@
 using System.Text;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
-using static Pororoca.Domain.Feature.Entities.Pororoca.Repetition.PororocaRepetitionInputData;
+using static Pororoca.Domain.Features.Entities.Pororoca.Repetition.PororocaRepetitionInputData;
 
-namespace Pororoca.Domain.Feature.Entities.Pororoca.Repetition;
+namespace Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 
 public enum PororocaRepetitionMode
 {

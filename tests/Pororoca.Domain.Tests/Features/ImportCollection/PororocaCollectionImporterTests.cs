@@ -1,5 +1,5 @@
 using System.Text;
-using Pororoca.Domain.Feature.Entities.Pororoca.Repetition;
+using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
