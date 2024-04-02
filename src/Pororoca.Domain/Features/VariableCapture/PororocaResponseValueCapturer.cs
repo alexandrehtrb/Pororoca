@@ -39,7 +39,7 @@ public static partial class PororocaResponseValueCapturer
             foreach (string subpath in subpaths)
             {
                 if (subpath.Equals("count()", StringComparison.InvariantCultureIgnoreCase))
-                    return GetCount(jsonNode);
+                    return GetCount(jsonNode!);
                 if (IsArrayElementSubpath(subpath, out string? elementName, out int? index1, out int? index2))
                 {
                     if (elementName?.Equals("$", StringComparison.InvariantCultureIgnoreCase) == true)
@@ -109,7 +109,7 @@ public static partial class PororocaResponseValueCapturer
 
     private static string GetCount(JsonNode node)
     {
-        var count = node.AsArray().Count();
+        int count = node.AsArray().Count;
         return count.ToString();
     }
 }
