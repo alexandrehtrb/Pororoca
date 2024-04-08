@@ -21,7 +21,7 @@ internal static class ClientCertificateTypeMapping
         };
 }
 
-public class ClientCertificateTypeMatchConverter : EnumMatchConverter<PororocaRequestAuthClientCertificateType>
+public sealed class ClientCertificateTypeMatchConverter : EnumMatchConverter<PororocaRequestAuthClientCertificateType>
 {
     protected override PororocaRequestAuthClientCertificateType? MapIndexToEnum(int index) =>
         ClientCertificateTypeMapping.MapIndexToEnum(index);

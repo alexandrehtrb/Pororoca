@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis;
 namespace Pororoca.Desktop.Localization.SourceGeneration;
 
 [Generator]
-public class LocalizationSourceGenerator : IIncrementalGenerator
+public sealed class LocalizationSourceGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {

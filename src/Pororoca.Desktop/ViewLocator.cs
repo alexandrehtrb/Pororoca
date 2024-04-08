@@ -4,7 +4,7 @@ using Pororoca.Desktop.ViewModels;
 
 namespace Pororoca.Desktop;
 
-public class ViewLocator : IDataTemplate
+public sealed class ViewLocator : IDataTemplate
 {
     public Control? Build(object? data)
     {

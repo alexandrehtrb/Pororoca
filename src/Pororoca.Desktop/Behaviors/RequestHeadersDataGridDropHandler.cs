@@ -11,7 +11,7 @@ public interface IRequestHeadersDataGridOwner
     RequestHeadersDataGridViewModel RequestHeadersTableVm { get; }
 }
 
-public class RequestHeadersDataGridDropHandler : BaseDataGridDropHandler<RequestHeaderViewModel>
+public sealed class RequestHeadersDataGridDropHandler : BaseDataGridDropHandler<RequestHeaderViewModel>
 {
     protected override RequestHeaderViewModel MakeCopy(ObservableCollection<RequestHeaderViewModel> parentCollection, RequestHeaderViewModel item) =>
         new(parentCollection, item.ToKeyValueParam());

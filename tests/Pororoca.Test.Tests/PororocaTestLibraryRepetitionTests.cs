@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 
 namespace Pororoca.Test.Tests;
 
-public class PororocaTestLibraryRepetitionTests
+public sealed class PororocaTestLibraryRepetitionTests
 {
     private static readonly TimeSpan oneSecond = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan oneMinute = TimeSpan.FromMinutes(1);

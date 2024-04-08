@@ -6,7 +6,7 @@ using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels.DataGrids;
 
-public class KeyValueParamViewModel : ViewModelBase
+public sealed class KeyValueParamViewModel : ViewModelBase
 {
     private readonly ObservableCollection<KeyValueParamViewModel> parentCollection;
 

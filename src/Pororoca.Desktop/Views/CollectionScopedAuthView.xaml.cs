@@ -3,7 +3,7 @@ using Avalonia.Markup.Xaml;
 
 namespace Pororoca.Desktop.Views;
 
-public class CollectionScopedAuthView : UserControl
+public sealed class CollectionScopedAuthView : UserControl
 {
     public CollectionScopedAuthView() => InitializeComponent();
 

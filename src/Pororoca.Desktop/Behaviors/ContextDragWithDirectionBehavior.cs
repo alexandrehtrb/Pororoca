@@ -10,9 +10,9 @@ using Avalonia.Xaml.Interactivity;
 namespace Pororoca.Desktop.Behaviors;
 
 /// <summary>
-/// 
+///
 /// </summary>
-public class ContextDragWithDirectionBehavior : Behavior<Control>
+public sealed class ContextDragWithDirectionBehavior : Behavior<Control>
 {
     private Point _dragStartPoint;
     private PointerEventArgs? _triggerEvent;
@@ -20,31 +20,31 @@ public class ContextDragWithDirectionBehavior : Behavior<Control>
     private bool _captured;
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public static readonly StyledProperty<object?> ContextProperty =
         AvaloniaProperty.Register<ContextDragBehavior, object?>(nameof(Context));
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public static readonly StyledProperty<IDragHandler?> HandlerProperty =
         AvaloniaProperty.Register<ContextDragBehavior, IDragHandler?>(nameof(Handler));
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    public static readonly StyledProperty<double> HorizontalDragThresholdProperty = 
+    public static readonly StyledProperty<double> HorizontalDragThresholdProperty =
         AvaloniaProperty.Register<ContextDragBehavior, double>(nameof(HorizontalDragThreshold), 3);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public static readonly StyledProperty<double> VerticalDragThresholdProperty =
         AvaloniaProperty.Register<ContextDragBehavior, double>(nameof(VerticalDragThreshold), 3);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public object? Context
     {
@@ -53,7 +53,7 @@ public class ContextDragWithDirectionBehavior : Behavior<Control>
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public IDragHandler? Handler
     {
@@ -62,7 +62,7 @@ public class ContextDragWithDirectionBehavior : Behavior<Control>
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public double HorizontalDragThreshold
     {
@@ -71,7 +71,7 @@ public class ContextDragWithDirectionBehavior : Behavior<Control>
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public double VerticalDragThreshold
     {
@@ -184,7 +184,7 @@ public class ContextDragWithDirectionBehavior : Behavior<Control>
                 }
 
                 var context = Context ?? AssociatedObject?.DataContext;
-                    
+
                 Handler?.BeforeDragDrop(sender, _triggerEvent, context);
 
                 await DoDragDrop(_triggerEvent, context, diff.Y > 0 ? "up" : "down");

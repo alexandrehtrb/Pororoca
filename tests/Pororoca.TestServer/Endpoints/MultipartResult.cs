@@ -4,7 +4,7 @@ using Microsoft.Net.Http.Headers;
 namespace Pororoca.TestServer.Endpoints;
 
 #nullable disable warnings
-public class MultipartContent
+public sealed class MultipartContent
 {
     public string Name { get; set; }
 
@@ -16,7 +16,7 @@ public class MultipartContent
 }
 #nullable restore warnings
 
-public class MultipartFormDataResult : Collection<MultipartContent>, IResult
+public sealed class MultipartFormDataResult : Collection<MultipartContent>, IResult
 {
     private readonly MultipartFormDataContent content;
 

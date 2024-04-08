@@ -5,7 +5,7 @@ using static Pororoca.Desktop.Views.DataGridSelectionUpdater;
 
 namespace Pororoca.Desktop.Views;
 
-public class CollectionVariablesView : UserControl
+public sealed class CollectionVariablesView : UserControl
 {
     public CollectionVariablesView() => InitializeComponent();
 

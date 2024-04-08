@@ -5,7 +5,7 @@ using Pororoca.Desktop.ViewModels;
 
 namespace Pororoca.Desktop.Controls;
 
-public class EditableTextBlock : UserControl
+public sealed class EditableTextBlock : UserControl
 {
     public EditableTextBlock() => InitializeComponent();
 

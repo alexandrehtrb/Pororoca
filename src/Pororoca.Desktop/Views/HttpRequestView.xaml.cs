@@ -9,7 +9,7 @@ using static Pororoca.Desktop.Views.DataGridSelectionUpdater;
 
 namespace Pororoca.Desktop.Views;
 
-public class HttpRequestView : UserControl
+public sealed class HttpRequestView : UserControl
 {
     private readonly AvaloniaEdit.TextMate.TextMate.Installation httpReqRawBodyEditorTextMateInstallation;
     private string? currentHttpReqRawBodySyntaxLangId;

@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Pororoca.Test.Tests;
 
-public class PororocaTestLibraryClientCertificatesTests
+public sealed class PororocaTestLibraryClientCertificatesTests
 {
     private readonly PororocaTest pororocaTest;
 

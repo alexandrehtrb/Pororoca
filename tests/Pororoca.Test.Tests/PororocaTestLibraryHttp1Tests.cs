@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Pororoca.Test.Tests;
 
-public class PororocaTestLibraryHttp1Tests
+public sealed class PororocaTestLibraryHttp1Tests
 {
     private readonly PororocaTest pororocaTest;
 

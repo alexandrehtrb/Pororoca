@@ -5,7 +5,7 @@ using static Pororoca.Desktop.Views.DataGridSelectionUpdater;
 
 namespace Pororoca.Desktop.Views;
 
-public class CollectionScopedRequestHeadersView : UserControl
+public sealed class CollectionScopedRequestHeadersView : UserControl
 {
     public CollectionScopedRequestHeadersView() => InitializeComponent();
 

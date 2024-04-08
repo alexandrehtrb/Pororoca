@@ -21,7 +21,7 @@ internal static class WebSocketMessageRawContentSyntaxMapping
         };
 }
 /*
-public class WebSocketMessageRawContentSyntaxMatchConverter : EnumMatchConverter<PororocaWebSocketMessageRawContentSyntax>
+public sealed class WebSocketMessageRawContentSyntaxMatchConverter : EnumMatchConverter<PororocaWebSocketMessageRawContentSyntax>
 {
     protected override PororocaWebSocketMessageRawContentSyntax? MapIndexToEnum(int index) =>
         WebSocketMessageRawContentSyntaxMapping.MapIndexToEnum(index);

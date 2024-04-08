@@ -9,7 +9,7 @@ using static Pororoca.Desktop.Views.DataGridSelectionUpdater;
 
 namespace Pororoca.Desktop.Views;
 
-public class WebSocketConnectionView : UserControl
+public sealed class WebSocketConnectionView : UserControl
 {
     private readonly AvaloniaEdit.TextMate.TextMate.Installation selectedExchangedMessageEditorTextMateInstallation;
     private string? currentSelectedMsgSyntaxLangId;

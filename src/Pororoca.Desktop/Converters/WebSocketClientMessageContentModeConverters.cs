@@ -21,7 +21,7 @@ internal static class WebSocketClientMessageContentModeMapping
         };
 }
 
-public class WebSocketClientMessageContentModeMatchConverter : EnumMatchConverter<PororocaWebSocketClientMessageContentMode>
+public sealed class WebSocketClientMessageContentModeMatchConverter : EnumMatchConverter<PororocaWebSocketClientMessageContentMode>
 {
     protected override PororocaWebSocketClientMessageContentMode? MapIndexToEnum(int index) =>
         WebSocketClientMessageContentModeMapping.MapIndexToEnum(index);

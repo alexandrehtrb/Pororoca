@@ -23,7 +23,7 @@ internal static class WebSocketMessageTypeMapping
         };
 }
 /*
-public class WebSocketMessageTypeMatchConverter : EnumMatchConverter<PororocaWebSocketMessageType>
+public sealed class WebSocketMessageTypeMatchConverter : EnumMatchConverter<PororocaWebSocketMessageType>
 {
     protected override PororocaWebSocketMessageType? MapIndexToEnum(int index) =>
         WebSocketMessageTypeMapping.MapIndexToEnum(index);

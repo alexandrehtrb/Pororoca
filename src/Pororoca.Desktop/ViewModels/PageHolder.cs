@@ -16,7 +16,7 @@ public abstract class PageHolder : ReactiveObject
     public abstract void SetVM(ViewModelBase? vm);
 }
 
-public class PageHolder<X> : PageHolder where X : ViewModelBase
+public sealed class PageHolder<X> : PageHolder where X : ViewModelBase
 {
     public override Type PageType => typeof(X);
 
