@@ -13,6 +13,7 @@ public static class HttpRepeater
         IEnumerable<PororocaVariable> collectionEffectiveVars,
         PororocaVariable[][]? resolvedInputData,
         PororocaRequestAuth? collectionScopedAuth,
+        List<PororocaKeyValueParam>? collectionScopedRequestHeaders,
         PororocaHttpRepetition rep,
         PororocaHttpRequest baseReq,
         CancellationToken cancellationToken)
@@ -25,9 +26,9 @@ public static class HttpRepeater
             {
                 await (rep.RepetitionMode switch
                 {
-                    PororocaRepetitionMode.Simple => requester.RunSimpleRepetitionAsync(channel.Writer, collectionEffectiveVars, collectionScopedAuth, rep, baseReq, cancellationToken),
-                    PororocaRepetitionMode.Sequential => requester.RunSequentialRepetitionAsync(channel.Writer, collectionEffectiveVars, resolvedInputData!, collectionScopedAuth, rep, baseReq, cancellationToken),
-                    PororocaRepetitionMode.Random => requester.RunRandomRepetitionAsync(channel.Writer, collectionEffectiveVars, resolvedInputData!, collectionScopedAuth, rep, baseReq, cancellationToken),
+                    PororocaRepetitionMode.Simple => requester.RunSimpleRepetitionAsync(channel.Writer, collectionEffectiveVars, collectionScopedAuth, collectionScopedRequestHeaders, rep, baseReq, cancellationToken),
+                    PororocaRepetitionMode.Sequential => requester.RunSequentialRepetitionAsync(channel.Writer, collectionEffectiveVars, resolvedInputData!, collectionScopedAuth, collectionScopedRequestHeaders, rep, baseReq, cancellationToken),
+                    PororocaRepetitionMode.Random => requester.RunRandomRepetitionAsync(channel.Writer, collectionEffectiveVars, resolvedInputData!, collectionScopedAuth, collectionScopedRequestHeaders, rep, baseReq, cancellationToken),
                     _ => Task.CompletedTask
                 });
             }
@@ -70,6 +71,7 @@ public static class HttpRepeater
         ChannelWriter<PororocaHttpRepetitionResult> channelWriter,
         IEnumerable<PororocaVariable> collectionEffectiveVars,
         PororocaRequestAuth? collectionScopedAuth,
+        List<PororocaKeyValueParam>? collectionScopedRequestHeaders,
         PororocaHttpRepetition rep,
         PororocaHttpRequest baseReq,
         CancellationToken cancellationToken)
@@ -83,7 +85,7 @@ public static class HttpRepeater
 
         await Parallel.ForAsync(0, (int)rep.NumberOfRepetitions!, options, async (i, ct) =>
         {
-            bool valid = await ExecuteRepetitionIfValidAsync(channelWriter, requester, collectionEffectiveVars, null, collectionScopedAuth, rep, baseReq, ct);
+            bool valid = await ExecuteRepetitionIfValidAsync(channelWriter, requester, collectionEffectiveVars, null, collectionScopedAuth, collectionScopedRequestHeaders, rep, baseReq, ct);
             if (!valid) internalCts.Cancel();
         });
     }
@@ -94,6 +96,7 @@ public static class HttpRepeater
         IEnumerable<PororocaVariable> collectionEffectiveVars,
         PororocaVariable[][] resolvedInputData,
         PororocaRequestAuth? collectionScopedAuth,
+        List<PororocaKeyValueParam>? collectionScopedRequestHeaders,
         PororocaHttpRepetition rep,
         PororocaHttpRequest baseReq,
         CancellationToken cancellationToken)
@@ -105,7 +108,7 @@ public static class HttpRepeater
             if (cancellationToken.IsCancellationRequested)
                 break;
 
-            bool valid = await ExecuteRepetitionIfValidAsync(channelWriter, requester, collectionEffectiveVars, inputLine, collectionScopedAuth, rep, baseReq, cancellationToken);
+            bool valid = await ExecuteRepetitionIfValidAsync(channelWriter, requester, collectionEffectiveVars, inputLine, collectionScopedAuth, collectionScopedRequestHeaders, rep, baseReq, cancellationToken);
             if (!valid) break;
         }
     }
@@ -116,6 +119,7 @@ public static class HttpRepeater
         IEnumerable<PororocaVariable> collectionEffectiveVars,
         PororocaVariable[][] resolvedInputData,
         PororocaRequestAuth? collectionScopedAuth,
+        List<PororocaKeyValueParam>? collectionScopedRequestHeaders,
         PororocaHttpRepetition rep,
         PororocaHttpRequest baseReq,
         CancellationToken cancellationToken)
@@ -135,12 +139,12 @@ public static class HttpRepeater
                             null :
                             resolvedInputData[Random.Shared.Next(0, resolvedInputData.Length)];
 
-            bool valid = await ExecuteRepetitionIfValidAsync(channelWriter, requester, collectionEffectiveVars, inputLine, collectionScopedAuth, rep, baseReq, ct);
+            bool valid = await ExecuteRepetitionIfValidAsync(channelWriter, requester, collectionEffectiveVars, inputLine, collectionScopedAuth, collectionScopedRequestHeaders, rep, baseReq, ct);
             if (!valid) internalCts.Cancel();
         });
     }
 
-    private static async Task<bool> ExecuteRepetitionIfValidAsync(ChannelWriter<PororocaHttpRepetitionResult> channelWriter, IPororocaRequester requester, IEnumerable<PororocaVariable> collectionEffectiveVars, PororocaVariable[]? inputLine, PororocaRequestAuth? collectionScopedAuth, PororocaHttpRepetition rep, PororocaHttpRequest baseReq, CancellationToken cancellationToken)
+    private static async Task<bool> ExecuteRepetitionIfValidAsync(ChannelWriter<PororocaHttpRepetitionResult> channelWriter, IPororocaRequester requester, IEnumerable<PororocaVariable> collectionEffectiveVars, PororocaVariable[]? inputLine, PororocaRequestAuth? collectionScopedAuth, List<PororocaKeyValueParam>? collectionScopedRequestHeaders, PororocaHttpRepetition rep, PororocaHttpRequest baseReq, CancellationToken cancellationToken)
     {
         var effectiveVars = CombineEffectiveVarsWithInputLine(collectionEffectiveVars, inputLine);
 
@@ -151,7 +155,7 @@ public static class HttpRepeater
         }
         else
         {
-            var res = await requester.RequestAsync(effectiveVars, collectionScopedAuth, baseReq, cancellationToken);
+            var res = await requester.RequestAsync(effectiveVars, collectionScopedAuth, collectionScopedRequestHeaders, baseReq, cancellationToken);
             channelWriter.TryWrite(new(inputLine, res, null));
         }
 

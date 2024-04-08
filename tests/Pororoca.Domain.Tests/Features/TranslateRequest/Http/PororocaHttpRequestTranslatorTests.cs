@@ -27,7 +27,7 @@ public static class PororocaHttpRequestTranslatorTests
         };
 
         // WHEN, THEN
-        Assert.False(TryTranslateRequest(effectiveVars, null, unresolvedReq, out var resolvedReq, out var reqMsg, out string? errorCode));
+        Assert.False(TryTranslateRequest(effectiveVars, null, null, unresolvedReq, out var resolvedReq, out var reqMsg, out string? errorCode));
         Assert.Null(resolvedReq);
         Assert.Null(reqMsg);
         Assert.Equal(TranslateRequestErrors.InvalidUrl, errorCode);
@@ -45,6 +45,9 @@ public static class PororocaHttpRequestTranslatorTests
             new(true, "BasicAuthLogin", "usr", false),
             new(true, "BasicAuthPassword", "pwd", true)
         ];
+        List<PororocaKeyValueParam> colScopedHeaders = [
+            new(true, "ColScopedHeaderName", "ColScopedHeaderValue")
+        ];
         PororocaHttpRequestBody unresolvedBody = new();
         unresolvedBody.SetRawContent("{\"id\":{{K1}}}", "application/json");
         var unresolvedAuth = PororocaRequestAuth.MakeBasicAuth("{{BasicAuthLogin}}", "{{BasicAuthPassword}}");
@@ -60,7 +63,7 @@ public static class PororocaHttpRequestTranslatorTests
         };
 
         // WHEN, THEN
-        bool valid = TryTranslateRequest(effectiveVars, null, unresolvedReq, out var resolvedReq, out var reqMsg, out string? errorCode);
+        bool valid = TryTranslateRequest(effectiveVars, null, colScopedHeaders, unresolvedReq, out var resolvedReq, out var reqMsg, out string? errorCode);
         Assert.Null(errorCode);
         Assert.True(valid);
         Assert.NotNull(resolvedReq);
@@ -73,6 +76,7 @@ public static class PororocaHttpRequestTranslatorTests
         Assert.Equal("PUT", reqMsg.Method.ToString());
         Assert.Equal("http://www.pudim.com.br/index.html", reqMsg.RequestUri!.ToString());
 #pragma warning disable xUnit2012
+        Assert.True(reqMsg.Headers.Any(x => x.Key.Equals("ColScopedHeaderName", StringComparison.InvariantCultureIgnoreCase) && x.Value.Contains("ColScopedHeaderValue")));
         Assert.True(reqMsg.Headers.Any(x => x.Key.Equals("MyHeader", StringComparison.InvariantCultureIgnoreCase) && x.Value.Contains("Value1234")));
         Assert.True(reqMsg.Headers.Any(x => x.Key.Equals("Authorization", StringComparison.InvariantCultureIgnoreCase) && x.Value.Contains("Basic dXNyOnB3ZA==")));
 #pragma warning restore xUnit2012
@@ -101,6 +105,9 @@ public static class PororocaHttpRequestTranslatorTests
             new(true, "BasicAuthLogin", "login", false),
             new(true, "BasicAuthPassword", "password", true)
         ];
+        List<PororocaKeyValueParam> colScopedHeaders = [
+            new(true, "ColScopedHeaderName", "ColScopedHeaderValue{{K1}}")
+        ];
         PororocaHttpRequestBody unresolvedBody = new();
         unresolvedBody.SetRawContent("{\"id\":{{K1}}}", "application/json");
         var unresolvedAuth = PororocaRequestAuth.MakeBasicAuth("{{BasicAuthLogin}}", "{{BasicAuthPassword}}");
@@ -116,14 +123,16 @@ public static class PororocaHttpRequestTranslatorTests
         };
 
         // WHEN
-        var resolvedReq = ResolveRequest(effectiveVars, null, unresolvedReq);
+        var resolvedReq = ResolveRequest(effectiveVars, null, colScopedHeaders, unresolvedReq);
 
         // THEN
         Assert.NotNull(resolvedReq);
         Assert.Equal(3.0m, resolvedReq.HttpVersion);
         Assert.Equal("PUT", resolvedReq.HttpMethod);
         Assert.Equal("http://www.pudim.com.br/index.html", resolvedReq.Url);
-        Assert.Equal([new(true, "MyHeader", "Value1234")], resolvedReq.Headers);
+        Assert.Equal([
+            new(true, "ColScopedHeaderName", "ColScopedHeaderValue17"),
+            new(true, "MyHeader", "Value1234")], resolvedReq.Headers);
         Assert.NotNull(resolvedReq.Body);
         Assert.Equal(PororocaHttpRequestBodyMode.Raw, resolvedReq.Body.Mode);
         Assert.Equal("application/json", resolvedReq.Body.ContentType);

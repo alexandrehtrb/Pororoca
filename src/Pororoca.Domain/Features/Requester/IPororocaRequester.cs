@@ -11,5 +11,5 @@ public interface IPororocaRequester
 
     // TODO: Customizable timeout period
     // TODO: Optional compressed request or response
-    Task<PororocaHttpResponse> RequestAsync(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaHttpRequest req, CancellationToken cancellationToken = default);
+    Task<PororocaHttpResponse> RequestAsync(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, List<PororocaKeyValueParam>? collectionScopedReqHeaders, PororocaHttpRequest req, CancellationToken cancellationToken = default);
 }

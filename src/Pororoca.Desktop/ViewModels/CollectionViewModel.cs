@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
 using Pororoca.Desktop.ExportImport;
+using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.VariableResolution;
 using ReactiveUI;
@@ -12,6 +13,7 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
 {
     #region COLLECTION ORGANIZATION
 
+    public ReactiveCommand<Unit, Unit> ShowCollectionScopedHeadersCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewEnvironmentCmd { get; }
     public ReactiveCommand<Unit, Unit> ImportEnvironmentsCmd { get; }
     public ReactiveCommand<Unit, Unit> ExportCollectionCmd { get; }
@@ -37,6 +39,11 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
     public PororocaRequestAuth? CollectionScopedAuth =>
         ((CollectionScopedAuthViewModel)Items.First(x => x is CollectionScopedAuthViewModel))
         .AuthVm.ToCustomAuth();
+
+    private CollectionScopedRequestHeadersViewModel CollectionScopedRequestHeadersVm { get; }
+
+    public List<PororocaKeyValueParam>? CollectionScopedRequestHeaders =>
+        CollectionScopedRequestHeadersVm.ToCollectionScopedRequestHeaders();
 
     public List<PororocaEnvironment> Environments =>
         EnvironmentsGroupVm.ToEnvironments().ToList(); // collection environments
@@ -69,6 +76,7 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
 
         #region COLLECTION ORGANIZATION
 
+        ShowCollectionScopedHeadersCmd = ReactiveCommand.Create(ShowCollectionScopedHeaders);
         AddNewEnvironmentCmd = ReactiveCommand.Create(AddNewEnvironment);
         ImportEnvironmentsCmd = ReactiveCommand.CreateFromTask(ImportEnvironmentsAsync);
         ExportCollectionCmd = ReactiveCommand.CreateFromTask(ExportCollectionAsync);
@@ -87,6 +95,7 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
 
         Items.Add(new CollectionVariablesViewModel(this, col));
         Items.Add(new CollectionScopedAuthViewModel(this, col));
+        CollectionScopedRequestHeadersVm = new(this, col);
         Items.Add(new EnvironmentsGroupViewModel(this, col.Environments));
         AddInitialFoldersAndRequests(col.Folders, col.Requests);
 
@@ -118,6 +127,12 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
                 colItemVm.CanMoveDown = x < Items.Count - 1;
             }
         }
+    }
+
+    private void ShowCollectionScopedHeaders()
+    {
+        var mainWindowVm = ((MainWindowViewModel)MainWindow.Instance!.DataContext!);
+        mainWindowVm.SwitchVisiblePage(CollectionScopedRequestHeadersVm);
     }
 
     private void AddNewEnvironment() =>
@@ -169,7 +184,7 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
                                 throw new InvalidDataException();
                         }).ToList();
 
-        return new PororocaCollection(this.colId, Name, this.colCreatedAt, Variables, CollectionScopedAuth, Environments, folders, reqs);
+        return new PororocaCollection(this.colId, Name, this.colCreatedAt, Variables, CollectionScopedAuth, CollectionScopedRequestHeaders, Environments, folders, reqs);
     }
 
     #region HTTP REQUESTS PATHS

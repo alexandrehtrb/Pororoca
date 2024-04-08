@@ -7,6 +7,89 @@ namespace Pororoca.Domain.Tests.Features.TranslateRequest.Common;
 
 public static class PororocaRequestCommonTranslatorTests
 {
+    #region RESOLVE REQUEST HEADERS
+
+    [Fact]
+    public static void Should_correctly_resolve_req_headers_only_col_scoped_headers()
+    {
+        // GIVEN
+        PororocaVariable[] effectiveVars =
+        [
+            new(true, "K1", "V1", true),
+            new(true, "K2", "V2", true),
+            new(true, "K3", "V3", true)
+        ];
+        List<PororocaKeyValueParam> colScopedHeaders = [
+            new(false, "P0", "V0"),
+            new(true, "P1", "{{K1}}"),
+            new(true, "P2", "{{K2}}")
+        ];
+        List<PororocaKeyValueParam>? reqHeaders = null;
+
+        // WHEN AND THEN
+        Assert.Equal([
+            new(true, "P1", "V1"),
+            new(true, "P2", "V2")],
+            ResolveRequestHeaders(effectiveVars, colScopedHeaders, reqHeaders));
+    }
+
+    [Fact]
+    public static void Should_correctly_resolve_req_headers_only_req_headers()
+    {
+        // GIVEN
+        PororocaVariable[] effectiveVars =
+        [
+            new(true, "K1", "V1", true),
+            new(true, "K2", "V2", true),
+            new(true, "K3", "V3", true)
+        ];
+        List<PororocaKeyValueParam>? colScopedHeaders = null;
+        List<PororocaKeyValueParam> reqHeaders = [
+            new(false, "P0", "V0"),
+            new(true, "P1", "{{K1}}"),
+            new(true, "P2", "{{K2}}")
+        ];
+
+        // WHEN AND THEN
+        Assert.Equal([
+            new(true, "P1", "V1"),
+            new(true, "P2", "V2")],
+            ResolveRequestHeaders(effectiveVars, colScopedHeaders, reqHeaders));
+    }
+
+    [Fact]
+    public static void Should_correctly_resolve_req_headers_both_col_scoped_and_req_specific_headers()
+    {
+        // GIVEN
+        PororocaVariable[] effectiveVars =
+        [
+            new(true, "K1", "V1", true),
+            new(true, "K2", "V2", true),
+            new(true, "K3", "V3", true)
+        ];
+        List<PororocaKeyValueParam>? colScopedHeaders = [
+            new(true, "P0", "V0"),
+            new(true, "P1", "{{K1}}"),
+            new(true, "P2", "{{K2}}")
+        ];
+        List<PororocaKeyValueParam> reqHeaders = [
+            new(false, "P0", "V0"),
+            new(true, "P1", "{{K3}}"),
+            new(true, "P2", "{{K1}}"),
+            new(true, "P4", "V4")
+        ];
+
+        // WHEN AND THEN
+        Assert.Equal([
+            new(true, "P0", "V0"),
+            new(true, "P1", "V3"),
+            new(true, "P2", "V1"),
+            new(true, "P4", "V4")],
+            ResolveRequestHeaders(effectiveVars, colScopedHeaders, reqHeaders));
+    }
+
+    #endregion
+
     #region RESOLVE KEY VALUE PARAMS
 
     [Fact]

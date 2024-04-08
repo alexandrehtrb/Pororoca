@@ -582,7 +582,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         {
             InvalidConnectionErrorCode = translateUriErrorCode;
         }
-        else if (!TryTranslateConnection(effectiveVars, this.col.CollectionScopedAuth, this.httpClientProvider, wsConn, disableTlsVerification,
+        else if (!TryTranslateConnection(effectiveVars, this.col.CollectionScopedAuth, this.col.CollectionScopedRequestHeaders, this.httpClientProvider, wsConn, disableTlsVerification,
                                          out var resolvedClients, out string? translateConnErrorCode))
         {
             InvalidConnectionErrorCode = translateConnErrorCode;

@@ -34,7 +34,7 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
 {
     #region COLLECTION ORGANIZATION
 
-    private readonly IPororocaRequester requester = PororocaRequester.Singleton;
+    private readonly PororocaRequester requester = PororocaRequester.Singleton;
     internal CollectionViewModel Collection { get; }
 
     #endregion
@@ -350,7 +350,7 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
             this.nameOfEnvironmentUsed = this.Collection.CurrentEnvironmentVm?.Name;
             this.nameOfBaseHttpRequestUsed = BaseRequest?.Name;
 
-            var channelReader = StartRepetition(this.requester, effectiveVars, resolvedInputData, Collection.CollectionScopedAuth, ToHttpRepetition(), BaseRequest!, this.cancellationTokenSource.Token);
+            var channelReader = StartRepetition(this.requester, effectiveVars, resolvedInputData, Collection.CollectionScopedAuth, Collection.CollectionScopedRequestHeaders, ToHttpRepetition(), BaseRequest!, this.cancellationTokenSource.Token);
             Dispatcher.UIThread.Post(async () => await CollectRepetitionResultsAsync(channelReader));
         }
     }

@@ -146,8 +146,8 @@ public sealed class PororocaTest
         }
         else
         {
-            IPororocaRequester requester = PororocaRequester.Singleton;
-            var res = await requester.RequestAsync(effectiveVars, Collection.CollectionScopedAuth, req, cancellationToken);
+            var requester = PororocaRequester.Singleton;
+            var res = await requester.RequestAsync(effectiveVars, Collection.CollectionScopedAuth, Collection.CollectionScopedRequestHeaders, req, cancellationToken);
             CaptureResponseValues(req, res);
             return res;
         }
@@ -180,7 +180,7 @@ public sealed class PororocaTest
         {
             throw new Exception($"Error: Could not connect to WebSocket. Cause: '{validationErrorCode}'.");
         }
-        else if (!PororocaWebSocketConnectionTranslator.TryTranslateConnection(effectiveVars, Collection.CollectionScopedAuth, PororocaHttpClientProvider.Singleton, ws, !ShouldCheckTlsCertificate, out var wsAndHttpCli, out string? translationErrorCode))
+        else if (!PororocaWebSocketConnectionTranslator.TryTranslateConnection(effectiveVars, Collection.CollectionScopedAuth, Collection.CollectionScopedRequestHeaders, PororocaHttpClientProvider.Singleton, ws, !ShouldCheckTlsCertificate, out var wsAndHttpCli, out string? translationErrorCode))
         {
             throw new Exception($"Error: Could not connect to WebSocket. Cause: '{translationErrorCode}'.");
         }
@@ -224,8 +224,8 @@ public sealed class PororocaTest
         }
         else
         {
-            IPororocaRequester requester = PororocaRequester.Singleton;
-            return StartRepetition(requester, colEffectiveVars, resolvedInputData, Collection.CollectionScopedAuth, rep, baseReq!, cancellationToken);
+            var requester = PororocaRequester.Singleton;
+            return StartRepetition(requester, colEffectiveVars, resolvedInputData, Collection.CollectionScopedAuth, Collection.CollectionScopedRequestHeaders, rep, baseReq!, cancellationToken);
         }
     }
 

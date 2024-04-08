@@ -49,6 +49,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     public PageHolder<CollectionScopedAuthViewModel> CollectionScopedAuthView { get; }
 
+    public PageHolder<CollectionScopedRequestHeadersViewModel> CollectionScopedRequestHeadersView { get; }
+
     public PageHolder<EnvironmentViewModel> EnvironmentView { get; }
 
     public PageHolder<CollectionFolderViewModel> CollectionFolderView { get; }
@@ -163,7 +165,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     public MainWindowViewModel()
     {
         #region COLLECTIONS ORGANIZATION
-        CollectionsGroupViewDataCtx = new(this, OnCollectionsGroupItemSelected);
+        CollectionsGroupViewDataCtx = new(this, SwitchVisiblePage);
         ImportCollectionsFromFileCmd = ReactiveCommand.CreateFromTask(ImportCollectionsAsync);
         AddNewCollectionCmd = ReactiveCommand.Create(AddNewCollection);
         IsSavedLabelVisible = false;
@@ -176,6 +178,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         this.pages.Add(CollectionView = new());
         this.pages.Add(CollectionVariablesView = new());
         this.pages.Add(CollectionScopedAuthView = new());
+        this.pages.Add(CollectionScopedRequestHeadersView = new());
         this.pages.Add(EnvironmentView = new());
         this.pages.Add(CollectionFolderView = new());
         this.pages.Add(HttpRequestView = new());
@@ -224,7 +227,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #region SCREENS
 
-    private void OnCollectionsGroupItemSelected(ViewModelBase? selectedItem)
+    public void SwitchVisiblePage(ViewModelBase? selectedItem)
     {
         if (selectedItem is EnvironmentsGroupViewModel)
         {
@@ -291,7 +294,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     }
 
     private void onRenameItemSelected(ViewModelBase vm) =>
-        OnCollectionsGroupItemSelected(vm);
+        SwitchVisiblePage(vm);
 
     public void DeleteSubItem(ICollectionOrganizationItemViewModel item)
     {
