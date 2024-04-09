@@ -433,7 +433,7 @@
         Value="Auto"/>
     <Setter
         Property="VerticalScrollBarVisibility"
-        Value="Visible"/>
+        Value="Auto"/>
     <Setter
         Property="ShowLineNumbers"
         Value="True"/>
