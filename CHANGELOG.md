@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.2.0](#320-2024-04-09)
 * [3.1.1](#311-2024-03-13)
 * [3.1.0.1](#3101-2024-02-19)
 * [3.1.0](#310-2024-02-14)
@@ -21,6 +22,23 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.2.0](https://github.com/alexandrehtrb/Pororoca/tree/3.2.0) (2024-04-09)
+
+### Features
+
+* `.count()` function for JSON response capture.
+* Scrollbars are now always visible on text editors (issue #91).
+* Collection-scoped request headers. To set them, click on your collection in the left panel and then on the button *Set collection headers* (issue #92).
+
+### Refactors
+
+* Minor code refactors (switch cases, sealed modifiers).
+* Optimized XML icons.
+
+### New Contributors
+
+* [@cameronpyne-smith](https://github.com/cameronpyne-smith) made his first contribution in PR [#87](https://github.com/alexandrehtrb/Pororoca/pull/87)
 
 ## [3.1.1](https://github.com/alexandrehtrb/Pororoca/tree/3.1.1) (2024-03-13)
 
