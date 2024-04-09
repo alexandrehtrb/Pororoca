@@ -31,6 +31,10 @@
 * Scrollbars are now always visible on text editors (issue #91).
 * Collection-scoped request headers. To set them, click on your collection in the left panel and then on the button *Set collection headers* (issue #92).
 
+### Bug Fixes
+
+* Improved collection-scoped auth when importing an OpenAPI / Swagger.
+
 ### Refactors
 
 * Minor code refactors (switch cases, sealed modifiers).

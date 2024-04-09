@@ -5,10 +5,8 @@ using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Microsoft.OpenApi.Readers;
-using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
-using static Pororoca.Domain.Features.Common.JsonConfiguration;
 
 namespace Pororoca.Domain.Features.ImportCollection;
 
@@ -29,19 +27,20 @@ public static class OpenApiImporter
             OpenApiStringReader reader = new();
             var doc = reader.Read(openApiFileContent, out var diag);
 
-            var collectionScopedAuth = ReadAuth(doc.SecurityRequirements);
+            var collectionScopedAuth = ReadAuth(doc.Components.SecuritySchemes);
             bool hasCollectionScopedAuth = collectionScopedAuth is not null;
 
             PororocaCollection col = new(doc.Info.Title)
             {
-                CollectionScopedAuth = collectionScopedAuth
+                CollectionScopedAuth = collectionScopedAuth,
+                CollectionScopedRequestHeaders = new()
             };
             ReadEnvironments(doc, col);
             AddOAuth2ToCollectionIfSpecified(col, doc.Components.SecuritySchemes);
             AddCollectionScopedAuthVariables(col);
 
-            var collectionScopedApiKeyHeaders = ReadApiKeys(doc.SecurityRequirements, ParameterLocation.Header);
-            AddCollectionScopedApiKeys(col, collectionScopedApiKeyHeaders);
+            var colScopedSecHeaders = ReadCollectionScopedSecurityHeaders(doc.Components.SecuritySchemes);
+            AddCollectionScopedSecurityHeaders(col, colScopedSecHeaders);
             // not bothering with collection-scoped api key query parameters
 
             foreach (var (path, pathItem) in doc.Paths)
@@ -51,11 +50,11 @@ public static class OpenApiImporter
                 {
                     string reqName = operation.Summary ?? operation.Description ?? "req";
                     string httpMethod = operationType.ToString().ToUpper();
-                    var headers = ReadRequestHeaders(operation.Parameters, collectionScopedApiKeyHeaders, operation.Security);
+                    var headers = ReadRequestHeaders(operation.Parameters, colScopedSecHeaders, operation.Security);
                     string queryParameters = ReadQueryParameters(operation.Parameters, operation.Security);
                     // TODO: get cookies
                     var reqBody = ReadRequestBody(operation.RequestBody);
-                    var reqAuth = ReadRequestAuth(hasCollectionScopedAuth, operation.Security);
+                    var reqAuth = ReadRequestAuth(hasCollectionScopedAuth, operation.Security, doc.Components.SecuritySchemes);
 
                     PororocaHttpRequest req = new(reqName);
                     req.Update(
@@ -122,21 +121,22 @@ public static class OpenApiImporter
         }
     }
 
-    private static List<PororocaKeyValueParam> ReadRequestHeaders(IList<OpenApiParameter> reqParams, IDictionary<string, string>? colScopedApiKeyHeaders, IList<OpenApiSecurityRequirement> reqSecurity)
+    private static List<PororocaKeyValueParam> ReadRequestHeaders(IList<OpenApiParameter> reqParams, IDictionary<string, string>? colScopedSecHeaders, IList<OpenApiSecurityRequirement> reqSecurity)
     {
         var reqHeaders = reqParams.Where(p => p.In == ParameterLocation.Header)
                                   .Select(p => new PororocaKeyValueParam(true, p.Name, ConvertOpenApiSchemaToObject(p.Schema)?.ToString()))
                                   .ToList();
 
-        if (colScopedApiKeyHeaders is not null)
+        var reqSecHeaders = ReadRequestScopedSecurity(reqSecurity, ParameterLocation.Header);
+        if (reqSecHeaders is not null)
         {
-            reqHeaders.AddRange(colScopedApiKeyHeaders.Select(kv => new PororocaKeyValueParam(true, kv.Key, kv.Value)));
-        }
-
-        var reqApiKeyHeaders = ReadApiKeys(reqSecurity, ParameterLocation.Header);
-        if (reqApiKeyHeaders is not null)
-        {
-            reqHeaders.AddRange(reqApiKeyHeaders.Select(kv => new PororocaKeyValueParam(true, kv.Key, kv.Value)));
+            foreach (var rh in reqSecHeaders)
+            {
+                if (colScopedSecHeaders is null || !colScopedSecHeaders.Any(ch => ch.Key == rh.Key))
+                {
+                    reqHeaders.Add(new PororocaKeyValueParam(true, rh.Key, rh.Value));
+                }
+            }
         }
 
         return reqHeaders;
@@ -149,7 +149,7 @@ public static class OpenApiImporter
                       .Select(p => (p.Name, ConvertOpenApiSchemaToObject(p.Schema)?.ToString()))
                       .ToList();
 
-        var reqApiKeyQueryParams = ReadApiKeys(reqSecurity, ParameterLocation.Query);
+        var reqApiKeyQueryParams = ReadRequestScopedSecurity(reqSecurity, ParameterLocation.Query);
         if (reqApiKeyQueryParams is not null)
         {
             qryParams.AddRange(reqApiKeyQueryParams.Select(x => (x.Key, x.Value))!);
@@ -285,8 +285,6 @@ public static class OpenApiImporter
 
     private static void AddCollectionScopedAuthVariables(PororocaCollection col)
     {
-
-
         if (col.CollectionScopedAuth is null)
             return;
 
@@ -304,19 +302,43 @@ public static class OpenApiImporter
         }
     }
 
-    private static void AddCollectionScopedApiKeys(PororocaCollection col, Dictionary<string, string>? collectionScopedApiKeyHeaders)
+    private static void AddCollectionScopedSecurityHeaders(PororocaCollection col, Dictionary<string, string>? collectionScopedSecurityHeaders)
     {
-        if (collectionScopedApiKeyHeaders is null)
+        if (collectionScopedSecurityHeaders is null)
             return;
 
         foreach (var env in col.Environments)
         {
-            env.Variables.AddRange(collectionScopedApiKeyHeaders.Select(kv => new PororocaVariable(true, kv.Key, kv.Value, true)));
+            env.Variables.AddRange(collectionScopedSecurityHeaders.Select(kv => new PororocaVariable(true, kv.Key, string.Empty, true)));
         }
+
+        col.CollectionScopedRequestHeaders!.AddRange(
+            collectionScopedSecurityHeaders.Select(x => new PororocaKeyValueParam(true, x.Key, x.Value)));
     }
 
-    private static PororocaRequestAuth? ReadRequestAuth(bool hasCollectionScopedAuth, IList<OpenApiSecurityRequirement> security) =>
-        ReadAuth(security) ?? (hasCollectionScopedAuth ? PororocaRequestAuth.InheritedFromCollection : null);
+    private static PororocaRequestAuth? ReadRequestAuth(bool hasCollectionScopedAuth, IList<OpenApiSecurityRequirement> securityRequirements, IDictionary<string, OpenApiSecurityScheme> securitySchemes)
+    {
+        var reqPrimarySecRequirement = securityRequirements.FirstOrDefault();
+        if (reqPrimarySecRequirement is null)
+        {
+            return null;
+        }
+        else
+        {
+            var colScopedAuthScheme = securitySchemes.Values.FirstOrDefault();
+            var reqPrimaryAuthScheme = reqPrimarySecRequirement.Keys.FirstOrDefault();
+
+            if (hasCollectionScopedAuth && reqPrimaryAuthScheme?.Name == colScopedAuthScheme!.Name)
+            {
+                return PororocaRequestAuth.InheritedFromCollection;
+            }
+            else
+            {
+                var dict = securitySchemes.Where(x => x.Key == reqPrimaryAuthScheme?.Name).ToDictionary();
+                return ReadAuth(dict);
+            }
+        }
+    }
 
     private static void AddOAuth2ToCollectionIfSpecified(PororocaCollection col, IDictionary<string, OpenApiSecurityScheme> securitySchemes)
     {
@@ -349,13 +371,13 @@ public static class OpenApiImporter
         }
     }
 
-    private static PororocaRequestAuth? ReadAuth(IList<OpenApiSecurityRequirement>? security)
+    private static PororocaRequestAuth? ReadAuth(IDictionary<string, OpenApiSecurityScheme> securitySchemes)
     {
-        if (security is null || security.Count == 0 || security.First().Count == 0)
+        if (securitySchemes is null || securitySchemes.Count == 0)
             return null;
 
         // only caring about one security requirement, others will be ignored
-        var (scheme, _) = security[0].First();
+        var scheme = securitySchemes.First().Value;
 
         if (scheme.Type == SecuritySchemeType.Http && scheme.Scheme == "basic")
         {
@@ -380,14 +402,26 @@ public static class OpenApiImporter
         }
     }
 
-    private static Dictionary<string, string>? ReadApiKeys(IList<OpenApiSecurityRequirement>? security, ParameterLocation location)
+    private static Dictionary<string, string>? ReadCollectionScopedSecurityHeaders(IDictionary<string, OpenApiSecurityScheme> securitySchemes)
+    {
+        if (securitySchemes is null || securitySchemes.Count == 0)
+            return null;
+
+        // only caring about one security requirement, others will be ignored
+        return securitySchemes
+               .Where((s, _) => (s.Value.Type == SecuritySchemeType.ApiKey || s.Value.Type == SecuritySchemeType.Http) && s.Value.In == ParameterLocation.Header)
+               .Select((s, _) => s.Value.Name)
+               .ToDictionary(s => s, s => "{{" + s + "}}");
+    }
+
+    private static Dictionary<string, string>? ReadRequestScopedSecurity(IList<OpenApiSecurityRequirement>? security, ParameterLocation location)
     {
         if (security is null || security.Count == 0 || security.First().Count == 0)
             return null;
 
         // only caring about one security requirement, others will be ignored
         return security[0]
-               .Where((s, _) => s.Key.Type == SecuritySchemeType.ApiKey && s.Key.In == location)
+               .Where((s, _) => (s.Key.Type == SecuritySchemeType.ApiKey || s.Key.Type == SecuritySchemeType.Http) && s.Key.In == location)
                .Select((s, _) => s.Key.Name)
                .ToDictionary(s => s, s => "{{" + s + "}}");
     }
