@@ -40,6 +40,10 @@
 * Minor code refactors (switch cases, sealed modifiers).
 * Optimized XML icons.
 
+### Others
+
+* Raised .NET SDK to version 8.0.204.
+
 ### New Contributors
 
 * [@cameronpyne-smith](https://github.com/cameronpyne-smith) made his first contribution in PR [#87](https://github.com/alexandrehtrb/Pororoca/pull/87)
