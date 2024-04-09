@@ -31,9 +31,9 @@ Pororoca 是一款灵感来源于 Postman 的 HTTP 测试工具，但做了许�
 
 *注意：*对于 Windows 系统, HTTP/2 的支持需要 Windows 10 及以上版本。HTTP/3 的支持需要 Linux 或 Windows 11 及以上版本。
 
-### HTTP/3 与隐私
+### HTTP/2 和 HTTP/3
 
-HTTP/3 使用 QUIC 传输协议，因此存在一些隐私问题。不过，对于内部网络通信和大多数业务应用程序来说，这可能不算问题。可以阅读[这篇文章](https://svs.informatik.uni-hamburg.de/publications/2019/2019-02-26-Sy-PET_Symposium-A_QUIC_Look_at_Web_Tracking.pdf)了解详情。
+您想要了解更多有关 HTTP/2 和 HTTP/3 的信息吗？查看此 [文章]（https://alexandrehtrb.github.io/posts/2024/03/http2-and-http3-explained/）。
 
 ## 数据保护政策
 
