@@ -16,7 +16,7 @@ public sealed class PororocaRequester : IPororocaRequester
     {
     }
 
-    public async Task<PororocaHttpResponse> RequestAsync(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaHttpRequest req, CancellationToken cancellationToken = default)
+    public async Task<PororocaHttpResponse> RequestAsync(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, List<PororocaKeyValueParam>? collectionScopedReqHeaders, PororocaHttpRequest req, CancellationToken cancellationToken = default)
     {
         PororocaHttpRequest? resolvedReq = null;
         HttpRequestMessage? reqMsg = null;
@@ -25,7 +25,7 @@ public sealed class PororocaRequester : IPororocaRequester
         DateTimeOffset? startedAt = null;
         try
         {
-            if (!PororocaHttpRequestTranslator.TryTranslateRequest(effectiveVars, collectionScopedAuth, req, out resolvedReq, out reqMsg, out string? errorCode))
+            if (!PororocaHttpRequestTranslator.TryTranslateRequest(effectiveVars, collectionScopedAuth, collectionScopedReqHeaders, req, out resolvedReq, out reqMsg, out string? errorCode))
             {
                 reqMsg?.Dispose();
                 return PororocaHttpResponse.Failed(resolvedReq, DateTimeOffset.Now, TimeSpan.Zero, new Exception("Invalid request. Please, check the resolved URL and the HTTP version compatibility."));

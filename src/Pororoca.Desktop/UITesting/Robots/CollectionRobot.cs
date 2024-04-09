@@ -12,6 +12,7 @@ public sealed class CollectionRobot : BaseNamedRobot
     internal IconButton AddHttpReq => GetChildView<IconButton>("btAddHttpReq")!;
     internal IconButton AddWebSocket => GetChildView<IconButton>("btAddWebSocket")!;
     internal IconButton AddRepeater => GetChildView<IconButton>("btAddHttpRep")!;
+    internal IconButton SetCollectionScopedReqHeaders => GetChildView<IconButton>("btSetColScopedReqHeaders")!;
     internal IconButton AddEnvironment => GetChildView<IconButton>("btAddEnvironment")!;
     internal IconButton ImportEnvironment => GetChildView<IconButton>("btImportEnv")!;
     internal IconButton ExportCollection => GetChildView<IconButton>("btExportCollection")!;

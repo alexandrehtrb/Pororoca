@@ -24,7 +24,9 @@
         HorizontalAlignment="Stretch"
         VerticalAlignment="Top"
         Margin="0,24,0,0">
-      <controls:EditableTextBlock x:Name="etbName" DataContext="{Binding NameEditableVm}"/>
+      <controls:EditableTextBlock
+          x:Name="etbName"
+          DataContext="{Binding NameEditableVm}"/>
     </Grid>
 
     <StackPanel
@@ -55,6 +57,12 @@
           Icon="{StaticResource IconRifleGunGeometry}"
           Text="{Binding i18n.Collection.AddHttpRepeater}"
           Command="{Binding AddNewHttpRepeaterCmd}"/>
+
+      <controls:IconButton
+          x:Name="btSetColScopedReqHeaders"
+          Icon="{StaticResource IconHeadersGeometry}"
+          Text="{Binding i18n.Collection.SetCollectionScopedHeaders}"
+          Command="{Binding ShowCollectionScopedHeadersCmd}"/>
 
       <controls:IconButton
           x:Name="btAddEnvironment"

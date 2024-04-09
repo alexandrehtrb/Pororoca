@@ -7,11 +7,9 @@ using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.ViewModels.DataGrids;
-using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
-using Pororoca.Domain.Features.Requester;
 using Pororoca.Domain.Features.TranslateRequest;
 using Pororoca.Domain.Features.VariableResolution;
 using Pororoca.Infrastructure.Features.Requester;
@@ -26,7 +24,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
 {
     #region REQUEST
 
-    private readonly IPororocaRequester requester = PororocaRequester.Singleton;
+    private readonly PororocaRequester requester = PororocaRequester.Singleton;
     private readonly CollectionViewModel col;
 
     // To preserve the state of the last shown request tab
@@ -524,18 +522,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
         if (RequestAuthDataCtx.AuthMode == PororocaRequestAuthMode.InheritFromCollection)
             return;
 
-        RequestAuthDataCtx.HasWindowsAuthLoginProblem = errorCode == TranslateRequestErrors.WindowsAuthLoginCannotBeBlank;
-        RequestAuthDataCtx.HasWindowsAuthPasswordProblem = errorCode == TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank;
-        RequestAuthDataCtx.HasWindowsAuthDomainProblem = errorCode == TranslateRequestErrors.WindowsAuthDomainCannotBeBlank;
-
-        RequestAuthDataCtx.HasClientCertificateAuthPkcs12CertificateFilePathProblem =
-        (errorCode == TranslateRequestErrors.ClientCertificatePkcs12CertificateFileNotFound);
-        RequestAuthDataCtx.HasClientCertificateAuthPkcs12FilePasswordProblem =
-        (errorCode == TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank);
-        RequestAuthDataCtx.HasClientCertificateAuthPemCertificateFilePathProblem =
-        (errorCode == TranslateRequestErrors.ClientCertificatePemCertificateFileNotFound);
-        RequestAuthDataCtx.HasClientCertificateAuthPemPrivateKeyFilePathProblem =
-        (errorCode == TranslateRequestErrors.ClientCertificatePemPrivateKeyFileNotFound);
+        RequestAuthDataCtx.HighlightValidationProblems(errorCode);
 
         if (RequestAuthDataCtx.HasValidationProblem)
         {
@@ -563,7 +550,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
         // Awaiting the request.RequestAsync() here, or simply returning its Task,
         // causes the UI to freeze for a few seconds, especially when performing the first request to a server.
         // That is why we are invoking the code to run in a new thread, like below.
-        return Task.Run(async () => await this.requester.RequestAsync(effectiveVars, this.col.CollectionScopedAuth, generatedReq, this.sendRequestCancellationTokenSourceField.Token));
+        return Task.Run(async () => await this.requester.RequestAsync(effectiveVars, this.col.CollectionScopedAuth, this.col.CollectionScopedRequestHeaders, generatedReq, this.sendRequestCancellationTokenSourceField.Token));
     }
 
     #endregion

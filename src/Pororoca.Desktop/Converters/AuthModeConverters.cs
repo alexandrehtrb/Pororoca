@@ -28,7 +28,7 @@ internal static class AuthModeMapping
         };
 }
 
-public class AuthModeMatchConverter : EnumMatchConverter<PororocaRequestAuthMode>
+public sealed class AuthModeMatchConverter : EnumMatchConverter<PororocaRequestAuthMode>
 {
     protected override PororocaRequestAuthMode? MapIndexToEnum(int index) =>
         AuthModeMapping.MapIndexToEnum(index);

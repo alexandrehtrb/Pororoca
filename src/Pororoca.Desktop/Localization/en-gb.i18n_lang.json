@@ -1,4 +1,5 @@
 {
+    "GoBack/Hint": "Go back",
     "MacOSXUserDataFolderMigratedV3Dialog/Title": "Pororoca - User data folder migrated",
     "MacOSXUserDataFolderMigratedV3Dialog/Message": "Your user data directory is now located at:\\n{0}\\nYou can backup and manually delete the PororocaUserData folder inside Applications.",
     "Welcome/Title": "Welcome!",
@@ -16,6 +17,7 @@
     "Collection/AddHttpRequest": "Add HTTP request",
     "Collection/AddWebSocketConnection": "Add WebSocket",
     "Collection/AddHttpRepeater": "Add HTTP repeater",
+    "Collection/SetCollectionScopedHeaders": "Set collection headers",
     "Collection/ChooseImportExportFormat": "Choose format",
     "Collection/ExportAsPororocaCollection": "Export as Pororoca…",
     "Collection/ExportAsPororocaCollectionDialogTitle": "Export collection in Pororoca format",
@@ -37,6 +39,7 @@
     "CollectionFolder/AddWebSocketConnection": "Add WebSocket",
     "CollectionFolder/AddHttpRepeater": "Add HTTP repeater",
     "CollectionScopedAuth/Title": "Collection-scoped auth",
+    "CollectionScopedRequestHeaders/Title": "Collection-scoped request headers",
     "CollectionVariables/AddVariable": "Add variable",
     "CollectionVariables/RemoveVariable": "Remove variable",
     "CollectionVariables/Tip": "Tip: To use a variable, type {{VariableName}} in the URL, body, authentication or header of your request. When sending the request, the {{VariableName}} text will be replaced by the variable's value.",

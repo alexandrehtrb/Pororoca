@@ -11,7 +11,7 @@ public interface IVariablesDataGridOwner
     VariablesDataGridViewModel VariablesTableVm { get; }
 }
 
-public class VariablesDataGridDropHandler : BaseDataGridDropHandler<VariableViewModel>
+public sealed class VariablesDataGridDropHandler : BaseDataGridDropHandler<VariableViewModel>
 {
     protected override VariableViewModel MakeCopy(ObservableCollection<VariableViewModel> parentCollection, VariableViewModel item) =>
         new(parentCollection, item.ToVariable());

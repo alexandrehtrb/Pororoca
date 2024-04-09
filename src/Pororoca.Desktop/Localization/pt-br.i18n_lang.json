@@ -1,4 +1,5 @@
 {
+    "GoBack/Hint": "Voltar",
     "MacOSXUserDataFolderMigratedV3Dialog/Title": "Pororoca - Pasta de dados migrada",
     "MacOSXUserDataFolderMigratedV3Dialog/Message": "Seu diretório de dados de usuário agora é:\\n{0}\\nVocê pode fazer um backup e excluir manualmente a pasta PororocaUserData dentro de Aplicações.",
     "Welcome/Title": "Bem-vindo(a)!",
@@ -15,6 +16,7 @@
     "Collection/AddFolder": "Adicionar pasta",
     "Collection/AddHttpRequest": "Adicionar req. HTTP",
     "Collection/AddHttpRepeater": "Adicionar repetidora",
+    "Collection/SetCollectionScopedHeaders": "Cabeçalhos de coleção",
     "Collection/AddWebSocketConnection": "Adicionar WebSocket",
     "Collection/ChooseImportExportFormat": "Selecione o formato",
     "Collection/ExportAsPororocaCollection": "Exportar > Pororoca…",
@@ -37,6 +39,7 @@
     "CollectionFolder/AddWebSocketConnection": "Adicionar WebSocket",
     "CollectionFolder/AddHttpRepeater": "Adicionar repetidora",
     "CollectionScopedAuth/Title": "Autenticação a nível de coleção",
+    "CollectionScopedRequestHeaders/Title": "Cabeçalhos a nível de coleção",
     "CollectionVariables/AddVariable": "Adicionar variável",
     "CollectionVariables/RemoveVariable": "Remover variável",
     "CollectionVariables/Tip": "Dica: Para usar uma variável, digite o {{NomeDaVariável}} na URL, no corpo, autenticação ou cabeçalho da sua requisição. Ao enviar a chamada, o texto {{NomeDaVariável}} será substituído pelo valor da variável.",

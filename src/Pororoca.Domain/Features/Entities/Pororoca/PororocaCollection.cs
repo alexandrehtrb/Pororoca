@@ -12,6 +12,7 @@ public sealed record PororocaCollection
     [property: JsonInclude] DateTimeOffset CreatedAt,
     [property: JsonInclude] List<PororocaVariable> Variables,
     [property: JsonInclude] PororocaRequestAuth? CollectionScopedAuth,
+    [property: JsonInclude] List<PororocaKeyValueParam>? CollectionScopedRequestHeaders,
     [property: JsonInclude] List<PororocaEnvironment> Environments,
     [property: JsonInclude] List<PororocaCollectionFolder> Folders,
     [property: JsonInclude] List<PororocaRequest> Requests
@@ -36,7 +37,7 @@ public sealed record PororocaCollection
                 .ToList()
                 .AsReadOnly();
 
-    public PororocaCollection(Guid guid, string name, DateTimeOffset createdAt) : this(guid, name, createdAt, new(), null, new(), new(), new()) { }
+    public PororocaCollection(Guid guid, string name, DateTimeOffset createdAt) : this(guid, name, createdAt, new(), null, null, new(), new(), new()) { }
 
     public PororocaCollection(string name) : this(Guid.NewGuid(), name, DateTimeOffset.Now) { }
 
@@ -50,7 +51,8 @@ public sealed record PororocaCollection
         Requests = Requests.Select(f => (PororocaRequest)f.Clone()).ToList(),
         Variables = Variables.Select(v => v.Copy()).ToList(),
         Environments = Environments.Select(e => preserveIds ? e.ClonePreservingId() : (PororocaEnvironment)e.Clone()).ToList(),
-        CollectionScopedAuth = CollectionScopedAuth?.Copy()
+        CollectionScopedAuth = CollectionScopedAuth?.Copy(),
+        CollectionScopedRequestHeaders = CollectionScopedRequestHeaders?.Select(v => v.Copy())?.ToList(),
     };
 
     public T? FindRequestInCollection<T>(Func<T, bool> criteria) where T : PororocaRequest

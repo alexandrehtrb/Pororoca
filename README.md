@@ -31,9 +31,9 @@ Check the [documentation](https://pororoca.io/docs/) to know more.
 
 *Note*: On Windows, support for HTTP/2 requires Windows 10 or later. Support for HTTP/3 requires Linux or Windows 11 and later.
 
-### HTTP/3 and privacy
+### HTTP/2 and HTTP/3
 
-HTTP/3 uses the QUIC transport protocol and there are some privacy concerns about it. It might not be a problem on internal network communications and for most business applications, though. There is an interesting article about it [here](https://svs.informatik.uni-hamburg.de/publications/2019/2019-02-26-Sy-PET_Symposium-A_QUIC_Look_at_Web_Tracking.pdf).
+Do you want to learn more about HTTP/2 and HTTP/3? Check this [article](https://alexandrehtrb.github.io/posts/2024/03/http2-and-http3-explained/).
 
 ## Data protection policy
 

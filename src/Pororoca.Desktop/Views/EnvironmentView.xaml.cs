@@ -5,7 +5,7 @@ using static Pororoca.Desktop.Views.DataGridSelectionUpdater;
 
 namespace Pororoca.Desktop.Views;
 
-public class EnvironmentView : UserControl
+public sealed class EnvironmentView : UserControl
 {
     public EnvironmentView() => InitializeComponent();
 

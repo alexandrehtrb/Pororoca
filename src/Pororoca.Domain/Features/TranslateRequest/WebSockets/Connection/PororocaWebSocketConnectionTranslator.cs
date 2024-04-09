@@ -13,6 +13,7 @@ public static class PororocaWebSocketConnectionTranslator
 {
     public static bool TryTranslateConnection(IEnumerable<PororocaVariable> effectiveVars,
                                               PororocaRequestAuth? collectionScopedAuth,
+                                              List<PororocaKeyValueParam>? collectionScopedReqHeaders,
                                               IPororocaHttpClientProvider httpClientProvider,
                                               PororocaWebSocketConnection wsConn,
                                               bool disableTlsVerification,
@@ -21,6 +22,7 @@ public static class PororocaWebSocketConnectionTranslator
         TryTranslateConnection(IsWebSocketHttpVersionAvailableInOS,
                                effectiveVars,
                                collectionScopedAuth,
+                               collectionScopedReqHeaders,
                                httpClientProvider,
                                wsConn,
                                disableTlsVerification,
@@ -30,6 +32,7 @@ public static class PororocaWebSocketConnectionTranslator
     internal static bool TryTranslateConnection(HttpVersionAvailableVerifier httpVersionVerifier,
                                                 IEnumerable<PororocaVariable> effectiveVars,
                                                 PororocaRequestAuth? collectionScopedAuth,
+                                                List<PororocaKeyValueParam>? collectionScopedReqHeaders,
                                                 IPororocaHttpClientProvider httpClientProvider,
                                                 PororocaWebSocketConnection wsConn,
                                                 bool disableTlsVerification,
@@ -46,7 +49,7 @@ public static class PororocaWebSocketConnectionTranslator
             try
             {
                 var resolvedAuth = ResolveRequestAuth(effectiveVars, collectionScopedAuth, wsConn.CustomAuth);
-                var resolvedHeaders = ResolveKVParams(effectiveVars, wsConn.Headers);
+                var resolvedHeaders = ResolveRequestHeaders(effectiveVars, collectionScopedReqHeaders, wsConn.Headers);
                 var resolvedSubprotocols = ResolveSubprotocols(effectiveVars, wsConn);
                 var httpCli = httpClientProvider.Provide(disableTlsVerification, resolvedAuth);
 

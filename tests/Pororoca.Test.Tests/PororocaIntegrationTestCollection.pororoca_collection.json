@@ -3,6 +3,13 @@
   "id": "846255a2-2387-4d4a-b129-78a806aeb52d",
   "name": "PororocaIntegrationTestCollection",
   "createdAt": "2022-10-19T22:10:05.3839027-03:00",
+  "collectionScopedRequestHeaders": [
+    {
+      "enabled": true,
+      "key": "CollectionScopedHeader",
+      "value": "XAPIKEY"
+    }
+  ],
   "variables": [
     {
       "enabled": true,

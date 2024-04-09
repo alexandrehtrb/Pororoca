@@ -49,6 +49,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     public PageHolder<CollectionScopedAuthViewModel> CollectionScopedAuthView { get; }
 
+    public PageHolder<CollectionScopedRequestHeadersViewModel> CollectionScopedRequestHeadersView { get; }
+
     public PageHolder<EnvironmentViewModel> EnvironmentView { get; }
 
     public PageHolder<CollectionFolderViewModel> CollectionFolderView { get; }
@@ -163,7 +165,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     public MainWindowViewModel()
     {
         #region COLLECTIONS ORGANIZATION
-        CollectionsGroupViewDataCtx = new(this, OnCollectionsGroupItemSelected);
+        CollectionsGroupViewDataCtx = new(this, SwitchVisiblePage);
         ImportCollectionsFromFileCmd = ReactiveCommand.CreateFromTask(ImportCollectionsAsync);
         AddNewCollectionCmd = ReactiveCommand.Create(AddNewCollection);
         IsSavedLabelVisible = false;
@@ -176,6 +178,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         this.pages.Add(CollectionView = new());
         this.pages.Add(CollectionVariablesView = new());
         this.pages.Add(CollectionScopedAuthView = new());
+        this.pages.Add(CollectionScopedRequestHeadersView = new());
         this.pages.Add(EnvironmentView = new());
         this.pages.Add(CollectionFolderView = new());
         this.pages.Add(HttpRequestView = new());
@@ -224,7 +227,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #region SCREENS
 
-    private void OnCollectionsGroupItemSelected(ViewModelBase? selectedItem)
+    public void SwitchVisiblePage(ViewModelBase? selectedItem)
     {
         if (selectedItem is EnvironmentsGroupViewModel)
         {
@@ -291,7 +294,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     }
 
     private void onRenameItemSelected(ViewModelBase vm) =>
-        OnCollectionsGroupItemSelected(vm);
+        SwitchVisiblePage(vm);
 
     public void DeleteSubItem(ICollectionOrganizationItemViewModel item)
     {
@@ -322,34 +325,10 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     private void SelectLanguage(Language lang)
     {
         Localizer.Instance.CurrentLanguage = lang;
-        switch (lang)
-        {
-            case Language.Portuguese:
-                IsLanguagePortuguese = true;
-                IsLanguageEnglish = false;
-                IsLanguageRussian = false;
-                IsLanguageItalian = false;
-                break;
-            case Language.Italian:
-                IsLanguagePortuguese = false;
-                IsLanguageEnglish = false;
-                IsLanguageRussian = false;
-                IsLanguageItalian = true;
-                break;
-            default:
-            case Language.English:
-                IsLanguagePortuguese = false;
-                IsLanguageEnglish = true;
-                IsLanguageRussian = false;
-                IsLanguageItalian = false;
-                break;
-            case Language.Russian:
-                IsLanguagePortuguese = false;
-                IsLanguageEnglish = false;
-                IsLanguageRussian = true;
-                IsLanguageItalian = false;
-                break;
-        }
+        IsLanguagePortuguese = lang == Language.Portuguese;
+        IsLanguageEnglish = lang == Language.English;
+        IsLanguageRussian = lang == Language.Russian;
+        IsLanguageItalian = lang == Language.Italian;
     }
 
     #endregion
@@ -364,22 +343,10 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     private void UpdateMenuSelectedTheme()
     {
-        IsThemeLight = IsThemeDark = IsThemePampa = IsThemeAmazonianNight = false;
-        switch (PororocaThemeManager.CurrentTheme)
-        {
-            case PororocaTheme.Light:
-                IsThemeLight = true;
-                break;
-            case PororocaTheme.Dark:
-                IsThemeDark = true;
-                break;
-            case PororocaTheme.Pampa:
-                IsThemePampa = true;
-                break;
-            case PororocaTheme.AmazonianNight:
-                IsThemeAmazonianNight = true;
-                break;
-        }
+        IsThemeLight = PororocaThemeManager.CurrentTheme == PororocaTheme.Light;
+        IsThemeDark = PororocaThemeManager.CurrentTheme == PororocaTheme.Dark;
+        IsThemePampa = PororocaThemeManager.CurrentTheme == PororocaTheme.Pampa;
+        IsThemeAmazonianNight = PororocaThemeManager.CurrentTheme == PororocaTheme.AmazonianNight;
     }
 
     #endregion

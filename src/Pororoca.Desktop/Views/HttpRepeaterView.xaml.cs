@@ -8,7 +8,7 @@ using static Pororoca.Desktop.Views.DataGridSelectionUpdater;
 
 namespace Pororoca.Desktop.Views;
 
-public class HttpRepeaterView : UserControl
+public sealed class HttpRepeaterView : UserControl
 {
     private readonly AvaloniaEdit.TextMate.TextMate.Installation rawInputDataEditorTextMateInstallation;
     private string? currentRawInputDataSyntaxLangId;

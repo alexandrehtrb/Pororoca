@@ -18,7 +18,7 @@ public sealed class HeaderNameTextBox : TextBox
         if (string.IsNullOrEmpty(Text))
         {
             this.autocompleteEnabled = true;
-        }        
+        }
 
         if (this.autocompleteEnabled && Text is not null && e.Text is not null)
         {
@@ -58,6 +58,9 @@ public sealed class HeaderNameTextBox : TextBox
             "ra" => "Range",
             "re" => "Referer",
             "us" => "User-Agent",
+            "x-ap" => "X-Api-Key",
+            "x-au" => "X-Auth-Token",
+            "x-tok" => "X-Token",
             _ => null
         };
 }

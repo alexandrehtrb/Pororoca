@@ -1,14 +1,14 @@
 using System.Diagnostics;
 using System.Net;
 using System.Threading.Channels;
-using Pororoca.Domain.Feature.Entities.Pororoca.Repetition;
+using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace Pororoca.Test.Tests;
 
-public class PororocaTestLibraryRepetitionTests
+public sealed class PororocaTestLibraryRepetitionTests
 {
     private static readonly TimeSpan oneSecond = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan oneMinute = TimeSpan.FromMinutes(1);

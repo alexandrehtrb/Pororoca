@@ -1,4 +1,4 @@
-using Pororoca.Domain.Feature.Entities.Pororoca.Repetition;
+using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 
 namespace Pororoca.Desktop.Converters;
 
@@ -21,7 +21,7 @@ internal static class RepetitionInputDataTypeMapping
         };
 }
 
-public class RepetitionInputDataTypeMatchConverter : EnumMatchConverter<PororocaRepetitionInputDataType>
+public sealed class RepetitionInputDataTypeMatchConverter : EnumMatchConverter<PororocaRepetitionInputDataType>
 {
     protected override PororocaRepetitionInputDataType? MapIndexToEnum(int index) =>
         RepetitionInputDataTypeMapping.MapIndexToEnum(index);

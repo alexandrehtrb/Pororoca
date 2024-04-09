@@ -17,6 +17,7 @@ public sealed partial class HttpRequestsUITest : UITest
     private TopMenuRobot TopMenuRobot { get; }
     private ItemsTreeRobot TreeRobot { get; }
     private CollectionRobot ColRobot { get; }
+    private CollectionScopedRequestHeadersRobot ColScopedReqHeadersRobot { get; }
     private CollectionVariablesRobot ColVarsRobot { get; }
     private EnvironmentRobot EnvRobot { get; }
     private HttpRequestRobot HttpRobot { get; }
@@ -28,6 +29,7 @@ public sealed partial class HttpRequestsUITest : UITest
         TopMenuRobot = new(RootView);
         TreeRobot = new(RootView.FindControl<CollectionsGroupView>("mainWindowCollectionsGroup")!);
         ColRobot = new(RootView.FindControl<CollectionView>("collectionView")!);
+        ColScopedReqHeadersRobot = new(RootView.FindControl<CollectionScopedRequestHeadersView>("collectionScopedReqHeadersView")!);
         ColVarsRobot = new(RootView.FindControl<CollectionVariablesView>("collectionVariablesView")!);
         EnvRobot = new(RootView.FindControl<EnvironmentView>("environmentView")!);
         HttpRobot = new(RootView.FindControl<HttpRequestView>("httpReqView")!);
@@ -47,6 +49,10 @@ public sealed partial class HttpRequestsUITest : UITest
     {
         await TopMenuRobot.CreateNewCollection();
         await ColRobot.Name.Edit("COL1");
+
+        await ColRobot.SetCollectionScopedReqHeaders.ClickOn();
+        await ColScopedReqHeadersRobot.SetRequestHeaders([
+            new(true, "ColScopedHeaderName", "ColScopedHeaderValue")]);
 
         await TreeRobot.Select("COL1/VARS");
         await ColVarsRobot.SetVariables(defaultColVars);

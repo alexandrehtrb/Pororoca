@@ -4,7 +4,7 @@ using System.Net;
 using System.Text.Json;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
-using Pororoca.Domain.Feature.Entities.Pororoca.Repetition;
+using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Requester;
@@ -25,6 +25,7 @@ public static class HttpRepeaterTests
         PororocaVariable[] colEffVars = [new(true, "A", "K", true)];
         PororocaVariable[][]? resolvedInputData = null;
         var colScopedAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
+        List<PororocaKeyValueParam>? colScopedReqHeaders = null;
         var rep = MakeExampleRep(PororocaRepetitionMode.Simple);
         PororocaHttpRequest baseReq = new("basereq");
 
@@ -33,11 +34,11 @@ public static class HttpRepeaterTests
         var response1 = await MakeExampleResponseAsync(HttpStatusCode.OK, null);
         var response2 = await MakeExampleResponseAsync(HttpStatusCode.Accepted, null);
         var response3 = await MakeExampleResponseAsync(HttpStatusCode.NotAcceptable, null);
-        requester.RequestAsync(colEffVars, colScopedAuth, baseReq, Arg.Any<CancellationToken>())
+        requester.RequestAsync(colEffVars, colScopedAuth, colScopedReqHeaders, baseReq, Arg.Any<CancellationToken>())
                  .Returns(Task.FromResult(response1), Task.FromResult(response2), Task.FromResult(response3));
 
         // WHEN
-        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, rep, baseReq, default);
+        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, default);
 
         // THEN
         List<PororocaHttpRepetitionResult> results = new();
@@ -72,6 +73,9 @@ public static class HttpRepeaterTests
             [ new(true, "Var1", "GHI", true), new(true,"Var2","789",true) ]
         ];
         var colScopedAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
+        List<PororocaKeyValueParam>? colScopedReqHeaders = [
+            new(true, "ColScopedHeader", "ColScopedValue")
+        ];
         var rep = MakeExampleRep(PororocaRepetitionMode.Sequential);
         PororocaHttpRequest baseReq = new("basereq");
 
@@ -80,21 +84,21 @@ public static class HttpRepeaterTests
 
         var response1 = await MakeExampleResponseAsync(HttpStatusCode.OK, null);
         var req1EffVars = Arg.Is<IEnumerable<PororocaVariable>>(il => il.Any(v => v.Key == "Var2" && v.Value == "123"));
-        requester.RequestAsync(req1EffVars, colScopedAuth, baseReq, Arg.Any<CancellationToken>())
+        requester.RequestAsync(req1EffVars, colScopedAuth, colScopedReqHeaders, baseReq, Arg.Any<CancellationToken>())
                  .Returns(Task.FromResult(response1));
 
         var response2 = await MakeExampleResponseAsync(HttpStatusCode.Accepted, null);
         var req2EffVars = Arg.Is<IEnumerable<PororocaVariable>>(il => il.Any(v => v.Key == "Var2" && v.Value == "456"));
-        requester.RequestAsync(req2EffVars, colScopedAuth, baseReq, Arg.Any<CancellationToken>())
+        requester.RequestAsync(req2EffVars, colScopedAuth, colScopedReqHeaders, baseReq, Arg.Any<CancellationToken>())
                  .Returns(Task.FromResult(response2));
 
         var response3 = await MakeExampleResponseAsync(null, new TaskCanceledException());
         var req3EffVars = Arg.Is<IEnumerable<PororocaVariable>>(il => il.Any(v => v.Key == "Var2" && v.Value == "789"));
-        requester.RequestAsync(req3EffVars, colScopedAuth, baseReq, Arg.Any<CancellationToken>())
+        requester.RequestAsync(req3EffVars, colScopedAuth, colScopedReqHeaders, baseReq, Arg.Any<CancellationToken>())
                  .Returns(Task.FromResult(response3));
 
         // WHEN
-        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, rep, baseReq, default);
+        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, default);
 
         // THEN
         List<PororocaHttpRepetitionResult> results = new();
@@ -129,6 +133,7 @@ public static class HttpRepeaterTests
             [ new(true, "Var1", "GHI", true), new(true,"Var2","789",true) ]
         ];
         var colScopedAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
+        List<PororocaKeyValueParam>? colScopedReqHeaders = null;
         var rep = MakeExampleRep(PororocaRepetitionMode.Sequential);
         PororocaHttpRequest baseReq = new("basereq");
 
@@ -137,21 +142,21 @@ public static class HttpRepeaterTests
 
         var response1 = await MakeExampleResponseAsync(HttpStatusCode.OK, null);
         var req1EffVars = Arg.Is<IEnumerable<PororocaVariable>>(il => il.Any(v => v.Key == "Var2" && v.Value == "123"));
-        requester.RequestAsync(req1EffVars, colScopedAuth, baseReq, Arg.Any<CancellationToken>())
+        requester.RequestAsync(req1EffVars, colScopedAuth, colScopedReqHeaders, baseReq, Arg.Any<CancellationToken>())
                  .Returns(Task.FromResult(response1));
 
         var response2 = await MakeExampleResponseAsync(HttpStatusCode.Accepted, null);
         var req2EffVars = Arg.Is<IEnumerable<PororocaVariable>>(il => il.Any(v => v.Key == "Var2" && v.Value == "456"));
-        requester.RequestAsync(req2EffVars, colScopedAuth, baseReq, Arg.Any<CancellationToken>())
+        requester.RequestAsync(req2EffVars, colScopedAuth, colScopedReqHeaders, baseReq, Arg.Any<CancellationToken>())
                  .Returns(Task.FromResult(response2));
 
         var response3 = await MakeExampleResponseAsync(null, new TaskCanceledException());
         var req3EffVars = Arg.Is<IEnumerable<PororocaVariable>>(il => il.Any(v => v.Key == "Var2" && v.Value == "789"));
-        requester.RequestAsync(req3EffVars, colScopedAuth, baseReq, Arg.Any<CancellationToken>())
+        requester.RequestAsync(req3EffVars, colScopedAuth, colScopedReqHeaders, baseReq, Arg.Any<CancellationToken>())
                  .Returns(Task.FromResult(response3));
 
         // WHEN
-        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, rep, baseReq, default);
+        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, default);
 
         // THEN
         List<PororocaHttpRepetitionResult> results = new();
@@ -202,6 +207,7 @@ public static class HttpRepeaterTests
             [ new(true, "Var1", "GHI", true), new(true,"Var2","789",true) ]
         ];
         var colScopedAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
+        List<PororocaKeyValueParam>? colScopedReqHeaders = null;
         var rep = MakeExampleRep(repMode);
         PororocaHttpRequest baseReq = new("basereq");
 
@@ -209,7 +215,7 @@ public static class HttpRepeaterTests
                  .ReturnsForAnyArgs(false);
 
         // WHEN
-        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, rep, baseReq, default);
+        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, default);
 
         // THEN
         List<PororocaHttpRepetitionResult> results = new();
@@ -237,6 +243,7 @@ public static class HttpRepeaterTests
             [ new(true, "Var1", "ABC", true), new(true,"Var2","123",true) ]
         ];
         var colScopedAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
+        List<PororocaKeyValueParam>? colScopedReqHeaders = null;
         var rep = MakeExampleRep(repMode);
         rep.NumberOfRepetitions = 1;
         rep.DelayInMs = delayInMs;
@@ -248,7 +255,7 @@ public static class HttpRepeaterTests
         // WHEN
         Stopwatch sw = new();
         sw.Start();
-        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, rep, baseReq, default);
+        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, default);
 
         // THEN
         List<PororocaHttpRepetitionResult> results = new();
@@ -276,6 +283,7 @@ public static class HttpRepeaterTests
             [ new(true, "Var1", "ABC", true), new(true,"Var2","123",true) ]
         ];
         var colScopedAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
+        List<PororocaKeyValueParam>? colScopedReqHeaders = null;
         var rep = MakeExampleRep(repMode);
         rep.NumberOfRepetitions = 1;
         PororocaHttpRequest baseReq = new("basereq");
@@ -284,7 +292,7 @@ public static class HttpRepeaterTests
                  .ThrowsForAnyArgs(new JsonException());
 
         // WHEN
-        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, rep, baseReq, default);
+        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, default);
 
         // THEN
         List<PororocaHttpRepetitionResult> results = new();

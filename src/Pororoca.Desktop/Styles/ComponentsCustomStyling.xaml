@@ -179,7 +179,7 @@
     <Setter
         Property="FontWeight"
         Value="Light"/>
-        <Setter
+    <Setter
         Property="Foreground"
         Value="{DynamicResource DefaultTextForegroundColor}"/>
     <Setter
@@ -224,6 +224,24 @@
     <Setter
         Property="Foreground"
         Value="{DynamicResource ResponseCapturedValueTextBrush}"/>
+  </Style>
+
+  <Style Selector="DataGrid">
+    <Setter
+        Property="VerticalScrollBarVisibility"
+        Value="Auto"/>
+  </Style>
+
+  <Style Selector="ScrollViewer">
+    <Setter
+        Property="AllowAutoHide"
+        Value="False"/>
+  </Style>
+
+  <Style Selector="ScrollBar">
+    <Setter
+        Property="AllowAutoHide"
+        Value="False"/>
   </Style>
 
   <Style Selector="DataGridColumnHeader">
@@ -352,54 +370,6 @@
     </Setter>
   </Style>
 
-  <Style Selector="Button.MoveDown">
-    <Setter Property="Background">
-      <DrawingBrush>
-        <DrawingBrush.Drawing>
-          <GeometryDrawing
-              Brush="{DynamicResource DefaultIconsBrush}"
-              Geometry="{StaticResource IconArrowDownGeometry}"/>
-        </DrawingBrush.Drawing>
-      </DrawingBrush>
-    </Setter>
-  </Style>
-
-  <Style Selector="Button.MoveDown:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background">
-      <DrawingBrush>
-        <DrawingBrush.Drawing>
-          <GeometryDrawing
-              Brush="{DynamicResource SystemInvertedAccentColor}"
-              Geometry="{StaticResource IconArrowDownGeometry}"/>
-        </DrawingBrush.Drawing>
-      </DrawingBrush>
-    </Setter>
-  </Style>
-
-  <Style Selector="Button.MoveUp">
-    <Setter Property="Background">
-      <DrawingBrush>
-        <DrawingBrush.Drawing>
-          <GeometryDrawing
-              Brush="{DynamicResource DefaultIconsBrush}"
-              Geometry="{StaticResource IconArrowUpGeometry}"/>
-        </DrawingBrush.Drawing>
-      </DrawingBrush>
-    </Setter>
-  </Style>
-
-  <Style Selector="Button.MoveUp:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background">
-      <DrawingBrush>
-        <DrawingBrush.Drawing>
-          <GeometryDrawing
-              Brush="{DynamicResource SystemInvertedAccentColor}"
-              Geometry="{StaticResource IconArrowUpGeometry}"/>
-        </DrawingBrush.Drawing>
-      </DrawingBrush>
-    </Setter>
-  </Style>
-
   <Style Selector="Button.TextButton">
     <Setter
         Property="Height"
@@ -463,7 +433,7 @@
         Value="Auto"/>
     <Setter
         Property="VerticalScrollBarVisibility"
-        Value="Visible"/>
+        Value="Auto"/>
     <Setter
         Property="ShowLineNumbers"
         Value="True"/>

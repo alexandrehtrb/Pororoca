@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Pororoca.Test.Tests;
 
-public class PororocaTestLibraryHttp1Tests
+public sealed class PororocaTestLibraryHttp1Tests
 {
     private readonly PororocaTest pororocaTest;
 
@@ -107,6 +107,7 @@ public class PororocaTestLibraryHttp1Tests
         Assert.Equal(HttpStatusCode.NoContent, res.StatusCode);
 
         Assert.NotNull(res.Headers);
+        Assert.Equal("XAPIKEY", res.Headers["MIRRORED-CollectionScopedHeader"]);
         Assert.Equal("oi", res.Headers["MIRRORED-Header1"]);
         Assert.Equal("ciao", res.Headers["MIRRORED-Header2"]);
     }

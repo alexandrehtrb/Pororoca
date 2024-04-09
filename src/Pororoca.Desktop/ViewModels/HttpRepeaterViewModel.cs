@@ -11,7 +11,7 @@ using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
-using Pororoca.Domain.Feature.Entities.Pororoca.Repetition;
+using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Requester;
@@ -34,7 +34,7 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
 {
     #region COLLECTION ORGANIZATION
 
-    private readonly IPororocaRequester requester = PororocaRequester.Singleton;
+    private readonly PororocaRequester requester = PororocaRequester.Singleton;
     internal CollectionViewModel Collection { get; }
 
     #endregion
@@ -126,20 +126,18 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
 
             HasInputDataFileSrcPathValidationProblem = (value == TranslateRepetitionErrors.InputDataFileNotFound);
 
-            if (value == TranslateRepetitionErrors.DelayCantBeNegative
-             || value == TranslateRepetitionErrors.NumberOfRepetitionsMustBeAtLeast1
-             || value == TranslateRepetitionErrors.MaxDopMustBeAtLeast1)
+            // TODO: Improve this, do not use fixed values to resolve index
+            RepetitionTabSelectedIndex = value switch
             {
-                // TODO: Improve this, do not use fixed values to resolve index
-                RepetitionTabSelectedIndex = 0;
-            }
+                TranslateRepetitionErrors.NumberOfRepetitionsMustBeAtLeast1 or
+                TranslateRepetitionErrors.DelayCantBeNegative or
+                TranslateRepetitionErrors.MaxDopMustBeAtLeast1 => 0,
 
-            if (value == TranslateRepetitionErrors.InputDataFileNotFound
-             || value == TranslateRepetitionErrors.InputDataInvalid)
-            {
-                // TODO: Improve this, do not use fixed values to resolve index
-                RepetitionTabSelectedIndex = 1;
-            }
+                TranslateRepetitionErrors.InputDataFileNotFound or
+                TranslateRepetitionErrors.InputDataInvalid => 1,
+
+                _ => RepetitionTabSelectedIndex
+            };
         }
     }
 
@@ -352,7 +350,7 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
             this.nameOfEnvironmentUsed = this.Collection.CurrentEnvironmentVm?.Name;
             this.nameOfBaseHttpRequestUsed = BaseRequest?.Name;
 
-            var channelReader = StartRepetition(this.requester, effectiveVars, resolvedInputData, Collection.CollectionScopedAuth, ToHttpRepetition(), BaseRequest!, this.cancellationTokenSource.Token);
+            var channelReader = StartRepetition(this.requester, effectiveVars, resolvedInputData, Collection.CollectionScopedAuth, Collection.CollectionScopedRequestHeaders, ToHttpRepetition(), BaseRequest!, this.cancellationTokenSource.Token);
             Dispatcher.UIThread.Post(async () => await CollectRepetitionResultsAsync(channelReader));
         }
     }

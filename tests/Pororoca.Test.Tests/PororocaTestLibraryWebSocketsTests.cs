@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Pororoca.Test.Tests;
 
-public class PororocaTestLibraryWebSocketsTests
+public sealed class PororocaTestLibraryWebSocketsTests
 {
     private readonly PororocaTest pororocaTest;
 

@@ -1,6 +1,6 @@
 using System.Net;
 using System.Text;
-using Pororoca.Domain.Feature.Entities.Pororoca.Repetition;
+using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using static Pororoca.Domain.Features.Common.HttpStatusCodeFormatter;
 
 namespace Pororoca.Domain.Features.RequestRepeater;

@@ -28,7 +28,7 @@ internal static class WebSocketConnectionOptionMapping
         };
 }
 
-public class WebSocketConnectionOptionMatchConverter : EnumMatchConverter<WebSocketConnectionOption>
+public sealed class WebSocketConnectionOptionMatchConverter : EnumMatchConverter<WebSocketConnectionOption>
 {
     protected override WebSocketConnectionOption? MapIndexToEnum(int index) =>
         WebSocketConnectionOptionMapping.MapIndexToEnum(index);

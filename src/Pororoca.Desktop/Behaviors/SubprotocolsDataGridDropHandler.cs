@@ -7,7 +7,7 @@ using Pororoca.Desktop.ViewModels.DataGrids;
 
 namespace Pororoca.Desktop.Behaviors;
 
-public class SubprotocolsDataGridDropHandler : BaseDataGridDropHandler<KeyValueParamViewModel>
+public sealed class SubprotocolsDataGridDropHandler : BaseDataGridDropHandler<KeyValueParamViewModel>
 {
     protected override KeyValueParamViewModel MakeCopy(ObservableCollection<KeyValueParamViewModel> parentCollection, KeyValueParamViewModel item) =>
         new(parentCollection, item.ToKeyValueParam());

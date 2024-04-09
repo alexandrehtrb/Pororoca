@@ -8,7 +8,7 @@ using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 
 namespace Pororoca.Desktop.Views;
 
-public class WebSocketClientMessageView : UserControl
+public sealed class WebSocketClientMessageView : UserControl
 {
     private readonly AvaloniaEdit.TextMate.TextMate.Installation rawContentEditorTextMateInstallation;
     private string? currentRawContentSyntaxLangId;

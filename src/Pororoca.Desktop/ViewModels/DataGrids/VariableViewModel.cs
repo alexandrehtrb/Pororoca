@@ -6,7 +6,7 @@ using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels.DataGrids;
 
-public class VariableViewModel : ViewModelBase
+public sealed class VariableViewModel : ViewModelBase
 {
     private readonly ObservableCollection<VariableViewModel> parentCollection;
 

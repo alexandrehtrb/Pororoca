@@ -1,6 +1,6 @@
 using System.Net;
 using Pororoca.Desktop.Localization;
-using Pororoca.Domain.Feature.Entities.Pororoca.Repetition;
+using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using ReactiveUI.Fody.Helpers;
 using static Pororoca.Domain.Features.Common.HttpStatusCodeFormatter;
 

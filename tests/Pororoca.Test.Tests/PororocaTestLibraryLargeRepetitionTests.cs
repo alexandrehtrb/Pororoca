@@ -4,7 +4,7 @@ using Xunit.Abstractions;
 
 namespace Pororoca.Test.Tests;
 
-public class PororocaTestLibraryLargeRepetitionTests
+public sealed class PororocaTestLibraryLargeRepetitionTests
 {
     private readonly PororocaTest pororocaTest;
     private readonly ITestOutputHelper output;

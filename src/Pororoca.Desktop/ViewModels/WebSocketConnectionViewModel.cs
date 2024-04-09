@@ -187,18 +187,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             if (RequestAuthDataCtx.AuthMode == PororocaRequestAuthMode.InheritFromCollection)
                 return;
 
-            RequestAuthDataCtx.HasWindowsAuthLoginProblem = value == TranslateRequestErrors.WindowsAuthLoginCannotBeBlank;
-            RequestAuthDataCtx.HasWindowsAuthPasswordProblem = value == TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank;
-            RequestAuthDataCtx.HasWindowsAuthDomainProblem = value == TranslateRequestErrors.WindowsAuthDomainCannotBeBlank;
-
-            RequestAuthDataCtx.HasClientCertificateAuthPkcs12CertificateFilePathProblem =
-            (value == TranslateRequestErrors.ClientCertificatePkcs12CertificateFileNotFound);
-            RequestAuthDataCtx.HasClientCertificateAuthPkcs12FilePasswordProblem =
-            (value == TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank);
-            RequestAuthDataCtx.HasClientCertificateAuthPemCertificateFilePathProblem =
-            (value == TranslateRequestErrors.ClientCertificatePemCertificateFileNotFound);
-            RequestAuthDataCtx.HasClientCertificateAuthPemPrivateKeyFilePathProblem =
-            (value == TranslateRequestErrors.ClientCertificatePemPrivateKeyFileNotFound);
+            RequestAuthDataCtx.HighlightValidationProblems(value);
 
             if (RequestAuthDataCtx.HasValidationProblem)
             {
@@ -593,7 +582,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         {
             InvalidConnectionErrorCode = translateUriErrorCode;
         }
-        else if (!TryTranslateConnection(effectiveVars, this.col.CollectionScopedAuth, this.httpClientProvider, wsConn, disableTlsVerification,
+        else if (!TryTranslateConnection(effectiveVars, this.col.CollectionScopedAuth, this.col.CollectionScopedRequestHeaders, this.httpClientProvider, wsConn, disableTlsVerification,
                                          out var resolvedClients, out string? translateConnErrorCode))
         {
             InvalidConnectionErrorCode = translateConnErrorCode;

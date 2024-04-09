@@ -2,6 +2,7 @@ using System.Reactive;
 using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.TranslateRequest;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -320,6 +321,21 @@ public sealed class RequestAuthViewModel : ViewModelBase
             default:
                 return null;
         }
+    }
+
+    #endregion
+
+    #region VALIDATIONS
+
+    public void HighlightValidationProblems(string? errorCode)
+    {
+        HasWindowsAuthLoginProblem = errorCode == TranslateRequestErrors.WindowsAuthLoginCannotBeBlank;
+        HasWindowsAuthPasswordProblem = errorCode == TranslateRequestErrors.WindowsAuthPasswordCannotBeBlank;
+        HasWindowsAuthDomainProblem = errorCode == TranslateRequestErrors.WindowsAuthDomainCannotBeBlank;
+        HasClientCertificateAuthPkcs12CertificateFilePathProblem = errorCode == TranslateRequestErrors.ClientCertificatePkcs12CertificateFileNotFound;
+        HasClientCertificateAuthPkcs12FilePasswordProblem = errorCode == TranslateRequestErrors.ClientCertificatePkcs12PasswordCannotBeBlank;
+        HasClientCertificateAuthPemCertificateFilePathProblem = errorCode == TranslateRequestErrors.ClientCertificatePemCertificateFileNotFound;
+        HasClientCertificateAuthPemPrivateKeyFilePathProblem = errorCode == TranslateRequestErrors.ClientCertificatePemPrivateKeyFileNotFound;
     }
 
     #endregion

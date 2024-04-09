@@ -21,7 +21,26 @@ public static class PororocaRequestCommonTranslator
 
     #region RESOLVE KEY VALUE PARAMS
 
-    internal static List<PororocaKeyValueParam> ResolveKVParams(IEnumerable<PororocaVariable> effectiveVars, List<PororocaKeyValueParam>? unresolvedParams) =>
+    internal static List<PororocaKeyValueParam> ResolveRequestHeaders(IEnumerable<PororocaVariable> effectiveVars, List<PororocaKeyValueParam>? colScopedReqHeaders, List<PororocaKeyValueParam>? reqHeaders)
+    {
+        // request specific headers override collection-scoped request headers
+        if (colScopedReqHeaders is null)
+        {
+            return ResolveKVParams(effectiveVars, reqHeaders);
+        }
+        else if (reqHeaders is null)
+        {
+            return ResolveKVParams(effectiveVars, colScopedReqHeaders);
+        }
+        else
+        {
+            var effectiveColHeadersNotInReq = colScopedReqHeaders.Where(ch => ch.Enabled && !reqHeaders.Any(rh => rh.Enabled && ch.Key == rh.Key));
+            var effectiveHeaders = effectiveColHeadersNotInReq.Concat(reqHeaders.Where(rh => rh.Enabled));
+            return ResolveKVParams(effectiveVars, effectiveHeaders);
+        }
+    }
+
+    internal static List<PororocaKeyValueParam> ResolveKVParams(IEnumerable<PororocaVariable> effectiveVars, IEnumerable<PororocaKeyValueParam>? unresolvedParams) =>
         unresolvedParams?
            .Where(h => h.Enabled)
            .Select(x => new PororocaKeyValueParam(

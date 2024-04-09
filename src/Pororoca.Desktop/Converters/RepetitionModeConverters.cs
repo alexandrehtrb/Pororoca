@@ -1,4 +1,4 @@
-using Pororoca.Domain.Feature.Entities.Pororoca.Repetition;
+using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 
 namespace Pororoca.Desktop.Converters;
 
@@ -23,7 +23,7 @@ internal static class RepetitionModeMapping
         };
 }
 
-public class RepetitionModeMatchConverter : EnumMatchConverter<PororocaRepetitionMode>
+public sealed class RepetitionModeMatchConverter : EnumMatchConverter<PororocaRepetitionMode>
 {
     protected override PororocaRepetitionMode? MapIndexToEnum(int index) =>
         RepetitionModeMapping.MapIndexToEnum(index);

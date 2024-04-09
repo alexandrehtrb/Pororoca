@@ -21,7 +21,7 @@ public static class PororocaHttpRequestTranslator
 
     #region TRANSLATE REQUEST
 
-    public static bool TryTranslateRequest(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaHttpRequest req, out PororocaHttpRequest? resolvedReq, out HttpRequestMessage? reqMsg, out string? errorCode)
+    public static bool TryTranslateRequest(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, List<PororocaKeyValueParam>? collectionScopedReqHeaders, PororocaHttpRequest req, out PororocaHttpRequest? resolvedReq, out HttpRequestMessage? reqMsg, out string? errorCode)
     {
         if (!TryResolveAndMakeRequestUri(effectiveVars, req.Url, out var uri, out errorCode)
          || !IsHttpVersionAvailableInOS(req.HttpVersion, out errorCode))
@@ -34,7 +34,7 @@ public static class PororocaHttpRequestTranslator
         {
             try
             {
-                resolvedReq = ResolveRequest(effectiveVars, collectionScopedAuth, req);
+                resolvedReq = ResolveRequest(effectiveVars, collectionScopedAuth, collectionScopedReqHeaders, req);
                 HttpMethod method = new(resolvedReq.HttpMethod);
                 var resolvedContentHeaders = MakeContentHeaders(resolvedReq.Headers);
                 reqMsg = new(method, uri)
@@ -68,12 +68,12 @@ public static class PororocaHttpRequestTranslator
 
     #region RESOLUTION / REPLACE VARIABLE TEMPLATES
 
-    internal static PororocaHttpRequest ResolveRequest(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, PororocaHttpRequest req) => new()
+    internal static PororocaHttpRequest ResolveRequest(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, List<PororocaKeyValueParam>? collectionScopedReqHeaders, PororocaHttpRequest req) => new()
     {
         HttpVersion = req.HttpVersion,
         HttpMethod = req.HttpMethod,
         Url = IPororocaVariableResolver.ReplaceTemplates(req.Url, effectiveVars),
-        Headers = ResolveKVParams(effectiveVars, req.Headers),
+        Headers = ResolveRequestHeaders(effectiveVars, collectionScopedReqHeaders, req.Headers),
         Body = ResolveRequestBody(effectiveVars, req.Body),
         CustomAuth = ResolveRequestAuth(effectiveVars, collectionScopedAuth, req.CustomAuth),
         ResponseCaptures = req.ResponseCaptures
