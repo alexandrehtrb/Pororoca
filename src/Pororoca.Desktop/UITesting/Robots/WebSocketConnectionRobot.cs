@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using AvaloniaEdit;
+using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.Views;
 using static Pororoca.Domain.Features.Common.HttpVersionFormatter;
@@ -10,7 +11,7 @@ public sealed class WebSocketConnectionRobot : BaseNamedRobot
 {
     public WebSocketConnectionRobot(WebSocketConnectionView rootView) : base(rootView) { }
 
-    internal DataGrid ConnectionRequestHeaders => GetChildView<DataGrid>("dgWsConnectionReqHeaders")!;
+    internal DataGrid ConnectionRequestHeaders => GetChildView<RequestHeadersTableView>("rhtvWsConnectionReqHeaders")!.FindControl<DataGrid>("datagrid")!;
     internal Button AddConnectionRequestHeader => GetChildView<Button>("btAddConnectionRequestHeader")!;
     internal Button AddSubprotocol => GetChildView<Button>("btAddSubprotocol")!;
     internal Button AddClientMessage => GetChildView<Button>("btAddWsCliMsg")!;
@@ -32,7 +33,7 @@ public sealed class WebSocketConnectionRobot : BaseNamedRobot
     internal TabItem TabConnectionRequestAuth => GetChildView<TabItem>("tabItemConnectionRequestAuth")!;
     internal TabItem TabConnectionResponse => GetChildView<TabItem>("tabItemConnectionResponse")!;
     internal TextBlock ConnectionResponseStatusCode => GetChildView<TextBlock>("tbWebsocketResStatusCodeAndTime")!;
-    internal DataGrid ConnectionResponseHeaders => GetChildView<DataGrid>("dgWebsocketResHeaders")!;
+    internal DataGrid ConnectionResponseHeaders => GetChildView<ResponseHeadersTableView>("rhtvWebsocketResHeaders")!.FindControl<DataGrid>("datagrid")!;
     internal TabItem TabConnectionRequestOptions => GetChildView<TabItem>("tabItemConnectionRequestOptions")!;
     internal TextBox ConnectionRequestException => GetChildView<TextBox>("tbConnectionException")!;
     internal TextBox MessageDetailType => GetChildView<TextBox>("tbMessageDetailType")!;

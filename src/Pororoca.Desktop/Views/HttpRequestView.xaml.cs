@@ -56,12 +56,6 @@ public sealed class HttpRequestView : UserControl
 
     #region VIEW COMPONENTS EVENTS
 
-    public void OnSelectedRequestHeadersChanged(object sender, SelectionChangedEventArgs e)
-    {
-        var tableVm = ((HttpRequestViewModel)DataContext!).RequestHeadersTableVm;
-        UpdateVmSelectedItems(tableVm, e);
-    }
-
     public void OnSelectedUrlEncodedParamsChanged(object sender, SelectionChangedEventArgs e)
     {
         var tableVm = ((HttpRequestViewModel)DataContext!).UrlEncodedParamsTableVm;
@@ -71,12 +65,6 @@ public sealed class HttpRequestView : UserControl
     public void OnSelectedFormDataParamsChanged(object sender, SelectionChangedEventArgs e)
     {
         var tableVm = ((HttpRequestViewModel)DataContext!).FormDataParamsTableVm;
-        UpdateVmSelectedItems(tableVm, e);
-    }
-
-    public void OnSelectedResponseHeadersAndTrailersChanged(object sender, SelectionChangedEventArgs e)
-    {
-        var tableVm = ((HttpRequestViewModel)DataContext!).ResponseDataCtx.ResponseHeadersAndTrailersTableVm;
         UpdateVmSelectedItems(tableVm, e);
     }
 

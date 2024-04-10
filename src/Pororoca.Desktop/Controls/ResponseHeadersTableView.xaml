@@ -1,0 +1,51 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels.DataGrids;assembly=Pororoca.Desktop"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="clr-namespace:Pororoca.Desktop.Controls;assembly=Pororoca.Desktop"
+    mc:Ignorable="d"
+    d:DesignWidth="1350"
+    d:DesignHeight="700"
+    x:Class="Pororoca.Desktop.Controls.ResponseHeadersTableView"
+    x:CompileBindings="True"
+    x:DataType="vm:KeyValueParamsDataGridViewModel">
+
+  <DataGrid
+      Name="datagrid"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Stretch"
+      AutoGenerateColumns="False"
+      ItemsSource="{Binding Items}"
+      SelectionChanged="OnSelectedResponseHeadersAndTrailersChanged"
+      CanUserResizeColumns="True">
+    <!--DataGrid.KeyBindings>
+      <KeyBinding Command="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.CopyCmd}" Gesture="Ctrl+C" />
+    </DataGrid.KeyBindings-->
+    <DataGrid.ContextMenu>
+      <ContextMenu>
+        <MenuItem
+            Header="{Binding i18n.ContextMenu.Copy}"
+            Command="{Binding CopyCmd}"
+            InputGesture="Ctrl+C"/>
+      </ContextMenu>
+    </DataGrid.ContextMenu>
+    <DataGrid.Columns>
+      <DataGridTextColumn
+          Width="*"
+          Binding="{Binding Key}">
+        <DataGridTextColumn.Header>
+          <TextBlock Text="{Binding i18n.HttpResponse.HeaderName}"/>
+        </DataGridTextColumn.Header>
+      </DataGridTextColumn>
+      <DataGridTextColumn
+          Width="*"
+          Binding="{Binding Value}">
+        <DataGridTextColumn.Header>
+          <TextBlock Text="{Binding i18n.HttpResponse.HeaderValue}"/>
+        </DataGridTextColumn.Header>
+      </DataGridTextColumn>
+    </DataGrid.Columns>
+  </DataGrid>
+</UserControl>

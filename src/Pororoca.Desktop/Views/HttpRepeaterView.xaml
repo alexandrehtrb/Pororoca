@@ -521,43 +521,10 @@
                   Classes="TabItemHeader"
                   Text="{Binding i18n.HttpResponse.Headers}"/>
             </TabItem.Header>
-            <DataGrid
-                Name="dgResHeaders"
+            <controls:ResponseHeadersTableView
+                x:Name="rhtvResHeaders"
                 Margin="-12,12,-12,12"
-                VerticalAlignment="Stretch"
-                AutoGenerateColumns="False"
-                ItemsSource="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.Items}"
-                SelectionChanged="OnSelectedResponseHeadersAndTrailersChanged"
-                CanUserResizeColumns="True">
-              <!--DataGrid.KeyBindings>
-                <KeyBinding Command="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.CopyCmd}"
-                            Gesture="Ctrl+C" />
-              </DataGrid.KeyBindings-->
-              <DataGrid.ContextMenu>
-                <ContextMenu>
-                  <MenuItem
-                      Header="{Binding i18n.ContextMenu.Copy}"
-                      Command="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.CopyCmd}"
-                      InputGesture="Ctrl+C"/>
-                </ContextMenu>
-              </DataGrid.ContextMenu>
-              <DataGrid.Columns>
-                <DataGridTextColumn
-                    Width="*"
-                    Binding="{Binding Key}">
-                  <DataGridTextColumn.Header>
-                    <TextBlock Text="{Binding i18n.HttpResponse.HeaderName}"/>
-                  </DataGridTextColumn.Header>
-                </DataGridTextColumn>
-                <DataGridTextColumn
-                    Width="*"
-                    Binding="{Binding Value}">
-                  <DataGridTextColumn.Header>
-                    <TextBlock Text="{Binding i18n.HttpResponse.HeaderValue}"/>
-                  </DataGridTextColumn.Header>
-                </DataGridTextColumn>
-              </DataGrid.Columns>
-            </DataGrid>
+                DataContext="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm}"/>
           </TabItem>
           <!-- RESPONSE BODY -->
           <TabItem Name="tabItemResBody">

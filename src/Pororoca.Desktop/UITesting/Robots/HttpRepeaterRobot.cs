@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using AvaloniaEdit;
+using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.UITesting.Robots;
@@ -26,7 +27,7 @@ public sealed class HttpRepeaterRobot : BaseNamedRobot
     internal ComboBoxItem OptionRepetitionModeRandom => GetChildView<ComboBoxItem>("cbiRepetitionModeRandom")!;
     internal ComboBoxItem OptionRepetitionModeSequential => GetChildView<ComboBoxItem>("cbiRepetitionModeSequential")!;
     internal ComboBoxItem OptionRepetitionModeSimple => GetChildView<ComboBoxItem>("cbiRepetitionModeSimple")!;
-    internal DataGrid ResultDetailHeaders => GetChildView<DataGrid>("dgResHeaders")!;
+    internal DataGrid ResultDetailHeaders => GetChildView<ResponseHeadersTableView>("dgResHeaders")!.FindControl<DataGrid>("datagrid")!;
     internal DataGrid ResultDetailInputLine => GetChildView<DataGrid>("dgResInputLine")!;
     internal ListBox RepetitionResults => GetChildView<ListBox>("lbRepetitionResults")!;
     internal TextEditor ResponseBodyRawEditor => GetChildView<TextEditor>("ResponseBodyRawContentEditor")!;

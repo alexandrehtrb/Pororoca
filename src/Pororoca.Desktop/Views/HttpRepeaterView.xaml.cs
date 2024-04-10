@@ -31,12 +31,6 @@ public sealed class HttpRepeaterView : UserControl
 
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
-    public void OnSelectedResponseHeadersAndTrailersChanged(object sender, SelectionChangedEventArgs e)
-    {
-        var tableVm = ((HttpRepeaterViewModel)DataContext!).ResponseDataCtx.ResponseHeadersAndTrailersTableVm;
-        UpdateVmSelectedItems(tableVm, e);
-    }
-
     private void OnResponseRawBodyEditorDocumentChanged(object? sender, EventArgs e)
     {
         var vm = (HttpRepeaterViewModel)DataContext!;

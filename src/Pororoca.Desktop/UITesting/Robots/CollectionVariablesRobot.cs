@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
@@ -10,7 +11,7 @@ public sealed class CollectionVariablesRobot : BaseRobot, IVariablesEditorRobot
     public CollectionVariablesRobot(CollectionVariablesView rootView) : base(rootView) { }
 
     internal Button AddVariable => GetChildView<Button>("btAddVariable")!;
-    public DataGrid Variables => GetChildView<DataGrid>("dgVariables")!;
+    public DataGrid Variables => GetChildView<VariablesTableView>("vtvVariables")!.FindControl<DataGrid>("datagrid")!;
     internal VariablesDataGridViewModel VariablesVm => ((CollectionVariablesViewModel)RootView!.DataContext!).VariablesTableVm;
 
     public Task SetVariables(IEnumerable<VariableViewModel> vars)

@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
@@ -12,7 +13,7 @@ public sealed class CollectionScopedRequestHeadersRobot : BaseNamedRobot
 
     internal Button GoBack => GetChildView<Button>("btGoBack")!;
     internal Button AddHeader => GetChildView<Button>("btAddColScopedReqHeader")!;
-    internal DataGrid Headers => GetChildView<DataGrid>("dgColScopedReqHeaders")!;
+    internal DataGrid Headers => GetChildView<RequestHeadersTableView>("rhtvColScopedReqHeaders")!.FindControl<DataGrid>("datagrid")!;
 
     internal async Task SetRequestHeaders(IEnumerable<PororocaKeyValueParam> headers)
     {
