@@ -76,7 +76,6 @@ jobs:
     uses: ./.github/workflows/generate-nuget-and-sboms-wfw.yml
     with:
       uploadArtifactsToRelease: true
-      releaseName: ${{ env.RELEASE_NAME }}
 
   linux-x64:
     needs: draft-github-release
@@ -86,7 +85,6 @@ jobs:
       rid: linux-x64
       enableUITesting: false
       uploadArtifactToRelease: true
-      releaseName: ${{ env.RELEASE_NAME }}
 
   linux-x64-debian:
     needs: draft-github-release
@@ -97,7 +95,6 @@ jobs:
       packaging: debian
       enableUITesting: false
       uploadArtifactToRelease: true
-      releaseName: ${{ env.RELEASE_NAME }}
 
   osx:
     needs: draft-github-release
@@ -107,7 +104,6 @@ jobs:
       rid: osx-x64
       enableUITesting: false
       uploadArtifactToRelease: true
-      releaseName: ${{ env.RELEASE_NAME }}
 
   win-x64-installer:
     needs: draft-github-release
@@ -118,7 +114,6 @@ jobs:
       packaging: nsis
       enableUITesting: false
       uploadArtifactToRelease: true
-      releaseName: ${{ env.RELEASE_NAME }}
 
   win-x64-portable:
     needs: draft-github-release
@@ -128,7 +123,6 @@ jobs:
       rid: win-x64
       enableUITesting: false
       uploadArtifactToRelease: true
-      releaseName: ${{ env.RELEASE_NAME }}
 
   win-x86-installer:
     needs: draft-github-release
@@ -139,7 +133,6 @@ jobs:
       packaging: nsis
       enableUITesting: false
       uploadArtifactToRelease: true
-      releaseName: ${{ env.RELEASE_NAME }}
 
   win-x86-portable:
     needs: draft-github-release
@@ -149,4 +142,3 @@ jobs:
       rid: win-x86
       enableUITesting: false
       uploadArtifactToRelease: true
-      releaseName: ${{ env.RELEASE_NAME }}
