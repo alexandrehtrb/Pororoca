@@ -1,0 +1,66 @@
+name: Publish GitHub release
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - 'master'
+
+jobs:
+  publish_github_release:
+    if: ${{ github.event.pull_request.merged == true }}
+    runs-on: ubuntu-latest
+    steps:
+
+    # TODO: add steps to publish (undraft) release on GitHub
+
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
+
+    - name: Read package version
+      shell: pwsh
+      run: |
+        ([XML]$nugetCsprojXml = Get-Content ./src/Pororoca.Test/Pororoca.Test.csproj)
+        $versionName = $nugetCsprojXml.Project.PropertyGroup.PackageVersion
+        echo "RELEASE_NAME=${versionName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+
+    - name: Check if release already exists
+      shell: pwsh
+      run: |
+        $releasesList = (gh release list --json name,isDraft) | ConvertFrom-Json;
+        $existingRelease = $releasesList | where { $_.Name -eq $env:RELEASE_NAME } | Select -First 1
+        if ($existingRelease -eq $null)
+        {
+          echo "No release found."
+          exit 0;
+        }
+        elseif ($existingRelease.IsDraft -eq $True)
+        {
+          echo "RELEASE_IS_DRAFTED=1" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        }
+        else
+        {
+          echo "This release exists and is published!";
+          exit 1;
+        }
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Install .NET
+      if: ${{ env.RELEASE_IS_DRAFTED == '1' }}
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.204
+
+    - name: Pack and push Pororoca.Test NuGet
+      if: ${{ env.RELEASE_IS_DRAFTED == '1' }}
+      shell: pwsh
+      run: |
+        dotnet pack ./src/Pororoca.Test/Pororoca.Test.csproj --nologo --verbosity quiet --configuration Release
+        $filePath = "./src/Pororoca.Test/bin/Release/Pororoca.Test.${env:RELEASE_NAME}.nupkg"
+        dotnet nuget push $filePath --api-key $env:NUGET_API_KEY --source https://api.nuget.org/v3/index.json
+      env:
+        NUGET_API_KEY: ${{ secrets.POROROCA_NUGET_API_KEY }}
