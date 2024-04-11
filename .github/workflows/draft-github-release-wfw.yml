@@ -1,11 +1,16 @@
 name: Draft GitHub release
 
 on:
-  workflow_dispatch:
-    inputs:
-      releaseName:
-        required: true
-        type: string
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches:
+      - 'master'
+    paths:
+      - '.github/**'
+      - 'src/**'
+      - 'tests/**'
+      - 'LICENCE.md'
+      - 'Pororoca.sln'
 
 jobs:
 
@@ -16,18 +21,62 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 1
-    - name: Draft GitHub release
-      run: gh release create $RELEASE_NAME --draft --latest --title $RELEASE_NAME --notes "include notes here"
+
+    - name: Read release version
+      shell: pwsh
+      run: |
+        ([XML]$desktopCsprojXml = Get-Content ./src/Pororoca.Desktop/Pororoca.Desktop.csproj)
+        $versionName = $desktopCsprojXml.Project.PropertyGroup.Version
+        echo "RELEASE_NAME=${versionName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+
+    - name: Check if release already exists
+      shell: pwsh
+      run: |
+        $releasesList = (gh release list --json name,isDraft) | ConvertFrom-Json;
+        $existingRelease = $releasesList | where { $_.Name -eq $env:RELEASE_NAME } | Select -First 1
+        if ($existingRelease -eq $null)
+        {
+          echo "RELEASE_IS_DRAFTED=0" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        }
+        elseif ($existingRelease.IsDraft -eq $True)
+        {
+          echo "RELEASE_IS_DRAFTED=1" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        }
+        else
+        {
+          echo "This release exists and is published!";
+          exit 1;
+        }
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        RELEASE_NAME: ${{ inputs.releaseName }}
+
+    - name: Delete pre-existing release assets
+      if: ${{ env.RELEASE_IS_DRAFTED == '1' }}
+      shell: pwsh
+      run: |
+        $releasesList = (gh api repos/alexandrehtrb/Pororoca/releases) | ConvertFrom-Json;
+        $existingRelease = $releasesList | where { $_.Name -eq $env:RELEASE_NAME } | Select -First 1
+        $assets = ($existingRelease.Assets | Select Name, Url)
+        foreach ($asset in $assets)
+        {
+          echo "Deleting asset ${asset.Name}...";
+          gh api --method DELETE $asset.Url
+        }
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Draft GitHub release
+      if: ${{ env.RELEASE_IS_DRAFTED == '0' }}
+      run: gh release create $RELEASE_NAME --draft --latest --target master --title $RELEASE_NAME --notes "include notes here"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   nuget-and-sboms:
     needs: draft-github-release
     uses: ./.github/workflows/generate-nuget-and-sboms-wfw.yml
     with:
       uploadArtifactsToRelease: true
-      releaseName: ${{ inputs.releaseName }}
+      releaseName: ${{ env.RELEASE_NAME }}
 
   linux-x64:
     needs: draft-github-release
@@ -37,7 +86,7 @@ jobs:
       rid: linux-x64
       enableUITesting: false
       uploadArtifactToRelease: true
-      releaseName: ${{ inputs.releaseName }}
+      releaseName: ${{ env.RELEASE_NAME }}
 
   linux-x64-debian:
     needs: draft-github-release
@@ -48,7 +97,7 @@ jobs:
       packaging: debian
       enableUITesting: false
       uploadArtifactToRelease: true
-      releaseName: ${{ inputs.releaseName }}
+      releaseName: ${{ env.RELEASE_NAME }}
 
   osx:
     needs: draft-github-release
@@ -58,7 +107,7 @@ jobs:
       rid: osx-x64
       enableUITesting: false
       uploadArtifactToRelease: true
-      releaseName: ${{ inputs.releaseName }}
+      releaseName: ${{ env.RELEASE_NAME }}
 
   win-x64-installer:
     needs: draft-github-release
@@ -69,7 +118,7 @@ jobs:
       packaging: nsis
       enableUITesting: false
       uploadArtifactToRelease: true
-      releaseName: ${{ inputs.releaseName }}
+      releaseName: ${{ env.RELEASE_NAME }}
 
   win-x64-portable:
     needs: draft-github-release
@@ -79,7 +128,7 @@ jobs:
       rid: win-x64
       enableUITesting: false
       uploadArtifactToRelease: true
-      releaseName: ${{ inputs.releaseName }}
+      releaseName: ${{ env.RELEASE_NAME }}
 
   win-x86-installer:
     needs: draft-github-release
@@ -90,7 +139,7 @@ jobs:
       packaging: nsis
       enableUITesting: false
       uploadArtifactToRelease: true
-      releaseName: ${{ inputs.releaseName }}
+      releaseName: ${{ env.RELEASE_NAME }}
 
   win-x86-portable:
     needs: draft-github-release
@@ -100,4 +149,4 @@ jobs:
       rid: win-x86
       enableUITesting: false
       uploadArtifactToRelease: true
-      releaseName: ${{ inputs.releaseName }}
+      releaseName: ${{ env.RELEASE_NAME }}
