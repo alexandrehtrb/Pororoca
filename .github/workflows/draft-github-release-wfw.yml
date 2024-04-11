@@ -1,15 +1,22 @@
 name: Draft GitHub release
 
 on:
-  pull_request_review:
-    types: [submitted]
+  # IMPORTANT: remember to forbid users from forked repos
+  # from running actions
+  pull_request:
+    types: [opened, reopened, synchronize]
     branches:
       - 'master'
+    paths:
+      - '.github/**'
+      - 'src/**'
+      - 'tests/**'
+      - 'LICENCE.md'
+      - 'Pororoca.sln'
 
 jobs:
 
   draft-github-release:
-    if: ${{ github.event.review.state == 'APPROVED' }}
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
