@@ -7,9 +7,6 @@ on:
         required: false
         default: false
         type: boolean
-      releaseName:
-        required: false
-        type: string
 
 jobs:
 
@@ -97,7 +94,7 @@ jobs:
       run: gh release upload $RELEASE_NAME $NUGET_FILE_PATH $DESKTOP_SBOM_FILE_PATH $NUGET_SBOM_FILE_PATH --clobber
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        RELEASE_NAME: ${{ inputs.releaseName }}
+        RELEASE_NAME: ${{ env.VERSION_NAME }}
         NUGET_FILE_PATH: ${{ format('./src/Pororoca.Test/bin/Release/Pororoca.Test.{0}.nupkg', env.VERSION_NAME) }}
         DESKTOP_SBOM_FILE_PATH: ./out/sbom_pororoca_desktop.json
         NUGET_SBOM_FILE_PATH: ./out/sbom_pororoca_test.json

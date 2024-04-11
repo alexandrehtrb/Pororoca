@@ -19,9 +19,6 @@ on:
         required: false
         default: false
         type: boolean
-      releaseName:
-        required: false
-        type: string
 
 jobs:
   generatePororocaDesktop:
@@ -276,5 +273,5 @@ jobs:
       run: gh release upload $env:RELEASE_NAME $env:FILE_PATH --clobber
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        RELEASE_NAME: ${{ inputs.releaseName }}
+        RELEASE_NAME: ${{ env.VERSION_NAME }}
         FILE_PATH: ${{ format('./out/{0}', env.OUTPUT_FILE_NAME) }}
