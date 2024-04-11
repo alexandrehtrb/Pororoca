@@ -61,7 +61,7 @@ jobs:
         $assets = ($existingRelease.Assets | Select Name, Url)
         foreach ($asset in $assets)
         {
-          echo "Deleting asset ${asset.Name}...";
+          echo "Deleting asset $($asset.Name)...";
           gh api --method DELETE $asset.Url
         }
       env:
