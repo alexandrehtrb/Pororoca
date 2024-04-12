@@ -56,11 +56,28 @@ jobs:
         dotnet-version: 8.0.204
 
     - name: Pack and push Pororoca.Test NuGet
+      id: packPushNuGet
       if: ${{ env.RELEASE_IS_DRAFTED == '1' }}
       shell: pwsh
       run: |
         dotnet pack ./src/Pororoca.Test/Pororoca.Test.csproj --nologo --verbosity quiet --configuration Release
         $filePath = "./src/Pororoca.Test/bin/Release/Pororoca.Test.${env:RELEASE_NAME}.nupkg"
-        dotnet nuget push $filePath --api-key $env:NUGET_API_KEY --source https://api.nuget.org/v3/index.json
+        dotnet nuget push $filePath --api-key $env:NUGET_API_KEY --source https://apiint.nugettest.org/v3/index.json
       env:
-        NUGET_API_KEY: ${{ secrets.POROROCA_NUGET_API_KEY }}
+        NUGET_API_KEY: ${{ secrets.POROROCA_QA_NUGET_API_KEY }}
+
+    - name: Add comment to PR package publishing failed
+      if: always() && (env.RELEASE_IS_DRAFTED == '1') && (steps.packPushNuGet.outcome == 'failure')
+      shell: pwsh
+      run: gh pr comment $env:PR_NUMBER --body "📦❌ Failed to publish Pororoca.Test ${env:RELEASE_NAME} to NuGet."
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PR_NUMBER: ${{ github.event.number }}
+
+    - name: Add comment to PR package published
+      if: always() && (env.RELEASE_IS_DRAFTED == '1') && (steps.packPushNuGet.outcome == 'success')
+      shell: pwsh
+      run: gh pr comment $env:PR_NUMBER --body "📦✅ Pororoca.Test ${env:RELEASE_NAME} published to NuGet!"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PR_NUMBER: ${{ github.event.number }}
