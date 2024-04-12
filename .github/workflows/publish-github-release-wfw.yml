@@ -62,9 +62,9 @@ jobs:
       run: |
         dotnet pack ./src/Pororoca.Test/Pororoca.Test.csproj --nologo --verbosity quiet --configuration Release
         $filePath = "./src/Pororoca.Test/bin/Release/Pororoca.Test.${env:RELEASE_NAME}.nupkg"
-        dotnet nuget push $filePath --api-key $env:NUGET_API_KEY --source https://api.nuget.org/v3/index.json
+        dotnet nuget push $filePath --api-key $env:NUGET_API_KEY --source https://apiint.nugettest.org/v3/index.json
       env:
-        NUGET_API_KEY: ${{ secrets.POROROCA_NUGET_API_KEY }}
+        NUGET_API_KEY: ${{ secrets.POROROCA_QA_NUGET_API_KEY }}
 
     - name: Add comment to PR package publishing failed
       if: always() && (env.RELEASE_IS_DRAFTED == '1') && (steps.packPushNuGet.outcome == 'failure')
