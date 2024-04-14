@@ -38,8 +38,11 @@ public static partial class PororocaResponseValueCapturer
 
             foreach (string subpath in subpaths)
             {
-                if (IsFunction(subpath, jsonNode, out string result))
-                    return result;
+                if (IsFunction(subpath, jsonNode, out JsonNode result))
+                {
+                    jsonNode = result;
+                    continue;
+                }
 
                 if (IsArrayElementSubpath(subpath, out string? elementName, out int? index1, out int? index2))
                 {
@@ -108,7 +111,7 @@ public static partial class PororocaResponseValueCapturer
         }
     }
 
-    private static bool IsFunction(string subpath, JsonNode? jsonNode, out string result)
+    private static bool IsFunction(string subpath, JsonNode? jsonNode, out JsonNode result)
     {
         if (string.IsNullOrWhiteSpace(subpath) || jsonNode is null)
         {
@@ -134,21 +137,21 @@ public static partial class PororocaResponseValueCapturer
         }
     }
 
-    private static string GetCount(JsonNode node)
+    private static JsonNode GetCount(JsonNode node)
     {
         int count = node.AsArray().Count;
-        return count.ToString();
+        return count;
     }
 
-    private static string GetFirstArrayElement(JsonNode node)
+    private static JsonNode GetFirstArrayElement(JsonNode node)
     {
         var firstElement = node.AsArray().First();
-        return firstElement.ToString();
+        return firstElement;
     }
 
-    private static string GetLastArrayElement(JsonNode node)
+    private static JsonNode GetLastArrayElement(JsonNode node)
     {
         var lastElement = node.AsArray().Last();
-        return lastElement.ToString();
+        return lastElement;
     }
 }
