@@ -25,9 +25,7 @@ public sealed class EditableTextBlockUITest : UITest
         EditableTextBlockRobot robot = new(etbView);
 
         AssertIsVisible(robot.RootView);
-        AssertIsHidden(robot.IconHttp);
-        AssertIsHidden(robot.IconDisconnectedWebSocket);
-        AssertIsHidden(robot.IconConnectedWebSocket);
+        Assert(robot.Icon == null);
         AssertIsVisible(robot.AppliedText);
         AssertHasText(robot.AppliedText, "New collection");
         AssertIsHidden(robot.TextBeingEdited);
@@ -38,9 +36,7 @@ public sealed class EditableTextBlockUITest : UITest
         await robot.ButtonEditOrApply.ClickOn();
 
         AssertIsVisible(robot.RootView);
-        AssertIsHidden(robot.IconHttp);
-        AssertIsHidden(robot.IconDisconnectedWebSocket);
-        AssertIsHidden(robot.IconConnectedWebSocket);
+        Assert(robot.Icon == null);
         AssertIsHidden(robot.AppliedText);
         AssertIsVisible(robot.TextBeingEdited);
         AssertHasText(robot.TextBeingEdited, "New collection");
@@ -53,9 +49,7 @@ public sealed class EditableTextBlockUITest : UITest
         await robot.ButtonEditOrApply.ClickOn();
 
         AssertIsVisible(robot.RootView);
-        AssertIsHidden(robot.IconHttp);
-        AssertIsHidden(robot.IconDisconnectedWebSocket);
-        AssertIsHidden(robot.IconConnectedWebSocket);
+        Assert(robot.Icon == null);
         AssertIsVisible(robot.AppliedText);
         AssertHasText(robot.AppliedText, "COLLECTION");
         AssertIsHidden(robot.TextBeingEdited);

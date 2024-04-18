@@ -152,8 +152,11 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
             this.RaiseAndSetIfChanged(ref this.numberOfRepetitionsToExecuteField, value);
             InvalidRepetitionErrorCode = null;
             const int minigunThreshold = 600;
-            NameEditableVm.IsHttpMinigun = value >= minigunThreshold;
-            NameEditableVm.IsHttpRepetition = value < minigunThreshold;
+            NameEditableVm.Icon = value switch
+            {
+                >= minigunThreshold => EditableTextBlockIcon.HttpMinigun,
+                _ => EditableTextBlockIcon.HttpRepeater
+            };
         }
     }
 

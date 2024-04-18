@@ -1,4 +1,5 @@
 using System.Reactive;
+using Pororoca.Desktop.Converters;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -9,19 +10,18 @@ public sealed class EditableTextBlockViewModel : ViewModelBase
     private readonly Action<string> onNameUpdated;
 
     [Reactive]
-    public bool IsHttpRequest { get; set; }
+    public bool HasIcon { get; private set; }
 
-    [Reactive]
-    public bool IsDisconnectedWebSocket { get; set; }
-
-    [Reactive]
-    public bool IsConnectedWebSocket { get; set; }
-
-    [Reactive]
-    public bool IsHttpRepetition { get; set; }
-
-    [Reactive]
-    public bool IsHttpMinigun { get; set; }
+    private EditableTextBlockIcon? iconField;
+    public EditableTextBlockIcon? Icon
+    {
+        get => this.iconField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.iconField, value);
+            HasIcon = value is not null;
+        }
+    }
 
     [Reactive]
     public string Txt { get; set; }

@@ -26,6 +26,7 @@ using static Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage.
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection.PororocaWebSocketConnectionTranslator;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection.PororocaWebSocketConnectionValidator;
 using static Pororoca.Domain.Features.Common.HttpStatusCodeFormatter;
+using Pororoca.Desktop.Converters;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -53,8 +54,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         get => this.isConnectedField;
         set
         {
-            NameEditableVm.IsConnectedWebSocket = value;
-            NameEditableVm.IsDisconnectedWebSocket = !value;
+            NameEditableVm.Icon = value ? EditableTextBlockIcon.ConnectedWebSocket : EditableTextBlockIcon.DisconnectedWebSocket;
             this.RaiseAndSetIfChanged(ref this.isConnectedField, value);
         }
     }
@@ -346,7 +346,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         #region COLLECTION ORGANIZATION
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
 
-        NameEditableVm.IsDisconnectedWebSocket = true;
+        NameEditableVm.Icon = EditableTextBlockIcon.DisconnectedWebSocket;
         AddNewWebSocketClientMessageCmd = ReactiveCommand.Create(AddNewWebSocketClientMessage);
         #endregion
 
