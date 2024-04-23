@@ -7,6 +7,17 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
+
+    <!-- properties below ensure JSON (de)serialization properly tested via unit tests -->
+    <!-- trimming begin -->
+    <PublishTrimmed>true</PublishTrimmed>
+    <TrimMode>partial</TrimMode>
+    <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
+    <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
+    <EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
+    <!-- trimming end -->
   </PropertyGroup>
 
   <ItemGroup>

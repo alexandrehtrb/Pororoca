@@ -409,7 +409,7 @@ public static class OpenApiImporterTests
         Assert.Equal(new(true, "text1", ""), req.Body.UrlEncodedValues[4]);
         Assert.Equal(new(true, "font", "impact"), req.Body.UrlEncodedValues[5]);
         Assert.Equal(new(true, "max_font_size", "0"), req.Body.UrlEncodedValues[6]);
-        Assert.Equal(new(true, "no_watermark", "False"), req.Body.UrlEncodedValues[7]);
+        Assert.Equal(new(true, "no_watermark", "false"), req.Body.UrlEncodedValues[7]);
 
         #endregion
     }
@@ -498,7 +498,7 @@ public static class OpenApiImporterTests
 
         Assert.Equal("req", req.Name);
         Assert.Equal("GET", req.HttpMethod);
-        Assert.Equal("{{BaseUrl}}/shodan/host/{{ip}}?history=False&minify=False", req.Url);
+        Assert.Equal("{{BaseUrl}}/shodan/host/{{ip}}?history=false&minify=false", req.Url);
         Assert.NotNull(req.Headers);
         Assert.Empty(req.Headers);
         Assert.Null(req.Body);
