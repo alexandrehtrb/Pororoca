@@ -18,27 +18,15 @@
   <Grid
       HorizontalAlignment="Stretch"
       VerticalAlignment="Stretch"
-      Margin="24,0,24,0">
+      Margin="24"
+      RowDefinitions="Auto,Auto,Auto,*,Auto">
 
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*"/>
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*"/>
-      <RowDefinition Height="Auto"/>
-    </Grid.RowDefinitions>
-
-    <Grid
+    <controls:EditableTextBlock
+        x:Name="etbName"
         Grid.Column="0"
         Grid.Row="0"
         HorizontalAlignment="Stretch"
-        VerticalAlignment="Top"
-        Margin="0,24,0,0">
-      <controls:EditableTextBlock x:Name="etbName" DataContext="{Binding NameEditableVm}"/>
-    </Grid>
+        DataContext="{Binding NameEditableVm}"/>
 
     <StackPanel
         Grid.Column="0"
@@ -116,7 +104,7 @@
         Grid.Column="0"
         Grid.Row="4"
         HorizontalAlignment="Stretch"
-        Margin="0,24,0,24"
+        Margin="0,24,0,0"
         Text="{Binding i18n.Environment.Tip}"
         Classes="TipText"/>
 

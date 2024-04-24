@@ -15,24 +15,21 @@
     FontSize="16">
 
   <StackPanel
-      Spacing="36"
       HorizontalAlignment="Stretch"
       VerticalAlignment="Stretch"
-      Margin="24,0,24,24">
+      Margin="24">
 
     <TextBlock
         Text="{Binding i18n.CollectionScopedAuth.Title}"
-        Margin="0,24,0,0"
         HorizontalAlignment="Left"
         VerticalAlignment="Top"
         TextWrapping="Wrap"
         Classes="PageTitle"/>
 
-    <Grid>
-      <v:RequestAuthView
-          x:Name="reqAuthView"
-          DataContext="{Binding AuthVm}"/>
-    </Grid>
+    <v:RequestAuthView
+        x:Name="reqAuthView"
+        Margin="0,36,0,0"
+        DataContext="{Binding AuthVm}"/>
 
   </StackPanel>
 </UserControl>

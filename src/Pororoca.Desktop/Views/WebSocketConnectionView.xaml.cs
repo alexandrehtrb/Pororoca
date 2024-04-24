@@ -1,6 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using AvaloniaEdit;
 using Pororoca.Desktop.TextEditorConfig;
 using Pororoca.Desktop.ViewModels;
@@ -28,6 +30,12 @@ public sealed class WebSocketConnectionView : UserControl
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
     #region VIEW COMPONENTS EVENTS
+
+    public void ConnectDisconnectCancel(object sender, RoutedEventArgs args)
+    {
+        var vm = (WebSocketConnectionViewModel)DataContext!;
+        Dispatcher.UIThread.Post(async () => await vm.ConnectDisconnectCancelAsync());
+    }
 
     public void OnSelectedSubprotocolsChanged(object sender, SelectionChangedEventArgs e)
     {

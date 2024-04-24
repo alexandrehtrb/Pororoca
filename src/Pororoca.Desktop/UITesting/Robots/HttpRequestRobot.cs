@@ -1,4 +1,6 @@
 using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using AvaloniaEdit;
 using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.ViewModels;
@@ -23,8 +25,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal TextBox Url => GetChildView<TextBox>("tbUrl")!;
     internal TextBlock ErrorMsg => GetChildView<TextBlock>("tbErrorMsg")!;
     internal ComboBox HttpVersion => GetChildView<ComboBox>("cbHttpVersion")!;
-    internal Button Send => GetChildView<Button>("btSendRequest")!;
-    internal Button Cancel => GetChildView<Button>("btCancelRequest")!;
+    internal Button SendOrCancel => GetChildView<Button>("btSendOrCancelRequest")!;
     internal TabItem TabReqHeaders => GetChildView<TabItem>("tabItemReqHeaders")!;
     internal Button AddReqHeader => GetChildView<Button>("btReqHeaderAdd")!;
     internal DataGrid ReqHeaders => GetChildView<RequestHeadersTableView>("rhtvReqHeaders")!.FindControl<DataGrid>("datagrid")!;
@@ -261,7 +262,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     {
         var vm = (HttpRequestViewModel)RootView!.DataContext!;
         CancellationTokenSource cts = new(TimeSpan.FromMinutes(3));
-        await Send.ClickOn();
+        await SendOrCancel.RaiseClickEvent();
         do
         {
             // don't make the value too low,

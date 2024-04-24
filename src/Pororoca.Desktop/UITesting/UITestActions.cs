@@ -17,6 +17,12 @@ internal static class UITestActions
     internal static TreeViewItem? GetTreeViewItemViewAtIndex(this TreeView parentView, int index) =>
         (TreeViewItem?)parentView.ItemsView[index];
 
+    internal static async Task RaiseClickEvent(this Button button)
+    {
+        button.RaiseEvent(new() { RoutedEvent = Button.ClickEvent });
+        await WaitAfterActionAsync();
+    }
+
     internal static async Task ClickOn(this Button control)
     {
         control.Command?.Execute(null);

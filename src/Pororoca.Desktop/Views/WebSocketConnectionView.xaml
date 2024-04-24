@@ -30,14 +30,8 @@
 
   <Grid
       HorizontalAlignment="Stretch"
-      VerticalAlignment="Stretch">
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*"/>
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*"/>
-    </Grid.RowDefinitions>
+      VerticalAlignment="Stretch"
+      RowDefinitions="Auto,*">
 
     <StackPanel
         Grid.Column="0"
@@ -47,14 +41,11 @@
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
 
-      <Grid
+      <controls:EditableTextBlock
+          x:Name="etbName"
           Margin="24,0,24,0"
           HorizontalAlignment="Stretch"
-          VerticalAlignment="Top">
-        <controls:EditableTextBlock
-            x:Name="etbName"
-            DataContext="{Binding NameEditableVm}"/>
-      </Grid>
+          DataContext="{Binding NameEditableVm}"/>
 
       <Grid
           ShowGridLines="False"
@@ -112,7 +103,7 @@
             Classes.HasValidationProblem="{Binding HasHttpVersionValidationProblem}"/>
 
         <Button
-            Name="btConnect"
+            Name="btConnectDisconnectCancel"
             Grid.Column="2"
             Grid.Row="0"
             Height="40"
@@ -120,58 +111,15 @@
             Margin="12,0,0,0"
             HorizontalContentAlignment="Center"
             VerticalContentAlignment="Center"
-            IsVisible="{Binding !IsConnected}"
-            Command="{Binding ConnectCmd}"
-            Content="{Binding i18n.WebSocketConnection.Connect}"
-            ToolTip.Tip="{Binding i18n.WebSocketConnection.ConnectToolTip}"
-            Classes="Primary"/>
-
-        <Button
-            Grid.Column="2"
-            Grid.Row="0"
-            Height="40"
-            Width="104"
-            Margin="12,0,0,0"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center"
-            IsVisible="{Binding IsConnecting}"
-            Command="{Binding CancelConnectCmd}"
-            Content="{Binding i18n.WebSocketConnection.CancelConnect}"
-            ToolTip.Tip="{Binding i18n.WebSocketConnection.CancelConnectToolTip}"
-            Classes="Primary"/>
-
-        <Button
-            Name="btDisconnect"
-            Grid.Column="2"
-            Grid.Row="0"
-            Height="40"
-            Width="104"
-            Margin="12,0,0,0"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center"
-            IsVisible="{Binding IsConnected}"
-            Command="{Binding DisconnectCmd}"
-            Content="{Binding i18n.WebSocketConnection.Disconnect}"
-            ToolTip.Tip="{Binding i18n.WebSocketConnection.DisconnectToolTip}"
-            Classes="PrimaryInverted"/>
-
-        <Button
-            Grid.Column="2"
-            Grid.Row="0"
-            Height="40"
-            Width="104"
-            Margin="12,0,0,0"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center"
-            IsVisible="{Binding IsDisconnecting}"
-            Command="{Binding CancelDisconnectCmd}"
-            Content="{Binding i18n.WebSocketConnection.CancelDisconnect}"
-            Classes="PrimaryInverted"/>
+            Click="ConnectDisconnectCancel"
+            Content="{Binding ConnectDisconnectCancelButtonText}"
+            ToolTip.Tip="{Binding ConnectDisconnectCancelButtonToolTip}"
+            Classes.Primary="{Binding !IsConnected}"
+            Classes.PrimaryInverted="{Binding IsConnected}"/>
 
       </Grid>
 
-      <!-- The grid below is necessary to preserve a spacing for the progress bar when it is not
-      visible -->
+      <!-- The grid below is necessary to preserve a spacing for the progress bar when it is not visible -->
       <Grid
           Margin="0,0,0,16"
           Height="4"
@@ -261,14 +209,8 @@
                   IsVisible="{Binding ConnectionOptionSelectedIndex,
                               Mode=OneWay,
                               Converter={StaticResource connectionOptionMatch},
-                              ConverterParameter=Headers}">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto"/>
-                  <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+                              ConverterParameter=Headers}"
+                  RowDefinitions="Auto,*">
                 <Button
                     Name="btAddConnectionRequestHeader"
                     Grid.Column="0"

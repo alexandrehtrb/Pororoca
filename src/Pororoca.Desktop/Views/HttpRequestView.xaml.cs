@@ -1,6 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using AvaloniaEdit;
 using Pororoca.Desktop.TextEditorConfig;
 using Pororoca.Desktop.ViewModels;
@@ -55,6 +57,12 @@ public sealed class HttpRequestView : UserControl
     #endregion
 
     #region VIEW COMPONENTS EVENTS
+
+    public void SendOrCancelRequest(object sender, RoutedEventArgs args)
+    {
+        var vm = (HttpRequestViewModel)DataContext!;
+        Dispatcher.UIThread.Post(async () => await vm.SendOrCancelRequestAsync());
+    }
 
     public void OnSelectedUrlEncodedParamsChanged(object sender, SelectionChangedEventArgs e)
     {

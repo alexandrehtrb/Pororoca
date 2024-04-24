@@ -3,6 +3,7 @@ using AvaloniaEdit;
 using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.Views;
+using Pororoca.Infrastructure.Features.Requester;
 using static Pororoca.Domain.Features.Common.HttpVersionFormatter;
 
 namespace Pororoca.Desktop.UITesting.Robots;
@@ -15,9 +16,8 @@ public sealed class WebSocketConnectionRobot : BaseNamedRobot
     internal Button AddConnectionRequestHeader => GetChildView<Button>("btAddConnectionRequestHeader")!;
     internal Button AddSubprotocol => GetChildView<Button>("btAddSubprotocol")!;
     internal Button AddClientMessage => GetChildView<Button>("btAddWsCliMsg")!;
-    internal Button Connect => GetChildView<Button>("btConnect")!;
+    internal Button ConnectDisconnectCancel => GetChildView<Button>("btConnectDisconnectCancel")!;
     internal Button DisableTlsVerification => GetChildView<Button>("btDisableTlsVerification")!;
-    internal Button Disconnect => GetChildView<Button>("btDisconnect")!;
     internal Button SendMessage => GetChildView<Button>("btSendMessage")!;
     internal ComboBox HttpVersion => GetChildView<ComboBox>("cbHttpVersion")!;
     internal ComboBox ConnectionRequestCompressionEnable => GetChildView<ComboBox>("cbWsConnReqCompressionEnable")!;
@@ -52,27 +52,27 @@ public sealed class WebSocketConnectionRobot : BaseNamedRobot
     {
         var vm = (WebSocketConnectionViewModel)RootView!.DataContext!;
         CancellationTokenSource cts = new(TimeSpan.FromMinutes(3));
-        await Connect.ClickOn();
+        await ConnectDisconnectCancel.RaiseClickEvent();
         do
         {
             // don't make the value too low,
             // because the first request causes a little lag in the screen
             await Task.Delay(1500);
         }
-        while (!cts.IsCancellationRequested && vm.IsConnecting);
+        while (!cts.IsCancellationRequested && vm.ConnectionState == PororocaWebSocketConnectorState.Connecting);
     }
 
     internal async Task ClickOnDisconnectAndWaitForDisconnection()
     {
         var vm = (WebSocketConnectionViewModel)RootView!.DataContext!;
         CancellationTokenSource cts = new(TimeSpan.FromMinutes(3));
-        await Disconnect.ClickOn();
+        await ConnectDisconnectCancel.RaiseClickEvent();
         do
         {
             // don't make the value too low,
             // because the first request causes a little lag in the screen
             await Task.Delay(750);
         }
-        while (!cts.IsCancellationRequested && vm.IsDisconnecting);
+        while (!cts.IsCancellationRequested && vm.ConnectionState == PororocaWebSocketConnectorState.Disconnecting);
     }
 }

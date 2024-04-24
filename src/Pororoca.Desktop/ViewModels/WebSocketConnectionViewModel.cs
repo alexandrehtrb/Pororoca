@@ -48,38 +48,58 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     private readonly IPororocaHttpClientProvider httpClientProvider;
     private readonly PororocaWebSocketConnector connector;
 
-    private bool isConnectedField;
-    public bool IsConnected
+    [Reactive]
+    public string ConnectDisconnectCancelButtonText { get; set; }
+
+    [Reactive]
+    public string ConnectDisconnectCancelButtonToolTip { get; set; }
+
+    private PororocaWebSocketConnectorState connectionStateField;
+    public PororocaWebSocketConnectorState ConnectionState
     {
-        get => this.isConnectedField;
+        get => this.connectionStateField;
         set
         {
-            NameEditableVm.Icon = value ? EditableTextBlockIcon.ConnectedWebSocket : EditableTextBlockIcon.DisconnectedWebSocket;
-            this.RaiseAndSetIfChanged(ref this.isConnectedField, value);
+            NameEditableVm.Icon = value switch
+            {
+                PororocaWebSocketConnectorState.Connected or
+                PororocaWebSocketConnectorState.Disconnecting => EditableTextBlockIcon.ConnectedWebSocket,
+                _ => EditableTextBlockIcon.DisconnectedWebSocket
+            };
+            IsConnected = value switch
+            {
+                PororocaWebSocketConnectorState.Connected or
+                PororocaWebSocketConnectorState.Disconnecting => true,
+                _ => false
+            };
+            IsConnectingOrDisconnecting = value switch
+            {
+                PororocaWebSocketConnectorState.Connecting or
+                PororocaWebSocketConnectorState.Disconnecting => true,
+                _ => false
+            };
+            ConnectDisconnectCancelButtonText = value switch
+            {
+                PororocaWebSocketConnectorState.Disconnected => Localizer.Instance.WebSocketConnection.Connect,
+                PororocaWebSocketConnectorState.Connecting => Localizer.Instance.WebSocketConnection.CancelConnect,
+                PororocaWebSocketConnectorState.Connected => Localizer.Instance.WebSocketConnection.Disconnect,
+                PororocaWebSocketConnectorState.Disconnecting => Localizer.Instance.WebSocketConnection.CancelDisconnect,
+                _ => string.Empty
+            };
+            ConnectDisconnectCancelButtonToolTip = value switch
+            {
+                PororocaWebSocketConnectorState.Disconnected => Localizer.Instance.WebSocketConnection.ConnectToolTip,
+                PororocaWebSocketConnectorState.Connecting => Localizer.Instance.WebSocketConnection.CancelConnectToolTip,
+                PororocaWebSocketConnectorState.Connected => Localizer.Instance.WebSocketConnection.DisconnectToolTip,
+                PororocaWebSocketConnectorState.Disconnecting => Localizer.Instance.WebSocketConnection.CancelDisconnect,
+                _ => string.Empty
+            };
+            this.connectionStateField = value;
         }
     }
 
-    private bool isConnectingField;
-    public bool IsConnecting
-    {
-        get => this.isConnectingField;
-        set
-        {
-            this.RaiseAndSetIfChanged(ref this.isConnectingField, value);
-            IsConnectingOrDisconnecting = this.isConnectingField || this.isDisconnectingField;
-        }
-    }
-
-    private bool isDisconnectingField;
-    public bool IsDisconnecting
-    {
-        get => this.isDisconnectingField;
-        set
-        {
-            this.RaiseAndSetIfChanged(ref this.isDisconnectingField, value);
-            IsConnectingOrDisconnecting = this.isConnectingField || this.isDisconnectingField;
-        }
-    }
+    [Reactive]
+    public bool IsConnected { get; set; }
 
     [Reactive]
     public bool IsConnectingOrDisconnecting { get; set; }
@@ -87,17 +107,9 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     [Reactive]
     public bool IsDisableTlsVerificationVisible { get; set; }
 
-    public ReactiveCommand<Unit, Unit> ConnectCmd { get; }
-
     private CancellationTokenSource? cancelConnectionAttemptTokenSource;
 
-    public ReactiveCommand<Unit, Unit> CancelConnectCmd { get; }
-
-    public ReactiveCommand<Unit, Unit> DisconnectCmd { get; }
-
     private CancellationTokenSource? cancelDisconnectionAttemptTokenSource;
-
-    public ReactiveCommand<Unit, Unit> CancelDisconnectCmd { get; }
 
     public ReactiveCommand<Unit, Unit> DisableTlsVerificationCmd { get; }
 
@@ -364,10 +376,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             RefreshSubItemsAvailableMovements();
         }
 
-        ConnectCmd = ReactiveCommand.CreateFromTask(ConnectAsync);
-        CancelConnectCmd = ReactiveCommand.Create(CancelConnect);
-        DisconnectCmd = ReactiveCommand.CreateFromTask(DisconnectAsync);
-        CancelDisconnectCmd = ReactiveCommand.Create(CancelDisconnect);
+        ConnectDisconnectCancelButtonText = Localizer.Instance.WebSocketConnection.Connect;
+        ConnectDisconnectCancelButtonToolTip = Localizer.Instance.WebSocketConnection.ConnectToolTip;
         DisableTlsVerificationCmd = ReactiveCommand.Create(DisableTlsVerification);
 
         #endregion
@@ -487,6 +497,10 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             string code = InvalidClientMessageErrorCode;
             InvalidClientMessageErrorCode = code; // this will trigger an update
         }
+
+        // this will trigger an update on the connect/disconnect/cancel ws button texts
+        var state = this.connectionStateField;
+        ConnectionState = state;
     }
 
     #endregion
@@ -553,9 +567,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     private void OnWebSocketConnectionChanged(PororocaWebSocketConnectorState state, Exception? ex)
     {
-        IsConnecting = state == PororocaWebSocketConnectorState.Connecting;
-        IsDisconnecting = state == PororocaWebSocketConnectorState.Disconnecting;
-        IsConnected = state == PororocaWebSocketConnectorState.Connected;
+        ConnectionState = state;
         ConnectionExceptionContent = ex?.ToString();
         if (state == PororocaWebSocketConnectorState.Connected || ex is not null)
         {
@@ -571,6 +583,25 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     private void OnWebSocketMessageSending(bool isSendingAMessage) =>
         IsSendingAMessage = isSendingAMessage;
+
+    public Task ConnectDisconnectCancelAsync()
+    {
+        switch (ConnectionState)
+        {
+            case PororocaWebSocketConnectorState.Disconnected:
+                return ConnectAsync();
+            case PororocaWebSocketConnectorState.Connecting:
+                CancelConnect();
+                return Task.CompletedTask;
+            case PororocaWebSocketConnectorState.Connected:
+                return DisconnectAsync();
+            case PororocaWebSocketConnectorState.Disconnecting:
+                CancelDisconnect();
+                return Task.CompletedTask;
+            default:
+                return Task.CompletedTask;
+        }
+    }
 
     public async Task ConnectAsync()
     {
@@ -642,7 +673,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     private async Task SendMessageAsync()
     {
-        if (!IsConnected)
+        if (ConnectionState != PororocaWebSocketConnectorState.Connected)
         {
             InvalidClientMessageErrorCode = TranslateRequestErrors.WebSocketNotConnected;
         }

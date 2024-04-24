@@ -17,23 +17,13 @@
   <Grid
       HorizontalAlignment="Stretch"
       VerticalAlignment="Stretch"
-      Margin="24,0,24,0">
-
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*"/>
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*"/>
-      <RowDefinition Height="Auto"/>
-    </Grid.RowDefinitions>
+      Margin="24"
+      RowDefinitions="Auto,Auto,*,Auto">
 
     <TextBlock
         Grid.Column="0"
         Grid.Row="0"
         Text="{Binding i18n.CollectionVariables.Title}"
-        Margin="0,24,0,0"
         HorizontalAlignment="Left"
         VerticalAlignment="Top"
         TextWrapping="Wrap"
@@ -52,8 +42,6 @@
         Classes="Secondary"
         ToolTip.Tip="{Binding i18n.CollectionVariables.AddVariable}"
         Command="{Binding VariablesTableVm.AddNewCmd}">
-
-
       <Image
           VerticalAlignment="Center"
           HorizontalAlignment="Center"
@@ -76,7 +64,7 @@
         Grid.Column="0"
         Grid.Row="3"
         HorizontalAlignment="Stretch"
-        Margin="0,24,0,24"
+        Margin="0,24,0,0"
         Text="{Binding i18n.CollectionVariables.Tip}"
         Classes="TipText"/>
 
