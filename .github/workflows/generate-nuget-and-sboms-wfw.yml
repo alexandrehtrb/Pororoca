@@ -72,9 +72,7 @@ jobs:
     - name: Add unit tests coverage comment to PR
       if: ${{ inputs.postUnitTestsCoverageInPR == true }}
       shell: pwsh
-      run: |
-        $reportContent = (Get-Content ./code-coverage-results.md)
-        gh pr comment $env:PR_NUMBER --body $reportContent
+      run: gh pr comment $env:PR_NUMBER --body-file ./code-coverage-results.md
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PR_NUMBER: ${{ inputs.prNumber }}
