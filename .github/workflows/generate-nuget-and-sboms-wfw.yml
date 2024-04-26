@@ -74,7 +74,7 @@ jobs:
         $branchCovBadgeColor = if ($summary.summary.branchcoverage -ge 80.0) { "080" } else { "800" };
         $linesBadge = "![Line coverage](https://img.shields.io/badge/lines-" + $summary.summary.linecoverage + "%25-" + $lineCovBadgeColor + ")";
         $branchesBadge = "![Branch coverage](https://img.shields.io/badge/branches-" + $summary.summary.branchcoverage + "%25-" + $branchCovBadgeColor + ")";
-        $text = "`# Unit tests code coverage " + $linesBadge + " " + $branchesBadge + "`n`n" + "| Assembly | Line coverage | Branch coverage |`n|---|---|---|`n";
+        $text = "`#`#`# Unit tests code coverage " + $linesBadge + " " + $branchesBadge + "`n`n" + "| Assembly | Line coverage | Branch coverage |`n|---|---|---|`n";
         foreach ($assembly in $summary.coverage.assemblies)
         {
             $text += "| **$($assembly.name)** | $($assembly.coverage)% | $($assembly.branchcoverage)% |`n"
