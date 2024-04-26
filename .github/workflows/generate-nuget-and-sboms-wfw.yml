@@ -7,6 +7,14 @@ on:
         required: false
         default: false
         type: boolean
+      postUnitTestsCoverageInPR:
+        required: false
+        default: false
+        type: boolean
+      prNumber:
+        required: false
+        default: 0
+        type: number
 
 jobs:
 
@@ -45,7 +53,31 @@ jobs:
       run: dotnet build --no-restore --configuration Release --nologo --verbosity quiet
 
     - name: Execute unit tests
-      run: dotnet test --no-build --configuration Release --nologo --verbosity quiet --filter FullyQualifiedName!~Pororoca.Test.Tests
+      run: dotnet test --no-build --configuration Release --nologo --verbosity quiet --filter FullyQualifiedName!~Pororoca.Test.Tests --collect:"XPlat Code Coverage" --results-directory ./coverage/
+
+    - name: Report unit tests coverage
+      uses: irongut/CodeCoverageSummary@v1.3.0
+      if: ${{ inputs.postUnitTestsCoverageInPR == true }}
+      with:
+        filename: coverage/**/coverage.cobertura.xml
+        badge: true
+        #fail_below_min: true
+        format: markdown
+        hide_branch_rate: false
+        hide_complexity: true
+        indicators: true
+        output: both
+        thresholds: '60 80'
+
+    - name: Add unit tests coverage comment to PR
+      if: ${{ inputs.postUnitTestsCoverageInPR == true }}
+      shell: pwsh
+      run: |
+        $reportContent = (Get-Content ./code-coverage-results.md)
+        gh pr comment $env:PR_NUMBER --body $reportContent
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PR_NUMBER: ${{ inputs.prNumber }}
 
     - name: Read package version
       shell: pwsh
