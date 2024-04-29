@@ -43,4 +43,4 @@ mkdir ./staging_folder/usr/share/icons/hicolor/scalable
 mkdir ./staging_folder/usr/share/icons/hicolor/scalable/apps
 cp ./misc/pororoca_logo.svg ./staging_folder/usr/share/icons/hicolor/scalable/apps/pororoca.svg
 # Make .deb file
-dpkg-deb --root-owner-group --build ./staging_folder/ ./pororoca_3.2.0_amd64.deb
+dpkg-deb --root-owner-group --build ./staging_folder/ ./pororoca_3.3.0_amd64.deb

@@ -221,12 +221,28 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
     #region SEND OR CANCEL REQUEST
 
     [Reactive]
-    public bool IsRequesting { get; set; }
+    public string SendOrCancelRequestButtonText { get; set; }
+
+    [Reactive]
+    public string SendOrCancelRequestButtonToolTip { get; set; }
+
+    private bool isRequestingField;
+    public bool IsRequesting
+    {
+        get => this.isRequestingField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.isRequestingField, value);
+            SendOrCancelRequestButtonText = value ?
+                Localizer.Instance.HttpRequest.CancelRequest :
+                Localizer.Instance.HttpRequest.SendRequest;
+            SendOrCancelRequestButtonToolTip = value ?
+                Localizer.Instance.HttpRequest.CancelRequestToolTip :
+                Localizer.Instance.HttpRequest.SendRequestToolTip;
+        }
+    }
 
     private CancellationTokenSource? sendRequestCancellationTokenSourceField;
-
-    public ReactiveCommand<Unit, Unit> CancelRequestCmd { get; }
-    public ReactiveCommand<Unit, Unit> SendRequestCmd { get; }
 
     [Reactive]
     public bool IsSendRequestProgressBarVisible { get; set; }
@@ -252,7 +268,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
     {
         #region COLLECTION ORGANIZATION
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
-        NameEditableVm.IsHttpRequest = true;
+        NameEditableVm.Icon = EditableTextBlockIcon.HttpRequest;
         #endregion
 
         #region REQUEST
@@ -299,8 +315,8 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
         #endregion
 
         #region SEND OR CANCEL REQUEST
-        CancelRequestCmd = ReactiveCommand.Create(CancelRequest);
-        SendRequestCmd = ReactiveCommand.CreateFromTask(SendRequestAsync);
+        SendOrCancelRequestButtonText = Localizer.Instance.HttpRequest.SendRequest;
+        SendOrCancelRequestButtonToolTip = Localizer.Instance.HttpRequest.SendRequestToolTip;
         #endregion
 
         #region RESPONSE
@@ -322,6 +338,10 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
         {
             ShowInvalidRequestWarnings();
         }
+
+        // this will trigger an update on the send/cancel req button texts
+        bool isRequesting = this.isRequestingField;
+        IsRequesting = isRequesting;
     }
 
     protected override void OnNameUpdated(string newName)
@@ -437,6 +457,19 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
     #endregion
 
     #region SEND OR CANCEL REQUEST
+
+    public Task SendOrCancelRequestAsync()
+    {
+        if (IsRequesting)
+        {
+            CancelRequest();
+            return Task.CompletedTask;
+        }
+        else
+        {
+            return SendRequestAsync();
+        }
+    }
 
     public void CancelRequest() =>
         // CancellationToken will cause a failed PororocaResponse,

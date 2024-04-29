@@ -6,6 +6,7 @@ using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.Entities.Postman;
+using System.Text.Json.Nodes;
 
 namespace Pororoca.Domain.Features.Common;
 
@@ -88,6 +89,10 @@ internal partial class MinifyJsonSrcGenContext : JsonSerializerContext
 }
 
 [JsonSerializable(typeof(JsonDocument))]
+[JsonSerializable(typeof(JsonNode))]
+[JsonSerializable(typeof(JsonObject))]
+[JsonSerializable(typeof(JsonArray))]
+[JsonSerializable(typeof(JsonValue))]
 internal partial class PrettifyJsonSrcGenContext : JsonSerializerContext
 {
 }

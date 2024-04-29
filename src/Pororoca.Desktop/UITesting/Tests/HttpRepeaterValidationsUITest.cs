@@ -64,7 +64,8 @@ public sealed partial class HttpRepeaterValidationsUITest : UITest
     {
         AssertIsHidden(RepeaterRobot.ErrorMessage);
         AssertDoesntHaveStyleClass(RepeaterRobot.BaseHttpRequest, "HasValidationProblem");
-        await RepeaterRobot.StartRepetition.ClickOn();
+        await RepeaterRobot.StartOrStopRepetition.RaiseClickEvent();
+        await Wait(1);
         AssertIsVisible(RepeaterRobot.ErrorMessage);
         AssertHasText(RepeaterRobot.ErrorMessage, "Select the base HTTP request to repeat.");
         AssertHasStyleClass(RepeaterRobot.BaseHttpRequest, "HasValidationProblem");
@@ -80,7 +81,8 @@ public sealed partial class HttpRepeaterValidationsUITest : UITest
         // raw
         await RepeaterRobot.InputDataType.Select(RepeaterRobot.OptionInputDataTypeRaw);
         await RepeaterRobot.InputDataRawEditor.ClearAndTypeText("[");
-        await RepeaterRobot.StartRepetition.ClickOn();
+        await RepeaterRobot.StartOrStopRepetition.RaiseClickEvent();
+        await Wait(1);
         AssertIsVisible(RepeaterRobot.ErrorMessage);
         AssertHasText(RepeaterRobot.ErrorMessage, "Invalid input data JSON array.");
         // error message will remain visible, because the text only changes inside the TextDocument object
@@ -88,7 +90,8 @@ public sealed partial class HttpRepeaterValidationsUITest : UITest
         await RepeaterRobot.InputDataType.Select(RepeaterRobot.OptionInputDataTypeFile);
         AssertDoesntHaveStyleClass(RepeaterRobot.InputDataFileSrcPath, "HasValidationProblem");
         await RepeaterRobot.InputDataFileSrcPath.ClearAndTypeText("{{TestFilesDir}}/InputData.jso");
-        await RepeaterRobot.StartRepetition.ClickOn();
+        await RepeaterRobot.StartOrStopRepetition.RaiseClickEvent();
+        await Wait(1);
         AssertIsVisible(RepeaterRobot.ErrorMessage);
         AssertHasText(RepeaterRobot.ErrorMessage, "Input data file not found.");
         AssertHasStyleClass(RepeaterRobot.InputDataFileSrcPath, "HasValidationProblem");

@@ -86,6 +86,8 @@ jobs:
     uses: ./.github/workflows/generate-nuget-and-sboms-wfw.yml
     with:
       uploadArtifactsToRelease: true
+      postUnitTestsCoverageInPR: true
+      prNumber: ${{ github.event.number }}
 
   linux-x64:
     needs: draft-github-release

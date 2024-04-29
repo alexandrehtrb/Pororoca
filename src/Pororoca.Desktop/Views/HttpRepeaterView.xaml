@@ -31,14 +31,8 @@
 
   <Grid
       HorizontalAlignment="Stretch"
-      VerticalAlignment="Stretch">
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*"/>
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*"/>
-    </Grid.RowDefinitions>
+      VerticalAlignment="Stretch"
+      RowDefinitions="Auto,*">
 
     <StackPanel
         Grid.Column="0"
@@ -48,14 +42,11 @@
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
 
-      <Grid
+      <controls:EditableTextBlock
+          x:Name="etbName"
           Margin="24,0,24,0"
           HorizontalAlignment="Stretch"
-          VerticalAlignment="Top">
-        <controls:EditableTextBlock
-            x:Name="etbName"
-            DataContext="{Binding NameEditableVm}"/>
-      </Grid>
+          DataContext="{Binding NameEditableVm}"/>
 
       <Grid
           ShowGridLines="False"
@@ -125,7 +116,7 @@
         </Button>
 
         <Button
-            Name="btStartRepetition"
+            Name="btStartOrStopRepetition"
             Grid.Column="2"
             Grid.Row="0"
             Height="40"
@@ -133,26 +124,11 @@
             Margin="6,0,0,0"
             HorizontalContentAlignment="Center"
             VerticalContentAlignment="Center"
-            IsVisible="{Binding !IsRepetitionRunning}"
-            Command="{Binding StartRepetitionCmd}"
-            Content="{Binding i18n.HttpRepeater.Start}"
-            ToolTip.Tip="{Binding i18n.HttpRepeater.StartTip}"
-            Classes="Primary"/>
-
-        <Button
-            Name="btStopRepetition"
-            Grid.Column="2"
-            Grid.Row="0"
-            Height="40"
-            Width="104"
-            Margin="6,0,0,0"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center"
-            IsVisible="{Binding IsRepetitionRunning}"
-            Command="{Binding StopRepetitionCmd}"
-            Content="{Binding i18n.HttpRepeater.Stop}"
-            ToolTip.Tip="{Binding i18n.HttpRepeater.StopTip}"
-            Classes="PrimaryInverted"/>
+            Click="StartOrStopRepetition"
+            Content="{Binding StartOrStopRepetitionButtonText}"
+            ToolTip.Tip="{Binding StartOrStopRepetitionButtonToolTip}"
+            Classes.Primary="{Binding !IsRepetitionRunning}"
+            Classes.PrimaryInverted="{Binding IsRepetitionRunning}"/>
 
       </Grid>
 
@@ -521,43 +497,10 @@
                   Classes="TabItemHeader"
                   Text="{Binding i18n.HttpResponse.Headers}"/>
             </TabItem.Header>
-            <DataGrid
-                Name="dgResHeaders"
+            <controls:ResponseHeadersTableView
+                x:Name="rhtvResHeaders"
                 Margin="-12,12,-12,12"
-                VerticalAlignment="Stretch"
-                AutoGenerateColumns="False"
-                ItemsSource="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.Items}"
-                SelectionChanged="OnSelectedResponseHeadersAndTrailersChanged"
-                CanUserResizeColumns="True">
-              <!--DataGrid.KeyBindings>
-                <KeyBinding Command="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.CopyCmd}"
-                            Gesture="Ctrl+C" />
-              </DataGrid.KeyBindings-->
-              <DataGrid.ContextMenu>
-                <ContextMenu>
-                  <MenuItem
-                      Header="{Binding i18n.ContextMenu.Copy}"
-                      Command="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.CopyCmd}"
-                      InputGesture="Ctrl+C"/>
-                </ContextMenu>
-              </DataGrid.ContextMenu>
-              <DataGrid.Columns>
-                <DataGridTextColumn
-                    Width="*"
-                    Binding="{Binding Key}">
-                  <DataGridTextColumn.Header>
-                    <TextBlock Text="{Binding i18n.HttpResponse.HeaderName}"/>
-                  </DataGridTextColumn.Header>
-                </DataGridTextColumn>
-                <DataGridTextColumn
-                    Width="*"
-                    Binding="{Binding Value}">
-                  <DataGridTextColumn.Header>
-                    <TextBlock Text="{Binding i18n.HttpResponse.HeaderValue}"/>
-                  </DataGridTextColumn.Header>
-                </DataGridTextColumn>
-              </DataGrid.Columns>
-            </DataGrid>
+                DataContext="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm}"/>
           </TabItem>
           <!-- RESPONSE BODY -->
           <TabItem Name="tabItemResBody">
@@ -568,14 +511,8 @@
             </TabItem.Header>
             <Grid
                 Margin="-12,12,-12,0"
-                VerticalAlignment="Stretch">
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-              </Grid.ColumnDefinitions>
-              <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-              </Grid.RowDefinitions>
+                VerticalAlignment="Stretch"
+                RowDefinitions="*,Auto">
 
               <!-- AcceptsReturn="True" allows for horizontal scrollbar -->
               <AvaloniaEdit:TextEditor

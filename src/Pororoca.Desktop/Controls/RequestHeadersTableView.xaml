@@ -1,0 +1,108 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels.DataGrids;assembly=Pororoca.Desktop"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="clr-namespace:Pororoca.Desktop.Controls;assembly=Pororoca.Desktop"
+    mc:Ignorable="d"
+    d:DesignWidth="1350"
+    d:DesignHeight="700"
+    x:Class="Pororoca.Desktop.Controls.RequestHeadersTableView"
+    x:CompileBindings="True"
+    x:DataType="vm:RequestHeadersDataGridViewModel">
+
+  <DataGrid
+      Name="datagrid"
+      HorizontalAlignment="Stretch"
+      VerticalAlignment="Stretch"
+      AutoGenerateColumns="False"
+      ItemsSource="{Binding Items}"
+      SelectionChanged="OnSelectedRequestHeadersChanged"
+      CanUserResizeColumns="True"
+      HeadersVisibility="All"
+      Classes="DragAndDrop RequestHeadersDragAndDrop">
+    <!--DataGrid.KeyBindings>
+        <KeyBinding Command="{Binding RequestHeadersTableVm.CutCmd}" Gesture="Ctrl+X" />
+        <KeyBinding Command="{Binding RequestHeadersTableVm.CopyCmd}" Gesture="Ctrl+C" />
+        <KeyBinding Command="{Binding RequestHeadersTableVm.PasteCmd}" Gesture="Ctrl+V" />
+        <KeyBinding Command="{Binding RequestHeadersTableVm.DuplicateCmd}" Gesture="Ctrl+D" />
+        <KeyBinding Command="{Binding RequestHeadersTableVm.DeleteCmd}" Gesture="Delete" />
+      </DataGrid.KeyBindings-->
+    <DataGrid.ContextMenu>
+      <ContextMenu>
+        <MenuItem
+            Header="{Binding i18n.ContextMenu.Cut}"
+            Command="{Binding CutCmd}"
+            InputGesture="Ctrl+X"/>
+        <MenuItem
+            Header="{Binding i18n.ContextMenu.Copy}"
+            Command="{Binding CopyCmd}"
+            InputGesture="Ctrl+C"/>
+        <MenuItem
+            Header="{Binding i18n.ContextMenu.Paste}"
+            Command="{Binding PasteCmd}"
+            InputGesture="Ctrl+V"
+            IsEnabled="{Binding InnerClipboardArea.CanPaste}"/>
+        <MenuItem
+            Header="{Binding i18n.ContextMenu.Delete}"
+            Command="{Binding DeleteCmd}"
+            InputGesture="Delete"/>
+      </ContextMenu>
+    </DataGrid.ContextMenu>
+    <DataGrid.Columns>
+      <DataGridCheckBoxColumn
+          Width="0.24*"
+          Binding="{Binding Enabled}">
+        <DataGridCheckBoxColumn.Header>
+          <TextBlock Text="{Binding i18n.HttpRequest.HeaderEnabled}"/>
+        </DataGridCheckBoxColumn.Header>
+      </DataGridCheckBoxColumn>
+      <DataGridTemplateColumn Width="0.32*">
+        <DataGridTemplateColumn.Header>
+          <TextBlock Text="{Binding i18n.HttpRequest.HeaderName}"/>
+        </DataGridTemplateColumn.Header>
+        <DataGridTemplateColumn.CellTemplate>
+          <DataTemplate>
+            <TextBlock
+                Text="{Binding Key}"
+                VerticalAlignment="Center"
+                Padding="12,0,12,0"/>
+          </DataTemplate>
+        </DataGridTemplateColumn.CellTemplate>
+        <DataGridTemplateColumn.CellEditingTemplate>
+          <DataTemplate>
+            <controls:HeaderNameTextBox
+                Text="{Binding Key}"
+                VerticalContentAlignment="Center"
+                Padding="12,0,12,0"/>
+          </DataTemplate>
+        </DataGridTemplateColumn.CellEditingTemplate>
+      </DataGridTemplateColumn>
+      <DataGridTextColumn
+          Width="0.32*"
+          Binding="{Binding Value}">
+        <DataGridTextColumn.Header>
+          <TextBlock Text="{Binding i18n.HttpRequest.HeaderValue}"/>
+        </DataGridTextColumn.Header>
+      </DataGridTextColumn>
+      <DataGridTemplateColumn
+          Width="0.12*"
+          Header="">
+        <DataGridTemplateColumn.CellTemplate>
+          <DataTemplate>
+            <Button
+                Command="{Binding RemoveParamCmd}"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Classes="Trash">
+            </Button>
+          </DataTemplate>
+        </DataGridTemplateColumn.CellTemplate>
+      </DataGridTemplateColumn>
+    </DataGrid.Columns>
+  </DataGrid>
+
+</UserControl>

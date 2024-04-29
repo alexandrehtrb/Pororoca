@@ -1,5 +1,7 @@
 using Avalonia.Controls;
 using Pororoca.Desktop.Controls;
+using Pororoca.Desktop.Converters;
+using Pororoca.Desktop.ViewModels;
 
 namespace Pororoca.Desktop.UITesting.Robots;
 
@@ -7,9 +9,7 @@ public sealed class EditableTextBlockRobot : BaseRobot
 {
     public EditableTextBlockRobot(EditableTextBlock rootView) : base(rootView) { }
 
-    internal Image IconHttp => GetChildView<Image>("imgIconHttp")!;
-    internal Image IconDisconnectedWebSocket => GetChildView<Image>("imgIconDisconnectedWebSocket")!;
-    internal Image IconConnectedWebSocket => GetChildView<Image>("imgIconConnectedWebSocket")!;
+    internal EditableTextBlockIcon? Icon => ((EditableTextBlockViewModel)RootView.DataContext!).Icon;
     internal TextBlock AppliedText => GetChildView<TextBlock>("tbText")!;
     internal TextBox TextBeingEdited => GetChildView<TextBox>("txtBox")!;
     internal Button ButtonEditOrApply => GetChildView<Button>("btEditOrApplyTxt")!;

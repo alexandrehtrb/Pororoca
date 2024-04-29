@@ -25,36 +25,21 @@
   <Grid
       HorizontalAlignment="Stretch"
       VerticalAlignment="Stretch"
-      Margin="24,24,24,24">
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*"/>
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*"/>
-    </Grid.RowDefinitions>
+      Margin="24"
+      RowDefinitions="Auto,*">
 
-    <Grid
+    <controls:EditableTextBlock
+        x:Name="etbName"
         Grid.Column="0"
         Grid.Row="0"
         HorizontalAlignment="Stretch"
-        VerticalAlignment="Top">
-      <controls:EditableTextBlock x:Name="etbName" DataContext="{Binding NameEditableVm}"/>
-    </Grid>
+        DataContext="{Binding NameEditableVm}"/>
 
     <Grid
         Margin="4,40,4,0"
         Grid.Column="0"
-        Grid.Row="1">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*"/>
-      </Grid.ColumnDefinitions>
-      <Grid.RowDefinitions>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="*"/>
-      </Grid.RowDefinitions>
+        Grid.Row="1"
+        RowDefinitions="Auto,Auto,Auto,*">
 
       <StackPanel
           Grid.Column="0"
@@ -82,9 +67,15 @@
           Width="240"
           Margin="0,12,0,0"
           SelectedIndex="{Binding MessageTypeSelectedIndex, Mode=TwoWay}">
-        <ComboBoxItem Name="cbiMessageTypeText" Content="{Binding i18n.WebSocketClientMessage.MessageTypeText}"/>
-        <ComboBoxItem Name="cbiMessageTypeBinary" Content="{Binding i18n.WebSocketClientMessage.MessageTypeBinary}"/>
-        <ComboBoxItem Name="cbiMessageTypeClose" Content="{Binding i18n.WebSocketClientMessage.MessageTypeClose}"/>
+        <ComboBoxItem
+            Name="cbiMessageTypeText"
+            Content="{Binding i18n.WebSocketClientMessage.MessageTypeText}"/>
+        <ComboBoxItem
+            Name="cbiMessageTypeBinary"
+            Content="{Binding i18n.WebSocketClientMessage.MessageTypeBinary}"/>
+        <ComboBoxItem
+            Name="cbiMessageTypeClose"
+            Content="{Binding i18n.WebSocketClientMessage.MessageTypeClose}"/>
       </ComboBox>
 
       <StackPanel
@@ -112,9 +103,9 @@
             Width="120"
             Margin="12,0,0,0"
             SelectedIndex="{Binding RawContentSyntaxSelectedIndex, Mode=TwoWay}"
-            IsVisible="{Binding ContentModeSelectedIndex, 
+            IsVisible="{Binding ContentModeSelectedIndex,
                         Mode=OneWay,
-                        Converter={StaticResource contentModeMatch}, 
+                        Converter={StaticResource contentModeMatch},
                         ConverterParameter=Raw}">
           <ComboBoxItem
               x:Name="cbiContentRawSyntaxJson"
@@ -129,7 +120,6 @@
 
       </StackPanel>
 
-
       <AvaloniaEdit:TextEditor
           x:Name="teContentRaw"
           Grid.Column="0"
@@ -139,9 +129,9 @@
           Margin="0,12,0,0"
           IsReadOnly="False"
           Document="{Binding RawContentTextDocument}"
-          IsVisible="{Binding ContentModeSelectedIndex, 
+          IsVisible="{Binding ContentModeSelectedIndex,
                       Mode=OneWay,
-                      Converter={StaticResource contentModeMatch}, 
+                      Converter={StaticResource contentModeMatch},
                       ConverterParameter=Raw}"/>
 
       <StackPanel
@@ -153,9 +143,9 @@
           HorizontalAlignment="Left"
           VerticalAlignment="Stretch"
           Orientation="Vertical"
-          IsVisible="{Binding ContentModeSelectedIndex, 
+          IsVisible="{Binding ContentModeSelectedIndex,
                       Mode=OneWay,
-                      Converter={StaticResource contentModeMatch}, 
+                      Converter={StaticResource contentModeMatch},
                       ConverterParameter=File}">
 
         <TextBox

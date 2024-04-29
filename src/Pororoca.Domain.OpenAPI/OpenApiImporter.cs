@@ -1,19 +1,17 @@
 using System.Text;
-using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Json.Serialization;
+using System.Text.Json.Nodes;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Microsoft.OpenApi.Readers;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using static Pororoca.Domain.Features.Common.JsonConfiguration;
 
 namespace Pororoca.Domain.Features.ImportCollection;
 
 public static class OpenApiImporter
 {
-    internal static readonly JsonSerializerOptions prettifyJsonOptions = MakePrettifyJsonContext();
-
     private static string ToPororocaTemplateStyle(this string input) =>
         input.Replace("{", "{{").Replace("}", "}}");
 
@@ -230,19 +228,19 @@ public static class OpenApiImporter
 
     private static PororocaHttpRequestBody? ReadRequestBodyFromInput(string? contentType, object? input)
     {
-        object? obj = null;
+        JsonNode? node = null;
         if (input is OpenApiSchema schema)
         {
-            obj = ConvertOpenApiSchemaToObject(schema);
+            node = ConvertOpenApiSchemaToObject(schema);
         }
         else if (input is IOpenApiAny any)
         {
-            obj = ConvertOpenApiAnyToObject(any);
+            node = ConvertOpenApiAnyToObject(any);
         }
 
         if (contentType?.Contains("json") == true)
         {
-            string rawStr = PrettySerializeJson(obj);
+            string rawStr = PrettySerializeJson(node);
             PororocaHttpRequestBody body = new();
             body.SetRawContent(rawStr, contentType);
             return body;
@@ -256,8 +254,8 @@ public static class OpenApiImporter
         }
         else if (contentType?.Contains("urlencoded") == true)
         {
-            var urlEncodedParams = obj is IDictionary<string, object?> dict ?
-                                   dict.Select(kv => new PororocaKeyValueParam(true, kv.Key, kv.Value?.ToString())) :
+            var urlEncodedParams = node is JsonObject obj ?
+                                   obj.Select(kv => new PororocaKeyValueParam(true, kv.Key, kv.Value?.ToString())) :
                                    Array.Empty<PororocaKeyValueParam>();
 
             PororocaHttpRequestBody reqBody = new();
@@ -515,15 +513,26 @@ public static class OpenApiImporter
 
     #region OTHERS
 
-    private static object? ConvertOpenApiAnyToObject(IOpenApiAny? val)
+    private static string PrettySerializeJson(JsonNode? node)
+    {
+        if (node is null) return string.Empty;
+        else return JsonSerializer.Serialize(node, PrettifyJsonCtx.JsonNode);
+    }
+
+    private static JsonNode? ConvertOpenApiAnyToObject(IOpenApiAny? val)
     {
         if (val is OpenApiObject o)
         {
-            return o.ToDictionary(x => x.Key, x => ConvertOpenApiAnyToObject(x.Value));
+            JsonObject obj = [];
+            foreach (var (k,v) in o)
+            {
+                obj.Add(k, ConvertOpenApiAnyToObject(v));
+            }
+            return obj;
         }
         if (val is OpenApiArray a)
         {
-            return a.Select(ConvertOpenApiAnyToObject).ToArray();
+            return new JsonArray(a.Select(ConvertOpenApiAnyToObject).ToArray());
         }
         if (val is OpenApiBoolean b)
         {
@@ -560,7 +569,7 @@ public static class OpenApiImporter
         return null;
     }
 
-    private static object? ConvertOpenApiSchemaToObject(OpenApiSchema schema)
+    private static JsonNode? ConvertOpenApiSchemaToObject(OpenApiSchema schema)
     {
         if (schema.Example is not null)
         {
@@ -596,28 +605,20 @@ public static class OpenApiImporter
         }
         else if (schema.Type == "array")
         {
-            object? innerObj = ConvertOpenApiSchemaToObject(schema.Items);
-            return innerObj is not null ? [innerObj] : Array.Empty<object>();
+            var innerObj = ConvertOpenApiSchemaToObject(schema.Items);
+            return innerObj is not null ? new JsonArray(innerObj) : [];
         }
         else if (schema.Type == "object")
         {
-            return schema.Properties.ToDictionary(x => x.Key, x => ConvertOpenApiSchemaToObject(x.Value));
+            JsonObject obj = [];
+            foreach (var (k,v) in schema.Properties)
+            {
+                obj.Add(k, ConvertOpenApiSchemaToObject(v));
+            }
+            return obj;
         }
 
         return null;
-    }
-
-    private static string PrettySerializeJson(object? objToSerialize) =>
-        JsonSerializer.Serialize(objToSerialize, options: prettifyJsonOptions);
-
-    private static JsonSerializerOptions MakePrettifyJsonContext()
-    {
-        JsonSerializerOptions options = new();
-        options.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
-        options.WriteIndented = true;
-        options.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
-        options.PropertyNamingPolicy = null;
-        return options;
     }
 
     #endregion

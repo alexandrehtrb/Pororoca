@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.3.0](#330-2024-04-29)
 * [3.2.0](#320-2024-04-09)
 * [3.1.1](#311-2024-03-13)
 * [3.1.0.1](#3101-2024-02-19)
@@ -22,6 +23,41 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.3.0](https://github.com/alexandrehtrb/Pororoca/tree/3.3.0) (2024-04-29)
+
+### Features
+
+* Adds `.first()` and `.last()` functions to JSON response captures by [@cameronpyne-smith](https://github.com/cameronpyne-smith) (PR #90).
+
+### Bug Fixes
+
+* Number of repetitions to execute in sequential mode is now correctly displayed.
+
+### Refactors
+
+* App trimming to remove unused code and DLLs, reducing disk and memory usage:
+
+| operating system | version | disk usage | start memory usage | end memory usage |
+|---|---|---|---|---|
+| Windows 7 x64 | Pororoca v3.3.0 | 49.7MB | 96MB | 250MB |
+| Windows 7 x64 | Pororoca v3.2.0 | 70.2MB | 138MB | 259MB |
+| Windows 7 x64 | Postman v10.24 | 526MB | 360MB | 787MB |
+| Debian 12 KDE x64 | Pororoca v3.3.0 | 47.4MB | 171MB | 494MB |
+| Debian 12 KDE x64 | Pororoca v3.2.0 | 67.5MB | 231MB | 497MB |
+| Debian 12 KDE x64 | Postman v10.24 | 405.6MB | 430MB | 816MB |
+
+The end memory usage was measured after importing several collections and sending many requests.
+
+* Centralized classes and layouts for many tables.
+* Removed useless grids and views, navigation is sleeker.
+
+### CI/CD
+
+* Releases are drafted when opening a PR to master.
+* Code coverage report in PR to master.
+* Pororoca.Test published to NuGet via GitHub Actions.
+
 
 ## [3.2.0](https://github.com/alexandrehtrb/Pororoca/tree/3.2.0) (2024-04-09)
 

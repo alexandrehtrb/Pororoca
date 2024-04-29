@@ -17,14 +17,29 @@
     <DefineConstants Condition=" '$(UITestsEnabled)' == 'true' ">$(DefineConstants);UI_TESTS_ENABLED</DefineConstants>
     <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
     <PublishReadyToRun>True</PublishReadyToRun>
+    <!-- trimming properties begin -->
+    <PublishTrimmed>true</PublishTrimmed>
+    <TrimMode>partial</TrimMode>
+    <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
+    <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
+    <EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
+    <!-- trimming properties end -->
     <ApplicationIcon>Assets/pororoca_icon.ico</ApplicationIcon>
-    <Version>3.2.0</Version>
+    <Version>3.3.0</Version>
     <FileVersion>$(Version)</FileVersion>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <Copyright>AlexandreHTRB</Copyright>
     <StartupObject>Pororoca.Desktop.Program</StartupObject>
     <!-- Licence also available at https://github.com/alexandrehtrb/Pororoca/LICENCE.md -->
   </PropertyGroup>
+  <ItemGroup Condition="'$(PublishTrimmed)'=='true'">
+    <TrimmableAssembly Include="Avalonia.Controls.ColorPicker" />
+    <TrimmableAssembly Include="Avalonia.Themes.Simple" />
+    <TrimmableAssembly Include="ColorTextBlock.Avalonia" />
+    <TrimmableAssembly Include="Markdown.Avalonia.Tight" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Pororoca.Domain\Pororoca.Domain.csproj" />
     <ProjectReference Include="..\Pororoca.Domain.OpenAPI\Pororoca.Domain.OpenAPI.csproj" />

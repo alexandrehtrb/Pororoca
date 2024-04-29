@@ -1,5 +1,7 @@
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using AvaloniaEdit;
 using Pororoca.Desktop.TextEditorConfig;
 using Pororoca.Desktop.ViewModels;
@@ -31,10 +33,10 @@ public sealed class HttpRepeaterView : UserControl
 
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
-    public void OnSelectedResponseHeadersAndTrailersChanged(object sender, SelectionChangedEventArgs e)
+    public void StartOrStopRepetition(object sender, RoutedEventArgs args)
     {
-        var tableVm = ((HttpRepeaterViewModel)DataContext!).ResponseDataCtx.ResponseHeadersAndTrailersTableVm;
-        UpdateVmSelectedItems(tableVm, e);
+        var vm = (HttpRepeaterViewModel)DataContext!;
+        Dispatcher.UIThread.Post(async () => await vm.StartOrStopRepetitionAsync());
     }
 
     private void OnResponseRawBodyEditorDocumentChanged(object? sender, EventArgs e)
