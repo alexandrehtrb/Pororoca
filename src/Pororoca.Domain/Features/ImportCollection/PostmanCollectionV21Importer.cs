@@ -4,6 +4,7 @@ using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Postman;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
 using static Pororoca.Domain.Features.Common.MimeTypesDetector;
+using static Pororoca.Domain.Features.Entities.Pororoca.Http.PororocaHttpRequestBody;
 
 namespace Pororoca.Domain.Features.ImportCollection;
 
@@ -175,27 +176,21 @@ public static class PostmanCollectionV21Importer
                 string? contentTypeFromHeader = FindContentTypeForPostmanContentTypeHeader(contentTypeHeaderValue);
                 string contentTypeFromRaw = FindContentTypeForPostmanRawBodyLanguage(body.Options?.Raw?.Language);
                 string contentType = contentTypeFromHeader ?? contentTypeFromRaw;
-                myBody.SetRawContent(body.Raw ?? string.Empty, contentTypeFromHeader ?? contentType);
-                break;
+                return MakeRawContent(body.Raw ?? string.Empty, contentTypeFromHeader ?? contentType);
             case PostmanRequestBodyMode.File:
                 string fileContentType = FindFileBodyMimeType(body);
-                myBody.SetFileContent(body.File?.Src ?? string.Empty, fileContentType);
-                break;
+                return MakeFileContent(body.File?.Src ?? string.Empty, fileContentType);
             case PostmanRequestBodyMode.Urlencoded:
-                myBody.SetUrlEncodedContent(ConvertToPororocaKeyValueParams(body.Urlencoded));
-                break;
+                return MakeUrlEncodedContent(ConvertToPororocaKeyValueParams(body.Urlencoded));
             case PostmanRequestBodyMode.Formdata:
-                myBody.SetFormDataContent(ConvertToPororocaHttpFormDataValues(body.Formdata));
-                break;
+                return MakeFormDataContent(ConvertToPororocaHttpFormDataValues(body.Formdata));
             case PostmanRequestBodyMode.Graphql:
                 string? query = string.IsNullOrWhiteSpace(body.Graphql?.Query) ? null : body.Graphql.Query;
                 string? variables = string.IsNullOrWhiteSpace(body.Graphql?.Variables) ? null : body.Graphql.Variables;
-                myBody.SetGraphQlContent(query, variables);
-                break;
+                return MakeGraphQlContent(query, variables);
             default:
                 return null;
         }
-        return myBody;
     }
 
     private static string FindContentTypeForPostmanRawBodyLanguage(string? postmanReqRawBodyLanguage) =>

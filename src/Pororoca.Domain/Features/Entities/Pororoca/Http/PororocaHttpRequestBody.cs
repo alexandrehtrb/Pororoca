@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace Pororoca.Domain.Features.Entities.Pororoca.Http;
 
 public enum PororocaHttpRequestBodyMode
@@ -11,81 +9,46 @@ public enum PororocaHttpRequestBodyMode
     GraphQl
 }
 
-public sealed class PororocaHttpRequestBody : ICloneable
+public sealed record PororocaHttpRequestBody
+(
+    PororocaHttpRequestBodyMode Mode,
+    string? ContentType = null,
+    string? RawContent = null,
+    string? FileSrcPath = null,
+    List<PororocaKeyValueParam>? UrlEncodedValues = null,
+    List<PororocaHttpRequestFormDataParam>? FormDataValues = null,
+    PororocaHttpRequestBodyGraphQl? GraphQlValues = null
+)
 {
-    [JsonInclude]
-    public PororocaHttpRequestBodyMode Mode { get; internal set; }
+    // Parameterless constructor for JSON deserialization
+    public PororocaHttpRequestBody() : this(PororocaHttpRequestBodyMode.Raw){}
 
-    [JsonInclude]
-    public string? ContentType { get; internal set; }
+    public static PororocaHttpRequestBody MakeRawContent(string rawContent, string contentType) =>
+        new(Mode: PororocaHttpRequestBodyMode.Raw,
+            ContentType: contentType,
+            RawContent: rawContent);
 
-    [JsonInclude]
-    public string? RawContent { get; internal set; }
+    public static PororocaHttpRequestBody MakeFileContent(string filePath, string contentType) =>
+        new(Mode: PororocaHttpRequestBodyMode.File,
+            ContentType: contentType,
+            FileSrcPath: filePath);
 
-    [JsonInclude]
-    public string? FileSrcPath { get; internal set; }
+    public static PororocaHttpRequestBody MakeUrlEncodedContent(IEnumerable<PororocaKeyValueParam> urlEncodedValues) =>
+        new(Mode: PororocaHttpRequestBodyMode.UrlEncoded,
+            UrlEncodedValues: urlEncodedValues.ToList());
 
-    [JsonInclude]
-    public List<PororocaKeyValueParam>? UrlEncodedValues { get; internal set; }
+    public static PororocaHttpRequestBody MakeFormDataContent(IEnumerable<PororocaHttpRequestFormDataParam> formDataValues) =>
+        new(Mode: PororocaHttpRequestBodyMode.FormData,
+            FormDataValues: formDataValues.ToList());
 
-    [JsonInclude]
-    public List<PororocaHttpRequestFormDataParam>? FormDataValues { get; internal set; }
+    public static PororocaHttpRequestBody MakeGraphQlContent(string? query, string? variables) =>
+        new(Mode: PororocaHttpRequestBodyMode.GraphQl,
+            GraphQlValues: new(query, variables));
 
-    [JsonInclude]
-    public PororocaHttpRequestBodyGraphQl? GraphQlValues { get; internal set; }
-
-    public PororocaHttpRequestBody()
+    public PororocaHttpRequestBody Copy() => this with
     {
-        Mode = PororocaHttpRequestBodyMode.Raw;
-        ContentType = null;
-        RawContent = null;
-        FileSrcPath = null;
-        UrlEncodedValues = null;
-        FormDataValues = null;
-        GraphQlValues = null;
-    }
-
-    public void SetRawContent(string rawContent, string contentType)
-    {
-        Mode = PororocaHttpRequestBodyMode.Raw;
-        ContentType = contentType;
-        RawContent = rawContent;
-    }
-
-    public void SetFileContent(string filePath, string contentType)
-    {
-        Mode = PororocaHttpRequestBodyMode.File;
-        ContentType = contentType;
-        FileSrcPath = filePath;
-    }
-
-    public void SetUrlEncodedContent(IEnumerable<PororocaKeyValueParam> urlEncodedValues)
-    {
-        Mode = PororocaHttpRequestBodyMode.UrlEncoded;
-        UrlEncodedValues = urlEncodedValues.ToList();
-    }
-
-    public void SetFormDataContent(IEnumerable<PororocaHttpRequestFormDataParam> formDataValues)
-    {
-        Mode = PororocaHttpRequestBodyMode.FormData;
-        FormDataValues = formDataValues.ToList();
-    }
-
-    public void SetGraphQlContent(string? query, string? variables)
-    {
-        Mode = PororocaHttpRequestBodyMode.GraphQl;
-        GraphQlValues = new(query, variables);
-    }
-
-    public object Clone() =>
-        new PororocaHttpRequestBody()
-        {
-            Mode = Mode,
-            ContentType = ContentType,
-            RawContent = RawContent,
-            FileSrcPath = FileSrcPath,
-            UrlEncodedValues = UrlEncodedValues?.Select(u => u.Copy())?.ToList(),
-            FormDataValues = FormDataValues?.Select(f => f.Copy())?.ToList(),
-            GraphQlValues = GraphQlValues?.Copy()
-        };
+        UrlEncodedValues = UrlEncodedValues?.Select(u => u.Copy())?.ToList(),
+        FormDataValues = FormDataValues?.Select(f => f.Copy())?.ToList(),
+        GraphQlValues = GraphQlValues?.Copy()
+    };
 }

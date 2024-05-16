@@ -17,6 +17,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
 using static Pororoca.Domain.Features.Common.HttpVersionFormatter;
+using static Pororoca.Domain.Features.Entities.Pororoca.Http.PororocaHttpRequestBody;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -410,31 +411,15 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
 
     #region CONVERT VIEW INPUTS TO REQUEST ENTITY
 
-    private PororocaHttpRequestBody? WrapRequestBodyFromInputs()
+    private PororocaHttpRequestBody? WrapRequestBodyFromInputs() => RequestBodyMode switch
     {
-        PororocaHttpRequestBody body = new();
-        switch (RequestBodyMode)
-        {
-            case PororocaHttpRequestBodyMode.GraphQl:
-                body.SetGraphQlContent(RequestBodyGraphQlQuery, RequestBodyGraphQlVariables);
-                break;
-            case PororocaHttpRequestBodyMode.FormData:
-                body.SetFormDataContent(FormDataParamsTableVm.Items.Select(p => p.ToFormDataParam()));
-                break;
-            case PororocaHttpRequestBodyMode.UrlEncoded:
-                body.SetUrlEncodedContent(UrlEncodedParamsTableVm.Items.Select(p => p.ToKeyValueParam()));
-                break;
-            case PororocaHttpRequestBodyMode.File:
-                body.SetFileContent(RequestBodyFileSrcPath ?? string.Empty, RequestFileContentType ?? string.Empty);
-                break;
-            case PororocaHttpRequestBodyMode.Raw:
-                body.SetRawContent(RequestRawContent ?? string.Empty, RequestRawContentType ?? string.Empty);
-                break;
-            default:
-                return null;
-        }
-        return body;
-    }
+        PororocaHttpRequestBodyMode.GraphQl => MakeGraphQlContent(RequestBodyGraphQlQuery, RequestBodyGraphQlVariables),
+        PororocaHttpRequestBodyMode.FormData => MakeFormDataContent(FormDataParamsTableVm.Items.Select(p => p.ToFormDataParam())),
+        PororocaHttpRequestBodyMode.UrlEncoded => MakeUrlEncodedContent(UrlEncodedParamsTableVm.Items.Select(p => p.ToKeyValueParam())),
+        PororocaHttpRequestBodyMode.File => MakeFileContent(RequestBodyFileSrcPath ?? string.Empty, RequestFileContentType ?? string.Empty),
+        PororocaHttpRequestBodyMode.Raw => MakeRawContent(RequestRawContent ?? string.Empty, RequestRawContentType ?? string.Empty),
+        _ => null,
+    };
 
     public PororocaHttpRequest ToHttpRequest() => new(
         Name: Name,

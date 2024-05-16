@@ -5,6 +5,7 @@ using Pororoca.Domain.Features.VariableResolution;
 using Xunit;
 using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonValidator;
 using static Pororoca.Domain.Features.TranslateRequest.Http.PororocaHttpRequestValidator;
+using static Pororoca.Domain.Features.Entities.Pororoca.Http.PororocaHttpRequestBody;
 
 namespace Pororoca.Domain.Tests.Features.TranslateRequest.Http;
 
@@ -84,8 +85,7 @@ public static class PororocaHttpRequestValidatorTests
         var varResolver = MockVariableResolver("url", "http://www.url.br");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
-        var body = new PororocaHttpRequestBody();
-        body.SetRawContent("", "");
+        var body = MakeRawContent("", "");
         var req = new PororocaHttpRequest(Name: string.Empty, Url: "{{url}}", Body: body);
 
         // WHEN
@@ -102,8 +102,7 @@ public static class PororocaHttpRequestValidatorTests
         var varResolver = MockVariableResolver("url", "http://www.url.br");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
-        var body = new PororocaHttpRequestBody();
-        body.SetFileContent("", "");
+        var body = MakeFileContent("", "");
         var req = new PororocaHttpRequest(Name: string.Empty, Url: "{{url}}", Body: body);
 
         // WHEN
@@ -120,8 +119,7 @@ public static class PororocaHttpRequestValidatorTests
         var varResolver = MockVariableResolver("url", "http://www.url.br");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
-        var body = new PororocaHttpRequestBody();
-        body.SetRawContent("abc", "flafubal");
+        var body = MakeRawContent("abc", "flafubal");
         var req = new PororocaHttpRequest(Name: string.Empty, Url: "{{url}}", Body: body);
 
         // WHEN
@@ -138,8 +136,7 @@ public static class PororocaHttpRequestValidatorTests
         var varResolver = MockVariableResolver("url", "http://www.url.br");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
-        var body = new PororocaHttpRequestBody();
-        body.SetFileContent("abc", "flafubal");
+        var body = MakeFileContent("abc", "flafubal");
         var req = new PororocaHttpRequest(Name: string.Empty, Url: "{{url}}", Body: body);
 
         // WHEN
@@ -172,8 +169,7 @@ public static class PororocaHttpRequestValidatorTests
         var varResolver = MockVariableResolver("url", "http://www.url.br");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
-        var body = new PororocaHttpRequestBody();
-        body.SetUrlEncodedContent(Array.Empty<PororocaKeyValueParam>());
+        var body = MakeUrlEncodedContent(Array.Empty<PororocaKeyValueParam>());
         var req = new PororocaHttpRequest(Name: string.Empty, Url: "{{url}}", Body: body);
 
         // WHEN
@@ -190,9 +186,8 @@ public static class PororocaHttpRequestValidatorTests
         var varResolver = MockVariableResolver("url", "http://www.url.br");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
-        var body = new PororocaHttpRequestBody();
         var p1 = PororocaHttpRequestFormDataParam.MakeTextParam(true, "p1", "oi", "text/plem");
-        body.SetFormDataContent(new[] { p1 });
+        var body = MakeFormDataContent([p1]);
         var req = new PororocaHttpRequest(Name: string.Empty, Url: "{{url}}", Body: body);
 
         // WHEN
@@ -209,9 +204,8 @@ public static class PororocaHttpRequestValidatorTests
         var varResolver = MockVariableResolver("url", "http://www.url.br");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
-        var body = new PororocaHttpRequestBody();
         var p1 = PororocaHttpRequestFormDataParam.MakeTextParam(false, "p1", "oi", "text/plem");
-        body.SetFormDataContent(new[] { p1 });
+        var body = MakeFormDataContent([p1]);
         var req = new PororocaHttpRequest(Name: string.Empty, Url: "{{url}}", Body: body);
 
         // WHEN
@@ -228,8 +222,7 @@ public static class PororocaHttpRequestValidatorTests
         var varResolver = MockVariableResolver("url", "http://www.url.br");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
-        var body = new PororocaHttpRequestBody();
-        body.SetFormDataContent(Array.Empty<PororocaHttpRequestFormDataParam>());
+        var body = MakeFormDataContent(Array.Empty<PororocaHttpRequestFormDataParam>());
         var req = new PororocaHttpRequest(Name: string.Empty, Url: "{{url}}", Body: body);
 
         // WHEN
@@ -246,8 +239,7 @@ public static class PororocaHttpRequestValidatorTests
         var varResolver = MockVariableResolver("url", "http://www.url.br");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(false);
-        var body = new PororocaHttpRequestBody();
-        body.SetFileContent("Ç://Uindous/sistem31/a.txt", "text/plain");
+        var body = MakeFileContent("Ç://Uindous/sistem31/a.txt", "text/plain");
         var req = new PororocaHttpRequest(Name: string.Empty, Url: "{{url}}", Body: body);
 
         // WHEN
@@ -267,8 +259,7 @@ public static class PororocaHttpRequestValidatorTests
         var varResolver = MockVariableResolver("MyFilePath", testFilePath);
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(new Dictionary<string, bool>() { { testFilePath, true } });
-        var body = new PororocaHttpRequestBody();
-        body.SetFileContent("{{MyFilePath}}", "text/plain");
+        var body = MakeFileContent("{{MyFilePath}}", "text/plain");
         var req = new PororocaHttpRequest(Name: string.Empty, Url: url, Body: body);
 
         // WHEN
@@ -285,9 +276,8 @@ public static class PororocaHttpRequestValidatorTests
         var varResolver = MockVariableResolver("url", "http://www.url.br");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(false);
-        var body = new PororocaHttpRequestBody();
         var p1 = PororocaHttpRequestFormDataParam.MakeFileParam(true, "p1", "Ç://Uindous/sistem31/a.txt", "text/plain");
-        body.SetFormDataContent(new[] { p1 });
+        var body = MakeFormDataContent([p1]);
         var req = new PororocaHttpRequest(Name: string.Empty, Url: "{{url}}", Body: body);
 
         // WHEN
@@ -304,9 +294,8 @@ public static class PororocaHttpRequestValidatorTests
         var varResolver = MockVariableResolver("url", "http://www.url.br");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(false);
-        var body = new PororocaHttpRequestBody();
         var p1 = PororocaHttpRequestFormDataParam.MakeFileParam(false, "p1", "Ç://Uindous/sistem31/a.txt", "text/plain");
-        body.SetFormDataContent(new[] { p1 });
+        var body = MakeFormDataContent([p1]);
         var req = new PororocaHttpRequest(Name: string.Empty, Url: "{{url}}", Body: body);
 
         // WHEN

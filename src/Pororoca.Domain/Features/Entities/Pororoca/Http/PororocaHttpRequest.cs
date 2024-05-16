@@ -28,7 +28,7 @@ public sealed record PororocaHttpRequest
         HttpMethod = HttpMethod,
         Url = Url,
         Headers = Headers?.Select(h => h.Copy())?.ToList(),
-        Body = (PororocaHttpRequestBody?) Body?.Clone(),
+        Body = Body?.Copy(),
         CustomAuth = CustomAuth?.Copy(),
         ResponseCaptures = ResponseCaptures?.Select(c => c.Copy())?.ToList()
     };

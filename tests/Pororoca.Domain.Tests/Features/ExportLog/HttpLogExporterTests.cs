@@ -4,6 +4,7 @@ using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Xunit;
 using static Pororoca.Domain.Features.ExportLog.HttpLogExporter;
+using static Pororoca.Domain.Features.Entities.Pororoca.Http.PororocaHttpRequestBody;
 
 namespace Pororoca.Domain.Tests.Features.ExportLog;
 
@@ -89,8 +90,7 @@ MyHeader: MyHeaderValue
     public static void Should_produce_http_log_request_part_with_raw_text_body_correctly()
     {
         // GIVEN
-        PororocaHttpRequestBody body = new();
-        body.SetRawContent("oi", "text/plain");
+        var body = MakeRawContent("oi", "text/plain");
         var res = GenerateResponse(resolvedReq: new("",
             HttpMethod: "POST",
             Url: "https://httpbin.org/anything",
@@ -115,8 +115,7 @@ oi
     public static void Should_produce_http_log_request_part_with_file_text_body_correctly()
     {
         // GIVEN
-        PororocaHttpRequestBody body = new();
-        body.SetFileContent(GetTestFilePath("testfilecontent1.json"), "application/json");
+        var body = MakeFileContent(GetTestFilePath("testfilecontent1.json"), "application/json");
         var res = GenerateResponse(resolvedReq: new("",
             HttpMethod: "POST",
             Url: "https://httpbin.org/anything",
@@ -141,8 +140,7 @@ Content-Length: 8
     public static void Should_produce_http_log_request_part_with_file_binary_body_correctly()
     {
         // GIVEN
-        PororocaHttpRequestBody body = new();
-        body.SetFileContent(GetTestFilePath("pirate.gif"), "image/gif");
+        var body = MakeFileContent(GetTestFilePath("pirate.gif"), "image/gif");
         var res = GenerateResponse(resolvedReq: new("",
             HttpMethod: "POST",
             Url: "https://httpbin.org/anything",
@@ -167,8 +165,7 @@ R0lGODlhQABAAMQRAAAAAAgIAAgQGBAQEFoAAIRjOZR7Sq0ICLUAAL29vcalY86le+fe3vf39//OnP//
     public static void Should_produce_http_log_request_part_with_file_binary_body_file_disappeared_correctly()
     {
         // GIVEN
-        PororocaHttpRequestBody body = new();
-        body.SetFileContent(GetTestFilePath("pirate1.gif"), "image/gif");
+        var body = MakeFileContent(GetTestFilePath("pirate1.gif"), "image/gif");
         var res = GenerateResponse(resolvedReq: new("",
             HttpMethod: "POST",
             Url: "https://httpbin.org/anything",
@@ -193,8 +190,7 @@ Content-Length: 0
     public static void Should_produce_http_log_request_part_with_url_encoded_text_body_correctly()
     {
         // GIVEN
-        PororocaHttpRequestBody body = new();
-        body.SetUrlEncodedContent([
+        var body = MakeUrlEncodedContent([
             new(true, "a", "xyz"),
             new(true, "b", "123"),
             new(true, "c", "true à é"),
@@ -223,8 +219,7 @@ a=xyz&b=123&c=true+%C3%A0+%C3%A9&myIdSecret=456
     public static void Should_produce_http_log_request_part_with_formdata_with_text_and_file_body_correctly()
     {
         // GIVEN
-        PororocaHttpRequestBody body = new();
-        body.SetFormDataContent([
+        var body = MakeFormDataContent([
             PororocaHttpRequestFormDataParam.MakeTextParam(true, "a", "xyz", "text/plain"),
             PororocaHttpRequestFormDataParam.MakeTextParam(true, "b", "{\"id\":2}", "application/json"),
             PororocaHttpRequestFormDataParam.MakeTextParam(true, "myIdSecret", "456", "text/plain"),
@@ -277,8 +272,7 @@ R0lGODlhQABAAMQRAAAAAAgIAAgQGBAQEFoAAIRjOZR7Sq0ICLUAAL29vcalY86le+fe3vf39//OnP//
     public static void Should_produce_http_log_request_part_with_formdata_with_text_and_file_body_file_disappeared_correctly()
     {
         // GIVEN
-        PororocaHttpRequestBody body = new();
-        body.SetFormDataContent([
+        var body = MakeFormDataContent([
             PororocaHttpRequestFormDataParam.MakeTextParam(true, "a", "xyz", "text/plain"),
             PororocaHttpRequestFormDataParam.MakeTextParam(true, "b", "{\"id\":2}", "application/json"),
             PororocaHttpRequestFormDataParam.MakeTextParam(true, "myIdSecret", "456", "text/plain"),
@@ -330,8 +324,7 @@ Content-Disposition: form-data; name=arq; filename=pirate1.gif; filename*=utf-8'
     public static void Should_produce_http_log_request_part_with_graphql_text_body_correctly()
     {
         // GIVEN
-        PororocaHttpRequestBody body = new();
-        body.SetGraphQlContent("myquery", "{\"id\":17}");
+        var body = MakeGraphQlContent("myquery", "{\"id\":17}");
         var res = GenerateResponse(resolvedReq: new("",
             HttpMethod: "POST",
             Url: "https://fruits-api.netlify.app/graphql",
@@ -356,8 +349,7 @@ Content-Length: 41
     public static void Should_produce_http_log_request_part_with_custom_auth_custom_headers_and_body_correctly()
     {
         // GIVEN
-        PororocaHttpRequestBody body = new();
-        body.SetRawContent("oi", "text/plain");
+        var body = MakeRawContent("oi", "text/plain");
         var res = GenerateResponse(resolvedReq: new("",
             HttpMethod: "POST",
             Url: "https://httpbin.org/anything",

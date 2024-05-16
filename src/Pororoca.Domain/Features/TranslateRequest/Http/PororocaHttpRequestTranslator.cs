@@ -7,6 +7,7 @@ using Pororoca.Domain.Features.VariableResolution;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
 using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
 using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonTranslator;
+using static Pororoca.Domain.Features.Entities.Pororoca.Http.PororocaHttpRequestBody;
 
 namespace Pororoca.Domain.Features.TranslateRequest.Http;
 
@@ -85,27 +86,21 @@ public static class PororocaHttpRequestTranslator
 
         if (input is null) return null;
 
-        PororocaHttpRequestBody body = new();
         switch (input.Mode)
         {
             case PororocaHttpRequestBodyMode.Raw:
-                body.SetRawContent(ReplaceTemplates(input.RawContent!), input.ContentType!);
-                return body;
+                return MakeRawContent(ReplaceTemplates(input.RawContent!), input.ContentType!);
             case PororocaHttpRequestBodyMode.File:
-                body.SetFileContent(ReplaceTemplates(input.FileSrcPath!), input.ContentType!);
-                return body;
+                return MakeFileContent(ReplaceTemplates(input.FileSrcPath!), input.ContentType!);
             case PororocaHttpRequestBodyMode.UrlEncoded:
-                body.SetUrlEncodedContent(ResolveKVParams(effectiveVars, input.UrlEncodedValues!));
-                return body;
+                return MakeUrlEncodedContent(ResolveKVParams(effectiveVars, input.UrlEncodedValues!));
             case PororocaHttpRequestBodyMode.FormData:
-                body.SetFormDataContent(
+                return MakeFormDataContent(
                     input.FormDataValues!
                         .Where(x => x.Enabled)
                         .Select(x => new PororocaHttpRequestFormDataParam(true, x.Type, ReplaceTemplates(x.Key), ReplaceTemplates(x.TextValue), x.ContentType, ReplaceTemplates(x.FileSrcPath))));
-                return body;
             case PororocaHttpRequestBodyMode.GraphQl:
-                body.SetGraphQlContent(input.GraphQlValues!.Query, ReplaceTemplates(input.GraphQlValues!.Variables));
-                return body;
+                return MakeGraphQlContent(input.GraphQlValues!.Query, ReplaceTemplates(input.GraphQlValues!.Variables));
             default:
                 return null;
         }

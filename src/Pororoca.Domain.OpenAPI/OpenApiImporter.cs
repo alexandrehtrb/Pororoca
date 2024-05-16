@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Readers;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
+using static Pororoca.Domain.Features.Entities.Pororoca.Http.PororocaHttpRequestBody;
 
 namespace Pororoca.Domain.Features.ImportCollection;
 
@@ -240,16 +241,12 @@ public static class OpenApiImporter
         if (contentType?.Contains("json") == true)
         {
             string rawStr = PrettySerializeJson(node);
-            PororocaHttpRequestBody body = new();
-            body.SetRawContent(rawStr, contentType);
-            return body;
+            return MakeRawContent(rawStr, contentType);
         }
         else if (contentType?.Contains("octet-stream") == true)
         {
             // probably a file input
-            PororocaHttpRequestBody reqBody = new();
-            reqBody.SetFileContent(string.Empty, contentType);
-            return reqBody;
+            return MakeFileContent(string.Empty, contentType);
         }
         else if (contentType?.Contains("urlencoded") == true)
         {
@@ -257,22 +254,16 @@ public static class OpenApiImporter
                                    obj.Select(kv => new PororocaKeyValueParam(true, kv.Key, kv.Value?.ToString())) :
                                    Array.Empty<PororocaKeyValueParam>();
 
-            PororocaHttpRequestBody reqBody = new();
-            reqBody.SetUrlEncodedContent(urlEncodedParams);
-            return reqBody;
+            return MakeUrlEncodedContent(urlEncodedParams);
         }
         else if (contentType?.Contains("form-data") == true)
         {
-            PororocaHttpRequestBody reqBody = new();
-            reqBody.SetFormDataContent(Array.Empty<PororocaHttpRequestFormDataParam>());
-            return reqBody;
+            return MakeFormDataContent(Array.Empty<PororocaHttpRequestFormDataParam>());
         }
         else
         {
             // only JSON and URL encoded will be supported for now
-            PororocaHttpRequestBody reqBody = new();
-            reqBody.SetRawContent(string.Empty, contentType ?? string.Empty);
-            return reqBody;
+            return MakeRawContent(string.Empty, contentType ?? string.Empty);
         }
     }
 
@@ -436,20 +427,18 @@ public static class OpenApiImporter
             HttpMethod: "GET",
             Url: sbUrl.ToString());
 
-        PororocaHttpRequestBody body = new();
-        body.SetUrlEncodedContent(new PororocaKeyValueParam[]
-        {
-            new(true, "grant_type", "authorization_code"),
-            new(true, "client_id", "{{oauth2_client_id}}"),
-            new(true, "client_secret", "{{oauth2_client_secret}}"),
-            new(true, "scope", string.Join(' ', flow.Scopes.Select(s => s.Key))),
-            new(true, "redirect_uri", "{{oauth2_redirect_uri}}")
-        });
         PororocaHttpRequest getAccessTokenReq = new(
             Name: "Get access token",
             HttpMethod: "POST",
             Url: flow.TokenUrl.ToString(),
-            Body: body,
+            Body: MakeUrlEncodedContent(
+            [
+                new(true, "grant_type", "authorization_code"),
+                new(true, "client_id", "{{oauth2_client_id}}"),
+                new(true, "client_secret", "{{oauth2_client_secret}}"),
+                new(true, "scope", string.Join(' ', flow.Scopes.Select(s => s.Key))),
+                new(true, "redirect_uri", "{{oauth2_redirect_uri}}")
+            ]),
             ResponseCaptures:
             [
                 new(PororocaHttpResponseValueCaptureType.Body, "oauth2_access_token", null, "$.access_token"),
@@ -457,20 +446,18 @@ public static class OpenApiImporter
                 new(PororocaHttpResponseValueCaptureType.Body, "oauth2_refresh_token", null, "$.refresh_token")
             ]);
 
-        PororocaHttpRequestBody body2 = new();
-        body.SetUrlEncodedContent(new PororocaKeyValueParam[]
-        {
-            new(true, "grant_type", "refresh_token"),
-            new(true, "client_id", "{{oauth2_client_id}}"),
-            new(true, "client_secret", "{{oauth2_client_secret}}"),
-            new(true, "scope", string.Join(' ', flow.Scopes.Select(s => s.Key))),
-            new(true, "refresh_token", "{{oauth2_refresh_token}}")
-        });
         PororocaHttpRequest renewAccessTokenReq = new(
             Name: "Renew access token",
             HttpMethod: "POST",
             Url: flow.TokenUrl.ToString(),
-            Body: body2,
+            Body: MakeUrlEncodedContent(
+            [
+                new(true, "grant_type", "refresh_token"),
+                new(true, "client_id", "{{oauth2_client_id}}"),
+                new(true, "client_secret", "{{oauth2_client_secret}}"),
+                new(true, "scope", string.Join(' ', flow.Scopes.Select(s => s.Key))),
+                new(true, "refresh_token", "{{oauth2_refresh_token}}")
+            ]),
             ResponseCaptures:
             [
                 new(PororocaHttpResponseValueCaptureType.Body, "oauth2_access_token", null, "$.access_token"),
@@ -486,19 +473,17 @@ public static class OpenApiImporter
 
     private static PororocaCollectionFolder GenerateOAuth2ClientCredentialsRequestsFolder(OpenApiOAuthFlow flow)
     {
-        PororocaHttpRequestBody body = new();
-        body.SetUrlEncodedContent(new PororocaKeyValueParam[]
-        {
-            new(true, "grant_type", "client_credentials"),
-            new(true, "client_id", "{{oauth2_client_id}}"),
-            new(true, "client_secret", "{{oauth2_client_secret}}"),
-            new(true, "scope", string.Join(' ', flow.Scopes.Select(s => s.Key)))
-        });
         PororocaHttpRequest getAccessTokenReq = new(
             Name: "Get access token",
             HttpMethod: "POST",
             Url: flow.TokenUrl.ToString(),
-            Body: body,
+            Body: MakeUrlEncodedContent(
+            [
+                new(true, "grant_type", "client_credentials"),
+                new(true, "client_id", "{{oauth2_client_id}}"),
+                new(true, "client_secret", "{{oauth2_client_secret}}"),
+                new(true, "scope", string.Join(' ', flow.Scopes.Select(s => s.Key)))
+            ]),
             ResponseCaptures:
             [
                 new(PororocaHttpResponseValueCaptureType.Body, "oauth2_access_token", null, "$.access_token"),
