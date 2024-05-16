@@ -74,13 +74,13 @@ public static class PororocaCollectionExporterTests
             new(true, "Key1", "Value1", false),
             new(false, "Key2", "Value2", true)
         });
-        PororocaEnvironment env1 = new("MyEnvironment");
-        env1.IsCurrent = true;
-        env1.UpdateVariables(new PororocaVariable[]
+        var env1 = new PororocaEnvironment("MyEnvironment") with
         {
-            new(true, "Key3", "Value3", true),
-            new(true, "Key4", "Value4", false)
-        });
+            IsCurrent = true,
+            Variables = [
+                new(true, "Key3", "Value3", true),
+                new(true, "Key4", "Value4", false)]
+        };
         col.Environments.Add(env1);
         return col;
     }

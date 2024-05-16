@@ -56,10 +56,10 @@ public static class PororocaCollectionTests
     {
         // GIVEN
         var col = CreateTestCollection();
-        foreach (var env in col.Environments)
+        col = col with
         {
-            env.IsCurrent = false;
-        }
+            Environments = col.Environments.Select(e => e with { IsCurrent = false }).ToList()
+        };
 
         // WHEN
         string resolvedStr = IPororocaVariableResolver.ReplaceTemplates(strToReplaceTemplates, ((IPororocaVariableResolver)col).GetEffectiveVariables());
@@ -77,8 +77,13 @@ public static class PororocaCollectionTests
     {
         // GIVEN
         var col = CreateTestCollection();
-        col.Environments.First(e => e.Name == "MyEnvironment1").IsCurrent = true;
-        col.Environments.First(e => e.Name == "MyEnvironment2").IsCurrent = false;
+        col = col with
+        {
+            Environments = col.Environments.Select(e => e with
+            {
+                IsCurrent = (e.Name == "MyEnvironment1")
+            }).ToList()
+        };
 
         // WHEN
         string resolvedStr = IPororocaVariableResolver.ReplaceTemplates(strToReplaceTemplates, ((IPororocaVariableResolver)col).GetEffectiveVariables());
@@ -210,29 +215,25 @@ public static class PororocaCollectionTests
         PororocaVariable v0 = new(true, "k0", "v0", false);
         PororocaVariable v1 = new(true, "k1", "v1", false);
         PororocaVariable v2 = new(false, "k2", "v2", false);
-        var colVars = new PororocaVariable[] { v0, v1, v2 };
+        List<PororocaVariable> colVars = [v0, v1, v2];
 
         PororocaVariable v1env1 = new(true, "k1", "v1env1", false);
         PororocaVariable v3env1 = new(true, "k3", "v3env1", false);
         PororocaVariable v4env1 = new(false, "k4", "v4env1", false);
-        var env1Vars = new PororocaVariable[] { v1env1, v3env1, v4env1 };
+        List<PororocaVariable> env1Vars = [v1env1, v3env1, v4env1];
 
         PororocaVariable v1env2 = new(true, "k1", "v1env2", false);
         PororocaVariable v3env2 = new(true, "k3", "v3env2", false);
         PororocaVariable v4env2 = new(false, "k4", "v4env2", false);
-        var env2Vars = new PororocaVariable[] { v1env2, v3env2, v4env2 };
+        List<PororocaVariable> env2Vars = [v1env2, v3env2, v4env2];
 
         col.Variables.Clear();
         col.Variables.AddRange(colVars);
 
-        PororocaEnvironment env1 = new("MyEnvironment1");
-        env1.IsCurrent = false;
-        env1.UpdateVariables(env1Vars);
+        var env1 = new PororocaEnvironment("MyEnvironment1") with { IsCurrent = false, Variables = env1Vars };
         col.Environments.Add(env1);
 
-        PororocaEnvironment env2 = new("MyEnvironment2");
-        env2.IsCurrent = true;
-        env2.UpdateVariables(env2Vars);
+        var env2 = new PororocaEnvironment("MyEnvironment2") with { IsCurrent = true, Variables = env2Vars };
         col.Environments.Add(env2);
 
         col.Requests.Add(new PororocaHttpRequest("HttpReq0"));

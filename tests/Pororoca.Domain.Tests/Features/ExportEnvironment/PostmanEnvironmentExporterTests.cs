@@ -52,17 +52,13 @@ public static class PostmanEnvironmentExporterTests
         Assert.Equal("secret", var2.Type);
     }
 
-    private static PororocaEnvironment CreateTestPororocaEnvironment()
-    {
-        PororocaEnvironment env = new(testEnvId, testEnvName, DateTimeOffset.Now)
-        {
-            IsCurrent = false
-        };
-        env.UpdateVariables(new PororocaVariable[]
-        {
-            new(true, "Key1", "Value1", false),
-            new(false, "Key2", "Value2", true)
-        });
-        return env;
-    }
+    private static PororocaEnvironment CreateTestPororocaEnvironment() =>
+        new(testEnvId,
+            DateTimeOffset.Now,
+            testEnvName,
+            false,
+            [
+                new(true, "Key1", "Value1", false),
+                new(false, "Key2", "Value2", true)
+            ]);
 }

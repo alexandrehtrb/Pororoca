@@ -214,22 +214,22 @@ public sealed class KeyboardShortcuts : ViewModelBase
     {
         var reqsToCopy = SelectedItems
                          .Where(i => i is HttpRequestViewModel reqVm && !HasAnyParentAlsoSelected(reqVm))
-                         .Select(r => (ICloneable)((HttpRequestViewModel)r).ToHttpRequest());
+                         .Select(r => (object)((HttpRequestViewModel)r).ToHttpRequest());
         var repsToCopy = SelectedItems
                          .Where(i => i is HttpRepeaterViewModel repVm && !HasAnyParentAlsoSelected(repVm))
-                         .Select(r => (ICloneable)((HttpRepeaterViewModel)r).ToHttpRepetition());
+                         .Select(r => (object)((HttpRepeaterViewModel)r).ToHttpRepetition());
         var wssToCopy = SelectedItems
                          .Where(i => i is WebSocketConnectionViewModel wsVm && !HasAnyParentAlsoSelected(wsVm))
-                         .Select(wsVm => (ICloneable)((WebSocketConnectionViewModel)wsVm).ToWebSocketConnection());
+                         .Select(wsVm => (object)((WebSocketConnectionViewModel)wsVm).ToWebSocketConnection());
         var wsMsgsToCopy = SelectedItems
                            .Where(i => i is WebSocketClientMessageViewModel wsMsgVm && !HasAnyParentAlsoSelected(wsMsgVm))
-                           .Select(wsMsgVm => (ICloneable)((WebSocketClientMessageViewModel)wsMsgVm).ToWebSocketClientMessage());
+                           .Select(wsMsgVm => (object)((WebSocketClientMessageViewModel)wsMsgVm).ToWebSocketClientMessage());
         var foldersToCopy = SelectedItems
                             .Where(i => i is CollectionFolderViewModel folderVm && !HasAnyParentAlsoSelected(folderVm))
-                            .Select(f => (ICloneable)((CollectionFolderViewModel)f).ToCollectionFolder());
+                            .Select(f => (object)((CollectionFolderViewModel)f).ToCollectionFolder());
         var envsToCopy = SelectedItems
                          .Where(i => i is EnvironmentViewModel)
-                         .Select(e => (ICloneable)((EnvironmentViewModel)e).ToEnvironment());
+                         .Select(e => (object)((EnvironmentViewModel)e).ToEnvironment());
 
         var itemsToCopy = reqsToCopy.Concat(repsToCopy).Concat(wssToCopy).Concat(wsMsgsToCopy).Concat(foldersToCopy).Concat(envsToCopy).ToArray();
 

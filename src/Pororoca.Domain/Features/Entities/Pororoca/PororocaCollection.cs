@@ -50,7 +50,7 @@ public sealed record PororocaCollection
         Folders = Folders.Select(f => (PororocaCollectionFolder)f.Clone()).ToList(),
         Requests = Requests.Select(f => (PororocaRequest)f.Clone()).ToList(),
         Variables = Variables.Select(v => v.Copy()).ToList(),
-        Environments = Environments.Select(e => preserveIds ? e.ClonePreservingId() : (PororocaEnvironment)e.Clone()).ToList(),
+        Environments = Environments.Select(e => e.Copy(preserveIds)).ToList(),
         CollectionScopedAuth = CollectionScopedAuth?.Copy(),
         CollectionScopedRequestHeaders = CollectionScopedRequestHeaders?.Select(v => v.Copy())?.ToList(),
     };

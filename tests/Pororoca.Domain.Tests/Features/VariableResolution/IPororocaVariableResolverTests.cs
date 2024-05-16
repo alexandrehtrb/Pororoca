@@ -154,7 +154,6 @@ public static class IPororocaVariableResolverTests
         col.Variables.Add(v2 = new(false, "k2", "v2", false));
 
         PororocaEnvironment env = new("env");
-        env.IsCurrent = false;
         env.Variables.Add(v3 = new(true, "k3", "v3", false));
         env.Variables.Add(v4 = new(false, "k4", "v4", false));
         col.Environments.Add(env);
@@ -175,8 +174,7 @@ public static class IPororocaVariableResolverTests
         col.Variables.Add(v1 = new(true, "k1", "v1", false));
         col.Variables.Add(v2 = new(false, "k2", "v2", false));
 
-        PororocaEnvironment env = new("env");
-        env.IsCurrent = true;
+        var env = new PororocaEnvironment("env") with { IsCurrent = true };
         env.Variables.Add(v3 = new(true, "k3", "v3", false));
         env.Variables.Add(v4 = new(false, "k4", "v4", false));
         col.Environments.Add(env);
@@ -199,8 +197,7 @@ public static class IPororocaVariableResolverTests
         col.Variables.Add(v1c = new(true, "k1", "v1c", false));
         col.Variables.Add(v2 = new(false, "k2", "v2", false));
 
-        PororocaEnvironment env = new("env");
-        env.IsCurrent = true;
+        var env = new PororocaEnvironment("env") with { IsCurrent = true };
         env.Variables.Add(v1e = new(true, "k1", "v1e", false));
         env.Variables.Add(v3 = new(true, "k3", "v3", false));
         env.Variables.Add(v4 = new(false, "k4", "v4", false));

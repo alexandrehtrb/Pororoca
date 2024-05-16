@@ -54,10 +54,14 @@ public sealed class PororocaTest
         var selectedEnv = Collection.Environments.FirstOrDefault(e => e.Name == environmentName)
             ?? throw new Exception($"Error: Environment with the name '{environmentName}' was not found.");
 
-        foreach (var env in Collection.Environments)
+        var newEnvs = Collection.Environments.Select(e => e with
         {
-            env.IsCurrent = env.Name == environmentName;
-        }
+            IsCurrent = e.Name == environmentName
+        }).ToList();
+
+        Collection.Environments.Clear();
+        Collection.Environments.AddRange(newEnvs);
+
         return this;
     }
 
@@ -103,12 +107,12 @@ public sealed class PororocaTest
         if (variable != null)
         {
             var newVariable = variable with { Value = value };
-            env.RemoveVariable(key);
-            env.AddVariable(newVariable);
+            env.Variables.RemoveAll(v => v.Key == key);
+            env.Variables.Add(newVariable);
         }
         else
         {
-            env.AddVariable(new(true, key, value, false));
+            env.Variables.Add(new(true, key, value, false));
         }
     }
 

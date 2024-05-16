@@ -108,18 +108,12 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel, 
 
     #region ENVIRONMENT
 
-    public PororocaEnvironment ToEnvironment()
-    {
-        PororocaEnvironment newEnv = new(this.envId, Name, this.envCreatedAt);
-        UpdateEnvironmentWithInputs(newEnv);
-        return newEnv;
-    }
-
-    private void UpdateEnvironmentWithInputs(PororocaEnvironment environment)
-    {
-        environment.IsCurrent = IsCurrentEnvironment;
-        environment.UpdateVariables(VariablesTableVm.Items.Select(v => v.ToVariable()));
-    }
+    public PororocaEnvironment ToEnvironment() =>
+        new(this.envId,
+            this.envCreatedAt,
+            Name,
+            IsCurrentEnvironment,
+            VariablesTableVm.ConvertItemsToDomain().ToList());
 
     #endregion
 }
