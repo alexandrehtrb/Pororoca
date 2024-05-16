@@ -241,7 +241,7 @@ public class PororocaWebSocketConnector
                 if (isClosing)
                 {
                     // closure message already received
-                    PororocaWebSocketServerMessage closingMsg = new(this.client?.CloseStatusDescription);
+                    var closingMsg = PororocaWebSocketServerMessage.Make(this.client?.CloseStatusDescription);
                     ExchangedMessages.Add(closingMsg);
                     await FinishClosureStartedByServerAsync();
                     break; // exits the reception thread
@@ -304,7 +304,6 @@ public class PororocaWebSocketConnector
 
             if (!cancellationToken.IsCancellationRequested && msg.ReachedEndOfStream())
             {
-                msg.SentAtUtc = DateTimeOffset.Now;
                 ExchangedMessages.Add(msg);
             }
         }
@@ -349,10 +348,10 @@ public class PororocaWebSocketConnector
             buffer = null;
 
             var msgType = receivalResult.MessageType.ToPororocaWebSocketMessageType();
-            PororocaWebSocketServerMessage msg =
+            var msg =
                 msgType == PororocaWebSocketMessageType.Close ?
-                new(this.client?.CloseStatusDescription) :
-                new(msgType, accumulator.ToArray());
+                PororocaWebSocketServerMessage.Make(this.client?.CloseStatusDescription) :
+                PororocaWebSocketServerMessage.Make(msgType, accumulator.ToArray());
 
             ExchangedMessages.Add(msg);
             return msg;
@@ -410,7 +409,6 @@ public class PororocaWebSocketConnector
                 else
                 {
                     await this.client!.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, closingMsg.Text, cancellationToken);
-                    closingMsg!.SentAtUtc = DateTimeOffset.Now;
                     ExchangedMessages.Add(closingMsg);
                 }
             }

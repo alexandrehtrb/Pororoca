@@ -1,40 +1,38 @@
 using System.Net.WebSockets;
-using System.Text.Json.Serialization;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 
 namespace Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage;
 
-public sealed class PororocaWebSocketClientMessageToSend : PororocaWebSocketClientMessage, IDisposable
+public sealed record PororocaWebSocketClientMessageToSend
+(
+    // parent props
+    PororocaWebSocketMessageType MessageType,
+    string Name,
+    // this props
+    Stream BytesStream,
+    long BytesLength, // cannot use BytesStream.Length because this cannot be re-read after stream closes
+    string? Text,
+    DateTimeOffset? SentAtUtc,
+    // more parent props
+    PororocaWebSocketClientMessageContentMode ContentMode = PororocaWebSocketClientMessageContentMode.Raw,
+    string? RawContent = null,
+    PororocaWebSocketMessageRawContentSyntax? RawContentSyntax = null,
+    string? FileSrcPath = null,
+    bool DisableCompressionForThis = false
+): PororocaWebSocketClientMessage(MessageType, Name, ContentMode, RawContent, RawContentSyntax, FileSrcPath, DisableCompressionForThis), IDisposable
 {
-    #region AUXILIARY PROPERTIES FOR INFRASTRUCTURE
-
-    [JsonIgnore]
-    public Stream BytesStream { get; set; }
-
-    [JsonIgnore]
-    public long BytesLength { get; set; } // cannot use BytesStream.Length because this cannot be re-read after stream closes
-
-    [JsonIgnore]
-    public string? Text { get; set; }
-
-    [JsonIgnore]
-    public DateTimeOffset? SentAtUtc { get; set; }
-
-    #endregion
-
     public PororocaWebSocketClientMessageToSend(PororocaWebSocketClientMessage templateWsCliMsg, Stream bytesStream, string? resolvedText) :
-        base(msgType: templateWsCliMsg.MessageType,
-             name: templateWsCliMsg.Name,
-             contentMode: templateWsCliMsg.ContentMode,
-             rawContent: templateWsCliMsg.RawContent,
-             rawContentSyntax: templateWsCliMsg.RawContentSyntax,
-             fileSrcPath: templateWsCliMsg.FileSrcPath,
-             disableCompressionForThis: templateWsCliMsg.DisableCompressionForThis)
-    {
-        BytesStream = bytesStream;
-        BytesLength = bytesStream.Length;
-        Text = resolvedText;
-    }
+        this(MessageType: templateWsCliMsg.MessageType,
+             Name: templateWsCliMsg.Name,
+             BytesStream: bytesStream,
+             BytesLength: bytesStream.Length,
+             Text: resolvedText,
+             SentAtUtc: DateTimeOffset.Now,
+             DisableCompressionForThis: templateWsCliMsg.DisableCompressionForThis,
+             ContentMode: templateWsCliMsg.ContentMode,
+             RawContent: templateWsCliMsg.RawContent,
+             RawContentSyntax: templateWsCliMsg.RawContentSyntax,
+             FileSrcPath: templateWsCliMsg.FileSrcPath){}
 
     public WebSocketMessageFlags DetermineFlags()
     {

@@ -14,7 +14,7 @@ public static class PororocaWebSocketServerMessageTests
         byte[] bytes = "hello"u8.ToArray();
 
         // WHEN
-        PororocaWebSocketServerMessage msg = new(PororocaWebSocketMessageType.Binary, bytes);
+        var msg = PororocaWebSocketServerMessage.Make(PororocaWebSocketMessageType.Binary, bytes);
 
         // THEN
         Assert.Equal(PororocaWebSocketMessageDirection.FromServer, msg.Direction);
@@ -32,7 +32,7 @@ public static class PororocaWebSocketServerMessageTests
         byte[] bytes = "ok bye"u8.ToArray();
 
         // WHEN
-        PororocaWebSocketServerMessage msg = new("ok bye");
+        var msg = PororocaWebSocketServerMessage.Make("ok bye");
 
         // THEN
         Assert.Equal(PororocaWebSocketMessageDirection.FromServer, msg.Direction);
@@ -50,7 +50,7 @@ public static class PororocaWebSocketServerMessageTests
         byte[] bytes = "hey man"u8.ToArray();
 
         // WHEN
-        PororocaWebSocketServerMessage msg = new(PororocaWebSocketMessageType.Text, bytes);
+        var msg = PororocaWebSocketServerMessage.Make(PororocaWebSocketMessageType.Text, bytes);
 
         // THEN
         Assert.Equal(PororocaWebSocketMessageDirection.FromServer, msg.Direction);
@@ -68,7 +68,7 @@ public static class PororocaWebSocketServerMessageTests
         byte[] bytes = "[]"u8.ToArray();
 
         // WHEN
-        PororocaWebSocketServerMessage msg = new(PororocaWebSocketMessageType.Text, bytes);
+        var msg = PororocaWebSocketServerMessage.Make(PororocaWebSocketMessageType.Text, bytes);
 
         // THEN
         Assert.Equal(PororocaWebSocketMessageDirection.FromServer, msg.Direction);

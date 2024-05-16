@@ -85,13 +85,13 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
     public PororocaWebSocketClientMessage ToWebSocketClientMessage()
     {
         PororocaWebSocketClientMessage wsCliMsg = new(
-            msgType: MessageType,
-            name: Name,
-            contentMode: ContentMode,
-            rawContent: ContentMode == PororocaWebSocketClientMessageContentMode.Raw ? RawContent : null,
-            rawContentSyntax: ContentMode == PororocaWebSocketClientMessageContentMode.Raw ? RawContentSyntax : null,
-            fileSrcPath: ContentFileSrcPath,
-            disableCompressionForThis: DisableCompressionForThisMessage);
+            MessageType: MessageType,
+            Name: Name,
+            ContentMode: ContentMode,
+            RawContent: ContentMode == PororocaWebSocketClientMessageContentMode.Raw ? RawContent : null,
+            RawContentSyntax: ContentMode == PororocaWebSocketClientMessageContentMode.Raw ? RawContentSyntax : null,
+            FileSrcPath: ContentFileSrcPath,
+            DisableCompressionForThis: DisableCompressionForThisMessage);
 
         return wsCliMsg;
     }

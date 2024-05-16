@@ -32,6 +32,6 @@ public sealed record PororocaWebSocketConnection
         CustomAuth = CustomAuth?.Copy(),
         CompressionOptions = CompressionOptions?.Copy(),
         Subprotocols = Subprotocols?.Select(s => s.Copy())?.ToList(),
-        ClientMessages = ClientMessages?.Select(m => (PororocaWebSocketClientMessage)m.Clone())?.ToList()
+        ClientMessages = ClientMessages?.Select(m => m.Copy())?.ToList()
     };
 }

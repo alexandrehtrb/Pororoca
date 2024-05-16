@@ -59,7 +59,6 @@ public sealed class ClipboardArea : ViewModelBase
 
     public IList<PororocaWebSocketClientMessage> FetchCopiesOfWebSocketClientMessages() =>
         this.copiedDomainObjs.Where(o => o is PororocaWebSocketClientMessage)
-                        .Select(o => ((PororocaWebSocketClientMessage)o).Clone())
-                        .Cast<PororocaWebSocketClientMessage>()
+                        .Select(o => ((PororocaWebSocketClientMessage)o).Copy())
                         .ToList();
 }

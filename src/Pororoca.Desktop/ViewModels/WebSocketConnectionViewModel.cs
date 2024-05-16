@@ -465,12 +465,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     private void AddNewWebSocketClientMessage()
     {
         PororocaWebSocketClientMessage wsReqMsg = new(PororocaWebSocketMessageType.Text,
-                                                       Localizer.Instance.WebSocketClientMessage.NewMessage,
-                                                       PororocaWebSocketClientMessageContentMode.Raw,
-                                                       string.Empty,
-                                                       PororocaWebSocketMessageRawContentSyntax.Json,
-                                                       null,
-                                                       false);
+                                                      Localizer.Instance.WebSocketClientMessage.NewMessage);
         AddWebSocketClientMessage(wsReqMsg, showItemInScreen: true);
     }
 
