@@ -90,7 +90,7 @@ public static class PostmanCollectionV21Importer
     private static PororocaVariable ConvertToPororocaVariable(PostmanVariable v) =>
         new(IsEnabledInPostman(v.Disabled), v.Key, v.Value, false);
 
-    private static PororocaCollectionItem ConvertToPororocaCollectionItem(PostmanCollectionItem item)
+    private static object ConvertToPororocaCollectionItem(PostmanCollectionItem item)
     {
         if (item.Request != null)
         {
@@ -105,9 +105,9 @@ public static class PostmanCollectionV21Importer
                 {
                     var convertedSubItem = ConvertToPororocaCollectionItem(subItem);
                     if (convertedSubItem is PororocaCollectionFolder subFolder)
-                        folder.AddFolder(subFolder);
+                        folder.Folders.Add(subFolder);
                     else if (convertedSubItem is PororocaHttpRequest subRequest)
-                        folder.AddRequest(subRequest);
+                        folder.Requests.Add(subRequest);
                 }
             }
             return folder;
@@ -117,21 +117,19 @@ public static class PostmanCollectionV21Importer
     internal static PororocaHttpRequest ConvertToPororocaHttpRequest(string name, PostmanRequest request)
     {
         const decimal defaultHttpVersion = 1.1m;
-        PororocaHttpRequest myReq = new();
         var headers = ConvertToPororocaHeaders(request.Header);
         string? contentTypeHeaderValue = headers.FirstOrDefault(h => h.Key == "Content-Type")?.Value;
 
-        myReq.Update(
-            name: name,
-            httpVersion: defaultHttpVersion,
-            httpMethod: request.Method,
-            url: ReadPostmanRequestUrl(request.Url),
+        return new(
+            Name: name,
+            HttpVersion: defaultHttpVersion,
+            HttpMethod: request.Method,
+            Url: ReadPostmanRequestUrl(request.Url),
+            Headers: headers,
+            Body: ConvertToPororocaHttpRequestBody(request.Body, contentTypeHeaderValue),
             // When Postman req auth is null, the request uses collection scoped auth
-            customAuth: request.Auth != null ? ConvertToPororocaAuth(request.Auth) : PororocaRequestAuth.InheritedFromCollection,
-            headers: headers,
-            body: ConvertToPororocaHttpRequestBody(request.Body, contentTypeHeaderValue),
-            captures: null);
-        return myReq;
+            CustomAuth: request.Auth != null ? ConvertToPororocaAuth(request.Auth) : PororocaRequestAuth.InheritedFromCollection,
+            ResponseCaptures: null);
     }
 
     private static string ReadPostmanRequestUrl(object? postmanRequestUrl)

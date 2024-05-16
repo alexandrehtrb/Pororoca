@@ -244,9 +244,11 @@ public static class HttpRepeaterTests
         ];
         var colScopedAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
         List<PororocaKeyValueParam>? colScopedReqHeaders = null;
-        var rep = MakeExampleRep(repMode);
-        rep.NumberOfRepetitions = 1;
-        rep.DelayInMs = delayInMs;
+        var rep = MakeExampleRep(repMode) with
+        {
+            NumberOfRepetitions = 1,
+            DelayInMs = delayInMs
+        };
         PororocaHttpRequest baseReq = new("basereq");
 
         requester.IsValidRequest(default!, default, default!, out _)
@@ -284,8 +286,7 @@ public static class HttpRepeaterTests
         ];
         var colScopedAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
         List<PororocaKeyValueParam>? colScopedReqHeaders = null;
-        var rep = MakeExampleRep(repMode);
-        rep.NumberOfRepetitions = 1;
+        var rep = MakeExampleRep(repMode) with { NumberOfRepetitions = 1 };
         PororocaHttpRequest baseReq = new("basereq");
 
         requester.IsValidRequest(default!, default, default!, out _)

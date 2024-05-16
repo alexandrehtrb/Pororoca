@@ -54,16 +54,15 @@ public static class OpenApiImporter
                     var reqBody = ReadRequestBody(operation.RequestBody);
                     var reqAuth = ReadRequestAuth(hasCollectionScopedAuth, operation.Security, doc.Components.SecuritySchemes);
 
-                    PororocaHttpRequest req = new(reqName);
-                    req.Update(
-                        name: reqName,
-                        httpVersion: 1.1m,
-                        httpMethod: httpMethod,
-                        url: "{{BaseUrl}}" + reqPath + queryParameters,
-                        customAuth: reqAuth,
-                        headers: headers,
-                        body: reqBody,
-                        captures: null);
+                    PororocaHttpRequest req = new(
+                        Name: reqName,
+                        HttpVersion: 1.1m,
+                        HttpMethod: httpMethod,
+                        Url: "{{BaseUrl}}" + reqPath + queryParameters,
+                        CustomAuth: reqAuth,
+                        Headers: headers,
+                        Body: reqBody,
+                        ResponseCaptures: null);
 
                     PlaceRequestInCollection(col, operation, req);
                 }
@@ -109,12 +108,12 @@ public static class OpenApiImporter
             var folder = col.Folders.FirstOrDefault(f => f.Name == folderName);
             if (folder is not null)
             {
-                folder.AddRequest(req);
+                folder.Requests.Add(req);
             }
             else
             {
                 col.Folders.Add(folder = new(folderName));
-                folder.AddRequest(req);
+                folder.Requests.Add(req);
             }
         }
     }
@@ -358,11 +357,11 @@ public static class OpenApiImporter
                 PororocaCollectionFolder authFolder = new(schemeName);
                 if (scheme.Flows.AuthorizationCode is not null)
                 {
-                    authFolder.AddFolder(GenerateOAuth2AuthorizationCodeRequestsFolder(scheme.Flows.AuthorizationCode));
+                    authFolder.Folders.Add(GenerateOAuth2AuthorizationCodeRequestsFolder(scheme.Flows.AuthorizationCode));
                 }
                 if (scheme.Flows.ClientCredentials is not null)
                 {
-                    authFolder.AddFolder(GenerateOAuth2ClientCredentialsRequestsFolder(scheme.Flows.ClientCredentials));
+                    authFolder.Folders.Add(GenerateOAuth2ClientCredentialsRequestsFolder(scheme.Flows.ClientCredentials));
                 }
                 col.Folders.Add(authFolder);
             }
@@ -426,18 +425,17 @@ public static class OpenApiImporter
 
     private static PororocaCollectionFolder GenerateOAuth2AuthorizationCodeRequestsFolder(OpenApiOAuthFlow flow)
     {
-        PororocaHttpRequest getAuthCodeReq = new("Get auth code");
         StringBuilder sbUrl = new(flow.AuthorizationUrl.ToString());
         sbUrl.Append("?client_id={{oauth2_client_id}}");
         sbUrl.Append("&redirect_uri={{oauth2_redirect_uri}}");
         sbUrl.Append("&response_type=code");
         sbUrl.Append("&response_mode=query");
         sbUrl.Append("&state=12345");
-        getAuthCodeReq.UpdateMethod("GET");
-        getAuthCodeReq.UpdateUrl(sbUrl.ToString());
+        PororocaHttpRequest getAuthCodeReq = new(
+            Name: "Get auth code",
+            HttpMethod: "GET",
+            Url: sbUrl.ToString());
 
-        PororocaHttpRequest getAccessTokenReq = new("Get access token");
-        getAccessTokenReq.UpdateUrl(flow.TokenUrl.ToString());
         PororocaHttpRequestBody body = new();
         body.SetUrlEncodedContent(new PororocaKeyValueParam[]
         {
@@ -447,17 +445,18 @@ public static class OpenApiImporter
             new(true, "scope", string.Join(' ', flow.Scopes.Select(s => s.Key))),
             new(true, "redirect_uri", "{{oauth2_redirect_uri}}")
         });
-        getAccessTokenReq.UpdateBody(body);
-        getAccessTokenReq.UpdateMethod("POST");
-        getAccessTokenReq.UpdateResponseCaptures(new()
-        {
-            new(PororocaHttpResponseValueCaptureType.Body, "oauth2_access_token", null, "$.access_token"),
-            new(PororocaHttpResponseValueCaptureType.Body, "oauth2_access_token_expires_in", null, "$.expires_in"),
-            new(PororocaHttpResponseValueCaptureType.Body, "oauth2_refresh_token", null, "$.refresh_token")
-        });
+        PororocaHttpRequest getAccessTokenReq = new(
+            Name: "Get access token",
+            HttpMethod: "POST",
+            Url: flow.TokenUrl.ToString(),
+            Body: body,
+            ResponseCaptures:
+            [
+                new(PororocaHttpResponseValueCaptureType.Body, "oauth2_access_token", null, "$.access_token"),
+                new(PororocaHttpResponseValueCaptureType.Body, "oauth2_access_token_expires_in", null, "$.expires_in"),
+                new(PororocaHttpResponseValueCaptureType.Body, "oauth2_refresh_token", null, "$.refresh_token")
+            ]);
 
-        PororocaHttpRequest renewAccessTokenReq = new("Renew access token");
-        renewAccessTokenReq.UpdateUrl(flow.TokenUrl.ToString());
         PororocaHttpRequestBody body2 = new();
         body.SetUrlEncodedContent(new PororocaKeyValueParam[]
         {
@@ -467,26 +466,26 @@ public static class OpenApiImporter
             new(true, "scope", string.Join(' ', flow.Scopes.Select(s => s.Key))),
             new(true, "refresh_token", "{{oauth2_refresh_token}}")
         });
-        renewAccessTokenReq.UpdateBody(body);
-        renewAccessTokenReq.UpdateMethod("POST");
-        renewAccessTokenReq.UpdateResponseCaptures(new()
-        {
-            new(PororocaHttpResponseValueCaptureType.Body, "oauth2_access_token", null, "$.access_token"),
-            new(PororocaHttpResponseValueCaptureType.Body, "oauth2_access_token_expires_in", null, "$.expires_in"),
-            new(PororocaHttpResponseValueCaptureType.Body, "oauth2_refresh_token", null, "$.refresh_token")
-        });
+        PororocaHttpRequest renewAccessTokenReq = new(
+            Name: "Renew access token",
+            HttpMethod: "POST",
+            Url: flow.TokenUrl.ToString(),
+            Body: body2,
+            ResponseCaptures:
+            [
+                new(PororocaHttpResponseValueCaptureType.Body, "oauth2_access_token", null, "$.access_token"),
+                new(PororocaHttpResponseValueCaptureType.Body, "oauth2_access_token_expires_in", null, "$.expires_in"),
+                new(PororocaHttpResponseValueCaptureType.Body, "oauth2_refresh_token", null, "$.refresh_token")
+            ]);
 
-        PororocaCollectionFolder folder = new("Authorization code");
-        folder.AddRequest(getAuthCodeReq);
-        folder.AddRequest(getAccessTokenReq);
-        folder.AddRequest(renewAccessTokenReq);
-        return folder;
+        return new(
+            Name: "Authorization code",
+            Folders: [],
+            Requests: [ getAuthCodeReq, getAccessTokenReq, renewAccessTokenReq ]);
     }
 
     private static PororocaCollectionFolder GenerateOAuth2ClientCredentialsRequestsFolder(OpenApiOAuthFlow flow)
     {
-        PororocaHttpRequest getAccessTokenReq = new("Get access token");
-        getAccessTokenReq.UpdateUrl(flow.TokenUrl.ToString());
         PororocaHttpRequestBody body = new();
         body.SetUrlEncodedContent(new PororocaKeyValueParam[]
         {
@@ -495,18 +494,22 @@ public static class OpenApiImporter
             new(true, "client_secret", "{{oauth2_client_secret}}"),
             new(true, "scope", string.Join(' ', flow.Scopes.Select(s => s.Key)))
         });
-        getAccessTokenReq.UpdateBody(body);
-        getAccessTokenReq.UpdateMethod("POST");
-        getAccessTokenReq.UpdateResponseCaptures(new()
-        {
-            new(PororocaHttpResponseValueCaptureType.Body, "oauth2_access_token", null, "$.access_token"),
-            new(PororocaHttpResponseValueCaptureType.Body, "oauth2_access_token_expires_in", null, "$.expires_in"),
-            new(PororocaHttpResponseValueCaptureType.Body, "oauth2_refresh_token", null, "$.refresh_token")
-        });
+        PororocaHttpRequest getAccessTokenReq = new(
+            Name: "Get access token",
+            HttpMethod: "POST",
+            Url: flow.TokenUrl.ToString(),
+            Body: body,
+            ResponseCaptures:
+            [
+                new(PororocaHttpResponseValueCaptureType.Body, "oauth2_access_token", null, "$.access_token"),
+                new(PororocaHttpResponseValueCaptureType.Body, "oauth2_access_token_expires_in", null, "$.expires_in"),
+                new(PororocaHttpResponseValueCaptureType.Body, "oauth2_refresh_token", null, "$.refresh_token")
+            ]);
 
-        PororocaCollectionFolder folder = new("Client credentials");
-        folder.AddRequest(getAccessTokenReq);
-        return folder;
+        return new(
+            Name: "Client credentials",
+            Folders: [],
+            Requests: [ getAccessTokenReq ]);
     }
 
     #endregion

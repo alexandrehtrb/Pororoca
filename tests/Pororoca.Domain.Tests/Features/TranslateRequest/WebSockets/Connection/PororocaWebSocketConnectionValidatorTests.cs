@@ -50,8 +50,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         var varResolver = MockVariableResolver("url", "url/api/qry?x=abc");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
-        PororocaWebSocketConnection ws = new();
-        ws.Url = "{{url}}";
+        PororocaWebSocketConnection ws = new(string.Empty, Url: "{{url}}");
 
         // WHEN
         Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
@@ -67,8 +66,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         var varResolver = MockVariableResolver("url", "ws://www.pudim.com.br");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
-        PororocaWebSocketConnection ws = new();
-        ws.Url = "{{url}}";
+        PororocaWebSocketConnection ws = new(string.Empty, Url: "{{url}}");
 
         // WHEN
         Assert.True(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
@@ -88,9 +86,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         var varResolver = MockVariableResolver("url", "ws://www.pudim.com.br");
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(false, TranslateRequestErrors.WebSocketHttpVersionUnavailable);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
-        PororocaWebSocketConnection ws = new();
-        ws.Url = "{{url}}";
-        ws.HttpVersion = 2.0m;
+        PororocaWebSocketConnection ws = new(string.Empty, Url: "{{url}}", HttpVersion: 2.0m);
 
         // WHEN
         Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
@@ -106,9 +102,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         var varResolver = MockVariableResolver(new());
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
-        PororocaWebSocketConnection ws = new();
-        ws.Url = "ws://www.url.br";
-        ws.HttpVersion = 2.0m;
+        PororocaWebSocketConnection ws = new(string.Empty, Url: "ws://www.url.br", HttpVersion: 2.0m);
 
         // WHEN
         Assert.True(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out _, out string? errorCode));
@@ -129,9 +123,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(false);
         var auth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "prvkeypwd");
-        PororocaWebSocketConnection ws = new();
-        ws.Url = "ws://www.pudim.com.br";
-        ws.CustomAuth = auth;
+        PororocaWebSocketConnection ws = new(string.Empty, Url: "ws://www.pudim.com.br", CustomAuth: auth);
 
         // WHEN
         Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
@@ -152,9 +144,7 @@ public static class PororocaWebSocketConnectionValidatorTests
             { "./private_key.key", true }
         });
         var auth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", "./private_key.key", "prvkeypwd");
-        PororocaWebSocketConnection ws = new();
-        ws.Url = "ws://www.pudim.com.br";
-        ws.CustomAuth = auth;
+        PororocaWebSocketConnection ws = new(string.Empty, Url: "ws://www.pudim.com.br", CustomAuth: auth);
 
         // WHEN
         Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
@@ -175,9 +165,7 @@ public static class PororocaWebSocketConnectionValidatorTests
             { "./private_key.key", false }
         });
         var auth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "./cert.pem", "{{PrivateKeyFilePath}}", "prvkeypwd");
-        PororocaWebSocketConnection ws = new();
-        ws.Url = "ws://www.pudim.com.br";
-        ws.CustomAuth = auth;
+        PororocaWebSocketConnection ws = new(string.Empty, Url: "ws://www.pudim.com.br", CustomAuth: auth);
 
         // WHEN
         Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
@@ -197,9 +185,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
         var auth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, filePassword);
-        PororocaWebSocketConnection ws = new();
-        ws.Url = "ws://www.pudim.com.br";
-        ws.CustomAuth = auth;
+        PororocaWebSocketConnection ws = new(string.Empty, Url: "ws://www.pudim.com.br", CustomAuth: auth);
 
         // WHEN
         Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
@@ -220,9 +206,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
         var auth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pkcs12, "{{CertificateFilePath}}", null, "{{PrivateKeyFilePassword}}");
-        PororocaWebSocketConnection ws = new();
-        ws.Url = "ws://www.pudim.com.br";
-        ws.CustomAuth = auth;
+        PororocaWebSocketConnection ws = new(string.Empty, Url: "ws://www.pudim.com.br", CustomAuth: auth);
 
         // WHEN
         Assert.True(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
@@ -247,9 +231,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
         var auth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", "{{PrivateKeyFilePath}}", "{{PrivateKeyFilePassword}}");
-        PororocaWebSocketConnection ws = new();
-        ws.Url = "ws://www.pudim.com.br";
-        ws.CustomAuth = auth;
+        PororocaWebSocketConnection ws = new(string.Empty, Url: "ws://www.pudim.com.br", CustomAuth: auth);
 
         // WHEN
         Assert.True(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
@@ -273,9 +255,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(true);
         var auth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "{{CertificateFilePath}}", null, "{{FilePassword}}");
-        PororocaWebSocketConnection ws = new();
-        ws.Url = "ws://www.pudim.com.br";
-        ws.CustomAuth = auth;
+        PororocaWebSocketConnection ws = new(string.Empty, Url: "ws://www.pudim.com.br", CustomAuth: auth);
 
         // WHEN
         Assert.True(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
@@ -296,9 +276,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(false);
         var auth = PororocaRequestAuth.MakeWindowsAuth(false, "win_login", "{{win_pwd}}", "win_domain");
-        PororocaWebSocketConnection ws = new();
-        ws.Url = "ws://www.pudim.com.br";
-        ws.CustomAuth = auth;
+        PororocaWebSocketConnection ws = new(string.Empty, Url: "ws://www.pudim.com.br", CustomAuth: auth);
 
         // WHEN
         Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
@@ -319,9 +297,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(false);
         var collectionScopedAuth = PororocaRequestAuth.MakeWindowsAuth(false, "win_login", "{{win_pwd}}", "win_domain");
-        PororocaWebSocketConnection ws = new();
-        ws.Url = "ws://www.pudim.com.br";
-        ws.CustomAuth = PororocaRequestAuth.InheritedFromCollection;
+        PororocaWebSocketConnection ws = new(string.Empty, Url: "ws://www.pudim.com.br", CustomAuth: PororocaRequestAuth.InheritedFromCollection);
 
         // WHEN
         Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), collectionScopedAuth, ws, out var resolvedUri, out string? errorCode));
@@ -341,8 +317,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         var varResolver = MockVariableResolver(new());
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(false);
-        PororocaWebSocketConnection ws = new();
-        ws.Url = "ws://www.pudim.com.br";
+        PororocaWebSocketConnection ws = new(string.Empty, Url: "ws://www.pudim.com.br");
 
         // WHEN
         Assert.True(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out _, out string? errorCode));
@@ -362,9 +337,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         var varResolver = MockVariableResolver(new());
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(false);
-        PororocaWebSocketConnection ws = new();
-        ws.Url = "ws://www.pudim.com.br";
-        ws.CompressionOptions = new(clientMaxWindowBits, true, serverMaxWindowBits, true);
+        PororocaWebSocketConnection ws = new(string.Empty, Url: "ws://www.pudim.com.br", CompressionOptions: new(clientMaxWindowBits, true, serverMaxWindowBits, true));
 
         // WHEN
         Assert.False(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out _, out string? errorCode));
@@ -384,9 +357,7 @@ public static class PororocaWebSocketConnectionValidatorTests
         var varResolver = MockVariableResolver(new());
         var mockedHttpVersionOSVerifier = MockHttpVersionOSVerifier(true, null);
         var mockedFileExistsVerifier = MockFileExistsVerifier(false);
-        PororocaWebSocketConnection ws = new();
-        ws.Url = "ws://www.pudim.com.br";
-        ws.CompressionOptions = new(clientMaxWindowBits, true, serverMaxWindowBits, true);
+        PororocaWebSocketConnection ws = new(string.Empty, Url: "ws://www.pudim.com.br", CompressionOptions: new(clientMaxWindowBits, true, serverMaxWindowBits, true));
 
         // WHEN
         Assert.True(IsValidConnection(mockedHttpVersionOSVerifier, mockedFileExistsVerifier, varResolver.GetEffectiveVariables(), varResolver.CollectionScopedAuth, ws, out _, out string? errorCode));

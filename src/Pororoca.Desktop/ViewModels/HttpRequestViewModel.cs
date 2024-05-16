@@ -436,23 +436,15 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, 
         return body;
     }
 
-    public PororocaHttpRequest ToHttpRequest()
-    {
-        PororocaHttpRequest newReq = new(Name);
-        UpdateRequestWithInputs(newReq);
-        return newReq;
-    }
-
-    private void UpdateRequestWithInputs(PororocaHttpRequest request) =>
-        request.Update(
-            name: Name,
-            httpVersion: RequestHttpVersion,
-            httpMethod: RequestMethod.ToString(),
-            url: RequestUrl,
-            customAuth: RequestAuthDataCtx.ToCustomAuth(),
-            headers: RequestHeadersTableVm.Items.Count == 0 ? null : RequestHeadersTableVm.ConvertItemsToDomain(),
-            body: WrapRequestBodyFromInputs(),
-            captures: ResCapturesTableVm.Items.Count == 0 ? null : ResCapturesTableVm.ConvertItemsToDomain());
+    public PororocaHttpRequest ToHttpRequest() => new(
+        Name: Name,
+        HttpVersion: RequestHttpVersion,
+        HttpMethod: RequestMethod.ToString(),
+        Url: RequestUrl,
+        CustomAuth: RequestAuthDataCtx.ToCustomAuth(),
+        Headers: RequestHeadersTableVm.Items.Count == 0 ? null : RequestHeadersTableVm.ConvertItemsToDomain(),
+        Body: WrapRequestBodyFromInputs(),
+        ResponseCaptures: ResCapturesTableVm.Items.Count == 0 ? null : ResCapturesTableVm.ConvertItemsToDomain());
 
     #endregion
 

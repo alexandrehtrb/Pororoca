@@ -238,11 +238,11 @@ public static class PororocaCollectionTests
 
         col.Requests.Add(new PororocaHttpRequest("HttpReq0"));
         col.Folders.Add(new("Dir1"));
-        col.Folders[0].AddRequest(new PororocaWebSocketConnection("Ws1"));
-        col.Folders[0].AddRequest(new PororocaHttpRepetition("Rep1"));
-        col.Folders[0].AddFolder(new("Dir1/0"));
-        col.Folders[0].AddFolder(new("Dir1/1"));
-        col.Folders[0].Folders[1].AddRequest(new PororocaHttpRequest("HttpReq1/1"));
+        col.Folders[0].Requests.Add(new PororocaWebSocketConnection("Ws1"));
+        col.Folders[0].Requests.Add(new PororocaHttpRepetition("Rep1"));
+        col.Folders[0].Folders.Add(new("Dir1/0"));
+        col.Folders[0].Folders.Add(new("Dir1/1"));
+        col.Folders[0].Folders[1].Requests.Add(new PororocaHttpRequest("HttpReq1/1"));
 
         return col;
     }

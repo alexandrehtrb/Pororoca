@@ -339,17 +339,18 @@ public static class PostmanCollectionV21ExporterTests
     public static void Should_convert_pororoca_req_to_postman_req_correctly()
     {
         // GIVEN
-        PororocaHttpRequest req = new("Req1");
-        PororocaKeyValueParam h1 = new(true, "Key1", "Value1");
-        PororocaKeyValueParam h2 = new(false, "Key2", "Value2");
-        req.UpdateHeaders(new[] { h1, h2 });
-        var auth = PororocaRequestAuth.MakeBasicAuth("usr", "pwd");
-        req.UpdateCustomAuth(auth);
-        req.UpdateMethod("POST");
-        req.UpdateUrl("http://www.abc.com.br");
         PororocaHttpRequestBody body = new();
         body.SetRawContent("[]", "application/json");
-        req.UpdateBody(body);
+        PororocaHttpRequest req = new(
+            Name: "Req1",
+            HttpMethod: "POST",
+            Url: "http://www.abc.com.br",
+            Headers: [
+                new(true, "Key1", "Value1"),
+                new(false, "Key2", "Value2")
+            ],
+            Body: body,
+            CustomAuth: PororocaRequestAuth.MakeBasicAuth("usr", "pwd"));
 
         // WHEN
         var postmanReq = ConvertToPostmanItem(req);
@@ -435,19 +436,18 @@ public static class PostmanCollectionV21ExporterTests
     private static PororocaCollection CreateTestCollection()
     {
         PororocaCollection col = new(testGuid, testName, DateTimeOffset.Now);
-        PororocaHttpRequest req1 = new("Req1");
-        req1.UpdateUrl("http://www.abc.com.br");
-        PororocaHttpRequest req2 = new("Req2");
-        req2.UpdateUrl("https://www.ghi.com.br");
+
+        PororocaHttpRequest req1 = new("Req1", Url: "http://www.abc.com.br");
+        PororocaHttpRequest req2 = new("Req2", Url: "https://www.ghi.com.br");
         PororocaCollectionFolder folder1 = new("Folder1");
-        folder1.AddRequest(req2);
+        folder1.Requests.Add(req2);
         col.Requests.Add(req1);
         col.Folders.Add(folder1);
-        col.Variables.AddRange(new PororocaVariable[]
-        {
+        col.Variables.AddRange(
+        [
             new(true, "Key1", "Value1", false),
             new(false, "Key2", "Value2", true)
-        });
+        ]);
         return col;
     }
 

@@ -61,12 +61,10 @@ public static class PororocaCollectionExporterTests
     private static PororocaCollection CreateTestCollection()
     {
         PororocaCollection col = new(testGuid, testName, DateTimeOffset.Now);
-        PororocaHttpRequest req1 = new("Req1");
-        req1.UpdateUrl("http://www.abc.com.br");
-        PororocaHttpRequest req2 = new("Req2");
-        req2.UpdateUrl("https://www.ghi.com.br");
+        PororocaHttpRequest req1 = new("Req1", Url: "http://www.abc.com.br");
+        PororocaHttpRequest req2 = new("Req2", Url: "https://www.ghi.com.br");
         PororocaCollectionFolder folder1 = new("Folder1");
-        folder1.AddRequest(req2);
+        folder1.Requests.Add(req2);
         col.Requests.Add(req1);
         col.Folders.Add(folder1);
         col.Variables.AddRange(new PororocaVariable[]

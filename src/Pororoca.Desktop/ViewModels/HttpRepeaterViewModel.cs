@@ -465,15 +465,14 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
     protected override void CopyThis() =>
         ClipboardArea.Instance.PushToCopy(ToHttpRepetition());
 
-    internal PororocaHttpRepetition ToHttpRepetition() => new(Name)
-    {
-        BaseRequestPath = BaseRequestPath ?? string.Empty,
-        RepetitionMode = RepetitionMode,
-        NumberOfRepetitions = RepetitionMode == PororocaRepetitionMode.Sequential ? null : NumberOfRepetitionsToExecute,
-        MaxDop = RepetitionMode == PororocaRepetitionMode.Sequential ? null : MaxDop,
-        DelayInMs = DelayInMs == 0 ? null : DelayInMs,
-        InputData = RepetitionMode == PororocaRepetitionMode.Simple ? null : new((PororocaRepetitionInputDataType)InputDataType!, InputDataRawText, InputDataFileSrcPath)
-    };
+    internal PororocaHttpRepetition ToHttpRepetition() => new(
+        Name: Name,
+        BaseRequestPath: BaseRequestPath ?? string.Empty,
+        RepetitionMode: RepetitionMode,
+        NumberOfRepetitions: RepetitionMode == PororocaRepetitionMode.Sequential ? null : NumberOfRepetitionsToExecute,
+        MaxDop: RepetitionMode == PororocaRepetitionMode.Sequential ? null : MaxDop,
+        DelayInMs: DelayInMs == 0 ? null : DelayInMs,
+        InputData: RepetitionMode == PororocaRepetitionMode.Simple ? null : new((PororocaRepetitionInputDataType)InputDataType!, InputDataRawText, InputDataFileSrcPath));
 
     private void OnLanguageChanged()
     {

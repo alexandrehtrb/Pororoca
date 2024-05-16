@@ -47,8 +47,8 @@ public sealed record PororocaCollection
     public PororocaCollection Copy(bool preserveIds) => this with
     {
         Id = preserveIds ? Id : Guid.NewGuid(),
-        Folders = Folders.Select(f => (PororocaCollectionFolder)f.Clone()).ToList(),
-        Requests = Requests.Select(f => (PororocaRequest)f.Clone()).ToList(),
+        Folders = Folders.Select(f => f.Copy()).ToList(),
+        Requests = Requests.Select(f => f.CopyAbstract()).ToList(),
         Variables = Variables.Select(v => v.Copy()).ToList(),
         Environments = Environments.Select(e => e.Copy(preserveIds)).ToList(),
         CollectionScopedAuth = CollectionScopedAuth?.Copy(),

@@ -42,12 +42,12 @@ public sealed class ClipboardArea : ViewModelBase
         CanPasteWebSocketClientMessage = this.copiedDomainObjs.Any(o => o is PororocaWebSocketClientMessage);
     }
 
-    public IList<PororocaCollectionItem> FetchCopiesOfFoldersAndReqs() =>
+    public IList<object> FetchCopiesOfFoldersAndReqs() =>
         this.copiedDomainObjs.Where(o => o is PororocaCollectionFolder || o is PororocaRequest)
                              .Select(o =>
                              {
-                                if (o is PororocaCollectionFolder f) return (PororocaCollectionItem)f.Clone();
-                                else if (o is PororocaRequest r) return (PororocaCollectionItem)r.Clone();
+                                if (o is PororocaCollectionFolder f) return (object)f.Copy();
+                                else if (o is PororocaRequest r) return (object)r.CopyAbstract();
                                 else throw new InvalidCastException();
                              })
                              .ToList();
