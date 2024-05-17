@@ -47,7 +47,7 @@ Logo e arte criados por [Anderson Martins](https://www.behance.net/am-dsgn).
 
 Você pode contribuir com esse projeto através de pull requests, abrindo issues, reportando bugs e sugerindo melhorias. Divulgue o Pororoca para seus amigos se você gostar dele!
 
-Leia [aqui](CONTRIBUTING.md) o tutorial sobre como contribuir com o código.
+Leia [aqui](CONTRIBUTING.md) o tutorial sobre como contribuir com o código e desenvolver localmente.
 
 Entre em contato se desejar suporte mais avançado, customizações especiais ou treinamentos.
 
