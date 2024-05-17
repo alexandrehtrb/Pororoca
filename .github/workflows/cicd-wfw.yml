@@ -453,14 +453,14 @@ jobs:
     # upload CD artifacts
 
     - name: Upload artifacts to workflow results
-      if: ${{ inputs.runCD && (inputs.uploadArtifactToRelease == false) }} # no need if uploading to release
+      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) }} # no need if uploading to release
       uses: actions/upload-artifact@v4
       with:
         compression-level: 0 # no need to compress because steps above already compress
         path: './out/*'
 
     - name: Upload artifacts to release
-      if: ${{ inputs.runCD && (inputs.uploadArtifactToRelease == true) }}
+      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == true) }}
       shell: pwsh
       run: |
         $outputFiles = $(Get-ChildItem ./out/ | Select FullName)

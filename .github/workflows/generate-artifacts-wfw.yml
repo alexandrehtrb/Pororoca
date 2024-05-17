@@ -51,11 +51,11 @@ jobs:
     with:
       os: ubuntu-latest
       runCD: true
-      enableUITesting: inputs.enableDesktopUITesting
-      producePororocaTestNuget: inputs.nuget
-      produceDesktopLinuxX64: inputs.linux-x64
-      produceDesktopDebianX64: inputs.linux-x64-debian
-      produceDesktopMacOSX: inputs.osx
+      enableUITesting: ${{ inputs.enableDesktopUITesting }}
+      producePororocaTestNuget: ${{ inputs.nuget }}
+      produceDesktopLinuxX64: ${{ inputs.linux-x64 }}
+      produceDesktopDebianX64: ${{ inputs.linux-x64-debian }}
+      produceDesktopMacOSX: ${{ inputs.osx }}
 
   windows:
     if: ${{ inputs.win-x64-installer || inputs.win-x64-portable || inputs.win-x86-installer || inputs.win-x86-portable }}
@@ -63,8 +63,8 @@ jobs:
     with:
       os: windows-latest # running on Windows because we need NSIS
       runCD: true
-      enableUITesting: inputs.enableDesktopUITesting
-      produceDesktopWinX64Installer: inputs.win-x64-installer
-      produceDesktopWinX64Portable: inputs.win-x64-portable
-      produceDesktopWinX86Installer: inputs.win-x86-installer
-      produceDesktopWinX86Portable: inputs.win-x86-portable
+      enableUITesting: ${{ inputs.enableDesktopUITesting }}
+      produceDesktopWinX64Installer: ${{ inputs.win-x64-installer }}
+      produceDesktopWinX64Portable: ${{ inputs.win-x64-portable }}
+      produceDesktopWinX86Installer: ${{ inputs.win-x86-installer }}
+      produceDesktopWinX86Portable: ${{ inputs.win-x86-portable }}
