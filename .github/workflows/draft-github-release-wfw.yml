@@ -81,76 +81,28 @@ jobs:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PR_NUMBER: ${{ github.event.number }}
 
-  nuget-and-sboms:
-    needs: draft-github-release
-    uses: ./.github/workflows/generate-nuget-and-sboms-wfw.yml
+  generate-nuget-linux-osx:
+    uses: ./.github/workflows/cicd-wfw.yml
     with:
-      uploadArtifactsToRelease: true
+      os: ubuntu-latest
       postUnitTestsCoverageInPR: true
       prNumber: ${{ github.event.number }}
-
-  linux-x64:
-    needs: draft-github-release
-    uses: ./.github/workflows/generate-desktop-wfw.yml
-    with:
-      os: ubuntu-latest
-      rid: linux-x64
+      runCD: true
+      uploadArtifactsToRelease: true
       enableUITesting: false
-      uploadArtifactToRelease: true
+      producePororocaTestNuget: true
+      produceDesktopLinuxX64: true
+      produceDesktopDebianX64: true
+      produceDesktopMacOSX: true
 
-  linux-x64-debian:
-    needs: draft-github-release
-    uses: ./.github/workflows/generate-desktop-wfw.yml
-    with:
-      os: ubuntu-latest
-      rid: linux-x64
-      packaging: debian
-      enableUITesting: false
-      uploadArtifactToRelease: true
-
-  osx:
-    needs: draft-github-release
-    uses: ./.github/workflows/generate-desktop-wfw.yml
-    with:
-      os: ubuntu-latest
-      rid: osx-x64
-      enableUITesting: false
-      uploadArtifactToRelease: true
-
-  win-x64-installer:
-    needs: draft-github-release
-    uses: ./.github/workflows/generate-desktop-wfw.yml
+  generate-windows:
+    uses: ./.github/workflows/cicd-wfw.yml
     with:
       os: windows-latest # running on Windows because we need NSIS
-      rid: win-x64
-      packaging: nsis
+      runCD: true
+      uploadArtifactsToRelease: true
       enableUITesting: false
-      uploadArtifactToRelease: true
-
-  win-x64-portable:
-    needs: draft-github-release
-    uses: ./.github/workflows/generate-desktop-wfw.yml
-    with:
-      os: ubuntu-latest # .NET 8 allows publishing for Windows on Linux machines
-      rid: win-x64
-      enableUITesting: false
-      uploadArtifactToRelease: true
-
-  win-x86-installer:
-    needs: draft-github-release
-    uses: ./.github/workflows/generate-desktop-wfw.yml
-    with:
-      os: windows-latest # running on Windows because we need NSIS
-      rid: win-x86
-      packaging: nsis
-      enableUITesting: false
-      uploadArtifactToRelease: true
-
-  win-x86-portable:
-    needs: draft-github-release
-    uses: ./.github/workflows/generate-desktop-wfw.yml
-    with:
-      os: ubuntu-latest # .NET 8 allows publishing for Windows on Linux machines
-      rid: win-x86
-      enableUITesting: false
-      uploadArtifactToRelease: true
+      produceDesktopWinX64Installer: true
+      produceDesktopWinX64Portable: true
+      produceDesktopWinX86Installer: true
+      produceDesktopWinX86Portable: true
