@@ -59,7 +59,7 @@ on:
 
 jobs:
   cicd:
-    runs-on: inputs.os
+    runs-on: ${{ inputs.os }}
 
     # start CI steps
 
@@ -178,16 +178,42 @@ jobs:
       if: ${{ inputs.runCD }}
       shell: pwsh
       run: |
-        $arr = @()
-        if ($env:LINUX_X64)         { $arr += @{ rid="linux-x64"; packaging=$null } };
-        if ($env:DEBIAN_X64)        { $arr += @{ rid="linux-x64"; packaging="debian" } };
-        if ($env:OSX)               { $arr += @{   rid="osx-x64"; packaging=$null } };
-        if ($env:WIN_X64_INSTALLER) { $arr += @{   rid="win-x64"; packaging="nsis" } };
-        if ($env:WIN_X64_PORTABLE)  { $arr += @{   rid="win-x64"; packaging=$null } };
-        if ($env:WIN_X86_INSTALLER) { $arr += @{   rid="win-x86"; packaging="nsis" } };
-        if ($env:WIN_X86_PORTABLE)  { $arr += @{   rid="win-x86"; packaging=$null } };
+        echo "LINUX_X64 = $LINUX_X64";
+        echo "DEBIAN_X64 = $DEBIAN_X64";
+        echo "OSX = $OSX";
+        echo "WIN_X64_INSTALLER = $WIN_X64_INSTALLER";
+        echo "WIN_X64_PORTABLE = $WIN_X64_PORTABLE";
+        echo "WIN_X86_INSTALLER = $WIN_X86_INSTALLER";
+        echo "WIN_X86_PORTABLE = $WIN_X86_PORTABLE";
 
+        $arr = @()
+        if ($env:LINUX_X64 -eq 'true')         { $arr += @{ rid="linux-x64"; packaging=$null } };
+        if ($env:DEBIAN_X64 -eq 'true')        { $arr += @{ rid="linux-x64"; packaging="debian" } };
+        if ($env:OSX -eq 'true')               { $arr += @{   rid="osx-x64"; packaging=$null } };
+        if ($env:WIN_X64_INSTALLER -eq 'true') { $arr += @{   rid="win-x64"; packaging="nsis" } };
+        if ($env:WIN_X64_PORTABLE -eq 'true')  { $arr += @{   rid="win-x64"; packaging=$null } };
+        if ($env:WIN_X86_INSTALLER -eq 'true') { $arr += @{   rid="win-x86"; packaging="nsis" } };
+        if ($env:WIN_X86_PORTABLE -eq 'true')  { $arr += @{   rid="win-x86"; packaging=$null } };
+
+        $hasOSXRelease = if ($env:OSX -eq 'true') { 1 } else { 0 }
+        $hasDebianRelease = if ($env:DEBIAN_X64 -eq 'true') { 1 } else { 0 }
+        $hasLinuxRelease = if (($env:LINUX_X64 -eq 'true') || $hasDebianRelease) { 1 } else { 0 }
+        $hasWinInstallerRelease = if (($env:WIN_X64_INSTALLER -eq 'true') || ($env:WIN_X86_INSTALLER -eq 'true')) { 1 } else { 0 }
+        $hasPortableRelease = if (($env:LINUX_X64 -eq 'true') || ($env:OSX -eq 'true') || ($env:WIN_X64_PORTABLE -eq 'true') || ($env:WIN_X86_PORTABLE -eq 'true')) { 1 } else { 0 }
         $arrJson = $arr | ConvertTo-Json
+
+        echo "HAS_OSX_RELEASE=$hasOSXRelease"
+        echo "HAS_DEBIAN_RELEASE=$hasDebianRelease"
+        echo "HAS_LINUX_RELEASE=$hasLinuxRelease"
+        echo "HAS_WIN_INSTALLER_RELEASE=$hasWinInstallerRelease"
+        echo "HAS_PORTABLE_RELEASE=$hasPortableRelease"
+        echo "DESKTOP_ARTIFACTS_LIST=${arrJson}"
+
+        echo "HAS_OSX_RELEASE=$hasOSXRelease" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        echo "HAS_DEBIAN_RELEASE=$hasDebianRelease" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        echo "HAS_LINUX_RELEASE=$hasLinuxRelease" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        echo "HAS_WIN_INSTALLER_RELEASE=$hasWinInstallerRelease" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        echo "HAS_PORTABLE_RELEASE=$hasPortableRelease" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
         echo "DESKTOP_ARTIFACTS_LIST=${arrJson}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
       env:
         LINUX_X64: ${{ inputs.produceDesktopLinuxX64 }}
@@ -199,6 +225,7 @@ jobs:
         WIN_X86_INSTALLER: ${{ inputs.produceDesktopWinX86Installer }}
 
     - name: Read desktop program version
+      if: ${{ inputs.runCD }}
       shell: pwsh
       run: |
         ([XML]$desktopCsprojXml = Get-Content ./src/Pororoca.Desktop/Pororoca.Desktop.csproj)
@@ -206,10 +233,12 @@ jobs:
         echo "VERSION_NAME=${versionName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Generate Pororoca.Desktop SBOM file
+      if: ${{ inputs.runCD }}
       shell: pwsh
       run: dotnet CycloneDX ./src/Pororoca.Desktop/Pororoca.Desktop.csproj -o ./out/ -f sbom_pororoca_desktop.json -sv $env:VERSION_NAME --json
 
     - name: Generate Pororoca Desktop dlls
+      if: ${{ inputs.runCD }}
       shell: pwsh
       run: |
         $list = $env:DESKTOP_ARTIFACTS_LIST | ConvertFrom-Json;
@@ -219,6 +248,12 @@ jobs:
           $PUBLISH_SINGLE_FILE = $artifact.rid.StartsWith("win") || $artifact.rid.StartsWith("linux");
           $WINDOWS_INSTALLER_RELEASE = $artifact.rid.StartsWith("win") && ($artifact.packaging -eq "nsis");
           $DEBIAN_INSTALLER_RELEASE = ($artifact.rid -eq "linux-x64") && ($artifact.packaging -eq "debian");
+
+          Write-Host "Generating Pororoca.Desktop DLLs for $($artifact.rid)."
+          Write-Host "Output folder: $OUTPUT_FOLDER"
+          Write-Host "Publish single file: $PUBLISH_SINGLE_FILE"
+          Write-Host "Win installer release: $WINDOWS_INSTALLER_RELEASE"
+          Write-Host "Debian installer release: $DEBIAN_INSTALLER_RELEASE"
 
           [void](New-Item $OUTPUT_FOLDER -ItemType Directory -ErrorAction Ignore);
           dotnet publish ./src/Pororoca.Desktop/Pororoca.Desktop.csproj `
@@ -259,7 +294,7 @@ jobs:
         ENABLE_UI_TESTING: ${{ inputs.enableUITesting }}
 
     - name: Make Pororoca.app structure (Mac OSX only)
-      if: ${{ inputs.runCD }}
+      if: ${{ inputs.runCD && env.HAS_OSX_RELEASE == '1' }}
       shell: pwsh
       run: |
         $list = $env:DESKTOP_ARTIFACTS_LIST | ConvertFrom-Json;
@@ -281,7 +316,7 @@ jobs:
 
     # so Linux users can create desktop launchers
     - name: Copy logo (Linux only)
-      if: ${{ inputs.runCD }}
+      if: ${{ inputs.runCD && env.HAS_LINUX_RELEASE == '1' }}
       shell: pwsh
       run: |
         $list = $env:DESKTOP_ARTIFACTS_LIST | ConvertFrom-Json;
@@ -295,7 +330,7 @@ jobs:
         }
 
     - name: Copy icon for Windows installer
-      if: ${{ inputs.runCD }}
+      if: ${{ inputs.runCD && env.HAS_WIN_INSTALLER_RELEASE == '1' }}
       shell: pwsh
       run: |
         $list = $env:DESKTOP_ARTIFACTS_LIST | ConvertFrom-Json;
@@ -320,7 +355,7 @@ jobs:
         }
 
     - name: Compress package
-      if: ${{ inputs.runCD }}
+      if: ${{ inputs.runCD && env.HAS_PORTABLE_RELEASE == '1' }}
       shell: pwsh
       run: |
         $list = $env:DESKTOP_ARTIFACTS_LIST | ConvertFrom-Json;
@@ -352,7 +387,7 @@ jobs:
         }
 
     - name: Make installer for Windows
-      if: ${{ inputs.runCD }}
+      if: ${{ inputs.runCD && env.HAS_WIN_INSTALLER_RELEASE == '1' }}
       shell: pwsh
       run: |
         $list = $env:DESKTOP_ARTIFACTS_LIST | ConvertFrom-Json;
@@ -377,7 +412,7 @@ jobs:
         }
 
     - name: Make Debian .deb package
-      if: ${{ inputs.runCD }}
+      if: ${{ inputs.runCD && env.HAS_DEBIAN_RELEASE == '1' }}
       shell: pwsh
       run: |
         $list = $env:DESKTOP_ARTIFACTS_LIST | ConvertFrom-Json;
