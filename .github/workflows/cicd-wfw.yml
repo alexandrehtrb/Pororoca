@@ -142,6 +142,11 @@ jobs:
 
     # finished CI steps
 
+    # CD
+    - name: Install CycloneDX SBOM tool
+      if: ${{ inputs.runCD }}
+      run: dotnet tool install --global CycloneDX
+
     # start CD steps - NuGet
 
     - name: Read NuGet version
