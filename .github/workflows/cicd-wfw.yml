@@ -1,0 +1,4 @@
+name: CI-CD
+
+on:
+  workflow_call:
