@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using System.Net;
 using System.Threading.Channels;
-using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -69,7 +69,7 @@ public sealed class PororocaTestLibraryRepetitionTests
     private async Task AssertSimpleRepetitionAsync(ChannelReader<PororocaHttpRepetitionResult> channelReader)
     {
         int count = 0;
-        TimeSpan sumOfAllDurations = TimeSpan.Zero;
+        var sumOfAllDurations = TimeSpan.Zero;
         Stopwatch sw = new();
         sw.Start();
         await foreach (var result in channelReader.ReadAllAsync())
@@ -174,7 +174,7 @@ public sealed class PororocaTestLibraryRepetitionTests
     private async Task AssertSequentialRepetitionAsync(ChannelReader<PororocaHttpRepetitionResult> channelReader)
     {
         int count = 0;
-        TimeSpan sumOfAllDurations = TimeSpan.Zero;
+        var sumOfAllDurations = TimeSpan.Zero;
         Stopwatch sw = new();
         sw.Start();
         await foreach (var result in channelReader.ReadAllAsync())
@@ -328,11 +328,11 @@ public sealed class PororocaTestLibraryRepetitionTests
 
     private async Task AssertRandomRepetitionAsync(ChannelReader<PororocaHttpRepetitionResult> channelReader)
     {
-        string[] possibleMyTxtValues = ["ABC","DEF","GHI","JKL","MNO","PQR","STU","VWX","YZA","BCD"];
-        string[] possibleMyIntValues = ["123","456","789","012","345","678","901"];
+        string[] possibleMyTxtValues = ["ABC", "DEF", "GHI", "JKL", "MNO", "PQR", "STU", "VWX", "YZA", "BCD"];
+        string[] possibleMyIntValues = ["123", "456", "789", "012", "345", "678", "901"];
 
         int count = 0;
-        TimeSpan sumOfAllDurations = TimeSpan.Zero;
+        var sumOfAllDurations = TimeSpan.Zero;
         Stopwatch sw = new();
         sw.Start();
         await foreach (var result in channelReader.ReadAllAsync())

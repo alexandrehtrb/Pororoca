@@ -3,9 +3,9 @@ using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.TranslateRequest;
 using Pororoca.Domain.Features.VariableResolution;
 using Xunit;
+using static Pororoca.Domain.Features.Entities.Pororoca.Http.PororocaHttpRequestBody;
 using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonValidator;
 using static Pororoca.Domain.Features.TranslateRequest.Http.PororocaHttpRequestValidator;
-using static Pororoca.Domain.Features.Entities.Pororoca.Http.PororocaHttpRequestBody;
 
 namespace Pororoca.Domain.Tests.Features.TranslateRequest.Http;
 

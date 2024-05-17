@@ -7,14 +7,9 @@ public sealed class CollectionFolderViewModel : RequestsAndFoldersParentViewMode
 {
 
     public CollectionFolderViewModel(ICollectionOrganizationItemParentViewModel parentVm,
-                                     PororocaCollectionFolder folder) : base(parentVm, folder.Name)
-    {
-        #region COLLECTION FOLDER
-
+                                     PororocaCollectionFolder folder) : base(parentVm, folder.Name) =>
         AddInitialFoldersAndRequests(folder.Folders, folder.Requests);
 
-        #endregion
-    }
 
     #region COLLECTION ORGANIZATION
 

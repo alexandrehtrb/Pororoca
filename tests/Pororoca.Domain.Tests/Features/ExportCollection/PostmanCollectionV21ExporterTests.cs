@@ -2,8 +2,8 @@ using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Postman;
 using Xunit;
-using static Pororoca.Domain.Features.ExportCollection.PostmanCollectionV21Exporter;
 using static Pororoca.Domain.Features.Entities.Pororoca.Http.PororocaHttpRequestBody;
+using static Pororoca.Domain.Features.ExportCollection.PostmanCollectionV21Exporter;
 
 namespace Pororoca.Domain.Tests.Features.ExportCollection;
 

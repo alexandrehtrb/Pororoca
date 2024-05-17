@@ -20,8 +20,8 @@ public record PororocaWebSocketClientMessage
 
 #nullable disable warnings
     // Parameterless constructor for JSON deserialization
-    public PororocaWebSocketClientMessage() : this(PororocaWebSocketMessageType.Text, string.Empty){}
+    public PororocaWebSocketClientMessage() : this(PororocaWebSocketMessageType.Text, string.Empty) { }
 #nullable restore warnings
 
-    public PororocaWebSocketClientMessage Copy() => this with {};
+    public PororocaWebSocketClientMessage Copy() => this with { };
 }

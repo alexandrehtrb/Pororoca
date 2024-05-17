@@ -19,7 +19,7 @@ public sealed record PororocaWebSocketClientMessageToSend
     PororocaWebSocketMessageRawContentSyntax? RawContentSyntax = null,
     string? FileSrcPath = null,
     bool DisableCompressionForThis = false
-): PororocaWebSocketClientMessage(MessageType, Name, ContentMode, RawContent, RawContentSyntax, FileSrcPath, DisableCompressionForThis), IDisposable
+) : PororocaWebSocketClientMessage(MessageType, Name, ContentMode, RawContent, RawContentSyntax, FileSrcPath, DisableCompressionForThis), IDisposable
 {
     public PororocaWebSocketClientMessageToSend(PororocaWebSocketClientMessage templateWsCliMsg, Stream bytesStream, string? resolvedText) :
         this(MessageType: templateWsCliMsg.MessageType,
@@ -32,7 +32,8 @@ public sealed record PororocaWebSocketClientMessageToSend
              ContentMode: templateWsCliMsg.ContentMode,
              RawContent: templateWsCliMsg.RawContent,
              RawContentSyntax: templateWsCliMsg.RawContentSyntax,
-             FileSrcPath: templateWsCliMsg.FileSrcPath){}
+             FileSrcPath: templateWsCliMsg.FileSrcPath)
+    { }
 
     public WebSocketMessageFlags DetermineFlags()
     {

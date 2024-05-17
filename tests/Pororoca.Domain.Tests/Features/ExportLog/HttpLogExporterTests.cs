@@ -3,8 +3,8 @@ using System.Net;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Xunit;
-using static Pororoca.Domain.Features.ExportLog.HttpLogExporter;
 using static Pororoca.Domain.Features.Entities.Pororoca.Http.PororocaHttpRequestBody;
+using static Pororoca.Domain.Features.ExportLog.HttpLogExporter;
 
 namespace Pororoca.Domain.Tests.Features.ExportLog;
 
@@ -72,7 +72,7 @@ Authorization: Basic dXNyOnB3ZA==
         // GIVEN
         var res = GenerateResponse(resolvedReq: new("",
             Url: "https://httpbin.org/headers",
-            Headers: [ new(true, "MyHeader", "MyHeaderValue") ]));
+            Headers: [new(true, "MyHeader", "MyHeaderValue")]));
 
         // WHEN, THEN
         Assert.Equal(
@@ -241,7 +241,7 @@ POST /anything HTTP/1.1
 Host: httpbin.org
 Accept-Encoding: gzip, deflate, br
 Content-Type: multipart/form-data
-Content-Length: "+contentLength+@"
+Content-Length: " + contentLength + @"
 
 --9e0248d8-f117-404e-a46b-51f0382d00bd
 Content-Type: text/plain; charset=utf-8
@@ -293,7 +293,7 @@ POST /anything HTTP/1.1
 Host: httpbin.org
 Accept-Encoding: gzip, deflate, br
 Content-Type: multipart/form-data
-Content-Length: "+contentLength+@"
+Content-Length: " + contentLength + @"
 
 --9e0248d8-f117-404e-a46b-51f0382d00bd
 Content-Type: text/plain; charset=utf-8

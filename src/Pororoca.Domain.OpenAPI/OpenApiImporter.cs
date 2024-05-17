@@ -468,7 +468,7 @@ public static class OpenApiImporter
         return new(
             Name: "Authorization code",
             Folders: [],
-            Requests: [ getAuthCodeReq, getAccessTokenReq, renewAccessTokenReq ]);
+            Requests: [getAuthCodeReq, getAccessTokenReq, renewAccessTokenReq]);
     }
 
     private static PororocaCollectionFolder GenerateOAuth2ClientCredentialsRequestsFolder(OpenApiOAuthFlow flow)
@@ -494,7 +494,7 @@ public static class OpenApiImporter
         return new(
             Name: "Client credentials",
             Folders: [],
-            Requests: [ getAccessTokenReq ]);
+            Requests: [getAccessTokenReq]);
     }
 
     #endregion
@@ -512,7 +512,7 @@ public static class OpenApiImporter
         if (val is OpenApiObject o)
         {
             JsonObject obj = [];
-            foreach (var (k,v) in o)
+            foreach (var (k, v) in o)
             {
                 obj.Add(k, ConvertOpenApiAnyToObject(v));
             }
@@ -599,7 +599,7 @@ public static class OpenApiImporter
         else if (schema.Type == "object")
         {
             JsonObject obj = [];
-            foreach (var (k,v) in schema.Properties)
+            foreach (var (k, v) in schema.Properties)
             {
                 obj.Add(k, ConvertOpenApiSchemaToObject(v));
             }

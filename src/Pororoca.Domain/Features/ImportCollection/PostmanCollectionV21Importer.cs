@@ -45,7 +45,7 @@ public static class PostmanCollectionV21Importer
             };
             foreach (var item in postmanCollection.Items)
             {
-                var convertedItem = ConvertToPororocaCollectionItem(item);
+                object convertedItem = ConvertToPororocaCollectionItem(item);
                 if (convertedItem is PororocaCollectionFolder folder)
                     myCol.Folders.Add(folder);
                 else if (convertedItem is PororocaHttpRequest request)
@@ -104,7 +104,7 @@ public static class PostmanCollectionV21Importer
             {
                 foreach (var subItem in item.Items)
                 {
-                    var convertedSubItem = ConvertToPororocaCollectionItem(subItem);
+                    object convertedSubItem = ConvertToPororocaCollectionItem(subItem);
                     if (convertedSubItem is PororocaCollectionFolder subFolder)
                         folder.Folders.Add(subFolder);
                     else if (convertedSubItem is PororocaHttpRequest subRequest)
@@ -169,7 +169,6 @@ public static class PostmanCollectionV21Importer
             return mimeType ?? DefaultMimeTypeForBinary;
         }
 
-        PororocaHttpRequestBody myBody = new();
         switch (body?.Mode)
         {
             case PostmanRequestBodyMode.Raw:

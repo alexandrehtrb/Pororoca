@@ -32,7 +32,7 @@ public sealed record PororocaCollectionFolder
     }
 #nullable restore warnings
 
-    public PororocaCollectionFolder(string name) : this(name,[],[]){}
+    public PororocaCollectionFolder(string name) : this(name, [], []) { }
 
     public PororocaCollectionFolder Copy() => this with
     {

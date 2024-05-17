@@ -21,7 +21,7 @@ public sealed record PororocaHttpRequestBody
 )
 {
     // Parameterless constructor for JSON deserialization
-    public PororocaHttpRequestBody() : this(PororocaHttpRequestBodyMode.Raw){}
+    public PororocaHttpRequestBody() : this(PororocaHttpRequestBodyMode.Raw) { }
 
     public static PororocaHttpRequestBody MakeRawContent(string rawContent, string contentType) =>
         new(Mode: PororocaHttpRequestBodyMode.Raw,

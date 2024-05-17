@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Security.Authentication;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.Behaviors;
+using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
@@ -20,13 +21,12 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using static Pororoca.Desktop.Localization.TimeTextFormatter;
 using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
+using static Pororoca.Domain.Features.Common.HttpStatusCodeFormatter;
 using static Pororoca.Domain.Features.Common.HttpVersionFormatter;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage.PororocaWebSocketClientMessageTranslator;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage.PororocaWebSocketClientMessageValidator;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection.PororocaWebSocketConnectionTranslator;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection.PororocaWebSocketConnectionValidator;
-using static Pororoca.Domain.Features.Common.HttpStatusCodeFormatter;
-using Pororoca.Desktop.Converters;
 
 namespace Pororoca.Desktop.ViewModels;
 

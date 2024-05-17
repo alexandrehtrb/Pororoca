@@ -46,9 +46,12 @@ public sealed class ClipboardArea : ViewModelBase
         this.copiedDomainObjs.Where(o => o is PororocaCollectionFolder || o is PororocaRequest)
                              .Select(o =>
                              {
-                                if (o is PororocaCollectionFolder f) return (object)f.Copy();
-                                else if (o is PororocaRequest r) return (object)r.CopyAbstract();
-                                else throw new InvalidCastException();
+                                 if (o is PororocaCollectionFolder f)
+                                     return (object)f.Copy();
+                                 else if (o is PororocaRequest r)
+                                     return (object)r.CopyAbstract();
+                                 else
+                                     throw new InvalidCastException();
                              })
                              .ToList();
 

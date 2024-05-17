@@ -49,7 +49,7 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
 
     internal void CutOrCopySelected(bool falseIfCutTrueIfCopy)
     {
-        if (SelectedItems is not null && SelectedItems.Count > 0)
+        if (SelectedItems is not null && !SelectedItems.IsEmpty)
         {
             // needs to generate a new array because of concurrency problems
             var vars = SelectedItems.Select(x => x.Key).ToArray();
@@ -79,7 +79,7 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
 
     private void DuplicateSelected()
     {
-        if (SelectedItems is not null && SelectedItems.Count > 0)
+        if (SelectedItems is not null && !SelectedItems.IsEmpty)
         {
             // needs to generate a new array because of concurrency problems
             var varsToDuplicate = SelectedItems.Select(x => x.Key).ToArray();
@@ -94,7 +94,7 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
 
     internal void DeleteSelected()
     {
-        if (SelectedItems is not null && SelectedItems.Count > 0)
+        if (SelectedItems is not null && !SelectedItems.IsEmpty)
         {
             // needs to generate a new array because of concurrency problems
             var varsToDelete = SelectedItems.Select(x => x.Key).ToArray();

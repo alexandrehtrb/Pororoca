@@ -9,7 +9,7 @@ internal class PostmanEnvironmentVariable
     public string? Value { get; set; }
 
     public string? Type { get; set; }
-    
+
     public bool Enabled { get; set; }
 }
 

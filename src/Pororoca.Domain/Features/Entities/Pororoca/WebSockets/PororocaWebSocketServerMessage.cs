@@ -10,7 +10,7 @@ public sealed record PororocaWebSocketServerMessage
     string? Text,
     PororocaWebSocketMessageRawContentSyntax? TextSyntax,
     DateTimeOffset? ReceivedAtUtc
-): PororocaWebSocketMessage(PororocaWebSocketMessageDirection.FromServer, MessageType)
+) : PororocaWebSocketMessage(PororocaWebSocketMessageDirection.FromServer, MessageType)
 {
     public static PororocaWebSocketServerMessage Make(PororocaWebSocketMessageType msgType, byte[] receivedBytes)
     {

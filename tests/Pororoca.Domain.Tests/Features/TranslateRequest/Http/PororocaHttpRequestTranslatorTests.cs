@@ -2,8 +2,8 @@ using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.TranslateRequest;
 using Xunit;
-using static Pororoca.Domain.Features.TranslateRequest.Http.PororocaHttpRequestTranslator;
 using static Pororoca.Domain.Features.Entities.Pororoca.Http.PororocaHttpRequestBody;
+using static Pororoca.Domain.Features.TranslateRequest.Http.PororocaHttpRequestTranslator;
 
 namespace Pororoca.Domain.Tests.Features.TranslateRequest.Http;
 

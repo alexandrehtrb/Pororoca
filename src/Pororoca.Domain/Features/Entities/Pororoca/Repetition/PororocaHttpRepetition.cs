@@ -62,7 +62,8 @@ public sealed record PororocaHttpRepetition
         NumberOfRepetitions: null,
         MaxDop: null,
         DelayInMs: null,
-        InputData: inputDataRawComment is null ? null : MakeRawJsonInputDataExample(inputDataRawComment)){}
+        InputData: inputDataRawComment is null ? null : MakeRawJsonInputDataExample(inputDataRawComment))
+    { }
 
 #nullable disable warnings
     public PororocaHttpRepetition() : this(string.Empty)
@@ -73,7 +74,7 @@ public sealed record PororocaHttpRepetition
 
     public override PororocaRequest CopyAbstract() => Copy();
 
-    public PororocaHttpRepetition Copy() => this with {};
+    public PororocaHttpRepetition Copy() => this with { };
 }
 
 public sealed record PororocaHttpRepetitionResult(

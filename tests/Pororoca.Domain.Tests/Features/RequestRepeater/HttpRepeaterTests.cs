@@ -1,12 +1,11 @@
-using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Net;
 using System.Text.Json;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
-using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Requester;
 using Pororoca.Domain.Features.RequestRepeater;
 using Xunit;
@@ -68,9 +67,9 @@ public static class HttpRepeaterTests
         PororocaVariable[] colEffVars = [];
         PororocaVariable[][]? resolvedInputData =
         [
-            [ new(true, "Var1", "ABC", true), new(true,"Var2","123",true) ],
-            [ new(true, "Var1", "DEF", true), new(true,"Var2","456",true) ],
-            [ new(true, "Var1", "GHI", true), new(true,"Var2","789",true) ]
+            [new(true, "Var1", "ABC", true), new(true, "Var2", "123", true)],
+            [new(true, "Var1", "DEF", true), new(true, "Var2", "456", true)],
+            [new(true, "Var1", "GHI", true), new(true, "Var2", "789", true)]
         ];
         var colScopedAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
         List<PororocaKeyValueParam>? colScopedReqHeaders = [
@@ -128,9 +127,9 @@ public static class HttpRepeaterTests
         PororocaVariable[] colEffVars = [];
         PororocaVariable[][]? resolvedInputData =
         [
-            [ new(true, "Var1", "ABC", true), new(true,"Var2","123",true) ],
-            [ new(true, "Var1", "DEF", true), new(true,"Var2","456",true) ],
-            [ new(true, "Var1", "GHI", true), new(true,"Var2","789",true) ]
+            [new(true, "Var1", "ABC", true), new(true, "Var2", "123", true)],
+            [new(true, "Var1", "DEF", true), new(true, "Var2", "456", true)],
+            [new(true, "Var1", "GHI", true), new(true, "Var2", "789", true)]
         ];
         var colScopedAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
         List<PororocaKeyValueParam>? colScopedReqHeaders = null;
@@ -202,9 +201,9 @@ public static class HttpRepeaterTests
         PororocaVariable[] colEffVars = [];
         PororocaVariable[][]? resolvedInputData =
         [
-            [ new(true, "Var1", "ABC", true), new(true,"Var2","123",true) ],
-            [ new(true, "Var1", "DEF", true), new(true,"Var2","456",true) ],
-            [ new(true, "Var1", "GHI", true), new(true,"Var2","789",true) ]
+            [new(true, "Var1", "ABC", true), new(true, "Var2", "123", true)],
+            [new(true, "Var1", "DEF", true), new(true, "Var2", "456", true)],
+            [new(true, "Var1", "GHI", true), new(true, "Var2", "789", true)]
         ];
         var colScopedAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
         List<PororocaKeyValueParam>? colScopedReqHeaders = null;
@@ -240,7 +239,7 @@ public static class HttpRepeaterTests
         PororocaVariable[] colEffVars = [];
         PororocaVariable[][]? resolvedInputData =
         [
-            [ new(true, "Var1", "ABC", true), new(true,"Var2","123",true) ]
+            [new(true, "Var1", "ABC", true), new(true, "Var2", "123", true)]
         ];
         var colScopedAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
         List<PororocaKeyValueParam>? colScopedReqHeaders = null;
@@ -282,7 +281,7 @@ public static class HttpRepeaterTests
         PororocaVariable[] colEffVars = [];
         PororocaVariable[][]? resolvedInputData =
         [
-            [ new(true, "Var1", "ABC", true), new(true,"Var2","123",true) ]
+            [new(true, "Var1", "ABC", true), new(true, "Var2", "123", true)]
         ];
         var colScopedAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
         List<PororocaKeyValueParam>? colScopedReqHeaders = null;
@@ -315,7 +314,7 @@ public static class HttpRepeaterTests
     public static void Should_combine_collection_effective_vars_with_null_input_line()
     {
         // GIVEN
-        PororocaVariable[] colEffVars = [ new(true, "Var1", "ABC", true), new(true,"Var2","123",true) ];
+        PororocaVariable[] colEffVars = [new(true, "Var1", "ABC", true), new(true, "Var2", "123", true)];
         PororocaVariable[]? inputLine = null;
 
         // WHEN
@@ -330,8 +329,8 @@ public static class HttpRepeaterTests
     public static void Should_combine_collection_effective_vars_with_input_line_unintersecting_variables()
     {
         // GIVEN
-        PororocaVariable[] colEffVars = [ new(true, "Var1", "ABC", true), new(true,"Var2","123",true) ];
-        PororocaVariable[]? inputLine = [ new(true, "Var3", "DEF", true), new(true,"Var4","456",true) ];
+        PororocaVariable[] colEffVars = [new(true, "Var1", "ABC", true), new(true, "Var2", "123", true)];
+        PororocaVariable[]? inputLine = [new(true, "Var3", "DEF", true), new(true, "Var4", "456", true)];
 
         // WHEN
         var effVars = CombineEffectiveVarsWithInputLine(colEffVars, inputLine).ToArray();
@@ -349,8 +348,8 @@ public static class HttpRepeaterTests
     public static void Should_combine_collection_effective_vars_with_input_line_intersecting_variables()
     {
         // GIVEN
-        PororocaVariable[] colEffVars = [ new(true, "Var1", "ABC", true), new(true,"Var2","123",true) ];
-        PororocaVariable[]? inputLine = [ new(true, "Var1", "DEF", true), new(true,"Var4","456",true) ];
+        PororocaVariable[] colEffVars = [new(true, "Var1", "ABC", true), new(true, "Var2", "123", true)];
+        PororocaVariable[]? inputLine = [new(true, "Var1", "DEF", true), new(true, "Var4", "456", true)];
 
         // WHEN
         var effVars = CombineEffectiveVarsWithInputLine(colEffVars, inputLine).ToArray();

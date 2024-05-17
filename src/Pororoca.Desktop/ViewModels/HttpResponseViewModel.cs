@@ -8,10 +8,10 @@ using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using static Pororoca.Domain.Features.Common.MimeTypesDetector;
-using static Pororoca.Domain.Features.ExportLog.HttpLogExporter;
 using static Pororoca.Desktop.Localization.TimeTextFormatter;
 using static Pororoca.Domain.Features.Common.HttpStatusCodeFormatter;
+using static Pororoca.Domain.Features.Common.MimeTypesDetector;
+using static Pororoca.Domain.Features.ExportLog.HttpLogExporter;
 
 namespace Pororoca.Desktop.ViewModels;
 

@@ -203,7 +203,7 @@ public static class PororocaWebSocketCommonTranslatorTests
         // GIVEN
         PororocaCollection col = new(string.Empty)
         {
-            CollectionScopedRequestHeaders = [ new(true, "K4", "V4") ]
+            CollectionScopedRequestHeaders = [new(true, "K4", "V4")]
         };
         col.Variables.Add(new(true, "K3Value", "V3", true));
         bool disableTlsVerification = false;

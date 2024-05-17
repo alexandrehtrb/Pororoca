@@ -11,7 +11,8 @@ internal sealed record ClientCertificateUniqueness(
     internal ClientCertificateUniqueness(PororocaRequestAuthClientCertificate? resolvedCert)
         : this(GetFileSha512Hash(resolvedCert?.CertificateFilePath),
                GetFileSha512Hash(resolvedCert?.PrivateKeyFilePath),
-               resolvedCert?.FilePassword) { }
+               resolvedCert?.FilePassword)
+    { }
 
     private static string? GetFileSha512Hash(string? filePath)
     {

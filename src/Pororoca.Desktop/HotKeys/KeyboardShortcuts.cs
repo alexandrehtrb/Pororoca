@@ -231,7 +231,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
                          .Where(i => i is EnvironmentViewModel)
                          .Select(e => (object)((EnvironmentViewModel)e).ToEnvironment());
 
-        var itemsToCopy = reqsToCopy.Concat(repsToCopy).Concat(wssToCopy).Concat(wsMsgsToCopy).Concat(foldersToCopy).Concat(envsToCopy).ToArray();
+        object[] itemsToCopy = reqsToCopy.Concat(repsToCopy).Concat(wssToCopy).Concat(wsMsgsToCopy).Concat(foldersToCopy).Concat(envsToCopy).ToArray();
 
         ClipboardArea.Instance.PushToCopy(itemsToCopy);
     }

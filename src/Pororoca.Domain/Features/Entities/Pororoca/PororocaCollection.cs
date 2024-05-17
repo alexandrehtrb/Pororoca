@@ -117,16 +117,16 @@ public sealed record PororocaCollection
                 string part = parts[i];
                 if (i == parts.Length - 1)
                 {
-                    return folder!.HttpRequests.FirstOrDefault(x => x.Name.Replace("/",string.Empty) == part);
+                    return folder!.HttpRequests.FirstOrDefault(x => x.Name.Replace("/", string.Empty) == part);
                 }
                 else if (i == 0)
                 {
-                    folder = Folders.FirstOrDefault(f => f.Name.Replace("/",string.Empty) == part);
+                    folder = Folders.FirstOrDefault(f => f.Name.Replace("/", string.Empty) == part);
                     if (folder is null) return null;
                 }
                 else
                 {
-                    folder = folder?.Folders?.FirstOrDefault(f => f.Name.Replace("/",string.Empty) == part);
+                    folder = folder?.Folders?.FirstOrDefault(f => f.Name.Replace("/", string.Empty) == part);
                     if (folder is null) return null;
                 }
             }

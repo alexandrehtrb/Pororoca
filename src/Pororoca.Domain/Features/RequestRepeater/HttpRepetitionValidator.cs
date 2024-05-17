@@ -1,7 +1,7 @@
 using System.Text.Json;
-using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.VariableResolution;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
 

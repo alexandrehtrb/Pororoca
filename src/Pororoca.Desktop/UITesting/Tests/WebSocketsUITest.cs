@@ -117,7 +117,7 @@ public sealed partial class WebSocketsUITest : UITest
             await WsRobot.SendMessage.ClickOn();
             await Wait(1);
 
-            await AssertExchangedMessage(0, "client -> server", "text, 24 bytes", "Text", "{" + Environment.NewLine + "  \"elemento\": \"Plutônio\""  + Environment.NewLine + "}");
+            await AssertExchangedMessage(0, "client -> server", "text, 24 bytes", "Text", "{" + Environment.NewLine + "  \"elemento\": \"Plutônio\"" + Environment.NewLine + "}");
             await AssertExchangedMessage(1, "server -> client", "text, 50 bytes", "Text", "received text (24 bytes): {\"elemento\":\"Plutônio\"}");
 
             await WsRobot.MessageToSend.Select("HOMEM_ARANHA");

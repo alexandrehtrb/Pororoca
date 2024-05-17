@@ -85,7 +85,7 @@ public static class PororocaThemeManager
             PororocaTheme.AmazonianNight => ThemeName.Dark,
             _ => ThemeName.DarkPlus
         };
-    
+
     public static ISolidColorBrush MapTextEditorSelectionForegroundBrush(PororocaTheme theme) =>
         // TextControlSelectionHighlightColor
         theme switch

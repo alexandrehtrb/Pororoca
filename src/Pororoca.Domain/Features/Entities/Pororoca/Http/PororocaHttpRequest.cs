@@ -18,7 +18,7 @@ public sealed record PororocaHttpRequest
     // also, it's safer to leave "no auth" as the default auth.
 
     // Parameterless constructor for JSON deserialization
-    public PororocaHttpRequest() : this(string.Empty){}
+    public PororocaHttpRequest() : this(string.Empty) { }
 
     public override PororocaRequest CopyAbstract() => Copy();
 

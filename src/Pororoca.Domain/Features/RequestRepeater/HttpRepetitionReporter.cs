@@ -54,7 +54,7 @@ public static class HttpRepetitionReporter
         string startedAt = GetStartedAtText(r);
         long durationInMs = GetDurationInMs(r);
 
-        StringBuilder sb = new($"\"{i+1}\",\"{result}\",\"{startedAt}\",\"{durationInMs}\"");
+        StringBuilder sb = new($"\"{i + 1}\",\"{result}\",\"{startedAt}\",\"{durationInMs}\"");
         foreach (string key in allInputDataKeys)
         {
             string value = r.InputLine?.FirstOrDefault(v => v.Key == key)?.Value?.Replace("\"", "\"\"") ?? string.Empty;
@@ -89,5 +89,5 @@ public static class HttpRepetitionReporter
         result.Response?.StartedAtUtc.TimeOfDay.ToString(@"hh':'mm':'ss") ?? string.Empty;
 
     private static long GetDurationInMs(PororocaHttpRepetitionResult result) =>
-        ((long?) result.Response?.ElapsedTime.TotalMilliseconds) ?? 0L;
+        ((long?)result.Response?.ElapsedTime.TotalMilliseconds) ?? 0L;
 }

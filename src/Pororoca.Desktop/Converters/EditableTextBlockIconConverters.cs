@@ -57,5 +57,5 @@ public sealed class EditableTextBlockIconConverter : IValueConverter
         new BindingNotification(new NotSupportedException(), BindingErrorType.Error);
 
     private static GeometryDrawing LoadGeometryDrawing(string resourceKey) =>
-        (GeometryDrawing) (Application.Current!.TryGetResource(resourceKey, null, out object? icon) ? icon! : null!);
+        (GeometryDrawing)(Application.Current!.TryGetResource(resourceKey, null, out object? icon) ? icon! : null!);
 }
