@@ -7,6 +7,7 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 
     <!-- properties below ensure JSON (de)serialization properly tested via unit tests -->
     <!-- trimming begin -->
