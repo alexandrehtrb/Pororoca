@@ -110,7 +110,7 @@ jobs:
       run: dotnet test --no-build --configuration Release --nologo --verbosity quiet --filter FullyQualifiedName!~Pororoca.Test.Tests --collect:"XPlat Code Coverage" --results-directory ./TestResults/
 
     - name: Report unit tests coverage
-      if: inputs.postUnitTestsCoverageInPR
+      if: ${{ inputs.postUnitTestsCoverageInPR }}
       uses: danielpalme/ReportGenerator-GitHub-Action@5.2.4
       with:
         reports: TestResults/**/coverage.cobertura.xml
@@ -121,7 +121,7 @@ jobs:
         customSettings: 'minimumCoverageThresholds:lineCoverage=90;minimumCoverageThresholds:branchCoverage=80'
 
     - name: Add unit tests coverage comment to PR
-      if: inputs.postUnitTestsCoverageInPR
+      if: ${{ inputs.postUnitTestsCoverageInPR }}
       shell: pwsh
       run: |
         $summary = (Get-Content ./TestResults/Summary.json) | ConvertFrom-Json;
@@ -170,7 +170,7 @@ jobs:
 
     - name: Parse desktop artifacts list
       # CD steps are invoked only via workflow_call
-      if: inputs.runCD
+      if: ${{ inputs.runCD }}
       shell: pwsh
       run: |
         $arr = @()
@@ -254,7 +254,7 @@ jobs:
         ENABLE_UI_TESTING: ${{ inputs.enableUITesting }}
 
     - name: Make Pororoca.app structure (Mac OSX only)
-      if: inputs.runCD
+      if: ${{ inputs.runCD }}
       shell: pwsh
       run: |
         $list = $env:DESKTOP_ARTIFACTS_LIST | ConvertFrom-Json;
@@ -276,7 +276,7 @@ jobs:
 
     # so Linux users can create desktop launchers
     - name: Copy logo (Linux only)
-      if: inputs.runCD
+      if: ${{ inputs.runCD }}
       shell: pwsh
       run: |
         $list = $env:DESKTOP_ARTIFACTS_LIST | ConvertFrom-Json;
@@ -290,7 +290,7 @@ jobs:
         }
 
     - name: Copy icon for Windows installer
-      if: inputs.runCD
+      if: ${{ inputs.runCD }}
       shell: pwsh
       run: |
         $list = $env:DESKTOP_ARTIFACTS_LIST | ConvertFrom-Json;
@@ -304,7 +304,7 @@ jobs:
         }
 
     - name: Copy licence
-      if: inputs.runCD
+      if: ${{ inputs.runCD }}
       shell: pwsh
       run: |
         $list = $env:DESKTOP_ARTIFACTS_LIST | ConvertFrom-Json;
@@ -315,7 +315,7 @@ jobs:
         }
 
     - name: Compress package
-      if: inputs.runCD
+      if: ${{ inputs.runCD }}
       shell: pwsh
       run: |
         $list = $env:DESKTOP_ARTIFACTS_LIST | ConvertFrom-Json;
@@ -347,7 +347,7 @@ jobs:
         }
 
     - name: Make installer for Windows
-      if: inputs.runCD
+      if: ${{ inputs.runCD }}
       shell: pwsh
       run: |
         $list = $env:DESKTOP_ARTIFACTS_LIST | ConvertFrom-Json;
@@ -372,7 +372,7 @@ jobs:
         }
 
     - name: Make Debian .deb package
-      if: inputs.runCD
+      if: ${{ inputs.runCD }}
       shell: pwsh
       run: |
         $list = $env:DESKTOP_ARTIFACTS_LIST | ConvertFrom-Json;
