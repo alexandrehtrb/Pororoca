@@ -3,8 +3,7 @@ name: Generate artifacts
 on:
   workflow_dispatch:
     inputs:
-      nuget-and-sboms:
-        #description: 'Pororoca.Test NuGet'
+      nuget:
         required: true
         default: true
         type: boolean
@@ -46,67 +45,26 @@ on:
         type: boolean
 
 jobs:
-  nuget-and-sboms:
-    if: ${{ inputs.nuget-and-sboms }}
-    uses: ./.github/workflows/generate-nuget-and-sboms-wfw.yml
-  linux-x64:
-    if: ${{ inputs.linux-x64 }}
-    uses: ./.github/workflows/generate-desktop-wfw.yml
+  nuget-linux-osx:
+    if: ${{ inputs.nuget || inputs.linux-x64 || inputs.linux-x64-debian || inputs.osx }}
+    uses: ./.github/workflows/cicd-wfw.yml
     with:
       os: ubuntu-latest
-      rid: linux-x64
-      enableUITesting: ${{ inputs.enableDesktopUITesting }}
-  linux-x64-debian:
-    if: ${{ inputs.linux-x64-debian }}
-    uses: ./.github/workflows/generate-desktop-wfw.yml
-    with:
-      os: ubuntu-latest
-      rid: linux-x64
-      packaging: debian
-      enableUITesting: ${{ inputs.enableDesktopUITesting }}
-  osx:
-    if: ${{ inputs.osx }}
-    uses: ./.github/workflows/generate-desktop-wfw.yml
-    with:
-      os: ubuntu-latest
-      rid: osx-x64
-      enableUITesting: ${{ inputs.enableDesktopUITesting }}
-  # osx-arm64 doesn't work for some reason,
-  # but osx-x64 releases work on Mac OSes with Apple Silicon (arm64)
-  # osx-arm64:
-  #   if: ${{ inputs.osx-arm64 }}
-  #   uses: ./.github/workflows/generate-desktop-wfw.yml
-  #   with:
-  #     os: ubuntu-latest
-  #     rid: osx-arm64
-  #     enableUITesting: ${{ inputs.enableDesktopUITesting }}
-  win-x64-installer:
-    if: ${{ inputs.win-x64-installer }}
-    uses: ./.github/workflows/generate-desktop-wfw.yml
+      runCD: true
+      enableUITesting: inputs.enableDesktopUITesting
+      producePororocaTestNuget: inputs.nuget
+      produceDesktopLinuxX64: inputs.linux-x64
+      produceDesktopDebianX64: inputs.linux-x64-debian
+      produceDesktopMacOSX: inputs.osx
+
+  windows:
+    if: ${{ inputs.win-x64-installer || inputs.win-x64-portable || inputs.win-x86-installer || inputs.win-x86-portable }}
+    uses: ./.github/workflows/cicd-wfw.yml
     with:
       os: windows-latest # running on Windows because we need NSIS
-      rid: win-x64
-      packaging: nsis
-      enableUITesting: ${{ inputs.enableDesktopUITesting }}
-  win-x64-portable:
-    if: ${{ inputs.win-x64-portable }}
-    uses: ./.github/workflows/generate-desktop-wfw.yml
-    with:
-      os: ubuntu-latest # .NET 8 allows publishing for Windows on Linux machines
-      rid: win-x64
-      enableUITesting: ${{ inputs.enableDesktopUITesting }}
-  win-x86-installer:
-    if: ${{ inputs.win-x86-installer }}
-    uses: ./.github/workflows/generate-desktop-wfw.yml
-    with:
-      os: windows-latest # running on Windows because we need NSIS
-      rid: win-x86
-      packaging: nsis
-      enableUITesting: ${{ inputs.enableDesktopUITesting }}
-  win-x86-portable:
-    if: ${{ inputs.win-x86-portable }}
-    uses: ./.github/workflows/generate-desktop-wfw.yml
-    with:
-      os: ubuntu-latest # .NET 8 allows publishing for Windows on Linux machines
-      rid: win-x86
-      enableUITesting: ${{ inputs.enableDesktopUITesting }}
+      runCD: true
+      enableUITesting: inputs.enableDesktopUITesting
+      produceDesktopWinX64Installer: inputs.win-x64-installer
+      produceDesktopWinX64Portable: inputs.win-x64-portable
+      produceDesktopWinX86Installer: inputs.win-x86-installer
+      produceDesktopWinX86Portable: inputs.win-x86-portable
