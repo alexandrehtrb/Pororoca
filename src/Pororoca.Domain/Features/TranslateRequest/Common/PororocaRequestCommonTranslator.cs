@@ -5,7 +5,7 @@ using Pororoca.Domain.Features.VariableResolution;
 
 namespace Pororoca.Domain.Features.TranslateRequest.Common;
 
-public static class PororocaRequestCommonTranslator
+internal static class PororocaRequestCommonTranslator
 {
     internal static PororocaRequestAuth? ChooseRequestAuth(PororocaRequestAuth? collectionScopedAuth, PororocaRequestAuth? reqAuth) =>
         reqAuth?.Mode == PororocaRequestAuthMode.InheritFromCollection ?
