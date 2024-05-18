@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Avalonia.Controls;
+using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.UITesting.Robots;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.ViewModels.DataGrids;
@@ -87,12 +88,10 @@ public sealed partial class WebSocketsUITest : UITest
             }
 
             AssertIsHidden(WsRobot.IsWsConnected);
-            AssertIsHidden(WsRobot.Name.IconConnectedWebSocket);
-            AssertIsVisible(WsRobot.Name.IconDisconnectedWebSocket);
+            Assert(WsRobot.Name.Icon == EditableTextBlockIcon.DisconnectedWebSocket);
             await WsRobot.ClickOnConnectAndWaitForConnection();
             AssertIsVisible(WsRobot.IsWsConnected);
-            AssertIsVisible(WsRobot.Name.IconConnectedWebSocket);
-            AssertIsHidden(WsRobot.Name.IconDisconnectedWebSocket);
+            Assert(WsRobot.Name.Icon == EditableTextBlockIcon.ConnectedWebSocket);
 
             AssertIsHidden(WsRobot.ConnectionRequestException);
             AssertIsVisible(WsRobot.ConnectionResponseStatusCode);
@@ -131,8 +130,7 @@ public sealed partial class WebSocketsUITest : UITest
             await WsRobot.ClickOnDisconnectAndWaitForDisconnection();
             await Wait(3);
             AssertIsHidden(WsRobot.IsWsConnected);
-            AssertIsHidden(WsRobot.Name.IconConnectedWebSocket);
-            AssertIsVisible(WsRobot.Name.IconDisconnectedWebSocket);
+            Assert(WsRobot.Name.Icon == EditableTextBlockIcon.DisconnectedWebSocket);
 
             await Wait(5);
             await AssertExchangedMessage(4, "server -> client", "closing, 7 bytes", "Closing message", "ok, bye");

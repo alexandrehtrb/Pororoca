@@ -152,8 +152,11 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
             this.RaiseAndSetIfChanged(ref this.numberOfRepetitionsToExecuteField, value);
             InvalidRepetitionErrorCode = null;
             const int minigunThreshold = 600;
-            NameEditableVm.IsHttpMinigun = value >= minigunThreshold;
-            NameEditableVm.IsHttpRepetition = value < minigunThreshold;
+            NameEditableVm.Icon = value switch
+            {
+                >= minigunThreshold => EditableTextBlockIcon.HttpMinigun,
+                _ => EditableTextBlockIcon.HttpRepeater
+            };
         }
     }
 
@@ -220,16 +223,29 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
 
     private string? nameOfBaseHttpRequestUsed;
 
-    [Reactive]
-    public ReactiveCommand<Unit, Unit> StartRepetitionCmd { get; set; }
-
-    [Reactive]
-    public ReactiveCommand<Unit, Unit> StopRepetitionCmd { get; set; }
-
     private CancellationTokenSource? cancellationTokenSource;
 
     [Reactive]
-    public bool IsRepetitionRunning { get; set; }
+    public string StartOrStopRepetitionButtonText { get; set; }
+
+    [Reactive]
+    public string StartOrStopRepetitionButtonToolTip { get; set; }
+
+    private bool isRepetitionRunningField;
+    public bool IsRepetitionRunning
+    {
+        get => this.isRepetitionRunningField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.isRepetitionRunningField, value);
+            StartOrStopRepetitionButtonText = value ?
+                Localizer.Instance.HttpRepeater.Stop :
+                Localizer.Instance.HttpRepeater.Start;
+            StartOrStopRepetitionButtonToolTip = value ?
+                Localizer.Instance.HttpRepeater.StopTip :
+                Localizer.Instance.HttpRepeater.StartTip;
+        }
+    }
 
     [Reactive]
     public bool HasFinishedRepetition { get; set; }
@@ -305,8 +321,8 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
 
         #region REPETITION RESULTS
         RepetitionResults = [];
-        StartRepetitionCmd = ReactiveCommand.CreateFromTask(StartRepetitionAsync);
-        StopRepetitionCmd = ReactiveCommand.Create(StopRepetition);
+        StartOrStopRepetitionButtonText = Localizer.Instance.HttpRepeater.Start;
+        StartOrStopRepetitionButtonToolTip = Localizer.Instance.HttpRepeater.StartTip;
         ExportReportCmd = ReactiveCommand.CreateFromTask(ExportReportAsync);
         SaveAllResponsesCmd = ReactiveCommand.CreateFromTask(SaveAllResponsesAsync);
         ExportAllLogsCmd = ReactiveCommand.CreateFromTask(ExportAllLogsAsync);
@@ -322,6 +338,19 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
     {
         Collection.UpdateListOfHttpRequestsPaths();
         BaseRequestPath = null;
+    }
+
+    public Task StartOrStopRepetitionAsync()
+    {
+        if (IsRepetitionRunning)
+        {
+            StopRepetition();
+            return Task.CompletedTask;
+        }
+        else
+        {
+            return StartRepetitionAsync();
+        }
     }
 
     public void StopRepetition() =>
@@ -342,6 +371,8 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
             InvalidRepetitionErrorCode = null;
             this.cancellationTokenSource = new();
             NumberOfRepetitionsExecuted = 0;
+            NumberOfRepetitionsToExecute = RepetitionMode == PororocaRepetitionMode.Sequential ?
+                                           resolvedInputData!.Length : NumberOfRepetitionsToExecute;
             IsRepetitionRunning = true;
             HasFinishedRepetition = false;
             RepetitionStatusText = null;
@@ -451,6 +482,10 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
             string code = InvalidRepetitionErrorCode;
             InvalidRepetitionErrorCode = code; // this will trigger an update
         }
+
+        // this will trigger an update on the start/stop rep button texts
+        bool isRepRunning = this.isRepetitionRunningField;
+        IsRepetitionRunning = isRepRunning;
     }
 
     private async Task SearchInputDataFileAsync()

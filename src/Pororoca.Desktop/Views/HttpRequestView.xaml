@@ -25,23 +25,15 @@
       <Setter
           Property="FontSize"
           Value="20"/>
-      <!--Setter
-      Property="FontWeight" Value="Bold"/-->
-      <!--Setter
-      Property="FontFamily" Value="{StaticResource CodeFontFamily}"/-->
+      <!--Setter Property="FontWeight" Value="Bold"/-->
+      <!--Setter Property="FontFamily" Value="{StaticResource CodeFontFamily}"/-->
     </Style>
   </UserControl.Styles>
 
   <Grid
       HorizontalAlignment="Stretch"
-      VerticalAlignment="Stretch">
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*"/>
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*"/>
-    </Grid.RowDefinitions>
+      VerticalAlignment="Stretch"
+      RowDefinitions="Auto,*">
 
     <StackPanel
         Grid.Column="0"
@@ -51,14 +43,11 @@
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
 
-      <Grid
+      <controls:EditableTextBlock
+          x:Name="etbName"
           Margin="24,0,24,0"
           HorizontalAlignment="Stretch"
-          VerticalAlignment="Top">
-        <controls:EditableTextBlock
-            x:Name="etbName"
-            DataContext="{Binding NameEditableVm}"/>
-      </Grid>
+          DataContext="{Binding NameEditableVm}"/>
 
       <Grid
           ShowGridLines="False"
@@ -119,39 +108,24 @@
             ItemsSource="{Binding RequestHttpVersionSelectionOptions}"
             Classes.HasValidationProblem="{Binding HasRequestHttpVersionValidationProblem}"/>
 
-        <Grid
+        <!--
+          needs Click instead of Command because ReactiveCommand blocks
+          button while method is being executed
+        -->
+        <Button
+            Name="btSendOrCancelRequest"
             Grid.Column="3"
             Grid.Row="0"
-            Width="104"
             Margin="12,0,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Stretch">
-
-          <Button
-              Name="btSendRequest"
-              Height="40"
-              Width="104"
-              HorizontalContentAlignment="Center"
-              VerticalContentAlignment="Center"
-              IsVisible="{Binding !IsRequesting}"
-              Command="{Binding SendRequestCmd}"
-              Content="{Binding i18n.HttpRequest.SendRequest}"
-              ToolTip.Tip="{Binding i18n.HttpRequest.SendRequestToolTip}"
-              Classes="Primary"/>
-
-          <Button
-              Name="btCancelRequest"
-              Height="40"
-              Width="104"
-              HorizontalContentAlignment="Center"
-              VerticalContentAlignment="Center"
-              IsVisible="{Binding IsRequesting}"
-              Command="{Binding CancelRequestCmd}"
-              Content="{Binding i18n.HttpRequest.CancelRequest}"
-              ToolTip.Tip="{Binding i18n.HttpRequest.CancelRequestToolTip}"
-              Classes="PrimaryInverted"/>
-
-        </Grid>
+            Height="40"
+            Width="104"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            Click="SendOrCancelRequest"
+            Content="{Binding SendOrCancelRequestButtonText}"
+            ToolTip.Tip="{Binding SendOrCancelRequestButtonToolTip}"
+            Classes.Primary="{Binding !IsRequesting}"
+            Classes.PrimaryInverted="{Binding IsRequesting}"/>
 
       </Grid>
 
@@ -165,27 +139,14 @@
         Grid.Column="0"
         Grid.Row="1"
         Margin="12,0,12,0"
-        VerticalAlignment="Stretch">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*"/>
-        <ColumnDefinition Width="2"/>
-        <ColumnDefinition Width="*"/>
-      </Grid.ColumnDefinitions>
-      <Grid.RowDefinitions>
-        <RowDefinition Height="*"/>
-      </Grid.RowDefinitions>
+        VerticalAlignment="Stretch"
+        ColumnDefinitions="*,2,*">
 
       <!-- REQUEST -->
       <Grid
           Grid.Column="0"
-          Grid.Row="0">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-          <RowDefinition Height="Auto"/>
-          <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+          Grid.Row="0"
+          RowDefinitions="Auto,*">
 
         <TextBlock
             Grid.Column="0"
@@ -207,14 +168,7 @@
                   Classes="TabItemHeader"
                   Text="{Binding i18n.HttpRequest.Headers}"/>
             </TabItem.Header>
-            <Grid Margin="-12,12,-12,12">
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-              </Grid.ColumnDefinitions>
-              <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-              </Grid.RowDefinitions>
+            <Grid Margin="-12,12,-12,12" RowDefinitions="Auto,*">
               <Button
                   Name="btReqHeaderAdd"
                   Grid.Column="0"
@@ -240,94 +194,12 @@
                   </Image>
                 </Button.Content>
               </Button>
-              <DataGrid
-                  Name="dgReqHeaders"
+              <controls:RequestHeadersTableView
+                  x:Name="rhtvReqHeaders"
                   Grid.Column="0"
                   Grid.Row="1"
                   Margin="0,12,0,0"
-                  VerticalAlignment="Stretch"
-                  AutoGenerateColumns="False"
-                  ItemsSource="{Binding RequestHeadersTableVm.Items}"
-                  SelectionChanged="OnSelectedRequestHeadersChanged"
-                  CanUserResizeColumns="True"
-                  HeadersVisibility="All"
-                  Classes="DragAndDrop RequestHeadersDragAndDrop">
-                <!--DataGrid.KeyBindings>
-                    <KeyBinding Command="{Binding RequestHeadersTableVm.CutCmd}" Gesture="Ctrl+X" />
-                    <KeyBinding Command="{Binding RequestHeadersTableVm.CopyCmd}" Gesture="Ctrl+C" />
-                    <KeyBinding Command="{Binding RequestHeadersTableVm.PasteCmd}" Gesture="Ctrl+V" />
-                    <KeyBinding Command="{Binding RequestHeadersTableVm.DuplicateCmd}" Gesture="Ctrl+D" />
-                    <KeyBinding Command="{Binding RequestHeadersTableVm.DeleteCmd}" Gesture="Delete" />
-                  </DataGrid.KeyBindings-->
-                <DataGrid.ContextMenu>
-                  <ContextMenu>
-                    <MenuItem
-                        Header="{Binding i18n.ContextMenu.Cut}"
-                        Command="{Binding RequestHeadersTableVm.CutCmd}"
-                        InputGesture="Ctrl+X"/>
-                    <MenuItem
-                        Header="{Binding i18n.ContextMenu.Copy}"
-                        Command="{Binding RequestHeadersTableVm.CopyCmd}"
-                        InputGesture="Ctrl+C"/>
-                    <MenuItem
-                        Header="{Binding i18n.ContextMenu.Paste}"
-                        Command="{Binding RequestHeadersTableVm.PasteCmd}"
-                        InputGesture="Ctrl+V"
-                        IsEnabled="{Binding RequestHeadersTableVm.InnerClipboardArea.CanPaste}"/>
-                    <MenuItem
-                        Header="{Binding i18n.ContextMenu.Delete}"
-                        Command="{Binding RequestHeadersTableVm.DeleteCmd}"
-                        InputGesture="Delete"/>
-                  </ContextMenu>
-                </DataGrid.ContextMenu>
-                <DataGrid.Columns>
-                  <DataGridCheckBoxColumn
-                      Width="0.24*"
-                      Binding="{Binding Enabled}">
-                    <DataGridCheckBoxColumn.Header>
-                      <TextBlock Text="{Binding i18n.HttpRequest.HeaderEnabled}"/>
-                    </DataGridCheckBoxColumn.Header>
-                  </DataGridCheckBoxColumn>
-                  <DataGridTemplateColumn Width="0.32*">
-                    <DataGridTemplateColumn.Header>
-                      <TextBlock Text="{Binding i18n.HttpRequest.HeaderName}"/>
-                    </DataGridTemplateColumn.Header>
-                    <DataGridTemplateColumn.CellTemplate>
-                      <DataTemplate>
-                        <TextBlock Text="{Binding Key}" VerticalAlignment="Center" Padding="12,0,12,0"/>
-                      </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                    <DataGridTemplateColumn.CellEditingTemplate>
-                      <DataTemplate>
-                        <controls:HeaderNameTextBox Text="{Binding Key}" VerticalContentAlignment="Center" Padding="12,0,12,0"/>
-                      </DataTemplate>
-                    </DataGridTemplateColumn.CellEditingTemplate>
-                  </DataGridTemplateColumn>
-                  <DataGridTextColumn
-                      Width="0.32*"
-                      Binding="{Binding Value}">
-                    <DataGridTextColumn.Header>
-                      <TextBlock Text="{Binding i18n.HttpRequest.HeaderValue}"/>
-                    </DataGridTextColumn.Header>
-                  </DataGridTextColumn>
-                  <DataGridTemplateColumn
-                      Width="0.12*"
-                      Header="">
-                    <DataGridTemplateColumn.CellTemplate>
-                      <DataTemplate>
-                        <Button
-                            Command="{Binding RemoveParamCmd}"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center"
-                            HorizontalContentAlignment="Center"
-                            VerticalContentAlignment="Center"
-                            Classes="Trash">
-                        </Button>
-                      </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                  </DataGridTemplateColumn>
-                </DataGrid.Columns>
-              </DataGrid>
+                  DataContext="{Binding RequestHeadersTableVm}"/>
             </Grid>
           </TabItem>
           <!-- REQUEST BODY -->
@@ -337,15 +209,7 @@
                   Classes="TabItemHeader"
                   Text="{Binding i18n.HttpRequest.Body}"/>
             </TabItem.Header>
-            <Grid Margin="-12,12,-12,12">
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-              </Grid.ColumnDefinitions>
-              <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-              </Grid.RowDefinitions>
-
+            <Grid Margin="-12,12,-12,12" RowDefinitions="Auto,*">
               <StackPanel
                   Grid.Column="0"
                   Grid.Row="0"
@@ -391,9 +255,9 @@
                     SelectedItem="{Binding RequestRawContentType, Mode=TwoWay}"
                     FilterMode="Contains"
                     Classes.HasValidationProblem="{Binding HasRequestRawContentTypeValidationProblem}"
-                    IsVisible="{Binding RequestBodyModeSelectedIndex, 
+                    IsVisible="{Binding RequestBodyModeSelectedIndex,
                                 Mode=OneWay,
-                                Converter={StaticResource reqBodyModeMatch}, 
+                                Converter={StaticResource reqBodyModeMatch},
                                 ConverterParameter=Raw}"/>
               </StackPanel>
               <!-- REQUEST BODY RAW -->
@@ -406,33 +270,24 @@
                   Margin="0,12,0,0"
                   IsReadOnly="False"
                   Document="{Binding RequestRawContentTextDocument, Mode=TwoWay}"
-                  IsVisible="{Binding RequestBodyModeSelectedIndex, 
+                  IsVisible="{Binding RequestBodyModeSelectedIndex,
                               Mode=OneWay,
-                              Converter={StaticResource reqBodyModeMatch}, 
+                              Converter={StaticResource reqBodyModeMatch},
                               ConverterParameter=Raw}"/>
               <!-- REQUEST BODY FILE -->
-              <Grid
+              <StackPanel
                   x:Name="grReqBodyFile"
                   Grid.Column="0"
                   Grid.Row="1"
+                  Spacing="12"
                   Margin="12,12,12,0"
                   VerticalAlignment="Stretch"
-                  IsVisible="{Binding RequestBodyModeSelectedIndex, 
+                  IsVisible="{Binding RequestBodyModeSelectedIndex,
                               Mode=OneWay,
-                              Converter={StaticResource reqBodyModeMatch}, 
+                              Converter={StaticResource reqBodyModeMatch},
                               ConverterParameter=File}">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto"/>
-                  <RowDefinition Height="Auto"/>
-                  <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
                 <AutoCompleteBox
                     Name="acbReqBodyFileContentType"
-                    Grid.Column="0"
-                    Grid.Row="0"
                     Height="36"
                     Width="180"
                     FontSize="14"
@@ -444,9 +299,6 @@
                     Classes.HasValidationProblem="{Binding HasRequestFileContentTypeValidationProblem}"/>
                 <TextBox
                     Name="tbReqBodyFileSrcPath"
-                    Grid.Column="0"
-                    Grid.Row="1"
-                    Margin="0,12,0,0"
                     Watermark="{Binding i18n.HttpRequest.BodyFileSrcPathWatermark}"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Left"
@@ -456,35 +308,26 @@
                     Text="{Binding RequestBodyFileSrcPath}"/>
                 <Button
                     Name="btReqBodyFileSearch"
-                    Grid.Column="0"
-                    Grid.Row="2"
                     Content="{Binding i18n.HttpRequest.BodyFileSearchFile}"
-                    Margin="0,12,0,0"
                     Command="{Binding SearchRequestBodyRawFileCmd}"
                     Classes="Secondary"/>
-              </Grid>
+              </StackPanel>
               <!-- REQUEST BODY URL ENCODED -->
               <Grid
                   x:Name="grReqBodyUrlEncoded"
                   Grid.Column="0"
                   Grid.Row="1"
-                  Margin="12,12,12,0"
                   VerticalAlignment="Stretch"
-                  IsVisible="{Binding RequestBodyModeSelectedIndex, 
+                  IsVisible="{Binding RequestBodyModeSelectedIndex,
                               Mode=OneWay,
-                              Converter={StaticResource reqBodyModeMatch}, 
-                              ConverterParameter=UrlEncoded}">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto"/>
-                  <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+                              Converter={StaticResource reqBodyModeMatch},
+                              ConverterParameter=UrlEncoded}"
+                  RowDefinitions="Auto,*">
                 <Button
                     Name="btReqBodyUrlEncodedAddParam"
                     Grid.Column="0"
                     Grid.Row="0"
+                    Margin="12,12,0,0"
                     Height="24"
                     Width="24"
                     HorizontalContentAlignment="Center"
@@ -509,7 +352,7 @@
                     Name="dgReqBodyUrlEncodedParams"
                     Grid.Column="0"
                     Grid.Row="1"
-                    Margin="-12,12,-12,0"
+                    Margin="0,12,0,0"
                     AutoGenerateColumns="False"
                     ItemsSource="{Binding UrlEncodedParamsTableVm.Items}"
                     SelectionChanged="OnSelectedUrlEncodedParamsChanged"
@@ -590,24 +433,17 @@
                   x:Name="grReqBodyFormData"
                   Grid.Column="0"
                   Grid.Row="1"
-                  Margin="12,12,12,0"
                   VerticalAlignment="Stretch"
-                  IsVisible="{Binding RequestBodyModeSelectedIndex, 
+                  IsVisible="{Binding RequestBodyModeSelectedIndex,
                               Mode=OneWay,
-                              Converter={StaticResource reqBodyModeMatch}, 
-                              ConverterParameter=FormData}">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto"/>
-                  <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+                              Converter={StaticResource reqBodyModeMatch},
+                              ConverterParameter=FormData}"
+                  RowDefinitions="Auto,*">
                 <StackPanel
                     Grid.Column="0"
                     Grid.Row="0"
                     Orientation="Horizontal"
-                    Margin="0,8,0,0">
+                    Margin="12,12,0,0">
                   <Button
                       Name="btReqBodyFormDataAddTextParam"
                       Content="{Binding i18n.HttpRequest.BodyFormDataTextParamAdd}"
@@ -625,7 +461,7 @@
                     Name="dgReqBodyFormDataParams"
                     Grid.Column="0"
                     Grid.Row="1"
-                    Margin="-12,24,-12,0"
+                    Margin="0,12,0,0"
                     AutoGenerateColumns="False"
                     ItemsSource="{Binding FormDataParamsTableVm.Items}"
                     SelectionChanged="OnSelectedFormDataParamsChanged"
@@ -723,9 +559,9 @@
                   Grid.Row="1"
                   Margin="12,12,12,0"
                   VerticalAlignment="Stretch"
-                  IsVisible="{Binding RequestBodyModeSelectedIndex, 
+                  IsVisible="{Binding RequestBodyModeSelectedIndex,
                               Mode=OneWay,
-                              Converter={StaticResource reqBodyModeMatch}, 
+                              Converter={StaticResource reqBodyModeMatch},
                               ConverterParameter=GraphQl}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition
@@ -788,15 +624,8 @@
       <!-- RESPONSE -->
       <Grid
           Grid.Column="2"
-          Grid.Row="0">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-          <RowDefinition Height="Auto"/>
-          <RowDefinition Height="*"/>
-          <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+          Grid.Row="0"
+          RowDefinitions="Auto,*,Auto">
         <TextBlock
             Name="tbResTitle"
             Grid.Column="0"
@@ -819,42 +648,10 @@
                   Classes="TabItemHeader"
                   Text="{Binding i18n.HttpResponse.Headers}"/>
             </TabItem.Header>
-            <DataGrid
-                Name="dgResHeaders"
+            <controls:ResponseHeadersTableView
+                x:Name="rhtvResHeaders"
                 Margin="-12,12,-12,12"
-                VerticalAlignment="Stretch"
-                AutoGenerateColumns="False"
-                ItemsSource="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.Items}"
-                SelectionChanged="OnSelectedResponseHeadersAndTrailersChanged"
-                CanUserResizeColumns="True">
-              <!--DataGrid.KeyBindings>
-                <KeyBinding Command="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.CopyCmd}" Gesture="Ctrl+C" />
-              </DataGrid.KeyBindings-->
-              <DataGrid.ContextMenu>
-                <ContextMenu>
-                  <MenuItem
-                      Header="{Binding i18n.ContextMenu.Copy}"
-                      Command="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.CopyCmd}"
-                      InputGesture="Ctrl+C"/>
-                </ContextMenu>
-              </DataGrid.ContextMenu>
-              <DataGrid.Columns>
-                <DataGridTextColumn
-                    Width="*"
-                    Binding="{Binding Key}">
-                  <DataGridTextColumn.Header>
-                    <TextBlock Text="{Binding i18n.HttpResponse.HeaderName}"/>
-                  </DataGridTextColumn.Header>
-                </DataGridTextColumn>
-                <DataGridTextColumn
-                    Width="*"
-                    Binding="{Binding Value}">
-                  <DataGridTextColumn.Header>
-                    <TextBlock Text="{Binding i18n.HttpResponse.HeaderValue}"/>
-                  </DataGridTextColumn.Header>
-                </DataGridTextColumn>
-              </DataGrid.Columns>
-            </DataGrid>
+                DataContext="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm}"/>
           </TabItem>
           <!-- RESPONSE BODY -->
           <TabItem Name="tabItemResBody">
@@ -865,14 +662,8 @@
             </TabItem.Header>
             <Grid
                 Margin="-12,12,-12,0"
-                VerticalAlignment="Stretch">
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-              </Grid.ColumnDefinitions>
-              <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-              </Grid.RowDefinitions>
+                VerticalAlignment="Stretch"
+                RowDefinitions="*,Auto">
 
               <!-- AcceptsReturn="True" allows for horizontal scrollbar -->
               <AvaloniaEdit:TextEditor
@@ -881,7 +672,6 @@
                   Grid.Row="0"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
-                  Margin="0,0,0,0"
                   IsReadOnly="True"
                   Document="{Binding ResponseDataCtx.ResponseRawContentTextDocument, Mode=TwoWay}"/>
               <StackPanel
@@ -925,14 +715,7 @@
                   Classes="TabItemHeader"
                   Text="{Binding i18n.HttpResponse.Capture}"/>
             </TabItem.Header>
-            <Grid>
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-              </Grid.ColumnDefinitions>
-              <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-              </Grid.RowDefinitions>
+            <Grid RowDefinitions="Auto,*">
               <StackPanel
                   Grid.Column="0"
                   Grid.Row="0"
@@ -976,7 +759,8 @@
                     Margin="6,0,0,0"
                     ToolTip.Tip="{Binding i18n.HttpResponse.CaptureTip}"
                     Classes="TipQuestionMark"/>
-                <!-- Adding a TextBlock Tip at the end of the Grid causes the separator GridSplitter to "jam" while resizing -->
+                <!-- Adding a TextBlock Tip at the end of the Grid causes the separator GridSplitter
+                to "jam" while resizing -->
               </StackPanel>
               <DataGrid
                   Grid.Column="0"
@@ -991,8 +775,8 @@
                   HeadersVisibility="All"
                   Classes="DragAndDrop ResponseCapturesDragAndDrop">
                 <!--DataGrid.KeyBindings>
-              <KeyBinding Command="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.CopyCmd}" Gesture="Ctrl+C" />
-            </DataGrid.KeyBindings-->
+                  <KeyBinding Command="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.CopyCmd}" Gesture="Ctrl+C" />
+                </DataGrid.KeyBindings-->
                 <DataGrid.ContextMenu>
                   <ContextMenu>
                     <MenuItem

@@ -1,6 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using AvaloniaEdit;
 using Pororoca.Desktop.TextEditorConfig;
 using Pororoca.Desktop.ViewModels;
@@ -56,10 +58,10 @@ public sealed class HttpRequestView : UserControl
 
     #region VIEW COMPONENTS EVENTS
 
-    public void OnSelectedRequestHeadersChanged(object sender, SelectionChangedEventArgs e)
+    public void SendOrCancelRequest(object sender, RoutedEventArgs args)
     {
-        var tableVm = ((HttpRequestViewModel)DataContext!).RequestHeadersTableVm;
-        UpdateVmSelectedItems(tableVm, e);
+        var vm = (HttpRequestViewModel)DataContext!;
+        Dispatcher.UIThread.Post(async () => await vm.SendOrCancelRequestAsync());
     }
 
     public void OnSelectedUrlEncodedParamsChanged(object sender, SelectionChangedEventArgs e)
@@ -71,12 +73,6 @@ public sealed class HttpRequestView : UserControl
     public void OnSelectedFormDataParamsChanged(object sender, SelectionChangedEventArgs e)
     {
         var tableVm = ((HttpRequestViewModel)DataContext!).FormDataParamsTableVm;
-        UpdateVmSelectedItems(tableVm, e);
-    }
-
-    public void OnSelectedResponseHeadersAndTrailersChanged(object sender, SelectionChangedEventArgs e)
-    {
-        var tableVm = ((HttpRequestViewModel)DataContext!).ResponseDataCtx.ResponseHeadersAndTrailersTableVm;
         UpdateVmSelectedItems(tableVm, e);
     }
 

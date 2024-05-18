@@ -7,6 +7,14 @@ on:
         required: false
         default: false
         type: boolean
+      postUnitTestsCoverageInPR:
+        required: false
+        default: false
+        type: boolean
+      prNumber:
+        required: false
+        default: 0
+        type: number
 
 jobs:
 
@@ -45,7 +53,37 @@ jobs:
       run: dotnet build --no-restore --configuration Release --nologo --verbosity quiet
 
     - name: Execute unit tests
-      run: dotnet test --no-build --configuration Release --nologo --verbosity quiet --filter FullyQualifiedName!~Pororoca.Test.Tests
+      run: dotnet test --no-build --configuration Release --nologo --verbosity quiet --filter FullyQualifiedName!~Pororoca.Test.Tests --collect:"XPlat Code Coverage" --results-directory ./TestResults/
+
+    - name: Report unit tests coverage
+      if: ${{ inputs.postUnitTestsCoverageInPR == true }}
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.2.4
+      with:
+        reports: TestResults/**/coverage.cobertura.xml
+        targetdir: TestResults
+        reporttypes: JsonSummary
+        assemblyfilters: +Pororoca.Domain;+Pororoca.Domain.OpenAPI
+        filefilters: -*.g.cs
+
+    - name: Add unit tests coverage comment to PR
+      if: ${{ inputs.postUnitTestsCoverageInPR == true }}
+      shell: pwsh
+      run: |
+        $summary = (Get-Content ./TestResults/Summary.json) | ConvertFrom-Json;
+        $lineCovBadgeColor = if ($summary.summary.linecoverage -ge 90.0) { "080" } else { "800" };
+        $branchCovBadgeColor = if ($summary.summary.branchcoverage -ge 80.0) { "080" } else { "800" };
+        $linesBadge = "![Line coverage](https://img.shields.io/badge/lines-" + $summary.summary.linecoverage + "%25-" + $lineCovBadgeColor + ")";
+        $branchesBadge = "![Branch coverage](https://img.shields.io/badge/branches-" + $summary.summary.branchcoverage + "%25-" + $branchCovBadgeColor + ")";
+        $text = "`#`#`# Unit tests code coverage " + $linesBadge + " " + $branchesBadge + "`n`n" + "| Assembly | Line coverage | Branch coverage |`n|---|---|---|`n";
+        foreach ($assembly in $summary.coverage.assemblies)
+        {
+            $text += "| **$($assembly.name)** | $($assembly.coverage)% | $($assembly.branchcoverage)% |`n"
+        }
+        Set-Content -Path ./TestResults/SummaryGithub2.md -Value $text
+        gh pr comment $env:PR_NUMBER --body-file ./TestResults/SummaryGithub2.md
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PR_NUMBER: ${{ inputs.prNumber }}
 
     - name: Read package version
       shell: pwsh

@@ -62,7 +62,8 @@ public sealed partial class WebSocketsValidationsUITest : UITest
             await WsRobot.Url.ClearAndTypeText(url);
             AssertIsHidden(WsRobot.ErrorMsg);
             AssertDoesntHaveStyleClass(WsRobot.Url, "HasValidationProblem");
-            await WsRobot.Connect.ClickOn();
+            await WsRobot.ConnectDisconnectCancel.RaiseClickEvent();
+            await Wait(1);
             AssertIsVisible(WsRobot.ErrorMsg);
             AssertHasText(WsRobot.ErrorMsg, "Invalid URL. Please, check it and try again.");
             AssertHasStyleClass(WsRobot.Url, "HasValidationProblem");
@@ -88,7 +89,8 @@ public sealed partial class WebSocketsValidationsUITest : UITest
             AssertIsHidden(WsRobot.ErrorMsg);
             AssertDoesntHaveStyleClass(WsRobot.HttpVersion, "HasValidationProblem");
             await WsRobot.Url.ClearAndTypeText("{{BaseUrlWs}}/{{WsHttp2Endpoint}}");
-            await WsRobot.Connect.ClickOn();
+            await WsRobot.ConnectDisconnectCancel.RaiseClickEvent();
+            await Wait(1);
             AssertIsVisible(WsRobot.ErrorMsg);
             AssertHasText(WsRobot.ErrorMsg, "On Windows, support for HTTP/2 requires Windows 10 or greater.");
             AssertHasStyleClass(WsRobot.HttpVersion, "HasValidationProblem");

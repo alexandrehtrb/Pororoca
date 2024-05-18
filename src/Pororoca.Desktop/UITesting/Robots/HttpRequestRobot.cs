@@ -1,5 +1,8 @@
 using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using AvaloniaEdit;
+using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
@@ -22,11 +25,10 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal TextBox Url => GetChildView<TextBox>("tbUrl")!;
     internal TextBlock ErrorMsg => GetChildView<TextBlock>("tbErrorMsg")!;
     internal ComboBox HttpVersion => GetChildView<ComboBox>("cbHttpVersion")!;
-    internal Button Send => GetChildView<Button>("btSendRequest")!;
-    internal Button Cancel => GetChildView<Button>("btCancelRequest")!;
+    internal Button SendOrCancel => GetChildView<Button>("btSendOrCancelRequest")!;
     internal TabItem TabReqHeaders => GetChildView<TabItem>("tabItemReqHeaders")!;
     internal Button AddReqHeader => GetChildView<Button>("btReqHeaderAdd")!;
-    internal DataGrid ReqHeaders => GetChildView<DataGrid>("dgReqHeaders")!;
+    internal DataGrid ReqHeaders => GetChildView<RequestHeadersTableView>("rhtvReqHeaders")!.FindControl<DataGrid>("datagrid")!;
     internal TabItem TabReqBody => GetChildView<TabItem>("tabItemReqBody")!;
     internal ComboBox ReqBodyMode => GetChildView<ComboBox>("cbReqBodyMode")!;
     internal ComboBoxItem ReqBodyModeOptionNone => GetChildView<ComboBoxItem>("cbiReqBodyModeNone")!;
@@ -50,7 +52,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal TabItem TabReqAuth => GetChildView<TabItem>("tabItemReqAuth")!;
     internal TextBlock ResTitle => GetChildView<TextBlock>("tbResTitle")!;
     internal TabItem TabResHeaders => GetChildView<TabItem>("tabItemResHeaders")!;
-    internal DataGrid ResHeaders => GetChildView<DataGrid>("dgResHeaders")!;
+    internal DataGrid ResHeaders => GetChildView<ResponseHeadersTableView>("rhtvResHeaders")!.FindControl<DataGrid>("datagrid")!;
     internal TabItem TabResBody => GetChildView<TabItem>("tabItemResBody")!;
     internal DataGrid ResCaptures => GetChildView<DataGrid>("dgResCaptures")!;
     internal TabItem TabResCapture => GetChildView<TabItem>("tabItemResCapture")!;
@@ -260,7 +262,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     {
         var vm = (HttpRequestViewModel)RootView!.DataContext!;
         CancellationTokenSource cts = new(TimeSpan.FromMinutes(3));
-        await Send.ClickOn();
+        await SendOrCancel.RaiseClickEvent();
         do
         {
             // don't make the value too low,

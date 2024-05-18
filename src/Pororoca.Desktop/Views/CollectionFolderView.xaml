@@ -15,48 +15,40 @@
     FontSize="14">
 
   <StackPanel
-      Spacing="36"
+      Spacing="16"
       HorizontalAlignment="Stretch"
       VerticalAlignment="Stretch"
-      Margin="24,0,24,0">
+      Margin="24">
 
-    <Grid
+    <controls:EditableTextBlock
+        x:Name="etbName"
         HorizontalAlignment="Stretch"
-        VerticalAlignment="Top"
-        Margin="0,24,0,0">
-      <controls:EditableTextBlock x:Name="etbName" DataContext="{Binding NameEditableVm}"/>
-    </Grid>
+        DataContext="{Binding NameEditableVm}"/>
 
-    <StackPanel
-        Orientation="Vertical"
-        Spacing="16"
-        Margin="0,12,0,0">
+    <controls:IconButton
+        x:Name="btAddFolder"
+        Margin="0,32,0,0"
+        Icon="{StaticResource IconAddFolderGeometry}"
+        Text="{Binding i18n.CollectionFolder.AddFolder}"
+        Command="{Binding AddNewFolderCmd}"/>
 
-      <controls:IconButton
-          x:Name="btAddFolder"
-          Icon="{StaticResource IconAddFolderGeometry}"
-          Text="{Binding i18n.CollectionFolder.AddFolder}"
-          Command="{Binding AddNewFolderCmd}"/>
+    <controls:IconButton
+        x:Name="btAddHttpReq"
+        Icon="{StaticResource IconAddGeometry}"
+        Text="{Binding i18n.CollectionFolder.AddHttpRequest}"
+        Command="{Binding AddNewHttpRequestCmd}"/>
 
-      <controls:IconButton
-          x:Name="btAddHttpReq"
-          Icon="{StaticResource IconAddGeometry}"
-          Text="{Binding i18n.CollectionFolder.AddHttpRequest}"
-          Command="{Binding AddNewHttpRequestCmd}"/>
+    <controls:IconButton
+        x:Name="btAddWebSocket"
+        Icon="{StaticResource IconWebsocketGeometry}"
+        Text="{Binding i18n.CollectionFolder.AddWebSocketConnection}"
+        Command="{Binding AddNewWebSocketConnectionCmd}"/>
 
-      <controls:IconButton
-          x:Name="btAddWebSocket"
-          Icon="{StaticResource IconWebsocketGeometry}"
-          Text="{Binding i18n.CollectionFolder.AddWebSocketConnection}"
-          Command="{Binding AddNewWebSocketConnectionCmd}"/>
-
-      <controls:IconButton
-          x:Name="btAddHttpRep"
-          Icon="{StaticResource IconRifleGunGeometry}"
-          Text="{Binding i18n.CollectionFolder.AddHttpRepeater}"
-          Command="{Binding AddNewHttpRepeaterCmd}"/>
-
-    </StackPanel>
+    <controls:IconButton
+        x:Name="btAddHttpRep"
+        Icon="{StaticResource IconRifleGunGeometry}"
+        Text="{Binding i18n.CollectionFolder.AddHttpRepeater}"
+        Command="{Binding AddNewHttpRepeaterCmd}"/>
 
   </StackPanel>
 

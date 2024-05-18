@@ -74,7 +74,7 @@ public sealed partial class HttpRepeaterUITest : UITest
         await RepeaterRobot.NumberOfRepetitions.SetValue(2);
         await RepeaterRobot.MaxDop.SetValue(1);
         await RepeaterRobot.DelayInMs.SetValue(0);
-        await RepeaterRobot.StartRepetition.ClickOn();
+        await RepeaterRobot.StartOrStopRepetition.RaiseClickEvent();
         await Wait(3);
 
         AssertIsHidden(RepeaterRobot.ErrorMessage);
@@ -97,7 +97,7 @@ public sealed partial class HttpRepeaterUITest : UITest
         await RepeaterRobot.TabControlRepetition.Select(RepeaterRobot.TabItemRepetitionInputData);
         await RepeaterRobot.InputDataType.Select(RepeaterRobot.OptionInputDataTypeRaw);
         await RepeaterRobot.InputDataRawEditor.ClearAndTypeText("[{\"SpecialValue1\":\"Nissan 300ZX\"},{\"SpecialValue1\":\"Nissan 350Z\"}]");
-        await RepeaterRobot.StartRepetition.ClickOn();
+        await RepeaterRobot.StartOrStopRepetition.RaiseClickEvent();
         await Wait(3);
 
         AssertIsHidden(RepeaterRobot.ErrorMessage);
@@ -123,7 +123,7 @@ public sealed partial class HttpRepeaterUITest : UITest
         await RepeaterRobot.TabControlRepetition.Select(RepeaterRobot.TabItemRepetitionInputData);
         await RepeaterRobot.InputDataType.Select(RepeaterRobot.OptionInputDataTypeFile);
         await RepeaterRobot.InputDataFileSrcPath.ClearAndTypeText("{{TestFilesDir}}/InputData.json");
-        await RepeaterRobot.StartRepetition.ClickOn();
+        await RepeaterRobot.StartOrStopRepetition.RaiseClickEvent();
         await Wait(3);
 
         AssertIsHidden(RepeaterRobot.ErrorMessage);
