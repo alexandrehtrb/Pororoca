@@ -597,11 +597,12 @@ jobs:
       shell: pwsh
       run: |
         $filePath = "./out/Pororoca.Test.${env:NUGET_VERSION_NAME}.nupkg"
-        dotnet nuget push $filePath --api-key $env:NUGET_API_KEY --source https://api.nuget.org/v3/index.json
-        # para testes: https://apiint.nugettest.org/v3/index.json
-        # para testes: POROROCA_QA_NUGET_API_KEY
+        dotnet nuget push $filePath --api-key $env:NUGET_API_KEY --source $env:NUGET_SOURCE_URL
       env:
         NUGET_API_KEY: ${{ secrets.POROROCA_NUGET_API_KEY }}
+        NUGET_SOURCE_URL: 'https://apiint.nugettest.org/v3/index.json'
+        # para produção: POROROCA_NUGET_API_KEY, https://api.nuget.org/v3/index.json
+        # para testes: POROROCA_QA_NUGET_API_KEY, https://apiint.nugettest.org/v3/index.json
 
     - name: Add comment to PR package publishing failed
       if: ${{ always() && inputs.runCD && inputs.producePororocaTestNuget && inputs.pushPackageToNuGetServer && (steps.pushPackageToNuGet.outcome == 'failure') }}
