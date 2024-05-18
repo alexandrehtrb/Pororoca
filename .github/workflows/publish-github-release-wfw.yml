@@ -8,9 +8,12 @@ on:
       - 'master'
 
 jobs:
+
   publish_github_release:
     if: ${{ github.event.pull_request.merged == true }}
     runs-on: ubuntu-latest
+    outputs:
+      is_release_drafted: ${{ steps.checkIfReleaseIsDrafted.outputs.IS_RELEASE_DRAFTED }}
     steps:
 
     # TODO: add steps to publish (undraft) release on GitHub
@@ -28,6 +31,7 @@ jobs:
         echo "RELEASE_NAME=${versionName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Check if release already exists
+      id: checkIfReleaseIsDrafted
       shell: pwsh
       run: |
         $releasesList = (gh release list --json name,isDraft) | ConvertFrom-Json;
@@ -39,7 +43,7 @@ jobs:
         }
         elseif ($existingRelease.IsDraft -eq $True)
         {
-          echo "RELEASE_IS_DRAFTED=1" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+          echo "IS_RELEASE_DRAFTED=1" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
         }
         else
         {
@@ -49,37 +53,13 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Install .NET
-      if: ${{ env.RELEASE_IS_DRAFTED == '1' }}
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.204
-
-    - name: Pack and push Pororoca.Test NuGet
-      id: packPushNuGet
-      if: ${{ env.RELEASE_IS_DRAFTED == '1' }}
-      shell: pwsh
-      run: |
-        dotnet pack ./src/Pororoca.Test/Pororoca.Test.csproj --nologo --verbosity quiet --configuration Release
-        $filePath = "./src/Pororoca.Test/bin/Release/Pororoca.Test.${env:RELEASE_NAME}.nupkg"
-        dotnet nuget push $filePath --api-key $env:NUGET_API_KEY --source https://api.nuget.org/v3/index.json
-        # para testes: https://apiint.nugettest.org/v3/index.json
-        # para testes: POROROCA_QA_NUGET_API_KEY
-      env:
-        NUGET_API_KEY: ${{ secrets.POROROCA_NUGET_API_KEY }}
-
-    - name: Add comment to PR package publishing failed
-      if: always() && (env.RELEASE_IS_DRAFTED == '1') && (steps.packPushNuGet.outcome == 'failure')
-      shell: pwsh
-      run: gh pr comment $env:PR_NUMBER --body "📦❌ Failed to publish Pororoca.Test ${env:RELEASE_NAME} to NuGet."
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        PR_NUMBER: ${{ github.event.number }}
-
-    - name: Add comment to PR package published
-      if: always() && (env.RELEASE_IS_DRAFTED == '1') && (steps.packPushNuGet.outcome == 'success')
-      shell: pwsh
-      run: gh pr comment $env:PR_NUMBER --body "📦✅ Pororoca.Test ${env:RELEASE_NAME} published to NuGet!"
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        PR_NUMBER: ${{ github.event.number }}
+  push_package_to_nuget:
+    needs: publish_github_release
+    if: ${{ needs.publish_github_release.outputs.is_release_drafted == '1' }}
+    uses: ./.github/workflows/cicd-wfw.yml
+    with:
+      os: ubuntu-latest
+      prNumber: ${{ github.event.number }}
+      runCD: true
+      producePororocaTestNuget: true
+      pushPackageToNuGetServer: true

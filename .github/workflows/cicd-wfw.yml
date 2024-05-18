@@ -3,12 +3,12 @@ name: CI-CD
 on:
   workflow_call:
     inputs:
-      runCD:
-        required: true
-        type: boolean
       os:
         required: true
         type: string
+      runCD:
+        required: true
+        type: boolean
       postUnitTestsCoverageInPR:
         required: false
         default: false
@@ -25,6 +25,10 @@ on:
         default: false
         type: boolean
       producePororocaTestNuget:
+        required: false
+        default: false
+        type: boolean
+      pushPackageToNuGetServer:
         required: false
         default: false
         type: boolean
@@ -479,7 +483,7 @@ jobs:
 
     # finished CD steps - desktop
 
-    # upload CD artifacts
+    # start upload CD artifacts
 
     - name: Upload artifacts to release
       if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == true) }}
@@ -582,3 +586,37 @@ jobs:
         compression-level: 0 # already compressed
         name: ${{ format('Pororoca_{0}_win-x86_installer.exe', env.VERSION_NAME) }}
         path: ${{ format('./out/Pororoca_{0}_win-x86_installer.exe', env.VERSION_NAME) }}
+
+    # finished upload CD artifacts
+
+    # start push package to NuGet
+
+    - name: Push package to NuGet server
+      id: pushPackageToNuGet
+      if: ${{ inputs.runCD && inputs.producePororocaTestNuget && inputs.pushPackageToNuGetServer }}
+      shell: pwsh
+      run: |
+        $filePath = "./out/Pororoca.Test.${env:NUGET_VERSION_NAME}.nupkg"
+        dotnet nuget push $filePath --api-key $env:NUGET_API_KEY --source https://api.nuget.org/v3/index.json
+        # para testes: https://apiint.nugettest.org/v3/index.json
+        # para testes: POROROCA_QA_NUGET_API_KEY
+      env:
+        NUGET_API_KEY: ${{ secrets.POROROCA_NUGET_API_KEY }}
+
+    - name: Add comment to PR package publishing failed
+      if: ${{ always() && inputs.runCD && inputs.producePororocaTestNuget && inputs.pushPackageToNuGetServer && (steps.pushPackageToNuGet.outcome == 'failure') }}
+      shell: pwsh
+      run: gh pr comment $env:PR_NUMBER --body "📦❌ Failed to publish Pororoca.Test ${env:NUGET_VERSION_NAME} to NuGet."
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PR_NUMBER: ${{ inputs.prNumber }}
+
+    - name: Add comment to PR package published
+      if: ${{ always() && inputs.runCD && inputs.producePororocaTestNuget && inputs.pushPackageToNuGetServer && (steps.pushPackageToNuGet.outcome == 'success') }}
+      shell: pwsh
+      run: gh pr comment $env:PR_NUMBER --body "📦✅ Pororoca.Test ${env:NUGET_VERSION_NAME} published to NuGet!"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PR_NUMBER: ${{ inputs.prNumber }}
+
+    # finished push package to NuGet
