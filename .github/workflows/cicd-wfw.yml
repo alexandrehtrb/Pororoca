@@ -18,7 +18,8 @@ on:
         default: 0
         type: number
       enableUITesting:
-        required: true
+        required: false
+        default: false
         type: boolean
       uploadArtifactsToRelease:
         required: false
@@ -600,7 +601,7 @@ jobs:
         dotnet nuget push $filePath --api-key $env:NUGET_API_KEY --source $env:NUGET_SOURCE_URL
       env:
         NUGET_API_KEY: ${{ secrets.POROROCA_NUGET_API_KEY }}
-        NUGET_SOURCE_URL: 'https://apiint.nugettest.org/v3/index.json'
+        NUGET_SOURCE_URL: 'https://api.nuget.org/v3/index.json'
         # para produção: POROROCA_NUGET_API_KEY, https://api.nuget.org/v3/index.json
         # para testes: POROROCA_QA_NUGET_API_KEY, https://apiint.nugettest.org/v3/index.json
 

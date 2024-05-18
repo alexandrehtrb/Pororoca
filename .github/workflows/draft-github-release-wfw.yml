@@ -83,7 +83,8 @@ jobs:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PR_NUMBER: ${{ github.event.number }}
 
-  generate-nuget-linux-osx:
+  nuget_linux_osx:
+    needs: draft_github_release
     uses: ./.github/workflows/cicd-wfw.yml
     with:
       os: ubuntu-latest
@@ -99,7 +100,8 @@ jobs:
       produceDesktopWinX64Portable: true
       produceDesktopWinX86Portable: true
 
-  generate-windows:
+  windows:
+    needs: draft_github_release
     uses: ./.github/workflows/cicd-wfw.yml
     with:
       os: windows-latest # running on Windows because we need NSIS
