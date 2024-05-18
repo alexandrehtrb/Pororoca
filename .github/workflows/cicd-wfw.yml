@@ -341,9 +341,9 @@ jobs:
       shell: pwsh
       run: |
         $arr = @(Get-ChildItem "./out/" -Directory | Select FullName)
-        foreach ($outputFolder in $arr)
+        foreach ($dir in $arr)
         {
-          Copy-Item -Path "./LICENCE.md" -Destination $outputFolder
+          Copy-Item -Path "./LICENCE.md" -Destination $dir.FullName
         }
 
     - name: Compress package
