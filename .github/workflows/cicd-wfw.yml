@@ -234,7 +234,7 @@ jobs:
         foreach ($artifact in $arr)
         {
           $OUTPUT_FOLDER = $artifact.outputFolder
-          $PUBLISH_SINGLE_FILE = (($artifact.rid -ne $null) && ($artifact.rid.StartsWith("win") || $artifact.rid.StartsWith("linux")));
+          $PUBLISH_SINGLE_FILE = (($artifact.rid -ne $null) -and ($artifact.rid.StartsWith("win") -or $artifact.rid.StartsWith("linux")));
           $WINDOWS_INSTALLER_RELEASE = $artifact.packaging -eq "nsis";
           $DEBIAN_INSTALLER_RELEASE = $artifact.packaging -eq "debian";
 
