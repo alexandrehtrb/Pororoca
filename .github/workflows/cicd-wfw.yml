@@ -486,9 +486,9 @@ jobs:
       shell: pwsh
       run: |
         $outputFiles = $(Get-ChildItem ./out/ | Select FullName)
-        foreach ($filePath in $outputFiles)
+        foreach ($file in $outputFiles)
         {
-          gh release upload $env:VERSION_NAME $filePath --clobber
+          gh release upload $env:VERSION_NAME $file.FullName --clobber
         }
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
