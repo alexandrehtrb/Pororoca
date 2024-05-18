@@ -45,7 +45,7 @@ on:
         type: boolean
 
 jobs:
-  nuget-linux-osx:
+  nuget_linux_osx_win_portable:
     if: ${{ inputs.nuget || inputs.linux_x64 || inputs.linux_x64_debian || inputs.osx || inputs.win_x64_portable || inputs.win_x86_portable }}
     uses: ./.github/workflows/cicd-wfw.yml
     with:
@@ -59,7 +59,7 @@ jobs:
       produceDesktopWinX64Portable: ${{ inputs.win_x64_portable }}
       produceDesktopWinX86Portable: ${{ inputs.win_x86_portable }}
 
-  windows:
+  win_installer:
     if: ${{ inputs.win_x64_installer || inputs.win_x86_installer }}
     uses: ./.github/workflows/cicd-wfw.yml
     with:

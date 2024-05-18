@@ -83,7 +83,7 @@ jobs:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PR_NUMBER: ${{ github.event.number }}
 
-  nuget_linux_osx:
+  nuget_linux_osx_win_portable:
     needs: draft_github_release
     uses: ./.github/workflows/cicd-wfw.yml
     with:
@@ -100,7 +100,7 @@ jobs:
       produceDesktopWinX64Portable: true
       produceDesktopWinX86Portable: true
 
-  windows:
+  win_installer:
     needs: draft_github_release
     uses: ./.github/workflows/cicd-wfw.yml
     with:
