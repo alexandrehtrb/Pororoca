@@ -175,15 +175,14 @@ jobs:
     # start CD steps - desktop
 
     - name: Parse desktop artifacts list for control
-      # CD steps are invoked only via workflow_call
       if: ${{ inputs.runCD }}
       shell: pwsh
       run: |
         $hasOSXRelease = if ($env:OSX -eq 'true') { 1 } else { 0 }
         $hasDebianRelease = if ($env:DEBIAN_X64 -eq 'true') { 1 } else { 0 }
-        $hasLinuxRelease = if (($env:LINUX_X64 -eq 'true') || $hasDebianRelease) { 1 } else { 0 }
-        $hasWinInstallerRelease = if (($env:WIN_X64_INSTALLER -eq 'true') || ($env:WIN_X86_INSTALLER -eq 'true')) { 1 } else { 0 }
-        $hasPortableRelease = if (($env:LINUX_X64 -eq 'true') || ($env:OSX -eq 'true') || ($env:WIN_X64_PORTABLE -eq 'true') || ($env:WIN_X86_PORTABLE -eq 'true')) { 1 } else { 0 }
+        $hasLinuxRelease = if (($env:LINUX_X64 -eq 'true') -or $hasDebianRelease) { 1 } else { 0 }
+        $hasWinInstallerRelease = if (($env:WIN_X64_INSTALLER -eq 'true') -or ($env:WIN_X86_INSTALLER -eq 'true')) { 1 } else { 0 }
+        $hasPortableRelease = if (($env:LINUX_X64 -eq 'true') -or ($env:OSX -eq 'true') -or ($env:WIN_X64_PORTABLE -eq 'true') -or ($env:WIN_X86_PORTABLE -eq 'true')) { 1 } else { 0 }
 
         echo "HAS_OSX_RELEASE=$hasOSXRelease"
         echo "HAS_DEBIAN_RELEASE=$hasDebianRelease"
@@ -489,13 +488,6 @@ jobs:
 
     # upload CD artifacts
 
-    - name: Upload artifacts to workflow results
-      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) }} # no need if uploading to release
-      uses: actions/upload-artifact@v4
-      with:
-        compression-level: 0 # no need to compress because steps above already compress
-        path: './out/*'
-
     - name: Upload artifacts to release
       if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == true) }}
       shell: pwsh
@@ -507,3 +499,93 @@ jobs:
         }
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload Pororoca.Test NuGet to workflow results
+      # no need if uploading to release
+      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) && inputs.producePororocaTestNuget }}
+      uses: actions/upload-artifact@v4
+      with:
+        compression-level: 0 # already compressed
+        name: ${{ format('Pororoca.Test.{0}.nupkg', env.NUGET_VERSION_NAME) }}
+        path: ${{ format('./out/Pororoca.Test.{0}.nupkg', env.NUGET_VERSION_NAME) }}
+
+    - name: Upload Pororoca.Test NuGet SBOM to workflow results
+      # no need if uploading to release
+      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) && inputs.producePororocaTestNuget }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: 'sbom_pororoca_test.json'
+        path: './out/sbom_pororoca_test.json'
+        overwrite: true
+
+    - name: Upload desktop SBOM to workflow results
+      # no need if uploading to release
+      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: 'sbom_pororoca_desktop.json'
+        path: './out/sbom_pororoca_desktop.json'
+        overwrite: true
+
+    - name: Upload desktop linux-x64 to workflow results
+      # no need if uploading to release
+      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) && inputs.produceDesktopLinuxX64 }}
+      uses: actions/upload-artifact@v4
+      with:
+        compression-level: 0 # already compressed
+        name: ${{ format('Pororoca_{0}_linux-x64.zip', env.VERSION_NAME) }}
+        path: ${{ format('./out/Pororoca_{0}_linux-x64.zip', env.VERSION_NAME) }}
+
+    - name: Upload desktop debian-x64 to workflow results
+      # no need if uploading to release
+      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) && inputs.produceDesktopDebianX64 }}
+      uses: actions/upload-artifact@v4
+      with:
+        compression-level: 0 # already compressed
+        name: ${{ format('Pororoca_{0}_amd64.deb', env.VERSION_NAME) }}
+        path: ${{ format('./out/Pororoca_{0}_amd64.deb', env.VERSION_NAME) }}
+
+    - name: Upload desktop MacOS to workflow results
+      # no need if uploading to release
+      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) && inputs.produceDesktopMacOSX }}
+      uses: actions/upload-artifact@v4
+      with:
+        compression-level: 0 # already compressed
+        name: ${{ format('Pororoca_{0}_osx.zip', env.VERSION_NAME) }}
+        path: ${{ format('./out/Pororoca_{0}_osx.zip', env.VERSION_NAME) }}
+
+    - name: Upload desktop win-x64-portable to workflow results
+      # no need if uploading to release
+      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) && inputs.produceDesktopWinX64Portable }}
+      uses: actions/upload-artifact@v4
+      with:
+        compression-level: 0 # already compressed
+        name: ${{ format('Pororoca_{0}_win-x64.zip', env.VERSION_NAME) }}
+        path: ${{ format('./out/Pororoca_{0}_win-x64.zip', env.VERSION_NAME) }}
+
+    - name: Upload desktop win-x86-portable to workflow results
+      # no need if uploading to release
+      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) && inputs.produceDesktopWinX86Portable }}
+      uses: actions/upload-artifact@v4
+      with:
+        compression-level: 0 # already compressed
+        name: ${{ format('Pororoca_{0}_win-x86.zip', env.VERSION_NAME) }}
+        path: ${{ format('./out/Pororoca_{0}_win-x86.zip', env.VERSION_NAME) }}
+
+    - name: Upload desktop win-x64-installer to workflow results
+      # no need if uploading to release
+      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) && inputs.produceDesktopWinX64Installer }}
+      uses: actions/upload-artifact@v4
+      with:
+        compression-level: 0 # already compressed
+        name: ${{ format('Pororoca_{0}_win-x64_installer.exe', env.VERSION_NAME) }}
+        path: ${{ format('./out/Pororoca_{0}_win-x64_installer.exe', env.VERSION_NAME) }}
+
+    - name: Upload desktop win-x86-installer to workflow results
+      # no need if uploading to release
+      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) && inputs.produceDesktopWinX86Installer }}
+      uses: actions/upload-artifact@v4
+      with:
+        compression-level: 0 # already compressed
+        name: ${{ format('Pororoca_{0}_win-x86_installer.exe', env.VERSION_NAME) }}
+        path: ${{ format('./out/Pororoca_{0}_win-x86_installer.exe', env.VERSION_NAME) }}
