@@ -46,7 +46,7 @@ on:
 
 jobs:
   nuget-linux-osx:
-    if: ${{ inputs.nuget || inputs.linux_x64 || inputs.linux_x64_debian || inputs.osx }}
+    if: ${{ inputs.nuget || inputs.linux_x64 || inputs.linux_x64_debian || inputs.osx || inputs.win_x64_portable || inputs.win_x86_portable }}
     uses: ./.github/workflows/cicd-wfw.yml
     with:
       os: ubuntu-latest
@@ -56,15 +56,15 @@ jobs:
       produceDesktopLinuxX64: ${{ inputs.linux_x64 }}
       produceDesktopDebianX64: ${{ inputs.linux_x64_debian }}
       produceDesktopMacOSX: ${{ inputs.osx }}
+      produceDesktopWinX64Portable: ${{ inputs.win_x64_portable }}
+      produceDesktopWinX86Portable: ${{ inputs.win_x86_portable }}
 
   windows:
-    if: ${{ inputs.win_x64_installer || inputs.win_x64_portable || inputs.win_x86_installer || inputs.win_x86_portable }}
+    if: ${{ inputs.win_x64_installer || inputs.win_x86_installer }}
     uses: ./.github/workflows/cicd-wfw.yml
     with:
       os: windows-latest # running on Windows because we need NSIS
       runCD: true
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
       produceDesktopWinX64Installer: ${{ inputs.win_x64_installer }}
-      produceDesktopWinX64Portable: ${{ inputs.win_x64_portable }}
       produceDesktopWinX86Installer: ${{ inputs.win_x86_installer }}
-      produceDesktopWinX86Portable: ${{ inputs.win_x86_portable }}
