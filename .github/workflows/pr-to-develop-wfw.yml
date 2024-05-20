@@ -1,0 +1,22 @@
+name: PR to develop
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches:
+      - 'develop'
+    paths:
+      - '.github/**'
+      - 'src/**'
+      - 'tests/**'
+      - 'LICENCE.md'
+      - 'Pororoca.sln'
+
+jobs:
+  ci:
+    uses: ./.github/workflows/cicd-wfw.yml
+    with:
+      os: ubuntu-latest
+      postUnitTestsCoverageInPR: true
+      prNumber: ${{ github.event.number }}
+      runCD: false
