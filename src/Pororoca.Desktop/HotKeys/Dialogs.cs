@@ -12,8 +12,13 @@ internal static class Dialogs
 {
     internal static void ShowDialog(string title, string message, ButtonEnum buttons, Action onButtonOkClicked)
     {
-        Task asyncAction() => new(onButtonOkClicked);
-        ShowDialog(title, message, buttons, asyncAction);
+        Task asyncTask()
+        {
+            Dispatcher.UIThread.Post(onButtonOkClicked);
+            return Task.CompletedTask;
+        }
+
+        ShowDialog(title, message, buttons, asyncTask);
     }
 
     internal static void ShowDialog(string title, string message, ButtonEnum buttons, Func<Task>? onButtonOkClicked = null)
