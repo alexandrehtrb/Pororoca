@@ -5,6 +5,7 @@ using Avalonia.Threading;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
+using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.HotKeys;
 
@@ -30,13 +31,13 @@ internal static class Dialogs
             {
                 ContentTitle = title,
                 ContentMessage = message,
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
                 WindowIcon = new(bitmap),
                 ButtonDefinitions = buttons
             });
         Dispatcher.UIThread.Post(async () =>
         {
-            var buttonResult = await msgbox.ShowAsync();
+            var buttonResult = await msgbox.ShowWindowDialogAsync(MainWindow.Instance!);
             if (buttonResult == ButtonResult.Ok)
             {
                 var task = onButtonOkClicked?.Invoke();
