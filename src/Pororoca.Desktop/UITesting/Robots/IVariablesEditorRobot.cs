@@ -56,7 +56,7 @@ internal interface IVariablesEditorRobot
 
     protected static async Task PasteVariables(VariablesDataGridViewModel variablesVm)
     {
-        variablesVm.Paste();
+        await variablesVm.PasteAsync();
         await UITestActions.WaitAfterActionAsync();
     }
 

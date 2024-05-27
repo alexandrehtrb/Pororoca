@@ -118,7 +118,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
 
     internal async Task PasteRequestHeaders()
     {
-        ReqHeadersVm.Paste();
+        await ReqHeadersVm.PasteAsync();
         await UITestActions.WaitAfterActionAsync();
     }
 
@@ -195,7 +195,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
 
     internal async Task PasteUrlEncodedParams()
     {
-        UrlEncodedParamsVm.Paste();
+        await UrlEncodedParamsVm.PasteAsync();
         await UITestActions.WaitAfterActionAsync();
     }
 
@@ -240,7 +240,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
 
     internal async Task PasteFormDataParams()
     {
-        FormDataParamsVm.Paste();
+        await FormDataParamsVm.PasteAsync();
         await UITestActions.WaitAfterActionAsync();
     }
 

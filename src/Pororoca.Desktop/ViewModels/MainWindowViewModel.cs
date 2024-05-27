@@ -470,6 +470,10 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         var bkupedItems = CollectionsGroupViewDataCtx.Items.ToList();
         CollectionsGroupViewDataCtx.Items.Clear();
         SelectLanguage(Language.English);
+        if (Pororoca.Desktop.Views.MainWindow.Instance!.Clipboard is Avalonia.Input.Platform.IClipboard systemClipboard)
+        {
+            await systemClipboard.ClearAsync();
+        }
 
         string resultsLog = await Pororoca.Desktop.UITesting.UITestsRunner.RunAllTestsAsync();
 

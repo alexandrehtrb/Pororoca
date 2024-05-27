@@ -28,7 +28,7 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
         AddNewCmd = ReactiveCommand.Create(AddNew);
         CutCmd = ReactiveCommand.Create(() => CutOrCopySelected(false));
         CopyCmd = ReactiveCommand.Create(() => CutOrCopySelected(true));
-        PasteCmd = ReactiveCommand.Create(Paste);
+        PasteCmd = ReactiveCommand.CreateFromTask(PasteAsync);
         DuplicateCmd = ReactiveCommand.Create(DuplicateSelected);
         DeleteCmd = ReactiveCommand.Create(DeleteSelected);
 
@@ -65,7 +65,7 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
         }
     }
 
-    internal void Paste()
+    internal virtual Task PasteAsync()
     {
         if (InnerClipboardArea.CanPaste)
         {
@@ -75,6 +75,7 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
                 Items.Add(ToVm(v));
             }
         }
+        return Task.CompletedTask;
     }
 
     private void DuplicateSelected()
