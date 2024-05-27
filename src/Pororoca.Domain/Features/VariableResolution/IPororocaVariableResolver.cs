@@ -7,7 +7,7 @@ public partial interface IPororocaVariableResolver
 {
     public static readonly Regex PororocaVariableRegex = GeneratePororocaVariableRegex();
 
-    [GeneratedRegex("\\{\\{(?<k>[\\w\\d_\\-\\.]+)\\}\\}")]
+    [GeneratedRegex("\\{\\{\\s*(?<k>[\\w\\d_\\-\\.]+)\\s*\\}\\}")]
     private static partial Regex GeneratePororocaVariableRegex();
 
     List<PororocaVariable> Variables { get; } // collection variables
