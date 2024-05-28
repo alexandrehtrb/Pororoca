@@ -83,7 +83,7 @@
             "name": "constant.numeric.json.comments"
         },
         "pororocavar": {
-            "begin": "\\{\\{\\s*[\\w\\d_\\-\\.]+",
+            "begin": "\\{\\{\\s*[\\w\\d_\\-\\.\\$]+",
             "beginCaptures": {
                 "0": {
                     "name": "punctuation.definition.pororocavar.begin.json.comments"

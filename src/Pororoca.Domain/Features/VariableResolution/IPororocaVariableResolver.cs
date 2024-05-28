@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using static Pororoca.Domain.Features.VariableResolution.PororocaPredefinedVariableEvaluator;
 
 namespace Pororoca.Domain.Features.VariableResolution;
 
@@ -7,7 +8,7 @@ public partial interface IPororocaVariableResolver
 {
     public static readonly Regex PororocaVariableRegex = GeneratePororocaVariableRegex();
 
-    [GeneratedRegex("\\{\\{\\s*(?<k>[\\w\\d_\\-\\.]+)\\s*\\}\\}")]
+    [GeneratedRegex("\\{\\{\\s*(?<k>[\\w\\d_\\-\\.\\$]+)\\s*\\}\\}")]
     private static partial Regex GeneratePororocaVariableRegex();
 
     List<PororocaVariable> Variables { get; } // collection variables
@@ -52,9 +53,9 @@ public partial interface IPororocaVariableResolver
         {
             return strToReplaceTemplatedVariables ?? string.Empty;
         }
-        else if (effectiveVars.Any() == false)
+        else if (effectiveVars.Any() == false && !strToReplaceTemplatedVariables.Contains('$'))
         {
-            // no need to run regex replacer if there are no effective variables
+            // no need to run regex replacer if there are no effective variables and no predefined variables
             return strToReplaceTemplatedVariables;
         }
         else
@@ -62,8 +63,15 @@ public partial interface IPororocaVariableResolver
             return PororocaVariableRegex.Replace(strToReplaceTemplatedVariables, match =>
             {
                 string keyName = match.Groups["k"].Value;
-                var effectiveVar = effectiveVars.FirstOrDefault(v => v.Key == keyName);
-                return effectiveVar?.Value ?? match.Value;
+                if (IsPredefinedVariable(keyName, out string? predefinedVarValue))
+                {
+                    return predefinedVarValue!;
+                }
+                else
+                {
+                    var effectiveVar = effectiveVars.FirstOrDefault(v => v.Key == keyName);
+                    return effectiveVar?.Value ?? match.Value;
+                }
             });
         }
     }

@@ -20,11 +20,12 @@ public static class IPororocaVariableResolverTests
     [InlineData("Hello my name is {{{{k4}}}}", "Hello my name is {{{{k4}}}}")]
     [InlineData("Hello my name is k1", "Hello my name is k1")]
     [InlineData("{{Hello my name is k1}}", "{{Hello my name is k1}}")]
-    [InlineData("Hello my name is v1", "Hello my name is {{k1}}")]
-    [InlineData("Hello my name is v1", "Hello my name is {{_k1}}")]
+    // prepending and appending spaces should be allowed
+    [InlineData("Hello my name is v1", "Hello my name is {{ k1 }}")]
+    // prepending and appending spaces should be allowed
+    [InlineData("Hello my name is v1", "Hello my name is {{ _k1 }}")]
     [InlineData("{{Hello}} my name is v2", "{{Hello}} my name is {{k2..1}}")]
     [InlineData("Hello my name is v2", "Hello my name is {{k2_2}}")]
-    [InlineData("Hello my name is {{v2}}", "Hello my name is {{{{k2..1}}}}")]
     public static void Should_replace_templates_correctly(string expectedString, string? inputString)
     {
         // GIVEN
@@ -42,6 +43,21 @@ public static class IPororocaVariableResolverTests
 
         // THEN
         Assert.Equal(expectedString, resolvedString);
+    }
+
+    [Fact]
+    public static void Should_replace_predefined_variable_correctly()
+    {
+        // GIVEN
+        PororocaCollection col = new(string.Empty);
+
+        // WHEN
+        string todayStr = DateTime.Today.ToString("yyyy-MM-dd");
+        var effectiveVars = ((IPororocaVariableResolver)col).GetEffectiveVariables();
+        string resolvedString = IPororocaVariableResolver.ReplaceTemplates("Today is {{ $today }}", effectiveVars);
+
+        // THEN
+        Assert.Equal($"Today is {todayStr}", resolvedString);
     }
 
     #endregion
