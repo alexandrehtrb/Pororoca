@@ -2,6 +2,7 @@ using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.TranslateRequest;
 using Xunit;
+using static Pororoca.Domain.Features.Entities.Pororoca.Http.PororocaHttpRequestBody;
 using static Pororoca.Domain.Features.TranslateRequest.Http.PororocaHttpRequestTranslator;
 
 namespace Pororoca.Domain.Tests.Features.TranslateRequest.Http;
@@ -48,8 +49,7 @@ public static class PororocaHttpRequestTranslatorTests
         List<PororocaKeyValueParam> colScopedHeaders = [
             new(true, "ColScopedHeaderName", "ColScopedHeaderValue")
         ];
-        PororocaHttpRequestBody unresolvedBody = new();
-        unresolvedBody.SetRawContent("{\"id\":{{K1}}}", "application/json");
+        var unresolvedBody = MakeRawContent("{\"id\":{{K1}}}", "application/json");
         var unresolvedAuth = PororocaRequestAuth.MakeBasicAuth("{{BasicAuthLogin}}", "{{BasicAuthPassword}}");
         PororocaHttpRequest unresolvedReq = new(string.Empty)
         {
@@ -108,8 +108,7 @@ public static class PororocaHttpRequestTranslatorTests
         List<PororocaKeyValueParam> colScopedHeaders = [
             new(true, "ColScopedHeaderName", "ColScopedHeaderValue{{K1}}")
         ];
-        PororocaHttpRequestBody unresolvedBody = new();
-        unresolvedBody.SetRawContent("{\"id\":{{K1}}}", "application/json");
+        var unresolvedBody = MakeRawContent("{\"id\":{{K1}}}", "application/json");
         var unresolvedAuth = PororocaRequestAuth.MakeBasicAuth("{{BasicAuthLogin}}", "{{BasicAuthPassword}}");
         PororocaHttpRequest unresolvedReq = new(string.Empty)
         {
@@ -157,8 +156,7 @@ public static class PororocaHttpRequestTranslatorTests
         [
             new(true, "K1", "4577", true)
         ];
-        PororocaHttpRequestBody unresolvedBody = new();
-        unresolvedBody.SetRawContent("{\"id\":{{K1}}}", "application/json");
+        var unresolvedBody = MakeRawContent("{\"id\":{{K1}}}", "application/json");
 
         // WHEN
         var resolvedBody = ResolveRequestBody(effectiveVars, unresolvedBody);
@@ -179,8 +177,7 @@ public static class PororocaHttpRequestTranslatorTests
             new(true, "FolderPath", "C:\\MYFILES", true),
             new(true, "FileName", "file.txt", true)
         ];
-        PororocaHttpRequestBody unresolvedBody = new();
-        unresolvedBody.SetFileContent("{{FolderPath}}\\{{FileName}}", "text/plain");
+        var unresolvedBody = MakeFileContent("{{FolderPath}}\\{{FileName}}", "text/plain");
 
         // WHEN
         var resolvedBody = ResolveRequestBody(effectiveVars, unresolvedBody);
@@ -207,8 +204,7 @@ public static class PororocaHttpRequestTranslatorTests
             new(true, "key1", "{{K1}}"),
             new(true, "{{K3}}", "value3")
         ];
-        PororocaHttpRequestBody unresolvedBody = new();
-        unresolvedBody.SetUrlEncodedContent(unresolvedUrlEncodedParams);
+        var unresolvedBody = MakeUrlEncodedContent(unresolvedUrlEncodedParams);
 
         // WHEN
         var resolvedBody = ResolveRequestBody(effectiveVars, unresolvedBody);
@@ -239,8 +235,7 @@ public static class PororocaHttpRequestTranslatorTests
         var p2 = PororocaHttpRequestFormDataParam.MakeTextParam(true, "key2", "oi2", "text/plain");
         var p3 = PororocaHttpRequestFormDataParam.MakeTextParam(true, "key{{K3}}", "[{{K1}}]", "application/json");
         var p4 = PororocaHttpRequestFormDataParam.MakeFileParam(true, "key4", "{{FolderPath}}\\{{FileName}}", "text/xml");
-        PororocaHttpRequestBody unresolvedBody = new();
-        unresolvedBody.SetFormDataContent([p0, p1, p2, p3, p4]);
+        var unresolvedBody = MakeFormDataContent([p0, p1, p2, p3, p4]);
 
         // WHEN
         var resolvedBody = ResolveRequestBody(effectiveVars, unresolvedBody);
@@ -265,8 +260,7 @@ public static class PororocaHttpRequestTranslatorTests
         [
             new(true, "K1", "18", true)
         ];
-        PororocaHttpRequestBody unresolvedBody = new();
-        unresolvedBody.SetGraphQlContent("myGraphQlQuery{{K1}}", "{\"id\":\n// some comment inside GraphQL variables\n{{K1}}}");
+        var unresolvedBody = MakeGraphQlContent("myGraphQlQuery{{K1}}", "{\"id\":\n// some comment inside GraphQL variables\n{{K1}}}");
 
         // WHEN
         var resolvedBody = ResolveRequestBody(effectiveVars, unresolvedBody);
@@ -298,8 +292,7 @@ public static class PororocaHttpRequestTranslatorTests
     public static async Task Should_make_raw_content_correctly()
     {
         // GIVEN
-        PororocaHttpRequestBody resolvedBody = new();
-        resolvedBody.SetRawContent("{\"id\":3162}", "application/json");
+        var resolvedBody = MakeRawContent("{\"id\":3162}", "application/json");
         Dictionary<string, string> resolvedContentHeaders = new(1)
         {
             { "Content-Language", "pt-BR" }
@@ -325,8 +318,7 @@ public static class PororocaHttpRequestTranslatorTests
     {
         // GIVEN
         string testFilePath = GetTestFilePath("testfilecontent1.json");
-        PororocaHttpRequestBody resolvedBody = new();
-        resolvedBody.SetFileContent(testFilePath, "application/json");
+        var resolvedBody = MakeFileContent(testFilePath, "application/json");
         Dictionary<string, string> resolvedContentHeaders = new(1)
         {
             { "Content-Language", "pt-BR" }
@@ -360,8 +352,7 @@ public static class PororocaHttpRequestTranslatorTests
             { "Content-Language", "pt-BR" }
         };
 
-        PororocaHttpRequestBody resolvedBody = new();
-        resolvedBody.SetUrlEncodedContent(resolvedUrlEncodedParams);
+        var resolvedBody = MakeUrlEncodedContent(resolvedUrlEncodedParams);
 
         // WHEN
         var resolvedReqContent = MakeRequestContent(resolvedBody, resolvedContentHeaders);
@@ -392,8 +383,7 @@ public static class PororocaHttpRequestTranslatorTests
         };
         var resolvedFormDataParams = new[] { p1, p2, p3, p4 };
 
-        PororocaHttpRequestBody resolvedBody = new();
-        resolvedBody.SetFormDataContent(resolvedFormDataParams);
+        var resolvedBody = MakeFormDataContent(resolvedFormDataParams);
 
         // WHEN
         var resolvedReqContent = MakeRequestContent(resolvedBody, resolvedContentHeaders);
@@ -452,8 +442,7 @@ public static class PororocaHttpRequestTranslatorTests
     public static async Task Should_resolve_graphql_content_without_variables_correctly()
     {
         // GIVEN
-        PororocaHttpRequestBody resolvedBody = new();
-        resolvedBody.SetGraphQlContent("myGraphQlQuery", null);
+        var resolvedBody = MakeGraphQlContent("myGraphQlQuery", null);
         Dictionary<string, string> resolvedContentHeaders = new(1)
         {
             { "Content-Language", "pt-BR" }
@@ -477,8 +466,7 @@ public static class PororocaHttpRequestTranslatorTests
     public static async Task Should_resolve_graphql_content_with_variables_correctly()
     {
         // GIVEN
-        PororocaHttpRequestBody resolvedBody = new();
-        resolvedBody.SetGraphQlContent("myGraphQlQuery", "{\"id\":\n// some comment inside GraphQL variables\n19}");
+        var resolvedBody = MakeGraphQlContent("myGraphQlQuery", "{\"id\":\n// some comment inside GraphQL variables\n19}");
         Dictionary<string, string> resolvedContentHeaders = new(1)
         {
             { "Content-Language", "pt-BR" }

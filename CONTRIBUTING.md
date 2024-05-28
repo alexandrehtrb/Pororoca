@@ -4,6 +4,17 @@ This is a tutorial for code contributions for the Pororoca project. Welcome!
 
 Remember to fork this repo and develop your code starting from the `develop` branch.
 
+## Machine requirements
+
+* [.NET 8](https://dotnet.microsoft.com)
+* [VS Code](https://code.visualstudio.com/) or [Visual Studio](https://visualstudio.microsoft.com/pt-br/)
+
+The system requirements are the same as those for .NET 8. Development can be done on Linux, Windows and MacOS.
+
+If you want to run `makereleases.ps1` or `rununittests.ps1` scripts, you will need [PowerShell](https://github.com/PowerShell/PowerShell).
+
+To generate the Windows Installer, you will need [NSIS](https://nsis.sourceforge.io/Main_Page) installed and with `makensis` added to PATH.
+
 ## I want to translate Pororoca to my language
 
 1) In the **Pororoca.Desktop.Localization.SourceGeneration** project, add your language to the enum and extensions.

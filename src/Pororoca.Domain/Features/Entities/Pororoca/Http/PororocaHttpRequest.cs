@@ -1,93 +1,35 @@
-using System.Text.Json.Serialization;
-
 namespace Pororoca.Domain.Features.Entities.Pororoca.Http;
 
-public sealed class PororocaHttpRequest : PororocaRequest
+public sealed record PororocaHttpRequest
+(
+    string Name,
+    decimal HttpVersion = 1.1m,
+    string HttpMethod = "GET",
+    string Url = "",
+    List<PororocaKeyValueParam>? Headers = null,
+    PororocaHttpRequestBody? Body = null,
+    PororocaRequestAuth? CustomAuth = null,
+    List<PororocaHttpResponseValueCapture>? ResponseCaptures = null
+) : PororocaRequest(PororocaRequestType.Http, Name)
 {
-    [JsonInclude]
-    public decimal HttpVersion { get; internal set; }
+    // we can't specify InheritFromCollection here because when there is no auth,
+    // CustomAuth should be null, and the JSON deserialization (which uses this constructor)
+    // does not replace the InheritFromCollection value with null
+    // also, it's safer to leave "no auth" as the default auth.
 
-    [JsonInclude]
-    public string HttpMethod { get; internal set; }
+    // Parameterless constructor for JSON deserialization
+    public PororocaHttpRequest() : this(string.Empty) { }
 
-    [JsonInclude]
-    public string Url { get; internal set; }
+    public override PororocaRequest CopyAbstract() => Copy();
 
-    [JsonInclude]
-    public List<PororocaKeyValueParam>? Headers { get; internal set; }
-
-    [JsonInclude]
-    public PororocaHttpRequestBody? Body { get; internal set; }
-
-    [JsonInclude]
-    public PororocaRequestAuth? CustomAuth { get; internal set; }
-
-    [JsonInclude]
-    public List<PororocaHttpResponseValueCapture>? ResponseCaptures { get; internal set; }
-
-#nullable disable warnings
-    public PororocaHttpRequest() : this(string.Empty)
+    public PororocaHttpRequest Copy() => this with
     {
-        // Parameterless constructor for JSON deserialization
-    }
-#nullable restore warnings
-
-    public PororocaHttpRequest(string name) : base(PororocaRequestType.Http, name)
-    {
-        HttpVersion = 1.1m;
-        HttpMethod = "GET";
-        Url = string.Empty;
-        // we can't specify InheritFromCollection here because when there is no auth,
-        // CustomAuth should be null, and the JSON deserialization (which uses this constructor)
-        // does not replace the InheritFromCollection value with null
-        // also, it's safer to leave "no auth" as the default auth.
-        CustomAuth = null;
-        Headers = null;
-        Body = null;
-    }
-
-    public void UpdateMethod(string httpMethod) =>
-        HttpMethod = httpMethod;
-
-    public void UpdateUrl(string url) =>
-        Url = url;
-
-    public void UpdateHttpVersion(decimal httpVersion) =>
-        HttpVersion = httpVersion;
-
-    public void UpdateHeaders(IEnumerable<PororocaKeyValueParam>? headers) =>
-        Headers = headers?.ToList();
-
-    public void UpdateCustomAuth(PororocaRequestAuth? auth) =>
-        CustomAuth = auth;
-
-    public void UpdateBody(PororocaHttpRequestBody? body) =>
-        Body = body;
-
-    public void UpdateResponseCaptures(List<PororocaHttpResponseValueCapture>? captures) =>
-        ResponseCaptures = captures;
-
-    public void Update(string name, decimal httpVersion, string httpMethod, string url, PororocaRequestAuth? customAuth, IEnumerable<PororocaKeyValueParam>? headers, PororocaHttpRequestBody? body, IEnumerable<PororocaHttpResponseValueCapture>? captures)
-    {
-        Name = name;
-        HttpVersion = httpVersion;
-        HttpMethod = httpMethod;
-        Url = url;
-        CustomAuth = customAuth;
-        Headers = headers?.ToList();
-        Body = body;
-        ResponseCaptures = captures?.ToList();
-    }
-
-    public override object Clone() =>
-        new PororocaHttpRequest(Name)
-        {
-            HttpVersion = HttpVersion,
-            HttpMethod = HttpMethod,
-            Url = Url,
-            CustomAuth = CustomAuth?.Copy(),
-            Headers = Headers?.Select(h => h.Copy())?.ToList(),
-            Body = (PororocaHttpRequestBody?)Body?.Clone(),
-            ResponseCaptures = ResponseCaptures?.Select(c => c.Copy())?.ToList()
-        };
+        HttpVersion = HttpVersion,
+        HttpMethod = HttpMethod,
+        Url = Url,
+        Headers = Headers?.Select(h => h.Copy())?.ToList(),
+        Body = Body?.Copy(),
+        CustomAuth = CustomAuth?.Copy(),
+        ResponseCaptures = ResponseCaptures?.Select(c => c.Copy())?.ToList()
+    };
 }

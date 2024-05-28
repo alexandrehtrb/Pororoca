@@ -1,12 +1,12 @@
 using System.Net;
 using System.Text;
 using System.Text.Json;
-using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.TranslateRequest;
 using Xunit;
-using static Pororoca.Domain.Tests.Features.Entities.Pororoca.Http.PororocaHttpResponseTests;
 using static Pororoca.Domain.Features.RequestRepeater.HttpRepetitionReporter;
+using static Pororoca.Domain.Tests.Features.Entities.Pororoca.Http.PororocaHttpResponseTests;
 
 namespace Pororoca.Domain.Tests.Features.RequestRepeater;
 

@@ -5,7 +5,7 @@ using Pororoca.Domain.Features.VariableResolution;
 
 namespace Pororoca.Domain.Features.TranslateRequest.Common;
 
-public static class PororocaRequestCommonTranslator
+internal static class PororocaRequestCommonTranslator
 {
     internal static PororocaRequestAuth? ChooseRequestAuth(PororocaRequestAuth? collectionScopedAuth, PororocaRequestAuth? reqAuth) =>
         reqAuth?.Mode == PororocaRequestAuthMode.InheritFromCollection ?
@@ -176,7 +176,8 @@ public static class PororocaRequestCommonTranslator
             return null;
         else if (unresolvedWinAuth.UseCurrentUser)
             return new(true, null, null, null);
-        else return new(UseCurrentUser: false,
+        else
+            return new(UseCurrentUser: false,
                         Login: IPororocaVariableResolver.ReplaceTemplates(unresolvedWinAuth.Login, effectiveVars),
                         Password: IPororocaVariableResolver.ReplaceTemplates(unresolvedWinAuth.Password, effectiveVars),
                         Domain: IPororocaVariableResolver.ReplaceTemplates(unresolvedWinAuth.Domain, effectiveVars));

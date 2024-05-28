@@ -28,7 +28,7 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
         AddNewCmd = ReactiveCommand.Create(AddNew);
         CutCmd = ReactiveCommand.Create(() => CutOrCopySelected(false));
         CopyCmd = ReactiveCommand.Create(() => CutOrCopySelected(true));
-        PasteCmd = ReactiveCommand.Create(Paste);
+        PasteCmd = ReactiveCommand.CreateFromTask(PasteAsync);
         DuplicateCmd = ReactiveCommand.Create(DuplicateSelected);
         DeleteCmd = ReactiveCommand.Create(DeleteSelected);
 
@@ -49,7 +49,7 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
 
     internal void CutOrCopySelected(bool falseIfCutTrueIfCopy)
     {
-        if (SelectedItems is not null && SelectedItems.Count > 0)
+        if (SelectedItems is not null && !SelectedItems.IsEmpty)
         {
             // needs to generate a new array because of concurrency problems
             var vars = SelectedItems.Select(x => x.Key).ToArray();
@@ -65,7 +65,7 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
         }
     }
 
-    internal void Paste()
+    internal virtual Task PasteAsync()
     {
         if (InnerClipboardArea.CanPaste)
         {
@@ -75,11 +75,12 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
                 Items.Add(ToVm(v));
             }
         }
+        return Task.CompletedTask;
     }
 
     private void DuplicateSelected()
     {
-        if (SelectedItems is not null && SelectedItems.Count > 0)
+        if (SelectedItems is not null && !SelectedItems.IsEmpty)
         {
             // needs to generate a new array because of concurrency problems
             var varsToDuplicate = SelectedItems.Select(x => x.Key).ToArray();
@@ -94,7 +95,7 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
 
     internal void DeleteSelected()
     {
-        if (SelectedItems is not null && SelectedItems.Count > 0)
+        if (SelectedItems is not null && !SelectedItems.IsEmpty)
         {
             // needs to generate a new array because of concurrency problems
             var varsToDelete = SelectedItems.Select(x => x.Key).ToArray();
@@ -105,6 +106,6 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
         }
     }
 
-    internal D[] ConvertItemsToDomain() =>
-        Items.Select(ToDomain).ToArray();
+    internal List<D> ConvertItemsToDomain() =>
+        Items.Select(ToDomain).ToList();
 }

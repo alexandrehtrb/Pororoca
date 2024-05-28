@@ -32,17 +32,18 @@ public static class PostmanEnvironmentImporter
     {
         try
         {
-            // Always generating new id, in case user imports the same environment twice
-            PororocaEnvironment myEnv = new(Guid.NewGuid(), postmanEnvironment.Name, DateTimeOffset.Now);
-            if (postmanEnvironment.Values != null)
-            {
-                foreach (var envVar in postmanEnvironment.Values)
-                {
-                    myEnv.AddVariable(ConvertPostmanEnvironmentVariable(envVar));
-                }
-            }
+            var envVars = postmanEnvironment.Values != null ?
+                          postmanEnvironment.Values.Select(ConvertPostmanEnvironmentVariable).ToList() :
+                          new();
 
-            pororocaEnvironment = myEnv;
+            pororocaEnvironment = new(
+                // Always generating new id, in case user imports the same environment twice
+                Id: Guid.NewGuid(),
+                Name: postmanEnvironment.Name,
+                CreatedAt: DateTimeOffset.Now,
+                IsCurrent: false,
+                Variables: envVars);
+
             return true;
         }
         catch

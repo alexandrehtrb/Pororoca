@@ -4,8 +4,9 @@ using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.VariableResolution;
-using static Pororoca.Domain.Features.Common.JsonConfiguration;
 using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
+using static Pororoca.Domain.Features.Common.JsonConfiguration;
+using static Pororoca.Domain.Features.Entities.Pororoca.Http.PororocaHttpRequestBody;
 using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonTranslator;
 
 namespace Pororoca.Domain.Features.TranslateRequest.Http;
@@ -85,30 +86,18 @@ public static class PororocaHttpRequestTranslator
 
         if (input is null) return null;
 
-        PororocaHttpRequestBody body = new();
-        switch (input.Mode)
+        return input.Mode switch
         {
-            case PororocaHttpRequestBodyMode.Raw:
-                body.SetRawContent(ReplaceTemplates(input.RawContent!), input.ContentType!);
-                return body;
-            case PororocaHttpRequestBodyMode.File:
-                body.SetFileContent(ReplaceTemplates(input.FileSrcPath!), input.ContentType!);
-                return body;
-            case PororocaHttpRequestBodyMode.UrlEncoded:
-                body.SetUrlEncodedContent(ResolveKVParams(effectiveVars, input.UrlEncodedValues!));
-                return body;
-            case PororocaHttpRequestBodyMode.FormData:
-                body.SetFormDataContent(
-                    input.FormDataValues!
-                        .Where(x => x.Enabled)
-                        .Select(x => new PororocaHttpRequestFormDataParam(true, x.Type, ReplaceTemplates(x.Key), ReplaceTemplates(x.TextValue), x.ContentType, ReplaceTemplates(x.FileSrcPath))));
-                return body;
-            case PororocaHttpRequestBodyMode.GraphQl:
-                body.SetGraphQlContent(input.GraphQlValues!.Query, ReplaceTemplates(input.GraphQlValues!.Variables));
-                return body;
-            default:
-                return null;
-        }
+            PororocaHttpRequestBodyMode.Raw => MakeRawContent(ReplaceTemplates(input.RawContent!), input.ContentType!),
+            PororocaHttpRequestBodyMode.File => MakeFileContent(ReplaceTemplates(input.FileSrcPath!), input.ContentType!),
+            PororocaHttpRequestBodyMode.UrlEncoded => MakeUrlEncodedContent(ResolveKVParams(effectiveVars, input.UrlEncodedValues!)),
+            PororocaHttpRequestBodyMode.FormData => MakeFormDataContent(
+                                input.FormDataValues!
+                                    .Where(x => x.Enabled)
+                                    .Select(x => new PororocaHttpRequestFormDataParam(true, x.Type, ReplaceTemplates(x.Key), ReplaceTemplates(x.TextValue), x.ContentType, ReplaceTemplates(x.FileSrcPath)))),
+            PororocaHttpRequestBodyMode.GraphQl => MakeGraphQlContent(input.GraphQlValues!.Query, ReplaceTemplates(input.GraphQlValues!.Variables)),
+            _ => null,
+        };
     }
 
     #endregion

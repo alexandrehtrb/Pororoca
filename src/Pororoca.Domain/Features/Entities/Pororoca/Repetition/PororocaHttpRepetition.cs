@@ -1,5 +1,4 @@
 using System.Text;
-using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using static Pororoca.Domain.Features.Entities.Pororoca.Repetition.PororocaRepetitionInputData;
 
@@ -45,14 +44,26 @@ public sealed record PororocaRepetitionInputData(
     }
 }
 
-public sealed class PororocaHttpRepetition : PororocaRequest
+public sealed record PororocaHttpRepetition
+(
+    string Name,
+    string BaseRequestPath,
+    PororocaRepetitionMode RepetitionMode,
+    int? NumberOfRepetitions, // only for Simple and Random
+    int? MaxDop, // only for Simple and Random
+    int? DelayInMs,
+    PororocaRepetitionInputData? InputData // only for Sequential and Random
+) : PororocaRequest(PororocaRequestType.HttpRepetition, Name)
 {
-    public string BaseRequestPath { get; set; }
-    public PororocaRepetitionMode RepetitionMode { get; set; }
-    public int? NumberOfRepetitions { get; set; } // only for Simple and Random
-    public int? MaxDop { get; set; } // only for Simple and Random
-    public int? DelayInMs { get; set; }
-    public PororocaRepetitionInputData? InputData { get; set; } // only for Sequential and Random
+    public PororocaHttpRepetition(string name, string? inputDataRawComment = null) : this(
+        Name: name,
+        BaseRequestPath: string.Empty,
+        RepetitionMode: PororocaRepetitionMode.Sequential,
+        NumberOfRepetitions: null,
+        MaxDop: null,
+        DelayInMs: null,
+        InputData: inputDataRawComment is null ? null : MakeRawJsonInputDataExample(inputDataRawComment))
+    { }
 
 #nullable disable warnings
     public PororocaHttpRepetition() : this(string.Empty)
@@ -61,26 +72,9 @@ public sealed class PororocaHttpRepetition : PororocaRequest
     }
 #nullable restore warnings
 
-    public PororocaHttpRepetition(string name, string? inputDataRawComment = null) : base(PororocaRequestType.HttpRepetition, name)
-    {
-        BaseRequestPath = string.Empty;
-        RepetitionMode = PororocaRepetitionMode.Sequential;
-        NumberOfRepetitions = null;
-        MaxDop = null;
-        DelayInMs = null;
-        InputData = inputDataRawComment is null ?
-            null : MakeRawJsonInputDataExample(inputDataRawComment);
-    }
+    public override PororocaRequest CopyAbstract() => Copy();
 
-    public override object Clone() => new PororocaHttpRepetition(Name)
-    {
-        BaseRequestPath = this.BaseRequestPath,
-        RepetitionMode = this.RepetitionMode,
-        NumberOfRepetitions = this.NumberOfRepetitions,
-        MaxDop = this.MaxDop,
-        DelayInMs = this.DelayInMs,
-        InputData = this.InputData
-    };
+    public PororocaHttpRepetition Copy() => this with { };
 }
 
 public sealed record PororocaHttpRepetitionResult(

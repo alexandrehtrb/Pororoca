@@ -8,7 +8,7 @@ public abstract class SimpleClipboardArea<T> : ViewModelBase
     protected readonly List<T> copied = new();
 
     [Reactive]
-    public bool CanPaste { get; private set; }
+    public virtual bool CanPaste { get; private set; }
 
     public void Clear()
     {

@@ -202,7 +202,6 @@ internal static partial class FileExporterImporter
                 {
                     if (TryImportPororocaEnvironment(fileContent, out var importedPororocaEnvironment))
                     {
-                        importedPororocaEnvironment!.IsCurrent = false; // Imported environment should always be disabled
                         egvm.AddEnvironment(importedPororocaEnvironment!);
                     }
                 }

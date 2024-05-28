@@ -16,8 +16,11 @@ public static class PororocaEnvironmentImporter
             // And always set as not current environment
             if (pororocaEnvironment != null)
             {
-                pororocaEnvironment.Id = Guid.NewGuid();
-                pororocaEnvironment.IsCurrent = false;
+                pororocaEnvironment = pororocaEnvironment with
+                {
+                    Id = Guid.NewGuid(),
+                    IsCurrent = false
+                };
             }
 
             return pororocaEnvironment != null

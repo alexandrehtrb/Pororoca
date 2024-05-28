@@ -37,7 +37,8 @@ internal interface IVariablesEditorRobot
     protected static async Task SelectVariables(DataGrid variablesDg, params VariableViewModel[] vars)
     {
         variablesDg.SelectedItems.Clear();
-        foreach (var v in vars) variablesDg.SelectedItems.Add(v);
+        foreach (var v in vars)
+            variablesDg.SelectedItems.Add(v);
         await UITestActions.WaitAfterActionAsync();
     }
 
@@ -55,7 +56,7 @@ internal interface IVariablesEditorRobot
 
     protected static async Task PasteVariables(VariablesDataGridViewModel variablesVm)
     {
-        variablesVm.Paste();
+        await variablesVm.PasteAsync();
         await UITestActions.WaitAfterActionAsync();
     }
 

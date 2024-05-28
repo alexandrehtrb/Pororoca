@@ -3,6 +3,7 @@ using System.Net;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Xunit;
+using static Pororoca.Domain.Features.Entities.Pororoca.Http.PororocaHttpRequestBody;
 using static Pororoca.Domain.Features.ExportLog.HttpLogExporter;
 
 namespace Pororoca.Domain.Tests.Features.ExportLog;
@@ -30,9 +31,9 @@ Elapsed time: 00:00:01.3944318
     public static void Should_produce_http_log_request_part_with_nothing_correctly()
     {
         // GIVEN
-        var res = GenerateResponse();
-        res.ResolvedRequest!.HttpMethod = "POST";
-        res.ResolvedRequest!.Url = "https://localhost:5000/test/post/none";
+        var res = GenerateResponse(resolvedReq: new("",
+            HttpMethod: "POST",
+            Url: "https://localhost:5000/test/post/none"));
 
         // WHEN, THEN
         Assert.Equal(
@@ -49,9 +50,9 @@ Accept-Encoding: gzip, deflate, br
     public static void Should_produce_http_log_request_part_with_custom_auth_correctly()
     {
         // GIVEN
-        var res = GenerateResponse();
-        res.ResolvedRequest!.Url = "https://httpbin.org/headers";
-        res.ResolvedRequest!.CustomAuth = PororocaRequestAuth.MakeBasicAuth("usr", "pwd");
+        var res = GenerateResponse(resolvedReq: new("",
+            Url: "https://httpbin.org/headers",
+            CustomAuth: PororocaRequestAuth.MakeBasicAuth("usr", "pwd")));
 
         // WHEN, THEN
         Assert.Equal(
@@ -69,9 +70,9 @@ Authorization: Basic dXNyOnB3ZA==
     public static void Should_produce_http_log_request_part_with_headers_correctly()
     {
         // GIVEN
-        var res = GenerateResponse();
-        res.ResolvedRequest!.Url = "https://httpbin.org/headers";
-        res.ResolvedRequest!.Headers = new() { new(true, "MyHeader", "MyHeaderValue") };
+        var res = GenerateResponse(resolvedReq: new("",
+            Url: "https://httpbin.org/headers",
+            Headers: [new(true, "MyHeader", "MyHeaderValue")]));
 
         // WHEN, THEN
         Assert.Equal(
@@ -89,11 +90,11 @@ MyHeader: MyHeaderValue
     public static void Should_produce_http_log_request_part_with_raw_text_body_correctly()
     {
         // GIVEN
-        var res = GenerateResponse();
-        res.ResolvedRequest!.HttpMethod = "POST";
-        res.ResolvedRequest!.Url = "https://httpbin.org/anything";
-        res.ResolvedRequest!.Body = new();
-        res.ResolvedRequest!.Body.SetRawContent("oi", "text/plain");
+        var body = MakeRawContent("oi", "text/plain");
+        var res = GenerateResponse(resolvedReq: new("",
+            HttpMethod: "POST",
+            Url: "https://httpbin.org/anything",
+            Body: body));
 
         // WHEN, THEN
         Assert.Equal(
@@ -114,11 +115,11 @@ oi
     public static void Should_produce_http_log_request_part_with_file_text_body_correctly()
     {
         // GIVEN
-        var res = GenerateResponse();
-        res.ResolvedRequest!.HttpMethod = "POST";
-        res.ResolvedRequest!.Url = "https://httpbin.org/anything";
-        res.ResolvedRequest!.Body = new();
-        res.ResolvedRequest!.Body.SetFileContent(GetTestFilePath("testfilecontent1.json"), "application/json");
+        var body = MakeFileContent(GetTestFilePath("testfilecontent1.json"), "application/json");
+        var res = GenerateResponse(resolvedReq: new("",
+            HttpMethod: "POST",
+            Url: "https://httpbin.org/anything",
+            Body: body));
 
         // WHEN, THEN
         Assert.Equal(
@@ -139,11 +140,11 @@ Content-Length: 8
     public static void Should_produce_http_log_request_part_with_file_binary_body_correctly()
     {
         // GIVEN
-        var res = GenerateResponse();
-        res.ResolvedRequest!.HttpMethod = "POST";
-        res.ResolvedRequest!.Url = "https://httpbin.org/anything";
-        res.ResolvedRequest!.Body = new();
-        res.ResolvedRequest!.Body.SetFileContent(GetTestFilePath("pirate.gif"), "image/gif");
+        var body = MakeFileContent(GetTestFilePath("pirate.gif"), "image/gif");
+        var res = GenerateResponse(resolvedReq: new("",
+            HttpMethod: "POST",
+            Url: "https://httpbin.org/anything",
+            Body: body));
 
         // WHEN, THEN
         Assert.Equal(
@@ -164,11 +165,11 @@ R0lGODlhQABAAMQRAAAAAAgIAAgQGBAQEFoAAIRjOZR7Sq0ICLUAAL29vcalY86le+fe3vf39//OnP//
     public static void Should_produce_http_log_request_part_with_file_binary_body_file_disappeared_correctly()
     {
         // GIVEN
-        var res = GenerateResponse();
-        res.ResolvedRequest!.HttpMethod = "POST";
-        res.ResolvedRequest!.Url = "https://httpbin.org/anything";
-        res.ResolvedRequest!.Body = new();
-        res.ResolvedRequest!.Body.SetFileContent(GetTestFilePath("pirate1.gif"), "image/gif");
+        var body = MakeFileContent(GetTestFilePath("pirate1.gif"), "image/gif");
+        var res = GenerateResponse(resolvedReq: new("",
+            HttpMethod: "POST",
+            Url: "https://httpbin.org/anything",
+            Body: body));
 
         // WHEN, THEN
         Assert.Equal(
@@ -189,15 +190,15 @@ Content-Length: 0
     public static void Should_produce_http_log_request_part_with_url_encoded_text_body_correctly()
     {
         // GIVEN
-        var res = GenerateResponse();
-        res.ResolvedRequest!.HttpMethod = "POST";
-        res.ResolvedRequest!.Url = "https://httpbin.org/anything";
-        res.ResolvedRequest!.Body = new();
-        res.ResolvedRequest!.Body.SetUrlEncodedContent([
+        var body = MakeUrlEncodedContent([
             new(true, "a", "xyz"),
             new(true, "b", "123"),
             new(true, "c", "true à é"),
             new(true, "myIdSecret", "456")]);
+        var res = GenerateResponse(resolvedReq: new("",
+            HttpMethod: "POST",
+            Url: "https://httpbin.org/anything",
+            Body: body));
 
         // WHEN, THEN
         Assert.Equal(
@@ -218,16 +219,17 @@ a=xyz&b=123&c=true+%C3%A0+%C3%A9&myIdSecret=456
     public static void Should_produce_http_log_request_part_with_formdata_with_text_and_file_body_correctly()
     {
         // GIVEN
-        var res = GenerateResponse();
-        res.ResolvedRequest!.HttpMethod = "POST";
-        res.ResolvedRequest!.Url = "https://httpbin.org/anything";
-        res.ResolvedRequest!.Body = new();
-        res.ResolvedRequest!.Body.SetFormDataContent([
+        var body = MakeFormDataContent([
             PororocaHttpRequestFormDataParam.MakeTextParam(true, "a", "xyz", "text/plain"),
             PororocaHttpRequestFormDataParam.MakeTextParam(true, "b", "{\"id\":2}", "application/json"),
             PororocaHttpRequestFormDataParam.MakeTextParam(true, "myIdSecret", "456", "text/plain"),
             PororocaHttpRequestFormDataParam.MakeFileParam(true, "arq", GetTestFilePath("pirate.gif"), "image/gif")
         ]);
+        var res = GenerateResponse(resolvedReq: new("",
+            HttpMethod: "POST",
+            Url: "https://httpbin.org/anything",
+            Body: body));
+
         var boundary = Guid.Parse("9e0248d8-f117-404e-a46b-51f0382d00bd");
 
         // WHEN, THEN
@@ -239,7 +241,7 @@ POST /anything HTTP/1.1
 Host: httpbin.org
 Accept-Encoding: gzip, deflate, br
 Content-Type: multipart/form-data
-Content-Length: "+contentLength+@"
+Content-Length: " + contentLength + @"
 
 --9e0248d8-f117-404e-a46b-51f0382d00bd
 Content-Type: text/plain; charset=utf-8
@@ -270,16 +272,16 @@ R0lGODlhQABAAMQRAAAAAAgIAAgQGBAQEFoAAIRjOZR7Sq0ICLUAAL29vcalY86le+fe3vf39//OnP//
     public static void Should_produce_http_log_request_part_with_formdata_with_text_and_file_body_file_disappeared_correctly()
     {
         // GIVEN
-        var res = GenerateResponse();
-        res.ResolvedRequest!.HttpMethod = "POST";
-        res.ResolvedRequest!.Url = "https://httpbin.org/anything";
-        res.ResolvedRequest!.Body = new();
-        res.ResolvedRequest!.Body.SetFormDataContent([
+        var body = MakeFormDataContent([
             PororocaHttpRequestFormDataParam.MakeTextParam(true, "a", "xyz", "text/plain"),
             PororocaHttpRequestFormDataParam.MakeTextParam(true, "b", "{\"id\":2}", "application/json"),
             PororocaHttpRequestFormDataParam.MakeTextParam(true, "myIdSecret", "456", "text/plain"),
             PororocaHttpRequestFormDataParam.MakeFileParam(true, "arq", GetTestFilePath("pirate1.gif"), "image/gif")
         ]);
+        var res = GenerateResponse(resolvedReq: new("",
+            HttpMethod: "POST",
+            Url: "https://httpbin.org/anything",
+            Body: body));
         var boundary = Guid.Parse("9e0248d8-f117-404e-a46b-51f0382d00bd");
 
         // WHEN, THEN
@@ -291,7 +293,7 @@ POST /anything HTTP/1.1
 Host: httpbin.org
 Accept-Encoding: gzip, deflate, br
 Content-Type: multipart/form-data
-Content-Length: "+contentLength+@"
+Content-Length: " + contentLength + @"
 
 --9e0248d8-f117-404e-a46b-51f0382d00bd
 Content-Type: text/plain; charset=utf-8
@@ -322,11 +324,11 @@ Content-Disposition: form-data; name=arq; filename=pirate1.gif; filename*=utf-8'
     public static void Should_produce_http_log_request_part_with_graphql_text_body_correctly()
     {
         // GIVEN
-        var res = GenerateResponse();
-        res.ResolvedRequest!.HttpMethod = "POST";
-        res.ResolvedRequest!.Url = "https://fruits-api.netlify.app/graphql";
-        res.ResolvedRequest!.Body = new();
-        res.ResolvedRequest!.Body.SetGraphQlContent("myquery", "{\"id\":17}");
+        var body = MakeGraphQlContent("myquery", "{\"id\":17}");
+        var res = GenerateResponse(resolvedReq: new("",
+            HttpMethod: "POST",
+            Url: "https://fruits-api.netlify.app/graphql",
+            Body: body));
 
         // WHEN, THEN
         Assert.Equal(
@@ -347,13 +349,13 @@ Content-Length: 41
     public static void Should_produce_http_log_request_part_with_custom_auth_custom_headers_and_body_correctly()
     {
         // GIVEN
-        var res = GenerateResponse();
-        res.ResolvedRequest!.HttpMethod = "POST";
-        res.ResolvedRequest!.Url = "https://httpbin.org/anything";
-        res.ResolvedRequest!.CustomAuth = PororocaRequestAuth.MakeBearerAuth("my_token");
-        res.ResolvedRequest!.Headers = [new(true, "MyHeader", "MyHeaderValue")];
-        res.ResolvedRequest!.Body = new();
-        res.ResolvedRequest!.Body.SetRawContent("oi", "text/plain");
+        var body = MakeRawContent("oi", "text/plain");
+        var res = GenerateResponse(resolvedReq: new("",
+            HttpMethod: "POST",
+            Url: "https://httpbin.org/anything",
+            Headers: [new(true, "MyHeader", "MyHeaderValue")],
+            Body: body,
+            CustomAuth: PororocaRequestAuth.MakeBearerAuth("my_token")));
 
         // WHEN, THEN
         Assert.Equal(

@@ -2,9 +2,9 @@ using System.Collections.ObjectModel;
 using System.Reactive;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
-using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using ReactiveUI;
 
@@ -44,7 +44,7 @@ public abstract class RequestsAndFoldersParentViewModel : CollectionOrganization
 
         #region COLLECTION FOLDER
 
-        this.Collection = GetCollectionByClimbingParents();
+        Collection = GetCollectionByClimbingParents();
         Items = new();
 
         #endregion
@@ -54,7 +54,8 @@ public abstract class RequestsAndFoldersParentViewModel : CollectionOrganization
 
     private CollectionViewModel GetCollectionByClimbingParents()
     {
-        if (this is CollectionViewModel c) return c;
+        if (this is CollectionViewModel c)
+            return c;
 
         var vm = Parent;
         while (vm is not CollectionViewModel)
@@ -86,7 +87,7 @@ public abstract class RequestsAndFoldersParentViewModel : CollectionOrganization
     public override void PasteToThis()
     {
         var itemsToPaste = ClipboardArea.Instance.FetchCopiesOfFoldersAndReqs();
-        foreach (var itemToPaste in itemsToPaste)
+        foreach (object itemToPaste in itemsToPaste)
         {
             if (itemToPaste is PororocaCollectionFolder folderToPaste)
                 AddFolder(folderToPaste);
@@ -147,7 +148,7 @@ public abstract class RequestsAndFoldersParentViewModel : CollectionOrganization
 
     public void AddHttpRequest(PororocaHttpRequest reqToAdd, bool isNewItem = false)
     {
-        HttpRequestViewModel reqToAddVm = new(this, this.Collection, reqToAdd);
+        HttpRequestViewModel reqToAddVm = new(this, Collection, reqToAdd);
         Items.Add(reqToAddVm); // always at the end
 
         IsExpanded = true;
@@ -161,7 +162,7 @@ public abstract class RequestsAndFoldersParentViewModel : CollectionOrganization
 
     public void AddWebSocketConnection(PororocaWebSocketConnection wsToAdd, bool isNewItem = false)
     {
-        WebSocketConnectionViewModel wsToAddVm = new(this, this.Collection, wsToAdd);
+        WebSocketConnectionViewModel wsToAddVm = new(this, Collection, wsToAdd);
         Items.Add(wsToAddVm); // always at the end
 
         IsExpanded = true;
@@ -171,7 +172,7 @@ public abstract class RequestsAndFoldersParentViewModel : CollectionOrganization
 
     public void AddHttpRepeater(PororocaHttpRepetition repToAdd, bool isNewItem = false)
     {
-        HttpRepeaterViewModel repToAddVm = new(this, this.Collection, repToAdd);
+        HttpRepeaterViewModel repToAddVm = new(this, Collection, repToAdd);
         Items.Add(repToAddVm); // always at the end
 
         IsExpanded = true;

@@ -38,8 +38,7 @@ public static class PororocaWebSocketCommonTranslatorTests
         httpClientProviderMock.Provide(Arg.Any<bool>(), Arg.Any<PororocaRequestAuth>()).Returns(httpClient);
         bool disableTlsVerification = false;
         var httpVersionVerifier = MockHttpVersionOSVerifier(false, TranslateRequestErrors.WebSocketHttpVersionUnavailable);
-        PororocaWebSocketConnection ws = new(string.Empty);
-        ws.HttpVersion = 3.0m;
+        PororocaWebSocketConnection ws = new(string.Empty, HttpVersion: 3.0m);
 
         // WHEN
         bool valid = TryTranslateConnection(httpVersionVerifier, col.GetEffectiveVariables(), col.CollectionScopedAuth, col.CollectionScopedRequestHeaders, httpClientProviderMock, ws, disableTlsVerification, out var clis, out string? errorCode);
@@ -61,8 +60,7 @@ public static class PororocaWebSocketCommonTranslatorTests
         httpClientProviderMock.Provide(Arg.Any<bool>(), Arg.Any<PororocaRequestAuth>()).Returns(httpClient);
         bool disableTlsVerification = false;
         var httpVersionVerifier = MockHttpVersionOSVerifier(true, null);
-        PororocaWebSocketConnection ws = new(string.Empty);
-        ws.HttpVersion = 2.0m;
+        PororocaWebSocketConnection ws = new(string.Empty, HttpVersion: 2.0m);
 
         // WHEN
         bool valid = TryTranslateConnection(httpVersionVerifier, col.GetEffectiveVariables(), col.CollectionScopedAuth, col.CollectionScopedRequestHeaders, httpClientProviderMock, ws, disableTlsVerification, out var clis, out string? errorCode);
@@ -87,8 +85,8 @@ public static class PororocaWebSocketCommonTranslatorTests
         PororocaCollection col = new(string.Empty);
         bool disableTlsVerification = false;
         var httpVersionVerifier = MockHttpVersionOSVerifier(true, null);
-        PororocaWebSocketConnection ws = new(string.Empty);
-        ws.CustomAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "./cert.crt", null, null);
+        var customAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "./cert.crt", null, null);
+        PororocaWebSocketConnection ws = new(string.Empty, CustomAuth: customAuth);
         var httpClientProviderMock = Substitute.For<IPororocaHttpClientProvider>();
         HttpClient httpClient = new();
         httpClientProviderMock.Provide(Arg.Any<bool>(), Arg.Is<PororocaRequestAuth>(
@@ -205,7 +203,7 @@ public static class PororocaWebSocketCommonTranslatorTests
         // GIVEN
         PororocaCollection col = new(string.Empty)
         {
-            CollectionScopedRequestHeaders = [ new(true, "K4", "V4") ]
+            CollectionScopedRequestHeaders = [new(true, "K4", "V4")]
         };
         col.Variables.Add(new(true, "K3Value", "V3", true));
         bool disableTlsVerification = false;
@@ -213,14 +211,15 @@ public static class PororocaWebSocketCommonTranslatorTests
         var httpClientProviderMock = Substitute.For<IPororocaHttpClientProvider>();
         HttpClient httpClient = new();
         httpClientProviderMock.Provide(Arg.Any<bool>(), Arg.Any<PororocaRequestAuth>()).Returns(httpClient);
-        PororocaWebSocketConnection ws = new(string.Empty);
-        ws.Headers = new()
-        {
-            new(false, "K1", "V1"),
-            new(true, "K2", "V2"),
-            new(true, "K3", "{{K3Value}}")
-        };
-        ws.CustomAuth = PororocaRequestAuth.MakeBasicAuth("usr", "{{K3Value}}");
+        PororocaWebSocketConnection ws = new(string.Empty,
+            Headers:
+            [
+                new(false, "K1", "V1"),
+                new(true, "K2", "V2"),
+                new(true, "K3", "{{K3Value}}")
+            ],
+            CustomAuth: PororocaRequestAuth.MakeBasicAuth("usr", "{{K3Value}}")
+        );
 
         // WHEN
         bool valid = TryTranslateConnection(httpVersionVerifier, col.GetEffectiveVariables(), col.CollectionScopedAuth, col.CollectionScopedRequestHeaders, httpClientProviderMock, ws, disableTlsVerification, out var clis, out string? errorCode);
@@ -250,13 +249,12 @@ public static class PororocaWebSocketCommonTranslatorTests
         var httpClientProviderMock = Substitute.For<IPororocaHttpClientProvider>();
         HttpClient httpClient = new();
         httpClientProviderMock.Provide(Arg.Any<bool>(), Arg.Any<PororocaRequestAuth>()).Returns(httpClient);
-        PororocaWebSocketConnection ws = new(string.Empty);
-        ws.Subprotocols = new()
-        {
-            new(true, "sub1", null),
-            new(false, "sub2", null),
-            new(true, "{{K3Value}}", null)
-        };
+        PororocaWebSocketConnection ws = new(string.Empty,
+            Subprotocols: [
+                new(true, "sub1", null),
+                new(false, "sub2", null),
+                new(true, "{{K3Value}}", null)
+            ]);
 
         // WHEN
         bool valid = TryTranslateConnection(httpVersionVerifier, col.GetEffectiveVariables(), col.CollectionScopedAuth, col.CollectionScopedRequestHeaders, httpClientProviderMock, ws, disableTlsVerification, out var clis, out string? errorCode);
@@ -309,8 +307,7 @@ public static class PororocaWebSocketCommonTranslatorTests
         var httpClientProviderMock = Substitute.For<IPororocaHttpClientProvider>();
         HttpClient httpClient = new();
         httpClientProviderMock.Provide(Arg.Any<bool>(), Arg.Any<PororocaRequestAuth>()).Returns(httpClient);
-        PororocaWebSocketConnection ws = new(string.Empty);
-        ws.CompressionOptions = new(14, true, 12, false);
+        PororocaWebSocketConnection ws = new(string.Empty, CompressionOptions: new(14, true, 12, false));
 
         // WHEN
         bool valid = TryTranslateConnection(httpVersionVerifier, col.GetEffectiveVariables(), col.CollectionScopedAuth, col.CollectionScopedRequestHeaders, httpClientProviderMock, ws, disableTlsVerification, out var clis, out string? errorCode);
@@ -339,8 +336,8 @@ public static class PororocaWebSocketCommonTranslatorTests
         PororocaCollection col = new(string.Empty);
         bool disableTlsVerification = false;
         var httpVersionVerifier = MockHttpVersionOSVerifier(true, null);
-        PororocaWebSocketConnection ws = new(string.Empty);
-        ws.CustomAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "./cert.crt", null, null);
+        var customAuth = PororocaRequestAuth.MakeClientCertificateAuth(PororocaRequestAuthClientCertificateType.Pem, "./cert.crt", null, null);
+        PororocaWebSocketConnection ws = new(string.Empty, CustomAuth: customAuth);
         var httpClientProviderMock = Substitute.For<IPororocaHttpClientProvider>();
         Exception ex = new("random exception");
         httpClientProviderMock.Provide(Arg.Any<bool>(), Arg.Any<PororocaRequestAuth>()).Returns(x => throw ex);

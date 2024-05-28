@@ -9,11 +9,11 @@ public enum PororocaRequestType
     HttpRepetition
 }
 
-public abstract class PororocaRequest : PororocaCollectionItem
+public abstract record PororocaRequest
+(
+    [property: JsonPropertyOrder(-3)] PororocaRequestType RequestType,
+    [property: JsonPropertyOrder(-2)] string Name
+)
 {
-    [JsonPropertyOrder(-3)]
-    public PororocaRequestType RequestType { get; init; }
-
-    protected PororocaRequest(PororocaRequestType reqType, string name) : base(name) =>
-        RequestType = reqType;
+    public abstract PororocaRequest CopyAbstract();
 }

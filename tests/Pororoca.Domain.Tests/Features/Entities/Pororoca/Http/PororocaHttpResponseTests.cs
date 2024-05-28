@@ -3,6 +3,7 @@ using System.Text;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.TranslateRequest.Http;
 using Xunit;
+using static Pororoca.Domain.Features.Entities.Pororoca.Http.PororocaHttpRequestBody;
 
 namespace Pororoca.Domain.Tests.Features.Entities.Pororoca.Http;
 
@@ -264,8 +265,7 @@ public static class PororocaHttpResponseTests
     public static async Task Should_read_multipart_parts_if_multipart_response()
     {
         // GIVEN
-        PororocaHttpRequestBody body = new();
-        body.SetFormDataContent([
+        var body = MakeFormDataContent([
             PororocaHttpRequestFormDataParam.MakeTextParam(true, "a", "oi", "text/plain"),
             PororocaHttpRequestFormDataParam.MakeFileParam(true, "arq", GetTestFilePath("pirate.gif"), "image/gif")
         ]);
@@ -299,8 +299,7 @@ public static class PororocaHttpResponseTests
     public static async Task Should_show_multipart_response_as_text_if_all_parts_are_text()
     {
         // GIVEN
-        PororocaHttpRequestBody body = new();
-        body.SetFormDataContent([
+        var body = MakeFormDataContent([
             PororocaHttpRequestFormDataParam.MakeTextParam(true, "a", "oi", "text/plain"),
             PororocaHttpRequestFormDataParam.MakeTextParam(true, "b", "[\"ciao\",\"bye\"]", "application/json")
         ]);

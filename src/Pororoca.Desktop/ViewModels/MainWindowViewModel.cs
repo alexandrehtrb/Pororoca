@@ -9,6 +9,7 @@ using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
 using Pororoca.Desktop.ExportImport;
+using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.UserData;
 using Pororoca.Domain.Features.Entities.Pororoca;
@@ -409,44 +410,22 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         UserDataManager.SaveUserData(UserPrefs, cols);
     }
 
-    private void ShowUpdateReminder()
-    {
-        Bitmap bitmap = new(AssetLoader.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
-
-        var msgbox = MessageBoxManager.GetMessageBoxStandard(
-            new MessageBoxStandardParams()
-            {
-                ContentTitle = Localizer.Instance.UpdateReminder.DialogTitle,
-                ContentMessage = Localizer.Instance.UpdateReminder.DialogMessage,
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                WindowIcon = new(bitmap),
-                ButtonDefinitions = ButtonEnum.OkCancel
-            });
-        Dispatcher.UIThread.Post(async () =>
-        {
-            var buttonResult = await msgbox.ShowAsync();
-            if (buttonResult == ButtonResult.Ok)
-            {
-                OpenWebBrowser(GitHubRepoUrl);
-            }
-        });
-    }
+    private void ShowUpdateReminder() =>
+        Dialogs.ShowDialog(
+            title: Localizer.Instance.UpdateReminder.DialogTitle,
+            message: Localizer.Instance.UpdateReminder.DialogMessage,
+            buttons: ButtonEnum.OkCancel,
+            onButtonOkClicked: () => OpenWebBrowser(GitHubRepoUrl));
 
     private void ShowMacOSXUserDataFolderMigratedV3Dialog()
     {
-        Bitmap bitmap = new(AssetLoader.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
         string newUserDataDirPath = UserDataManager.GetUserDataFolder().FullName;
+        string message = string.Format(Localizer.Instance.MacOSXUserDataFolderMigratedV3Dialog.Message, newUserDataDirPath);
 
-        var msgbox = MessageBoxManager.GetMessageBoxStandard(
-            new MessageBoxStandardParams()
-            {
-                ContentTitle = Localizer.Instance.MacOSXUserDataFolderMigratedV3Dialog.Title,
-                ContentMessage = string.Format(Localizer.Instance.MacOSXUserDataFolderMigratedV3Dialog.Message, newUserDataDirPath),
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                WindowIcon = new(bitmap),
-                ButtonDefinitions = ButtonEnum.Ok
-            });
-        Dispatcher.UIThread.Post(async () => await msgbox.ShowAsync());
+        Dialogs.ShowDialog(
+            title: Localizer.Instance.MacOSXUserDataFolderMigratedV3Dialog.Title,
+            message: message,
+            buttons: ButtonEnum.Ok);
     }
 
     private static void OpenWebBrowser(string url)
@@ -491,6 +470,10 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         var bkupedItems = CollectionsGroupViewDataCtx.Items.ToList();
         CollectionsGroupViewDataCtx.Items.Clear();
         SelectLanguage(Language.English);
+        if (Pororoca.Desktop.Views.MainWindow.Instance!.Clipboard is Avalonia.Input.Platform.IClipboard systemClipboard)
+        {
+            await systemClipboard.ClearAsync();
+        }
 
         string resultsLog = await Pororoca.Desktop.UITesting.UITestsRunner.RunAllTestsAsync();
 
@@ -499,18 +482,10 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
         SelectLanguage(bkupedLang);
 
-        Bitmap bitmap = new(AssetLoader.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
-
-        var msgbox = MessageBoxManager.GetMessageBoxStandard(
-            new MessageBoxStandardParams()
-            {
-                ContentTitle = "UI tests results",
-                ContentMessage = resultsLog,
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                WindowIcon = new(bitmap),
-                ButtonDefinitions = ButtonEnum.Ok
-            });
-        Dispatcher.UIThread.Post(async () => await msgbox.ShowAsync());
+        Dialogs.ShowDialog(
+            title: "UI tests results",
+            message: resultsLog,
+            buttons: ButtonEnum.Ok);
     }
 #else
     private Task RunUITestsAsync() => Task.CompletedTask;

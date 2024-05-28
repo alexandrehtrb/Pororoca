@@ -4,14 +4,13 @@ using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca;
 
-public sealed class PororocaCollectionFolder : PororocaCollectionItem, ICloneable
+public sealed record PororocaCollectionFolder
+(
+    string Name,
+    List<PororocaCollectionFolder> Folders,
+    List<PororocaRequest> Requests
+)
 {
-    [JsonInclude]
-    public IReadOnlyList<PororocaCollectionFolder> Folders { get; internal set; }
-
-    [JsonInclude]
-    public IReadOnlyList<PororocaRequest> Requests { get; internal set; }
-
     [JsonIgnore] // JSON IGNORE
     public IReadOnlyList<PororocaHttpRequest> HttpRequests =>
         Requests.Where(r => r is PororocaHttpRequest)
@@ -33,44 +32,11 @@ public sealed class PororocaCollectionFolder : PororocaCollectionItem, ICloneabl
     }
 #nullable restore warnings
 
-    public PororocaCollectionFolder(string name) : base(name)
-    {
-        Folders = new List<PororocaCollectionFolder>().AsReadOnly();
-        Requests = new List<PororocaRequest>().AsReadOnly();
-    }
+    public PororocaCollectionFolder(string name) : this(name, [], []) { }
 
-    public void AddFolder(PororocaCollectionFolder folder)
+    public PororocaCollectionFolder Copy() => this with
     {
-        List<PororocaCollectionFolder> newList = new(Folders);
-        newList.Add(folder);
-        Folders = newList.AsReadOnly();
-    }
-
-    public void RemoveFolder(PororocaCollectionFolder subFolder)
-    {
-        List<PororocaCollectionFolder> newList = new(Folders);
-        newList.Remove(subFolder);
-        Folders = newList.AsReadOnly();
-    }
-
-    public void AddRequest(PororocaRequest req)
-    {
-        List<PororocaRequest> newList = new(Requests);
-        newList.Add(req);
-        Requests = newList.AsReadOnly();
-    }
-
-    public void RemoveRequest(PororocaRequest req)
-    {
-        List<PororocaRequest> newList = new(Requests);
-        newList.Remove(req);
-        Requests = newList.AsReadOnly();
-    }
-
-    public override object Clone() =>
-        new PororocaCollectionFolder(Name)
-        {
-            Folders = Folders.Select(f => (PororocaCollectionFolder)f.Clone()).ToList(),
-            Requests = Requests.Select(r => (PororocaRequest)r.Clone()).ToList()
-        };
+        Folders = Folders.Select(f => f.Copy()).ToList(),
+        Requests = Requests.Select(r => r.CopyAbstract()).ToList()
+    };
 }

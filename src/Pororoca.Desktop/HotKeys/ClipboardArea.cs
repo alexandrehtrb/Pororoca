@@ -9,7 +9,7 @@ public sealed class ClipboardArea : ViewModelBase
 {
     internal static readonly ClipboardArea Instance = new();
 
-    private readonly List<ICloneable> copiedDomainObjs = new();
+    private readonly List<object> copiedDomainObjs = new();
 
     internal List<CollectionOrganizationItemViewModel>? ItemsMarkedForCut { get; set; }
 
@@ -33,7 +33,7 @@ public sealed class ClipboardArea : ViewModelBase
         CanPasteWebSocketClientMessage = false;
     }
 
-    public void PushToCopy(params ICloneable[] domainObjsToCopy)
+    public void PushToCopy(params object[] domainObjsToCopy)
     {
         this.copiedDomainObjs.Clear();
         this.copiedDomainObjs.AddRange(domainObjsToCopy);
@@ -42,21 +42,26 @@ public sealed class ClipboardArea : ViewModelBase
         CanPasteWebSocketClientMessage = this.copiedDomainObjs.Any(o => o is PororocaWebSocketClientMessage);
     }
 
-    public IList<PororocaCollectionItem> FetchCopiesOfFoldersAndReqs() =>
+    public IList<object> FetchCopiesOfFoldersAndReqs() =>
         this.copiedDomainObjs.Where(o => o is PororocaCollectionFolder || o is PororocaRequest)
-                             .Select(o => o.Clone())
-                             .Cast<PororocaCollectionItem>()
+                             .Select(o =>
+                             {
+                                 if (o is PororocaCollectionFolder f)
+                                     return (object)f.Copy();
+                                 else if (o is PororocaRequest r)
+                                     return (object)r.CopyAbstract();
+                                 else
+                                     throw new InvalidCastException();
+                             })
                              .ToList();
 
     public IList<PororocaEnvironment> FetchCopiesOfEnvironments() =>
         this.copiedDomainObjs.Where(o => o is PororocaEnvironment)
-                        .Select(o => o.Clone())
-                        .Cast<PororocaEnvironment>()
+                        .Select(o => ((PororocaEnvironment)o).Copy(preserveId: false))
                         .ToList();
 
     public IList<PororocaWebSocketClientMessage> FetchCopiesOfWebSocketClientMessages() =>
         this.copiedDomainObjs.Where(o => o is PororocaWebSocketClientMessage)
-                        .Select(o => o.Clone())
-                        .Cast<PororocaWebSocketClientMessage>()
+                        .Select(o => ((PororocaWebSocketClientMessage)o).Copy())
                         .ToList();
 }

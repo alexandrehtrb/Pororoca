@@ -69,17 +69,13 @@ public static class PororocaEnvironmentExporterTests
         }
     }
 
-    private static PororocaEnvironment CreateTestPororocaEnvironment()
-    {
-        PororocaEnvironment env = new(testEnvId, testEnvName, testEnvCreationDate)
-        {
-            IsCurrent = true
-        };
-        env.UpdateVariables(new PororocaVariable[]
-        {
-            new(true, "Key1", "Value1", false),
-            new(false, "Key2", "Value2", true)
-        });
-        return env;
-    }
+    private static PororocaEnvironment CreateTestPororocaEnvironment() =>
+        new(testEnvId,
+            testEnvCreationDate,
+            testEnvName,
+            true,
+            [
+                new(true, "Key1", "Value1", false),
+                new(false, "Key2", "Value2", true)
+            ]);
 }

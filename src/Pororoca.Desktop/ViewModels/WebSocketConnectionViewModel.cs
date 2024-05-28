@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Security.Authentication;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.Behaviors;
+using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
@@ -20,13 +21,12 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using static Pororoca.Desktop.Localization.TimeTextFormatter;
 using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
+using static Pororoca.Domain.Features.Common.HttpStatusCodeFormatter;
 using static Pororoca.Domain.Features.Common.HttpVersionFormatter;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage.PororocaWebSocketClientMessageTranslator;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage.PororocaWebSocketClientMessageValidator;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection.PororocaWebSocketConnectionTranslator;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection.PororocaWebSocketConnectionValidator;
-using static Pororoca.Domain.Features.Common.HttpStatusCodeFormatter;
-using Pororoca.Desktop.Converters;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -465,12 +465,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     private void AddNewWebSocketClientMessage()
     {
         PororocaWebSocketClientMessage wsReqMsg = new(PororocaWebSocketMessageType.Text,
-                                                       Localizer.Instance.WebSocketClientMessage.NewMessage,
-                                                       PororocaWebSocketClientMessageContentMode.Raw,
-                                                       string.Empty,
-                                                       PororocaWebSocketMessageRawContentSyntax.Json,
-                                                       null,
-                                                       false);
+                                                      Localizer.Instance.WebSocketClientMessage.NewMessage);
         AddWebSocketClientMessage(wsReqMsg, showItemInScreen: true);
     }
 
@@ -530,24 +525,15 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
                 CompressionServerContextTakeoverEnabled) :
             null;
 
-    public PororocaWebSocketConnection ToWebSocketConnection()
-    {
-        PororocaWebSocketConnection newWs = new(Name);
-        UpdateConnectionWithInputs(newWs);
-        return newWs;
-    }
-
-    private void UpdateConnectionWithInputs(PororocaWebSocketConnection ws)
-    {
-        ws.UpdateName(Name);
-        ws.HttpVersion = HttpVersion;
-        ws.Url = Url;
-        ws.CustomAuth = RequestAuthDataCtx.ToCustomAuth();
-        ws.Headers = RequestHeadersTableVm.Items.Count == 0 ? null : RequestHeadersTableVm.Items.Select(h => h.ToKeyValueParam()).ToList();
-        ws.ClientMessages = Items.Count == 0 ? null : Items.Select(i => i.ToWebSocketClientMessage()).ToList();
-        ws.Subprotocols = SubprotocolsTableVm.Items.Count == 0 ? null : SubprotocolsTableVm.Items.Select(s => s.ToKeyValueParam()).ToList();
-        ws.CompressionOptions = WrapCompressionOptionsFromInputs();
-    }
+    public PororocaWebSocketConnection ToWebSocketConnection() => new(
+        Name: Name,
+        HttpVersion: HttpVersion,
+        Url: Url,
+        CustomAuth: RequestAuthDataCtx.ToCustomAuth(),
+        Headers: RequestHeadersTableVm.Items.Count == 0 ? null : RequestHeadersTableVm.ConvertItemsToDomain(),
+        ClientMessages: Items.Count == 0 ? null : Items.Select(i => i.ToWebSocketClientMessage()).ToList(),
+        Subprotocols: SubprotocolsTableVm.Items.Count == 0 ? null : SubprotocolsTableVm.ConvertItemsToDomain(),
+        CompressionOptions: WrapCompressionOptionsFromInputs());
 
     #endregion
 

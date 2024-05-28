@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 
 public enum PororocaWebSocketMessageDirection
@@ -15,24 +13,8 @@ public enum PororocaWebSocketMessageType
     Close
 }
 
-public abstract class PororocaWebSocketMessage
-{
-    [JsonInclude]
-    public PororocaWebSocketMessageDirection Direction { get; internal set; }
-
-    [JsonInclude]
-    public PororocaWebSocketMessageType MessageType { get; internal set; }
-
-#nullable disable warnings
-    protected PororocaWebSocketMessage() : this(PororocaWebSocketMessageDirection.FromClient, PororocaWebSocketMessageType.Text)
-    {
-        // Parameterless constructor for JSON deserialization
-    }
-#nullable restore warnings
-
-    protected PororocaWebSocketMessage(PororocaWebSocketMessageDirection direction, PororocaWebSocketMessageType msgType)
-    {
-        Direction = direction;
-        MessageType = msgType;
-    }
-}
+public abstract record PororocaWebSocketMessage
+(
+    PororocaWebSocketMessageDirection Direction,
+    PororocaWebSocketMessageType MessageType
+);

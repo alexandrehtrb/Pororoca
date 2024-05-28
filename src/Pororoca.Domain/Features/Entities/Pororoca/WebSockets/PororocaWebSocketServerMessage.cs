@@ -1,46 +1,35 @@
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Pororoca.Domain.Features.Common;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 
-public sealed class PororocaWebSocketServerMessage : PororocaWebSocketMessage
+public sealed record PororocaWebSocketServerMessage
+(
+    PororocaWebSocketMessageType MessageType,
+    byte[] Bytes,
+    string? Text,
+    PororocaWebSocketMessageRawContentSyntax? TextSyntax,
+    DateTimeOffset? ReceivedAtUtc
+) : PororocaWebSocketMessage(PororocaWebSocketMessageDirection.FromServer, MessageType)
 {
-    #region AUXILIARY PROPERTIES FOR INFRASTRUCTURE
-
-    [JsonIgnore]
-    public byte[] Bytes { get; }
-
-    [JsonIgnore]
-    public string? Text { get; }
-
-    [JsonIgnore]
-    public PororocaWebSocketMessageRawContentSyntax? TextSyntax { get; }
-
-    [JsonIgnore]
-    public DateTimeOffset? ReceivedAtUtc { get; }
-
-    #endregion
-
-    public PororocaWebSocketServerMessage(string? closeStatusDescription)
-        : this(PororocaWebSocketMessageType.Close, closeStatusDescription is not null ?
-                                                   Encoding.UTF8.GetBytes(closeStatusDescription) :
-                                                   Array.Empty<byte>())
+    public static PororocaWebSocketServerMessage Make(PororocaWebSocketMessageType msgType, byte[] receivedBytes)
     {
-    }
-
-    public PororocaWebSocketServerMessage(PororocaWebSocketMessageType msgType, byte[] receivedBytes) : base(PororocaWebSocketMessageDirection.FromServer, msgType)
-    {
-        Bytes = receivedBytes;
-        ReceivedAtUtc = DateTimeOffset.Now;
+        string? text = null;
+        PororocaWebSocketMessageRawContentSyntax? textSyntax = null;
 
         if (msgType == PororocaWebSocketMessageType.Text || msgType == PororocaWebSocketMessageType.Close)
         {
-            Text = Encoding.UTF8.GetString(Bytes);
-            TextSyntax = JsonUtils.IsValidJson(Text) ?
+            text = Encoding.UTF8.GetString(receivedBytes);
+            textSyntax = JsonUtils.IsValidJson(text) ?
                 PororocaWebSocketMessageRawContentSyntax.Json :
                 PororocaWebSocketMessageRawContentSyntax.Other;
         }
+
+        return new(msgType, receivedBytes, text, textSyntax, DateTimeOffset.Now);
     }
+
+    public static PororocaWebSocketServerMessage Make(string? closeStatusDescription) =>
+        Make(PororocaWebSocketMessageType.Close, closeStatusDescription is not null ?
+                                                   Encoding.UTF8.GetBytes(closeStatusDescription) :
+                                                   Array.Empty<byte>());
 }

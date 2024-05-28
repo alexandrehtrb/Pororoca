@@ -16,8 +16,10 @@ on:
 
 jobs:
 
-  draft-github-release:
+  draft_github_release:
+
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -76,81 +78,35 @@ jobs:
     - name: Add comment to PR
       if: ${{ env.RELEASE_IS_DRAFTED == '0' }}
       shell: pwsh
-      run: gh pr comment $env:PR_NUMBER --body "🌊 New release 🌊`n`n1) Test and validate the program`n2) Edit the release notes`n3) Merge this PR`n4) Check if NuGet was successfully published`n5) Publish (undraft) this release and unlist the previous release`n6) Update https://pororoca.io to reflect new version"
+      run: gh pr comment $env:PR_NUMBER --body "🌊 New release 🌊`n`n- [ ] Test and validate the program`n- [ ] Edit the release notes`n- [ ] Merge this PR`n- [ ] Check if NuGet was successfully published`n- [ ] Publish (undraft) this release`n- [ ] Update https://pororoca.io to reflect new version`n- [ ] Unlist previous release on GitHub"
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PR_NUMBER: ${{ github.event.number }}
 
-  nuget-and-sboms:
-    needs: draft-github-release
-    uses: ./.github/workflows/generate-nuget-and-sboms-wfw.yml
+  nuget_linux_osx_win_portable:
+    needs: draft_github_release
+    uses: ./.github/workflows/cicd-wfw.yml
     with:
-      uploadArtifactsToRelease: true
+      os: ubuntu-latest
       postUnitTestsCoverageInPR: true
       prNumber: ${{ github.event.number }}
-
-  linux-x64:
-    needs: draft-github-release
-    uses: ./.github/workflows/generate-desktop-wfw.yml
-    with:
-      os: ubuntu-latest
-      rid: linux-x64
+      runCD: true
+      uploadArtifactsToRelease: true
       enableUITesting: false
-      uploadArtifactToRelease: true
+      producePororocaTestNuget: true
+      produceDesktopLinuxX64: true
+      produceDesktopDebianX64: true
+      produceDesktopMacOSX: true
+      produceDesktopWinX64Portable: true
+      produceDesktopWinX86Portable: true
 
-  linux-x64-debian:
-    needs: draft-github-release
-    uses: ./.github/workflows/generate-desktop-wfw.yml
-    with:
-      os: ubuntu-latest
-      rid: linux-x64
-      packaging: debian
-      enableUITesting: false
-      uploadArtifactToRelease: true
-
-  osx:
-    needs: draft-github-release
-    uses: ./.github/workflows/generate-desktop-wfw.yml
-    with:
-      os: ubuntu-latest
-      rid: osx-x64
-      enableUITesting: false
-      uploadArtifactToRelease: true
-
-  win-x64-installer:
-    needs: draft-github-release
-    uses: ./.github/workflows/generate-desktop-wfw.yml
+  win_installer:
+    needs: draft_github_release
+    uses: ./.github/workflows/cicd-wfw.yml
     with:
       os: windows-latest # running on Windows because we need NSIS
-      rid: win-x64
-      packaging: nsis
+      runCD: true
+      uploadArtifactsToRelease: true
       enableUITesting: false
-      uploadArtifactToRelease: true
-
-  win-x64-portable:
-    needs: draft-github-release
-    uses: ./.github/workflows/generate-desktop-wfw.yml
-    with:
-      os: ubuntu-latest # .NET 8 allows publishing for Windows on Linux machines
-      rid: win-x64
-      enableUITesting: false
-      uploadArtifactToRelease: true
-
-  win-x86-installer:
-    needs: draft-github-release
-    uses: ./.github/workflows/generate-desktop-wfw.yml
-    with:
-      os: windows-latest # running on Windows because we need NSIS
-      rid: win-x86
-      packaging: nsis
-      enableUITesting: false
-      uploadArtifactToRelease: true
-
-  win-x86-portable:
-    needs: draft-github-release
-    uses: ./.github/workflows/generate-desktop-wfw.yml
-    with:
-      os: ubuntu-latest # .NET 8 allows publishing for Windows on Linux machines
-      rid: win-x86
-      enableUITesting: false
-      uploadArtifactToRelease: true
+      produceDesktopWinX64Installer: true
+      produceDesktopWinX86Installer: true

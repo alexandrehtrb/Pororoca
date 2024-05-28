@@ -47,10 +47,10 @@ public sealed record PororocaCollection
     public PororocaCollection Copy(bool preserveIds) => this with
     {
         Id = preserveIds ? Id : Guid.NewGuid(),
-        Folders = Folders.Select(f => (PororocaCollectionFolder)f.Clone()).ToList(),
-        Requests = Requests.Select(f => (PororocaRequest)f.Clone()).ToList(),
+        Folders = Folders.Select(f => f.Copy()).ToList(),
+        Requests = Requests.Select(f => f.CopyAbstract()).ToList(),
         Variables = Variables.Select(v => v.Copy()).ToList(),
-        Environments = Environments.Select(e => preserveIds ? e.ClonePreservingId() : (PororocaEnvironment)e.Clone()).ToList(),
+        Environments = Environments.Select(e => e.Copy(preserveIds)).ToList(),
         CollectionScopedAuth = CollectionScopedAuth?.Copy(),
         CollectionScopedRequestHeaders = CollectionScopedRequestHeaders?.Select(v => v.Copy())?.ToList(),
     };
@@ -117,16 +117,16 @@ public sealed record PororocaCollection
                 string part = parts[i];
                 if (i == parts.Length - 1)
                 {
-                    return folder!.HttpRequests.FirstOrDefault(x => x.Name.Replace("/",string.Empty) == part);
+                    return folder!.HttpRequests.FirstOrDefault(x => x.Name.Replace("/", string.Empty) == part);
                 }
                 else if (i == 0)
                 {
-                    folder = Folders.FirstOrDefault(f => f.Name.Replace("/",string.Empty) == part);
+                    folder = Folders.FirstOrDefault(f => f.Name.Replace("/", string.Empty) == part);
                     if (folder is null) return null;
                 }
                 else
                 {
-                    folder = folder?.Folders?.FirstOrDefault(f => f.Name.Replace("/",string.Empty) == part);
+                    folder = folder?.Folders?.FirstOrDefault(f => f.Name.Replace("/", string.Empty) == part);
                     if (folder is null) return null;
                 }
             }

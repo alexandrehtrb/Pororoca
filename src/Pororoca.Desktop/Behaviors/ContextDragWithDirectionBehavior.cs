@@ -127,8 +127,8 @@ public sealed class ContextDragWithDirectionBehavior : Behavior<Control>
 
     private void Released()
     {
-        _triggerEvent = null;
-        _lock = false;
+        this._triggerEvent = null;
+        this._lock = false;
     }
 
     private void AssociatedObject_PointerPressed(object? sender, PointerPressedEventArgs e)
@@ -139,59 +139,59 @@ public sealed class ContextDragWithDirectionBehavior : Behavior<Control>
             if (e.Source is Control control
                 && AssociatedObject?.DataContext == control.DataContext)
             {
-                _dragStartPoint = e.GetPosition(null);
-                _triggerEvent = e;
-                _lock = true;
-                _captured = true;
+                this._dragStartPoint = e.GetPosition(null);
+                this._triggerEvent = e;
+                this._lock = true;
+                this._captured = true;
             }
         }
     }
 
     private void AssociatedObject_PointerReleased(object? sender, PointerReleasedEventArgs e)
     {
-        if (_captured)
+        if (this._captured)
         {
-            if (e.InitialPressMouseButton == MouseButton.Left && _triggerEvent is { })
+            if (e.InitialPressMouseButton == MouseButton.Left && this._triggerEvent is { })
             {
                 Released();
             }
 
-            _captured = false;
+            this._captured = false;
         }
     }
 
     private async void AssociatedObject_PointerMoved(object? sender, PointerEventArgs e)
     {
         var properties = e.GetCurrentPoint(AssociatedObject).Properties;
-        if (_captured
+        if (this._captured
             && properties.IsLeftButtonPressed &&
-            _triggerEvent is { })
+            this._triggerEvent is { })
         {
             var point = e.GetPosition(null);
-            var diff = _dragStartPoint - point;
-            var horizontalDragThreshold = HorizontalDragThreshold;
-            var verticalDragThreshold = VerticalDragThreshold;
+            var diff = this._dragStartPoint - point;
+            double horizontalDragThreshold = HorizontalDragThreshold;
+            double verticalDragThreshold = VerticalDragThreshold;
 
             if (Math.Abs(diff.X) > horizontalDragThreshold || Math.Abs(diff.Y) > verticalDragThreshold)
             {
-                if (_lock)
+                if (this._lock)
                 {
-                    _lock = false;
+                    this._lock = false;
                 }
                 else
                 {
                     return;
                 }
 
-                var context = Context ?? AssociatedObject?.DataContext;
+                object? context = Context ?? AssociatedObject?.DataContext;
 
-                Handler?.BeforeDragDrop(sender, _triggerEvent, context);
+                Handler?.BeforeDragDrop(sender, this._triggerEvent, context);
 
-                await DoDragDrop(_triggerEvent, context, diff.Y > 0 ? "up" : "down");
+                await DoDragDrop(this._triggerEvent, context, diff.Y > 0 ? "up" : "down");
 
-                Handler?.AfterDragDrop(sender, _triggerEvent, context);
+                Handler?.AfterDragDrop(sender, this._triggerEvent, context);
 
-                _triggerEvent = null;
+                this._triggerEvent = null;
             }
         }
     }
@@ -199,6 +199,6 @@ public sealed class ContextDragWithDirectionBehavior : Behavior<Control>
     private void AssociatedObject_CaptureLost(object? sender, PointerCaptureLostEventArgs e)
     {
         Released();
-        _captured = false;
+        this._captured = false;
     }
 }

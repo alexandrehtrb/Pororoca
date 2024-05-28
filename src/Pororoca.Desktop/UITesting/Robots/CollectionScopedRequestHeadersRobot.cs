@@ -9,7 +9,7 @@ namespace Pororoca.Desktop.UITesting.Robots;
 public sealed class CollectionScopedRequestHeadersRobot : BaseNamedRobot
 {
     public CollectionScopedRequestHeadersRobot(CollectionScopedRequestHeadersView rootView)
-     : base(rootView) {}
+     : base(rootView) { }
 
     internal Button GoBack => GetChildView<Button>("btGoBack")!;
     internal Button AddHeader => GetChildView<Button>("btAddColScopedReqHeader")!;

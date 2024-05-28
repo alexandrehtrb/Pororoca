@@ -124,7 +124,7 @@ public abstract class BaseDataGridDropHandler<T> : DropHandlerBase
             if (cv is DataGridRowsPresenter dgrp)
                 return dgrp;
             else if (GetRowsPresenter(cv) is DataGridRowsPresenter dgrp2)
-                return dgrp2;                
+                return dgrp2;
         }
         return null;
     }

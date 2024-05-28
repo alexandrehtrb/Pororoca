@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 
 public enum PororocaWebSocketClientMessageContentMode
@@ -8,50 +6,22 @@ public enum PororocaWebSocketClientMessageContentMode
     File
 }
 
-public class PororocaWebSocketClientMessage : PororocaWebSocketMessage, ICloneable
+public record PororocaWebSocketClientMessage
+(
+    PororocaWebSocketMessageType MessageType,
+    string Name,
+    PororocaWebSocketClientMessageContentMode ContentMode = PororocaWebSocketClientMessageContentMode.Raw,
+    string? RawContent = null,
+    PororocaWebSocketMessageRawContentSyntax? RawContentSyntax = null,
+    string? FileSrcPath = null,
+    bool DisableCompressionForThis = false
+) : PororocaWebSocketMessage(PororocaWebSocketMessageDirection.FromClient, MessageType)
 {
-    [JsonInclude]
-    public string Name { get; set; }
-
-    [JsonInclude]
-    public PororocaWebSocketClientMessageContentMode ContentMode { get; set; }
-
-    [JsonInclude]
-    public string? RawContent { get; set; }
-
-    [JsonInclude]
-    public PororocaWebSocketMessageRawContentSyntax? RawContentSyntax { get; set; }
-
-    [JsonInclude]
-    public string? FileSrcPath { get; set; }
-
-    [JsonInclude]
-    public bool DisableCompressionForThis { get; set; }
-
-    public PororocaWebSocketClientMessage(PororocaWebSocketMessageType msgType,
-                                          string name,
-                                          PororocaWebSocketClientMessageContentMode contentMode,
-                                          string? rawContent,
-                                          PororocaWebSocketMessageRawContentSyntax? rawContentSyntax,
-                                          string? fileSrcPath,
-                                          bool disableCompressionForThis) :
-        base(PororocaWebSocketMessageDirection.FromClient, msgType)
-    {
-        Name = name;
-        ContentMode = contentMode;
-        RawContent = rawContent;
-        RawContentSyntax = rawContentSyntax;
-        FileSrcPath = fileSrcPath;
-        DisableCompressionForThis = disableCompressionForThis;
-    }
 
 #nullable disable warnings
-    public PororocaWebSocketClientMessage()
-    {
-        // Parameterless constructor for JSON deserialization
-    }
+    // Parameterless constructor for JSON deserialization
+    public PororocaWebSocketClientMessage() : this(PororocaWebSocketMessageType.Text, string.Empty) { }
 #nullable restore warnings
 
-    public object Clone() =>
-        new PororocaWebSocketClientMessage(MessageType, Name, ContentMode, RawContent, RawContentSyntax, FileSrcPath, DisableCompressionForThis);
+    public PororocaWebSocketClientMessage Copy() => this with { };
 }

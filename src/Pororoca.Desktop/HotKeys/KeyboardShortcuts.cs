@@ -195,43 +195,34 @@ public sealed class KeyboardShortcuts : ViewModelBase
     private bool AreAnyCollectionsBeingCopiedOrCut() =>
         SelectedItems.Any(x => x is CollectionViewModel);
 
-    private void ShowCollectionsCannotBeCopiedOrCutDialog()
-    {
-        Bitmap bitmap = new(AssetLoader.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
-        var msgbox = MessageBoxManager.GetMessageBoxStandard(
-            new MessageBoxStandardParams()
-            {
-                ContentTitle = Localizer.Instance.CannotCopyOrCutCollectionDialog.Title,
-                ContentMessage = Localizer.Instance.CannotCopyOrCutCollectionDialog.Content,
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                WindowIcon = new(bitmap),
-                ButtonDefinitions = ButtonEnum.Ok
-            });
-        Dispatcher.UIThread.Post(async () => await msgbox.ShowAsync());
-    }
+    private void ShowCollectionsCannotBeCopiedOrCutDialog() =>
+        Dialogs.ShowDialog(
+            title: Localizer.Instance.CannotCopyOrCutCollectionDialog.Title,
+            message: Localizer.Instance.CannotCopyOrCutCollectionDialog.Content,
+            buttons: ButtonEnum.Ok);
 
     private void PushSelectedItemsToClipboardArea()
     {
         var reqsToCopy = SelectedItems
                          .Where(i => i is HttpRequestViewModel reqVm && !HasAnyParentAlsoSelected(reqVm))
-                         .Select(r => (ICloneable)((HttpRequestViewModel)r).ToHttpRequest());
+                         .Select(r => (object)((HttpRequestViewModel)r).ToHttpRequest());
         var repsToCopy = SelectedItems
                          .Where(i => i is HttpRepeaterViewModel repVm && !HasAnyParentAlsoSelected(repVm))
-                         .Select(r => (ICloneable)((HttpRepeaterViewModel)r).ToHttpRepetition());
+                         .Select(r => (object)((HttpRepeaterViewModel)r).ToHttpRepetition());
         var wssToCopy = SelectedItems
                          .Where(i => i is WebSocketConnectionViewModel wsVm && !HasAnyParentAlsoSelected(wsVm))
-                         .Select(wsVm => (ICloneable)((WebSocketConnectionViewModel)wsVm).ToWebSocketConnection());
+                         .Select(wsVm => (object)((WebSocketConnectionViewModel)wsVm).ToWebSocketConnection());
         var wsMsgsToCopy = SelectedItems
                            .Where(i => i is WebSocketClientMessageViewModel wsMsgVm && !HasAnyParentAlsoSelected(wsMsgVm))
-                           .Select(wsMsgVm => (ICloneable)((WebSocketClientMessageViewModel)wsMsgVm).ToWebSocketClientMessage());
+                           .Select(wsMsgVm => (object)((WebSocketClientMessageViewModel)wsMsgVm).ToWebSocketClientMessage());
         var foldersToCopy = SelectedItems
                             .Where(i => i is CollectionFolderViewModel folderVm && !HasAnyParentAlsoSelected(folderVm))
-                            .Select(f => (ICloneable)((CollectionFolderViewModel)f).ToCollectionFolder());
+                            .Select(f => (object)((CollectionFolderViewModel)f).ToCollectionFolder());
         var envsToCopy = SelectedItems
                          .Where(i => i is EnvironmentViewModel)
-                         .Select(e => (ICloneable)((EnvironmentViewModel)e).ToEnvironment());
+                         .Select(e => (object)((EnvironmentViewModel)e).ToEnvironment());
 
-        var itemsToCopy = reqsToCopy.Concat(repsToCopy).Concat(wssToCopy).Concat(wsMsgsToCopy).Concat(foldersToCopy).Concat(envsToCopy).ToArray();
+        object[] itemsToCopy = reqsToCopy.Concat(repsToCopy).Concat(wssToCopy).Concat(wsMsgsToCopy).Concat(foldersToCopy).Concat(envsToCopy).ToArray();
 
         ClipboardArea.Instance.PushToCopy(itemsToCopy);
     }
@@ -297,20 +288,11 @@ public sealed class KeyboardShortcuts : ViewModelBase
         }
     }
 
-    private void ShowCannotPasteCutItemToItselfDialog()
-    {
-        Bitmap bitmap = new(AssetLoader.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
-        var msgbox = MessageBoxManager.GetMessageBoxStandard(
-            new MessageBoxStandardParams()
-            {
-                ContentTitle = Localizer.Instance.CannotPasteItemToItselfDialog.Title,
-                ContentMessage = Localizer.Instance.CannotPasteItemToItselfDialog.Content,
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                WindowIcon = new(bitmap),
-                ButtonDefinitions = ButtonEnum.Ok
-            });
-        Dispatcher.UIThread.Post(async () => await msgbox.ShowAsync());
-    }
+    private void ShowCannotPasteCutItemToItselfDialog() =>
+        Dialogs.ShowDialog(
+            title: Localizer.Instance.CannotPasteItemToItselfDialog.Title,
+            message: Localizer.Instance.CannotPasteItemToItselfDialog.Content,
+            buttons: ButtonEnum.Ok);
 
     #endregion
 
@@ -318,8 +300,6 @@ public sealed class KeyboardShortcuts : ViewModelBase
 
     private void AskUserToConfirmDeleteItems()
     {
-        Bitmap bitmap = new(AssetLoader.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
-
         string dialogMsg;
 
         if (HasMultipleItemsSelected)
@@ -332,23 +312,11 @@ public sealed class KeyboardShortcuts : ViewModelBase
             dialogMsg = string.Format(Localizer.Instance.DeleteItemsDialog.MessageSingleItem, itemName);
         }
 
-        var msgbox = MessageBoxManager.GetMessageBoxStandard(
-            new MessageBoxStandardParams()
-            {
-                ContentTitle = Localizer.Instance.DeleteItemsDialog.Title,
-                ContentMessage = dialogMsg,
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                WindowIcon = new(bitmap),
-                ButtonDefinitions = ButtonEnum.OkCancel
-            });
-        Dispatcher.UIThread.Post(async () =>
-        {
-            var buttonResult = await msgbox.ShowAsync();
-            if (buttonResult == ButtonResult.Ok)
-            {
-                DeleteSelectedItems();
-            }
-        });
+        Dialogs.ShowDialog(
+            title: Localizer.Instance.DeleteItemsDialog.Title,
+            message: dialogMsg,
+            buttons: ButtonEnum.OkCancel,
+            onButtonOkClicked: DeleteSelectedItems);
     }
 
     internal void DeleteSelectedItems() =>
@@ -447,21 +415,11 @@ public sealed class KeyboardShortcuts : ViewModelBase
 
     #region DELETE
 
-    private void ShowHelpDialog()
-    {
-        Bitmap bitmap = new(AssetLoader.Open(new("avares://Pororoca.Desktop/Assets/Images/pororoca.png")));
-
-        var msgbox = MessageBoxManager.GetMessageBoxStandard(
-            new MessageBoxStandardParams()
-            {
-                ContentTitle = Localizer.Instance.HelpDialog.Title,
-                ContentMessage = Localizer.Instance.HelpDialog.Content,
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                WindowIcon = new(bitmap),
-                ButtonDefinitions = ButtonEnum.Ok
-            });
-        Dispatcher.UIThread.Post(async () => await msgbox.ShowAsync());
-    }
+    private void ShowHelpDialog() =>
+        Dialogs.ShowDialog(
+            title: Localizer.Instance.HelpDialog.Title,
+            message: Localizer.Instance.HelpDialog.Content,
+            buttons: ButtonEnum.Ok);
 
     #endregion
 

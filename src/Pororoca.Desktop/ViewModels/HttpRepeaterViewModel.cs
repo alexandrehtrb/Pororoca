@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Net;
 using System.Reactive;
 using System.Threading.Channels;
 using Avalonia.Threading;
@@ -10,23 +9,19 @@ using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.ViewModels.DataGrids;
-using Pororoca.Desktop.Views;
-using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
-using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
-using Pororoca.Domain.Features.Requester;
+using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
+using Pororoca.Domain.Features.ExportLog;
 using Pororoca.Domain.Features.RequestRepeater;
 using Pororoca.Domain.Features.VariableResolution;
 using Pororoca.Infrastructure.Features.Requester;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using static Pororoca.Desktop.Localization.TimeTextFormatter;
-using static Pororoca.Domain.Features.RequestRepeater.HttpRepeater;
-using static Pororoca.Domain.Features.RequestRepeater.HttpRepetitionValidator;
-using static Pororoca.Domain.Features.RequestRepeater.HttpRepetitionReporter;
 using static Pororoca.Domain.Features.Common.MimeTypesDetector;
-using Pororoca.Domain.Features.ExportLog;
-using Pororoca.Domain.Features.Common;
+using static Pororoca.Domain.Features.RequestRepeater.HttpRepeater;
+using static Pororoca.Domain.Features.RequestRepeater.HttpRepetitionReporter;
+using static Pororoca.Domain.Features.RequestRepeater.HttpRepetitionValidator;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -263,13 +258,13 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref this.selectedRepetitionResultField, value);
-            this.ResponseDataCtx.UpdateWithResponse(this.nameOfBaseHttpRequestUsed ?? "MyReq", value?.Result?.Response, null);
-            this.InputLineTableVm.Items.Clear();
+            ResponseDataCtx.UpdateWithResponse(this.nameOfBaseHttpRequestUsed ?? "MyReq", value?.Result?.Response, null);
+            InputLineTableVm.Items.Clear();
             if (value?.Result.InputLine is not null)
             {
                 foreach (var pv in value.Result.InputLine)
                 {
-                    this.InputLineTableVm.Items.Add(new(this.InputLineTableVm.Items, pv));
+                    InputLineTableVm.Items.Add(new(InputLineTableVm.Items, pv));
                 }
             }
         }
@@ -302,11 +297,11 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
     {
         #region COLLECTION ORGANIZATION
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
-        this.Collection = col;
+        Collection = col;
         #endregion
 
         #region REPETITION CONFIG
-        CollectionHttpRequestsPaths = this.Collection.HttpRequestsPaths;
+        CollectionHttpRequestsPaths = Collection.HttpRequestsPaths;
         BaseRequestPath = rep.BaseRequestPath;
         RefreshBaseRequestsListCmd = ReactiveCommand.Create(RefreshBaseRequestsList);
         RepetitionModeSelectedIndex = RepetitionModeMapping.MapEnumToIndex(rep.RepetitionMode);
@@ -329,7 +324,7 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
         #endregion
 
         #region REPETITION RESULT DETAILS
-        ResponseDataCtx = new(this.Collection);
+        ResponseDataCtx = new(Collection);
         InputLineTableVm = new();
         #endregion
     }
@@ -358,7 +353,7 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
 
     public async Task StartRepetitionAsync()
     {
-        var effectiveVars = ((IPororocaVariableResolver)this.Collection).GetEffectiveVariables();
+        var effectiveVars = ((IPororocaVariableResolver)Collection).GetEffectiveVariables();
         var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effectiveVars, BaseRequest, ToHttpRepetition(), default);
 
         if (!valid)
@@ -378,7 +373,7 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
             RepetitionStatusText = null;
             RepetitionResults.Clear();
             SelectedRepetitionResult = null;
-            this.nameOfEnvironmentUsed = this.Collection.CurrentEnvironmentVm?.Name;
+            this.nameOfEnvironmentUsed = Collection.CurrentEnvironmentVm?.Name;
             this.nameOfBaseHttpRequestUsed = BaseRequest?.Name;
 
             var channelReader = StartRepetition(this.requester, effectiveVars, resolvedInputData, Collection.CollectionScopedAuth, Collection.CollectionScopedRequestHeaders, ToHttpRepetition(), BaseRequest!, this.cancellationTokenSource.Token);
@@ -465,15 +460,14 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
     protected override void CopyThis() =>
         ClipboardArea.Instance.PushToCopy(ToHttpRepetition());
 
-    internal PororocaHttpRepetition ToHttpRepetition() => new(Name)
-    {
-        BaseRequestPath = BaseRequestPath ?? string.Empty,
-        RepetitionMode = RepetitionMode,
-        NumberOfRepetitions = RepetitionMode == PororocaRepetitionMode.Sequential ? null : NumberOfRepetitionsToExecute,
-        MaxDop = RepetitionMode == PororocaRepetitionMode.Sequential ? null : MaxDop,
-        DelayInMs = DelayInMs == 0 ? null : DelayInMs,
-        InputData = RepetitionMode == PororocaRepetitionMode.Simple ? null : new((PororocaRepetitionInputDataType)InputDataType!, InputDataRawText, InputDataFileSrcPath)
-    };
+    internal PororocaHttpRepetition ToHttpRepetition() => new(
+        Name: Name,
+        BaseRequestPath: BaseRequestPath ?? string.Empty,
+        RepetitionMode: RepetitionMode,
+        NumberOfRepetitions: RepetitionMode == PororocaRepetitionMode.Sequential ? null : NumberOfRepetitionsToExecute,
+        MaxDop: RepetitionMode == PororocaRepetitionMode.Sequential ? null : MaxDop,
+        DelayInMs: DelayInMs == 0 ? null : DelayInMs,
+        InputData: RepetitionMode == PororocaRepetitionMode.Simple ? null : new((PororocaRepetitionInputDataType)InputDataType!, InputDataRawText, InputDataFileSrcPath));
 
     private void OnLanguageChanged()
     {

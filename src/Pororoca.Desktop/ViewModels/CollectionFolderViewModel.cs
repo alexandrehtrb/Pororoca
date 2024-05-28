@@ -7,14 +7,9 @@ public sealed class CollectionFolderViewModel : RequestsAndFoldersParentViewMode
 {
 
     public CollectionFolderViewModel(ICollectionOrganizationItemParentViewModel parentVm,
-                                     PororocaCollectionFolder folder) : base(parentVm, folder.Name)
-    {
-        #region COLLECTION FOLDER
-
+                                     PororocaCollectionFolder folder) : base(parentVm, folder.Name) =>
         AddInitialFoldersAndRequests(folder.Folders, folder.Requests);
 
-        #endregion
-    }
 
     #region COLLECTION ORGANIZATION
 
@@ -50,13 +45,13 @@ public sealed class CollectionFolderViewModel : RequestsAndFoldersParentViewMode
         foreach (var colItemVm in Items)
         {
             if (colItemVm is CollectionFolderViewModel colFolderVm)
-                newFolder.AddFolder(colFolderVm.ToCollectionFolder());
+                newFolder.Folders.Add(colFolderVm.ToCollectionFolder());
             else if (colItemVm is HttpRequestViewModel reqVm)
-                newFolder.AddRequest(reqVm.ToHttpRequest());
+                newFolder.Requests.Add(reqVm.ToHttpRequest());
             else if (colItemVm is WebSocketConnectionViewModel wsVm)
-                newFolder.AddRequest(wsVm.ToWebSocketConnection());
+                newFolder.Requests.Add(wsVm.ToWebSocketConnection());
             else if (colItemVm is HttpRepeaterViewModel repVm)
-                newFolder.AddRequest(repVm.ToHttpRepetition());
+                newFolder.Requests.Add(repVm.ToHttpRepetition());
         }
         return newFolder;
     }

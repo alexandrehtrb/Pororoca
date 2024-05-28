@@ -1,12 +1,10 @@
 using System.Text;
 using System.Threading.Channels;
-using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.ImportCollection;
-using Pororoca.Domain.Features.Requester;
-using Pororoca.Domain.Features.RequestRepeater;
 using Pororoca.Domain.Features.TranslateRequest.Http;
 using Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection;
 using Pororoca.Domain.Features.VariableResolution;
@@ -54,10 +52,14 @@ public sealed class PororocaTest
         var selectedEnv = Collection.Environments.FirstOrDefault(e => e.Name == environmentName)
             ?? throw new Exception($"Error: Environment with the name '{environmentName}' was not found.");
 
-        foreach (var env in Collection.Environments)
+        var newEnvs = Collection.Environments.Select(e => e with
         {
-            env.IsCurrent = env.Name == environmentName;
-        }
+            IsCurrent = e.Name == environmentName
+        }).ToList();
+
+        Collection.Environments.Clear();
+        Collection.Environments.AddRange(newEnvs);
+
         return this;
     }
 
@@ -103,12 +105,12 @@ public sealed class PororocaTest
         if (variable != null)
         {
             var newVariable = variable with { Value = value };
-            env.RemoveVariable(key);
-            env.AddVariable(newVariable);
+            env.Variables.RemoveAll(v => v.Key == key);
+            env.Variables.Add(newVariable);
         }
         else
         {
-            env.AddVariable(new(true, key, value, false));
+            env.Variables.Add(new(true, key, value, false));
         }
     }
 

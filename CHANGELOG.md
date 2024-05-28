@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.4.0](#340-2024-05-28)
 * [3.3.0](#330-2024-04-29)
 * [3.2.0](#320-2024-04-09)
 * [3.1.1](#311-2024-03-13)
@@ -23,6 +24,48 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.4.0](https://github.com/alexandrehtrb/Pororoca/tree/3.4.0) (2024-05-28)
+
+### Features
+
+* Allow prepending and appending whitespaces on templated variables. For example: `{{ MyVariableHere }}` is accepted now.
+* Predefined variables (issue #81). Read more about in our [docs](https://pororoca.io/docs/variables).
+* Paste headers from text into headers table (issue #68). You can copy a text like this from your notepad:
+
+```
+Pragma: no-cache
+Accept: */*
+Host: somehost.com
+Connection: Keep-Alive
+User-Agent: okhttp/3.12.1
+```
+
+And paste into a headers table, by right-click on it. (pasting with the keyboard doesn't work yet, will be fixed in the future).
+
+### Bug Fixes
+
+* Center dialogs on main window (issue #107).
+
+### Refactors
+
+* All of Pororoca entities are now records.
+* PororocaRequestCommonTranslator as internal class.
+* `TreatWarningsAsErrors` in most of the .csprojs.
+* Run `dotnet format`.
+* Centralized logic for dialogs.
+
+### CI/CD
+
+* Release checklist comment in PR to master.
+* CI workflow when opening PR to develop.
+* Unified the main CI/CD workflow.
+* Added code coverage thresholds on CI/CD.
+
+### Others
+
+* Raised .NET SDK to 8.0.300.
+* Added information about machine requirements for development, on [CONTRIBUTING.md]([CONTRIBUTING.md]).
 
 ## [3.3.0](https://github.com/alexandrehtrb/Pororoca/tree/3.3.0) (2024-04-29)
 

@@ -1,6 +1,6 @@
-using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.RequestRepeater;
 using Xunit;
 using static Pororoca.Domain.Features.RequestRepeater.HttpRepetitionValidator;
@@ -18,8 +18,7 @@ public static class HttpRepetitionValidatorTests
         // GIVEN
         PororocaVariable[] effVars = [];
         PororocaHttpRequest baseReq = new(string.Empty);
-        var rep = MakeExampleRep();
-        rep.BaseRequestPath = baseReqPath!;
+        var rep = MakeExampleRep() with { BaseRequestPath = baseReqPath! };
 
         // WHEN
         var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
@@ -53,8 +52,7 @@ public static class HttpRepetitionValidatorTests
         // GIVEN
         PororocaVariable[] effVars = [];
         PororocaHttpRequest? baseReq = new(string.Empty);
-        var rep = MakeExampleRep();
-        rep.DelayInMs = -11;
+        var rep = MakeExampleRep() with { DelayInMs = -11 };
 
         // WHEN
         var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
@@ -73,8 +71,7 @@ public static class HttpRepetitionValidatorTests
         // GIVEN
         PororocaVariable[] effVars = [];
         PororocaHttpRequest? baseReq = new(string.Empty);
-        var rep = MakeExampleRep();
-        rep.NumberOfRepetitions = numReps;
+        var rep = MakeExampleRep() with { NumberOfRepetitions = numReps };
 
         // WHEN
         var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
@@ -93,8 +90,7 @@ public static class HttpRepetitionValidatorTests
         // GIVEN
         PororocaVariable[] effVars = [];
         PororocaHttpRequest? baseReq = new(string.Empty);
-        var rep = MakeExampleRep();
-        rep.MaxDop = maxDop;
+        var rep = MakeExampleRep() with { MaxDop = maxDop };
 
         // WHEN
         var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
@@ -113,9 +109,11 @@ public static class HttpRepetitionValidatorTests
         // GIVEN
         PororocaVariable[] effVars = [];
         PororocaHttpRequest? baseReq = new(string.Empty);
-        var rep = MakeExampleRep();
-        rep.RepetitionMode = repMode;
-        rep.InputData = null;
+        var rep = MakeExampleRep() with
+        {
+            RepetitionMode = repMode,
+            InputData = null
+        };
 
         // WHEN
         var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
@@ -136,8 +134,7 @@ public static class HttpRepetitionValidatorTests
         // GIVEN
         PororocaVariable[] effVars = [];
         PororocaHttpRequest? baseReq = new(string.Empty);
-        var rep = MakeExampleRep();
-        rep.InputData = new(PororocaRepetitionInputDataType.File, null, inputDataFilePath);
+        var rep = MakeExampleRep() with { InputData = new(PororocaRepetitionInputDataType.File, null, inputDataFilePath) };
 
         // WHEN
         var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
@@ -154,8 +151,7 @@ public static class HttpRepetitionValidatorTests
         // GIVEN
         PororocaVariable[] effVars = [];
         PororocaHttpRequest? baseReq = new(string.Empty);
-        var rep = MakeExampleRep();
-        rep.InputData = new(PororocaRepetitionInputDataType.RawJsonArray, "[]", null);
+        var rep = MakeExampleRep() with { InputData = new(PororocaRepetitionInputDataType.RawJsonArray, "[]", null) };
 
         // WHEN
         var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
@@ -178,8 +174,7 @@ public static class HttpRepetitionValidatorTests
         // GIVEN
         PororocaVariable[] effVars = [];
         PororocaHttpRequest? baseReq = new(string.Empty);
-        var rep = MakeExampleRep();
-        rep.InputData = new(PororocaRepetitionInputDataType.RawJsonArray, rawJsonArray, null);
+        var rep = MakeExampleRep() with { InputData = new(PororocaRepetitionInputDataType.RawJsonArray, rawJsonArray, null) };
 
         // WHEN
         var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
@@ -196,9 +191,11 @@ public static class HttpRepetitionValidatorTests
         // GIVEN
         PororocaVariable[] effVars = [];
         PororocaHttpRequest? baseReq = new(string.Empty);
-        var rep = MakeExampleRep();
-        rep.RepetitionMode = PororocaRepetitionMode.Simple;
-        rep.InputData = null;
+        var rep = MakeExampleRep() with
+        {
+            RepetitionMode = PororocaRepetitionMode.Simple,
+            InputData = null
+        };
 
         // WHEN
         var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
@@ -222,11 +219,13 @@ public static class HttpRepetitionValidatorTests
             new(true, "InputDataDir", GetTestFilesDirPath(), true)
         ];
         PororocaHttpRequest? baseReq = new(string.Empty);
-        var rep = MakeExampleRep();
-        rep.RepetitionMode = repMode;
-        rep.InputData = inputDataType == PororocaRepetitionInputDataType.RawJsonArray ?
+        var rep = MakeExampleRep() with
+        {
+            RepetitionMode = repMode,
+            InputData = inputDataType == PororocaRepetitionInputDataType.RawJsonArray ?
                         PororocaRepetitionInputData.MakeRawJsonInputDataExample("comments are allowed") :
-                        new(PororocaRepetitionInputDataType.File, null, "{{InputDataDir}}/InputData2.json");
+                        new(PororocaRepetitionInputDataType.File, null, "{{InputDataDir}}/InputData2.json")
+        };
 
         // WHEN
         var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);

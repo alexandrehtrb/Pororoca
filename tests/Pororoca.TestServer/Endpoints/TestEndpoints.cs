@@ -108,7 +108,7 @@ public static class TestEndpoints
                 Stream = new FileStream(GetTestFilePath("pirate.gif"), FileMode.Open)
             }
         };
-    
+
     private static MultipartFormDataResult TestGetMultipartTextOnly() =>
         new()
         {

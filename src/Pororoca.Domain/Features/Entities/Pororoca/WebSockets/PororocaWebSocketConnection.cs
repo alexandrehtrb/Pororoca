@@ -2,29 +2,18 @@ using System.Text.Json.Serialization;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 
-public sealed class PororocaWebSocketConnection : PororocaRequest
+public sealed record PororocaWebSocketConnection
+(
+    string Name,
+    decimal HttpVersion = 1.1m,
+    string Url = "",
+    List<PororocaKeyValueParam>? Headers = null,
+    PororocaRequestAuth? CustomAuth = null,
+    PororocaWebSocketCompressionOptions? CompressionOptions = null,
+    List<PororocaKeyValueParam>? Subprotocols = null,
+    List<PororocaWebSocketClientMessage>? ClientMessages = null
+) : PororocaRequest(PororocaRequestType.Websocket, Name)
 {
-    [JsonInclude]
-    public decimal HttpVersion { get; set; }
-
-    [JsonInclude]
-    public string Url { get; set; }
-
-    [JsonInclude]
-    public List<PororocaKeyValueParam>? Headers { get; set; }
-
-    [JsonInclude]
-    public PororocaRequestAuth? CustomAuth { get; set; }
-
-    [JsonInclude]
-    public PororocaWebSocketCompressionOptions? CompressionOptions { get; set; }
-
-    [JsonInclude]
-    public List<PororocaKeyValueParam>? Subprotocols { get; set; }
-
-    [JsonInclude]
-    public List<PororocaWebSocketClientMessage>? ClientMessages { get; set; }
-
     [JsonIgnore]
     public bool EnableCompression => CompressionOptions is not null;
 
@@ -35,23 +24,14 @@ public sealed class PororocaWebSocketConnection : PororocaRequest
     }
 #nullable restore warnings
 
-    public PororocaWebSocketConnection(string name) : base(PororocaRequestType.Websocket, name)
-    {
-        HttpVersion = 1.1m;
-        Url = string.Empty;
-        Headers = null;
-        CustomAuth = null;
-    }
+    public override PororocaRequest CopyAbstract() => Copy();
 
-    public override object Clone() =>
-        new PororocaWebSocketConnection(Name)
-        {
-            HttpVersion = HttpVersion,
-            Url = Url,
-            Headers = Headers?.Select(h => h.Copy())?.ToList(),
-            CustomAuth = CustomAuth?.Copy(),
-            ClientMessages = ClientMessages?.Select(m => (PororocaWebSocketClientMessage)m.Clone())?.ToList(),
-            Subprotocols = Subprotocols,
-            CompressionOptions = CompressionOptions?.Copy()
-        };
+    public PororocaWebSocketConnection Copy() => this with
+    {
+        Headers = Headers?.Select(h => h.Copy())?.ToList(),
+        CustomAuth = CustomAuth?.Copy(),
+        CompressionOptions = CompressionOptions?.Copy(),
+        Subprotocols = Subprotocols?.Select(s => s.Copy())?.ToList(),
+        ClientMessages = ClientMessages?.Select(m => m.Copy())?.ToList()
+    };
 }
