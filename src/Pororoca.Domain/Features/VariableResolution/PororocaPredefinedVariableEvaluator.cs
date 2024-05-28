@@ -60,7 +60,8 @@ internal static class PororocaPredefinedVariableEvaluator
             "James",
             "Julius",
             "Ryan",
-            "Francis"
+            "Francis",
+            "Michael"
         ]),
         ("ru", [
             "Dmitri",
@@ -120,7 +121,8 @@ internal static class PororocaPredefinedVariableEvaluator
             "Cortez",
             "Franco",
             "Zambrano",
-            "La Cruz"
+            "La Cruz",
+            "Martinez"
         ])
     ];
 

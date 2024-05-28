@@ -231,7 +231,7 @@
           "body": {
             "mode": "raw",
             "contentType": "application/json",
-            "rawContent": "{\r\n\t\"id\": {{MyIdSecret}},\r\n\t\"nome\": \"Alexandre\"\r\n}"
+            "rawContent": "{\r\n\t\"id\": {{ $randomInt }},\r\n\t\"secretNumber\": {{ MyIdSecret }},\r\n\t\"nome\": \"Alexandre\"\r\n}"
           }
         },
         {
