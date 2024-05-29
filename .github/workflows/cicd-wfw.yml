@@ -180,7 +180,7 @@ jobs:
     # start CD steps - desktop
 
     - name: Parse desktop artifacts list for control
-      if: ${{ inputs.runCD }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxX64 || inputs.produceDesktopDebianX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
       shell: pwsh
       run: |
         $hasOSXRelease = if ($env:OSX -eq 'true') { 1 } else { 0 }
@@ -210,7 +210,7 @@ jobs:
         WIN_X86_INSTALLER: ${{ inputs.produceDesktopWinX86Installer }}
 
     - name: Read desktop program version
-      if: ${{ inputs.runCD }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxX64 || inputs.produceDesktopDebianX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
       shell: pwsh
       run: |
         ([XML]$desktopCsprojXml = Get-Content ./src/Pororoca.Desktop/Pororoca.Desktop.csproj)
@@ -218,12 +218,12 @@ jobs:
         echo "VERSION_NAME=${versionName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Generate Pororoca.Desktop SBOM file
-      if: ${{ inputs.runCD }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxX64 || inputs.produceDesktopDebianX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
       shell: pwsh
       run: dotnet CycloneDX ./src/Pororoca.Desktop/Pororoca.Desktop.csproj -o ./out/ -f sbom_pororoca_desktop.json -sv $env:VERSION_NAME --json
 
     - name: Generate Pororoca Desktop dlls
-      if: ${{ inputs.runCD }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxX64 || inputs.produceDesktopDebianX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
       shell: pwsh
       run: |
         $arr = @()
@@ -341,7 +341,7 @@ jobs:
         WIN_X86_INSTALLER: ${{ inputs.produceDesktopWinX86Installer }}
 
     - name: Copy licence
-      if: ${{ inputs.runCD }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxX64 || inputs.produceDesktopDebianX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
       shell: pwsh
       run: |
         $arr = @(Get-ChildItem "./out/" -Directory | Select FullName)
@@ -518,7 +518,7 @@ jobs:
 
     - name: Upload desktop SBOM to workflow results
       # no need if uploading to release
-      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) }}
+      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) && (inputs.produceDesktopLinuxX64 || inputs.produceDesktopDebianX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
       uses: actions/upload-artifact@v4
       with:
         name: 'sbom_pororoca_desktop.json'
