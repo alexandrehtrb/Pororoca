@@ -58,6 +58,7 @@ jobs:
     needs: publish_github_release
     if: ${{ needs.publish_github_release.outputs.is_release_drafted == '1' }}
     uses: ./.github/workflows/cicd-wfw.yml
+    secrets: inherit
     with:
       os: ubuntu-latest
       prNumber: ${{ github.event.number }}
