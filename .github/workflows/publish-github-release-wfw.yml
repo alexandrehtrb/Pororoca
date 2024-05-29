@@ -6,6 +6,7 @@ on:
       - closed
     branches:
       - 'master'
+  workflow_dispatch: # manual trigger, for when nuget push doesn't work
 
 jobs:
 
