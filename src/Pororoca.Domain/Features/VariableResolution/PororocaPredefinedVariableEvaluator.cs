@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace Pororoca.Domain.Features.VariableResolution;
 
@@ -11,13 +12,14 @@ internal static class PororocaPredefinedVariableEvaluator
             "Tatiana",
             "Camila",
             "Fernanda",
-            "Manuela"
+            "Manuela",
+            "Samira"
         ]),
         ("it", [
             "Caterina",
             "Margherita",
             "Viviana",
-            "Valentina",
+            "Valentina"
         ]),
         ("en", [
             "Elizabeth",
@@ -46,7 +48,8 @@ internal static class PororocaPredefinedVariableEvaluator
             "Pedro",
             "João",
             "Matheus",
-            "Ricardo"
+            "Ricardo",
+            "Henrique"
         ]),
         ("it", [
             "Antonio",
@@ -71,10 +74,10 @@ internal static class PororocaPredefinedVariableEvaluator
         ]),
         ("es", [
             "Alejandro",
-            "Cesar",
+            "César",
             "Fernando",
             "Javier"
-        ]),
+        ])
     ];
 
     private static readonly (string lang, string[] surnames)[] surnamesByLang =
@@ -122,7 +125,7 @@ internal static class PororocaPredefinedVariableEvaluator
             "Franco",
             "Zambrano",
             "La Cruz",
-            "Martinez"
+            "Martínez"
         ])
     ];
 
@@ -136,6 +139,7 @@ internal static class PororocaPredefinedVariableEvaluator
             "$randomBirthDate" => GetRandomBirthDate(atLeast18YearsOld: false),
             "$randomBirthDateOver18" => GetRandomBirthDate(atLeast18YearsOld: true),
             "$randomInt" => GetRandomInt(),
+            "$randomQuantity" => GetRandomQuantity(),
             "$randomFullName" => GetRandomFullName(),
             "$randomManFullName" => GetRandomManFullName(),
             "$randomWomanFullName" => GetRandomWomanFullName(),
@@ -143,6 +147,10 @@ internal static class PororocaPredefinedVariableEvaluator
             "$randomManFirstName" => GetRandomManFirstName(),
             "$randomWomanFirstName" => GetRandomWomanFirstName(),
             "$randomLastName" => GetRandomSurname(),
+            "$randomCPF" => GetRandomCPF(includeSeparators: true),
+            "$randomCPFDigitsOnly" => GetRandomCPF(includeSeparators: false),
+            "$randomCNPJ" => GetRandomCNPJ(includeSeparators: true),
+            "$randomCNPJDigitsOnly" => GetRandomCNPJ(includeSeparators: false),
             _ => null
         };
 
@@ -163,6 +171,10 @@ internal static class PororocaPredefinedVariableEvaluator
     }
 
     private static string GetRandomInt() => Random.Shared.Next().ToString();
+
+    private static string GetRandomQuantity() => Random.Shared.Next(1, 1001).ToString();
+
+    #region NAMES
 
     private static string GetRandomFullName() =>
         Random.Shared.Next(0,10) < 5 ?
@@ -239,7 +251,7 @@ internal static class PororocaPredefinedVariableEvaluator
             string s1 = swapPlaces ? surname2 : surname1;
             string s2 = swapPlaces ? surname1 : surname2;
 
-            bool russianWoman = lang1 == "ru" && falseIfManTrueIfWoman;
+            bool russianWoman = (lang1 == "ru" || lang2 == "ru") && falseIfManTrueIfWoman;
 
             return GetRandomSurname(s1, s2, russianWoman, joinSpanishSurnames);
         }
@@ -267,4 +279,115 @@ internal static class PororocaPredefinedVariableEvaluator
             }
         }
     }
+
+    #endregion
+
+    #region CPF
+
+    private static string GetRandomCPF(bool includeSeparators)
+    {
+        ReadOnlySpan<byte> digits = GetRandomCPFDigits();
+        StringBuilder sb = new(14);
+        sb.Append(digits[0]);
+        sb.Append(digits[1]);
+        sb.Append(digits[2]);
+        if (includeSeparators) sb.Append('.');
+        sb.Append(digits[3]);
+        sb.Append(digits[4]);
+        sb.Append(digits[5]);
+        if (includeSeparators) sb.Append('.');
+        sb.Append(digits[6]);
+        sb.Append(digits[7]);
+        sb.Append(digits[8]);
+        if (includeSeparators) sb.Append('-');
+        sb.Append(digits[9]);
+        sb.Append(digits[10]);
+        return sb.ToString();
+    }
+
+    private static ReadOnlySpan<byte> GetRandomCPFDigits()
+    {
+        static int CalculateVerifierDigit(ReadOnlySpan<byte> digits)
+        {
+            int sum = 0;
+            int factor = 2;
+            for (int x = digits.Length - 1; x >= 0; x--)
+            {
+                sum += factor * digits[x];
+                factor++;
+            }
+            int mod = sum % 11;
+            return mod < 2 ? 0 : (11 - mod);
+        }
+
+        Span<byte> digits = stackalloc byte[11];
+        Random.Shared.NextBytes(digits[0..9]);
+        for (int i = 0; i < 9; i++) digits[i] = (byte) (digits[i] % 10);
+
+        digits[9] = (byte) CalculateVerifierDigit(digits[0..9]);
+        digits[10] = (byte) CalculateVerifierDigit(digits[0..10]);
+
+        return digits.ToArray();
+    }
+
+    #endregion
+
+    #region CNPJ
+
+    private static string GetRandomCNPJ(bool includeSeparators)
+    {
+        ReadOnlySpan<byte> digits = GetRandomCNPJDigits();
+        StringBuilder sb = new(18);
+        sb.Append(digits[0]);
+        sb.Append(digits[1]);
+        if (includeSeparators) sb.Append('.');
+        sb.Append(digits[2]);
+        sb.Append(digits[3]);
+        sb.Append(digits[4]);
+        if (includeSeparators) sb.Append('.');
+        sb.Append(digits[5]);
+        sb.Append(digits[6]);
+        sb.Append(digits[7]);
+        if (includeSeparators) sb.Append('/');
+        sb.Append(digits[8]);
+        sb.Append(digits[9]);
+        sb.Append(digits[10]);
+        sb.Append(digits[11]);
+        if (includeSeparators) sb.Append('-');
+        sb.Append(digits[12]);
+        sb.Append(digits[13]);
+        return sb.ToString();
+    }
+
+    private static ReadOnlySpan<byte> GetRandomCNPJDigits()
+    {
+        static int CalculateVerifierDigit(ReadOnlySpan<byte> digits)
+        {
+            int sum = 0;
+            int factor = 2;
+            for (int x = digits.Length - 1; x >= 0; x--)
+            {
+                sum += factor * digits[x];
+                factor++;
+                if (factor > 9) factor = 2; // DIFERENTE DO CPF
+            }
+            int mod = sum % 11;
+            return mod < 2 ? 0 : (11 - mod);
+        }
+
+        Span<byte> digits = stackalloc byte[14];
+        Random.Shared.NextBytes(digits[0..8]);
+        for (int i = 0; i < 8; i++) digits[i] = (byte) (digits[i] % 10);
+        digits[8] = 0;
+        digits[9] = 0;
+        digits[10] = 0;
+        digits[11] = 1;
+
+        digits[12] = (byte) CalculateVerifierDigit(digits[0..12]);
+        digits[13] = (byte) CalculateVerifierDigit(digits[0..13]);
+
+        return digits.ToArray();
+    }
+
+    #endregion
 }
