@@ -77,7 +77,7 @@ jobs:
     secrets: inherit
     with:
       os: ubuntu-latest
-      prNumber: ${{ inputs.prNumber }}
+      prNumber: ${{ fromJSON(inputs.prNumber) }} # fromJSON converts string to number
       runCD: true
       producePororocaTestNuget: true
       pushPackageToNuGetServer: true
