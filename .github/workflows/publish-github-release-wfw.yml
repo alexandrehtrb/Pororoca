@@ -11,7 +11,7 @@ on:
 jobs:
 
   publish_github_release:
-    if: ${{ github.event.pull_request.merged == true }}
+    if: ${{ github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     outputs:
       is_release_drafted: ${{ steps.checkIfReleaseIsDrafted.outputs.IS_RELEASE_DRAFTED }}
