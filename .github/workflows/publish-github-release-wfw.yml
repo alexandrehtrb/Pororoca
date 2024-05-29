@@ -58,14 +58,26 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  push_package_to_nuget:
+  push_package_to_nuget_from_merged_pr:
     needs: publish_github_release
-    if: ${{ needs.publish_github_release.outputs.is_release_drafted == '1' }}
+    if: ${{ github.event_name == 'pull_request' && needs.publish_github_release.outputs.is_release_drafted == '1' }}
     uses: ./.github/workflows/cicd-wfw.yml
     secrets: inherit
     with:
       os: ubuntu-latest
-      prNumber: ${{ github.event_name == 'pull_request' && github.event.number || inputs.prNumber }}
+      prNumber: ${{ github.event.number }}
+      runCD: true
+      producePororocaTestNuget: true
+      pushPackageToNuGetServer: true
+
+  push_package_to_nuget_from_manual_trigger:
+    needs: publish_github_release
+    if: ${{ github.event_name == 'workflow_dispatch' && needs.publish_github_release.outputs.is_release_drafted == '1' }}
+    uses: ./.github/workflows/cicd-wfw.yml
+    secrets: inherit
+    with:
+      os: ubuntu-latest
+      prNumber: ${{ inputs.prNumber }}
       runCD: true
       producePororocaTestNuget: true
       pushPackageToNuGetServer: true
