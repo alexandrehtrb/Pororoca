@@ -7,6 +7,10 @@ on:
     branches:
       - 'master'
   workflow_dispatch: # manual trigger, for when nuget push doesn't work
+    inputs:
+      prNumber:
+        required: true
+        type: number
 
 jobs:
 
@@ -61,7 +65,7 @@ jobs:
     secrets: inherit
     with:
       os: ubuntu-latest
-      prNumber: ${{ github.event.number }}
+      prNumber: ${{ github.event_name == 'pull_request' && github.event.number || inputs.prNumber }}
       runCD: true
       producePororocaTestNuget: true
       pushPackageToNuGetServer: true
