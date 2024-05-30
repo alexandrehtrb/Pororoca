@@ -51,6 +51,10 @@ To generate the Windows Installer, you will need [NSIS](https://nsis.sourceforge
 
 2) Add a ViewModel command and logic for your keyboard shortcut in the `KeyboardShortcuts.cs` file.
 
+## I want a custom predefined or random variable
+
+Edit the `PororocaPredefinedVariableEvaluator.cs` file to add your predefined variable key and logic.
+
 ## Is there anything else I can contribute with?
 
 Yes! Check the GitHub issues track.
