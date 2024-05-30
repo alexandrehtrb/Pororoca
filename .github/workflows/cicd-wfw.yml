@@ -179,36 +179,6 @@ jobs:
 
     # start CD steps - desktop
 
-    - name: Parse desktop artifacts list for control
-      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxX64 || inputs.produceDesktopDebianX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
-      shell: pwsh
-      run: |
-        $hasOSXRelease = if ($env:OSX -eq 'true') { 1 } else { 0 }
-        $hasDebianRelease = if ($env:DEBIAN_X64 -eq 'true') { 1 } else { 0 }
-        $hasLinuxRelease = if (($env:LINUX_X64 -eq 'true') -or $hasDebianRelease) { 1 } else { 0 }
-        $hasWinInstallerRelease = if (($env:WIN_X64_INSTALLER -eq 'true') -or ($env:WIN_X86_INSTALLER -eq 'true')) { 1 } else { 0 }
-        $hasPortableRelease = if (($env:LINUX_X64 -eq 'true') -or ($env:OSX -eq 'true') -or ($env:WIN_X64_PORTABLE -eq 'true') -or ($env:WIN_X86_PORTABLE -eq 'true')) { 1 } else { 0 }
-
-        echo "HAS_OSX_RELEASE=$hasOSXRelease"
-        echo "HAS_DEBIAN_RELEASE=$hasDebianRelease"
-        echo "HAS_LINUX_RELEASE=$hasLinuxRelease"
-        echo "HAS_WIN_INSTALLER_RELEASE=$hasWinInstallerRelease"
-        echo "HAS_PORTABLE_RELEASE=$hasPortableRelease"
-
-        echo "HAS_OSX_RELEASE=$hasOSXRelease" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-        echo "HAS_DEBIAN_RELEASE=$hasDebianRelease" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-        echo "HAS_LINUX_RELEASE=$hasLinuxRelease" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-        echo "HAS_WIN_INSTALLER_RELEASE=$hasWinInstallerRelease" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-        echo "HAS_PORTABLE_RELEASE=$hasPortableRelease" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-      env:
-        LINUX_X64: ${{ inputs.produceDesktopLinuxX64 }}
-        DEBIAN_X64: ${{ inputs.produceDesktopDebianX64 }}
-        OSX: ${{ inputs.produceDesktopMacOSX }}
-        WIN_X64_PORTABLE: ${{ inputs.produceDesktopWinX64Portable }}
-        WIN_X64_INSTALLER: ${{ inputs.produceDesktopWinX64Installer }}
-        WIN_X86_PORTABLE: ${{ inputs.produceDesktopWinX86Portable }}
-        WIN_X86_INSTALLER: ${{ inputs.produceDesktopWinX86Installer }}
-
     - name: Read desktop program version
       if: ${{ inputs.runCD && (inputs.produceDesktopLinuxX64 || inputs.produceDesktopDebianX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
       shell: pwsh
@@ -294,7 +264,7 @@ jobs:
         WIN_X86_INSTALLER: ${{ inputs.produceDesktopWinX86Installer }}
 
     - name: Make Pororoca.app structure (Mac OSX only)
-      if: ${{ inputs.runCD && env.HAS_OSX_RELEASE == '1' }}
+      if: ${{ inputs.runCD && inputs.produceDesktopMacOSX }}
       shell: pwsh
       run: |
         $OUTPUT_FOLDER = "./out/osx-x64";
@@ -308,24 +278,17 @@ jobs:
         Get-ChildItem $OUTPUT_FOLDER -File | Remove-Item
 
     # so Linux users can create desktop launchers
-    - name: Copy logo (Linux only)
-      if: ${{ inputs.runCD && env.HAS_LINUX_RELEASE == '1' }}
+    - name: Copy logo (Linux portable only)
+      if: ${{ inputs.runCD && inputs.produceDesktopLinuxX64 }}
       shell: pwsh
       run: |
-        $arr = @()
-        if ($env:LINUX_X64 -eq 'true')  { $arr += @{ outputFolder="./out/linux-x64" } };
-        if ($env:DEBIAN_X64 -eq 'true') { $arr += @{ outputFolder="./out/debian-x64" } };
-        foreach ($artifact in $arr)
-        {
-          $OUTPUT_FOLDER = $artifact.outputFolder
-          Copy-Item -Path "./pororoca.png" -Destination $OUTPUT_FOLDER
-        }
+        $OUTPUT_FOLDER = "./out/linux-x64"
+        Copy-Item -Path "./pororoca.png" -Destination $OUTPUT_FOLDER
       env:
         LINUX_X64: ${{ inputs.produceDesktopLinuxX64 }}
-        DEBIAN_X64: ${{ inputs.produceDesktopDebianX64 }}
 
     - name: Copy icon for Windows installer
-      if: ${{ inputs.runCD && env.HAS_WIN_INSTALLER_RELEASE == '1' }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Installer) }}
       shell: pwsh
       run: |
         $arr = @()
@@ -351,7 +314,7 @@ jobs:
         }
 
     - name: Compress package
-      if: ${{ inputs.runCD && env.HAS_PORTABLE_RELEASE == '1' }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX86Portable) }}
       shell: pwsh
       run: |
         $arr = @()
@@ -385,7 +348,7 @@ jobs:
         WIN_X86_PORTABLE: ${{ inputs.produceDesktopWinX86Portable }}
 
     - name: Make installer for Windows
-      if: ${{ inputs.runCD && env.HAS_WIN_INSTALLER_RELEASE == '1' }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Installer) }}
       shell: pwsh
       run: |
         $arr = @()
@@ -414,7 +377,7 @@ jobs:
         WIN_X86_INSTALLER: ${{ inputs.produceDesktopWinX86Installer }}
 
     - name: Make Debian .deb package
-      if: ${{ inputs.runCD && env.HAS_DEBIAN_RELEASE == '1' }}
+      if: ${{ inputs.runCD && inputs.produceDesktopDebianX64 }}
       shell: pwsh
       run: |
         $OUTPUT_FOLDER = "./out/debian-x64";
