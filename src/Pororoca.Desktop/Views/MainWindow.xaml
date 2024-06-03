@@ -197,6 +197,20 @@
                 </Image>
               </MenuItem.Icon>
             </MenuItem>
+            <MenuItem
+                x:Name="topMenuItemOptionsLanguageSimplifiedChinese"
+                Header="{Binding i18n.TopMenuLanguage.SimplifiedChinese}"
+                Command="{Binding SelectLanguageSimplifiedChineseCmd}">
+              <MenuItem.Icon>
+                <Image
+                    IsVisible="{Binding IsLanguageSimplifiedChinese}"
+                    Classes="MenuItemCheckMark">
+                  <Image.Source>
+                    <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                  </Image.Source>
+                </Image>
+              </MenuItem.Icon>
+            </MenuItem>
           </MenuItem>
           <MenuItem
               x:Name="topMenuItemOptionsEnableTlsVerification"
