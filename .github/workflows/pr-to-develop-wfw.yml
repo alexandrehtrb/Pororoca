@@ -17,6 +17,4 @@ jobs:
     uses: ./.github/workflows/cicd-wfw.yml
     with:
       os: ubuntu-latest
-      postUnitTestsCoverageInPR: true
-      prNumber: ${{ github.event.number }}
       runCD: false
