@@ -4,7 +4,14 @@ This is a tutorial for code contributions for the Pororoca project. Welcome!
 
 Remember to fork this repo and develop your code starting from the `develop` branch.
 
-## Machine requirements
+* [Machine requirements](#machine-requirements-for-development)
+* [I want to translate Pororoca to my language](#i-want-to-translate-pororoca-to-my-language)
+* [I want to make my own colour theme](#i-want-to-make-my-own-colour-theme)
+* [I want a custom keyboard shortcut](#i-want-a-custom-keyboard-shortcut)
+* [I want a predefined or random variable](#i-want-a-predefined-or-random-variable)
+* [Is there anything else I can contribute with?](#is-there-anything-else-i-can-contribute-with)
+
+## Machine requirements for development
 
 * [.NET 8](https://dotnet.microsoft.com)
 * [VS Code](https://code.visualstudio.com/) or [Visual Studio](https://visualstudio.microsoft.com/pt-br/)
@@ -17,11 +24,17 @@ To generate the Windows Installer, you will need [NSIS](https://nsis.sourceforge
 
 ## I want to translate Pororoca to my language
 
-1) In the **Pororoca.Desktop.Localization.SourceGeneration** project, add your language to the enum and extensions.
+Pororoca uses `.resx` files for internationalization.
 
-2) In the **Pororoca.Desktop** project, create a new JSON file with your language strings, inside the Localization folder, and reference in AdditionalFiles inside `Pororoca.Desktop.csproj`.
+[ResXResourceManager](https://github.com/dotnet/ResXResourceManager) is a great tool for managing translations in `.resx` files. In its bottom bar, tab Translate, you can automate translations by using popular APIs, like Google, Bing and MyMemory. But it is only available for Windows.
 
-3) Insert a new key in the `i18n_keys.json` file, of your language name, like: `"TopMenuLanguage/YourLanguage",`. The other languages files will need a translation for this key.
+For other platforms, there are VSCode extensions that allow visualization of `.resx` strings as tables. You can also use a text editor for them, as they follow a XML format.
+
+1) In the *Pororoca.Desktop.Localization.SourceGeneration* project, add your language to the enum and extensions.
+
+2) In the *Pororoca.Desktop* project, create a new resx file with your language strings, inside the Localization folder, and reference in AdditionalFiles inside `Pororoca.Desktop.csproj`.
+
+3) Insert a new key in the `strings.resx` file, of your language name, like: `"TopMenuLanguage/YourLanguage",`. The other language files will need a translation for this key.
 
 4) Edit `MainWindow.xaml` and `MainWindowViewModel.cs` to add your language to the top menu.
 
@@ -50,6 +63,10 @@ To generate the Windows Installer, you will need [NSIS](https://nsis.sourceforge
 1) If the keyboard shortcut is related to the collection tree (left-side panel), then the keybinding needs to be registered in `CollectionsGroupView.xaml`. If it is related to the main window, then the keybinding resides in the `MainWindow.xaml` file.
 
 2) Add a ViewModel command and logic for your keyboard shortcut in the `KeyboardShortcuts.cs` file.
+
+## I want a predefined or random variable
+
+Edit the `PororocaPredefinedVariableEvaluator.cs` file to add your variable key and logic.
 
 ## Is there anything else I can contribute with?
 

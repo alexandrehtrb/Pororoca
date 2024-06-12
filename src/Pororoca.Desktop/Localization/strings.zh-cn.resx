@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<!--
+    Microsoft ResX Schema
+
+    Version 2.0
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
+    associated with the data types.
+
+    Example:
+
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+
+    There are any number of "resheader" rows that contain simple
+    name/value pairs.
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
+    mimetype set.
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
+    extensible. For a given mimetype the value must be set accordingly:
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
+    read any of the formats listed below.
+
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="metadata">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0"/>
+							</xsd:sequence>
+							<xsd:attribute name="name" use="required" type="xsd:string"/>
+							<xsd:attribute name="type" type="xsd:string"/>
+							<xsd:attribute name="mimetype" type="xsd:string"/>
+							<xsd:attribute ref="xml:space"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="assembly">
+						<xsd:complexType>
+							<xsd:attribute name="alias" type="xsd:string"/>
+							<xsd:attribute name="name" type="xsd:string"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+							<xsd:attribute ref="xml:space"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required"/>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<data name="GoBack/Hint" xml:space="preserve"><value>返回</value></data>
+	<data name="MacOSXUserDataFolderMigratedV3Dialog/Title" xml:space="preserve"><value>Pororoca - 用户数据文件夹已迁移</value></data>
+	<data name="MacOSXUserDataFolderMigratedV3Dialog/Message" xml:space="preserve"><value>您的用户数据目录现在位于：\\n{0}\\n您可以备份和手动删除应用程序内的PororocaUserData文件夹。</value></data>
+	<data name="Welcome/Title" xml:space="preserve"><value>欢迎!</value></data>
+	<data name="Welcome/NewCollection" xml:space="preserve"><value>新集合</value></data>
+	<data name="Welcome/ImportCollection" xml:space="preserve"><value>导入集合...</value></data>
+	<data name="Welcome/ImportOpenAPI" xml:space="preserve"><value>导入 OpenAPI…</value></data>
+	<data name="Welcome/OpenDocsWebsite" xml:space="preserve"><value>转到文档</value></data>
+	<data name="Welcome/VisitGitHubRepo" xml:space="preserve"><value>访问 GitHub 仓库</value></data>
+	<data name="CannotCopyOrCutCollectionDialog/Title" xml:space="preserve"><value>Pororoca - 复制项目</value></data>
+	<data name="CannotCopyOrCutCollectionDialog/Content" xml:space="preserve"><value>您可以复制，但不能复制或剪切集合。</value></data>
+	<data name="CannotPasteItemToItselfDialog/Title" xml:space="preserve"><value>Pororoca - 剪切项目</value></data>
+	<data name="CannotPasteItemToItselfDialog/Content" xml:space="preserve"><value>无法将剪切项目粘贴到其本身。</value></data>
+	<data name="Collection/AddEnvironment" xml:space="preserve"><value>添加环境</value></data>
+	<data name="Collection/AddFolder" xml:space="preserve"><value>添加文件夹</value></data>
+	<data name="Collection/AddHttpRequest" xml:space="preserve"><value>添加 HTTP 请求</value></data>
+	<data name="Collection/AddWebSocketConnection" xml:space="preserve"><value>添加 WebSocket</value></data>
+	<data name="Collection/AddHttpRepeater" xml:space="preserve"><value>添加 HTTP 转发器</value></data>
+	<data name="Collection/SetCollectionScopedHeaders" xml:space="preserve"><value>设置集合标题</value></data>
+	<data name="Collection/ChooseImportExportFormat" xml:space="preserve"><value>选择格式</value></data>
+	<data name="Collection/ExportAsPororocaCollection" xml:space="preserve"><value>导出为 Pororoca...</value></data>
+	<data name="Collection/ExportAsPororocaCollectionDialogTitle" xml:space="preserve"><value>以 Pororoca 格式导出集合</value></data>
+	<data name="Collection/ExportAsPostmanCollection" xml:space="preserve"><value>导出为 Postman...</value></data>
+	<data name="Collection/ExportAsPostmanCollectionDialogTitle" xml:space="preserve"><value>以 Postman 格式导出集合</value></data>
+	<data name="Collection/ExportCollection" xml:space="preserve"><value>导出集合…</value></data>
+	<data name="Collection/ExportCollectionDialogTitle" xml:space="preserve"><value>将集合输出到文件 (选择格式)</value></data>
+	<data name="Collection/ExportIncludeSecrets" xml:space="preserve"><value>导出时包括 secret 变量</value></data>
+	<data name="Collection/ImportCollectionDialogTitle" xml:space="preserve"><value>导入集合 / OpenAPI 文件</value></data>
+	<data name="Collection/ImportCollectionDialogTypes" xml:space="preserve"><value>集合 / OpenAPI 文件</value></data>
+	<data name="Collection/ImportEnvironment" xml:space="preserve"><value>导入环境...</value></data>
+	<data name="Collection/ImportEnvironmentDialogTitle" xml:space="preserve"><value>导入环境文件</value></data>
+	<data name="Collection/ImportEnvironmentDialogTypes" xml:space="preserve"><value>环境文件</value></data>
+	<data name="Collection/NewCollection" xml:space="preserve"><value>新集合</value></data>
+	<data name="Collection/PororocaCollectionFormat" xml:space="preserve"><value>Pororoca 集合</value></data>
+	<data name="Collection/PostmanCollectionFormat" xml:space="preserve"><value>Postman 集合 v2.1</value></data>
+	<data name="CollectionFolder/AddFolder" xml:space="preserve"><value>添加文件夹</value></data>
+	<data name="CollectionFolder/AddHttpRequest" xml:space="preserve"><value>添加 HTTP 请求</value></data>
+	<data name="CollectionFolder/AddWebSocketConnection" xml:space="preserve"><value>添加 WebSocket</value></data>
+	<data name="CollectionFolder/AddHttpRepeater" xml:space="preserve"><value>添加 HTTP 转发器</value></data>
+	<data name="CollectionScopedAuth/Title" xml:space="preserve"><value>Collection-scoped 授权</value></data>
+	<data name="CollectionScopedRequestHeaders/Title" xml:space="preserve"><value>Collection-scoped 请求标头</value></data>
+	<data name="CollectionVariables/AddVariable" xml:space="preserve"><value>添加变量</value></data>
+	<data name="CollectionVariables/RemoveVariable" xml:space="preserve"><value>移除变量</value></data>
+	<data name="CollectionVariables/Tip" xml:space="preserve"><value>提示：要使用变量，请在请求的 URL、正文、身份验证或标头中输入 {{VariableName}}。发送请求时，{{VariableName}} 文本将被变量的值替换。</value></data>
+	<data name="CollectionVariables/Title" xml:space="preserve"><value>集合变量</value></data>
+	<data name="Variables/Enabled" xml:space="preserve"><value>ENABLED</value></data>
+	<data name="Variables/IsSecret" xml:space="preserve"><value>IS SECRET</value></data>
+	<data name="Variables/Name" xml:space="preserve"><value>VARIABLE NAME</value></data>
+	<data name="Variables/Value" xml:space="preserve"><value>VALUE</value></data>
+	<data name="CollectionsGroup/CollectionScopedAuth" xml:space="preserve"><value>授权</value></data>
+	<data name="CollectionsGroup/Environments" xml:space="preserve"><value>环境</value></data>
+	<data name="CollectionsGroup/Variables" xml:space="preserve"><value>变量</value></data>
+	<data name="ContextMenu/Copy" xml:space="preserve"><value>复制</value></data>
+	<data name="ContextMenu/Cut" xml:space="preserve"><value>剪切</value></data>
+	<data name="ContextMenu/Delete" xml:space="preserve"><value>删除</value></data>
+	<data name="ContextMenu/Duplicate" xml:space="preserve"><value>重复</value></data>
+	<data name="ContextMenu/Export" xml:space="preserve"><value>导出</value></data>
+	<data name="ContextMenu/ImportEnvironment" xml:space="preserve"><value>导入环境...</value></data>
+	<data name="ContextMenu/MoveDown" xml:space="preserve"><value>下移</value></data>
+	<data name="ContextMenu/MoveUp" xml:space="preserve"><value>上移</value></data>
+	<data name="ContextMenu/NewEnvironment" xml:space="preserve"><value>新建环境</value></data>
+	<data name="ContextMenu/NewFolder" xml:space="preserve"><value>新建文件夹</value></data>
+	<data name="ContextMenu/NewHttpRequest" xml:space="preserve"><value>新建 HTTP 请求</value></data>
+	<data name="ContextMenu/NewHttpRepeater" xml:space="preserve"><value>新建 HTTP 转发器</value></data>
+	<data name="ContextMenu/NewWebSocketClientMessage" xml:space="preserve"><value>新建客户端消息</value></data>
+	<data name="ContextMenu/NewWebSocketConnection" xml:space="preserve"><value>新建 WebSocket</value></data>
+	<data name="ContextMenu/Paste" xml:space="preserve"><value>粘贴</value></data>
+	<data name="ContextMenu/Rename" xml:space="preserve"><value>重命名</value></data>
+	<data name="ContextMenu/SetAsCurrentEnvironment" xml:space="preserve"><value>设置为当前环境</value></data>
+	<data name="DeleteItemsDialog/Title" xml:space="preserve"><value>Pororoca - 删除项目</value></data>
+	<data name="DeleteItemsDialog/MessageSingleItem" xml:space="preserve"><value>您确定要删除 '{0}' 吗？</value></data>
+	<data name="DeleteItemsDialog/MessageMultipleItems" xml:space="preserve"><value>您确定要删除所选项目吗？</value></data>
+	<data name="EditableTextBlock/RenameToolTip" xml:space="preserve"><value>重命名 (F2)</value></data>
+	<data name="Environment/AddVariable" xml:space="preserve"><value>添加变量</value></data>
+	<data name="Environment/ChooseImportExportFormat" xml:space="preserve"><value>选择格式</value></data>
+	<data name="Environment/ExportAsPororocaEnvironment" xml:space="preserve"><value>导出为 Pororoca...</value></data>
+	<data name="Environment/ExportAsPororocaEnvironmentDialogTitle" xml:space="preserve"><value>以 Pororoca 格式导出环境</value></data>
+	<data name="Environment/ExportAsPostmanEnvironment" xml:space="preserve"><value>导出为 Postman...</value></data>
+	<data name="Environment/ExportAsPostmanEnvironmentDialogTitle" xml:space="preserve"><value>以 Postman 格式导出环境</value></data>
+	<data name="Environment/ExportEnvironment" xml:space="preserve"><value>导出环境…</value></data>
+	<data name="Environment/ExportEnvironmentDialogTitle" xml:space="preserve"><value>将环境输出到文件 (选择格式)</value></data>
+	<data name="Environment/ExportIncludeSecrets" xml:space="preserve"><value>导出时包括 secret 变量</value></data>
+	<data name="Environment/NewEnvironment" xml:space="preserve"><value>新建环境</value></data>
+	<data name="Environment/PororocaEnvironmentFormat" xml:space="preserve"><value>Pororoca 环境</value></data>
+	<data name="Environment/PostmanEnvironmentFormat" xml:space="preserve"><value>Postman 环境</value></data>
+	<data name="Environment/RemoveVariable" xml:space="preserve"><value>移除变量</value></data>
+	<data name="Environment/SetAsCurrentEnvironment" xml:space="preserve"><value>设置为当前环境</value></data>
+	<data name="Environment/UnsetAsCurrentEnvironment" xml:space="preserve"><value>禁用当前环境</value></data>
+	<data name="Environment/Tip" xml:space="preserve"><value>提示：如果环境变量与其他集合变量同名，则环境变量的值将是应用的值。</value></data>
+	<data name="Folder/NewFolder" xml:space="preserve"><value>新建文件夹</value></data>
+	<data name="SelectFolderDialog/Title" xml:space="preserve"><value>选择目标文件夹</value></data>
+	<data name="HelpDialog/Title" xml:space="preserve"><value>帮助</value></data>
+	<data name="HelpDialog/Content" xml:space="preserve"><value>键盘快捷方式\\n\\nF1 - 显示帮助\\nF2 - 重命名\\nF4 - 关注 URL\\nF5 - 发送请求/连接 WebSocket\\nF6 - 取消请求/断开 WebSocket\\nF7 - 将上一个环境设置为活动\\nF8 - 将下一个环境设置为活动\\nF9 - 将响应正文保存到文件\\nF10 - 将 HTTP 日志输出到文件\\nCtrl+PageUp -切换到树中上方的项\\nCtrl+PageDown -切换到树中的下方的项\\nCtrl+Shift+S -保存所有\\n\\n网站上的完整文档：https://pororoca.io</value></data>
+	<data name="HttpRepeater/NewRepeater" xml:space="preserve"><value>新建 HTTP 转发器</value></data>
+	<data name="HttpRepeater/SelectBaseRequest" xml:space="preserve"><value>(选择基本http请求)</value></data>
+	<data name="HttpRepeater/RefreshBaseRequestsListTip" xml:space="preserve"><value>刷新列表</value></data>
+	<data name="HttpRepeater/Start" xml:space="preserve"><value>开始</value></data>
+	<data name="HttpRepeater/StartTip" xml:space="preserve"><value>开始 (F5)</value></data>
+	<data name="HttpRepeater/Stop" xml:space="preserve"><value>停止</value></data>
+	<data name="HttpRepeater/StopTip" xml:space="preserve"><value>停止 (F6)</value></data>
+	<data name="HttpRepeater/RepetitionSectionTitle" xml:space="preserve"><value>重复</value></data>
+	<data name="HttpRepeater/RepetitionMode" xml:space="preserve"><value>模式</value></data>
+	<data name="HttpRepeater/RepetitionModeSimple" xml:space="preserve"><value>简单</value></data>
+	<data name="HttpRepeater/RepetitionModeSequential" xml:space="preserve"><value>顺序</value></data>
+	<data name="HttpRepeater/RepetitionModeRandom" xml:space="preserve"><value>随机</value></data>
+	<data name="HttpRepeater/NumberOfRepetitions" xml:space="preserve"><value>数量</value></data>
+	<data name="HttpRepeater/MaxDOP" xml:space="preserve"><value>并行度</value></data>
+	<data name="HttpRepeater/Delay" xml:space="preserve"><value>延迟 (ms)</value></data>
+	<data name="HttpRepeater/DelayTip" xml:space="preserve"><value>响应和发送下一个请求之间的等待时间。</value></data>
+	<data name="HttpRepeater/InputData" xml:space="preserve"><value>输入数据</value></data>
+	<data name="HttpRepeater/InputDataTypeRaw" xml:space="preserve"><value>原始JSON数组</value></data>
+	<data name="HttpRepeater/InputDataTypeRawComment" xml:space="preserve"><value>允许添加注释</value></data>
+	<data name="HttpRepeater/InputDataTypeFile" xml:space="preserve"><value>文件</value></data>
+	<data name="HttpRepeater/InputDataFileSrcPathWatermark" xml:space="preserve"><value>(文件来源路径)</value></data>
+	<data name="HttpRepeater/InputDataFileSearch" xml:space="preserve"><value>搜索文件...</value></data>
+	<data name="HttpRepeater/ExportReport" xml:space="preserve"><value>导出报告…</value></data>
+	<data name="HttpRepeater/SaveAllResponses" xml:space="preserve"><value>保存所有响应…</value></data>
+	<data name="HttpRepeater/ExportAllLogs" xml:space="preserve"><value>导出所有日志...</value></data>
+	<data name="HttpRepeater/InputLine" xml:space="preserve"><value>输入线</value></data>
+	<data name="HttpRepeater/InputLineKey" xml:space="preserve"><value>VARIABLE NAME</value></data>
+	<data name="HttpRepeater/InputLineValue" xml:space="preserve"><value>VALUE</value></data>
+	<data name="HttpRepeater/RepetitionOngoingStatus" xml:space="preserve"><value>{0}/{1} 重复. 预计剩余时间：{2}。</value></data>
+	<data name="HttpRepeater/RepetitionFinishedStatus" xml:space="preserve"><value>已完成 {0} 次重复。运行时间：{1}。</value></data>
+	<data name="HttpRepeater/RepetitionResultCancelled" xml:space="preserve"><value>取消</value></data>
+	<data name="HttpRepeater/RepetitionResultException" xml:space="preserve"><value>意外</value></data>
+	<data name="HttpRepeater/Results" xml:space="preserve"><value>结果</value></data>
+	<data name="HttpRequest/Body" xml:space="preserve"><value>主体</value></data>
+	<data name="HttpRequest/BodyFileContentTypeWatermark" xml:space="preserve"><value>(文件内容类型)</value></data>
+	<data name="HttpRequest/BodyFileSearchFile" xml:space="preserve"><value>搜索文件...</value></data>
+	<data name="HttpRequest/BodyFileSrcPathWatermark" xml:space="preserve"><value>(文件路径)</value></data>
+	<data name="HttpRequest/BodyFormDataFileParamAdd" xml:space="preserve"><value>添加文件</value></data>
+	<data name="HttpRequest/BodyFormDataParamContentType" xml:space="preserve"><value>CONTENT-TYPE</value></data>
+	<data name="HttpRequest/BodyFormDataParamEnabled" xml:space="preserve"><value>ENABLED</value></data>
+	<data name="HttpRequest/BodyFormDataParamName" xml:space="preserve"><value>NAME</value></data>
+	<data name="HttpRequest/BodyFormDataParamRemove" xml:space="preserve"><value>移除</value></data>
+	<data name="HttpRequest/BodyFormDataParamTextOrSrcPath" xml:space="preserve"><value>TEXT / PATH</value></data>
+	<data name="HttpRequest/BodyFormDataParamType" xml:space="preserve"><value>TYPE</value></data>
+	<data name="HttpRequest/BodyFormDataParamTypeFile" xml:space="preserve"><value>文件</value></data>
+	<data name="HttpRequest/BodyFormDataParamTypeText" xml:space="preserve"><value>文本</value></data>
+	<data name="HttpRequest/BodyFormDataTextParamAdd" xml:space="preserve"><value>添加文本</value></data>
+	<data name="HttpRequest/BodyGraphQlQueryWatermark" xml:space="preserve"><value>(graph ql 查询)</value></data>
+	<data name="HttpRequest/BodyGraphQlVariablesWatermark" xml:space="preserve"><value>(graph ql 变量)</value></data>
+	<data name="HttpRequest/BodyModeFile" xml:space="preserve"><value>文件</value></data>
+	<data name="HttpRequest/BodyModeFormData" xml:space="preserve"><value>表单数据</value></data>
+	<data name="HttpRequest/BodyModeGraphQl" xml:space="preserve"><value>Graph QL</value></data>
+	<data name="HttpRequest/BodyModeNone" xml:space="preserve"><value>无</value></data>
+	<data name="HttpRequest/BodyModeRaw" xml:space="preserve"><value>原始</value></data>
+	<data name="HttpRequest/BodyModeUrlEncoded" xml:space="preserve"><value>URL 编码</value></data>
+	<data name="HttpRequest/BodyRawContentTypeWatermark" xml:space="preserve"><value>(原始内容类型)</value></data>
+	<data name="HttpRequest/BodyRawContentWatermark" xml:space="preserve"><value>(原始主体)</value></data>
+	<data name="HttpRequest/BodyUrlEncodedParamAdd" xml:space="preserve"><value>添加参数</value></data>
+	<data name="HttpRequest/BodyUrlEncodedParamEnabled" xml:space="preserve"><value>ENABLED</value></data>
+	<data name="HttpRequest/BodyUrlEncodedParamName" xml:space="preserve"><value>PARAMETER NAME</value></data>
+	<data name="HttpRequest/BodyUrlEncodedParamRemove" xml:space="preserve"><value>移除</value></data>
+	<data name="HttpRequest/BodyUrlEncodedParamValue" xml:space="preserve"><value>VALUE</value></data>
+	<data name="HttpRequest/CancelRequest" xml:space="preserve"><value>取消</value></data>
+	<data name="HttpRequest/CancelRequestToolTip" xml:space="preserve"><value>取消 (F6)</value></data>
+	<data name="HttpRequest/CustomAuth" xml:space="preserve"><value>自定义授权</value></data>
+	<data name="HttpRequest/HeaderAdd" xml:space="preserve"><value>添加报头</value></data>
+	<data name="HttpRequest/HeaderEnabled" xml:space="preserve"><value>ENABLED</value></data>
+	<data name="HttpRequest/HeaderName" xml:space="preserve"><value>HEADER NAME</value></data>
+	<data name="HttpRequest/HeaderRemove" xml:space="preserve"><value>移除</value></data>
+	<data name="HttpRequest/HeaderValue" xml:space="preserve"><value>VALUE</value></data>
+	<data name="HttpRequest/Headers" xml:space="preserve"><value>报头</value></data>
+	<data name="HttpRequest/NewRequest" xml:space="preserve"><value>新建 HTTP 请求</value></data>
+	<data name="HttpRequest/SectionTitle" xml:space="preserve"><value>请求</value></data>
+	<data name="HttpRequest/SendRequest" xml:space="preserve"><value>发送</value></data>
+	<data name="HttpRequest/SendRequestToolTip" xml:space="preserve"><value>发送 (F5)</value></data>
+	<data name="HttpRequest/UrlWatermark" xml:space="preserve"><value>(请求 url)</value></data>
+	<data name="HttpResponse/Body" xml:space="preserve"><value>主体</value></data>
+	<data name="HttpResponse/BodyContentBinaryNotShown" xml:space="preserve"><value>(未显示二进制内容，{0} 字节)</value></data>
+	<data name="HttpResponse/BodyContentTypeWatermark" xml:space="preserve"><value>(响应内容类型)</value></data>
+	<data name="HttpResponse/BodyContentWatermark" xml:space="preserve"><value>(响应主体)</value></data>
+	<data name="HttpResponse/BodyCouldNotReadAsUTF8" xml:space="preserve"><value>(无法将正文读取为 UTF-8 文本，{0} 字节)</value></data>
+	<data name="HttpResponse/BodySaveToFile" xml:space="preserve"><value>另存为...</value></data>
+	<data name="HttpResponse/BodySaveToFileToolTip" xml:space="preserve"><value>另存为... (F9)</value></data>
+	<data name="HttpResponse/ExportLog" xml:space="preserve"><value>导出日志...</value></data>
+	<data name="HttpResponse/ExportLogToolTip" xml:space="preserve"><value>导出日志... (F10)</value></data>
+	<data name="HttpResponse/DisableTlsVerification" xml:space="preserve"><value>关闭 TLS 验证</value></data>
+	<data name="TimeText/MillisecondsFormat" xml:space="preserve"><value>{0}ms</value></data>
+	<data name="TimeText/HoursAndMinutesFormat" xml:space="preserve"><value>{0}h {1]min</value></data>
+	<data name="TimeText/MinutesAndSecondsFormat" xml:space="preserve"><value>{0}min {1}s</value></data>
+	<data name="TimeText/MinutesFormat" xml:space="preserve"><value>{0}min</value></data>
+	<data name="TimeText/SecondsFormat" xml:space="preserve"><value>{0:0.00}s</value></data>
+	<data name="HttpResponse/HeaderName" xml:space="preserve"><value>HEADER NAME</value></data>
+	<data name="HttpResponse/HeaderValue" xml:space="preserve"><value>VALUE</value></data>
+	<data name="HttpResponse/Headers" xml:space="preserve"><value>报头</value></data>
+	<data name="HttpResponse/SectionTitle" xml:space="preserve"><value>响应</value></data>
+	<data name="HttpResponse/SectionTitleFailedFormat" xml:space="preserve"><value>响应：失败 ({0})</value></data>
+	<data name="HttpResponse/SectionTitleSuccessfulFormat" xml:space="preserve"><value>响应：{0} ({1})</value></data>
+	<data name="HttpResponse/Capture" xml:space="preserve"><value>捕获</value></data>
+	<data name="HttpResponse/CaptureAddHeaderCapture" xml:space="preserve"><value>添加标头捕获</value></data>
+	<data name="HttpResponse/CaptureAddBodyCapture" xml:space="preserve"><value>添加主题捕捉</value></data>
+	<data name="HttpResponse/CaptureTargetVariable" xml:space="preserve"><value>TARGET VARIABLE</value></data>
+	<data name="HttpResponse/CaptureType" xml:space="preserve"><value>TYPE</value></data>
+	<data name="HttpResponse/CaptureTypeHeader" xml:space="preserve"><value>报头</value></data>
+	<data name="HttpResponse/CaptureTypeBody" xml:space="preserve"><value>主体</value></data>
+	<data name="HttpResponse/CaptureHeaderNameOrBodyPath" xml:space="preserve"><value>HEADER NAME / BODY PATH</value></data>
+	<data name="HttpResponse/CaptureCapturedValue" xml:space="preserve"><value>VALUE</value></data>
+	<data name="HttpResponse/ExecuteCapturesTooltip" xml:space="preserve"><value>执行捕获</value></data>
+	<data name="HttpResponse/CaptureTip" xml:space="preserve"><value>提示：对于JSON值捕获：$.myProp[0].myProp2 ($表示根，[0]表示数组元素)。对于 XML 值捕获，请使用 XPath 1.0 语法。\\n\\n捕获的值保存到当前环境变量中。如果没有活动的环境，则进入集合变量。</value></data>
+	<data name="RequestAuth/AuthModeInheritFromCollection" xml:space="preserve"><value>继承集合</value></data>
+	<data name="RequestAuth/AuthModeBasic" xml:space="preserve"><value>基本</value></data>
+	<data name="RequestAuth/AuthModeBasicLoginWatermark" xml:space="preserve"><value>(基本授权登录)</value></data>
+	<data name="RequestAuth/AuthModeBasicPasswordWatermark" xml:space="preserve"><value>(基本授权密码)</value></data>
+	<data name="RequestAuth/AuthModeBearer" xml:space="preserve"><value>承载</value></data>
+	<data name="RequestAuth/AuthModeBearerTokenWatermark" xml:space="preserve"><value>(承载身份验证令牌)</value></data>
+	<data name="RequestAuth/AuthModeClientCertificate" xml:space="preserve"><value>客户端证书</value></data>
+	<data name="RequestAuth/AuthModeNone" xml:space="preserve"><value>无</value></data>
+	<data name="RequestAuth/AuthModeWindows" xml:space="preserve"><value>Windows / NTLM</value></data>
+	<data name="RequestAuth/AuthModeWindowsUseCurrentUser" xml:space="preserve"><value>使用当前用户</value></data>
+	<data name="RequestAuth/AuthModeWindowsLoginWatermark" xml:space="preserve"><value>(登录)</value></data>
+	<data name="RequestAuth/AuthModeWindowsPasswordWatermark" xml:space="preserve"><value>(密码)</value></data>
+	<data name="RequestAuth/AuthModeWindowsDomainWatermark" xml:space="preserve"><value>(域)</value></data>
+	<data name="RequestAuth/CertificateFilePathWatermark" xml:space="preserve"><value>(证书文件路径)</value></data>
+	<data name="RequestAuth/ClientCertificateTypeNone" xml:space="preserve"><value>无</value></data>
+	<data name="RequestAuth/ClientCertificateTypePem" xml:space="preserve"><value>PEM</value></data>
+	<data name="RequestAuth/ClientCertificateTypePkcs12" xml:space="preserve"><value>PKCS#12</value></data>
+	<data name="RequestAuth/FilePasswordWatermark" xml:space="preserve"><value>(文件密码)</value></data>
+	<data name="RequestAuth/PemClientCertificatesTip" xml:space="preserve"><value>提示：如果证书文件包含私钥，请将私钥路径留空。只有当私钥加密时才需要密码。</value></data>
+	<data name="RequestAuth/PemImportCertificateFileDialogTitle" xml:space="preserve"><value>导入 PEM 格式的证书</value></data>
+	<data name="RequestAuth/PemImportCertificateFileTypesDescription" xml:space="preserve"><value>PEM 证书</value></data>
+	<data name="RequestAuth/PemImportPrivateKeyFileDialogTitle" xml:space="preserve"><value>以 PEM 格式导入私钥</value></data>
+	<data name="RequestAuth/PemImportPrivateKeyFileTypesDescription" xml:space="preserve"><value>PEM 私钥</value></data>
+	<data name="RequestAuth/PemSearchCertFile" xml:space="preserve"><value>搜索证书...</value></data>
+	<data name="RequestAuth/PemSearchPrivateKeyFile" xml:space="preserve"><value>搜索私钥...</value></data>
+	<data name="RequestAuth/Pkcs12ImportCertificateFileDialogTitle" xml:space="preserve"><value>导入 PKCS12 格式的证书</value></data>
+	<data name="RequestAuth/Pkcs12ImportCertificateFileTypesDescription" xml:space="preserve"><value>PKCS12 证书</value></data>
+	<data name="RequestAuth/Pkcs12SearchFile" xml:space="preserve"><value>搜索证书...</value></data>
+	<data name="RequestAuth/PrivateKeyFilePathWatermark" xml:space="preserve"><value>(私钥文件路径)</value></data>
+	<data name="RequestValidation/WindowsAuthLoginCannotBeBlank" xml:space="preserve"><value>Windows 身份验证的登录名不能为空。</value></data>
+	<data name="RequestValidation/WindowsAuthPasswordCannotBeBlank" xml:space="preserve"><value>Windows 身份验证的密码不能为空。</value></data>
+	<data name="RequestValidation/WindowsAuthDomainCannotBeBlank" xml:space="preserve"><value>Windows 身份验证的域不能为空。</value></data>
+	<data name="RequestValidation/ClientCertificateFileNotFound" xml:space="preserve"><value>找不到客户端证书文件。</value></data>
+	<data name="RequestValidation/ClientCertificatePkcs12PasswordCannotBeBlank" xml:space="preserve"><value>PKCS#12 客户端证书需要密码。</value></data>
+	<data name="RequestValidation/ClientCertificatePemPrivateKeyFileNotFound" xml:space="preserve"><value>找不到客户端证书私钥文件。</value></data>
+	<data name="RequestValidation/ContentTypeCannotBeBlankReqBodyRawOrFile" xml:space="preserve"><value>请求主体需要内容类型。</value></data>
+	<data name="RequestValidation/Http2Unavailable" xml:space="preserve"><value>在 Windows 上，对 HTTP/2 的支持需要 Windows 10 或更高版本。</value></data>
+	<data name="RequestValidation/Http3Unavailable" xml:space="preserve"><value>HTTP/3 仅适用于配备 msquic 的 Linux 或 Windows 11 及更高版本。</value></data>
+	<data name="RequestValidation/InvalidContentTypeFormData" xml:space="preserve"><value>表单数据参数之一的内容类型无效。</value></data>
+	<data name="RequestValidation/InvalidContentTypeRawOrFile" xml:space="preserve"><value>为请求正文使用一种可用的内容类型。</value></data>
+	<data name="RequestValidation/InvalidUnknownCause" xml:space="preserve"><value>请求无效。请检查并再试一次。</value></data>
+	<data name="RequestValidation/InvalidUrl" xml:space="preserve"><value>无效的 URL。请检查并再试一次。</value></data>
+	<data name="RequestValidation/RepetitionBaseHttpRequestNotSelected" xml:space="preserve"><value>选择要重复的基本 HTTP 请求。</value></data>
+	<data name="RequestValidation/RepetitionBaseHttpRequestNotFound" xml:space="preserve"><value>找不到基本 HTTP 请求。</value></data>
+	<data name="RequestValidation/RepetitionDelayCantBeNegative" xml:space="preserve"><value>延迟必须大于或等于零。</value></data>
+	<data name="RequestValidation/RepetitionNumberOfRepetitionsMustBeAtLeast1" xml:space="preserve"><value>重复次数需要大于或等于 1。</value></data>
+	<data name="RequestValidation/RepetitionMaxDopMustBeAtLeast1" xml:space="preserve"><value>并行度需要大于或等于 1。</value></data>
+	<data name="RequestValidation/RepetitionInputDataFileNotFound" xml:space="preserve"><value>找不到输入数据文件。</value></data>
+	<data name="RequestValidation/RepetitionInputDataInvalid" xml:space="preserve"><value>输入数据 JSON 数组无效。</value></data>
+	<data name="RequestValidation/RepetitionInputDataAtLeastOneLine" xml:space="preserve"><value>至少需要一条输入行。</value></data>
+	<data name="RequestValidation/ReqBodyFileNotFound" xml:space="preserve"><value>找不到请求正文的文件。</value></data>
+	<data name="RequestValidation/WebSocketClientMessageContentFileNotFound" xml:space="preserve"><value>未找到组成该消息的文件。</value></data>
+	<data name="RequestValidation/WebSocketCompressionMaxWindowBitsOutOfRange" xml:space="preserve"><value>压缩最大窗口位必须在9到15之间。</value></data>
+	<data name="RequestValidation/WebSocketHttpVersionUnavailable" xml:space="preserve"><value>此 HTTP 版本不可用于 WebSocket 连接。</value></data>
+	<data name="RequestValidation/WebSocketNotConnected" xml:space="preserve"><value>未连接。</value></data>
+	<data name="RequestValidation/WebSocketUnknownClientMessageTranslationError" xml:space="preserve"><value>要发送的消息无效。请检查并再试一次。</value></data>
+	<data name="RequestValidation/WebSocketUnknownConnectionTranslationError" xml:space="preserve"><value>连接请求无效。请检查并再试一次。</value></data>
+	<data name="TextEditor/Copy" xml:space="preserve"><value>复制</value></data>
+	<data name="TextEditor/Cut" xml:space="preserve"><value>剪切</value></data>
+	<data name="TextEditor/Paste" xml:space="preserve"><value>粘贴</value></data>
+	<data name="TopMenu/Contribute" xml:space="preserve"><value>贡献</value></data>
+	<data name="TopMenu/File" xml:space="preserve"><value>文件</value></data>
+	<data name="TopMenu/Options" xml:space="preserve"><value>选项</value></data>
+	<data name="TopMenu/Help" xml:space="preserve"><value>帮助</value></data>
+	<data name="TopMenu/Saved" xml:space="preserve"><value>保存!</value></data>
+	<data name="TopMenuFile/Exit" xml:space="preserve"><value>退出</value></data>
+	<data name="TopMenuFile/SaveAll" xml:space="preserve"><value>保存全部</value></data>
+	<data name="TopMenuFile/ImportFromFile" xml:space="preserve"><value>从文件导入...</value></data>
+	<data name="TopMenuFile/NewCollection" xml:space="preserve"><value>新集合</value></data>
+	<data name="TopMenuLanguage/English" xml:space="preserve"><value>English</value></data>
+	<data name="TopMenuLanguage/Português" xml:space="preserve"><value>Portuguese</value></data>
+	<data name="TopMenuLanguage/Russian" xml:space="preserve"><value>Russian</value></data>
+	<data name="TopMenuLanguage/Italian" xml:space="preserve"><value>Italian</value></data>
+	<data name="TopMenuLanguage/SimplifiedChinese" xml:space="preserve"><value>中文（简体）</value></data>
+	<data name="TopMenuOptions/EnableTlsVerification" xml:space="preserve"><value>启用 TLS 验证</value></data>
+	<data name="TopMenuOptions/Language" xml:space="preserve"><value>语言</value></data>
+	<data name="TopMenuOptions/Theme" xml:space="preserve"><value>主题</value></data>
+	<data name="TopMenuTheme/AmazonianNight" xml:space="preserve"><value>Amazonian night</value></data>
+	<data name="TopMenuTheme/Dark" xml:space="preserve"><value>Dark</value></data>
+	<data name="TopMenuTheme/Light" xml:space="preserve"><value>Light</value></data>
+	<data name="TopMenuTheme/Pampa" xml:space="preserve"><value>Pampa</value></data>
+	<data name="TopMenuHelp/ViewKeyboardShortcuts" xml:space="preserve"><value>查看键盘快捷键</value></data>
+	<data name="TopMenuHelp/OpenDocsWebsite" xml:space="preserve"><value>转到文档</value></data>
+	<data name="TopMenuHelp/RunUITests" xml:space="preserve"><value>运行UI测试 (Alt +F12)</value></data>
+	<data name="UpdateReminder/DialogCancel" xml:space="preserve"><value>我稍后再检查</value></data>
+	<data name="UpdateReminder/DialogGoToSite" xml:space="preserve"><value>前往网站</value></data>
+	<data name="UpdateReminder/DialogMessage" xml:space="preserve"><value>请记住定期检查更新!</value></data>
+	<data name="UpdateReminder/DialogTitle" xml:space="preserve"><value>Pororoca</value></data>
+	<data name="WebSocketClientMessage/ContentFileSearchFile" xml:space="preserve"><value>搜索文件...</value></data>
+	<data name="WebSocketClientMessage/ContentFileSrcPathWatermark" xml:space="preserve"><value>(文件路径)</value></data>
+	<data name="WebSocketClientMessage/ContentModeFile" xml:space="preserve"><value>文件</value></data>
+	<data name="WebSocketClientMessage/ContentModeRaw" xml:space="preserve"><value>原始</value></data>
+	<data name="WebSocketClientMessage/ContentRawWatermark" xml:space="preserve"><value>(原始内容)</value></data>
+	<data name="WebSocketClientMessage/DisableCompressionExplanation" xml:space="preserve"><value>对加密数据使用压缩时要小心 - 留意犯罪/泄露攻击。</value></data>
+	<data name="WebSocketClientMessage/DisableCompressionForThisMessage" xml:space="preserve"><value>禁用此消息的压缩</value></data>
+	<data name="WebSocketClientMessage/MessageTypeBinary" xml:space="preserve"><value>二进制</value></data>
+	<data name="WebSocketClientMessage/MessageTypeClose" xml:space="preserve"><value>结束消息</value></data>
+	<data name="WebSocketClientMessage/MessageTypeText" xml:space="preserve"><value>文本</value></data>
+	<data name="WebSocketClientMessage/NewMessage" xml:space="preserve"><value>新建客户端消息</value></data>
+	<data name="WebSocketClientMessage/RawContentJsonSyntax" xml:space="preserve"><value>JSON</value></data>
+	<data name="WebSocketClientMessage/RawContentOtherSyntax" xml:space="preserve"><value>其他</value></data>
+	<data name="WebSocketConnection/CancelConnect" xml:space="preserve"><value>取消</value></data>
+	<data name="WebSocketConnection/CancelConnectToolTip" xml:space="preserve"><value>取消 (F6)</value></data>
+	<data name="WebSocketConnection/CancelDisconnect" xml:space="preserve"><value>取消</value></data>
+	<data name="WebSocketConnection/CompressionClientContextTakeover" xml:space="preserve"><value>客户端上下文接管</value></data>
+	<data name="WebSocketConnection/CompressionClientMaxWindowBits" xml:space="preserve"><value>客户端最大窗口位数</value></data>
+	<data name="WebSocketConnection/CompressionServerContextTakeover" xml:space="preserve"><value>服务器上下文接管</value></data>
+	<data name="WebSocketConnection/CompressionServerMaxWindowBits" xml:space="preserve"><value>服务器最大窗口位数</value></data>
+	<data name="WebSocketConnection/Connect" xml:space="preserve"><value>连接</value></data>
+	<data name="WebSocketConnection/ConnectToolTip" xml:space="preserve"><value>连接 (F5)</value></data>
+	<data name="WebSocketConnection/Connected" xml:space="preserve"><value>CONNECTED</value></data>
+	<data name="WebSocketConnection/ConnectionResponse" xml:space="preserve"><value>响应</value></data>
+	<data name="WebSocketConnection/ConnectionExceptionWatermark" xml:space="preserve"><value>(如果发生连接异常，请参阅此处)</value></data>
+	<data name="WebSocketConnection/ConnectionRequestHeaderAdd" xml:space="preserve"><value>添加报头</value></data>
+	<data name="WebSocketConnection/ConnectionRequestOptions" xml:space="preserve"><value>选项</value></data>
+	<data name="WebSocketConnection/ConnectionRequestSubprotocolAdd" xml:space="preserve"><value>添加子协议</value></data>
+	<data name="WebSocketConnection/ConnectionRequestSubprotocolEnabled" xml:space="preserve"><value>ENABLED</value></data>
+	<data name="WebSocketConnection/ConnectionRequestSubprotocolName" xml:space="preserve"><value>NAME</value></data>
+	<data name="WebSocketConnection/CustomAuth" xml:space="preserve"><value>授权</value></data>
+	<data name="WebSocketConnection/Disconnect" xml:space="preserve"><value>断开连接</value></data>
+	<data name="WebSocketConnection/DisconnectToolTip" xml:space="preserve"><value>断开连接 (F6)</value></data>
+	<data name="WebSocketConnection/EnableCompression" xml:space="preserve"><value>启用压缩</value></data>
+	<data name="WebSocketConnection/NewConnection" xml:space="preserve"><value>新建 WebSocket 连接</value></data>
+	<data name="WebSocketConnection/OptionCompression" xml:space="preserve"><value>压缩</value></data>
+	<data name="WebSocketConnection/OptionHeaders" xml:space="preserve"><value>报头</value></data>
+	<data name="WebSocketConnection/OptionSubprotocols" xml:space="preserve"><value>子协议</value></data>
+	<data name="WebSocketConnection/SectionTitle" xml:space="preserve"><value>连接</value></data>
+	<data name="WebSocketConnection/UrlWatermark" xml:space="preserve"><value>(websocket url)</value></data>
+	<data name="WebSocketExchangedMessageDetail/ContentWatermark" xml:space="preserve"><value>(消息内容)</value></data>
+	<data name="WebSocketExchangedMessageDetail/MessageTypeWatermark" xml:space="preserve"><value>(消息类型)</value></data>
+	<data name="WebSocketExchangedMessageDetail/SaveToFile" xml:space="preserve"><value>另存为...</value></data>
+	<data name="WebSocketExchangedMessageDetail/SaveToFileToolTip" xml:space="preserve"><value>另存为... (F9)</value></data>
+	<data name="WebSocketExchangedMessageDetail/SectionTitle" xml:space="preserve"><value>消息细节</value></data>
+	<data name="WebSocketExchangedMessages/BinaryContentDescriptionFormat" xml:space="preserve"><value>二进制，{0} 字节</value></data>
+	<data name="WebSocketExchangedMessages/ClosingMessageContentDescriptionFormat" xml:space="preserve"><value>关闭，{0} 字节</value></data>
+	<data name="WebSocketExchangedMessages/FromClientToServer" xml:space="preserve"><value>客户端 -> 服务器</value></data>
+	<data name="WebSocketExchangedMessages/FromServerToClient" xml:space="preserve"><value>服务器 -> 客户端</value></data>
+	<data name="WebSocketExchangedMessages/InstantDescriptionFormat" xml:space="preserve"><value>HH:mm:ss, yyyy-MM-dd, 'GMT'z'h'</value></data>
+	<data name="WebSocketExchangedMessages/SectionTitle" xml:space="preserve"><value>交换消息</value></data>
+	<data name="WebSocketExchangedMessages/SendMessage" xml:space="preserve"><value>发送</value></data>
+	<data name="WebSocketExchangedMessages/TextContentDescriptionFormat" xml:space="preserve"><value>文本，{0} 字节</value></data>
+</root>
