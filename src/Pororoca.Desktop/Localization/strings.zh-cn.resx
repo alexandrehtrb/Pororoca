@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-	<!-- 
-    Microsoft ResX Schema 
-    
+	<!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -144,8 +144,8 @@
 	<data name="Collection/ExportCollection" xml:space="preserve"><value>导出集合…</value></data>
 	<data name="Collection/ExportCollectionDialogTitle" xml:space="preserve"><value>将集合输出到文件 (选择格式)</value></data>
 	<data name="Collection/ExportIncludeSecrets" xml:space="preserve"><value>导出时包括 secret 变量</value></data>
-	<data name="Collection/ImportCollectionDialogTitle" xml:space="preserve"><value>导入集合 \/ OpenAPI 文件</value></data>
-	<data name="Collection/ImportCollectionDialogTypes" xml:space="preserve"><value>集合 \/ OpenAPI 文件</value></data>
+	<data name="Collection/ImportCollectionDialogTitle" xml:space="preserve"><value>导入集合 / OpenAPI 文件</value></data>
+	<data name="Collection/ImportCollectionDialogTypes" xml:space="preserve"><value>集合 / OpenAPI 文件</value></data>
 	<data name="Collection/ImportEnvironment" xml:space="preserve"><value>导入环境...</value></data>
 	<data name="Collection/ImportEnvironmentDialogTitle" xml:space="preserve"><value>导入环境文件</value></data>
 	<data name="Collection/ImportEnvironmentDialogTypes" xml:space="preserve"><value>环境文件</value></data>
@@ -209,7 +209,7 @@
 	<data name="Folder/NewFolder" xml:space="preserve"><value>新建文件夹</value></data>
 	<data name="SelectFolderDialog/Title" xml:space="preserve"><value>选择目标文件夹</value></data>
 	<data name="HelpDialog/Title" xml:space="preserve"><value>帮助</value></data>
-	<data name="HelpDialog/Content" xml:space="preserve"><value>键盘快捷方式\\n\\nF1 - 显示帮助\\nF2 - 重命名\\nF4 - 关注 URL\\nF5 - 发送请求\/连接 WebSocket\\nF6 - 取消请求\/断开 WebSocket\\nF7 - 将上一个环境设置为活动\\nF8 - 将下一个环境设置为活动\\nF9 - 将响应正文保存到文件\\nF10 - 将 HTTP 日志输出到文件\\nCtrl+PageUp -切换到树中上方的项\\nCtrl+PageDown -切换到树中的下方的项\\nCtrl+Shift+S -保存所有\\n\\n网站上的完整文档：https:\/\/pororoca.io</value></data>
+	<data name="HelpDialog/Content" xml:space="preserve"><value>键盘快捷方式\\n\\nF1 - 显示帮助\\nF2 - 重命名\\nF4 - 关注 URL\\nF5 - 发送请求/连接 WebSocket\\nF6 - 取消请求/断开 WebSocket\\nF7 - 将上一个环境设置为活动\\nF8 - 将下一个环境设置为活动\\nF9 - 将响应正文保存到文件\\nF10 - 将 HTTP 日志输出到文件\\nCtrl+PageUp -切换到树中上方的项\\nCtrl+PageDown -切换到树中的下方的项\\nCtrl+Shift+S -保存所有\\n\\n网站上的完整文档：https://pororoca.io</value></data>
 	<data name="HttpRepeater/NewRepeater" xml:space="preserve"><value>新建 HTTP 转发器</value></data>
 	<data name="HttpRepeater/SelectBaseRequest" xml:space="preserve"><value>(选择基本http请求)</value></data>
 	<data name="HttpRepeater/RefreshBaseRequestsListTip" xml:space="preserve"><value>刷新列表</value></data>
@@ -238,7 +238,7 @@
 	<data name="HttpRepeater/InputLine" xml:space="preserve"><value>输入线</value></data>
 	<data name="HttpRepeater/InputLineKey" xml:space="preserve"><value>VARIABLE NAME</value></data>
 	<data name="HttpRepeater/InputLineValue" xml:space="preserve"><value>VALUE</value></data>
-	<data name="HttpRepeater/RepetitionOngoingStatus" xml:space="preserve"><value>{0}\/{1} 重复. 预计剩余时间：{2}。</value></data>
+	<data name="HttpRepeater/RepetitionOngoingStatus" xml:space="preserve"><value>{0}/{1} 重复. 预计剩余时间：{2}。</value></data>
 	<data name="HttpRepeater/RepetitionFinishedStatus" xml:space="preserve"><value>已完成 {0} 次重复。运行时间：{1}。</value></data>
 	<data name="HttpRepeater/RepetitionResultCancelled" xml:space="preserve"><value>取消</value></data>
 	<data name="HttpRepeater/RepetitionResultException" xml:space="preserve"><value>意外</value></data>
@@ -252,7 +252,7 @@
 	<data name="HttpRequest/BodyFormDataParamEnabled" xml:space="preserve"><value>ENABLED</value></data>
 	<data name="HttpRequest/BodyFormDataParamName" xml:space="preserve"><value>NAME</value></data>
 	<data name="HttpRequest/BodyFormDataParamRemove" xml:space="preserve"><value>移除</value></data>
-	<data name="HttpRequest/BodyFormDataParamTextOrSrcPath" xml:space="preserve"><value>TEXT \/ PATH</value></data>
+	<data name="HttpRequest/BodyFormDataParamTextOrSrcPath" xml:space="preserve"><value>TEXT / PATH</value></data>
 	<data name="HttpRequest/BodyFormDataParamType" xml:space="preserve"><value>TYPE</value></data>
 	<data name="HttpRequest/BodyFormDataParamTypeFile" xml:space="preserve"><value>文件</value></data>
 	<data name="HttpRequest/BodyFormDataParamTypeText" xml:space="preserve"><value>文本</value></data>
@@ -314,7 +314,7 @@
 	<data name="HttpResponse/CaptureType" xml:space="preserve"><value>TYPE</value></data>
 	<data name="HttpResponse/CaptureTypeHeader" xml:space="preserve"><value>报头</value></data>
 	<data name="HttpResponse/CaptureTypeBody" xml:space="preserve"><value>主体</value></data>
-	<data name="HttpResponse/CaptureHeaderNameOrBodyPath" xml:space="preserve"><value>HEADER NAME \/ BODY PATH</value></data>
+	<data name="HttpResponse/CaptureHeaderNameOrBodyPath" xml:space="preserve"><value>HEADER NAME / BODY PATH</value></data>
 	<data name="HttpResponse/CaptureCapturedValue" xml:space="preserve"><value>VALUE</value></data>
 	<data name="HttpResponse/ExecuteCapturesTooltip" xml:space="preserve"><value>执行捕获</value></data>
 	<data name="HttpResponse/CaptureTip" xml:space="preserve"><value>提示：对于JSON值捕获：$.myProp[0].myProp2 ($表示根，[0]表示数组元素)。对于 XML 值捕获，请使用 XPath 1.0 语法。\\n\\n捕获的值保存到当前环境变量中。如果没有活动的环境，则进入集合变量。</value></data>
@@ -326,7 +326,7 @@
 	<data name="RequestAuth/AuthModeBearerTokenWatermark" xml:space="preserve"><value>(承载身份验证令牌)</value></data>
 	<data name="RequestAuth/AuthModeClientCertificate" xml:space="preserve"><value>客户端证书</value></data>
 	<data name="RequestAuth/AuthModeNone" xml:space="preserve"><value>无</value></data>
-	<data name="RequestAuth/AuthModeWindows" xml:space="preserve"><value>Windows \/ NTLM</value></data>
+	<data name="RequestAuth/AuthModeWindows" xml:space="preserve"><value>Windows / NTLM</value></data>
 	<data name="RequestAuth/AuthModeWindowsUseCurrentUser" xml:space="preserve"><value>使用当前用户</value></data>
 	<data name="RequestAuth/AuthModeWindowsLoginWatermark" xml:space="preserve"><value>(登录)</value></data>
 	<data name="RequestAuth/AuthModeWindowsPasswordWatermark" xml:space="preserve"><value>(密码)</value></data>
@@ -354,8 +354,8 @@
 	<data name="RequestValidation/ClientCertificatePkcs12PasswordCannotBeBlank" xml:space="preserve"><value>PKCS#12 客户端证书需要密码。</value></data>
 	<data name="RequestValidation/ClientCertificatePemPrivateKeyFileNotFound" xml:space="preserve"><value>找不到客户端证书私钥文件。</value></data>
 	<data name="RequestValidation/ContentTypeCannotBeBlankReqBodyRawOrFile" xml:space="preserve"><value>请求主体需要内容类型。</value></data>
-	<data name="RequestValidation/Http2Unavailable" xml:space="preserve"><value>在 Windows 上，对 HTTP\/2 的支持需要 Windows 10 或更高版本。</value></data>
-	<data name="RequestValidation/Http3Unavailable" xml:space="preserve"><value>HTTP\/3 仅适用于配备 msquic 的 Linux 或 Windows 11 及更高版本。</value></data>
+	<data name="RequestValidation/Http2Unavailable" xml:space="preserve"><value>在 Windows 上，对 HTTP/2 的支持需要 Windows 10 或更高版本。</value></data>
+	<data name="RequestValidation/Http3Unavailable" xml:space="preserve"><value>HTTP/3 仅适用于配备 msquic 的 Linux 或 Windows 11 及更高版本。</value></data>
 	<data name="RequestValidation/InvalidContentTypeFormData" xml:space="preserve"><value>表单数据参数之一的内容类型无效。</value></data>
 	<data name="RequestValidation/InvalidContentTypeRawOrFile" xml:space="preserve"><value>为请求正文使用一种可用的内容类型。</value></data>
 	<data name="RequestValidation/InvalidUnknownCause" xml:space="preserve"><value>请求无效。请检查并再试一次。</value></data>
@@ -411,7 +411,7 @@
 	<data name="WebSocketClientMessage/ContentModeFile" xml:space="preserve"><value>文件</value></data>
 	<data name="WebSocketClientMessage/ContentModeRaw" xml:space="preserve"><value>原始</value></data>
 	<data name="WebSocketClientMessage/ContentRawWatermark" xml:space="preserve"><value>(原始内容)</value></data>
-	<data name="WebSocketClientMessage/DisableCompressionExplanation" xml:space="preserve"><value>对加密数据使用压缩时要小心 - 留意犯罪\/泄露攻击。</value></data>
+	<data name="WebSocketClientMessage/DisableCompressionExplanation" xml:space="preserve"><value>对加密数据使用压缩时要小心 - 留意犯罪/泄露攻击。</value></data>
 	<data name="WebSocketClientMessage/DisableCompressionForThisMessage" xml:space="preserve"><value>禁用此消息的压缩</value></data>
 	<data name="WebSocketClientMessage/MessageTypeBinary" xml:space="preserve"><value>二进制</value></data>
 	<data name="WebSocketClientMessage/MessageTypeClose" xml:space="preserve"><value>结束消息</value></data>

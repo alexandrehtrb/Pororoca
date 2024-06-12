@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 using System.Text;
-using System.Text.Json;
+using System.Xml;
 using Microsoft.CodeAnalysis;
 
 namespace Pororoca.Desktop.Localization.SourceGeneration;
@@ -15,16 +15,16 @@ public sealed class LocalizationSourceGenerator : IIncrementalGenerator
         var assemblyNameProvider = context.CompilationProvider.Select(static (c, _) => c.AssemblyName);
 
         var keyFilesContentsProvider = context.AdditionalTextsProvider
-                                      .Where(static file => file.Path.EndsWith("i18n_keys.json"))
+                                      .Where(static file => file.Path.EndsWith("strings.resx"))
                                       .Select(static (file, ct) => file.GetText(ct)!.ToString())
-                                      .Select(static (text, _) => JsonSerializer.Deserialize<string[]>(text)!)
+                                      .Select(static (text, _) => ReadResXStrings(text).Keys.ToArray())
                                       .Collect();
 
         var langFilesProvider = context.AdditionalTextsProvider
-                                       .Where(static file => file.Path.EndsWith(".i18n_lang.json"));
+                                       .Where(static file => !file.Path.EndsWith("strings.resx") && file.Path.EndsWith(".resx"));
 
         var allLangsProvider = langFilesProvider
-                                .Select(static (file, _) => LanguageExtensions.GetLanguageByLCID(Path.GetFileNameWithoutExtension(file.Path).Split('.')[0]))
+                                .Select(static (file, _) => LanguageExtensions.GetLanguageByLCID(Path.GetFileNameWithoutExtension(file.Path).Split('.')[1]))
                                 .Collect();
 
         var allLangsAndAllKeysProvider = allLangsProvider.Combine(keyFilesContentsProvider).Combine(assemblyNameProvider);
@@ -38,9 +38,9 @@ public sealed class LocalizationSourceGenerator : IIncrementalGenerator
         context.RegisterSourceOutput(langFilesWithContentsProvider, (spc, x) =>
         {
             string name = x.Left.name, content = x.Left.content, assemblyName = x.Right!;
-            string lcid = name.Split('.')[0];
+            string lcid = name.Split('.')[1];
             var lang = LanguageExtensions.GetLanguageByLCID(lcid);
-            var langDict = JsonSerializer.Deserialize<Dictionary<string, string>>(content)!;
+            var langDict = ReadResXStrings(content);
             spc.AddSource($"{lang}Strings.g.cs", BuildCodeForLanguageClass(assemblyName, lang, langDict));
         });
 
@@ -65,6 +65,20 @@ public sealed class LocalizationSourceGenerator : IIncrementalGenerator
             spc.AddSource("Language.g.cs", BuildCodeForLanguagesEnum(assemblyName, allLangs));
             spc.AddSource("Localizer.g.cs", BuildCodeForLocalizerClass(assemblyName, allLangs, contextsWithKeys));
         });
+    }
+
+    private static Dictionary<string, string> ReadResXStrings(string resxFileContent)
+    {
+        Dictionary<string, string> dict = new();
+        XmlDocument doc = new();
+        doc.LoadXml(resxFileContent);
+        foreach (object node in doc.SelectNodes("/root/data"))
+        {
+            string key = ((XmlNode)node).Attributes["name"].InnerText;
+            string value = ((XmlNode)node).ChildNodes[0].InnerText;
+            dict[key] = value;
+        }
+        return dict;
     }
 
     private string BuildCodeForLanguagesEnum(string assemblyName, ImmutableArray<Language> langs)
@@ -147,7 +161,7 @@ public sealed class LocalizationSourceGenerator : IIncrementalGenerator
             foreach (var ctxKv in ctxKvs)
             {
                 string[] contextAndKey = ctxKv.Key.Split('/');
-                string key = contextAndKey[1], value = ctxKv.Value;
+                string key = contextAndKey[1], value = ctxKv.Value.Replace("\\\\", "\\");
                 sb.AppendLine($"\t\tpublic const string {key} = \"{value}\";");
             }
             sb.AppendLine("\t}");

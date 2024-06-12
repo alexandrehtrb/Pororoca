@@ -47,12 +47,12 @@
     <ProjectReference Include="..\Pororoca.Desktop.Localization.SourceGeneration\Pororoca.Desktop.Localization.SourceGeneration.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
   </ItemGroup>
   <ItemGroup>
-    <AdditionalFiles Include="./Localization/i18n_keys.json" />
-    <AdditionalFiles Include="./Localization/en-gb.i18n_lang.json" />
-    <AdditionalFiles Include="./Localization/pt-br.i18n_lang.json" />
-    <AdditionalFiles Include="./Localization/ru-ru.i18n_lang.json" />
-    <AdditionalFiles Include="./Localization/it-it.i18n_lang.json" />
-    <AdditionalFiles Include="./Localization/zh-cn.i18n_lang.json" />
+    <AdditionalFiles Include="./Localization/strings.resx" />
+    <AdditionalFiles Include="./Localization/strings.en-gb.resx" />
+    <AdditionalFiles Include="./Localization/strings.pt-br.resx" />
+    <AdditionalFiles Include="./Localization/strings.ru-ru.resx" />
+    <AdditionalFiles Include="./Localization/strings.it-it.resx" />
+    <AdditionalFiles Include="./Localization/strings.zh-cn.resx" />
   </ItemGroup>
   <!-- Removes UI tests code in release versions that are not flagged for UI tests -->
   <ItemGroup Condition="'$(Configuration)'=='Release' And '$(UITestsEnabled)' == 'false'">
