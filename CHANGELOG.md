@@ -40,6 +40,10 @@
 
 * Removed unnecessary step in CI/CD.
 
+### Others
+
+* Raised .NET SDK to 8.0.302.
+
 ### New Contributors
 
 * [@LiarOnce](https://github.com/LiarOnce) made his first contribution in PR [#111](https://github.com/alexandrehtrb/Pororoca/pull/111)
