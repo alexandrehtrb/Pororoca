@@ -1,6 +1,7 @@
 # Changelog
 
-* [3.4.0](#340-2024-05-28)
+* [3.4.1](#341-2024-06-12)
+* [3.4.0](#340-2024-05-29)
 * [3.3.0](#330-2024-04-29)
 * [3.2.0](#320-2024-04-09)
 * [3.1.1](#311-2024-03-13)
@@ -25,7 +26,25 @@
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
 
-## [3.4.0](https://github.com/alexandrehtrb/Pororoca/tree/3.4.0) (2024-05-28)
+## [3.4.1](https://github.com/alexandrehtrb/Pororoca/tree/3.4.1) (2024-06-12)
+
+### Features
+
+* Adds chinese language by [@LiarOnce](https://github.com/LiarOnce).
+
+### Refactors
+
+* Translated strings are now inside `.resx` files.
+
+### CI/CD
+
+* Removed unnecessary step in CI/CD.
+
+### New Contributors
+
+* [@LiarOnce](https://github.com/LiarOnce) made his first contribution in PR [#111](https://github.com/alexandrehtrb/Pororoca/pull/111)
+
+## [3.4.0](https://github.com/alexandrehtrb/Pororoca/tree/3.4.0) (2024-05-29)
 
 ### Features
 
