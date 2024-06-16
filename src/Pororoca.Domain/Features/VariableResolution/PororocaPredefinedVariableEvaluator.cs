@@ -4,7 +4,7 @@ using System.Text;
 namespace Pororoca.Domain.Features.VariableResolution;
 
 [ExcludeFromCodeCoverage(Justification = "Most methods return random values. Cannot be tested.")]
-internal static class PororocaPredefinedVariableEvaluator
+public static class PororocaPredefinedVariableEvaluator
 {
     private static readonly (string lang, string[] names)[] womenFirstNamesByLang =
     [
@@ -141,7 +141,7 @@ internal static class PororocaPredefinedVariableEvaluator
         ])
     ];
 
-    internal static bool IsPredefinedVariable(string variableKey, out string? resolvedValue)
+    public static bool IsPredefinedVariable(string variableKey, out string? resolvedValue)
     {
         resolvedValue = variableKey switch
         {
@@ -178,7 +178,7 @@ internal static class PororocaPredefinedVariableEvaluator
 
     private static string GetRandomBirthDate(bool atLeast18YearsOld)
     {
-        var daysToSubtract = TimeSpan.FromDays(Random.Shared.Next(atLeast18YearsOld ? 365.26 * 18 : 1, 365 * 100));
+        var daysToSubtract = TimeSpan.FromDays(Random.Shared.Next(atLeast18YearsOld ? 366 * 18 : 1, 365 * 100));
         return DateTime.Today.Subtract(daysToSubtract).ToString("yyyy-MM-dd");
     }
 

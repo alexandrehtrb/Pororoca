@@ -3,6 +3,7 @@ using System.Reactive;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using static Pororoca.Domain.Features.VariableResolution.PororocaPredefinedVariableEvaluator;
 
 namespace Pororoca.Desktop.ViewModels.DataGrids;
 
@@ -16,8 +17,22 @@ public sealed class VariableViewModel : ViewModelBase
     [Reactive]
     public string Key { get; set; }
 
-    [Reactive]
-    public string Value { get; set; }
+    private string valueField;
+    public string Value
+    {
+        get => this.valueField;
+        set
+        {
+            if (value is not null && value.StartsWith('$') && IsPredefinedVariable(value, out string? resolvedPredefValue))
+            {
+                this.RaiseAndSetIfChanged(ref this.valueField, resolvedPredefValue!);
+            }
+            else
+            {
+                this.RaiseAndSetIfChanged(ref this.valueField, value!);
+            }
+        }
+    }
 
     [Reactive]
     public bool IsSecret { get; set; }
@@ -39,7 +54,7 @@ public sealed class VariableViewModel : ViewModelBase
         this.parentCollection = parentCollection;
         Enabled = enabled;
         Key = key;
-        Value = value;
+        this.valueField = value;
         IsSecret = isSecret;
         RemoveVariableCmd = ReactiveCommand.Create(RemoveVariable);
         MoveVariableUpCmd = ReactiveCommand.Create(MoveVariableUp);
