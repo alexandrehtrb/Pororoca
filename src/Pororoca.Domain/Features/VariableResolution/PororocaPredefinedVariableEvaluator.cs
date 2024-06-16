@@ -178,7 +178,7 @@ internal static class PororocaPredefinedVariableEvaluator
 
     private static string GetRandomBirthDate(bool atLeast18YearsOld)
     {
-        var daysToSubtract = TimeSpan.FromDays(Random.Shared.Next(atLeast18YearsOld ? 365 * 18 : 1, 365 * 100));
+        var daysToSubtract = TimeSpan.FromDays(Random.Shared.Next(atLeast18YearsOld ? 365.26 * 18 : 1, 365 * 100));
         return DateTime.Today.Subtract(daysToSubtract).ToString("yyyy-MM-dd");
     }
 
