@@ -26,7 +26,14 @@ internal static class PororocaPredefinedVariableEvaluator
             "Jessica",
             "Bonnie",
             "Heather",
-            "Rochelle"
+            "Rochelle",
+            "Scarlett",
+            "Florence",
+            "Madison",
+            "Sarah",
+            "Laura",
+            "Alice",
+            "Julia"
         ]),
         ("ru", [
             "Xenia",
@@ -64,7 +71,12 @@ internal static class PororocaPredefinedVariableEvaluator
             "Julius",
             "Ryan",
             "Francis",
-            "Michael"
+            "Michael",
+            "Leigh",
+            "Richard",
+            "Landon",
+            "Jack",
+            "Harold"
         ]),
         ("ru", [
             "Dmitri",
