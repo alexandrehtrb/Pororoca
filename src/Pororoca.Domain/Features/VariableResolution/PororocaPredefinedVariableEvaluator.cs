@@ -149,26 +149,26 @@ public static class PororocaPredefinedVariableEvaluator
             return false;
         }
 
-        resolvedValue = variableKey switch
+        resolvedValue = variableKey.ToLowerInvariant() switch
         {
             "$guid" => GetRandomGuid(),
             "$now" => GetNow(),
             "$today" => GetToday(),
-            "$randomBirthDate" => GetRandomBirthDate(atLeast18YearsOld: false),
-            "$randomBirthDateOver18" => GetRandomBirthDate(atLeast18YearsOld: true),
-            "$randomInt" => GetRandomInt(),
-            "$randomQuantity" => GetRandomQuantity(),
-            "$randomFullName" => GetRandomFullName(),
-            "$randomManFullName" => GetRandomManFullName(),
-            "$randomWomanFullName" => GetRandomWomanFullName(),
-            "$randomFirstName" => GetRandomFirstName(),
-            "$randomManFirstName" => GetRandomManFirstName(),
-            "$randomWomanFirstName" => GetRandomWomanFirstName(),
-            "$randomLastName" => GetRandomSurname(),
-            "$randomCPF" => GetRandomCPF(includeSeparators: true),
-            "$randomCPFDigitsOnly" => GetRandomCPF(includeSeparators: false),
-            "$randomCNPJ" => GetRandomCNPJ(includeSeparators: true),
-            "$randomCNPJDigitsOnly" => GetRandomCNPJ(includeSeparators: false),
+            "$randombirthdate" => GetRandomBirthDate(atLeast18YearsOld: false),
+            "$randombirthdateover18" => GetRandomBirthDate(atLeast18YearsOld: true),
+            "$randomint" => GetRandomInt(),
+            "$randomquantity" => GetRandomQuantity(),
+            "$randomfullname" => GetRandomFullName(),
+            "$randommanfullname" => GetRandomManFullName(),
+            "$randomwomanfullname" => GetRandomWomanFullName(),
+            "$randomfirstname" => GetRandomFirstName(),
+            "$randommanfirstname" => GetRandomManFirstName(),
+            "$randomwomanfirstname" => GetRandomWomanFirstName(),
+            "$randomlastname" => GetRandomSurname(),
+            "$randomcpf" => GetRandomCPF(includeSeparators: true),
+            "$randomcpfdigitsonly" => GetRandomCPF(includeSeparators: false),
+            "$randomcnpj" => GetRandomCNPJ(includeSeparators: true),
+            "$randomcnpjdigitsonly" => GetRandomCNPJ(includeSeparators: false),
             _ => null
         };
 
