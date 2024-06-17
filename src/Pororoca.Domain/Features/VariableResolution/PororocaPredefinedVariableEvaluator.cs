@@ -143,6 +143,12 @@ public static class PororocaPredefinedVariableEvaluator
 
     public static bool IsPredefinedVariable(string variableKey, out string? resolvedValue)
     {
+        if (!variableKey.StartsWith('$'))
+        {
+            resolvedValue = null;
+            return false;
+        }
+
         resolvedValue = variableKey switch
         {
             "$guid" => GetRandomGuid(),

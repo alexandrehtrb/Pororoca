@@ -23,7 +23,7 @@ public sealed class VariableViewModel : ViewModelBase
         get => this.valueField;
         set
         {
-            if (value is not null && value.StartsWith('$') && IsPredefinedVariable(value, out string? resolvedPredefValue))
+            if (value is not null && IsPredefinedVariable(value, out string? resolvedPredefValue))
             {
                 this.RaiseAndSetIfChanged(ref this.valueField, resolvedPredefValue!);
             }
