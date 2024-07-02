@@ -1,4 +1,4 @@
-﻿{
+{
   "schema": "Pororoca/1",
   "id": "846255a2-2387-4d4a-b129-78a806aeb52d",
   "name": "PororocaIntegrationTestCollection",
@@ -83,7 +83,7 @@
         {
           "enabled": true,
           "key": "BadSslClientCertDir",
-          "value": "C:\\Projetos\\Pororoca\\tests\\Pororoca.Test.Tests\\BadSslClientCertificates",
+          "value": "C:\\Projetos\\Pororoca\\tests\\TestFiles\\ClientCertificates",
           "isSecret": false
         },
         {

@@ -12,13 +12,13 @@ internal static class TestFilesLoader
 
     internal static string GetTestClientCertificatesDir()
     {
-        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
-        return Path.Combine(testDataDirInfo.FullName, "BadSslClientCertificates");
+        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!.Parent!;
+        return Path.Combine(testDataDirInfo.FullName, "TestFiles", "ClientCertificates");
     }
 
     internal static string GetTestFilesDir()
     {
-        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!;
+        var testDataDirInfo = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!.Parent!;
         return Path.Combine(testDataDirInfo.FullName, "TestFiles");
     }
 }
