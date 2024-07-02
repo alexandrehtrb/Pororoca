@@ -6,11 +6,6 @@ using Pororoca.Desktop.ViewModels.DataGrids;
 
 namespace Pororoca.Desktop.Behaviors;
 
-public interface IRequestHeadersDataGridOwner
-{
-    RequestHeadersDataGridViewModel RequestHeadersTableVm { get; }
-}
-
 public sealed class RequestHeadersDataGridDropHandler : BaseDataGridDropHandler<RequestHeaderViewModel>
 {
     protected override RequestHeaderViewModel MakeCopy(ObservableCollection<RequestHeaderViewModel> parentCollection, RequestHeaderViewModel item) =>
@@ -19,14 +14,14 @@ public sealed class RequestHeadersDataGridDropHandler : BaseDataGridDropHandler<
     protected override bool Validate(DataGrid dg, DragEventArgs e, object? sourceContext, object? targetContext, bool bExecute)
     {
         if (sourceContext is not RequestHeaderViewModel sourceItem
-         || targetContext is not IRequestHeadersDataGridOwner vm
+         || targetContext is not RequestHeadersDataGridViewModel vm
          || dg.GetVisualAt(e.GetPosition(dg)) is not Control targetControl
          || targetControl.DataContext is not RequestHeaderViewModel targetItem)
         {
             return false;
         }
 
-        var items = vm.RequestHeadersTableVm.Items;
+        var items = vm.Items;
         return RunDropAction(dg, e, bExecute, sourceItem, targetItem, items);
     }
 }

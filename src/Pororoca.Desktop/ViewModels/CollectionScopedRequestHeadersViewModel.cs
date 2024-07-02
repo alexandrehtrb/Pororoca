@@ -7,7 +7,7 @@ using ReactiveUI;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class CollectionScopedRequestHeadersViewModel : CollectionOrganizationItemViewModel, IRequestHeadersDataGridOwner
+public sealed class CollectionScopedRequestHeadersViewModel : CollectionOrganizationItemViewModel
 {
     public ReactiveCommand<Unit, Unit> GoBackCmd { get; }
 

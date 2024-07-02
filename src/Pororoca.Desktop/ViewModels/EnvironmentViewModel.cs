@@ -9,7 +9,7 @@ using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel, IVariablesDataGridOwner
+public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
 {
     #region COLLECTION ORGANIZATION
 

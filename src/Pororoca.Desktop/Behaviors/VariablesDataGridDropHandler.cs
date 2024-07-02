@@ -6,11 +6,6 @@ using Pororoca.Desktop.ViewModels.DataGrids;
 
 namespace Pororoca.Desktop.Behaviors;
 
-public interface IVariablesDataGridOwner
-{
-    VariablesDataGridViewModel VariablesTableVm { get; }
-}
-
 public sealed class VariablesDataGridDropHandler : BaseDataGridDropHandler<VariableViewModel>
 {
     protected override VariableViewModel MakeCopy(ObservableCollection<VariableViewModel> parentCollection, VariableViewModel item) =>
@@ -19,14 +14,14 @@ public sealed class VariablesDataGridDropHandler : BaseDataGridDropHandler<Varia
     protected override bool Validate(DataGrid dg, DragEventArgs e, object? sourceContext, object? targetContext, bool bExecute)
     {
         if (sourceContext is not VariableViewModel sourceItem
-         || targetContext is not IVariablesDataGridOwner vm
+         || targetContext is not VariablesDataGridViewModel vm
          || dg.GetVisualAt(e.GetPosition(dg)) is not Control targetControl
          || targetControl.DataContext is not VariableViewModel targetItem)
         {
             return false;
         }
 
-        var items = vm.VariablesTableVm.Items;
+        var items = vm.Items;
         return RunDropAction(dg, e, bExecute, sourceItem, targetItem, items);
     }
 }
