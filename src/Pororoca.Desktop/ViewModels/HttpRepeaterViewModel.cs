@@ -363,6 +363,7 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
 
         if (!valid)
         {
+            ShowRepetitionSuccessfulTip = false;
             RepetitionStatusText = null;
             InvalidRepetitionErrorCode = errorCode;
         }
@@ -376,6 +377,7 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
                                            resolvedInputData!.Length : NumberOfRepetitionsToExecute;
             IsRepetitionRunning = true;
             HasFinishedRepetition = false;
+            ShowRepetitionSuccessfulTip = false;
             RepetitionStatusText = null;
             RepetitionResults.Clear();
             SelectedRepetitionResult = null;
