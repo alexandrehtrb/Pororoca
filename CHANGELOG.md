@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.4.2](#342-2024-07-02)
 * [3.4.1](#341-2024-06-12)
 * [3.4.0](#340-2024-05-29)
 * [3.3.0](#330-2024-04-29)
@@ -25,6 +26,18 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.4.2](https://github.com/alexandrehtrb/Pororoca/tree/3.4.2) (2024-07-02)
+
+### Features
+
+* Count successes in repetition results (issue #113).
+* Adds more names for predefined variables.
+* Predefined variables can be applied on tables, like typing `$today` in a variable value will apply the current date formatted as yyyy-MM-dd. Read more about in our [docs](https://pororoca.io/docs/variables).
+
+### Bug Fixes
+
+* Fixed drag-and-drop in variables and headers tables.
 
 ## [3.4.1](https://github.com/alexandrehtrb/Pororoca/tree/3.4.1) (2024-06-12)
 
