@@ -14,6 +14,7 @@ public static class TestEndpoints
         app.MapGet("test/get/xml", TestGetXml);
         app.MapGet("test/get/img", TestGetImg);
         app.MapGet("test/get/txt", TestGetTxt);
+        app.MapGet("test/get/statuscode/{statusCode}", TestGetStatusCode);
         app.MapGet("test/get/headers", TestGetHeaders);
         app.MapGet("test/get/trailers", TestGetTrailers);
         app.MapGet("test/get/multipartformdata", TestGetMultipartFormData);
@@ -67,6 +68,9 @@ public static class TestEndpoints
         string testFilePath = GetTestFilePath(fileName);
         return Results.File(File.OpenRead(testFilePath), "text/plain", fileName);
     }
+
+    private static IResult TestGetStatusCode(int statusCode) =>
+        Results.StatusCode(statusCode);
 
     private static IResult TestGetHeaders(HttpContext httpCtx)
     {

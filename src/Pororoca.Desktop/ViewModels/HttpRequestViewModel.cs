@@ -21,7 +21,7 @@ using static Pororoca.Domain.Features.Entities.Pororoca.Http.PororocaHttpRequest
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel, IRequestHeadersDataGridOwner
+public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 {
     #region REQUEST
 

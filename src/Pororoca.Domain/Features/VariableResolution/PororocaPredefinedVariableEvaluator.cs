@@ -4,7 +4,7 @@ using System.Text;
 namespace Pororoca.Domain.Features.VariableResolution;
 
 [ExcludeFromCodeCoverage(Justification = "Most methods return random values. Cannot be tested.")]
-internal static class PororocaPredefinedVariableEvaluator
+public static class PororocaPredefinedVariableEvaluator
 {
     private static readonly (string lang, string[] names)[] womenFirstNamesByLang =
     [
@@ -13,32 +13,46 @@ internal static class PororocaPredefinedVariableEvaluator
             "Camila",
             "Fernanda",
             "Manuela",
-            "Samira"
+            "Samira",
+            "Iara"
         ]),
         ("it", [
             "Caterina",
             "Margherita",
             "Viviana",
-            "Valentina"
+            "Valentina",
+            "Francesca",
+            "Laura"
         ]),
         ("en", [
             "Elizabeth",
             "Jessica",
             "Bonnie",
             "Heather",
-            "Rochelle"
+            "Rochelle",
+            "Scarlett",
+            "Florence",
+            "Madison",
+            "Sarah",
+            "Laura",
+            "Alice",
+            "Julia"
         ]),
         ("ru", [
             "Xenia",
             "Oksana",
             "Lyudmila",
-            "Svetlana"
+            "Svetlana",
+            "Ekaterina",
+            "Eleonora"
         ]),
         ("es", [
             "Esmeralda",
             "Carolina",
             "Valeria",
-            "Teresa"
+            "Teresa",
+            "María",
+            "Elena"
         ])
     ];
 
@@ -49,13 +63,16 @@ internal static class PororocaPredefinedVariableEvaluator
             "João",
             "Matheus",
             "Ricardo",
-            "Henrique"
+            "Henrique",
+            "Matias"
         ]),
         ("it", [
             "Antonio",
             "Marco",
             "Enrico",
-            "Massimo"
+            "Massimo",
+            "Vincenzo",
+            "Giuseppe"
         ]),
         ("en", [
             "John",
@@ -64,19 +81,28 @@ internal static class PororocaPredefinedVariableEvaluator
             "Julius",
             "Ryan",
             "Francis",
-            "Michael"
+            "Michael",
+            "Leigh",
+            "Richard",
+            "Landon",
+            "Jack",
+            "Harold"
         ]),
         ("ru", [
             "Dmitri",
             "Vasili",
             "Mikhail",
-            "Fedor"
+            "Fedor",
+            "Boris",
+            "Stanislav"
         ]),
         ("es", [
             "Alejandro",
             "César",
             "Fernando",
-            "Javier"
+            "Javier",
+            "Miguel",
+            "Guillermo"
         ])
     ];
 
@@ -87,7 +113,10 @@ internal static class PororocaPredefinedVariableEvaluator
             "Torres",
             "Gomes",
             "Costa",
-            "Almeida"
+            "Almeida",
+            "Oliveira",
+            "Ferreira",
+            "Lima"
         ]),
         ("it", [
             "Acquarone",
@@ -105,7 +134,9 @@ internal static class PororocaPredefinedVariableEvaluator
             "Radek",
             "Lomonosov",
             "Pavlichenko",
-            "Mendeleev"
+            "Mendeleev",
+            "Novoselov",
+            "Kovalevsky"
         ]),
         ("en", [
             "Markinson",
@@ -129,28 +160,34 @@ internal static class PororocaPredefinedVariableEvaluator
         ])
     ];
 
-    internal static bool IsPredefinedVariable(string variableKey, out string? resolvedValue)
+    public static bool IsPredefinedVariable(string variableKey, out string? resolvedValue)
     {
-        resolvedValue = variableKey switch
+        if (!variableKey.StartsWith('$'))
+        {
+            resolvedValue = null;
+            return false;
+        }
+
+        resolvedValue = variableKey.ToLowerInvariant() switch
         {
             "$guid" => GetRandomGuid(),
             "$now" => GetNow(),
             "$today" => GetToday(),
-            "$randomBirthDate" => GetRandomBirthDate(atLeast18YearsOld: false),
-            "$randomBirthDateOver18" => GetRandomBirthDate(atLeast18YearsOld: true),
-            "$randomInt" => GetRandomInt(),
-            "$randomQuantity" => GetRandomQuantity(),
-            "$randomFullName" => GetRandomFullName(),
-            "$randomManFullName" => GetRandomManFullName(),
-            "$randomWomanFullName" => GetRandomWomanFullName(),
-            "$randomFirstName" => GetRandomFirstName(),
-            "$randomManFirstName" => GetRandomManFirstName(),
-            "$randomWomanFirstName" => GetRandomWomanFirstName(),
-            "$randomLastName" => GetRandomSurname(),
-            "$randomCPF" => GetRandomCPF(includeSeparators: true),
-            "$randomCPFDigitsOnly" => GetRandomCPF(includeSeparators: false),
-            "$randomCNPJ" => GetRandomCNPJ(includeSeparators: true),
-            "$randomCNPJDigitsOnly" => GetRandomCNPJ(includeSeparators: false),
+            "$randombirthdate" => GetRandomBirthDate(atLeast18YearsOld: false),
+            "$randombirthdateover18" => GetRandomBirthDate(atLeast18YearsOld: true),
+            "$randomint" => GetRandomInt(),
+            "$randomquantity" => GetRandomQuantity(),
+            "$randomfullname" => GetRandomFullName(),
+            "$randommanfullname" => GetRandomManFullName(),
+            "$randomwomanfullname" => GetRandomWomanFullName(),
+            "$randomfirstname" => GetRandomFirstName(),
+            "$randommanfirstname" => GetRandomManFirstName(),
+            "$randomwomanfirstname" => GetRandomWomanFirstName(),
+            "$randomlastname" => GetRandomSurname(),
+            "$randomcpf" => GetRandomCPF(includeSeparators: true),
+            "$randomcpfdigitsonly" => GetRandomCPF(includeSeparators: false),
+            "$randomcnpj" => GetRandomCNPJ(includeSeparators: true),
+            "$randomcnpjdigitsonly" => GetRandomCNPJ(includeSeparators: false),
             _ => null
         };
 
@@ -166,7 +203,7 @@ internal static class PororocaPredefinedVariableEvaluator
 
     private static string GetRandomBirthDate(bool atLeast18YearsOld)
     {
-        var daysToSubtract = TimeSpan.FromDays(Random.Shared.Next(atLeast18YearsOld ? 365 * 18 : 1, 365 * 100));
+        var daysToSubtract = TimeSpan.FromDays(Random.Shared.Next(atLeast18YearsOld ? 366 * 18 : 1, 365 * 100));
         return DateTime.Today.Subtract(daysToSubtract).ToString("yyyy-MM-dd");
     }
 

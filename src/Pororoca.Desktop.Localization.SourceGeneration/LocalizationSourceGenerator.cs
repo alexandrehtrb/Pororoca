@@ -72,16 +72,24 @@ public sealed class LocalizationSourceGenerator : IIncrementalGenerator
         Dictionary<string, string> dict = new();
         XmlDocument doc = new();
         doc.LoadXml(resxFileContent);
-        foreach (object node in doc.SelectNodes("/root/data"))
+        foreach (object obj in doc.SelectNodes("/root/data")!)
         {
-            string key = ((XmlNode)node).Attributes["name"].InnerText;
-            string value = ((XmlNode)node).ChildNodes[0].InnerText;
+            XmlNode node = (XmlNode)obj;
+            XmlNode valueChild = null!;
+            for (int i = 0; i < node.ChildNodes.Count; i++)
+            {
+                valueChild = node.ChildNodes[i]!;
+                if (valueChild.NodeType == XmlNodeType.Element)
+                    break;
+            }
+            string key = node!.Attributes!["name"]!.InnerText;
+            string value = valueChild.InnerText;
             dict[key] = value;
         }
         return dict;
     }
 
-    private string BuildCodeForLanguagesEnum(string assemblyName, ImmutableArray<Language> langs)
+    private static string BuildCodeForLanguagesEnum(string assemblyName, ImmutableArray<Language> langs)
     {
         StringBuilder sb = new($"namespace {assemblyName}.Localization;\npublic enum Language\n{{\n");
         foreach (var lang in langs)
@@ -106,7 +114,7 @@ public sealed class LocalizationSourceGenerator : IIncrementalGenerator
         return sb.ToString();
     }
 
-    private string BuildCodeForLocalizerClass(string assemblyName, ImmutableArray<Language> langs, List<(string ctx, string[] ctxKeys)> contextsWithKeys)
+    private static string BuildCodeForLocalizerClass(string assemblyName, ImmutableArray<Language> langs, List<(string ctx, string[] ctxKeys)> contextsWithKeys)
     {
         StringBuilder sb = new($"using ReactiveUI;\nnamespace {assemblyName}.Localization;\npublic sealed class Localizer\n{{");
         foreach (string ctx in contextsWithKeys.Select(x => x.ctx))
@@ -150,7 +158,7 @@ public sealed class LocalizationSourceGenerator : IIncrementalGenerator
         return sb.ToString();
     }
 
-    private string BuildCodeForLanguageClass(string assemblyName, Language lang, Dictionary<string, string> kvs)
+    private static string BuildCodeForLanguageClass(string assemblyName, Language lang, Dictionary<string, string> kvs)
     {
         StringBuilder sb = new($"namespace {assemblyName}.Localization;\npublic static class {lang}Strings\n{{\n");
         string[] contexts = kvs.Keys.Select(k => k.Split('/')[0]).Distinct().ToArray();
@@ -171,7 +179,7 @@ public sealed class LocalizationSourceGenerator : IIncrementalGenerator
         return sb.ToString();
     }
 
-    private string BuildCodeForContextsClasses(string assemblyName, List<(string ctx, string[] ctxKeys)> contextsWithKeys)
+    private static string BuildCodeForContextsClasses(string assemblyName, List<(string ctx, string[] ctxKeys)> contextsWithKeys)
     {
         StringBuilder sb = new($"using ReactiveUI;\nnamespace {assemblyName}.Localization;\n");
         foreach (var (ctx, ctxKeys) in contextsWithKeys)
@@ -181,7 +189,7 @@ public sealed class LocalizationSourceGenerator : IIncrementalGenerator
         return sb.ToString();
     }
 
-    private string BuildCodeForContextClass(string ctx, string[] contextKeys)
+    private static string BuildCodeForContextClass(string ctx, string[] contextKeys)
     {
         StringBuilder sb = new($"public sealed class {ctx}Context : ReactiveObject\n{{");
 

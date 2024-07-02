@@ -91,7 +91,7 @@ public sealed class WebSocketExchangedMessageViewModel : ViewModelBase
                             string? txtContent)
     {
         const string shortInstanceDtFormat = "yyyyMMdd-HHmmss";
-        string instantDateTimeFormat = Localizer.Instance.WebSocketExchangedMessages.InstantDescriptionFormat;
+        string instantDateTimeFormat = "HH:mm:ss, yyyy-MM-dd, 'GMT'z'h'";
         if (direction == PororocaWebSocketMessageDirection.FromClient)
         {
             IsFromClient = true;

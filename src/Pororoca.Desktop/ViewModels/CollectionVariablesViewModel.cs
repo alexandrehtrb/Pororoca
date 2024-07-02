@@ -5,7 +5,7 @@ using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class CollectionVariablesViewModel : CollectionOrganizationItemViewModel, IVariablesDataGridOwner
+public sealed class CollectionVariablesViewModel : CollectionOrganizationItemViewModel
 {
     [Reactive]
     public VariablesDataGridViewModel VariablesTableVm { get; set; }

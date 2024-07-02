@@ -30,7 +30,7 @@ using static Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection.Por
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemParentViewModel<WebSocketClientMessageViewModel>, IRequestHeadersDataGridOwner
+public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemParentViewModel<WebSocketClientMessageViewModel>
 {
     #region COLLECTION ORGANIZATION
 

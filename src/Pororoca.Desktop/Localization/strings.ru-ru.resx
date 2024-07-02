@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-	<!--
+  <!--
     Microsoft ResX Schema
 
     Version 2.0
@@ -59,404 +59,1088 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-		<xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
-		<xsd:element name="root" msdata:IsDataSet="true">
-			<xsd:complexType>
-				<xsd:choice maxOccurs="unbounded">
-					<xsd:element name="metadata">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0"/>
-							</xsd:sequence>
-							<xsd:attribute name="name" use="required" type="xsd:string"/>
-							<xsd:attribute name="type" type="xsd:string"/>
-							<xsd:attribute name="mimetype" type="xsd:string"/>
-							<xsd:attribute ref="xml:space"/>
-						</xsd:complexType>
-					</xsd:element>
-					<xsd:element name="assembly">
-						<xsd:complexType>
-							<xsd:attribute name="alias" type="xsd:string"/>
-							<xsd:attribute name="name" type="xsd:string"/>
-						</xsd:complexType>
-					</xsd:element>
-					<xsd:element name="data">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
-							</xsd:sequence>
-							<xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
-							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
-							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
-							<xsd:attribute ref="xml:space"/>
-						</xsd:complexType>
-					</xsd:element>
-					<xsd:element name="resheader">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-							</xsd:sequence>
-							<xsd:attribute name="name" type="xsd:string" use="required"/>
-						</xsd:complexType>
-					</xsd:element>
-				</xsd:choice>
-			</xsd:complexType>
-		</xsd:element>
-	</xsd:schema>
-	<resheader name="resmimetype">
-		<value>text/microsoft-resx</value>
-	</resheader>
-	<resheader name="version">
-		<value>2.0</value>
-	</resheader>
-	<resheader name="reader">
-		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
-	<resheader name="writer">
-		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
-	<data name="GoBack/Hint" xml:space="preserve"><value>Вернуться</value></data>
-	<data name="MacOSXUserDataFolderMigratedV3Dialog/Title" xml:space="preserve"><value>Pororoca - Перенесенная папка с пользовательскими данными</value></data>
-	<data name="MacOSXUserDataFolderMigratedV3Dialog/Message" xml:space="preserve"><value>Каталог пользовательских данных теперь находится по адресу:\\n{0}\\nВы можете сделать резервную копию и вручную удалить папку PororocaUserData в Приложениях.</value></data>
-	<data name="Welcome/Title" xml:space="preserve"><value>Добро пожаловать!</value></data>
-	<data name="Welcome/NewCollection" xml:space="preserve"><value>Новая коллекция</value></data>
-	<data name="Welcome/ImportCollection" xml:space="preserve"><value>Импорт коллекции…</value></data>
-	<data name="Welcome/ImportOpenAPI" xml:space="preserve"><value>Импорт OpenAPI…</value></data>
-	<data name="Welcome/OpenDocsWebsite" xml:space="preserve"><value>Перейти к докс</value></data>
-	<data name="Welcome/VisitGitHubRepo" xml:space="preserve"><value>Перейти на GitHub</value></data>
-	<data name="CannotCopyOrCutCollectionDialog/Title" xml:space="preserve"><value>Pororoca - Копировать элементы</value></data>
-	<data name="CannotCopyOrCutCollectionDialog/Content" xml:space="preserve"><value>Вы можете дублировать, но не копировать или вырезать коллекцию.</value></data>
-	<data name="CannotPasteItemToItselfDialog/Title" xml:space="preserve"><value>Pororoca - Вырезать предметы</value></data>
-	<data name="CannotPasteItemToItselfDialog/Content" xml:space="preserve"><value>Невозможно вставить вырезанный элемент сам в себя.</value></data>
-	<data name="Collection/AddEnvironment" xml:space="preserve"><value>Добавить окружение</value></data>
-	<data name="Collection/AddFolder" xml:space="preserve"><value>Добавить папку</value></data>
-	<data name="Collection/AddHttpRequest" xml:space="preserve"><value>Добавить HTTP запрос</value></data>
-	<data name="Collection/AddWebSocketConnection" xml:space="preserve"><value>Добавить WebSocket</value></data>
-	<data name="Collection/AddHttpRepeater" xml:space="preserve"><value>Добавить ретранслятор</value></data>
-	<data name="Collection/SetCollectionScopedHeaders" xml:space="preserve"><value>Заголовки коллекций</value></data>
-	<data name="Collection/ChooseImportExportFormat" xml:space="preserve"><value>Выбрать формат</value></data>
-	<data name="Collection/ExportCollection" xml:space="preserve"><value>Экспорт колекции…</value></data>
-	<data name="Collection/ExportAsPororocaCollection" xml:space="preserve"><value>Экспорт как Pororoca…</value></data>
-	<data name="Collection/ExportAsPostmanCollection" xml:space="preserve"><value>Экспорт как Postman…</value></data>
-	<data name="Collection/ExportCollectionDialogTitle" xml:space="preserve"><value>Экспорт колекции в файл (выберите формат)</value></data>
-	<data name="Collection/ExportAsPororocaCollectionDialogTitle" xml:space="preserve"><value>Экспорт колекции в Pororoca формат</value></data>
-	<data name="Collection/ExportAsPostmanCollectionDialogTitle" xml:space="preserve"><value>Экспорт колекции в Postman формат</value></data>
-	<data name="Collection/ImportCollectionDialogTitle" xml:space="preserve"><value>Импорт файлов коллекции / OpenAPI</value></data>
-	<data name="Collection/ImportCollectionDialogTypes" xml:space="preserve"><value>Файлы коллекции / OpenAPI</value></data>
-	<data name="Collection/ExportIncludeSecrets" xml:space="preserve"><value>Включать секретные переменные при экспорте</value></data>
-	<data name="Collection/ImportEnvironment" xml:space="preserve"><value>Импорт окружения…</value></data>
-	<data name="Collection/ImportEnvironmentDialogTitle" xml:space="preserve"><value>Импорт файлов окружения</value></data>
-	<data name="Collection/ImportEnvironmentDialogTypes" xml:space="preserve"><value>файлы окружения</value></data>
-	<data name="Collection/NewCollection" xml:space="preserve"><value>Новая коллекция</value></data>
-	<data name="Collection/PororocaCollectionFormat" xml:space="preserve"><value>Pororoca коллекция</value></data>
-	<data name="Collection/PostmanCollectionFormat" xml:space="preserve"><value>Postman коллекция v2.1</value></data>
-	<data name="CollectionFolder/AddFolder" xml:space="preserve"><value>Добавить папку</value></data>
-	<data name="CollectionFolder/AddHttpRequest" xml:space="preserve"><value>Добавить HTTP запрос</value></data>
-	<data name="CollectionFolder/AddWebSocketConnection" xml:space="preserve"><value>Добавить WebSocket</value></data>
-	<data name="CollectionFolder/AddHttpRepeater" xml:space="preserve"><value>Добавить ретранслятор</value></data>
-	<data name="CollectionsGroup/CollectionScopedAuth" xml:space="preserve"><value>Auth</value></data>
-	<data name="CollectionsGroup/Environments" xml:space="preserve"><value>Окружения</value></data>
-	<data name="CollectionsGroup/Variables" xml:space="preserve"><value>Переменные</value></data>
-	<data name="ContextMenu/Copy" xml:space="preserve"><value>Копировать</value></data>
-	<data name="ContextMenu/Cut" xml:space="preserve"><value>Резать</value></data>
-	<data name="ContextMenu/Delete" xml:space="preserve"><value>Удалить</value></data>
-	<data name="ContextMenu/Duplicate" xml:space="preserve"><value>Дублировать</value></data>
-	<data name="ContextMenu/Export" xml:space="preserve"><value>Экспорт</value></data>
-	<data name="ContextMenu/ImportEnvironment" xml:space="preserve"><value>Импорт окружения…</value></data>
-	<data name="ContextMenu/MoveDown" xml:space="preserve"><value>Вниз</value></data>
-	<data name="ContextMenu/MoveUp" xml:space="preserve"><value>Вверх</value></data>
-	<data name="ContextMenu/NewEnvironment" xml:space="preserve"><value>Новое окружение</value></data>
-	<data name="ContextMenu/NewFolder" xml:space="preserve"><value>Новая папка</value></data>
-	<data name="ContextMenu/NewHttpRequest" xml:space="preserve"><value>Новый HTTP запрос</value></data>
-	<data name="ContextMenu/NewHttpRepeater" xml:space="preserve"><value>Новый ретранслятор</value></data>
-	<data name="ContextMenu/NewWebSocketConnection" xml:space="preserve"><value>Новый WebSocket</value></data>
-	<data name="ContextMenu/NewWebSocketClientMessage" xml:space="preserve"><value>Новое клиентское сообщение</value></data>
-	<data name="ContextMenu/Paste" xml:space="preserve"><value>Вставить</value></data>
-	<data name="ContextMenu/Rename" xml:space="preserve"><value>Переименовать</value></data>
-	<data name="ContextMenu/SetAsCurrentEnvironment" xml:space="preserve"><value>Установлено в качестве текущей среды</value></data>
-	<data name="CollectionScopedAuth/Title" xml:space="preserve"><value>Авторизация на уровне коллекции</value></data>
-	<data name="CollectionScopedRequestHeaders/Title" xml:space="preserve"><value>Заголовки на уровне коллекции</value></data>
-	<data name="CollectionVariables/AddVariable" xml:space="preserve"><value>Добавить переменную</value></data>
-	<data name="CollectionVariables/RemoveVariable" xml:space="preserve"><value>Удалить переменную</value></data>
-	<data name="CollectionVariables/Tip" xml:space="preserve"><value>Совет: Чтобы использовать переменную, введите {{VariableName}} в URL, теле, аутентификации или заголовке вашего запроса. При отправке запроса текст {{VariableName}} будет заменен значением переменной.</value></data>
-	<data name="CollectionVariables/Title" xml:space="preserve"><value>Переменные коллекции</value></data>
-	<data name="Variables/Enabled" xml:space="preserve"><value>ВКЛЮЧЕН</value></data>
-	<data name="Variables/IsSecret" xml:space="preserve"><value>СЕКРЕТ</value></data>
-	<data name="Variables/Name" xml:space="preserve"><value>ИМЯ ПЕРЕМЕННОЙ</value></data>
-	<data name="Variables/Value" xml:space="preserve"><value>ЗНАЧЕНИЕ</value></data>
-	<data name="DeleteItemsDialog/Title" xml:space="preserve"><value>Pororoca - Удаление элементов</value></data>
-	<data name="DeleteItemsDialog/MessageSingleItem" xml:space="preserve"><value>Вы действительно хотите удалить '{0}'?</value></data>
-	<data name="DeleteItemsDialog/MessageMultipleItems" xml:space="preserve"><value>Вы действительно хотите удалить выбранные элементы?</value></data>
-	<data name="EditableTextBlock/RenameToolTip" xml:space="preserve"><value>Переименовать (F2)</value></data>
-	<data name="Environment/AddVariable" xml:space="preserve"><value>Добавить переменную</value></data>
-	<data name="Environment/ChooseImportExportFormat" xml:space="preserve"><value>Выбрать формат</value></data>
-	<data name="Environment/ExportEnvironment" xml:space="preserve"><value>Экспорт окружения…</value></data>
-	<data name="Environment/ExportAsPororocaEnvironment" xml:space="preserve"><value>Экспорт как Pororoca…</value></data>
-	<data name="Environment/ExportAsPostmanEnvironment" xml:space="preserve"><value>Экспорт как Postman…</value></data>
-	<data name="Environment/ExportEnvironmentDialogTitle" xml:space="preserve"><value>Экспорт окружения в файл (выбрать формат)</value></data>
-	<data name="Environment/ExportAsPororocaEnvironmentDialogTitle" xml:space="preserve"><value>Экспорт окружения в Pororoca формат</value></data>
-	<data name="Environment/ExportAsPostmanEnvironmentDialogTitle" xml:space="preserve"><value>Экспорт окружения в Postman формат</value></data>
-	<data name="Environment/ExportIncludeSecrets" xml:space="preserve"><value>Включать секретные переменные при экспорте</value></data>
-	<data name="Environment/NewEnvironment" xml:space="preserve"><value>Новое окружение</value></data>
-	<data name="Environment/PororocaEnvironmentFormat" xml:space="preserve"><value>Pororoca окружение</value></data>
-	<data name="Environment/PostmanEnvironmentFormat" xml:space="preserve"><value>Postman окружение</value></data>
-	<data name="Environment/RemoveVariable" xml:space="preserve"><value>Удалить переменную</value></data>
-	<data name="Environment/SetAsCurrentEnvironment" xml:space="preserve"><value>Включить как текущую среду</value></data>
-	<data name="Environment/UnsetAsCurrentEnvironment" xml:space="preserve"><value>Отключить как текущую среду</value></data>
-	<data name="Environment/Tip" xml:space="preserve"><value>Совет: Если переменная окружения имеет то же имя, что и другая переменная коллекции, то будет применено значение переменной окружения.</value></data>
-	<data name="Folder/NewFolder" xml:space="preserve"><value>Новая папка</value></data>
-	<data name="SelectFolderDialog/Title" xml:space="preserve"><value>Выберите папку назначения</value></data>
-	<data name="HelpDialog/Title" xml:space="preserve"><value>Ажуда</value></data>
-	<data name="HelpDialog/Content" xml:space="preserve"><value>Горячие клавиши\\n\\nF1 - Показать справку\\nF2 - Переименовать\\nF4 - Сосредоточиться на URL-адресе\\nF5 - Отправить запрос / подключить WebSocket\\nF6 - Отменить запрос / отключить WebSocket\\nF7 - Установить предыдущую среду как активную\\nF8 - Установить следующую среду как активную\\nF9 - Сохранить тело ответа в файл\\nF10 - Экспорт журнала HTTP в файл\\nCtrl+PageUp - Переключиться на элемент выше в дереве\\nCtrl+PageDown - Переключитесь на элемент ниже в дереве\\nCtrl+Shift+S - Сохранить все\\n\\nПолная документация на сайте: https://pororoca.io</value></data>
-	<data name="HttpRepeater/NewRepeater" xml:space="preserve"><value>Новый ретранслятор</value></data>
-	<data name="HttpRepeater/SelectBaseRequest" xml:space="preserve"><value>(Выберите базовый HTTP-запрос)</value></data>
-	<data name="HttpRepeater/RefreshBaseRequestsListTip" xml:space="preserve"><value>Обновить список</value></data>
-	<data name="HttpRepeater/Start" xml:space="preserve"><value>Начало</value></data>
-	<data name="HttpRepeater/StartTip" xml:space="preserve"><value>Начало (F5)</value></data>
-	<data name="HttpRepeater/Stop" xml:space="preserve"><value>Остановка</value></data>
-	<data name="HttpRepeater/StopTip" xml:space="preserve"><value>Остановка (F6)</value></data>
-	<data name="HttpRepeater/RepetitionSectionTitle" xml:space="preserve"><value>Повторение</value></data>
-	<data name="HttpRepeater/RepetitionMode" xml:space="preserve"><value>Режим</value></data>
-	<data name="HttpRepeater/RepetitionModeSimple" xml:space="preserve"><value>Простой</value></data>
-	<data name="HttpRepeater/RepetitionModeSequential" xml:space="preserve"><value>Последовательный</value></data>
-	<data name="HttpRepeater/RepetitionModeRandom" xml:space="preserve"><value>Случайный</value></data>
-	<data name="HttpRepeater/NumberOfRepetitions" xml:space="preserve"><value>Количество</value></data>
-	<data name="HttpRepeater/MaxDOP" xml:space="preserve"><value>Параллелизм</value></data>
-	<data name="HttpRepeater/Delay" xml:space="preserve"><value>Задержка (мс)</value></data>
-	<data name="HttpRepeater/DelayTip" xml:space="preserve"><value>Время ожидания между ответом и отправкой следующего запроса.</value></data>
-	<data name="HttpRepeater/InputData" xml:space="preserve"><value>Входные данные</value></data>
-	<data name="HttpRepeater/InputDataTypeRaw" xml:space="preserve"><value>Raw JSON array</value></data>
-	<data name="HttpRepeater/InputDataTypeRawComment" xml:space="preserve"><value>Комментарии разрешены</value></data>
-	<data name="HttpRepeater/InputDataTypeFile" xml:space="preserve"><value>Файл</value></data>
-	<data name="HttpRepeater/InputDataFileSrcPathWatermark" xml:space="preserve"><value>(путь к файлу)</value></data>
-	<data name="HttpRepeater/InputDataFileSearch" xml:space="preserve"><value>Найти файл…</value></data>
-	<data name="HttpRepeater/ExportReport" xml:space="preserve"><value>Создание отчета…</value></data>
-	<data name="HttpRepeater/SaveAllResponses" xml:space="preserve"><value>Сохранение ответов…</value></data>
-	<data name="HttpRepeater/ExportAllLogs" xml:space="preserve"><value>Экспорт журналов…</value></data>
-	<data name="HttpRepeater/InputLine" xml:space="preserve"><value>Входная строка</value></data>
-	<data name="HttpRepeater/InputLineKey" xml:space="preserve"><value>ИМЯ ПЕРЕМЕННОЙ</value></data>
-	<data name="HttpRepeater/InputLineValue" xml:space="preserve"><value>ЗНАЧЕНИЕ</value></data>
-	<data name="HttpRepeater/RepetitionOngoingStatus" xml:space="preserve"><value>{0}/{1} повторения. Приблизительное оставшееся время: {2}.</value></data>
-	<data name="HttpRepeater/RepetitionFinishedStatus" xml:space="preserve"><value>Выполнено {0} повторения. Затраченное время: {1}.</value></data>
-	<data name="HttpRepeater/RepetitionResultCancelled" xml:space="preserve"><value>Отменен</value></data>
-	<data name="HttpRepeater/RepetitionResultException" xml:space="preserve"><value>исключение</value></data>
-	<data name="HttpRepeater/Results" xml:space="preserve"><value>Результаты</value></data>
-	<data name="HttpRequest/Body" xml:space="preserve"><value>Body</value></data>
-	<data name="HttpRequest/BodyFileContentTypeWatermark" xml:space="preserve"><value>(файл content-type)</value></data>
-	<data name="HttpRequest/BodyFileSearchFile" xml:space="preserve"><value>Найти файл…</value></data>
-	<data name="HttpRequest/BodyFileSrcPathWatermark" xml:space="preserve"><value>(путь к файлу)</value></data>
-	<data name="HttpRequest/BodyFormDataFileParamAdd" xml:space="preserve"><value>Добавить файл</value></data>
-	<data name="HttpRequest/BodyFormDataTextParamAdd" xml:space="preserve"><value>Добавить текст</value></data>
-	<data name="HttpRequest/BodyFormDataParamRemove" xml:space="preserve"><value>Удалить</value></data>
-	<data name="HttpRequest/BodyFormDataParamEnabled" xml:space="preserve"><value>ВКЛЮЧЕН</value></data>
-	<data name="HttpRequest/BodyFormDataParamType" xml:space="preserve"><value>ТИП</value></data>
-	<data name="HttpRequest/BodyFormDataParamTypeText" xml:space="preserve"><value>Текст</value></data>
-	<data name="HttpRequest/BodyFormDataParamTypeFile" xml:space="preserve"><value>Файл</value></data>
-	<data name="HttpRequest/BodyFormDataParamName" xml:space="preserve"><value>ИМЯ</value></data>
-	<data name="HttpRequest/BodyFormDataParamTextOrSrcPath" xml:space="preserve"><value>TEXT / PATH</value></data>
-	<data name="HttpRequest/BodyFormDataParamContentType" xml:space="preserve"><value>CONTENT-TYPE</value></data>
-	<data name="HttpRequest/BodyModeFile" xml:space="preserve"><value>Файл</value></data>
-	<data name="HttpRequest/BodyModeFormData" xml:space="preserve"><value>Form Data</value></data>
-	<data name="HttpRequest/BodyModeNone" xml:space="preserve"><value>Отсутствует</value></data>
-	<data name="HttpRequest/BodyModeRaw" xml:space="preserve"><value>Raw</value></data>
-	<data name="HttpRequest/BodyModeUrlEncoded" xml:space="preserve"><value>закодированный URL</value></data>
-	<data name="HttpRequest/BodyModeGraphQl" xml:space="preserve"><value>Graph QL</value></data>
-	<data name="HttpRequest/BodyGraphQlQueryWatermark" xml:space="preserve"><value>(graph ql запрос)</value></data>
-	<data name="HttpRequest/BodyGraphQlVariablesWatermark" xml:space="preserve"><value>(graph ql переменные)</value></data>
-	<data name="HttpRequest/BodyRawContentTypeWatermark" xml:space="preserve"><value>(raw content-type here)</value></data>
-	<data name="HttpRequest/BodyRawContentWatermark" xml:space="preserve"><value>(raw body here)</value></data>
-	<data name="HttpRequest/BodyUrlEncodedParamAdd" xml:space="preserve"><value>Добавить параметр</value></data>
-	<data name="HttpRequest/BodyUrlEncodedParamEnabled" xml:space="preserve"><value>ВКЛЮЧЕН</value></data>
-	<data name="HttpRequest/BodyUrlEncodedParamName" xml:space="preserve"><value>ИМЯ ПАРАМЕТРА</value></data>
-	<data name="HttpRequest/BodyUrlEncodedParamRemove" xml:space="preserve"><value>Удалить</value></data>
-	<data name="HttpRequest/BodyUrlEncodedParamValue" xml:space="preserve"><value>ЗНАЧЕНИЕ</value></data>
-	<data name="HttpRequest/CancelRequest" xml:space="preserve"><value>Отмена</value></data>
-	<data name="HttpRequest/CancelRequestToolTip" xml:space="preserve"><value>Отмена (F6)</value></data>
-	<data name="HttpRequest/CustomAuth" xml:space="preserve"><value>Auth</value></data>
-	<data name="HttpRequest/HeaderAdd" xml:space="preserve"><value>Добавить header</value></data>
-	<data name="HttpRequest/HeaderEnabled" xml:space="preserve"><value>ВКЛЮЧЕН</value></data>
-	<data name="HttpRequest/HeaderName" xml:space="preserve"><value>HEADER ИМЯ</value></data>
-	<data name="HttpRequest/HeaderRemove" xml:space="preserve"><value>Удалить</value></data>
-	<data name="HttpRequest/Headers" xml:space="preserve"><value>Headers</value></data>
-	<data name="HttpRequest/HeaderValue" xml:space="preserve"><value>ЗНАЧЕНИЕ</value></data>
-	<data name="HttpRequest/NewRequest" xml:space="preserve"><value>Новый HTTP запрос</value></data>
-	<data name="HttpRequest/SectionTitle" xml:space="preserve"><value>Запрос</value></data>
-	<data name="HttpRequest/SendRequest" xml:space="preserve"><value>Отправить</value></data>
-	<data name="HttpRequest/SendRequestToolTip" xml:space="preserve"><value>Отправить (F5)</value></data>
-	<data name="HttpRequest/UrlWatermark" xml:space="preserve"><value>(запрос url)</value></data>
-	<data name="HttpResponse/Body" xml:space="preserve"><value>Body</value></data>
-	<data name="HttpResponse/BodyCouldNotReadAsUTF8" xml:space="preserve"><value>(не удалось прочитать тело как UTF-8 текст, {0} байтов)</value></data>
-	<data name="HttpResponse/BodyContentBinaryNotShown" xml:space="preserve"><value>(двоичное содержимое не отображается, {0} байтов)</value></data>
-	<data name="HttpResponse/BodyContentTypeWatermark" xml:space="preserve"><value>(ответ content-type)</value></data>
-	<data name="HttpResponse/BodyContentWatermark" xml:space="preserve"><value>(ответ body)</value></data>
-	<data name="HttpResponse/BodySaveToFile" xml:space="preserve"><value>Сохранить как…</value></data>
-	<data name="HttpResponse/BodySaveToFileToolTip" xml:space="preserve"><value>Сохранить как… (F9)</value></data>
-	<data name="HttpResponse/ExportLog" xml:space="preserve"><value>Журнал экспорта…</value></data>
-	<data name="HttpResponse/ExportLogToolTip" xml:space="preserve"><value>Журнал экспорта… (F10)</value></data>
-	<data name="HttpResponse/DisableTlsVerification" xml:space="preserve"><value>Отключить TLS проверку</value></data>
-	<data name="TimeText/MillisecondsFormat" xml:space="preserve"><value>{0}мс</value></data>
-	<data name="TimeText/HoursAndMinutesFormat" xml:space="preserve"><value>{0}ч {1]мин</value></data>
-	<data name="TimeText/MinutesAndSecondsFormat" xml:space="preserve"><value>{0}мин {1}с</value></data>
-	<data name="TimeText/MinutesFormat" xml:space="preserve"><value>{0}мин</value></data>
-	<data name="TimeText/SecondsFormat" xml:space="preserve"><value>{0:0.00}с</value></data>
-	<data name="HttpResponse/HeaderName" xml:space="preserve"><value>HEADER ИМЯ</value></data>
-	<data name="HttpResponse/Headers" xml:space="preserve"><value>Headers</value></data>
-	<data name="HttpResponse/HeaderValue" xml:space="preserve"><value>ЗНАЧЕНИЕ</value></data>
-	<data name="HttpResponse/SectionTitle" xml:space="preserve"><value>Ответ</value></data>
-	<data name="HttpResponse/SectionTitleFailedFormat" xml:space="preserve"><value>Ответ: Неудачный ({0})</value></data>
-	<data name="HttpResponse/SectionTitleSuccessfulFormat" xml:space="preserve"><value>Ответ: {0} ({1})</value></data>
-	<data name="HttpResponse/Capture" xml:space="preserve"><value>Захват</value></data>
-	<data name="HttpResponse/CaptureAddHeaderCapture" xml:space="preserve"><value>Захват header</value></data>
-	<data name="HttpResponse/CaptureAddBodyCapture" xml:space="preserve"><value>Захват body</value></data>
-	<data name="HttpResponse/CaptureTargetVariable" xml:space="preserve"><value>ЦЕЛЕВАЯ ПЕРЕМЕННАЯ</value></data>
-	<data name="HttpResponse/CaptureType" xml:space="preserve"><value>ТИП</value></data>
-	<data name="HttpResponse/CaptureTypeHeader" xml:space="preserve"><value>Header</value></data>
-	<data name="HttpResponse/CaptureTypeBody" xml:space="preserve"><value>Body</value></data>
-	<data name="HttpResponse/CaptureHeaderNameOrBodyPath" xml:space="preserve"><value>HEADER NAME / BODY PATH</value></data>
-	<data name="HttpResponse/CaptureCapturedValue" xml:space="preserve"><value>ЗНАЧЕНИЕ</value></data>
-	<data name="HttpResponse/ExecuteCapturesTooltip" xml:space="preserve"><value>Выполнение захватов</value></data>
-	<data name="HttpResponse/CaptureTip" xml:space="preserve"><value>Совет: Для захвата значений JSON: $.myProp[0].myProp2 ($ означает корень, [0] означает array element). Для захвата значений XML используйте синтаксис XPath 1.0.\\n\\nПерехваченные значения сохраняются в текущих переменных среды. Если ни одна среда не активна, то они будут сохранены в переменных коллекции.</value></data>
-	<data name="RequestAuth/AuthModeInheritFromCollection" xml:space="preserve"><value>Наследовать из коллекции</value></data>
-	<data name="RequestAuth/AuthModeBasic" xml:space="preserve"><value>Basic</value></data>
-	<data name="RequestAuth/AuthModeBasicLoginWatermark" xml:space="preserve"><value>(basic auth логин)</value></data>
-	<data name="RequestAuth/AuthModeBasicPasswordWatermark" xml:space="preserve"><value>(basic auth пароль)</value></data>
-	<data name="RequestAuth/AuthModeBearer" xml:space="preserve"><value>Bearer</value></data>
-	<data name="RequestAuth/AuthModeBearerTokenWatermark" xml:space="preserve"><value>(bearer auth токен)</value></data>
-	<data name="RequestAuth/AuthModeNone" xml:space="preserve"><value>Отсутствует</value></data>
-	<data name="RequestAuth/AuthModeWindows" xml:space="preserve"><value>Windows / NTLM</value></data>
-	<data name="RequestAuth/AuthModeWindowsUseCurrentUser" xml:space="preserve"><value>Использовать текущего пользователя</value></data>
-	<data name="RequestAuth/AuthModeWindowsLoginWatermark" xml:space="preserve"><value>(login)</value></data>
-	<data name="RequestAuth/AuthModeWindowsPasswordWatermark" xml:space="preserve"><value>(password)</value></data>
-	<data name="RequestAuth/AuthModeWindowsDomainWatermark" xml:space="preserve"><value>(domain)</value></data>
-	<data name="RequestAuth/AuthModeClientCertificate" xml:space="preserve"><value>Клиентский сертификат</value></data>
-	<data name="RequestAuth/ClientCertificateTypeNone" xml:space="preserve"><value>Отсутствует</value></data>
-	<data name="RequestAuth/ClientCertificateTypePkcs12" xml:space="preserve"><value>PKCS#12</value></data>
-	<data name="RequestAuth/ClientCertificateTypePem" xml:space="preserve"><value>PEM</value></data>
-	<data name="RequestAuth/CertificateFilePathWatermark" xml:space="preserve"><value>(путь к файлу сертификата)</value></data>
-	<data name="RequestAuth/PrivateKeyFilePathWatermark" xml:space="preserve"><value>(путь к файлу закрытого ключа)</value></data>
-	<data name="RequestAuth/FilePasswordWatermark" xml:space="preserve"><value>(пароль к файлу)</value></data>
-	<data name="RequestAuth/Pkcs12SearchFile" xml:space="preserve"><value>Найти серитификат…</value></data>
-	<data name="RequestAuth/PemSearchCertFile" xml:space="preserve"><value>Найти серитификат…</value></data>
-	<data name="RequestAuth/PemSearchPrivateKeyFile" xml:space="preserve"><value>Поиск закрытого ключа…</value></data>
-	<data name="RequestAuth/PemClientCertificatesTip" xml:space="preserve"><value>Совет: Если файл сертификата содержит закрытый ключ, оставьте путь к закрытому ключу пустым. Пароль требуется только в том случае, если закрытый ключ зашифрован.</value></data>
-	<data name="RequestAuth/Pkcs12ImportCertificateFileTypesDescription" xml:space="preserve"><value>PKCS12 сертификаты</value></data>
-	<data name="RequestAuth/Pkcs12ImportCertificateFileDialogTitle" xml:space="preserve"><value>Импорт сертификата в PKCS12 формат</value></data>
-	<data name="RequestAuth/PemImportCertificateFileTypesDescription" xml:space="preserve"><value>PEM сертификаты</value></data>
-	<data name="RequestAuth/PemImportCertificateFileDialogTitle" xml:space="preserve"><value>Импорт сертификата в PEM формат</value></data>
-	<data name="RequestAuth/PemImportPrivateKeyFileTypesDescription" xml:space="preserve"><value>PEM закрытые ключи</value></data>
-	<data name="RequestAuth/PemImportPrivateKeyFileDialogTitle" xml:space="preserve"><value>Импорт закрытого ключа в PEM формат</value></data>
-	<data name="RequestValidation/WindowsAuthLoginCannotBeBlank" xml:space="preserve"><value>Имя входа для проверки подлинности Windows не может быть пустым.</value></data>
-	<data name="RequestValidation/WindowsAuthPasswordCannotBeBlank" xml:space="preserve"><value>Пароль для проверки подлинности Windows не может быть пустым.</value></data>
-	<data name="RequestValidation/WindowsAuthDomainCannotBeBlank" xml:space="preserve"><value>Домен для проверки подлинности Windows не может быть пустым.</value></data>
-	<data name="RequestValidation/ClientCertificateFileNotFound" xml:space="preserve"><value>Файл сертификата клиента не найден.</value></data>
-	<data name="RequestValidation/ClientCertificatePkcs12PasswordCannotBeBlank" xml:space="preserve"><value>PKCS#12 для клиентских сертификатов требуется пароль.</value></data>
-	<data name="RequestValidation/ClientCertificatePemPrivateKeyFileNotFound" xml:space="preserve"><value>Файл закрытого ключа клиентского сертификата не найден.</value></data>
-	<data name="RequestValidation/ContentTypeCannotBeBlankReqBodyRawOrFile" xml:space="preserve"><value>В теле запроса требуется Content-Type.</value></data>
-	<data name="RequestValidation/Http2Unavailable" xml:space="preserve"><value>В Windows для поддержки HTTP/2 требуется Windows 10 или более поздней версии.</value></data>
-	<data name="RequestValidation/Http3Unavailable" xml:space="preserve"><value>HTTP/3 доступен только для Linux с msquic или Windows 11 и более поздних версий.</value></data>
-	<data name="RequestValidation/InvalidContentTypeFormData" xml:space="preserve"><value>Один из параметров Form Data имеют недопустимое значение Content-Type.</value></data>
-	<data name="RequestValidation/InvalidContentTypeRawOrFile" xml:space="preserve"><value>Используйте один из доступных Content-Types для тела запроса.</value></data>
-	<data name="RequestValidation/InvalidUnknownCause" xml:space="preserve"><value>Запрос недействителен. Пожалуйста, проверьте это и повторите попытку.</value></data>
-	<data name="RequestValidation/InvalidUrl" xml:space="preserve"><value>Неверный URL. Пожалуйста, проверьте и попробуйте снова.</value></data>
-	<data name="RequestValidation/RepetitionBaseHttpRequestNotSelected" xml:space="preserve"><value>Выберите базовый HTTP-запрос для повторения.</value></data>
-	<data name="RequestValidation/RepetitionBaseHttpRequestNotFound" xml:space="preserve"><value>Базовый HTTP-запрос не найден.</value></data>
-	<data name="RequestValidation/RepetitionDelayCantBeNegative" xml:space="preserve"><value>Задержка должна быть больше или равна нулю.</value></data>
-	<data name="RequestValidation/RepetitionNumberOfRepetitionsMustBeAtLeast1" xml:space="preserve"><value>Количество повторений должно быть больше или равно одному.</value></data>
-	<data name="RequestValidation/RepetitionMaxDopMustBeAtLeast1" xml:space="preserve"><value>Параллелизм должен быть больше или равен единице.</value></data>
-	<data name="RequestValidation/RepetitionInputDataFileNotFound" xml:space="preserve"><value>Файл входных данных не найден.</value></data>
-	<data name="RequestValidation/RepetitionInputDataInvalid" xml:space="preserve"><value>Недопустимый массив входных данных JSON.</value></data>
-	<data name="RequestValidation/RepetitionInputDataAtLeastOneLine" xml:space="preserve"><value>Требуется хотя бы одна строка ввода.</value></data>
-	<data name="RequestValidation/ReqBodyFileNotFound" xml:space="preserve"><value>Файл для запроса body не найден.</value></data>
-	<data name="RequestValidation/WebSocketHttpVersionUnavailable" xml:space="preserve"><value>Эта версия HTTP недоступна для подключений через WebSocket.</value></data>
-	<data name="RequestValidation/WebSocketCompressionMaxWindowBitsOutOfRange" xml:space="preserve"><value>Биты окна максимального сжатия должны находиться в пределах 9 и 15.</value></data>
-	<data name="RequestValidation/WebSocketUnknownConnectionTranslationError" xml:space="preserve"><value>Запрос на подключение недействителен. Пожалуйста, проверьте это и повторите попытку.</value></data>
-	<data name="RequestValidation/WebSocketNotConnected" xml:space="preserve"><value>Нет соединения.</value></data>
-	<data name="RequestValidation/WebSocketClientMessageContentFileNotFound" xml:space="preserve"><value>Файл, из которого состоит сообщение, не был найден.</value></data>
-	<data name="RequestValidation/WebSocketUnknownClientMessageTranslationError" xml:space="preserve"><value>Отправляемое сообщение недействительно. Пожалуйста, проверьте это и повторите попытку.</value></data>
-	<data name="TopMenu/Contribute" xml:space="preserve"><value>Внести</value></data>
-	<data name="TopMenu/File" xml:space="preserve"><value>Файл</value></data>
-	<data name="TopMenu/Options" xml:space="preserve"><value>Настройки</value></data>
-	<data name="TopMenu/Help" xml:space="preserve"><value>Ажуда</value></data>
-	<data name="TopMenu/Saved" xml:space="preserve"><value>Сохранено!</value></data>
-	<data name="TopMenuFile/Exit" xml:space="preserve"><value>Выход</value></data>
-	<data name="TopMenuFile/SaveAll" xml:space="preserve"><value>Сохранить все</value></data>
-	<data name="TopMenuFile/ImportFromFile" xml:space="preserve"><value>Импорт из файла…</value></data>
-	<data name="TopMenuFile/NewCollection" xml:space="preserve"><value>Новая коллекция</value></data>
-	<data name="TopMenuLanguage/English" xml:space="preserve"><value>Английский</value></data>
-	<data name="TopMenuLanguage/Português" xml:space="preserve"><value>Португальский</value></data>
-	<data name="TopMenuLanguage/Russian" xml:space="preserve"><value>Русский</value></data>
-	<data name="TopMenuLanguage/Italian" xml:space="preserve"><value>Итальяно</value></data>
-	<data name="TopMenuLanguage/SimplifiedChinese" xml:space="preserve"><value>Упрощенный китайский</value></data>
-	<data name="TopMenuOptions/EnableTlsVerification" xml:space="preserve"><value>Включить TLS проверку</value></data>
-	<data name="TopMenuOptions/Language" xml:space="preserve"><value>Язык</value></data>
-	<data name="TopMenuOptions/Theme" xml:space="preserve"><value>Тема</value></data>
-	<data name="TopMenuTheme/AmazonianNight" xml:space="preserve"><value>Amazonian night</value></data>
-	<data name="TopMenuTheme/Dark" xml:space="preserve"><value>Темная</value></data>
-	<data name="TopMenuTheme/Light" xml:space="preserve"><value>Светлая</value></data>
-	<data name="TopMenuTheme/Pampa" xml:space="preserve"><value>Pampa</value></data>
-	<data name="TopMenuHelp/ViewKeyboardShortcuts" xml:space="preserve"><value>Просмотр сочетаний клавиш</value></data>
-	<data name="TopMenuHelp/OpenDocsWebsite" xml:space="preserve"><value>Перейти к докс</value></data>
-	<data name="TopMenuHelp/RunUITests" xml:space="preserve"><value>Выполнение UI тестов (Ctrl+F12)</value></data>
-	<data name="TextEditor/Copy" xml:space="preserve"><value>Копировать</value></data>
-	<data name="TextEditor/Paste" xml:space="preserve"><value>Вставить</value></data>
-	<data name="TextEditor/Cut" xml:space="preserve"><value>Вырезать</value></data>
-	<data name="UpdateReminder/DialogTitle" xml:space="preserve"><value>Pororoca</value></data>
-	<data name="UpdateReminder/DialogMessage" xml:space="preserve"><value>Не забывайте периодически проверять наличие обновлений!</value></data>
-	<data name="UpdateReminder/DialogGoToSite" xml:space="preserve"><value>Перейти на сайт</value></data>
-	<data name="UpdateReminder/DialogCancel" xml:space="preserve"><value>Проверю позже</value></data>
-	<data name="WebSocketConnection/NewConnection" xml:space="preserve"><value>Новое WebSocket соединение</value></data>
-	<data name="WebSocketConnection/UrlWatermark" xml:space="preserve"><value>(websocket url)</value></data>
-	<data name="WebSocketConnection/Connect" xml:space="preserve"><value>Соединить</value></data>
-	<data name="WebSocketConnection/ConnectToolTip" xml:space="preserve"><value>Соединить (F5)</value></data>
-	<data name="WebSocketConnection/CancelConnect" xml:space="preserve"><value>Отмена</value></data>
-	<data name="WebSocketConnection/CancelConnectToolTip" xml:space="preserve"><value>Отмена (F6)</value></data>
-	<data name="WebSocketConnection/Disconnect" xml:space="preserve"><value>Разъединить</value></data>
-	<data name="WebSocketConnection/DisconnectToolTip" xml:space="preserve"><value>Разъединить (F6)</value></data>
-	<data name="WebSocketConnection/CancelDisconnect" xml:space="preserve"><value>Отмена</value></data>
-	<data name="WebSocketConnection/Connected" xml:space="preserve"><value>СОЕДИНЕН</value></data>
-	<data name="WebSocketConnection/SectionTitle" xml:space="preserve"><value>Соединить</value></data>
-	<data name="WebSocketConnection/CustomAuth" xml:space="preserve"><value>Auth</value></data>
-	<data name="WebSocketConnection/ConnectionRequestOptions" xml:space="preserve"><value>Настройки</value></data>
-	<data name="WebSocketConnection/OptionHeaders" xml:space="preserve"><value>Headers</value></data>
-	<data name="WebSocketConnection/OptionSubprotocols" xml:space="preserve"><value>Подпротоколы</value></data>
-	<data name="WebSocketConnection/OptionCompression" xml:space="preserve"><value>Сжатие</value></data>
-	<data name="WebSocketConnection/ConnectionRequestHeaderAdd" xml:space="preserve"><value>Добавить header</value></data>
-	<data name="WebSocketConnection/ConnectionRequestSubprotocolEnabled" xml:space="preserve"><value>ВКЛЮЧЕН</value></data>
-	<data name="WebSocketConnection/ConnectionRequestSubprotocolName" xml:space="preserve"><value>ИМЯ</value></data>
-	<data name="WebSocketConnection/ConnectionRequestSubprotocolAdd" xml:space="preserve"><value>Добавить подпротокол</value></data>
-	<data name="WebSocketConnection/EnableCompression" xml:space="preserve"><value>Включить сжатие</value></data>
-	<data name="WebSocketConnection/CompressionClientContextTakeover" xml:space="preserve"><value>Захват клиентского контекста</value></data>
-	<data name="WebSocketConnection/CompressionClientMaxWindowBits" xml:space="preserve"><value>Максимальное количество битов окна клиента</value></data>
-	<data name="WebSocketConnection/CompressionServerContextTakeover" xml:space="preserve"><value>Захват контекста сервера</value></data>
-	<data name="WebSocketConnection/CompressionServerMaxWindowBits" xml:space="preserve"><value>Максимальное количество битов окна сервера</value></data>
-	<data name="WebSocketConnection/ConnectionResponse" xml:space="preserve"><value>Ответ</value></data>
-	<data name="WebSocketConnection/ConnectionExceptionWatermark" xml:space="preserve"><value>(исключение подключения здесь, если это произойдет)</value></data>
-	<data name="WebSocketExchangedMessages/FromClientToServer" xml:space="preserve"><value>клиент -> сервер</value></data>
-	<data name="WebSocketExchangedMessages/FromServerToClient" xml:space="preserve"><value>сервер -> клиент</value></data>
-	<data name="WebSocketExchangedMessages/TextContentDescriptionFormat" xml:space="preserve"><value>текст, {0} байтов</value></data>
-	<data name="WebSocketExchangedMessages/BinaryContentDescriptionFormat" xml:space="preserve"><value>двоичный, {0} байтов</value></data>
-	<data name="WebSocketExchangedMessages/ClosingMessageContentDescriptionFormat" xml:space="preserve"><value>закрывающие, {0} байтов</value></data>
-	<data name="WebSocketExchangedMessages/SectionTitle" xml:space="preserve"><value>Обмен сообщениями</value></data>
-	<data name="WebSocketExchangedMessages/InstantDescriptionFormat" xml:space="preserve"><value>HH:mm:ss, yyyy-MM-dd, 'GMT'z'h'</value></data>
-	<data name="WebSocketExchangedMessages/SendMessage" xml:space="preserve"><value>Отправить</value></data>
-	<data name="WebSocketExchangedMessageDetail/SectionTitle" xml:space="preserve"><value>Детали сообщения</value></data>
-	<data name="WebSocketExchangedMessageDetail/MessageTypeWatermark" xml:space="preserve"><value>(тип сообщения)</value></data>
-	<data name="WebSocketExchangedMessageDetail/ContentWatermark" xml:space="preserve"><value>(контент сообщения)</value></data>
-	<data name="WebSocketExchangedMessageDetail/SaveToFile" xml:space="preserve"><value>Сохранить как…</value></data>
-	<data name="WebSocketExchangedMessageDetail/SaveToFileToolTip" xml:space="preserve"><value>Сохранить как… (F9)</value></data>
-	<data name="WebSocketClientMessage/NewMessage" xml:space="preserve"><value>Новое клиентское сообщение</value></data>
-	<data name="WebSocketClientMessage/MessageTypeText" xml:space="preserve"><value>Текст</value></data>
-	<data name="WebSocketClientMessage/MessageTypeBinary" xml:space="preserve"><value>Двоичный</value></data>
-	<data name="WebSocketClientMessage/MessageTypeClose" xml:space="preserve"><value>Сообщение о закрытии</value></data>
-	<data name="WebSocketClientMessage/DisableCompressionForThisMessage" xml:space="preserve"><value>Отключить сжатие для этого сообщения</value></data>
-	<data name="WebSocketClientMessage/DisableCompressionExplanation" xml:space="preserve"><value>Будьте осторожны при использовании сжатия с зашифрованными данными - следите за преступлениями / взломами.</value></data>
-	<data name="WebSocketClientMessage/ContentModeRaw" xml:space="preserve"><value>Raw</value></data>
-	<data name="WebSocketClientMessage/ContentModeFile" xml:space="preserve"><value>Файл</value></data>
-	<data name="WebSocketClientMessage/ContentRawWatermark" xml:space="preserve"><value>(raw контент)</value></data>
-	<data name="WebSocketClientMessage/ContentFileSrcPathWatermark" xml:space="preserve"><value>(путь к файлу)</value></data>
-	<data name="WebSocketClientMessage/ContentFileSearchFile" xml:space="preserve"><value>Поиск файла…</value></data>
-	<data name="WebSocketClientMessage/RawContentJsonSyntax" xml:space="preserve"><value>JSON</value></data>
-	<data name="WebSocketClientMessage/RawContentOtherSyntax" xml:space="preserve"><value>Другой</value></data>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="GoBack/Hint" xml:space="preserve">
+    <value>Вернуться</value>
+  </data>
+  <data name="MacOSXUserDataFolderMigratedV3Dialog/Title" xml:space="preserve">
+    <value>Pororoca - Перенесенная папка с пользовательскими данными</value>
+  </data>
+  <data name="MacOSXUserDataFolderMigratedV3Dialog/Message" xml:space="preserve">
+    <value>Каталог пользовательских данных теперь находится по адресу:\\n{0}\\nВы можете сделать резервную копию и вручную удалить папку PororocaUserData в Приложениях.</value>
+  </data>
+  <data name="Welcome/Title" xml:space="preserve">
+    <value>Добро пожаловать!</value>
+  </data>
+  <data name="Welcome/NewCollection" xml:space="preserve">
+    <value>Новая коллекция</value>
+  </data>
+  <data name="Welcome/ImportCollection" xml:space="preserve">
+    <value>Импорт коллекции…</value>
+  </data>
+  <data name="Welcome/ImportOpenAPI" xml:space="preserve">
+    <value>Импорт OpenAPI…</value>
+  </data>
+  <data name="Welcome/OpenDocsWebsite" xml:space="preserve">
+    <value>Перейти к докс</value>
+  </data>
+  <data name="Welcome/VisitGitHubRepo" xml:space="preserve">
+    <value>Перейти на GitHub</value>
+  </data>
+  <data name="CannotCopyOrCutCollectionDialog/Title" xml:space="preserve">
+    <value>Pororoca - Копировать элементы</value>
+  </data>
+  <data name="CannotCopyOrCutCollectionDialog/Content" xml:space="preserve">
+    <value>Вы можете дублировать, но не копировать или вырезать коллекцию.</value>
+  </data>
+  <data name="CannotPasteItemToItselfDialog/Title" xml:space="preserve">
+    <value>Pororoca - Вырезать предметы</value>
+  </data>
+  <data name="CannotPasteItemToItselfDialog/Content" xml:space="preserve">
+    <value>Невозможно вставить вырезанный элемент сам в себя.</value>
+  </data>
+  <data name="Collection/AddEnvironment" xml:space="preserve">
+    <value>Добавить окружение</value>
+  </data>
+  <data name="Collection/AddFolder" xml:space="preserve">
+    <value>Добавить папку</value>
+  </data>
+  <data name="Collection/AddHttpRequest" xml:space="preserve">
+    <value>Добавить HTTP запрос</value>
+  </data>
+  <data name="Collection/AddWebSocketConnection" xml:space="preserve">
+    <value>Добавить WebSocket</value>
+  </data>
+  <data name="Collection/AddHttpRepeater" xml:space="preserve">
+    <value>Добавить ретранслятор</value>
+  </data>
+  <data name="Collection/SetCollectionScopedHeaders" xml:space="preserve">
+    <value>Заголовки коллекций</value>
+  </data>
+  <data name="Collection/ChooseImportExportFormat" xml:space="preserve">
+    <value>Выбрать формат</value>
+  </data>
+  <data name="Collection/ExportCollection" xml:space="preserve">
+    <value>Экспорт колекции…</value>
+  </data>
+  <data name="Collection/ExportAsPororocaCollection" xml:space="preserve">
+    <value>Экспорт как Pororoca…</value>
+  </data>
+  <data name="Collection/ExportAsPostmanCollection" xml:space="preserve">
+    <value>Экспорт как Postman…</value>
+  </data>
+  <data name="Collection/ExportCollectionDialogTitle" xml:space="preserve">
+    <value>Экспорт колекции в файл (выберите формат)</value>
+  </data>
+  <data name="Collection/ExportAsPororocaCollectionDialogTitle" xml:space="preserve">
+    <value>Экспорт колекции в Pororoca формат</value>
+  </data>
+  <data name="Collection/ExportAsPostmanCollectionDialogTitle" xml:space="preserve">
+    <value>Экспорт колекции в Postman формат</value>
+  </data>
+  <data name="Collection/ImportCollectionDialogTitle" xml:space="preserve">
+    <value>Импорт файлов коллекции / OpenAPI</value>
+  </data>
+  <data name="Collection/ImportCollectionDialogTypes" xml:space="preserve">
+    <value>Файлы коллекции / OpenAPI</value>
+  </data>
+  <data name="Collection/ExportIncludeSecrets" xml:space="preserve">
+    <value>Включать секретные переменные при экспорте</value>
+  </data>
+  <data name="Collection/ImportEnvironment" xml:space="preserve">
+    <value>Импорт окружения…</value>
+  </data>
+  <data name="Collection/ImportEnvironmentDialogTitle" xml:space="preserve">
+    <value>Импорт файлов окружения</value>
+  </data>
+  <data name="Collection/ImportEnvironmentDialogTypes" xml:space="preserve">
+    <value>файлы окружения</value>
+  </data>
+  <data name="Collection/NewCollection" xml:space="preserve">
+    <value>Новая коллекция</value>
+  </data>
+  <data name="Collection/PororocaCollectionFormat" xml:space="preserve">
+    <value>Pororoca коллекция</value>
+  </data>
+  <data name="Collection/PostmanCollectionFormat" xml:space="preserve">
+    <value>Postman коллекция v2.1</value>
+  </data>
+  <data name="CollectionFolder/AddFolder" xml:space="preserve">
+    <value>Добавить папку</value>
+  </data>
+  <data name="CollectionFolder/AddHttpRequest" xml:space="preserve">
+    <value>Добавить HTTP запрос</value>
+  </data>
+  <data name="CollectionFolder/AddWebSocketConnection" xml:space="preserve">
+    <value>Добавить WebSocket</value>
+  </data>
+  <data name="CollectionFolder/AddHttpRepeater" xml:space="preserve">
+    <value>Добавить ретранслятор</value>
+  </data>
+  <data name="CollectionsGroup/CollectionScopedAuth" xml:space="preserve">
+    <value>Auth</value>
+  </data>
+  <data name="CollectionsGroup/Environments" xml:space="preserve">
+    <value>Окружения</value>
+  </data>
+  <data name="CollectionsGroup/Variables" xml:space="preserve">
+    <value>Переменные</value>
+  </data>
+  <data name="ContextMenu/Copy" xml:space="preserve">
+    <value>Копировать</value>
+  </data>
+  <data name="ContextMenu/Cut" xml:space="preserve">
+    <value>Резать</value>
+  </data>
+  <data name="ContextMenu/Delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="ContextMenu/Duplicate" xml:space="preserve">
+    <value>Дублировать</value>
+  </data>
+  <data name="ContextMenu/Export" xml:space="preserve">
+    <value>Экспорт</value>
+  </data>
+  <data name="ContextMenu/ImportEnvironment" xml:space="preserve">
+    <value>Импорт окружения…</value>
+  </data>
+  <data name="ContextMenu/MoveDown" xml:space="preserve">
+    <value>Вниз</value>
+  </data>
+  <data name="ContextMenu/MoveUp" xml:space="preserve">
+    <value>Вверх</value>
+  </data>
+  <data name="ContextMenu/NewEnvironment" xml:space="preserve">
+    <value>Новое окружение</value>
+  </data>
+  <data name="ContextMenu/NewFolder" xml:space="preserve">
+    <value>Новая папка</value>
+  </data>
+  <data name="ContextMenu/NewHttpRequest" xml:space="preserve">
+    <value>Новый HTTP запрос</value>
+  </data>
+  <data name="ContextMenu/NewHttpRepeater" xml:space="preserve">
+    <value>Новый ретранслятор</value>
+  </data>
+  <data name="ContextMenu/NewWebSocketConnection" xml:space="preserve">
+    <value>Новый WebSocket</value>
+  </data>
+  <data name="ContextMenu/NewWebSocketClientMessage" xml:space="preserve">
+    <value>Новое клиентское сообщение</value>
+  </data>
+  <data name="ContextMenu/Paste" xml:space="preserve">
+    <value>Вставить</value>
+  </data>
+  <data name="ContextMenu/Rename" xml:space="preserve">
+    <value>Переименовать</value>
+  </data>
+  <data name="ContextMenu/SetAsCurrentEnvironment" xml:space="preserve">
+    <value>Установлено в качестве текущей среды</value>
+  </data>
+  <data name="CollectionScopedAuth/Title" xml:space="preserve">
+    <value>Авторизация на уровне коллекции</value>
+  </data>
+  <data name="CollectionScopedRequestHeaders/Title" xml:space="preserve">
+    <value>Заголовки на уровне коллекции</value>
+  </data>
+  <data name="CollectionVariables/AddVariable" xml:space="preserve">
+    <value>Добавить переменную</value>
+  </data>
+  <data name="CollectionVariables/RemoveVariable" xml:space="preserve">
+    <value>Удалить переменную</value>
+  </data>
+  <data name="CollectionVariables/Tip" xml:space="preserve">
+    <value>Совет: Чтобы использовать переменную, введите {{VariableName}} в URL, теле, аутентификации или заголовке вашего запроса. При отправке запроса текст {{VariableName}} будет заменен значением переменной.</value>
+  </data>
+  <data name="CollectionVariables/Title" xml:space="preserve">
+    <value>Переменные коллекции</value>
+  </data>
+  <data name="Variables/Enabled" xml:space="preserve">
+    <value>ВКЛЮЧЕН</value>
+  </data>
+  <data name="Variables/IsSecret" xml:space="preserve">
+    <value>СЕКРЕТ</value>
+  </data>
+  <data name="Variables/Name" xml:space="preserve">
+    <value>ИМЯ ПЕРЕМЕННОЙ</value>
+  </data>
+  <data name="Variables/Value" xml:space="preserve">
+    <value>ЗНАЧЕНИЕ</value>
+  </data>
+  <data name="DeleteItemsDialog/Title" xml:space="preserve">
+    <value>Pororoca - Удаление элементов</value>
+  </data>
+  <data name="DeleteItemsDialog/MessageSingleItem" xml:space="preserve">
+    <value>Вы действительно хотите удалить '{0}'?</value>
+  </data>
+  <data name="DeleteItemsDialog/MessageMultipleItems" xml:space="preserve">
+    <value>Вы действительно хотите удалить выбранные элементы?</value>
+  </data>
+  <data name="EditableTextBlock/RenameToolTip" xml:space="preserve">
+    <value>Переименовать (F2)</value>
+  </data>
+  <data name="Environment/AddVariable" xml:space="preserve">
+    <value>Добавить переменную</value>
+  </data>
+  <data name="Environment/ChooseImportExportFormat" xml:space="preserve">
+    <value>Выбрать формат</value>
+  </data>
+  <data name="Environment/ExportEnvironment" xml:space="preserve">
+    <value>Экспорт окружения…</value>
+  </data>
+  <data name="Environment/ExportAsPororocaEnvironment" xml:space="preserve">
+    <value>Экспорт как Pororoca…</value>
+  </data>
+  <data name="Environment/ExportAsPostmanEnvironment" xml:space="preserve">
+    <value>Экспорт как Postman…</value>
+  </data>
+  <data name="Environment/ExportEnvironmentDialogTitle" xml:space="preserve">
+    <value>Экспорт окружения в файл (выбрать формат)</value>
+  </data>
+  <data name="Environment/ExportAsPororocaEnvironmentDialogTitle" xml:space="preserve">
+    <value>Экспорт окружения в Pororoca формат</value>
+  </data>
+  <data name="Environment/ExportAsPostmanEnvironmentDialogTitle" xml:space="preserve">
+    <value>Экспорт окружения в Postman формат</value>
+  </data>
+  <data name="Environment/ExportIncludeSecrets" xml:space="preserve">
+    <value>Включать секретные переменные при экспорте</value>
+  </data>
+  <data name="Environment/NewEnvironment" xml:space="preserve">
+    <value>Новое окружение</value>
+  </data>
+  <data name="Environment/PororocaEnvironmentFormat" xml:space="preserve">
+    <value>Pororoca окружение</value>
+  </data>
+  <data name="Environment/PostmanEnvironmentFormat" xml:space="preserve">
+    <value>Postman окружение</value>
+  </data>
+  <data name="Environment/RemoveVariable" xml:space="preserve">
+    <value>Удалить переменную</value>
+  </data>
+  <data name="Environment/SetAsCurrentEnvironment" xml:space="preserve">
+    <value>Включить как текущую среду</value>
+  </data>
+  <data name="Environment/UnsetAsCurrentEnvironment" xml:space="preserve">
+    <value>Отключить как текущую среду</value>
+  </data>
+  <data name="Environment/Tip" xml:space="preserve">
+    <value>Совет: Если переменная окружения имеет то же имя, что и другая переменная коллекции, то будет применено значение переменной окружения.</value>
+  </data>
+  <data name="Folder/NewFolder" xml:space="preserve">
+    <value>Новая папка</value>
+  </data>
+  <data name="SelectFolderDialog/Title" xml:space="preserve">
+    <value>Выберите папку назначения</value>
+  </data>
+  <data name="HelpDialog/Title" xml:space="preserve">
+    <value>Ажуда</value>
+  </data>
+  <data name="HelpDialog/Content" xml:space="preserve">
+    <value>Горячие клавиши\\n\\nF1 - Показать справку\\nF2 - Переименовать\\nF4 - Сосредоточиться на URL-адресе\\nF5 - Отправить запрос / подключить WebSocket\\nF6 - Отменить запрос / отключить WebSocket\\nF7 - Установить предыдущую среду как активную\\nF8 - Установить следующую среду как активную\\nF9 - Сохранить тело ответа в файл\\nF10 - Экспорт журнала HTTP в файл\\nCtrl+PageUp - Переключиться на элемент выше в дереве\\nCtrl+PageDown - Переключитесь на элемент ниже в дереве\\nCtrl+Shift+S - Сохранить все\\n\\nПолная документация на сайте: https://pororoca.io</value>
+  </data>
+  <data name="HttpRepeater/NewRepeater" xml:space="preserve">
+    <value>Новый ретранслятор</value>
+  </data>
+  <data name="HttpRepeater/SelectBaseRequest" xml:space="preserve">
+    <value>(Выберите базовый HTTP-запрос)</value>
+  </data>
+  <data name="HttpRepeater/RefreshBaseRequestsListTip" xml:space="preserve">
+    <value>Обновить список</value>
+  </data>
+  <data name="HttpRepeater/Start" xml:space="preserve">
+    <value>Начало</value>
+  </data>
+  <data name="HttpRepeater/StartTip" xml:space="preserve">
+    <value>Начало (F5)</value>
+  </data>
+  <data name="HttpRepeater/Stop" xml:space="preserve">
+    <value>Остановка</value>
+  </data>
+  <data name="HttpRepeater/StopTip" xml:space="preserve">
+    <value>Остановка (F6)</value>
+  </data>
+  <data name="HttpRepeater/RepetitionSectionTitle" xml:space="preserve">
+    <value>Повторение</value>
+  </data>
+  <data name="HttpRepeater/RepetitionMode" xml:space="preserve">
+    <value>Режим</value>
+  </data>
+  <data name="HttpRepeater/RepetitionModeSimple" xml:space="preserve">
+    <value>Простой</value>
+  </data>
+  <data name="HttpRepeater/RepetitionModeSequential" xml:space="preserve">
+    <value>Последовательный</value>
+  </data>
+  <data name="HttpRepeater/RepetitionModeRandom" xml:space="preserve">
+    <value>Случайный</value>
+  </data>
+  <data name="HttpRepeater/NumberOfRepetitions" xml:space="preserve">
+    <value>Количество</value>
+  </data>
+  <data name="HttpRepeater/MaxDOP" xml:space="preserve">
+    <value>Параллелизм</value>
+  </data>
+  <data name="HttpRepeater/Delay" xml:space="preserve">
+    <value>Задержка (мс)</value>
+  </data>
+  <data name="HttpRepeater/DelayTip" xml:space="preserve">
+    <value>Время ожидания между ответом и отправкой следующего запроса.</value>
+  </data>
+  <data name="HttpRepeater/InputData" xml:space="preserve">
+    <value>Входные данные</value>
+  </data>
+  <data name="HttpRepeater/InputDataTypeRaw" xml:space="preserve">
+    <value>Raw JSON array</value>
+  </data>
+  <data name="HttpRepeater/InputDataTypeRawComment" xml:space="preserve">
+    <value>Комментарии разрешены</value>
+  </data>
+  <data name="HttpRepeater/InputDataTypeFile" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="HttpRepeater/InputDataFileSrcPathWatermark" xml:space="preserve">
+    <value>(путь к файлу)</value>
+  </data>
+  <data name="HttpRepeater/InputDataFileSearch" xml:space="preserve">
+    <value>Найти файл…</value>
+  </data>
+  <data name="HttpRepeater/ExportReport" xml:space="preserve">
+    <value>Создание отчета…</value>
+  </data>
+  <data name="HttpRepeater/SaveAllResponses" xml:space="preserve">
+    <value>Сохранение ответов…</value>
+  </data>
+  <data name="HttpRepeater/ExportAllLogs" xml:space="preserve">
+    <value>Экспорт журналов…</value>
+  </data>
+  <data name="HttpRepeater/InputLine" xml:space="preserve">
+    <value>Входная строка</value>
+  </data>
+  <data name="HttpRepeater/InputLineKey" xml:space="preserve">
+    <value>ИМЯ ПЕРЕМЕННОЙ</value>
+  </data>
+  <data name="HttpRepeater/InputLineValue" xml:space="preserve">
+    <value>ЗНАЧЕНИЕ</value>
+  </data>
+  <data name="HttpRepeater/RepetitionOngoingStatus" xml:space="preserve">
+    <value>{0}/{1} повторения, {2} успешных. Приблизительное оставшееся время: {3}.</value>
+  </data>
+  <data name="HttpRepeater/RepetitionFinishedStatus" xml:space="preserve">
+    <value>Выполнено {0} повторений, {1} успешных. Затраченное время: {2}.</value>
+  </data>
+  <data name="HttpRepeater/RepetitionSuccessTip" xml:space="preserve">
+    <value>Успешно: код состояния HTTP 2xx.</value>
+  </data>
+  <data name="HttpRepeater/RepetitionResultCancelled" xml:space="preserve">
+    <value>Отменен</value>
+  </data>
+  <data name="HttpRepeater/RepetitionResultException" xml:space="preserve">
+    <value>исключение</value>
+  </data>
+  <data name="HttpRepeater/Results" xml:space="preserve">
+    <value>Результаты</value>
+  </data>
+  <data name="HttpRequest/Body" xml:space="preserve">
+    <value>Body</value>
+  </data>
+  <data name="HttpRequest/BodyFileContentTypeWatermark" xml:space="preserve">
+    <value>(файл content-type)</value>
+  </data>
+  <data name="HttpRequest/BodyFileSearchFile" xml:space="preserve">
+    <value>Найти файл…</value>
+  </data>
+  <data name="HttpRequest/BodyFileSrcPathWatermark" xml:space="preserve">
+    <value>(путь к файлу)</value>
+  </data>
+  <data name="HttpRequest/BodyFormDataFileParamAdd" xml:space="preserve">
+    <value>Добавить файл</value>
+  </data>
+  <data name="HttpRequest/BodyFormDataTextParamAdd" xml:space="preserve">
+    <value>Добавить текст</value>
+  </data>
+  <data name="HttpRequest/BodyFormDataParamRemove" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="HttpRequest/BodyFormDataParamEnabled" xml:space="preserve">
+    <value>ВКЛЮЧЕН</value>
+  </data>
+  <data name="HttpRequest/BodyFormDataParamType" xml:space="preserve">
+    <value>ТИП</value>
+  </data>
+  <data name="HttpRequest/BodyFormDataParamTypeText" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="HttpRequest/BodyFormDataParamTypeFile" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="HttpRequest/BodyFormDataParamName" xml:space="preserve">
+    <value>ИМЯ</value>
+  </data>
+  <data name="HttpRequest/BodyFormDataParamTextOrSrcPath" xml:space="preserve">
+    <value>TEXT / PATH</value>
+  </data>
+  <data name="HttpRequest/BodyFormDataParamContentType" xml:space="preserve">
+    <value>CONTENT-TYPE</value>
+  </data>
+  <data name="HttpRequest/BodyModeFile" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="HttpRequest/BodyModeFormData" xml:space="preserve">
+    <value>Form Data</value>
+  </data>
+  <data name="HttpRequest/BodyModeNone" xml:space="preserve">
+    <value>Отсутствует</value>
+  </data>
+  <data name="HttpRequest/BodyModeRaw" xml:space="preserve">
+    <value>Raw</value>
+  </data>
+  <data name="HttpRequest/BodyModeUrlEncoded" xml:space="preserve">
+    <value>закодированный URL</value>
+  </data>
+  <data name="HttpRequest/BodyModeGraphQl" xml:space="preserve">
+    <value>Graph QL</value>
+  </data>
+  <data name="HttpRequest/BodyGraphQlQueryWatermark" xml:space="preserve">
+    <value>(graph ql запрос)</value>
+  </data>
+  <data name="HttpRequest/BodyGraphQlVariablesWatermark" xml:space="preserve">
+    <value>(graph ql переменные)</value>
+  </data>
+  <data name="HttpRequest/BodyRawContentTypeWatermark" xml:space="preserve">
+    <value>(raw content-type here)</value>
+  </data>
+  <data name="HttpRequest/BodyRawContentWatermark" xml:space="preserve">
+    <value>(raw body here)</value>
+  </data>
+  <data name="HttpRequest/BodyUrlEncodedParamAdd" xml:space="preserve">
+    <value>Добавить параметр</value>
+  </data>
+  <data name="HttpRequest/BodyUrlEncodedParamEnabled" xml:space="preserve">
+    <value>ВКЛЮЧЕН</value>
+  </data>
+  <data name="HttpRequest/BodyUrlEncodedParamName" xml:space="preserve">
+    <value>ИМЯ ПАРАМЕТРА</value>
+  </data>
+  <data name="HttpRequest/BodyUrlEncodedParamRemove" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="HttpRequest/BodyUrlEncodedParamValue" xml:space="preserve">
+    <value>ЗНАЧЕНИЕ</value>
+  </data>
+  <data name="HttpRequest/CancelRequest" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="HttpRequest/CancelRequestToolTip" xml:space="preserve">
+    <value>Отмена (F6)</value>
+  </data>
+  <data name="HttpRequest/CustomAuth" xml:space="preserve">
+    <value>Auth</value>
+  </data>
+  <data name="HttpRequest/HeaderAdd" xml:space="preserve">
+    <value>Добавить header</value>
+  </data>
+  <data name="HttpRequest/HeaderEnabled" xml:space="preserve">
+    <value>ВКЛЮЧЕН</value>
+  </data>
+  <data name="HttpRequest/HeaderName" xml:space="preserve">
+    <value>HEADER ИМЯ</value>
+  </data>
+  <data name="HttpRequest/HeaderRemove" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="HttpRequest/Headers" xml:space="preserve">
+    <value>Headers</value>
+  </data>
+  <data name="HttpRequest/HeaderValue" xml:space="preserve">
+    <value>ЗНАЧЕНИЕ</value>
+  </data>
+  <data name="HttpRequest/NewRequest" xml:space="preserve">
+    <value>Новый HTTP запрос</value>
+  </data>
+  <data name="HttpRequest/SectionTitle" xml:space="preserve">
+    <value>Запрос</value>
+  </data>
+  <data name="HttpRequest/SendRequest" xml:space="preserve">
+    <value>Отправить</value>
+  </data>
+  <data name="HttpRequest/SendRequestToolTip" xml:space="preserve">
+    <value>Отправить (F5)</value>
+  </data>
+  <data name="HttpRequest/UrlWatermark" xml:space="preserve">
+    <value>(запрос url)</value>
+  </data>
+  <data name="HttpResponse/Body" xml:space="preserve">
+    <value>Body</value>
+  </data>
+  <data name="HttpResponse/BodyCouldNotReadAsUTF8" xml:space="preserve">
+    <value>(не удалось прочитать тело как UTF-8 текст, {0} байтов)</value>
+  </data>
+  <data name="HttpResponse/BodyContentBinaryNotShown" xml:space="preserve">
+    <value>(двоичное содержимое не отображается, {0} байтов)</value>
+  </data>
+  <data name="HttpResponse/BodyContentTypeWatermark" xml:space="preserve">
+    <value>(ответ content-type)</value>
+  </data>
+  <data name="HttpResponse/BodyContentWatermark" xml:space="preserve">
+    <value>(ответ body)</value>
+  </data>
+  <data name="HttpResponse/BodySaveToFile" xml:space="preserve">
+    <value>Сохранить как…</value>
+  </data>
+  <data name="HttpResponse/BodySaveToFileToolTip" xml:space="preserve">
+    <value>Сохранить как… (F9)</value>
+  </data>
+  <data name="HttpResponse/ExportLog" xml:space="preserve">
+    <value>Журнал экспорта…</value>
+  </data>
+  <data name="HttpResponse/ExportLogToolTip" xml:space="preserve">
+    <value>Журнал экспорта… (F10)</value>
+  </data>
+  <data name="HttpResponse/DisableTlsVerification" xml:space="preserve">
+    <value>Отключить TLS проверку</value>
+  </data>
+  <data name="TimeText/MillisecondsFormat" xml:space="preserve">
+    <value>{0}мс</value>
+  </data>
+  <data name="TimeText/HoursAndMinutesFormat" xml:space="preserve">
+    <value>{0}ч {1]мин</value>
+  </data>
+  <data name="TimeText/MinutesAndSecondsFormat" xml:space="preserve">
+    <value>{0}мин {1}с</value>
+  </data>
+  <data name="TimeText/MinutesFormat" xml:space="preserve">
+    <value>{0}мин</value>
+  </data>
+  <data name="TimeText/SecondsFormat" xml:space="preserve">
+    <value>{0:0.00}с</value>
+  </data>
+  <data name="HttpResponse/HeaderName" xml:space="preserve">
+    <value>HEADER ИМЯ</value>
+  </data>
+  <data name="HttpResponse/Headers" xml:space="preserve">
+    <value>Headers</value>
+  </data>
+  <data name="HttpResponse/HeaderValue" xml:space="preserve">
+    <value>ЗНАЧЕНИЕ</value>
+  </data>
+  <data name="HttpResponse/SectionTitle" xml:space="preserve">
+    <value>Ответ</value>
+  </data>
+  <data name="HttpResponse/SectionTitleFailedFormat" xml:space="preserve">
+    <value>Ответ: Неудачный ({0})</value>
+  </data>
+  <data name="HttpResponse/SectionTitleSuccessfulFormat" xml:space="preserve">
+    <value>Ответ: {0} ({1})</value>
+  </data>
+  <data name="HttpResponse/Capture" xml:space="preserve">
+    <value>Захват</value>
+  </data>
+  <data name="HttpResponse/CaptureAddHeaderCapture" xml:space="preserve">
+    <value>Захват header</value>
+  </data>
+  <data name="HttpResponse/CaptureAddBodyCapture" xml:space="preserve">
+    <value>Захват body</value>
+  </data>
+  <data name="HttpResponse/CaptureTargetVariable" xml:space="preserve">
+    <value>ЦЕЛЕВАЯ ПЕРЕМЕННАЯ</value>
+  </data>
+  <data name="HttpResponse/CaptureType" xml:space="preserve">
+    <value>ТИП</value>
+  </data>
+  <data name="HttpResponse/CaptureTypeHeader" xml:space="preserve">
+    <value>Header</value>
+  </data>
+  <data name="HttpResponse/CaptureTypeBody" xml:space="preserve">
+    <value>Body</value>
+  </data>
+  <data name="HttpResponse/CaptureHeaderNameOrBodyPath" xml:space="preserve">
+    <value>HEADER NAME / BODY PATH</value>
+  </data>
+  <data name="HttpResponse/CaptureCapturedValue" xml:space="preserve">
+    <value>ЗНАЧЕНИЕ</value>
+  </data>
+  <data name="HttpResponse/ExecuteCapturesTooltip" xml:space="preserve">
+    <value>Выполнение захватов</value>
+  </data>
+  <data name="HttpResponse/CaptureTip" xml:space="preserve">
+    <value>Совет: Для захвата значений JSON: $.myProp[0].myProp2 ($ означает корень, [0] означает array element). Для захвата значений XML используйте синтаксис XPath 1.0.\\n\\nПерехваченные значения сохраняются в текущих переменных среды. Если ни одна среда не активна, то они будут сохранены в переменных коллекции.</value>
+  </data>
+  <data name="RequestAuth/AuthModeInheritFromCollection" xml:space="preserve">
+    <value>Наследовать из коллекции</value>
+  </data>
+  <data name="RequestAuth/AuthModeBasic" xml:space="preserve">
+    <value>Basic</value>
+  </data>
+  <data name="RequestAuth/AuthModeBasicLoginWatermark" xml:space="preserve">
+    <value>(basic auth логин)</value>
+  </data>
+  <data name="RequestAuth/AuthModeBasicPasswordWatermark" xml:space="preserve">
+    <value>(basic auth пароль)</value>
+  </data>
+  <data name="RequestAuth/AuthModeBearer" xml:space="preserve">
+    <value>Bearer</value>
+  </data>
+  <data name="RequestAuth/AuthModeBearerTokenWatermark" xml:space="preserve">
+    <value>(bearer auth токен)</value>
+  </data>
+  <data name="RequestAuth/AuthModeNone" xml:space="preserve">
+    <value>Отсутствует</value>
+  </data>
+  <data name="RequestAuth/AuthModeWindows" xml:space="preserve">
+    <value>Windows / NTLM</value>
+  </data>
+  <data name="RequestAuth/AuthModeWindowsUseCurrentUser" xml:space="preserve">
+    <value>Использовать текущего пользователя</value>
+  </data>
+  <data name="RequestAuth/AuthModeWindowsLoginWatermark" xml:space="preserve">
+    <value>(login)</value>
+  </data>
+  <data name="RequestAuth/AuthModeWindowsPasswordWatermark" xml:space="preserve">
+    <value>(password)</value>
+  </data>
+  <data name="RequestAuth/AuthModeWindowsDomainWatermark" xml:space="preserve">
+    <value>(domain)</value>
+  </data>
+  <data name="RequestAuth/AuthModeClientCertificate" xml:space="preserve">
+    <value>Клиентский сертификат</value>
+  </data>
+  <data name="RequestAuth/ClientCertificateTypeNone" xml:space="preserve">
+    <value>Отсутствует</value>
+  </data>
+  <data name="RequestAuth/ClientCertificateTypePkcs12" xml:space="preserve">
+    <value>PKCS#12</value>
+  </data>
+  <data name="RequestAuth/ClientCertificateTypePem" xml:space="preserve">
+    <value>PEM</value>
+  </data>
+  <data name="RequestAuth/CertificateFilePathWatermark" xml:space="preserve">
+    <value>(путь к файлу сертификата)</value>
+  </data>
+  <data name="RequestAuth/PrivateKeyFilePathWatermark" xml:space="preserve">
+    <value>(путь к файлу закрытого ключа)</value>
+  </data>
+  <data name="RequestAuth/FilePasswordWatermark" xml:space="preserve">
+    <value>(пароль к файлу)</value>
+  </data>
+  <data name="RequestAuth/Pkcs12SearchFile" xml:space="preserve">
+    <value>Найти серитификат…</value>
+  </data>
+  <data name="RequestAuth/PemSearchCertFile" xml:space="preserve">
+    <value>Найти серитификат…</value>
+  </data>
+  <data name="RequestAuth/PemSearchPrivateKeyFile" xml:space="preserve">
+    <value>Поиск закрытого ключа…</value>
+  </data>
+  <data name="RequestAuth/PemClientCertificatesTip" xml:space="preserve">
+    <value>Совет: Если файл сертификата содержит закрытый ключ, оставьте путь к закрытому ключу пустым. Пароль требуется только в том случае, если закрытый ключ зашифрован.</value>
+  </data>
+  <data name="RequestAuth/Pkcs12ImportCertificateFileTypesDescription" xml:space="preserve">
+    <value>PKCS12 сертификаты</value>
+  </data>
+  <data name="RequestAuth/Pkcs12ImportCertificateFileDialogTitle" xml:space="preserve">
+    <value>Импорт сертификата в PKCS12 формат</value>
+  </data>
+  <data name="RequestAuth/PemImportCertificateFileTypesDescription" xml:space="preserve">
+    <value>PEM сертификаты</value>
+  </data>
+  <data name="RequestAuth/PemImportCertificateFileDialogTitle" xml:space="preserve">
+    <value>Импорт сертификата в PEM формат</value>
+  </data>
+  <data name="RequestAuth/PemImportPrivateKeyFileTypesDescription" xml:space="preserve">
+    <value>PEM закрытые ключи</value>
+  </data>
+  <data name="RequestAuth/PemImportPrivateKeyFileDialogTitle" xml:space="preserve">
+    <value>Импорт закрытого ключа в PEM формат</value>
+  </data>
+  <data name="RequestValidation/WindowsAuthLoginCannotBeBlank" xml:space="preserve">
+    <value>Имя входа для проверки подлинности Windows не может быть пустым.</value>
+  </data>
+  <data name="RequestValidation/WindowsAuthPasswordCannotBeBlank" xml:space="preserve">
+    <value>Пароль для проверки подлинности Windows не может быть пустым.</value>
+  </data>
+  <data name="RequestValidation/WindowsAuthDomainCannotBeBlank" xml:space="preserve">
+    <value>Домен для проверки подлинности Windows не может быть пустым.</value>
+  </data>
+  <data name="RequestValidation/ClientCertificateFileNotFound" xml:space="preserve">
+    <value>Файл сертификата клиента не найден.</value>
+  </data>
+  <data name="RequestValidation/ClientCertificatePkcs12PasswordCannotBeBlank" xml:space="preserve">
+    <value>PKCS#12 для клиентских сертификатов требуется пароль.</value>
+  </data>
+  <data name="RequestValidation/ClientCertificatePemPrivateKeyFileNotFound" xml:space="preserve">
+    <value>Файл закрытого ключа клиентского сертификата не найден.</value>
+  </data>
+  <data name="RequestValidation/ContentTypeCannotBeBlankReqBodyRawOrFile" xml:space="preserve">
+    <value>В теле запроса требуется Content-Type.</value>
+  </data>
+  <data name="RequestValidation/Http2Unavailable" xml:space="preserve">
+    <value>В Windows для поддержки HTTP/2 требуется Windows 10 или более поздней версии.</value>
+  </data>
+  <data name="RequestValidation/Http3Unavailable" xml:space="preserve">
+    <value>HTTP/3 доступен только для Linux с msquic или Windows 11 и более поздних версий.</value>
+  </data>
+  <data name="RequestValidation/InvalidContentTypeFormData" xml:space="preserve">
+    <value>Один из параметров Form Data имеют недопустимое значение Content-Type.</value>
+  </data>
+  <data name="RequestValidation/InvalidContentTypeRawOrFile" xml:space="preserve">
+    <value>Используйте один из доступных Content-Types для тела запроса.</value>
+  </data>
+  <data name="RequestValidation/InvalidUnknownCause" xml:space="preserve">
+    <value>Запрос недействителен. Пожалуйста, проверьте это и повторите попытку.</value>
+  </data>
+  <data name="RequestValidation/InvalidUrl" xml:space="preserve">
+    <value>Неверный URL. Пожалуйста, проверьте и попробуйте снова.</value>
+  </data>
+  <data name="RequestValidation/RepetitionBaseHttpRequestNotSelected" xml:space="preserve">
+    <value>Выберите базовый HTTP-запрос для повторения.</value>
+  </data>
+  <data name="RequestValidation/RepetitionBaseHttpRequestNotFound" xml:space="preserve">
+    <value>Базовый HTTP-запрос не найден.</value>
+  </data>
+  <data name="RequestValidation/RepetitionDelayCantBeNegative" xml:space="preserve">
+    <value>Задержка должна быть больше или равна нулю.</value>
+  </data>
+  <data name="RequestValidation/RepetitionNumberOfRepetitionsMustBeAtLeast1" xml:space="preserve">
+    <value>Количество повторений должно быть больше или равно одному.</value>
+  </data>
+  <data name="RequestValidation/RepetitionMaxDopMustBeAtLeast1" xml:space="preserve">
+    <value>Параллелизм должен быть больше или равен единице.</value>
+  </data>
+  <data name="RequestValidation/RepetitionInputDataFileNotFound" xml:space="preserve">
+    <value>Файл входных данных не найден.</value>
+  </data>
+  <data name="RequestValidation/RepetitionInputDataInvalid" xml:space="preserve">
+    <value>Недопустимый массив входных данных JSON.</value>
+  </data>
+  <data name="RequestValidation/RepetitionInputDataAtLeastOneLine" xml:space="preserve">
+    <value>Требуется хотя бы одна строка ввода.</value>
+  </data>
+  <data name="RequestValidation/ReqBodyFileNotFound" xml:space="preserve">
+    <value>Файл для запроса body не найден.</value>
+  </data>
+  <data name="RequestValidation/WebSocketHttpVersionUnavailable" xml:space="preserve">
+    <value>Эта версия HTTP недоступна для подключений через WebSocket.</value>
+  </data>
+  <data name="RequestValidation/WebSocketCompressionMaxWindowBitsOutOfRange" xml:space="preserve">
+    <value>Биты окна максимального сжатия должны находиться в пределах 9 и 15.</value>
+  </data>
+  <data name="RequestValidation/WebSocketUnknownConnectionTranslationError" xml:space="preserve">
+    <value>Запрос на подключение недействителен. Пожалуйста, проверьте это и повторите попытку.</value>
+  </data>
+  <data name="RequestValidation/WebSocketNotConnected" xml:space="preserve">
+    <value>Нет соединения.</value>
+  </data>
+  <data name="RequestValidation/WebSocketClientMessageContentFileNotFound" xml:space="preserve">
+    <value>Файл, из которого состоит сообщение, не был найден.</value>
+  </data>
+  <data name="RequestValidation/WebSocketUnknownClientMessageTranslationError" xml:space="preserve">
+    <value>Отправляемое сообщение недействительно. Пожалуйста, проверьте это и повторите попытку.</value>
+  </data>
+  <data name="TopMenu/Contribute" xml:space="preserve">
+    <value>Внести</value>
+  </data>
+  <data name="TopMenu/File" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="TopMenu/Options" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="TopMenu/Help" xml:space="preserve">
+    <value>Ажуда</value>
+  </data>
+  <data name="TopMenu/Saved" xml:space="preserve">
+    <value>Сохранено!</value>
+  </data>
+  <data name="TopMenuFile/Exit" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="TopMenuFile/SaveAll" xml:space="preserve">
+    <value>Сохранить все</value>
+  </data>
+  <data name="TopMenuFile/ImportFromFile" xml:space="preserve">
+    <value>Импорт из файла…</value>
+  </data>
+  <data name="TopMenuFile/NewCollection" xml:space="preserve">
+    <value>Новая коллекция</value>
+  </data>
+  <data name="TopMenuLanguage/English" xml:space="preserve">
+    <value>Английский</value>
+  </data>
+  <data name="TopMenuLanguage/Português" xml:space="preserve">
+    <value>Португальский</value>
+  </data>
+  <data name="TopMenuLanguage/Russian" xml:space="preserve">
+    <value>Русский</value>
+  </data>
+  <data name="TopMenuLanguage/Italian" xml:space="preserve">
+    <value>Итальяно</value>
+  </data>
+  <data name="TopMenuLanguage/SimplifiedChinese" xml:space="preserve">
+    <value>Упрощенный китайский</value>
+  </data>
+  <data name="TopMenuOptions/EnableTlsVerification" xml:space="preserve">
+    <value>Включить TLS проверку</value>
+  </data>
+  <data name="TopMenuOptions/Language" xml:space="preserve">
+    <value>Язык</value>
+  </data>
+  <data name="TopMenuOptions/Theme" xml:space="preserve">
+    <value>Тема</value>
+  </data>
+  <data name="TopMenuTheme/AmazonianNight" xml:space="preserve">
+    <value>Amazonian night</value>
+  </data>
+  <data name="TopMenuTheme/Dark" xml:space="preserve">
+    <value>Темная</value>
+  </data>
+  <data name="TopMenuTheme/Light" xml:space="preserve">
+    <value>Светлая</value>
+  </data>
+  <data name="TopMenuTheme/Pampa" xml:space="preserve">
+    <value>Pampa</value>
+  </data>
+  <data name="TopMenuHelp/ViewKeyboardShortcuts" xml:space="preserve">
+    <value>Просмотр сочетаний клавиш</value>
+  </data>
+  <data name="TopMenuHelp/OpenDocsWebsite" xml:space="preserve">
+    <value>Перейти к докс</value>
+  </data>
+  <data name="TopMenuHelp/RunUITests" xml:space="preserve">
+    <value>Выполнение UI тестов (Ctrl+F12)</value>
+  </data>
+  <data name="TextEditor/Copy" xml:space="preserve">
+    <value>Копировать</value>
+  </data>
+  <data name="TextEditor/Paste" xml:space="preserve">
+    <value>Вставить</value>
+  </data>
+  <data name="TextEditor/Cut" xml:space="preserve">
+    <value>Вырезать</value>
+  </data>
+  <data name="UpdateReminder/DialogTitle" xml:space="preserve">
+    <value>Pororoca</value>
+  </data>
+  <data name="UpdateReminder/DialogMessage" xml:space="preserve">
+    <value>Не забывайте периодически проверять наличие обновлений!</value>
+  </data>
+  <data name="UpdateReminder/DialogGoToSite" xml:space="preserve">
+    <value>Перейти на сайт</value>
+  </data>
+  <data name="UpdateReminder/DialogCancel" xml:space="preserve">
+    <value>Проверю позже</value>
+  </data>
+  <data name="WebSocketConnection/NewConnection" xml:space="preserve">
+    <value>Новое WebSocket соединение</value>
+  </data>
+  <data name="WebSocketConnection/UrlWatermark" xml:space="preserve">
+    <value>(websocket url)</value>
+  </data>
+  <data name="WebSocketConnection/Connect" xml:space="preserve">
+    <value>Соединить</value>
+  </data>
+  <data name="WebSocketConnection/ConnectToolTip" xml:space="preserve">
+    <value>Соединить (F5)</value>
+  </data>
+  <data name="WebSocketConnection/CancelConnect" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="WebSocketConnection/CancelConnectToolTip" xml:space="preserve">
+    <value>Отмена (F6)</value>
+  </data>
+  <data name="WebSocketConnection/Disconnect" xml:space="preserve">
+    <value>Разъединить</value>
+  </data>
+  <data name="WebSocketConnection/DisconnectToolTip" xml:space="preserve">
+    <value>Разъединить (F6)</value>
+  </data>
+  <data name="WebSocketConnection/CancelDisconnect" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="WebSocketConnection/Connected" xml:space="preserve">
+    <value>СОЕДИНЕН</value>
+  </data>
+  <data name="WebSocketConnection/SectionTitle" xml:space="preserve">
+    <value>Соединить</value>
+  </data>
+  <data name="WebSocketConnection/CustomAuth" xml:space="preserve">
+    <value>Auth</value>
+  </data>
+  <data name="WebSocketConnection/ConnectionRequestOptions" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="WebSocketConnection/OptionHeaders" xml:space="preserve">
+    <value>Headers</value>
+  </data>
+  <data name="WebSocketConnection/OptionSubprotocols" xml:space="preserve">
+    <value>Подпротоколы</value>
+  </data>
+  <data name="WebSocketConnection/OptionCompression" xml:space="preserve">
+    <value>Сжатие</value>
+  </data>
+  <data name="WebSocketConnection/ConnectionRequestHeaderAdd" xml:space="preserve">
+    <value>Добавить header</value>
+  </data>
+  <data name="WebSocketConnection/ConnectionRequestSubprotocolEnabled" xml:space="preserve">
+    <value>ВКЛЮЧЕН</value>
+  </data>
+  <data name="WebSocketConnection/ConnectionRequestSubprotocolName" xml:space="preserve">
+    <value>ИМЯ</value>
+  </data>
+  <data name="WebSocketConnection/ConnectionRequestSubprotocolAdd" xml:space="preserve">
+    <value>Добавить подпротокол</value>
+  </data>
+  <data name="WebSocketConnection/EnableCompression" xml:space="preserve">
+    <value>Включить сжатие</value>
+  </data>
+  <data name="WebSocketConnection/CompressionClientContextTakeover" xml:space="preserve">
+    <value>Захват клиентского контекста</value>
+  </data>
+  <data name="WebSocketConnection/CompressionClientMaxWindowBits" xml:space="preserve">
+    <value>Максимальное количество битов окна клиента</value>
+  </data>
+  <data name="WebSocketConnection/CompressionServerContextTakeover" xml:space="preserve">
+    <value>Захват контекста сервера</value>
+  </data>
+  <data name="WebSocketConnection/CompressionServerMaxWindowBits" xml:space="preserve">
+    <value>Максимальное количество битов окна сервера</value>
+  </data>
+  <data name="WebSocketConnection/ConnectionResponse" xml:space="preserve">
+    <value>Ответ</value>
+  </data>
+  <data name="WebSocketConnection/ConnectionExceptionWatermark" xml:space="preserve">
+    <value>(исключение подключения здесь, если это произойдет)</value>
+  </data>
+  <data name="WebSocketExchangedMessages/FromClientToServer" xml:space="preserve">
+    <value>клиент -&gt; сервер</value>
+  </data>
+  <data name="WebSocketExchangedMessages/FromServerToClient" xml:space="preserve">
+    <value>сервер -&gt; клиент</value>
+  </data>
+  <data name="WebSocketExchangedMessages/TextContentDescriptionFormat" xml:space="preserve">
+    <value>текст, {0} байтов</value>
+  </data>
+  <data name="WebSocketExchangedMessages/BinaryContentDescriptionFormat" xml:space="preserve">
+    <value>двоичный, {0} байтов</value>
+  </data>
+  <data name="WebSocketExchangedMessages/ClosingMessageContentDescriptionFormat" xml:space="preserve">
+    <value>закрывающие, {0} байтов</value>
+  </data>
+  <data name="WebSocketExchangedMessages/SectionTitle" xml:space="preserve">
+    <value>Обмен сообщениями</value>
+  </data>
+  <data name="WebSocketExchangedMessages/SendMessage" xml:space="preserve">
+    <value>Отправить</value>
+  </data>
+  <data name="WebSocketExchangedMessageDetail/SectionTitle" xml:space="preserve">
+    <value>Детали сообщения</value>
+  </data>
+  <data name="WebSocketExchangedMessageDetail/MessageTypeWatermark" xml:space="preserve">
+    <value>(тип сообщения)</value>
+  </data>
+  <data name="WebSocketExchangedMessageDetail/ContentWatermark" xml:space="preserve">
+    <value>(контент сообщения)</value>
+  </data>
+  <data name="WebSocketExchangedMessageDetail/SaveToFile" xml:space="preserve">
+    <value>Сохранить как…</value>
+  </data>
+  <data name="WebSocketExchangedMessageDetail/SaveToFileToolTip" xml:space="preserve">
+    <value>Сохранить как… (F9)</value>
+  </data>
+  <data name="WebSocketClientMessage/NewMessage" xml:space="preserve">
+    <value>Новое клиентское сообщение</value>
+  </data>
+  <data name="WebSocketClientMessage/MessageTypeText" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="WebSocketClientMessage/MessageTypeBinary" xml:space="preserve">
+    <value>Двоичный</value>
+  </data>
+  <data name="WebSocketClientMessage/MessageTypeClose" xml:space="preserve">
+    <value>Сообщение о закрытии</value>
+  </data>
+  <data name="WebSocketClientMessage/DisableCompressionForThisMessage" xml:space="preserve">
+    <value>Отключить сжатие для этого сообщения</value>
+  </data>
+  <data name="WebSocketClientMessage/DisableCompressionExplanation" xml:space="preserve">
+    <value>Будьте осторожны при использовании сжатия с зашифрованными данными - следите за преступлениями / взломами.</value>
+  </data>
+  <data name="WebSocketClientMessage/ContentModeRaw" xml:space="preserve">
+    <value>Raw</value>
+  </data>
+  <data name="WebSocketClientMessage/ContentModeFile" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="WebSocketClientMessage/ContentRawWatermark" xml:space="preserve">
+    <value>(raw контент)</value>
+  </data>
+  <data name="WebSocketClientMessage/ContentFileSrcPathWatermark" xml:space="preserve">
+    <value>(путь к файлу)</value>
+  </data>
+  <data name="WebSocketClientMessage/ContentFileSearchFile" xml:space="preserve">
+    <value>Поиск файла…</value>
+  </data>
+  <data name="WebSocketClientMessage/RawContentJsonSyntax" xml:space="preserve">
+    <value>JSON</value>
+  </data>
+  <data name="WebSocketClientMessage/RawContentOtherSyntax" xml:space="preserve">
+    <value>Другой</value>
+  </data>
 </root>

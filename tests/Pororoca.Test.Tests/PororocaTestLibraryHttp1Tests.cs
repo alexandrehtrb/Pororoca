@@ -47,8 +47,7 @@ public sealed class PororocaTestLibraryHttp1Tests
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
         Assert.Equal("text/plain", res.ContentType);
-        int expectedLength = OperatingSystem.IsWindows() ? 462 : 448; // because of \r\n instead of \n
-        Assert.Equal(expectedLength, res.GetBodyAsBinary()?.Length);
+        Assert.Equal(448, res.GetBodyAsBinary()?.Length);
         Assert.Contains("Cross-Stitch Pattern", res.GetBodyAsPrettyText());
     }
 
