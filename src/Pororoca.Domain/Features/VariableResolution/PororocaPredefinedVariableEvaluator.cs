@@ -13,13 +13,16 @@ public static class PororocaPredefinedVariableEvaluator
             "Camila",
             "Fernanda",
             "Manuela",
-            "Samira"
+            "Samira",
+            "Iara"
         ]),
         ("it", [
             "Caterina",
             "Margherita",
             "Viviana",
-            "Valentina"
+            "Valentina",
+            "Francesca",
+            "Laura"
         ]),
         ("en", [
             "Elizabeth",
@@ -39,13 +42,17 @@ public static class PororocaPredefinedVariableEvaluator
             "Xenia",
             "Oksana",
             "Lyudmila",
-            "Svetlana"
+            "Svetlana",
+            "Ekaterina",
+            "Eleonora"
         ]),
         ("es", [
             "Esmeralda",
             "Carolina",
             "Valeria",
-            "Teresa"
+            "Teresa",
+            "María",
+            "Elena"
         ])
     ];
 
@@ -56,13 +63,16 @@ public static class PororocaPredefinedVariableEvaluator
             "João",
             "Matheus",
             "Ricardo",
-            "Henrique"
+            "Henrique",
+            "Matias"
         ]),
         ("it", [
             "Antonio",
             "Marco",
             "Enrico",
-            "Massimo"
+            "Massimo",
+            "Vincenzo",
+            "Giuseppe"
         ]),
         ("en", [
             "John",
@@ -82,13 +92,17 @@ public static class PororocaPredefinedVariableEvaluator
             "Dmitri",
             "Vasili",
             "Mikhail",
-            "Fedor"
+            "Fedor",
+            "Boris",
+            "Stanislav"
         ]),
         ("es", [
             "Alejandro",
             "César",
             "Fernando",
-            "Javier"
+            "Javier",
+            "Miguel",
+            "Guillermo"
         ])
     ];
 
@@ -99,7 +113,10 @@ public static class PororocaPredefinedVariableEvaluator
             "Torres",
             "Gomes",
             "Costa",
-            "Almeida"
+            "Almeida",
+            "Oliveira",
+            "Ferreira",
+            "Lima"
         ]),
         ("it", [
             "Acquarone",
@@ -117,7 +134,9 @@ public static class PororocaPredefinedVariableEvaluator
             "Radek",
             "Lomonosov",
             "Pavlichenko",
-            "Mendeleev"
+            "Mendeleev",
+            "Novoselov",
+            "Kovalevsky"
         ]),
         ("en", [
             "Markinson",
