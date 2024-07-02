@@ -481,10 +481,13 @@
     <value>ЗНАЧЕНИЕ</value>
   </data>
   <data name="HttpRepeater/RepetitionOngoingStatus" xml:space="preserve">
-    <value>{0}/{1} повторения. Приблизительное оставшееся время: {2}.</value>
+    <value>{0}/{1} повторения, {2} успешных. Приблизительное оставшееся время: {3}.</value>
   </data>
   <data name="HttpRepeater/RepetitionFinishedStatus" xml:space="preserve">
-    <value>Выполнено {0} повторения. Затраченное время: {1}.</value>
+    <value>Выполнено {0} повторений, {1} успешных. Затраченное время: {2}.</value>
+  </data>
+  <data name="HttpRepeater/RepetitionSuccessTip" xml:space="preserve">
+    <value>Успешно: код состояния HTTP 2xx.</value>
   </data>
   <data name="HttpRepeater/RepetitionResultCancelled" xml:space="preserve">
     <value>Отменен</value>

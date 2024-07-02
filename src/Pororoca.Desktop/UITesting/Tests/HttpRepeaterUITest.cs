@@ -79,7 +79,7 @@ public sealed partial class HttpRepeaterUITest : UITest
 
         AssertIsHidden(RepeaterRobot.ErrorMessage);
         AssertIsVisible(RepeaterRobot.RepetitionStatusMessage);
-        AssertContainsText(RepeaterRobot.RepetitionStatusMessage, "Finished 2 repetitions. Elapsed time:");
+        AssertContainsText(RepeaterRobot.RepetitionStatusMessage, "Finished 2 repetitions, 2 successful. Elapsed time:");
         await AssertResultAsync(2, 0, "{{SpecialValue1}}");
         await AssertResultAsync(2, 1, "{{SpecialValue1}}");
         AssertIsVisible(RepeaterRobot.RepetitionStatusMessage);
@@ -102,7 +102,7 @@ public sealed partial class HttpRepeaterUITest : UITest
 
         AssertIsHidden(RepeaterRobot.ErrorMessage);
         AssertIsVisible(RepeaterRobot.RepetitionStatusMessage);
-        AssertContainsText(RepeaterRobot.RepetitionStatusMessage, "Finished 2 repetitions. Elapsed time:");
+        AssertContainsText(RepeaterRobot.RepetitionStatusMessage, "Finished 2 repetitions, 2 successful. Elapsed time:");
         await AssertResultAsync(2, 0, "Nissan 300ZX");
         await AssertResultAsync(2, 1, "Nissan 350Z");
         AssertIsVisible(RepeaterRobot.RepetitionStatusMessage);
@@ -128,7 +128,7 @@ public sealed partial class HttpRepeaterUITest : UITest
 
         AssertIsHidden(RepeaterRobot.ErrorMessage);
         AssertIsVisible(RepeaterRobot.RepetitionStatusMessage);
-        AssertContainsText(RepeaterRobot.RepetitionStatusMessage, "Finished 2 repetitions. Elapsed time:");
+        AssertContainsText(RepeaterRobot.RepetitionStatusMessage, "Finished 2 repetitions, 2 successful. Elapsed time:");
         await AssertResultAsync(2, 0, "Nissan Skyline");
         await AssertResultAsync(2, 1, "Nissan Skyline");
         AssertIsVisible(RepeaterRobot.RepetitionStatusMessage);

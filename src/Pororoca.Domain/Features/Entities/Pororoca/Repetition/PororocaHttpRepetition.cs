@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using static Pororoca.Domain.Features.Entities.Pororoca.Repetition.PororocaRepetitionInputData;
@@ -83,4 +84,21 @@ public sealed record PororocaHttpRepetitionResult(
     string? ValidationErrorCode)
 {
     public bool Successful => ValidationErrorCode is null && Response?.Successful == true;
+
+    public bool HasHttp2xxStatusCode
+    {
+        get
+        {
+            if (!Successful)
+                return false;
+
+            if (Response?.StatusCode is HttpStatusCode sc)
+            {
+                int sci = (int)sc;
+                return 200 <= sci && sci < 300;
+            }
+            else
+                return false;
+        }
+    }
 }

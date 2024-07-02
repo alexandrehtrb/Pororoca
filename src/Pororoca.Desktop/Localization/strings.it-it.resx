@@ -481,10 +481,13 @@
     <value>VALORE</value>
   </data>
   <data name="HttpRepeater/RepetitionOngoingStatus" xml:space="preserve">
-    <value>{0}/{1} ripetizioni. Tempo rimanente stimato: {2}.</value>
+    <value>{0}/{1} ripetizioni, {2} riuscite. Tempo rimanente stimato: {3}.</value>
   </data>
   <data name="HttpRepeater/RepetitionFinishedStatus" xml:space="preserve">
-    <value>Hai completato {0} ripetizioni. Tempo trascorso: {1}.</value>
+    <value>Hai completato {0} ripetizioni, {1} riuscite. Tempo trascorso: {2}.</value>
+  </data>
+  <data name="HttpRepeater/RepetitionSuccessTip" xml:space="preserve">
+    <value>Riuscita: codice di stato HTTP 2xx.</value>
   </data>
   <data name="HttpRepeater/RepetitionResultCancelled" xml:space="preserve">
     <value>annullato</value>
@@ -1139,5 +1142,5 @@
   </data>
   <data name="WebSocketExchangedMessages/TextContentDescriptionFormat" xml:space="preserve">
     <value>testo, {0} byte</value>
-  </data>
+  </data>  
 </root>

@@ -246,10 +246,15 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
     public bool HasFinishedRepetition { get; set; }
 
     [Reactive]
+    public bool ShowRepetitionSuccessfulTip { get; set; }
+
+    [Reactive]
     public ObservableCollection<HttpRepetitionResultViewModel> RepetitionResults { get; set; }
 
     [Reactive]
     public int NumberOfRepetitionsExecuted { get; set; }
+
+    private int NumberOfRepetitionsSuccessful { get; set; }
 
     private HttpRepetitionResultViewModel? selectedRepetitionResultField;
     public HttpRepetitionResultViewModel? SelectedRepetitionResult
@@ -366,6 +371,7 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
             InvalidRepetitionErrorCode = null;
             this.cancellationTokenSource = new();
             NumberOfRepetitionsExecuted = 0;
+            NumberOfRepetitionsSuccessful = 0;
             NumberOfRepetitionsToExecute = RepetitionMode == PororocaRepetitionMode.Sequential ?
                                            resolvedInputData!.Length : NumberOfRepetitionsToExecute;
             IsRepetitionRunning = true;
@@ -388,18 +394,24 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
         await foreach (var result in channelReader.ReadAllAsync())
         {
             NumberOfRepetitionsExecuted++;
+            if (result.HasHttp2xxStatusCode)
+            {
+                NumberOfRepetitionsSuccessful++;
+            }
+
             HttpRepetitionResultViewModel vm = new(NumberOfRepetitionsExecuted, result);
             RepetitionResults.Add(vm);
             if (ShouldUpdateRepetitionStatusText(NumberOfRepetitionsToExecute, NumberOfRepetitionsExecuted))
             {
+                ShowRepetitionSuccessfulTip = true;
                 var estimatedTimeRemaining = EstimateRemainingTime(NumberOfRepetitionsToExecute, NumberOfRepetitionsExecuted, sw.Elapsed);
-                RepetitionStatusText = string.Format(Localizer.Instance.HttpRepeater.RepetitionOngoingStatus, NumberOfRepetitionsExecuted, NumberOfRepetitionsToExecute, FormatRemainingTimeText(estimatedTimeRemaining));
+                RepetitionStatusText = string.Format(Localizer.Instance.HttpRepeater.RepetitionOngoingStatus, NumberOfRepetitionsExecuted, NumberOfRepetitionsToExecute, NumberOfRepetitionsSuccessful, FormatRemainingTimeText(estimatedTimeRemaining));
             }
         }
         sw.Stop();
         IsRepetitionRunning = false;
         HasFinishedRepetition = true;
-        RepetitionStatusText = string.Format(Localizer.Instance.HttpRepeater.RepetitionFinishedStatus, NumberOfRepetitionsExecuted, FormatTimeText(sw.Elapsed));
+        RepetitionStatusText = string.Format(Localizer.Instance.HttpRepeater.RepetitionFinishedStatus, NumberOfRepetitionsExecuted, NumberOfRepetitionsSuccessful, FormatTimeText(sw.Elapsed));
         NumberOfRepetitionsExecuted = 0;
     }
 

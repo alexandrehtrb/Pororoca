@@ -481,10 +481,13 @@
     <value>VALOR</value>
   </data>
   <data name="HttpRepeater/RepetitionOngoingStatus" xml:space="preserve">
-    <value>{0} de {1} repetições. Tempo restante estimado: {2}.</value>
+    <value>{0} de {1} repetições, {2} com sucesso. Tempo restante estimado: {3}.</value>
   </data>
   <data name="HttpRepeater/RepetitionFinishedStatus" xml:space="preserve">
-    <value>Finalizadas {0} repetições. Tempo decorrido: {1}.</value>
+    <value>Finalizadas {0} repetições, {1} com sucesso. Tempo decorrido: {2}.</value>
+  </data>
+  <data name="HttpRepeater/RepetitionSuccessTip" xml:space="preserve">
+    <value>Com sucesso: status code HTTP 2xx.</value>
   </data>
   <data name="HttpRepeater/RepetitionResultCancelled" xml:space="preserve">
     <value>cancelada</value>
@@ -1139,5 +1142,5 @@
   </data>
   <data name="WebSocketExchangedMessages/TextContentDescriptionFormat" xml:space="preserve">
     <value>texto, {0} bytes</value>
-  </data>
+  </data>  
 </root>

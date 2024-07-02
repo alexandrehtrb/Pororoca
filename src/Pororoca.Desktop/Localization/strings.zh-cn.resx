@@ -481,10 +481,13 @@
     <value>VALUE</value>
   </data>
   <data name="HttpRepeater/RepetitionOngoingStatus" xml:space="preserve">
-    <value>{0}/{1} 重复. 预计剩余时间：{2}。</value>
+    <value>重复 {0}/{1} 次，成功 {2} 次。 预计剩余时间：{3}。</value>
   </data>
   <data name="HttpRepeater/RepetitionFinishedStatus" xml:space="preserve">
-    <value>已完成 {0} 次重复。运行时间：{1}。</value>
+    <value>完成 {0} 次重复, {1} 次成功。运行时间：{2}。</value>
+  </data>
+  <data name="HttpRepeater/RepetitionSuccessTip" xml:space="preserve">
+    <value>成功：HTTP 2xx 状态代码。</value>
   </data>
   <data name="HttpRepeater/RepetitionResultCancelled" xml:space="preserve">
     <value>取消</value>

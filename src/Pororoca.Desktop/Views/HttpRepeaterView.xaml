@@ -79,13 +79,22 @@
               Text="{Binding InvalidRepetitionError}"
               IsVisible="{Binding IsInvalidRepetitionErrorVisible}"/>
 
-          <TextBlock
-              Name="tbRepetitionStatus"
-              Margin="12,8,12,0"
-              Classes="TipText"
-              FontSize="14"
-              Text="{Binding RepetitionStatusText}"
-              IsVisible="{Binding !IsInvalidRepetitionErrorVisible}"/>
+          <StackPanel Orientation="Horizontal" Margin="12,8,12,0">
+            
+            <TextBlock
+                Name="tbRepetitionStatus"                
+                Classes="TipText"
+                FontSize="14"
+                Text="{Binding RepetitionStatusText}"
+                IsVisible="{Binding !IsInvalidRepetitionErrorVisible}"/>
+
+            <TextBlock
+                Margin="4,0,0,0"
+                ToolTip.Tip="{Binding i18n.HttpRepeater.RepetitionSuccessTip}"
+                IsVisible="{Binding ShowRepetitionSuccessfulTip}"
+                Classes="TipQuestionMark"/>
+
+          </StackPanel>
 
         </StackPanel>
 
