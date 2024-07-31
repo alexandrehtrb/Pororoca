@@ -6,4 +6,6 @@ public sealed record PororocaVariable(bool Enabled, string Key, string? Value, b
     public PororocaVariable() : this(true, string.Empty, null, false) { }
 
     public PororocaVariable Copy() => this with { };
+
+    public PororocaVariable Censor() => this with { Value = IsSecret ? string.Empty : Value };
 }

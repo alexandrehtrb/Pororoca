@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Avalonia.Controls;
+using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.UITesting.Robots;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.ViewModels.DataGrids;
@@ -11,13 +12,13 @@ using Pororoca.Domain.Features.ImportCollection;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed class ExportAndImportUITest : UITest
+public class SaveAndRestoreCollectionUITest : UITest
 {
     private static readonly ObservableCollection<VariableViewModel> defaultColVars = GenerateCollectionVariables();
 
-    private static readonly ObservableCollection<VariableViewModel> defaultEnvVars = GenerateEnvironmentVariables();
+    private static readonly ObservableCollection<VariableViewModel> defaultEnvVars = GenerateEnvironmentVariables("env");
 
-    private static readonly PororocaKeyValueParam[] headers =
+    protected static readonly PororocaKeyValueParam[] headers =
     [
         new(false, "Header1", "ValueHeader1"),
         new(true, "Header1", "Header1Value"),
@@ -40,31 +41,35 @@ public sealed class ExportAndImportUITest : UITest
         PororocaHttpRequestFormDataParam.MakeFileParam(true, "arq", "{{TestFilesDir}}/arq.txt", "text/plain")
     ];
 
-    private Control RootView { get; }
-    private TopMenuRobot TopMenuRobot { get; }
-    private CollectionsGroupView CollectionsGroup { get; }
-    private ItemsTreeRobot TreeRobot { get; }
-    private CollectionRobot ColRobot { get; }
-    private CollectionVariablesRobot ColVarsRobot { get; }
-    private CollectionScopedAuthRobot ColAuthRobot { get; }
-    private CollectionFolderRobot DirRobot { get; }
-    private EnvironmentRobot EnvRobot { get; }
-    private HttpRequestRobot HttpRobot { get; }
+    protected Control RootView { get; }
+    protected TopMenuRobot TopMenuRobot { get; }
+    protected CollectionsGroupView CollectionsGroup { get; }
+    protected ItemsTreeRobot TreeRobot { get; }
+    protected CollectionRobot ColRobot { get; }
+    protected ExportCollectionRobot ExportColRobot { get; }
+    protected CollectionVariablesRobot ColVarsRobot { get; }
+    protected CollectionScopedAuthRobot ColAuthRobot { get; }
+    protected CollectionFolderRobot DirRobot { get; }
+    protected EnvironmentRobot EnvRobot { get; }
+    protected ExportEnvironmentRobot ExportEnvRobot { get; }
+    protected HttpRequestRobot HttpRobot { get; }
     private WebSocketConnectionRobot WsRobot { get; }
     private WebSocketClientMessageRobot WsMsgRobot { get; }
     private HttpRepeaterRobot RepeaterRobot { get; }
 
-    public ExportAndImportUITest()
+    public SaveAndRestoreCollectionUITest()
     {
         RootView = (Control)MainWindow.Instance!.Content!;
         TopMenuRobot = new(RootView);
         CollectionsGroup = RootView.FindControl<CollectionsGroupView>("mainWindowCollectionsGroup")!;
         TreeRobot = new(CollectionsGroup);
         ColRobot = new(RootView.FindControl<CollectionView>("collectionView")!);
+        ExportColRobot = new(RootView.FindControl<ExportCollectionView>("exportCollectionView")!);
         ColVarsRobot = new(RootView.FindControl<CollectionVariablesView>("collectionVariablesView")!);
         ColAuthRobot = new(RootView.FindControl<CollectionScopedAuthView>("collectionScopedAuthView")!);
         DirRobot = new(RootView.FindControl<CollectionFolderView>("collectionFolderView")!);
         EnvRobot = new(RootView.FindControl<EnvironmentView>("environmentView")!);
+        ExportEnvRobot = new(RootView.FindControl<ExportEnvironmentView>("exportEnvironmentView")!);
         HttpRobot = new(RootView.FindControl<HttpRequestView>("httpReqView")!);
         WsRobot = new(RootView.FindControl<WebSocketConnectionView>("wsConnView")!);
         WsMsgRobot = new(RootView.FindControl<WebSocketClientMessageView>("wsClientMsgView")!);
@@ -75,7 +80,7 @@ public sealed class ExportAndImportUITest : UITest
     {
         await CreateCollectionWithDifferentItems();
 
-        await ExportAndReimportCollection();
+        await SaveAndRestoreCollection();
 
         await AssertCollectionReimportedSuccessfully();
     }
@@ -307,11 +312,11 @@ public sealed class ExportAndImportUITest : UITest
         AssertTreeItemExists(CollectionsGroup, "COL1/REPSIMPLE");
     }
 
-    private async Task ExportAndReimportCollection()
+    private async Task SaveAndRestoreCollection()
     {
         await TreeRobot.Select("COL1");
-        var collection = ((CollectionViewModel)ColRobot.RootView!.DataContext!).ToCollection();
-        string json = PororocaCollectionExporter.ExportAsPororocaCollection(collection, shouldHideSecrets: false);
+        var collection = ((CollectionViewModel)ColRobot.RootView!.DataContext!).ToCollection(forExporting: false);
+        string json = PororocaCollectionExporter.ExportAsPororocaCollection(collection);
         var mwvm = ((MainWindowViewModel)MainWindow.Instance!.DataContext!);
         mwvm.CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
         mwvm.CollectionsGroupViewDataCtx.Items.Clear();
@@ -592,28 +597,23 @@ public sealed class ExportAndImportUITest : UITest
         AssertValue(RepeaterRobot.DelayInMs, 12);
     }
 
-    private static ObservableCollection<VariableViewModel> GenerateCollectionVariables()
+    protected static ObservableCollection<VariableViewModel> GenerateCollectionVariables(bool secretsCleared = false)
     {
         ObservableCollection<VariableViewModel> parent = new();
-        parent.Add(new(parent, new(true, "ClientCertificatesDir", Path.Combine(GetTestFilesDirPath(), "ClientCertificates"), false)));
-        parent.Add(new(parent, new(true, "TestFilesDir", Path.Combine(GetTestFilesDirPath()), false)));
-        parent.Add(new(parent, new(true, "SpecialHeaderKey", "Header2", false)));
-        parent.Add(new(parent, new(true, "SpecialHeaderValue", "ciao", false)));
-        parent.Add(new(parent, new(true, "SpecialValue1", "Tailândia", false)));
+        parent.Add(new(parent, new(true, "colVarNotSecret", "valueNotSecret", false)));
+        parent.Add(new(parent, new(true, "colVarSecret", secretsCleared ? string.Empty : "valueSecret", true)));
+        parent.Add(new(parent, new(false, "colVarNotSecret", "valueNotSecret", false)));
+        parent.Add(new(parent, new(false, "colVarSecret", secretsCleared ? string.Empty : "valueSecret", true)));
         return parent;
     }
 
-    private static ObservableCollection<VariableViewModel> GenerateEnvironmentVariables()
+    protected static ObservableCollection<VariableViewModel> GenerateEnvironmentVariables(string envName, bool secretsCleared = false)
     {
         ObservableCollection<VariableViewModel> parent = new();
-        parent.Add(new(parent, new(true, "BaseUrl", "https://localhost:5001", false)));
-        parent.Add(new(parent, new(true, "BaseUrlWs", "wss://localhost:5001", false)));
-        parent.Add(new(parent, new(true, "BadSslSelfSignedTestsUrl", "https://self-signed.badssl.com/", false)));
-        parent.Add(new(parent, new(true, "BadSslClientCertTestsUrl", "https://client.badssl.com", false)));
-        parent.Add(new(parent, new(true, "BadSslClientCertFilePassword", "badssl.com", false)));
-        parent.Add(new(parent, new(true, "BasicAuthLogin", "usr", false)));
-        parent.Add(new(parent, new(true, "BasicAuthPassword", "pwd", false)));
-        parent.Add(new(parent, new(true, "BearerAuthToken", "token_local", false)));
+        parent.Add(new(parent, new(true, "envVarNotSecret", envName + "-notSecret", false)));
+        parent.Add(new(parent, new(true, "envVarSecret", secretsCleared ? string.Empty : (envName + "-secret"), true)));
+        parent.Add(new(parent, new(false, "envVarNotSecret", envName + "-notSecret", false)));
+        parent.Add(new(parent, new(false, "envVarSecret", secretsCleared ? string.Empty : (envName + "-secret"), true)));
         return parent;
     }
 }

@@ -25,15 +25,13 @@ public sealed record PororocaCollection
 
     [JsonIgnore] // JSON IGNORE
     public IReadOnlyList<PororocaHttpRequest> HttpRequests =>
-        Requests.Where(r => r is PororocaHttpRequest)
-                .Cast<PororocaHttpRequest>()
+        Requests.OfType<PororocaHttpRequest>()
                 .ToList()
                 .AsReadOnly();
 
     [JsonIgnore] // JSON IGNORE
     public IReadOnlyList<PororocaWebSocketConnection> WebSocketConnections =>
-        Requests.Where(r => r is PororocaWebSocketConnection)
-                .Cast<PororocaWebSocketConnection>()
+        Requests.OfType<PororocaWebSocketConnection>()
                 .ToList()
                 .AsReadOnly();
 

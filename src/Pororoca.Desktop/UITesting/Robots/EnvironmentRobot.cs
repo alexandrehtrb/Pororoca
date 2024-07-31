@@ -11,6 +11,7 @@ public sealed class EnvironmentRobot : BaseNamedRobot, IVariablesEditorRobot
     public EnvironmentRobot(EnvironmentView rootView) : base(rootView) { }
 
     internal Button SetAsCurrentEnvironment => GetChildView<Button>("btSetAsCurrentEnvironment")!;
+    internal IconButton ExportEnvironment => GetChildView<IconButton>("btExportEnvironment")!;
     internal Button AddVariable => GetChildView<Button>("btAddVariable")!;
     public DataGrid Variables => GetChildView<VariablesTableView>("vtvVariables")!.FindControl<DataGrid>("datagrid")!;
 

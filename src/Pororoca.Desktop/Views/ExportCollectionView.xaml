@@ -1,0 +1,164 @@
+<UserControl
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:v="using:Pororoca.Desktop.Views"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:controls="clr-namespace:Pororoca.Desktop.Controls;assembly=Pororoca.Desktop"
+  xmlns:conv="clr-namespace:Pororoca.Desktop.Converters;assembly=Pororoca.Desktop"
+  mc:Ignorable="d"
+  d:DesignWidth="1350"
+  d:DesignHeight="700"
+  x:Class="Pororoca.Desktop.Views.ExportCollectionView"
+  x:CompileBindings="True"
+  x:DataType="vm:ExportCollectionViewModel"
+  FontSize="16">
+
+  <UserControl.Resources>
+    <conv:ExportCollectionFormatMatchConverter x:Key="exportFormatMatch"/>
+  </UserControl.Resources>
+
+  <StackPanel
+    HorizontalAlignment="Stretch"
+    VerticalAlignment="Stretch"
+    Margin="24"
+    Spacing="24">
+
+    <Grid
+      HorizontalAlignment="Stretch"
+      ColumnDefinitions="Auto,*,Auto">
+      <Button
+        x:Name="btGoBack"
+        Grid.Row="0"
+        Grid.Column="0"
+        Height="40"
+        Width="40"
+        Command="{Binding GoBackCmd}"
+        ToolTip.Tip="{Binding i18n.GoBack.Hint}"
+        HorizontalContentAlignment="Center"
+        VerticalContentAlignment="Center"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Stretch"
+        Classes="Secondary">
+        <Panel>
+          <Image
+            Width="16"
+            Height="16"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center">
+            <Image.Source>
+              <DrawingImage Drawing="{StaticResource IconArrowBack}"/>
+            </Image.Source>
+          </Image>
+        </Panel>
+      </Button>
+      <TextBlock
+        Grid.Row="0"
+        Grid.Column="1"
+        Margin="24,0,0,0"
+        Text="{Binding i18n.ExportCollection.Title}"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Center"
+        TextWrapping="Wrap"
+        Classes="PageTitle"/>
+      <Button
+        Grid.Row="0"
+        Grid.Column="2"
+        Name="btExportCollection"
+        Height="40"
+        Width="104"
+        Margin="24,0,0,0"
+        HorizontalContentAlignment="Center"
+        VerticalContentAlignment="Center"
+        Command="{Binding ExportCollectionCmd}"
+        Content="{Binding i18n.ExportCollection.Export}"
+        Classes="Primary"/>
+    </Grid>
+
+    <TextBlock
+      x:Name="tbCollectionName"
+      HorizontalAlignment="Left"
+      VerticalAlignment="Center"
+      Margin="0,12,0,0"
+      TextWrapping="Wrap"
+      Classes="SectionTitle"
+      Foreground="{DynamicResource WebSocketConnectedBrush}"
+      Text="{Binding Collection.Name}"/>
+
+    <CheckBox
+      x:Name="cbIncludeSecretsWhenExporting"
+      Content="{Binding i18n.ExportCollection.IncludeCollectionVariablesSecrets}"
+      IsChecked="{Binding IncludeSecretVariables}"/>
+
+    <StackPanel Orientation="Horizontal">
+      <TextBlock
+        TextWrapping="Wrap"
+        FontSize="14"
+        Classes="TipText"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Center"
+        Margin="0,0,6,0"
+        Text="{Binding i18n.ExportCollection.Format}"/>
+      <ComboBox
+        x:Name="cbExportFormat"
+        Height="36"
+        Width="120"
+        Margin="6,0,0,0"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Stretch"
+        SelectedIndex="{Binding ExportFormatSelectedIndex}">
+        <ComboBoxItem
+          x:Name="cbiExportFormatPororoca"
+          Content="Pororoca"/>
+        <ComboBoxItem
+          x:Name="cbiExportFormatPostman"
+          Content="Postman"/>
+      </ComboBox>
+
+    </StackPanel>
+
+    <DataGrid
+      Name="dgEnvironmentsToInclude"
+      HorizontalAlignment="Left"
+      VerticalAlignment="Stretch"
+      Width="420"
+      Height="240"
+      AutoGenerateColumns="False"
+      ItemsSource="{Binding EnvironmentsToExport}"
+      CanUserResizeColumns="True"
+      HeadersVisibility="All"
+      IsVisible="{Binding ExportFormatSelectedIndex, 
+                  Mode=OneWay,
+                  Converter={StaticResource exportFormatMatch}, 
+                  ConverterParameter='Pororoca'}">
+      <DataGrid.Columns>
+        <DataGridCheckBoxColumn
+          Width="0.25*"
+          Binding="{Binding ExportEnvironmentVm.IncludeInCollectionExport}">
+          <DataGridCheckBoxColumn.Header>
+            <TextBlock Text="{Binding i18n.ExportCollection.EnvironmentInclude}"/>
+          </DataGridCheckBoxColumn.Header>
+        </DataGridCheckBoxColumn>
+        <DataGridTextColumn
+          Width="0.40*"
+          Binding="{Binding Name}"
+          IsReadOnly="True">
+          <DataGridTextColumn.Header>
+            <TextBlock Text="{Binding i18n.ExportCollection.EnvironmentName}"/>
+          </DataGridTextColumn.Header>
+        </DataGridTextColumn>
+        <DataGridCheckBoxColumn
+          Width="0.35*"
+          Binding="{Binding ExportEnvironmentVm.IncludeSecretVariables}">
+          <DataGridCheckBoxColumn.Header>
+            <TextBlock Text="{Binding i18n.ExportCollection.EnvironmentWithSecretVariables}"/>
+          </DataGridCheckBoxColumn.Header>
+        </DataGridCheckBoxColumn>
+      </DataGrid.Columns>
+    </DataGrid>
+
+    
+
+  </StackPanel>
+</UserControl>

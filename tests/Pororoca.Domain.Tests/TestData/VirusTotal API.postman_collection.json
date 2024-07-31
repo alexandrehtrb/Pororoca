@@ -1,0 +1,76 @@
+﻿{
+  "info": {
+    "_postman_id": "0697278a-49b1-4c5c-bb5f-ba684ff705be",
+    "name": "VirusTotal API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get file analysis",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": "{{BaseURL}}/analyses/{{AnalysisId}}"
+      },
+      "response": []
+    },
+    {
+      "name": "Upload files",
+      "item": [
+        {
+          "name": "Get URL for upload",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": "{{BaseURL}}/files/upload_url"
+          },
+          "response": []
+        },
+        {
+          "name": "Upload large file",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"text\":\"this endpoint actually uses form data\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{UploadFileURL}}"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "BaseURL",
+      "value": "https://www.virustotal.com/api/v3"
+    },
+    {
+      "key": "API-Key",
+      "value": ""
+    },
+    {
+      "key": "UploadFileURL",
+      "value": ""
+    }
+  ],
+  "auth": {
+    "type": "noauth"
+  }
+}

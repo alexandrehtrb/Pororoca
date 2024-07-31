@@ -2,6 +2,8 @@ using System.Text.Json;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
+using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.Entities.Postman;
 using Xunit;
 using static Pororoca.Domain.Features.ImportCollection.PostmanCollectionV21Importer;
@@ -12,6 +14,70 @@ public static class PostmanCollectionV21ImporterTests
 {
     private static readonly Guid testGuid = Guid.NewGuid();
     private const string testName = "MyCollection";
+
+    #region FULL COLLECTION JSON IMPORT
+
+    [Fact]
+    public static void Should_import_valid_full_postman_collection_correctly()
+    {
+        // GIVEN
+        string json = ReadTestFileText("VirusTotal API.postman_collection.json");
+
+        // WHEN AND THEN
+        Assert.True(TryImportPostmanCollection(json, out var col));
+
+        // THEN
+        Assert.NotNull(col);
+        Assert.Equal("VirusTotal API", col.Name);
+        Assert.Equal([
+            new(true, "BaseURL", "https://www.virustotal.com/api/v3", false),
+            new(true, "API-Key", string.Empty, false),
+            new(true, "UploadFileURL", string.Empty, false)],
+            col.Variables);
+
+        Assert.Null(col.CollectionScopedAuth);
+
+        Assert.Empty(col.Environments);
+
+        var dir = Assert.Single(col.Folders);
+        Assert.Equal("Upload files", dir.Name);
+        Assert.Equal(2, dir.HttpRequests.Count);
+
+        var req = dir.HttpRequests[0];
+        Assert.Equal("Get URL for upload", req.Name);
+        Assert.Equal(1.1m, req.HttpVersion);
+        Assert.Equal("GET", req.HttpMethod);
+        Assert.Equal("{{BaseURL}}/files/upload_url", req.Url);
+        Assert.NotNull(req.Headers);
+        Assert.Empty(req.Headers);
+        Assert.Null(req.Body);
+        Assert.Null(req.CustomAuth);
+
+        req = dir.HttpRequests[1];
+        Assert.Equal("Upload large file", req.Name);
+        Assert.Equal(1.1m, req.HttpVersion);
+        Assert.Equal("POST", req.HttpMethod);
+        Assert.Equal("{{UploadFileURL}}", req.Url);
+        Assert.NotNull(req.Headers);
+        Assert.Empty(req.Headers);
+        Assert.NotNull(req.Body);
+        Assert.Equal(PororocaHttpRequestBodyMode.Raw, req.Body.Mode);
+        Assert.Equal("application/json", req.Body.ContentType);
+        Assert.Equal("{\"text\":\"this endpoint actually uses form data\"}", req.Body.RawContent);
+        Assert.Null(req.CustomAuth);
+
+        req = Assert.Single(col.HttpRequests);
+        Assert.Equal("Get file analysis", req.Name);
+        Assert.Equal(1.1m, req.HttpVersion);
+        Assert.Equal("GET", req.HttpMethod);
+        Assert.Equal("{{BaseURL}}/analyses/{{AnalysisId}}", req.Url);
+        Assert.NotNull(req.Headers);
+        Assert.Empty(req.Headers);
+        Assert.Null(req.Body);
+        Assert.Null(req.CustomAuth);
+    }
+
+    #endregion
 
     #region INVALID COLLECTION
 

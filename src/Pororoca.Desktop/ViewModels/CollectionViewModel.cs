@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
-using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.VariableResolution;
@@ -17,8 +16,6 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
     public ReactiveCommand<Unit, Unit> AddNewEnvironmentCmd { get; }
     public ReactiveCommand<Unit, Unit> ImportEnvironmentsCmd { get; }
     public ReactiveCommand<Unit, Unit> ExportCollectionCmd { get; }
-    public ReactiveCommand<Unit, Unit> ExportAsPororocaCollectionCmd { get; }
-    public ReactiveCommand<Unit, Unit> ExportAsPostmanCollectionCmd { get; }
 
     #endregion
 
@@ -28,13 +25,11 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
 
     private readonly DateTimeOffset colCreatedAt;
 
-    [Reactive]
-    public bool IncludeSecretVariables { get; set; }
-
     public ObservableCollection<string> HttpRequestsPaths { get; }
 
+    // collection variables
     public List<PororocaVariable> Variables =>
-        CollectionVariablesVm.ToVariables().ToList(); // collection variables
+        CollectionVariablesVm.VariablesTableVm.GetVariables(includeSecretVariables: true);
 
     public PororocaRequestAuth? CollectionScopedAuth =>
         ((CollectionScopedAuthViewModel)Items.First(x => x is CollectionScopedAuthViewModel))
@@ -57,31 +52,19 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
     public EnvironmentViewModel? CurrentEnvironmentVm =>
         EnvironmentsGroupVm.Items.FirstOrDefault(evm => evm.IsCurrentEnvironment);
 
-    #endregion
-
-    #region OTHERS
-
-    [Reactive]
-    public bool IsOperatingSystemMacOsx { get; set; }
+    public ExportCollectionViewModel ExportCollectionVm { get; }
 
     #endregion
 
     public CollectionViewModel(ICollectionOrganizationItemParentViewModel parentVm,
-                               PororocaCollection col,
-                               Func<bool>? isOperatingSystemMacOsx = null) : base(parentVm, col.Name)
+                               PororocaCollection col) : base(parentVm, col.Name)
     {
-        #region OTHERS
-        IsOperatingSystemMacOsx = (isOperatingSystemMacOsx ?? OperatingSystem.IsMacOS)();
-        #endregion
-
         #region COLLECTION ORGANIZATION
 
         ShowCollectionScopedHeadersCmd = ReactiveCommand.Create(ShowCollectionScopedHeaders);
         AddNewEnvironmentCmd = ReactiveCommand.Create(AddNewEnvironment);
         ImportEnvironmentsCmd = ReactiveCommand.CreateFromTask(ImportEnvironmentsAsync);
-        ExportCollectionCmd = ReactiveCommand.CreateFromTask(ExportCollectionAsync);
-        ExportAsPororocaCollectionCmd = ReactiveCommand.CreateFromTask(ExportAsPororocaCollectionAsync);
-        ExportAsPostmanCollectionCmd = ReactiveCommand.CreateFromTask(ExportAsPostmanCollectionAsync);
+        ExportCollectionCmd = ReactiveCommand.Create(GoToExportCollection);
 
         #endregion
 
@@ -98,6 +81,7 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
         CollectionScopedRequestHeadersVm = new(this, col);
         Items.Add(new EnvironmentsGroupViewModel(this, col.Environments));
         AddInitialFoldersAndRequests(col.Folders, col.Requests);
+        ExportCollectionVm = new(this);
 
         #endregion
     }
@@ -152,14 +136,11 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
 
     #region EXPORT COLLECTION
 
-    private Task ExportCollectionAsync() =>
-        FileExporterImporter.ExportCollectionAsync(this);
-
-    private Task ExportAsPororocaCollectionAsync() =>
-        FileExporterImporter.ExportAsPororocaCollectionAsync(this);
-
-    private Task ExportAsPostmanCollectionAsync() =>
-        FileExporterImporter.ExportAsPostmanCollectionAsync(this);
+    private void GoToExportCollection()
+    {
+        var mwvm = (MainWindowViewModel)MainWindow.Instance!.DataContext!;
+        mwvm.SwitchVisiblePage(ExportCollectionVm);
+    }
 
     #endregion
 
@@ -168,9 +149,15 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
 
     #region COLLECTION
 
-    public PororocaCollection ToCollection()
+    public PororocaCollection ToCollection(bool forExporting = false)
     {
-        var folders = Items.Where(i => i is CollectionFolderViewModel).Cast<CollectionFolderViewModel>().Select(x => x.ToCollectionFolder()).ToList();
+        bool includeSecretColVars = !forExporting || ExportCollectionVm.IncludeSecretVariables;
+        var colVars = CollectionVariablesVm.VariablesTableVm.GetVariables(includeSecretColVars);
+        var envs = EnvironmentsGroupVm.Items
+            .Where(e => !forExporting || e.ExportEnvironmentVm.IncludeInCollectionExport)
+            .Select(e => e.ToEnvironment(forExporting)).ToList();
+
+        var folders = Items.OfType<CollectionFolderViewModel>().Select(x => x.ToCollectionFolder()).ToList();
         var reqs = Items.Where(i => i is HttpRequestViewModel || i is WebSocketConnectionViewModel || i is HttpRepeaterViewModel)
                         .Select(i =>
                         {
@@ -184,7 +171,7 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
                                 throw new InvalidDataException();
                         }).ToList();
 
-        return new PororocaCollection(this.colId, Name, this.colCreatedAt, Variables, CollectionScopedAuth, CollectionScopedRequestHeaders, Environments, folders, reqs);
+        return new PororocaCollection(this.colId, Name, this.colCreatedAt, colVars, CollectionScopedAuth, CollectionScopedRequestHeaders, envs, folders, reqs);
     }
 
     #region HTTP REQUESTS PATHS
@@ -218,8 +205,8 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
     {
         static IEnumerable<string> ListHttpRequestsPathsInFolder(CollectionFolderViewModel folder)
         {
-            var httpReqs = folder.Items.Where(i => i is HttpRequestViewModel).Cast<HttpRequestViewModel>();
-            var subFolders = folder.Items.Where(i => i is CollectionFolderViewModel).Cast<CollectionFolderViewModel>();
+            var httpReqs = folder.Items.OfType<HttpRequestViewModel>();
+            var subFolders = folder.Items.OfType<CollectionFolderViewModel>();
             var paths = httpReqs.Select(r => r.GetRequestPathInCollection()).ToList();
             foreach (var subFolder in subFolders)
             {
@@ -228,8 +215,8 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
             return paths;
         }
 
-        var httpReqs = Items.Where(i => i is HttpRequestViewModel).Cast<HttpRequestViewModel>();
-        var folders = Items.Where(i => i is CollectionFolderViewModel).Cast<CollectionFolderViewModel>();
+        var httpReqs = Items.OfType<HttpRequestViewModel>();
+        var folders = Items.OfType<CollectionFolderViewModel>();
         var paths = httpReqs.Select(r => r.GetRequestPathInCollection()).ToList();
         foreach (var folder in folders)
         {

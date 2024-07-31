@@ -16,7 +16,4 @@ public sealed class CollectionRobot : BaseNamedRobot
     internal IconButton AddEnvironment => GetChildView<IconButton>("btAddEnvironment")!;
     internal IconButton ImportEnvironment => GetChildView<IconButton>("btImportEnv")!;
     internal IconButton ExportCollection => GetChildView<IconButton>("btExportCollection")!;
-    internal IconButton ExportAsPororocaCollection => GetChildView<IconButton>("btExportAsPororocaCollection")!;
-    internal IconButton ExportAsPostmanCollection => GetChildView<IconButton>("btExportAsPostmanCollection")!;
-    internal CheckBox IncludeSecretsWhenExporting => GetChildView<CheckBox>("cbIncludeSecretsWhenExporting")!;
 }

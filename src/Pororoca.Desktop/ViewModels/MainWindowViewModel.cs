@@ -46,6 +46,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     public PageHolder<CollectionViewModel> CollectionView { get; }
 
+    public PageHolder<ExportCollectionViewModel> ExportCollectionView { get; }
+
     public PageHolder<CollectionVariablesViewModel> CollectionVariablesView { get; }
 
     public PageHolder<CollectionScopedAuthViewModel> CollectionScopedAuthView { get; }
@@ -53,6 +55,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     public PageHolder<CollectionScopedRequestHeadersViewModel> CollectionScopedRequestHeadersView { get; }
 
     public PageHolder<EnvironmentViewModel> EnvironmentView { get; }
+
+    public PageHolder<ExportEnvironmentViewModel> ExportEnvironmentView { get; }
 
     public PageHolder<CollectionFolderViewModel> CollectionFolderView { get; }
 
@@ -181,10 +185,12 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         this.pages = new();
         this.pages.Add(WelcomeView = new());
         this.pages.Add(CollectionView = new());
+        this.pages.Add(ExportCollectionView = new());
         this.pages.Add(CollectionVariablesView = new());
         this.pages.Add(CollectionScopedAuthView = new());
         this.pages.Add(CollectionScopedRequestHeadersView = new());
         this.pages.Add(EnvironmentView = new());
+        this.pages.Add(ExportEnvironmentView = new());
         this.pages.Add(CollectionFolderView = new());
         this.pages.Add(HttpRequestView = new());
         this.pages.Add(WebSocketConnectionView = new());

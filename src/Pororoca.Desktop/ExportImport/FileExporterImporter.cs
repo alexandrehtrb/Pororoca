@@ -13,6 +13,8 @@ using static Pororoca.Domain.Features.ImportCollection.PororocaCollectionImporte
 using static Pororoca.Domain.Features.ImportCollection.PostmanCollectionV21Importer;
 using static Pororoca.Domain.Features.ImportEnvironment.PororocaEnvironmentImporter;
 using static Pororoca.Domain.Features.ImportEnvironment.PostmanEnvironmentImporter;
+using Pororoca.Desktop.Converters;
+using Pororoca.Domain.Features.Entities.Pororoca;
 
 namespace Pororoca.Desktop.ExportImport;
 
@@ -38,63 +40,52 @@ internal static partial class FileExporterImporter
 
     #region EXPORT COLLECTION
 
-    internal static Task ExportCollectionAsync(CollectionViewModel cvm)
+    internal static async Task ShowExportCollectionToFileDialogAsync(PororocaCollection col, ExportCollectionFormat format)
     {
         FilePickerSaveOptions opts = new()
         {
-            Title = Localizer.Instance.Collection.ExportCollectionDialogTitle,
-            FileTypeChoices = new List<FilePickerFileType>()
+            Title = Localizer.Instance.ExportCollection.DialogTitle,
+            SuggestedFileName = $"{col.Name}.{(format switch
             {
-                new(Localizer.Instance.Collection.PororocaCollectionFormat)
+                ExportCollectionFormat.Pororoca => PororocaCollectionExtension,
+                ExportCollectionFormat.Postman => PostmanCollectionExtension,
+                _ => string.Empty
+            })}"
+        };
+
+        if (!OperatingSystem.IsMacOS())
+        {
+            var fileTypeChoices = new List<FilePickerFileType>();
+            fileTypeChoices.Add(format switch
+            {
+                ExportCollectionFormat.Pororoca => new(Localizer.Instance.ExportCollection.PororocaCollectionFormat)
                 {
                     Patterns = new List<string> { PororocaCollectionExtensionGlob }
                 },
-                new(Localizer.Instance.Collection.PostmanCollectionFormat)
+                ExportCollectionFormat.Postman => new(Localizer.Instance.ExportCollection.PostmanCollectionFormat)
                 {
                     Patterns = new List<string> { PostmanCollectionExtensionGlob }
-                }
+                },
+                _ => new(string.Empty)
+            });
+            opts.FileTypeChoices = fileTypeChoices;
+
+            if (OperatingSystem.IsWindows())
+            {
+                opts.DefaultExtension = PororocaCollectionExtensionGlob;
             }
-        };
-        if (OperatingSystem.IsWindows())
-        {
-            opts.DefaultExtension = PororocaCollectionExtensionGlob;
         }
 
-        return ShowExportCollectionDialogAsync(cvm, opts);
-    }
-
-    internal static Task ExportAsPororocaCollectionAsync(CollectionViewModel cvm)
-    {
-        FilePickerSaveOptions opts = new()
-        {
-            Title = Localizer.Instance.Collection.ExportAsPororocaCollectionDialogTitle,
-            SuggestedFileName = $"{cvm.Name}.{PororocaCollectionExtension}"
-        };
-
-        return ShowExportCollectionDialogAsync(cvm, opts);
-    }
-
-    internal static Task ExportAsPostmanCollectionAsync(CollectionViewModel cvm)
-    {
-        FilePickerSaveOptions opts = new()
-        {
-            Title = Localizer.Instance.Collection.ExportAsPostmanCollectionDialogTitle,
-            SuggestedFileName = $"{cvm.Name}.{PostmanCollectionExtension}"
-        };
-
-        return ShowExportCollectionDialogAsync(cvm, opts);
-    }
-
-    private static async Task ShowExportCollectionDialogAsync(CollectionViewModel cvm, FilePickerSaveOptions opts)
-    {
         string? destFilePath = await SelectPathForFileToBeSavedAsync(opts);
 
         if (destFilePath != null)
         {
-            var c = cvm.ToCollection();
-            string json = destFilePath.EndsWith(PostmanCollectionExtension) ?
-                ExportAsPostmanCollectionV21(c, !cvm.IncludeSecretVariables) :
-                ExportAsPororocaCollection(c, !cvm.IncludeSecretVariables);
+            string json = format switch
+            {
+                ExportCollectionFormat.Pororoca => ExportAsPororocaCollection(col),
+                ExportCollectionFormat.Postman => ExportAsPostmanCollectionV21(col),
+                _ => string.Empty
+            };
             await File.WriteAllTextAsync(destFilePath, json, Encoding.UTF8);
         }
     }
@@ -103,63 +94,52 @@ internal static partial class FileExporterImporter
 
     #region EXPORT ENVIRONMENT
 
-    internal static Task ExportEnvironmentAsync(EnvironmentViewModel evm)
+    internal static async Task ShowExportEnvironmentToFileDialogAsync(PororocaEnvironment env, ExportEnvironmentFormat format)
     {
         FilePickerSaveOptions opts = new()
         {
-            Title = Localizer.Instance.Environment.ExportEnvironmentDialogTitle,
-            FileTypeChoices = new List<FilePickerFileType>()
+            Title = Localizer.Instance.ExportEnvironment.DialogTitle,
+            SuggestedFileName = $"{env.Name}.{(format switch
             {
-                new(Localizer.Instance.Environment.PororocaEnvironmentFormat)
+                ExportEnvironmentFormat.Pororoca => PororocaEnvironmentExtension,
+                ExportEnvironmentFormat.Postman => PostmanEnvironmentExtension,
+                _ => string.Empty
+            })}"
+        };
+
+        if (!OperatingSystem.IsMacOS())
+        {
+            var fileTypeChoices = new List<FilePickerFileType>();
+            fileTypeChoices.Add(format switch
+            {
+                ExportEnvironmentFormat.Pororoca => new(Localizer.Instance.ExportEnvironment.PororocaEnvironmentFormat)
                 {
                     Patterns = new List<string> { PororocaEnvironmentExtensionGlob }
                 },
-                new(Localizer.Instance.Environment.PostmanEnvironmentFormat)
+                ExportEnvironmentFormat.Postman => new(Localizer.Instance.ExportEnvironment.PostmanEnvironmentFormat)
                 {
                     Patterns = new List<string> { PostmanEnvironmentExtensionGlob }
-                }
+                },
+                _ => new(string.Empty)
+            });
+            opts.FileTypeChoices = fileTypeChoices;
+
+            if (OperatingSystem.IsWindows())
+            {
+                opts.DefaultExtension = PororocaEnvironmentExtensionGlob;
             }
-        };
-        if (OperatingSystem.IsWindows())
-        {
-            opts.DefaultExtension = PororocaEnvironmentExtensionGlob;
         }
 
-        return ShowExportEnvironmentDialogAsync(evm, opts);
-    }
-
-    internal static Task ExportAsPororocaEnvironmentAsync(EnvironmentViewModel evm)
-    {
-        FilePickerSaveOptions opts = new()
-        {
-            Title = Localizer.Instance.Environment.ExportAsPororocaEnvironmentDialogTitle,
-            SuggestedFileName = $"{evm.Name}.{PororocaEnvironmentExtension}"
-        };
-
-        return ShowExportEnvironmentDialogAsync(evm, opts);
-    }
-
-    internal static Task ExportAsPostmanEnvironmentAsync(EnvironmentViewModel evm)
-    {
-        FilePickerSaveOptions opts = new()
-        {
-            Title = Localizer.Instance.Environment.ExportAsPostmanEnvironmentDialogTitle,
-            SuggestedFileName = $"{evm.Name}.{PostmanEnvironmentExtension}"
-        };
-
-        return ShowExportEnvironmentDialogAsync(evm, opts);
-    }
-
-    private static async Task ShowExportEnvironmentDialogAsync(EnvironmentViewModel evm, FilePickerSaveOptions opts)
-    {
         string? destFilePath = await SelectPathForFileToBeSavedAsync(opts);
 
         if (destFilePath != null)
         {
-            var env = evm.ToEnvironment();
-            string json = destFilePath.EndsWith(PostmanEnvironmentExtension) ?
-                ExportAsPostmanEnvironment(env, !evm.IncludeSecretVariables) :
-                ExportAsPororocaEnvironment(env, !evm.IncludeSecretVariables);
+            string json = format switch
+            {
+                ExportEnvironmentFormat.Pororoca => ExportAsPororocaEnvironment(env),
+                ExportEnvironmentFormat.Postman => ExportAsPostmanEnvironment(env),
+                _ => string.Empty
+            };
             await File.WriteAllTextAsync(destFilePath, json, Encoding.UTF8);
         }
     }

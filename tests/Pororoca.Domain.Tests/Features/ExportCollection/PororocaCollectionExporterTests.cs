@@ -28,34 +28,21 @@ public static class PororocaCollectionExporterTests
 
         // WHEN AND THEN
         string minifiedInputJson = MinifyJsonString(json1);
-        string minifiedOutputJson = MinifyJsonString(ExportAsPororocaCollection(col, false));
+        string minifiedOutputJson = MinifyJsonString(ExportAsPororocaCollection(col));
         Assert.Equal(minifiedOutputJson, minifiedInputJson);
     }
 
     [Fact]
-    public static void Should_hide_pororoca_collection_and_environment_secrets()
+    public static void Should_export_and_reimport_pororoca_collection_successfully_2()
     {
         // GIVEN
         var col = CreateTestCollection();
 
-        // WHEN
-        var colWithHiddenSecrets = GenerateCollectionToExport(col, true);
-
-        // THEN
-        AssertCollection(colWithHiddenSecrets, true);
-    }
-
-    [Fact]
-    public static void Should_not_hide_pororoca_collection_and_environment_secrets()
-    {
-        // GIVEN
-        var col = CreateTestCollection();
-
-        // WHEN
-        var colWithHiddenSecrets = GenerateCollectionToExport(col, false);
-
-        // THEN
-        AssertCollection(colWithHiddenSecrets, false);
+        // WHEN AND THEN
+        string json = ExportAsPororocaCollection(col);
+        Assert.True(TryImportPororocaCollection(json, preserveId: true, out var colReimported));
+        Assert.NotNull(colReimported);
+        AssertCollection(colReimported);
     }
 
     private static PororocaCollection CreateTestCollection()
@@ -83,7 +70,7 @@ public static class PororocaCollectionExporterTests
         return col;
     }
 
-    private static void AssertCollection(PororocaCollection col, bool areSecretsHidden)
+    private static void AssertCollection(PororocaCollection col)
     {
         Assert.NotNull(col);
         Assert.Equal(testGuid, col.Id);
@@ -119,14 +106,7 @@ public static class PororocaCollectionExporterTests
         Assert.False(var2.Enabled);
         Assert.Equal("Key2", var2.Key);
         Assert.True(var2.IsSecret);
-        if (areSecretsHidden)
-        {
-            Assert.Equal(string.Empty, var2.Value);
-        }
-        else
-        {
-            Assert.Equal("Value2", var2.Value);
-        }
+        Assert.Equal("Value2", var2.Value);
 
         Assert.True(env1.IsCurrent); // Should preserve environment.IsCurrent when exporting it inside of a collection
 
@@ -134,14 +114,7 @@ public static class PororocaCollectionExporterTests
         Assert.True(var3.Enabled);
         Assert.Equal("Key3", var3.Key);
         Assert.True(var3.IsSecret);
-        if (areSecretsHidden)
-        {
-            Assert.Equal(string.Empty, var3.Value);
-        }
-        else
-        {
-            Assert.Equal("Value3", var3.Value);
-        }
+        Assert.Equal("Value3", var3.Value);
 
         var var4 = env1.Variables[1];
         Assert.True(var4.Enabled);
