@@ -38,6 +38,11 @@ internal static partial class FileExporterImporter
     [GeneratedRegex("schema\":\\s*\"Pororoca")]
     private static partial Regex GeneratePororocaSchemaRegex();
 
+    // Postman exported files use UTF-8 without BOM
+    // Insomnia can't read Postman collection and environment files
+    // if they are in UTF-8 encoding with BOM
+    private static readonly UTF8Encoding utf8EncodingWithoutBOM = new(encoderShouldEmitUTF8Identifier: false);
+
     #region EXPORT COLLECTION
 
     internal static async Task ShowExportCollectionToFileDialogAsync(PororocaCollection col, ExportCollectionFormat format)
@@ -86,7 +91,13 @@ internal static partial class FileExporterImporter
                 ExportCollectionFormat.Postman => ExportAsPostmanCollectionV21(col),
                 _ => string.Empty
             };
-            await File.WriteAllTextAsync(destFilePath, json, Encoding.UTF8);
+            var encoding = format switch
+            {
+                ExportCollectionFormat.Pororoca => Encoding.UTF8,
+                ExportCollectionFormat.Postman => utf8EncodingWithoutBOM,
+                _ => Encoding.UTF8
+            };
+            await File.WriteAllTextAsync(destFilePath, json, encoding);
         }
     }
 
@@ -140,7 +151,13 @@ internal static partial class FileExporterImporter
                 ExportEnvironmentFormat.Postman => ExportAsPostmanEnvironment(env),
                 _ => string.Empty
             };
-            await File.WriteAllTextAsync(destFilePath, json, Encoding.UTF8);
+            var encoding = format switch
+            {
+                ExportEnvironmentFormat.Pororoca => Encoding.UTF8,
+                ExportEnvironmentFormat.Postman => utf8EncodingWithoutBOM,
+                _ => Encoding.UTF8
+            };
+            await File.WriteAllTextAsync(destFilePath, json, encoding);
         }
     }
 
