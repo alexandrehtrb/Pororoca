@@ -11,6 +11,7 @@ using static Pororoca.Domain.Features.ExportEnvironment.PostmanEnvironmentExport
 using static Pororoca.Domain.Features.ImportCollection.OpenApiImporter;
 using static Pororoca.Domain.Features.ImportCollection.PororocaCollectionImporter;
 using static Pororoca.Domain.Features.ImportCollection.PostmanCollectionV21Importer;
+using static Pororoca.Domain.Features.ImportCollection.InsomniaCollectionV4Importer;
 using static Pororoca.Domain.Features.ImportEnvironment.PororocaEnvironmentImporter;
 using static Pororoca.Domain.Features.ImportEnvironment.PostmanEnvironmentImporter;
 using Pororoca.Desktop.Converters;
@@ -247,6 +248,7 @@ internal static partial class FileExporterImporter
                 bool possiblyPororocaCollection = pororocaSchemaRegex.IsMatch(fileContent);
                 bool possiblyPostmanCollection = fileContent.Contains("postman");
                 bool possiblyOpenApi = fileContent.Contains("openapi") && (filePath.EndsWith(".yaml") || filePath.EndsWith(".yml") || filePath.EndsWith(".json"));
+                bool possiblyInsomnia = fileContent.Contains("insomnia") && filePath.EndsWith(".json");
 
                 // First, tries to import as a Pororoca collection
                 if (possiblyPororocaCollection && TryImportPororocaCollection(fileContent, preserveId: false, out var importedPororocaCollection))
@@ -261,6 +263,10 @@ internal static partial class FileExporterImporter
                 else if (possiblyOpenApi && TryImportOpenApi(fileContent, out var importedOpenApiCollection))
                 {
                     mwvm.AddCollection(importedOpenApiCollection!);
+                }
+                else if (possiblyInsomnia && TryImportInsomniaCollection(fileContent, out var importedInsomniaCollection))
+                {
+                    mwvm.AddCollection(importedInsomniaCollection!);
                 }
             }
         }
