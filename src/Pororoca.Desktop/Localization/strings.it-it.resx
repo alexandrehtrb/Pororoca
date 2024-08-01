@@ -186,6 +186,12 @@
   <data name="Collection/ImportCollectionDialogTypes" xml:space="preserve">
     <value>File di collezione / OpenAPI</value>
   </data>
+  <data name="Collection/FailedToImportCollectionDialogTitle" xml:space="preserve">
+    <value>Pororoca - Importa collezione / OpenAPI</value>
+  </data>
+  <data name="Collection/FailedToImportCollectionDialogMessage" xml:space="preserve">
+    <value>Impossibile importare il file di collezione / OpenAPI.\\n\\nTipi accettati:\\n\\n- Pororoca collection\\n- Postman collection v2.1\\n- OpenAPI (Swagger), in JSON o YAML\\n- Insomnia collection</value>
+  </data>
   <data name="Collection/ImportEnvironment" xml:space="preserve">
     <value>Importa ambiente…</value>
   </data>
@@ -194,6 +200,12 @@
   </data>
   <data name="Collection/ImportEnvironmentDialogTypes" xml:space="preserve">
     <value>File di ambiente</value>
+  </data>
+  <data name="Collection/FailedToImportEnvironmentDialogTitle" xml:space="preserve">
+    <value>Pororoca - Importa environment</value>
+  </data>
+  <data name="Collection/FailedToImportEnvironmentDialogMessage" xml:space="preserve">
+    <value>Impossibile importare il file di ambiente.\\n\\nTipi accettati:\\n\\n- Ambiente Pororoca\\n- Ambiente Postman</value>
   </data>
   <data name="Collection/NewCollection" xml:space="preserve">
     <value>Nuova collezione</value>

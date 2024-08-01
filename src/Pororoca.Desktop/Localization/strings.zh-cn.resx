@@ -186,6 +186,12 @@
   <data name="Collection/ImportCollectionDialogTypes" xml:space="preserve">
     <value>集合 / OpenAPI 文件</value>
   </data>
+  <data name="Collection/FailedToImportCollectionDialogTitle" xml:space="preserve">
+    <value>Pororoca - 导入集合 / OpenAPI 文件</value>
+  </data>
+  <data name="Collection/FailedToImportCollectionDialogMessage" xml:space="preserve">
+    <value>无法导入集合/OpenAPI 文件。\\n\\n接受的类型：\\n\\n- Pororoca collection\\n- Postman collection v2.1\\n- OpenAPI (Swagger), 在 JSON 或 YAML 中\\n- Insomnia collection</value>
+  </data>
   <data name="Collection/ImportEnvironment" xml:space="preserve">
     <value>导入环境...</value>
   </data>
@@ -194,6 +200,12 @@
   </data>
   <data name="Collection/ImportEnvironmentDialogTypes" xml:space="preserve">
     <value>环境文件</value>
+  </data>
+  <data name="Collection/FailedToImportEnvironmentDialogTitle" xml:space="preserve">
+    <value>Pororoca - 导入环境文件</value>
+  </data>
+  <data name="Collection/FailedToImportEnvironmentDialogMessage" xml:space="preserve">
+    <value>导入环境文件失败。\\n\\n接受的类型：\\n\\n- Pororoca environment\\n- Postman environment</value>
   </data>
   <data name="Collection/NewCollection" xml:space="preserve">
     <value>新集合</value>

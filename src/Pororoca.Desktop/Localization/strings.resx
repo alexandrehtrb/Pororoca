@@ -186,6 +186,12 @@
   <data name="Collection/ImportCollectionDialogTypes" xml:space="preserve">
     <value></value>
   </data>
+  <data name="Collection/FailedToImportCollectionDialogTitle" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Collection/FailedToImportCollectionDialogMessage" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="Collection/ImportEnvironment" xml:space="preserve">
     <value></value>
   </data>
@@ -193,6 +199,12 @@
     <value></value>
   </data>
   <data name="Collection/ImportEnvironmentDialogTypes" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Collection/FailedToImportEnvironmentDialogTitle" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Collection/FailedToImportEnvironmentDialogMessage" xml:space="preserve">
     <value></value>
   </data>
   <data name="Collection/NewCollection" xml:space="preserve">

@@ -16,6 +16,8 @@ using static Pororoca.Domain.Features.ImportEnvironment.PororocaEnvironmentImpor
 using static Pororoca.Domain.Features.ImportEnvironment.PostmanEnvironmentImporter;
 using Pororoca.Desktop.Converters;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Desktop.HotKeys;
+using MsBox.Avalonia.Enums;
 
 namespace Pororoca.Desktop.ExportImport;
 
@@ -196,20 +198,21 @@ internal static partial class FileExporterImporter
                 bool isPororocaEnvironment = pororocaSchemaRegex.IsMatch(fileContent);
 
                 // First, tries to import as a Pororoca environment
-                if (isPororocaEnvironment)
+                if (isPororocaEnvironment && TryImportPororocaEnvironment(fileContent, out var importedPororocaEnvironment))
                 {
-                    if (TryImportPororocaEnvironment(fileContent, out var importedPororocaEnvironment))
-                    {
-                        egvm.AddEnvironment(importedPororocaEnvironment!);
-                    }
+                    egvm.AddEnvironment(importedPororocaEnvironment!);
                 }
                 // If not a valid Pororoca environment, then tries to import as a Postman environment
+                else if (TryImportPostmanEnvironment(fileContent, out var importedPostmanEnvironment))
+                {
+                    egvm.AddEnvironment(importedPostmanEnvironment!);
+                }
                 else
                 {
-                    if (TryImportPostmanEnvironment(fileContent, out var importedPostmanEnvironment))
-                    {
-                        egvm.AddEnvironment(importedPostmanEnvironment!);
-                    }
+                    Dialogs.ShowDialog(
+                        title: Localizer.Instance.Collection.FailedToImportEnvironmentDialogTitle,
+                        message: Localizer.Instance.Collection.FailedToImportEnvironmentDialogMessage,
+                        buttons: ButtonEnum.Ok);
                 }
             }
         }
@@ -267,6 +270,13 @@ internal static partial class FileExporterImporter
                 else if (possiblyInsomnia && TryImportInsomniaCollection(fileContent, out var importedInsomniaCollection))
                 {
                     mwvm.AddCollection(importedInsomniaCollection!);
+                }
+                else
+                {
+                    Dialogs.ShowDialog(
+                        title: Localizer.Instance.Collection.FailedToImportCollectionDialogTitle,
+                        message: Localizer.Instance.Collection.FailedToImportCollectionDialogMessage,
+                        buttons: ButtonEnum.Ok);
                 }
             }
         }
