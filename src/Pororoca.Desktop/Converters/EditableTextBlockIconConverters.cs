@@ -8,6 +8,7 @@ namespace Pororoca.Desktop.Converters;
 
 public enum EditableTextBlockIcon
 {
+    Folder = 0,
     HttpRequest = 1,
     DisconnectedWebSocket = 2,
     ConnectedWebSocket = 3,
@@ -17,6 +18,9 @@ public enum EditableTextBlockIcon
 
 public sealed class EditableTextBlockIconConverter : IValueConverter
 {
+    private static readonly Lazy<GeometryDrawing> FolderIcon =
+        new(() => LoadGeometryDrawing("IconFolder"), true);
+
     private static readonly Lazy<GeometryDrawing> HttpRequestIcon =
         new(() => LoadGeometryDrawing("IconHttp"), true);
 
@@ -38,6 +42,7 @@ public sealed class EditableTextBlockIconConverter : IValueConverter
         {
             return icon switch
             {
+                EditableTextBlockIcon.Folder => FolderIcon.Value,
                 EditableTextBlockIcon.HttpRequest => HttpRequestIcon.Value,
                 EditableTextBlockIcon.DisconnectedWebSocket => DisconnectedWebSocketIcon.Value,
                 EditableTextBlockIcon.ConnectedWebSocket => ConnectedWebSocketIcon.Value,
