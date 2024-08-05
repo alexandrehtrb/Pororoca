@@ -14,13 +14,13 @@
 
   <TreeView
       x:Name="itemsTree"
-      Classes="sidebar"
       Margin="0 40 0 20"
       ItemsSource="{Binding Items}"
       SelectedItem="{Binding CollectionGroupSelectedItem, Mode=TwoWay}"
       SelectedItems="{Binding CollectionGroupSelectedItems, Mode=TwoWay}"
       SelectionMode="Multiple"
-      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+      Classes="sidebar DragAndDrop CollectionOrganizationItemDragAndDrop">
       <TreeView.KeyBindings>
         <!-- Commands need to be defined for both keybindings and context menu actions -->
         <!-- Keyboard shortcuts are defined in CollectionsGroupView and MainWindow -->

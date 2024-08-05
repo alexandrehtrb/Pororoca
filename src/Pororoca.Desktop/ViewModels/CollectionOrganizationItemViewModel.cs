@@ -16,7 +16,7 @@ public abstract class CollectionOrganizationItemViewModel : ViewModelBase, IColl
     public CollectionsGroupViewModel CollectionsGroupDataCtx =>
         ((MainWindowViewModel)MainWindow.Instance!.DataContext!).CollectionsGroupViewDataCtx;
 
-    public ICollectionOrganizationItemParentViewModel Parent { get; }
+    public ICollectionOrganizationItemParentViewModel Parent { get; set; }
 
     [Reactive]
     public bool CanMoveUp { get; set; }
@@ -61,6 +61,21 @@ public abstract class CollectionOrganizationItemViewModel : ViewModelBase, IColl
     {
         if (show)
             CollectionsGroupDataCtx.CollectionGroupSelectedItem = vm;
+    }
+
+    public bool IsDescendantOf(CollectionOrganizationItemViewModel possibleAncestor)
+    {
+        var current = Parent;
+        while (current is not null)
+        {
+            if (current == possibleAncestor)
+                return true;
+            else if (current is CollectionOrganizationItemViewModel itemVm)
+                current = itemVm.Parent; // above is to avoid casting into MainWindowViewModel
+            else
+                break;
+        }
+        return false;
     }
 
     protected CollectionOrganizationItemViewModel(ICollectionOrganizationItemParentViewModel parentVm, string name)

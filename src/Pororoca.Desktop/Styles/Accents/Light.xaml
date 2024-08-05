@@ -25,7 +25,7 @@
       <Color x:Key="CurrentEnvironmentLabelColor">#a90a4c</Color>
       <Color x:Key="ListBoxBackgroundColor">Silver</Color>
       <Color x:Key="ListBoxItemSelectedBackgroundColor">Gainsboro</Color>
-      <Color x:Key="DragAndDropDataGridItemDraggingColor">Black</Color>
+      <Color x:Key="DragAndDropItemDraggingColor">Black</Color>
       
       <Thickness x:Key="ButtonSecondaryBorderThickness">0</Thickness>
       <Color x:Key="ButtonSecondaryBorderBrush">Transparent</Color>
@@ -49,6 +49,7 @@
       <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#cff33f"/>
       <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPressed" Color="#c4f00f"/>
       <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="#DBF66F"/>
+      <!--Color x:Key="TreeViewItemTargetMovementHighlightColor">#22000000</Color-->
     </ResourceDictionary>
   </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

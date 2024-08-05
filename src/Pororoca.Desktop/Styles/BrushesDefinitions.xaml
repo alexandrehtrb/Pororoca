@@ -62,10 +62,11 @@
     <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPressed" Color="{DynamicResource SystemAccentColorDark1}"/>
     <SolidColorBrush x:Key="TreeViewItemBackgroundSelected" Color="{DynamicResource SystemAccentColor}"/>
     <SolidColorBrush x:Key="TreeViewItemBackgroundSelectedPointerOver" Color="{DynamicResource SystemAccentColorLight1}"/>
+    <!--SolidColorBrush x:Key="TreeViewItemTargetMovementHighlightBrush" Color="{DynamicResource TreeViewItemTargetMovementHighlightColor}"/-->
     <SolidColorBrush x:Key="ListBoxBackgroundBrush" Color="{DynamicResource ListBoxBackgroundColor}"/>
     <SolidColorBrush x:Key="ListBoxItemSelectedBackgroundBrush" Color="{DynamicResource ListBoxItemSelectedBackgroundColor}"/>
     <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="{DynamicResource SystemAccentColorLight1}"/>
-    <SolidColorBrush x:Key="DragAndDropDataGridItemDraggingBrush" Color="{DynamicResource DragAndDropDataGridItemDraggingColor}"/>
+    <SolidColorBrush x:Key="DragAndDropItemDraggingBrush" Color="{DynamicResource DragAndDropItemDraggingColor}"/>
     <SolidColorBrush x:Key="ButtonPrimaryBackgroundBrush" Color="{DynamicResource SystemAccentColor}"/>
     <SolidColorBrush x:Key="ButtonPrimaryTextBrush" Color="{DynamicResource SystemBaseHighColor}"/>
     <SolidColorBrush x:Key="ButtonPrimaryHighlightBackgroundBrush" Color="{DynamicResource SystemAccentColorLight1}"/>
