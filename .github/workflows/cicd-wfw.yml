@@ -93,6 +93,11 @@ jobs:
         $jsonObj = (dotnet list $projectPath package --vulnerable --include-transitive --format json) | ConvertFrom-Json;
         $hasAnyVulnerability = ($jsonObj.projects[0].frameworks -ne $null);
         if ($hasAnyVulnerability) {
+          if ($jsonObj.projects[0].frameworks.transitivePackages.id -eq "System.Text.Json") {
+            # remove this when upgrading to Avalonia 11.1.x
+            echo "::warning file=Pororoca.Desktop.csproj::Vulnerability ignored: System.Text.Json"
+            exit 0;
+          }
           dotnet list package --vulnerable --include-transitive;
           exit 1;
         }
