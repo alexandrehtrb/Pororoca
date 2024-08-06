@@ -36,7 +36,6 @@ public sealed class InsomniaResourceJsonConverter : JsonConverter<InsomniaCollec
             return null;
         }
         
-
         // The custom converters cannot be used below, otherwise, a recursive call will happen
         // and a StackOverflowExcpetion will arise
         return resourceTypeStr switch
@@ -50,17 +49,6 @@ public sealed class InsomniaResourceJsonConverter : JsonConverter<InsomniaCollec
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, InsomniaCollectionV4Resource? resource, JsonSerializerOptions options)
-    {
-        // No need for this one in our use case, but to just dump the object into JSON
-        // (without having the requestType property!), we can do this:
-        if (resource is InsomniaCollectionV4Workspace wks)
-            JsonSerializer.Serialize(writer, wks, MainJsonCtx.InsomniaCollectionV4Workspace);
-        else if (resource is InsomniaCollectionV4RequestGroup reqGrp)
-            JsonSerializer.Serialize(writer, reqGrp, MainJsonCtx.InsomniaCollectionV4RequestGroup);
-        else if (resource is InsomniaCollectionV4Request req)
-            JsonSerializer.Serialize(writer, req, MainJsonCtx.InsomniaCollectionV4Request);
-        else if (resource is InsomniaCollectionV4Environment env)
-            JsonSerializer.Serialize(writer, env, MainJsonCtx.InsomniaCollectionV4Environment);
-    }
+    public override void Write(Utf8JsonWriter writer, InsomniaCollectionV4Resource? resource, JsonSerializerOptions options) =>
+        throw new NotImplementedException(); // no need because we only import Insomnia collections
 }

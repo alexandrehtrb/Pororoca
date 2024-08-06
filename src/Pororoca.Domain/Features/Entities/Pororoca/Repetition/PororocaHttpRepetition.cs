@@ -43,6 +43,8 @@ public sealed record PororocaRepetitionInputData(
         sb.AppendLine("]");
         return new(PororocaRepetitionInputDataType.RawJsonArray, sb.ToString(), null);
     }
+
+    public PororocaRepetitionInputData Copy() => this with { };
 }
 
 public sealed record PororocaHttpRepetition
@@ -75,7 +77,10 @@ public sealed record PororocaHttpRepetition
 
     public override PororocaRequest CopyAbstract() => Copy();
 
-    public PororocaHttpRepetition Copy() => this with { };
+    public PororocaHttpRepetition Copy() => this with
+    {
+        InputData = InputData?.Copy()
+    };
 }
 
 public sealed record PororocaHttpRepetitionResult(

@@ -2,8 +2,6 @@ using System.Text.Json;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
-using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
-using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.Entities.Postman;
 using Xunit;
 using static Pororoca.Domain.Features.ImportCollection.PostmanCollectionV21Importer;
@@ -136,11 +134,14 @@ public static class PostmanCollectionV21ImporterTests
         Assert.Null(reqBody);
     }
 
-    [Fact]
-    public static void Should_convert_postman_req_raw_json_body_to_pororoca_req_body_correctly_taking_content_type_from_header()
+    [Theory]
+    [InlineData(MimeTypesDetector.DefaultMimeTypeForJson, "application/json; charset=utf-8")]
+    [InlineData(MimeTypesDetector.DefaultMimeTypeForHtml, "text/html")]
+    [InlineData(MimeTypesDetector.DefaultMimeTypeForXml, "text/xml")]
+    [InlineData(MimeTypesDetector.DefaultMimeTypeForText, "text/plain")]
+    public static void Should_convert_postman_req_raw_json_body_to_pororoca_req_body_correctly_taking_content_type_from_header(string expectedPororocaContentType, string contentTypeFromHeader)
     {
         // GIVEN
-        string contentTypeFromHeader = "application/json; charset=utf-8";
         PostmanRequestBody? postmanBody = new()
         {
             Mode = PostmanRequestBodyMode.Raw,
@@ -154,17 +155,22 @@ public static class PostmanCollectionV21ImporterTests
         Assert.NotNull(reqBody);
         Assert.Equal(PororocaHttpRequestBodyMode.Raw, reqBody!.Mode);
         Assert.Equal("[]", reqBody.RawContent);
-        Assert.Equal(MimeTypesDetector.DefaultMimeTypeForJson, reqBody.ContentType);
+        Assert.Equal(expectedPororocaContentType, reqBody.ContentType);
     }
 
-    [Fact]
-    public static void Should_convert_postman_req_raw_json_body_to_pororoca_req_body_correctly()
+    [Theory]
+    [InlineData(MimeTypesDetector.DefaultMimeTypeForJson, "json")]
+    [InlineData(MimeTypesDetector.DefaultMimeTypeForJavascript, "javascript")]
+    [InlineData(MimeTypesDetector.DefaultMimeTypeForHtml, "html")]
+    [InlineData(MimeTypesDetector.DefaultMimeTypeForXml, "xml")]
+    [InlineData(MimeTypesDetector.DefaultMimeTypeForText, "text")]
+    public static void Should_convert_postman_req_raw_json_body_to_pororoca_req_body_correctly(string expectedPororocaContentType, string postmanRawBodyLang)
     {
         // GIVEN
         PostmanRequestBody? postmanBody = new()
         {
             Mode = PostmanRequestBodyMode.Raw,
-            Options = new() { Raw = new() { Language = "json" } },
+            Options = new() { Raw = new() { Language = postmanRawBodyLang } },
             Raw = "[]"
         };
 
@@ -175,7 +181,7 @@ public static class PostmanCollectionV21ImporterTests
         Assert.NotNull(reqBody);
         Assert.Equal(PororocaHttpRequestBodyMode.Raw, reqBody!.Mode);
         Assert.Equal("[]", reqBody.RawContent);
-        Assert.Equal(MimeTypesDetector.DefaultMimeTypeForJson, reqBody.ContentType);
+        Assert.Equal(expectedPororocaContentType, reqBody.ContentType);
     }
 
     [Fact]
@@ -526,7 +532,7 @@ public static class PostmanCollectionV21ImporterTests
     }
 
     [Fact]
-    public static void Should_convert_postman_req_ntlm_auth_to_pororoca_req_auth_correctly()
+    public static void Should_convert_postman_req_ntlm_auth_to_pororoca_req_auth_correctly_ntlm_is_postmanvararray()
     {
         // GIVEN
         PostmanAuth? postmanAuth = new()
@@ -538,6 +544,60 @@ public static class PostmanCollectionV21ImporterTests
                 new() { Key = "password", Value = "pwd", Type = "string" },
                 new() { Key = "domain", Value = "dom", Type = "string" }
             }
+        };
+
+        // WHEN
+        var reqAuth = ConvertToPororocaAuth(postmanAuth);
+
+        // THEN
+        Assert.NotNull(reqAuth);
+        Assert.Equal(PororocaRequestAuthMode.Windows, reqAuth!.Mode);
+        Assert.Null(reqAuth.BasicAuthLogin);
+        Assert.Null(reqAuth.BasicAuthPassword);
+        Assert.Null(reqAuth.BearerToken);
+        Assert.Null(reqAuth.ClientCertificate);
+        Assert.NotNull(reqAuth.Windows);
+        Assert.False(reqAuth.Windows.UseCurrentUser);
+        Assert.Equal("usr", reqAuth.Windows.Login);
+        Assert.Equal("pwd", reqAuth.Windows.Password);
+        Assert.Equal("dom", reqAuth.Windows.Domain);
+    }
+
+    [Fact]
+    public static void Should_convert_postman_req_ntlm_auth_to_pororoca_req_auth_correctly_ntlm_is_postmanauthntlmjsonobj()
+    {
+        // GIVEN
+        PostmanAuth? postmanAuth = new()
+        {
+            Type = PostmanAuthType.ntlm,
+            Ntlm = JsonDocument.Parse("{\"username\":\"usr\",\"password\":\"pwd\",\"domain\":\"dom\"}").RootElement
+        };
+
+        // WHEN
+        var reqAuth = ConvertToPororocaAuth(postmanAuth);
+
+        // THEN
+        Assert.NotNull(reqAuth);
+        Assert.Equal(PororocaRequestAuthMode.Windows, reqAuth!.Mode);
+        Assert.Null(reqAuth.BasicAuthLogin);
+        Assert.Null(reqAuth.BasicAuthPassword);
+        Assert.Null(reqAuth.BearerToken);
+        Assert.Null(reqAuth.ClientCertificate);
+        Assert.NotNull(reqAuth.Windows);
+        Assert.False(reqAuth.Windows.UseCurrentUser);
+        Assert.Equal("usr", reqAuth.Windows.Login);
+        Assert.Equal("pwd", reqAuth.Windows.Password);
+        Assert.Equal("dom", reqAuth.Windows.Domain);
+    }
+
+    [Fact]
+    public static void Should_convert_postman_req_ntlm_auth_to_pororoca_req_auth_correctly_ntlm_is_postmanauthntlmjsonarray()
+    {
+        // GIVEN
+        PostmanAuth? postmanAuth = new()
+        {
+            Type = PostmanAuthType.ntlm,
+            Ntlm = JsonDocument.Parse("[ {\"key\":\"username\",\"value\":\"usr\"},{\"key\":\"password\",\"value\":\"pwd\"},{\"key\":\"domain\",\"value\":\"dom\"} ]").RootElement
         };
 
         // WHEN

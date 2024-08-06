@@ -1,10 +1,12 @@
 using System.Collections.Frozen;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Quic;
 using Pororoca.Domain.Features.TranslateRequest;
 
 namespace Pororoca.Domain.Features.Common;
 
+[ExcludeFromCodeCoverage(Justification = "This class only holds available options and the check HTTP versions methods depend on the machine.")]
 public static class AvailablePororocaRequestSelectionOptions
 {
     public static readonly ImmutableList<HttpMethod> AvailableHttpMethods =
