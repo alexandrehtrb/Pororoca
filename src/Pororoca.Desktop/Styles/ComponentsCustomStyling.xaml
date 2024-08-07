@@ -19,6 +19,13 @@
         Value="0,0,12,0"/>
   </Style>
 
+  <Style Selector="TreeViewItem.TargetHighlight">
+    <Setter
+      Property="Background"
+      Value="{DynamicResource TreeViewItemBackgroundPointerOver}"/>
+    <!-- TreeViewItemTargetMovementHighlightBrush -->
+  </Style>
+
   <Style Selector="TabControl WrapPanel">
     <Setter
         Property="Background"

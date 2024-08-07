@@ -13,10 +13,10 @@
     <ProjectReference Include="..\..\src\Pororoca.Domain\Pororoca.Domain.csproj"/>
     <ProjectReference Include="..\..\src\Pororoca.Infrastructure\Pororoca.Infrastructure.csproj"/>
     <ProjectReference Include="..\..\src\Pororoca.Test\Pororoca.Test.csproj"/>
-    <!--PackageReference Include="Pororoca.Test" Version="3.4.2" /-->
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageReference Include="xunit" Version="2.7.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
+    <!--PackageReference Include="Pororoca.Test" Version="3.5.0" /-->
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+    <PackageReference Include="xunit" Version="2.9.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

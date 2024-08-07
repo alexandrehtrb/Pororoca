@@ -6,6 +6,66 @@
   xmlns:idd="clr-namespace:Avalonia.Xaml.Interactions.DragAndDrop;assembly=Avalonia.Xaml.Interactions.DragAndDrop"
   xmlns:b="using:Pororoca.Desktop.Behaviors">
 
+  <!-- TreeView drag and drop -->
+
+  <Style Selector="TreeView.DragAndDrop TreeViewItem.DraggingUp">
+    <Setter Property="AdornerLayer.Adorner">
+      <Template>
+        <Border BorderThickness="0 2 0 0"
+                BorderBrush="{DynamicResource DragAndDropItemDraggingBrush}"/>
+      </Template>
+    </Setter>
+  </Style>
+
+  <Style Selector="TreeView.DragAndDrop TreeViewItem.DraggingDown">
+    <Setter Property="AdornerLayer.Adorner">
+      <Template>
+        <Border BorderThickness="0 0 0 2"
+                BorderBrush="{DynamicResource DragAndDropItemDraggingBrush}"/>
+      </Template>
+    </Setter>
+  </Style>
+
+  <Style Selector="TreeView.DragAndDrop TreeViewItem">
+    <Setter Property="(i:Interaction.Behaviors)">
+      <i:BehaviorCollectionTemplate>
+        <i:BehaviorCollection>
+          <b:ContextDragWithDirectionBehavior
+            HorizontalDragThreshold="3"
+            VerticalDragThreshold="3" />
+        </i:BehaviorCollection>
+      </i:BehaviorCollectionTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="TreeView.CollectionOrganizationItemDragAndDrop">
+    <Style.Resources>
+      <b:CollectionOrganizationItemTreeViewDropHandler x:Key="CollectionOrganizationItemTreeViewDropHandler" />
+    </Style.Resources>
+    <Setter Property="(i:Interaction.Behaviors)">
+      <i:BehaviorCollectionTemplate>
+        <i:BehaviorCollection>
+          <idd:ContextDropBehavior Handler="{StaticResource CollectionOrganizationItemTreeViewDropHandler}" />
+        </i:BehaviorCollection>
+      </i:BehaviorCollectionTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="TreeViewItem.CollectionOrganizationItemDragAndDrop">
+    <Style.Resources>
+      <b:CollectionOrganizationItemTreeViewDropHandler x:Key="CollectionOrganizationItemTreeViewDropHandler" />
+    </Style.Resources>
+    <Setter Property="(i:Interaction.Behaviors)">
+      <i:BehaviorCollectionTemplate>
+        <i:BehaviorCollection>
+          <idd:ContextDropBehavior Handler="{StaticResource CollectionOrganizationItemTreeViewDropHandler}" />
+        </i:BehaviorCollection>
+      </i:BehaviorCollectionTemplate>
+    </Setter>
+  </Style>
+
+  <!-- DataGrids drag and drop -->
+
   <Style Selector="DataGrid.DragAndDrop">
     <Setter
       Property="RowHeaderWidth"
@@ -15,7 +75,7 @@
   <Style Selector="DataGrid.DragAndDrop DataGridRow.DraggingUp">
     <Setter Property="AdornerLayer.Adorner">
       <Template>
-        <Border BorderThickness="0 2 0 0" BorderBrush="{DynamicResource DragAndDropDataGridItemDraggingBrush}"/>
+        <Border BorderThickness="0 2 0 0" BorderBrush="{DynamicResource DragAndDropItemDraggingBrush}"/>
       </Template>
     </Setter>
   </Style>
@@ -23,7 +83,7 @@
   <Style Selector="DataGrid.DragAndDrop DataGridRow.DraggingDown">
     <Setter Property="AdornerLayer.Adorner">
       <Template>
-        <Border BorderThickness="0 0 0 2" BorderBrush="{DynamicResource DragAndDropDataGridItemDraggingBrush}"/>
+        <Border BorderThickness="0 0 0 2" BorderBrush="{DynamicResource DragAndDropItemDraggingBrush}"/>
       </Template>
     </Setter>
   </Style>

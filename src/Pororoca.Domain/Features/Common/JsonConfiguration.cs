@@ -2,6 +2,7 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using Pororoca.Domain.Features.Entities.Insomnia;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
@@ -34,6 +35,7 @@ internal static class JsonConfiguration
         if (includeCustomConverters)
         {
             options.Converters.Add(new PororocaRequestJsonConverter());
+            options.Converters.Add(new InsomniaResourceJsonConverter());
         }
 
         return new(options);
@@ -77,6 +79,13 @@ internal static class JsonConfiguration
 [JsonSerializable(typeof(PostmanAuthBearer))]
 [JsonSerializable(typeof(PostmanAuthNtlm))]
 [JsonSerializable(typeof(PostmanVariable[]))]
+[JsonSerializable(typeof(InsomniaCollectionV4))]
+[JsonSerializable(typeof(InsomniaCollectionV4Resource))]
+[JsonSerializable(typeof(InsomniaCollectionV4Workspace))]
+[JsonSerializable(typeof(InsomniaCollectionV4Environment))]
+[JsonSerializable(typeof(InsomniaCollectionV4RequestGroup))]
+[JsonSerializable(typeof(InsomniaCollectionV4Request))]
+[JsonSerializable(typeof(InsomniaCollectionV4WebSocket))]
 internal partial class PororocaJsonSrcGenContext : JsonSerializerContext
 {
 }

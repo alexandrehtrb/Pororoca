@@ -11,22 +11,14 @@ public static class PostmanEnvironmentExporterTests
     private const string testEnvName = "TestEnvironment";
 
     [Fact]
-    public static void Should_convert_pororoca_environment_without_secrets_correctly()
+    public static void Should_convert_pororoca_environment_correctly()
     {
         var pororocaEnvironment = CreateTestPororocaEnvironment();
-        var env = ConvertToPostmanEnvironment(pororocaEnvironment, true);
-        AssertConvertedEnvironment(env, true);
+        var env = ConvertToPostmanEnvironment(pororocaEnvironment);
+        AssertConvertedEnvironment(env);
     }
 
-    [Fact]
-    public static void Should_convert_pororoca_environment_with_secrets_correctly()
-    {
-        var pororocaEnvironment = CreateTestPororocaEnvironment();
-        var env = ConvertToPostmanEnvironment(pororocaEnvironment, false);
-        AssertConvertedEnvironment(env, false);
-    }
-
-    private static void AssertConvertedEnvironment(PostmanEnvironment env, bool hideSecrets)
+    private static void AssertConvertedEnvironment(PostmanEnvironment env)
     {
         Assert.NotNull(env);
         Assert.Equal(testEnvId, env.Id);
@@ -45,10 +37,7 @@ public static class PostmanEnvironmentExporterTests
         var var2 = env.Values[1];
         Assert.False(var2.Enabled);
         Assert.Equal("Key2", var2.Key);
-        if (hideSecrets)
-            Assert.Equal(string.Empty, var2.Value);
-        else
-            Assert.Equal("Value2", var2.Value);
+        Assert.Equal("Value2", var2.Value);
         Assert.Equal("secret", var2.Type);
     }
 

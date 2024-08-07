@@ -207,15 +207,13 @@ public static class PostmanCollectionV21Importer
     {
         if (string.IsNullOrWhiteSpace(contentTypeHeaderValue))
             return null;
-        else if (contentTypeHeaderValue.Contains(DefaultMimeTypeForJson))
+        else if (contentTypeHeaderValue.Contains("json", StringComparison.InvariantCultureIgnoreCase))
             return DefaultMimeTypeForJson;
-        else if (contentTypeHeaderValue.Contains(DefaultMimeTypeForJavascript))
-            return DefaultMimeTypeForJavascript;
-        else if (contentTypeHeaderValue.Contains(DefaultMimeTypeForHtml))
+        else if (contentTypeHeaderValue.Contains("html", StringComparison.InvariantCultureIgnoreCase))
             return DefaultMimeTypeForHtml;
-        else if (contentTypeHeaderValue.Contains(DefaultMimeTypeForXml))
+        else if (contentTypeHeaderValue.Contains("xml", StringComparison.InvariantCultureIgnoreCase))
             return DefaultMimeTypeForXml;
-        else if (contentTypeHeaderValue.Contains(DefaultMimeTypeForText))
+        else if (contentTypeHeaderValue.Contains("text", StringComparison.InvariantCultureIgnoreCase))
             return DefaultMimeTypeForText;
         else
             return null;

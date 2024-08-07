@@ -11,8 +11,13 @@ using static Pororoca.Domain.Features.ExportEnvironment.PostmanEnvironmentExport
 using static Pororoca.Domain.Features.ImportCollection.OpenApiImporter;
 using static Pororoca.Domain.Features.ImportCollection.PororocaCollectionImporter;
 using static Pororoca.Domain.Features.ImportCollection.PostmanCollectionV21Importer;
+using static Pororoca.Domain.Features.ImportCollection.InsomniaCollectionV4Importer;
 using static Pororoca.Domain.Features.ImportEnvironment.PororocaEnvironmentImporter;
 using static Pororoca.Domain.Features.ImportEnvironment.PostmanEnvironmentImporter;
+using Pororoca.Desktop.Converters;
+using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Desktop.HotKeys;
+using MsBox.Avalonia.Enums;
 
 namespace Pororoca.Desktop.ExportImport;
 
@@ -36,66 +41,66 @@ internal static partial class FileExporterImporter
     [GeneratedRegex("schema\":\\s*\"Pororoca")]
     private static partial Regex GeneratePororocaSchemaRegex();
 
+    // Postman exported files use UTF-8 without BOM
+    // Insomnia can't read Postman collection and environment files
+    // if they are in UTF-8 encoding with BOM
+    private static readonly UTF8Encoding utf8EncodingWithoutBOM = new(encoderShouldEmitUTF8Identifier: false);
+
     #region EXPORT COLLECTION
 
-    internal static Task ExportCollectionAsync(CollectionViewModel cvm)
+    internal static async Task ShowExportCollectionToFileDialogAsync(PororocaCollection col, ExportCollectionFormat format)
     {
         FilePickerSaveOptions opts = new()
         {
-            Title = Localizer.Instance.Collection.ExportCollectionDialogTitle,
-            FileTypeChoices = new List<FilePickerFileType>()
+            Title = Localizer.Instance.ExportCollection.DialogTitle,
+            SuggestedFileName = $"{col.Name}.{(format switch
             {
-                new(Localizer.Instance.Collection.PororocaCollectionFormat)
+                ExportCollectionFormat.Pororoca => PororocaCollectionExtension,
+                ExportCollectionFormat.Postman => PostmanCollectionExtension,
+                _ => string.Empty
+            })}"
+        };
+
+        if (!OperatingSystem.IsMacOS())
+        {
+            var fileTypeChoices = new List<FilePickerFileType>();
+            fileTypeChoices.Add(format switch
+            {
+                ExportCollectionFormat.Pororoca => new(Localizer.Instance.ExportCollection.PororocaCollectionFormat)
                 {
                     Patterns = new List<string> { PororocaCollectionExtensionGlob }
                 },
-                new(Localizer.Instance.Collection.PostmanCollectionFormat)
+                ExportCollectionFormat.Postman => new(Localizer.Instance.ExportCollection.PostmanCollectionFormat)
                 {
                     Patterns = new List<string> { PostmanCollectionExtensionGlob }
-                }
+                },
+                _ => new(string.Empty)
+            });
+            opts.FileTypeChoices = fileTypeChoices;
+
+            if (OperatingSystem.IsWindows())
+            {
+                opts.DefaultExtension = PororocaCollectionExtensionGlob;
             }
-        };
-        if (OperatingSystem.IsWindows())
-        {
-            opts.DefaultExtension = PororocaCollectionExtensionGlob;
         }
 
-        return ShowExportCollectionDialogAsync(cvm, opts);
-    }
-
-    internal static Task ExportAsPororocaCollectionAsync(CollectionViewModel cvm)
-    {
-        FilePickerSaveOptions opts = new()
-        {
-            Title = Localizer.Instance.Collection.ExportAsPororocaCollectionDialogTitle,
-            SuggestedFileName = $"{cvm.Name}.{PororocaCollectionExtension}"
-        };
-
-        return ShowExportCollectionDialogAsync(cvm, opts);
-    }
-
-    internal static Task ExportAsPostmanCollectionAsync(CollectionViewModel cvm)
-    {
-        FilePickerSaveOptions opts = new()
-        {
-            Title = Localizer.Instance.Collection.ExportAsPostmanCollectionDialogTitle,
-            SuggestedFileName = $"{cvm.Name}.{PostmanCollectionExtension}"
-        };
-
-        return ShowExportCollectionDialogAsync(cvm, opts);
-    }
-
-    private static async Task ShowExportCollectionDialogAsync(CollectionViewModel cvm, FilePickerSaveOptions opts)
-    {
         string? destFilePath = await SelectPathForFileToBeSavedAsync(opts);
 
         if (destFilePath != null)
         {
-            var c = cvm.ToCollection();
-            string json = destFilePath.EndsWith(PostmanCollectionExtension) ?
-                ExportAsPostmanCollectionV21(c, !cvm.IncludeSecretVariables) :
-                ExportAsPororocaCollection(c, !cvm.IncludeSecretVariables);
-            await File.WriteAllTextAsync(destFilePath, json, Encoding.UTF8);
+            string json = format switch
+            {
+                ExportCollectionFormat.Pororoca => ExportAsPororocaCollection(col),
+                ExportCollectionFormat.Postman => ExportAsPostmanCollectionV21(col),
+                _ => string.Empty
+            };
+            var encoding = format switch
+            {
+                ExportCollectionFormat.Pororoca => Encoding.UTF8,
+                ExportCollectionFormat.Postman => utf8EncodingWithoutBOM,
+                _ => Encoding.UTF8
+            };
+            await File.WriteAllTextAsync(destFilePath, json, encoding);
         }
     }
 
@@ -103,64 +108,59 @@ internal static partial class FileExporterImporter
 
     #region EXPORT ENVIRONMENT
 
-    internal static Task ExportEnvironmentAsync(EnvironmentViewModel evm)
+    internal static async Task ShowExportEnvironmentToFileDialogAsync(PororocaEnvironment env, ExportEnvironmentFormat format)
     {
         FilePickerSaveOptions opts = new()
         {
-            Title = Localizer.Instance.Environment.ExportEnvironmentDialogTitle,
-            FileTypeChoices = new List<FilePickerFileType>()
+            Title = Localizer.Instance.ExportEnvironment.DialogTitle,
+            SuggestedFileName = $"{env.Name}.{(format switch
             {
-                new(Localizer.Instance.Environment.PororocaEnvironmentFormat)
+                ExportEnvironmentFormat.Pororoca => PororocaEnvironmentExtension,
+                ExportEnvironmentFormat.Postman => PostmanEnvironmentExtension,
+                _ => string.Empty
+            })}"
+        };
+
+        if (!OperatingSystem.IsMacOS())
+        {
+            var fileTypeChoices = new List<FilePickerFileType>();
+            fileTypeChoices.Add(format switch
+            {
+                ExportEnvironmentFormat.Pororoca => new(Localizer.Instance.ExportEnvironment.PororocaEnvironmentFormat)
                 {
                     Patterns = new List<string> { PororocaEnvironmentExtensionGlob }
                 },
-                new(Localizer.Instance.Environment.PostmanEnvironmentFormat)
+                ExportEnvironmentFormat.Postman => new(Localizer.Instance.ExportEnvironment.PostmanEnvironmentFormat)
                 {
                     Patterns = new List<string> { PostmanEnvironmentExtensionGlob }
-                }
+                },
+                _ => new(string.Empty)
+            });
+            opts.FileTypeChoices = fileTypeChoices;
+
+            if (OperatingSystem.IsWindows())
+            {
+                opts.DefaultExtension = PororocaEnvironmentExtensionGlob;
             }
-        };
-        if (OperatingSystem.IsWindows())
-        {
-            opts.DefaultExtension = PororocaEnvironmentExtensionGlob;
         }
 
-        return ShowExportEnvironmentDialogAsync(evm, opts);
-    }
-
-    internal static Task ExportAsPororocaEnvironmentAsync(EnvironmentViewModel evm)
-    {
-        FilePickerSaveOptions opts = new()
-        {
-            Title = Localizer.Instance.Environment.ExportAsPororocaEnvironmentDialogTitle,
-            SuggestedFileName = $"{evm.Name}.{PororocaEnvironmentExtension}"
-        };
-
-        return ShowExportEnvironmentDialogAsync(evm, opts);
-    }
-
-    internal static Task ExportAsPostmanEnvironmentAsync(EnvironmentViewModel evm)
-    {
-        FilePickerSaveOptions opts = new()
-        {
-            Title = Localizer.Instance.Environment.ExportAsPostmanEnvironmentDialogTitle,
-            SuggestedFileName = $"{evm.Name}.{PostmanEnvironmentExtension}"
-        };
-
-        return ShowExportEnvironmentDialogAsync(evm, opts);
-    }
-
-    private static async Task ShowExportEnvironmentDialogAsync(EnvironmentViewModel evm, FilePickerSaveOptions opts)
-    {
         string? destFilePath = await SelectPathForFileToBeSavedAsync(opts);
 
         if (destFilePath != null)
         {
-            var env = evm.ToEnvironment();
-            string json = destFilePath.EndsWith(PostmanEnvironmentExtension) ?
-                ExportAsPostmanEnvironment(env, !evm.IncludeSecretVariables) :
-                ExportAsPororocaEnvironment(env, !evm.IncludeSecretVariables);
-            await File.WriteAllTextAsync(destFilePath, json, Encoding.UTF8);
+            string json = format switch
+            {
+                ExportEnvironmentFormat.Pororoca => ExportAsPororocaEnvironment(env),
+                ExportEnvironmentFormat.Postman => ExportAsPostmanEnvironment(env),
+                _ => string.Empty
+            };
+            var encoding = format switch
+            {
+                ExportEnvironmentFormat.Pororoca => Encoding.UTF8,
+                ExportEnvironmentFormat.Postman => utf8EncodingWithoutBOM,
+                _ => Encoding.UTF8
+            };
+            await File.WriteAllTextAsync(destFilePath, json, encoding);
         }
     }
 
@@ -198,20 +198,21 @@ internal static partial class FileExporterImporter
                 bool isPororocaEnvironment = pororocaSchemaRegex.IsMatch(fileContent);
 
                 // First, tries to import as a Pororoca environment
-                if (isPororocaEnvironment)
+                if (isPororocaEnvironment && TryImportPororocaEnvironment(fileContent, out var importedPororocaEnvironment))
                 {
-                    if (TryImportPororocaEnvironment(fileContent, out var importedPororocaEnvironment))
-                    {
-                        egvm.AddEnvironment(importedPororocaEnvironment!);
-                    }
+                    egvm.AddEnvironment(importedPororocaEnvironment!);
                 }
                 // If not a valid Pororoca environment, then tries to import as a Postman environment
+                else if (TryImportPostmanEnvironment(fileContent, out var importedPostmanEnvironment))
+                {
+                    egvm.AddEnvironment(importedPostmanEnvironment!);
+                }
                 else
                 {
-                    if (TryImportPostmanEnvironment(fileContent, out var importedPostmanEnvironment))
-                    {
-                        egvm.AddEnvironment(importedPostmanEnvironment!);
-                    }
+                    Dialogs.ShowDialog(
+                        title: Localizer.Instance.Collection.FailedToImportEnvironmentDialogTitle,
+                        message: Localizer.Instance.Collection.FailedToImportEnvironmentDialogMessage,
+                        buttons: ButtonEnum.Ok);
                 }
             }
         }
@@ -250,6 +251,7 @@ internal static partial class FileExporterImporter
                 bool possiblyPororocaCollection = pororocaSchemaRegex.IsMatch(fileContent);
                 bool possiblyPostmanCollection = fileContent.Contains("postman");
                 bool possiblyOpenApi = fileContent.Contains("openapi") && (filePath.EndsWith(".yaml") || filePath.EndsWith(".yml") || filePath.EndsWith(".json"));
+                bool possiblyInsomnia = fileContent.Contains("insomnia") && filePath.EndsWith(".json");
 
                 // First, tries to import as a Pororoca collection
                 if (possiblyPororocaCollection && TryImportPororocaCollection(fileContent, preserveId: false, out var importedPororocaCollection))
@@ -264,6 +266,17 @@ internal static partial class FileExporterImporter
                 else if (possiblyOpenApi && TryImportOpenApi(fileContent, out var importedOpenApiCollection))
                 {
                     mwvm.AddCollection(importedOpenApiCollection!);
+                }
+                else if (possiblyInsomnia && TryImportInsomniaCollection(fileContent, out var importedInsomniaCollection))
+                {
+                    mwvm.AddCollection(importedInsomniaCollection!);
+                }
+                else
+                {
+                    Dialogs.ShowDialog(
+                        title: Localizer.Instance.Collection.FailedToImportCollectionDialogTitle,
+                        message: Localizer.Instance.Collection.FailedToImportCollectionDialogMessage,
+                        buttons: ButtonEnum.Ok);
                 }
             }
         }

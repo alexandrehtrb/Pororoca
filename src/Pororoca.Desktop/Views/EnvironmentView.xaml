@@ -46,27 +46,11 @@
           Command="{Binding ToggleEnabledEnvironmentCmd}"
           Classes="Secondary TextButton"/>
       <controls:IconButton
-          IsVisible="{Binding !IsOperatingSystemMacOsx}"
+          Name="btExportEnvironment"
           Margin="12,0,0,0"
           Icon="{StaticResource IconExportGeometry}"
           Text="{Binding i18n.Environment.ExportEnvironment}"
           Command="{Binding ExportEnvironmentCmd}"/>
-      <controls:IconButton
-          IsVisible="{Binding IsOperatingSystemMacOsx}"
-          Margin="12,0,0,0"
-          Icon="{StaticResource IconExportGeometry}"
-          Text="{Binding i18n.Environment.ExportAsPororocaEnvironment}"
-          Command="{Binding ExportAsPororocaEnvironmentCmd}"/>
-      <controls:IconButton
-          IsVisible="{Binding IsOperatingSystemMacOsx}"
-          Margin="12,0,0,0"
-          Icon="{StaticResource IconExportGeometry}"
-          Text="{Binding i18n.Environment.ExportAsPostmanEnvironment}"
-          Command="{Binding ExportAsPostmanEnvironmentCmd}"/>
-      <CheckBox
-          Margin="12,0,0,0"
-          Content="{Binding i18n.Environment.ExportIncludeSecrets}"
-          IsChecked="{Binding IncludeSecretVariables}"/>
     </StackPanel>
 
     <Button

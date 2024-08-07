@@ -401,29 +401,16 @@ public static class PostmanCollectionV21ExporterTests
     #region COLLECTION, FOLDERS AND COLLECTION VARIABLES
 
     [Fact]
-    public static void Should_convert_pororoca_collection_hiding_secrets_to_postman_collection_correctly()
+    public static void Should_convert_pororoca_collection_to_postman_collection_correctly()
     {
         // GIVEN
         var col = CreateTestCollection();
 
         // WHEN
-        var postmanCollection = ConvertToPostmanCollectionV21(col, true);
+        var postmanCollection = ConvertToPostmanCollectionV21(col);
 
         // THEN
-        AssertConvertedCollection(postmanCollection, true);
-    }
-
-    [Fact]
-    public static void Should_convert_pororoca_collection_showing_secrets_to_postman_collection_correctly()
-    {
-        // GIVEN
-        var col = CreateTestCollection();
-
-        // WHEN
-        var postmanCollection = ConvertToPostmanCollectionV21(col, false);
-
-        // THEN
-        AssertConvertedCollection(postmanCollection, false);
+        AssertConvertedCollection(postmanCollection);
     }
 
     private static PororocaCollection CreateTestCollection()
@@ -444,7 +431,7 @@ public static class PostmanCollectionV21ExporterTests
         return col;
     }
 
-    private static void AssertConvertedCollection(PostmanCollectionV21? postmanCollection, bool hideSecrets)
+    private static void AssertConvertedCollection(PostmanCollectionV21? postmanCollection)
     {
         Assert.NotNull(postmanCollection);
         Assert.Equal(testGuid, postmanCollection!.Info!.Id);
@@ -481,10 +468,7 @@ public static class PostmanCollectionV21ExporterTests
         var var2 = postmanCollection.Variable[1];
         Assert.True(var2.Disabled);
         Assert.Equal("Key2", var2.Key);
-        if (hideSecrets)
-            Assert.Equal(string.Empty, var2.Value);
-        else
-            Assert.Equal("Value2", var2.Value);
+        Assert.Equal("Value2", var2.Value);
     }
 
     #endregion

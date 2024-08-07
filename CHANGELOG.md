@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.5.0](#350-2024-08-07)
 * [3.4.2](#342-2024-07-02)
 * [3.4.1](#341-2024-06-12)
 * [3.4.0](#340-2024-05-29)
@@ -26,6 +27,25 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.5.0](https://github.com/alexandrehtrb/Pororoca/tree/3.5.0) (2024-08-07)
+
+### Features
+
+* Mouse drag-and-drop in collections' tree 🙌
+* Collection and environments export redesigned. For collections, now you can select which environments you wish to include and whether to include their secret variables. (issue #82)
+* Insomnia collections can now be imported.
+* A dialog now appears when trying to import an invalid collection or environment file. (issue #35)
+* A folder icon now appears to indicate a collection folder.
+
+## Bug Fixes
+
+* Postman collections and environments are now exported to files with UTF-8 without BOM encoding. Now you can export files from Pororoca to Insomnia, using Postman format.
+
+### Others
+
+* Raised .NET SDK to 8.0.303.
+* Raised Microsoft.OpenAPI and test libs versions.
 
 ## [3.4.2](https://github.com/alexandrehtrb/Pororoca/tree/3.4.2) (2024-07-02)
 

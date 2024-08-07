@@ -12,6 +12,13 @@ public sealed class VariablesDataGridViewModel : BaseDataGridWithOperationsViewM
     {
     }
 
+    public List<PororocaVariable> GetVariables(bool includeSecretVariables) =>
+        Items.Select(i =>
+        {
+            var v = ToDomain(i);
+            return includeSecretVariables ? v : v.Censor();
+        }).ToList();
+
     protected override VariableViewModel ToVm(PororocaVariable domainObj) =>
         new(Items, domainObj);
 

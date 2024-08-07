@@ -1,6 +1,7 @@
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Xunit;
 using static Pororoca.Domain.Features.ExportEnvironment.PororocaEnvironmentExporter;
+using static Pororoca.Domain.Features.ImportEnvironment.PororocaEnvironmentImporter;
 
 namespace Pororoca.Domain.Tests.Features.ExportEnvironment;
 
@@ -10,40 +11,26 @@ public static class PororocaEnvironmentExporterTests
     private const string testEnvName = "TestEnvironment";
     private static readonly DateTimeOffset testEnvCreationDate = DateTimeOffset.Now;
 
-
-    [Theory]
-    [InlineData(false, false)]
-    [InlineData(false, true)]
-    [InlineData(true, false)]
-    [InlineData(true, true)]
-    public static void Should_hide_pororoca_environment_secrets_correctly(bool shouldHideSecrets, bool preserveIsCurrentEnvironment)
+    [Fact]
+    public static void Should_export_and_reimport_pororoca_environment_correctly()
     {
         // GIVEN
-        var pororocaEnvironment = CreateTestPororocaEnvironment();
+        var env = CreateTestPororocaEnvironment();
 
-        // WHEN
-        var env = GenerateEnvironmentToExport(pororocaEnvironment, shouldHideSecrets, preserveIsCurrentEnvironment);
-
-        // THEN
-        AssertEnvironment(env, shouldHideSecrets, preserveIsCurrentEnvironment);
+        // WHEN AND THEN
+        string json = ExportAsPororocaEnvironment(env);
+        Assert.True(TryImportPororocaEnvironment(json, out var reimportedEnv));
+        Assert.NotNull(reimportedEnv);
+        AssertEnvironment(reimportedEnv);
     }
 
-    private static void AssertEnvironment(PororocaEnvironment env, bool areSecretsHidden, bool shouldPreserveIsCurrentEnv)
+    private static void AssertEnvironment(PororocaEnvironment env)
     {
         Assert.NotNull(env);
-        Assert.Equal(testEnvId, env.Id);
+        Assert.NotEqual(testEnvId, env.Id); // imported envs always have new ids
         Assert.Equal(testEnvName, env.Name);
         Assert.Equal(testEnvCreationDate, env.CreatedAt);
-        // Always export as non current environment,
-        // unless if exporting environment inside of a collection
-        if (shouldPreserveIsCurrentEnv)
-        {
-            Assert.True(env.IsCurrent);
-        }
-        else
-        {
-            Assert.False(env.IsCurrent);
-        }
+        Assert.False(env.IsCurrent); // imported envs are always not current
 
         Assert.NotNull(env.Variables);
         Assert.Equal(2, env.Variables.Count);
@@ -58,15 +45,7 @@ public static class PororocaEnvironmentExporterTests
         Assert.False(var2.Enabled);
         Assert.Equal("Key2", var2.Key);
         Assert.True(var2.IsSecret);
-
-        if (areSecretsHidden)
-        {
-            Assert.Equal(string.Empty, var2.Value); // Hidden secret value
-        }
-        else
-        {
-            Assert.Equal("Value2", var2.Value);
-        }
+        Assert.Equal("Value2", var2.Value);
     }
 
     private static PororocaEnvironment CreateTestPororocaEnvironment() =>

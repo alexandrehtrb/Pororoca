@@ -70,29 +70,9 @@
 
     <controls:IconButton
         x:Name="btExportCollection"
-        IsVisible="{Binding !IsOperatingSystemMacOsx}"
         Icon="{StaticResource IconExportGeometry}"
         Text="{Binding i18n.Collection.ExportCollection}"
         Command="{Binding ExportCollectionCmd}"/>
-
-    <controls:IconButton
-        x:Name="btExportAsPororocaCollection"
-        IsVisible="{Binding IsOperatingSystemMacOsx}"
-        Icon="{StaticResource IconExportGeometry}"
-        Text="{Binding i18n.Collection.ExportAsPororocaCollection}"
-        Command="{Binding ExportAsPororocaCollectionCmd}"/>
-
-    <controls:IconButton
-        x:Name="btExportAsPostmanCollection"
-        IsVisible="{Binding IsOperatingSystemMacOsx}"
-        Icon="{StaticResource IconExportGeometry}"
-        Text="{Binding i18n.Collection.ExportAsPostmanCollection}"
-        Command="{Binding ExportAsPostmanCollectionCmd}"/>
-
-    <CheckBox
-        x:Name="cbIncludeSecretsWhenExporting"
-        Content="{Binding i18n.Collection.ExportIncludeSecrets}"
-        IsChecked="{Binding IncludeSecretVariables}"/>
 
   </StackPanel>
 </UserControl>

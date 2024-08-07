@@ -8,13 +8,13 @@ namespace Pororoca.Domain.Features.ExportCollection;
 
 public static class PostmanCollectionV21Exporter
 {
-    public static string ExportAsPostmanCollectionV21(PororocaCollection col, bool shouldHideSecrets)
+    public static string ExportAsPostmanCollectionV21(PororocaCollection col)
     {
-        var postmanCollection = ConvertToPostmanCollectionV21(col, shouldHideSecrets);
+        var postmanCollection = ConvertToPostmanCollectionV21(col);
         return JsonSerializer.Serialize(postmanCollection!, MainJsonCtx.PostmanCollectionV21);
     }
 
-    internal static PostmanCollectionV21 ConvertToPostmanCollectionV21(PororocaCollection col, bool shouldHideSecrets) =>
+    internal static PostmanCollectionV21 ConvertToPostmanCollectionV21(PororocaCollection col) =>
         new()
         {
             Info = new()
@@ -28,7 +28,7 @@ public static class PostmanCollectionV21Exporter
                           .Select(v => new PostmanVariable()
                           {
                               Key = v.Key,
-                              Value = shouldHideSecrets && v.IsSecret ? string.Empty : v.Value,
+                              Value = v.Value,
                               Disabled = v.Enabled ? null : true
                           })
                           .ToArray(),

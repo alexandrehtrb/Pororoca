@@ -21,10 +21,4 @@ public sealed class CollectionVariablesViewModel : CollectionOrganizationItemVie
 
     #endregion
 
-    #region COLLECTION VARIABLES
-
-    public IEnumerable<PororocaVariable> ToVariables() =>
-        VariablesTableVm.Items.Select(v => v.ToVariable());
-
-    #endregion
 }

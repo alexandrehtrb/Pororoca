@@ -281,6 +281,12 @@
               HorizontalAlignment="Stretch"
               IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).CollectionView.Visible}"
               DataContext="{Binding CollectionView.VM}"/>
+          <v:ExportCollectionView
+              x:Name="exportCollectionView"
+              VerticalAlignment="Stretch"
+              HorizontalAlignment="Stretch"
+              IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).ExportCollectionView.Visible}"
+              DataContext="{Binding ExportCollectionView.VM}"/>
           <v:CollectionVariablesView
               x:Name="collectionVariablesView"
               VerticalAlignment="Stretch"
@@ -305,6 +311,12 @@
               HorizontalAlignment="Stretch"
               IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).EnvironmentView.Visible}"
               DataContext="{Binding EnvironmentView.VM}"/>
+          <v:ExportEnvironmentView
+              x:Name="exportEnvironmentView"
+              VerticalAlignment="Stretch"
+              HorizontalAlignment="Stretch"
+              IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).ExportEnvironmentView.Visible}"
+              DataContext="{Binding ExportEnvironmentView.VM}"/>
           <v:CollectionFolderView
               x:Name="collectionFolderView"
               VerticalAlignment="Stretch"

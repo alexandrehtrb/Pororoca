@@ -119,7 +119,7 @@ public static class UserDataManager
         foreach (var col in collections)
         {
             string path = GetUserDataFilePath($"{col.Id}.{PororocaCollectionExtension}");
-            string json = PororocaCollectionExporter.ExportAsPororocaCollection(col, false);
+            string json = PororocaCollectionExporter.ExportAsPororocaCollection(col);
 
             File.WriteAllText(path, json, Encoding.UTF8);
             // Marking collections that were deleted, to delete their files

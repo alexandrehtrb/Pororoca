@@ -26,7 +26,7 @@
       <Color x:Key="CurrentEnvironmentLabelColor">#99E3D5</Color>
       <Color x:Key="ListBoxBackgroundColor">Black</Color>
       <Color x:Key="ListBoxItemSelectedBackgroundColor">#292929</Color>
-      <Color x:Key="DragAndDropDataGridItemDraggingColor">White</Color>
+      <Color x:Key="DragAndDropItemDraggingColor">White</Color>
       
       <Thickness x:Key="ButtonSecondaryBorderThickness">0</Thickness>
       <Color x:Key="ButtonSecondaryBorderBrush">Transparent</Color>
@@ -42,6 +42,7 @@
       <Color x:Key="TextEditorBackgroundColor">#1E1E1E</Color>
       <Color x:Key="TextEditorForegroundColor">#D4D4D4</Color>
       <Color x:Key="ResponseCapturedValueTextColor">#99E3D5</Color>
+      <!--Color x:Key="TreeViewItemTargetMovementHighlightColor">LawnGreen</Color-->
     </ResourceDictionary>
   </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

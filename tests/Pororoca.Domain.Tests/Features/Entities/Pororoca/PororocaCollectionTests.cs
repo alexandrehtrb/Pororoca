@@ -1,3 +1,4 @@
+using System.Xml.Linq;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
@@ -9,6 +10,8 @@ namespace Pororoca.Domain.Tests.Features.Entities.Pororoca;
 
 public static class PororocaCollectionTests
 {
+    #region VARIABLE RESOLUTION
+
     [Theory]
     [InlineData(null)]
     [InlineData("")]
@@ -94,6 +97,8 @@ public static class PororocaCollectionTests
         // Selected environment enabled vars override collection enabled vars
         Assert.Equal(expectedResult, resolvedStr);
     }
+
+    #endregion
 
     #region FIND REQUEST IN COLLECTION
 
@@ -208,42 +213,202 @@ public static class PororocaCollectionTests
 
     #endregion
 
-    private static PororocaCollection CreateTestCollection()
+    #region COPY
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public static void Should_copy_full_collection_creating_new_instances(bool preservingIds)
     {
-        PororocaCollection col = new("MyCollection");
+        // GIVEN
+        var col = CreateTestCollection();
 
-        PororocaVariable v0 = new(true, "k0", "v0", false);
-        PororocaVariable v1 = new(true, "k1", "v1", false);
-        PororocaVariable v2 = new(false, "k2", "v2", false);
-        List<PororocaVariable> colVars = [v0, v1, v2];
+        // WHEN
+        var copy = col.Copy(preservingIds);
 
-        PororocaVariable v1env1 = new(true, "k1", "v1env1", false);
-        PororocaVariable v3env1 = new(true, "k3", "v3env1", false);
-        PororocaVariable v4env1 = new(false, "k4", "v4env1", false);
-        List<PororocaVariable> env1Vars = [v1env1, v3env1, v4env1];
+        // THEN
+        Assert.NotSame(col, copy);
+        if (preservingIds)
+        {
+            Assert.Equal(col.Id, copy.Id);
+        }
+        else
+        {
+            Assert.NotEqual(col.Id, copy.Id);
+        }
+        Assert.Equal(col.Name, copy.Name);
 
-        PororocaVariable v1env2 = new(true, "k1", "v1env2", false);
-        PororocaVariable v3env2 = new(true, "k3", "v3env2", false);
-        PororocaVariable v4env2 = new(false, "k4", "v4env2", false);
-        List<PororocaVariable> env2Vars = [v1env2, v3env2, v4env2];
+        Assert.Equal(col.CreatedAt, copy.CreatedAt);
 
-        col.Variables.Clear();
-        col.Variables.AddRange(colVars);
+        Assert.Equal(col.Variables, copy.Variables);
+        Assert.NotSame(col.Variables, copy.Variables);
+        Assert.Equal(col.Variables.Count, copy.Variables.Count);
+        foreach (var (varCol, varCopy) in col.Variables.Zip(copy.Variables))
+        {
+            Assert.Equal(varCol, varCopy);
+            Assert.NotSame(varCol, varCopy);
+        }
 
-        var env1 = new PororocaEnvironment("MyEnvironment1") with { IsCurrent = false, Variables = env1Vars };
-        col.Environments.Add(env1);
+        Assert.Equal(col.CollectionScopedAuth, copy.CollectionScopedAuth);
+        Assert.NotSame(col.CollectionScopedAuth, copy.CollectionScopedAuth);
 
-        var env2 = new PororocaEnvironment("MyEnvironment2") with { IsCurrent = true, Variables = env2Vars };
-        col.Environments.Add(env2);
+        Assert.NotNull(copy.CollectionScopedRequestHeaders);
+        Assert.Equal(col.CollectionScopedRequestHeaders, copy.CollectionScopedRequestHeaders);
+        Assert.NotSame(col.CollectionScopedRequestHeaders, copy.CollectionScopedRequestHeaders);
+        Assert.Equal(col.CollectionScopedRequestHeaders!.Count, copy.CollectionScopedRequestHeaders!.Count);
+        foreach (var (csrhCol, csrhCopy) in col.CollectionScopedRequestHeaders.Zip(copy.CollectionScopedRequestHeaders))
+        {
+            Assert.Equal(csrhCol, csrhCopy);
+            Assert.NotSame(csrhCol, csrhCopy);
+        }
 
-        col.Requests.Add(new PororocaHttpRequest("HttpReq0"));
-        col.Folders.Add(new("Dir1"));
-        col.Folders[0].Requests.Add(new PororocaWebSocketConnection("Ws1"));
-        col.Folders[0].Requests.Add(new PororocaHttpRepetition("Rep1"));
-        col.Folders[0].Folders.Add(new("Dir1/0"));
-        col.Folders[0].Folders.Add(new("Dir1/1"));
-        col.Folders[0].Folders[1].Requests.Add(new PororocaHttpRequest("HttpReq1/1"));
+        Assert.Equal(col.Requests, copy.Requests);
+        Assert.NotSame(col.Requests, copy.Requests);
+        Assert.NotSame(col.Requests[0], copy.Requests[0]);
 
-        return col;
+        Assert.NotNull(copy.Environments);
+        Assert.NotSame(col.Environments, copy.Environments);
+        Assert.Equal(col.Environments.Count, copy.Environments.Count);
+        foreach (var (envCol, envCopy) in col.Environments.Zip(copy.Environments))
+        {
+            Assert.NotSame(envCol, envCopy);
+            if (preservingIds)
+            {
+                Assert.Equal(envCol.Id, envCopy.Id);
+            }
+            else
+            {
+                Assert.NotEqual(envCol.Id, envCopy.Id);
+            }
+            Assert.Equal(envCol.CreatedAt, envCopy.CreatedAt);
+            Assert.Equal(envCol.Name, envCopy.Name);
+            Assert.Equal(envCol.IsCurrent, envCopy.IsCurrent);
+            Assert.Equal(envCol.Variables, envCopy.Variables);
+            Assert.NotSame(envCol.Variables, envCopy.Variables);
+            Assert.Equal(envCol.Variables.Count, envCopy.Variables.Count);
+            foreach (var (varCol, varCopy) in envCol.Variables.Zip(envCopy.Variables))
+            {
+                Assert.Equal(varCol, varCopy);
+                Assert.NotSame(varCol, varCopy);
+            }
+        }
+
+        var copiedDir1 = Assert.Single(copy.Folders);
+        Assert.NotNull(copiedDir1.Requests);
+        Assert.Empty(copiedDir1.Requests);
+        Assert.NotNull(copiedDir1.Folders);
+        Assert.Equal(2, copiedDir1.Folders.Count);
+
+        var copiedDir1_0 = copiedDir1.Folders[0];
+        Assert.Equal("Dir1/0", copiedDir1_0.Name);
+        Assert.NotNull(copiedDir1_0.Folders);
+        Assert.Empty(copiedDir1_0.Folders);
+        Assert.NotNull(copiedDir1_0.Requests);
+        Assert.Equal(2, copiedDir1_0.Requests.Count);
+        Assert.Equal(col.Folders[0].Folders[0].Requests[0], copiedDir1_0.Requests[0]);
+        Assert.NotSame(col.Folders[0].Folders[0].Requests[0], copiedDir1_0.Requests[0]);
+        Assert.Equal(col.Folders[0].Folders[0].Requests[1], copiedDir1_0.Requests[1]);
+        Assert.NotSame(col.Folders[0].Folders[0].Requests[1], copiedDir1_0.Requests[1]);
+
+        var copiedDir1_1 = copiedDir1.Folders[1];
+        Assert.Equal("Dir1/1", copiedDir1_1.Name);
+        Assert.NotNull(copiedDir1_1.Folders);
+        Assert.Empty(copiedDir1_1.Folders);
+        Assert.NotNull(copiedDir1_1.Requests);
+        var copiedReqDir1_1 = Assert.Single(copiedDir1_1.Requests);
+        Assert.Equal(col.Folders[0].Folders[1].Requests[0], copiedReqDir1_1);
+        Assert.NotSame(col.Folders[0].Folders[1].Requests[0], copiedReqDir1_1);
     }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public static void Should_copy_empty_collection_creating_new_instances(bool preservingIds)
+    {
+        // GIVEN
+        PororocaCollection col = new(
+            Id: Guid.NewGuid(),
+            Name: "name",
+            CreatedAt: DateTimeOffset.Now,
+            Variables: [],
+            CollectionScopedAuth: null,
+            CollectionScopedRequestHeaders: null,
+            Environments: [],
+            Requests: [],
+            Folders: []);
+
+        // WHEN
+        var copy = col.Copy(preservingIds);
+
+        // THEN
+        Assert.NotSame(col, copy);
+        if (preservingIds)
+        {
+            Assert.Equal(col.Id, copy.Id);
+        }
+        else
+        {
+            Assert.NotEqual(col.Id, copy.Id);
+        }
+        Assert.Equal(col.Name, copy.Name);
+        Assert.Equal(col.CreatedAt, copy.CreatedAt);
+        Assert.Equal(col.Variables, copy.Variables);
+        Assert.NotSame(col.Variables, copy.Variables);
+        Assert.Equal(col.CollectionScopedAuth, copy.CollectionScopedAuth);
+        Assert.Equal(col.CollectionScopedRequestHeaders, copy.CollectionScopedRequestHeaders);
+        Assert.Equal(col.Environments, copy.Environments);
+        Assert.NotSame(col.Environments, copy.Environments);
+        Assert.Equal(col.Requests, copy.Requests);
+        Assert.NotSame(col.Requests, copy.Requests);
+        Assert.Equal(col.Folders, copy.Folders);
+        Assert.NotSame(col.Folders, copy.Folders);
+    }
+
+    #endregion
+
+    private static PororocaCollection CreateTestCollection() =>
+        new(Id: Guid.NewGuid(),
+            Name: "MyCollection",
+            CreatedAt: DateTimeOffset.Now,
+            Variables: [
+                new(true, "k0", "v0", false),
+                new(true, "k1", "v1", false),
+                new(false, "k2", "v2", false)
+            ],
+            CollectionScopedAuth: PororocaRequestAuth.MakeBearerAuth("tkn"),
+            CollectionScopedRequestHeaders: [new(true, "ColScopedHeader", "val")],
+            Environments: [
+                new(Id: Guid.NewGuid(),
+                    CreatedAt: DateTimeOffset.Now,
+                    Name: "MyEnvironment1",
+                    IsCurrent: false,
+                    Variables: [
+                        new(true, "k1", "v1env1", false),
+                        new(true, "k3", "v3env1", false),
+                        new(false, "k4", "v4env1", false)
+                    ]),
+                new(Id: Guid.NewGuid(),
+                    CreatedAt: DateTimeOffset.Now,
+                    Name: "MyEnvironment2",
+                    IsCurrent: true,
+                    Variables: [
+                        new(true, "k1", "v1env2", false),
+                        new(true, "k3", "v3env2", false),
+                        new(false, "k4", "v4env2", false)
+                    ])
+                ],
+            Requests: [new PororocaHttpRequest("HttpReq0")],
+            Folders: [
+                new(Name: "Dir1",
+                    Requests: [],
+                    Folders: [
+                        new(Name: "Dir1/0",
+                            Folders: [],
+                            Requests: [new PororocaWebSocketConnection("Ws1"),
+                                       new PororocaHttpRepetition("Rep1")]),
+                        new(Name: "Dir1/1",
+                            Folders: [],
+                            Requests: [ new PororocaHttpRequest("HttpReq1/1") ])
+                    ])
+            ]);
 }

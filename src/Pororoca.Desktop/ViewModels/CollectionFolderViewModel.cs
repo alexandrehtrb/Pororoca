@@ -1,3 +1,4 @@
+using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Domain.Features.Entities.Pororoca;
 
@@ -7,9 +8,11 @@ public sealed class CollectionFolderViewModel : RequestsAndFoldersParentViewMode
 {
 
     public CollectionFolderViewModel(ICollectionOrganizationItemParentViewModel parentVm,
-                                     PororocaCollectionFolder folder) : base(parentVm, folder.Name) =>
+                                     PororocaCollectionFolder folder) : base(parentVm, folder.Name)
+    {
+        NameEditableVm.Icon = EditableTextBlockIcon.Folder;
         AddInitialFoldersAndRequests(folder.Folders, folder.Requests);
-
+    }
 
     #region COLLECTION ORGANIZATION
 

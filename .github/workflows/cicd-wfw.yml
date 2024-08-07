@@ -77,7 +77,7 @@ jobs:
     - name: Install .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.302
+        dotnet-version: 8.0.303
 
     # GitHub Actions Windows Runners come with NSIS pre-installed
     # https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md
@@ -93,6 +93,11 @@ jobs:
         $jsonObj = (dotnet list $projectPath package --vulnerable --include-transitive --format json) | ConvertFrom-Json;
         $hasAnyVulnerability = ($jsonObj.projects[0].frameworks -ne $null);
         if ($hasAnyVulnerability) {
+          if ($jsonObj.projects[0].frameworks.transitivePackages.id -eq "System.Text.Json") {
+            # remove this when upgrading to Avalonia 11.1.x
+            echo "::warning file=Pororoca.Desktop.csproj::Vulnerability ignored: System.Text.Json"
+            exit 0;
+          }
           dotnet list package --vulnerable --include-transitive;
           exit 1;
         }

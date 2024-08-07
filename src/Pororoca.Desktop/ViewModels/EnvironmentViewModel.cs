@@ -3,6 +3,7 @@ using Pororoca.Desktop.Behaviors;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.ViewModels.DataGrids;
+using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -14,8 +15,6 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
     #region COLLECTION ORGANIZATION
 
     public ReactiveCommand<Unit, Unit> ExportEnvironmentCmd { get; }
-    public ReactiveCommand<Unit, Unit> ExportAsPororocaEnvironmentCmd { get; }
-    public ReactiveCommand<Unit, Unit> ExportAsPostmanEnvironmentCmd { get; }
 
     #endregion
 
@@ -30,34 +29,20 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
     [Reactive]
     public bool IsCurrentEnvironment { get; set; }
 
-    [Reactive]
-    public bool IncludeSecretVariables { get; set; }
-
     public ReactiveCommand<Unit, Unit> ToggleEnabledEnvironmentCmd { get; }
 
-    #endregion
-
-    #region OTHERS
-
-    [Reactive]
-    public bool IsOperatingSystemMacOsx { get; set; }
+    public ExportEnvironmentViewModel ExportEnvironmentVm { get; }
 
     #endregion
+
 
     public EnvironmentViewModel(ICollectionOrganizationItemParentViewModel parentVm,
                                 PororocaEnvironment env,
-                                Action<EnvironmentViewModel> onToggleEnabledEnvironment,
-                                Func<bool>? isOperatingSystemMacOsx = null) : base(parentVm, env.Name)
+                                Action<EnvironmentViewModel> onToggleEnabledEnvironment) : base(parentVm, env.Name)
     {
-        #region OTHERS
-        IsOperatingSystemMacOsx = (isOperatingSystemMacOsx ?? OperatingSystem.IsMacOS)();
-        #endregion
-
         #region COLLECTION ORGANIZATION
 
-        ExportEnvironmentCmd = ReactiveCommand.CreateFromTask(ExportEnvironmentAsync);
-        ExportAsPororocaEnvironmentCmd = ReactiveCommand.CreateFromTask(ExportAsPororocaEnvironmentAsync);
-        ExportAsPostmanEnvironmentCmd = ReactiveCommand.CreateFromTask(ExportAsPostmanEnvironmentAsync);
+        ExportEnvironmentCmd = ReactiveCommand.Create(GoToExportEnvironment);
 
         #endregion
 
@@ -68,13 +53,14 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
         VariablesTableVm = new(env.Variables);
         IsCurrentEnvironment = env.IsCurrent;
         ToggleEnabledEnvironmentCmd = ReactiveCommand.Create(() => onToggleEnabledEnvironment(this));
+        ExportEnvironmentVm = new(this);
         #endregion
     }
 
     #region COLLECTION ORGANIZATION
 
     protected override void CopyThis() =>
-        ClipboardArea.Instance.PushToCopy(ToEnvironment());
+        ClipboardArea.Instance.PushToCopy(ToEnvironment(forExporting: false));
 
     protected override void OnNameUpdated(string newName)
     {
@@ -93,14 +79,11 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
 
     #region EXPORT ENVIRONMENT
 
-    private Task ExportEnvironmentAsync() =>
-        FileExporterImporter.ExportEnvironmentAsync(this);
-
-    private Task ExportAsPororocaEnvironmentAsync() =>
-        FileExporterImporter.ExportAsPororocaEnvironmentAsync(this);
-
-    private Task ExportAsPostmanEnvironmentAsync() =>
-        FileExporterImporter.ExportAsPostmanEnvironmentAsync(this);
+    private void GoToExportEnvironment()
+    {
+        var mwvm = (MainWindowViewModel)MainWindow.Instance!.DataContext!;
+        mwvm.SwitchVisiblePage(ExportEnvironmentVm);
+    }
 
     #endregion
 
@@ -108,12 +91,17 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
 
     #region ENVIRONMENT
 
-    public PororocaEnvironment ToEnvironment() =>
-        new(this.envId,
-            this.envCreatedAt,
-            Name,
-            IsCurrentEnvironment,
-            VariablesTableVm.ConvertItemsToDomain().ToList());
+    public PororocaEnvironment ToEnvironment(bool forExporting = false)
+    {
+        bool includeSecretVariables = !forExporting || ExportEnvironmentVm.IncludeSecretVariables;
+        bool markAsCurrentEnvironment = !forExporting && IsCurrentEnvironment;
+
+        return new(this.envId,
+                   this.envCreatedAt,
+                   Name,
+                   markAsCurrentEnvironment,
+                   VariablesTableVm.GetVariables(includeSecretVariables));
+    }
 
     #endregion
 }

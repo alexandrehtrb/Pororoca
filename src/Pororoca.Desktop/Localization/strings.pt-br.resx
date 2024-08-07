@@ -177,32 +177,20 @@
   <data name="Collection/ChooseImportExportFormat" xml:space="preserve">
     <value>Selecione o formato</value>
   </data>
-  <data name="Collection/ExportAsPororocaCollection" xml:space="preserve">
-    <value>Exportar &gt; Pororoca…</value>
-  </data>
-  <data name="Collection/ExportAsPororocaCollectionDialogTitle" xml:space="preserve">
-    <value>Exportar coleção em formato Pororoca</value>
-  </data>
-  <data name="Collection/ExportAsPostmanCollection" xml:space="preserve">
-    <value>Exportar &gt; Postman…</value>
-  </data>
-  <data name="Collection/ExportAsPostmanCollectionDialogTitle" xml:space="preserve">
-    <value>Exportar coleção em formato Postman</value>
-  </data>
   <data name="Collection/ExportCollection" xml:space="preserve">
     <value>Exportar coleção…</value>
-  </data>
-  <data name="Collection/ExportCollectionDialogTitle" xml:space="preserve">
-    <value>Exportar coleção para arquivo (escolha o formato)</value>
-  </data>
-  <data name="Collection/ExportIncludeSecrets" xml:space="preserve">
-    <value>Incluir variáveis secretas ao exportar</value>
   </data>
   <data name="Collection/ImportCollectionDialogTitle" xml:space="preserve">
     <value>Importar arquivos de coleção / OpenAPI</value>
   </data>
   <data name="Collection/ImportCollectionDialogTypes" xml:space="preserve">
     <value>Arquivos de coleção / OpenAPI</value>
+  </data>
+  <data name="Collection/FailedToImportCollectionDialogTitle" xml:space="preserve">
+    <value>Pororoca - Importar coleção / OpenAPI</value>
+  </data>
+  <data name="Collection/FailedToImportCollectionDialogMessage" xml:space="preserve">
+    <value>Não foi possível importar o arquivo de coleção / OpenAPI.\\n\\nTipos aceitos:\\n\\n- Coleção Pororoca\\n- Postman collection v2.1\\n- OpenAPI (Swagger), em JSON ou YAML\\n- Insomnia collection</value>
   </data>
   <data name="Collection/ImportEnvironment" xml:space="preserve">
     <value>Importar ambiente…</value>
@@ -213,14 +201,14 @@
   <data name="Collection/ImportEnvironmentDialogTypes" xml:space="preserve">
     <value>Arquivos de ambiente</value>
   </data>
+  <data name="Collection/FailedToImportEnvironmentDialogTitle" xml:space="preserve">
+    <value>Pororoca - Importar ambiente</value>
+  </data>
+  <data name="Collection/FailedToImportEnvironmentDialogMessage" xml:space="preserve">
+    <value>Não foi possível importar o arquivo de ambiente.\\n\\nTipos aceitos:\\n\\n- Ambiente Pororoca\\n- Postman environment</value>
+  </data>
   <data name="Collection/NewCollection" xml:space="preserve">
     <value>Nova coleção</value>
-  </data>
-  <data name="Collection/PororocaCollectionFormat" xml:space="preserve">
-    <value>Coleção do Pororoca</value>
-  </data>
-  <data name="Collection/PostmanCollectionFormat" xml:space="preserve">
-    <value>Coleção v2.1 do Postman</value>
   </data>
   <data name="CollectionFolder/AddFolder" xml:space="preserve">
     <value>Adicionar pasta</value>
@@ -339,38 +327,11 @@
   <data name="Environment/AddVariable" xml:space="preserve">
     <value>Adicionar variável</value>
   </data>
-  <data name="Environment/ChooseImportExportFormat" xml:space="preserve">
-    <value>Selecione o formato</value>
-  </data>
-  <data name="Environment/ExportAsPororocaEnvironment" xml:space="preserve">
-    <value>Exportar &gt; Pororoca…</value>
-  </data>
-  <data name="Environment/ExportAsPororocaEnvironmentDialogTitle" xml:space="preserve">
-    <value>Exportar ambiente em formato Pororoca</value>
-  </data>
-  <data name="Environment/ExportAsPostmanEnvironment" xml:space="preserve">
-    <value>Exportar &gt; Postman…</value>
-  </data>
-  <data name="Environment/ExportAsPostmanEnvironmentDialogTitle" xml:space="preserve">
-    <value>Exportar ambiente em formato Postman</value>
-  </data>
   <data name="Environment/ExportEnvironment" xml:space="preserve">
     <value>Exportar ambiente…</value>
   </data>
-  <data name="Environment/ExportEnvironmentDialogTitle" xml:space="preserve">
-    <value>Exportar ambiente para arquivo (escolha o formato)</value>
-  </data>
-  <data name="Environment/ExportIncludeSecrets" xml:space="preserve">
-    <value>Incluir variáveis secretas ao exportar</value>
-  </data>
   <data name="Environment/NewEnvironment" xml:space="preserve">
     <value>Novo ambiente</value>
-  </data>
-  <data name="Environment/PororocaEnvironmentFormat" xml:space="preserve">
-    <value>Ambiente do Pororoca</value>
-  </data>
-  <data name="Environment/PostmanEnvironmentFormat" xml:space="preserve">
-    <value>Ambiente do Postman</value>
   </data>
   <data name="Environment/RemoveVariable" xml:space="preserve">
     <value>Remover variável</value>
@@ -384,6 +345,57 @@
   <data name="Environment/Tip" xml:space="preserve">
     <value>Dica: Se uma variável de ambiente tiver o mesmo nome que uma variável de coleção, o valor da variável de ambiente é o que será usado.</value>
   </data>
+  <data name="ExportCollection/Title" xml:space="preserve">
+    <value>Exportar coleção…</value>
+  </data>
+  <data name="ExportCollection/Export" xml:space="preserve">
+    <value>Exportar</value>
+  </data>
+  <data name="ExportCollection/Format" xml:space="preserve">
+    <value>Formato: </value>
+  </data>
+  <data name="ExportCollection/DialogTitle" xml:space="preserve">
+    <value>Exportar coleção para arquivo</value>
+  </data>
+  <data name="ExportCollection/IncludeCollectionVariablesSecrets" xml:space="preserve">
+    <value>Incluir variáveis secretas da coleção</value>
+  </data>
+  <data name="ExportCollection/PororocaCollectionFormat" xml:space="preserve">
+    <value>Coleção do Pororoca</value>
+  </data>
+  <data name="ExportCollection/PostmanCollectionFormat" xml:space="preserve">
+    <value>Coleção v2.1 do Postman</value>
+  </data>
+  <data name="ExportCollection/EnvironmentInclude" xml:space="preserve">
+    <value>INCLUIR</value>
+  </data>
+  <data name="ExportCollection/EnvironmentName" xml:space="preserve">
+    <value>AMBIENTE</value>
+  </data>
+  <data name="ExportCollection/EnvironmentWithSecretVariables" xml:space="preserve">
+    <value>COM SEGREDOS</value>
+  </data>  
+  <data name="ExportEnvironment/Title" xml:space="preserve">
+    <value>Exportar ambiente…</value>
+  </data>
+  <data name="ExportEnvironment/Export" xml:space="preserve">
+    <value>Exportar</value>
+  </data>
+  <data name="ExportEnvironment/Format" xml:space="preserve">
+    <value>Formato: </value>
+  </data>
+  <data name="ExportEnvironment/DialogTitle" xml:space="preserve">
+    <value>Exportar ambiente para arquivo</value>
+  </data>
+  <data name="ExportEnvironment/IncludeVariablesSecrets" xml:space="preserve">
+    <value>Incluir variáveis secretas</value>
+  </data>
+  <data name="ExportEnvironment/PororocaEnvironmentFormat" xml:space="preserve">
+    <value>Ambiente Pororoca</value>
+  </data>
+  <data name="ExportEnvironment/PostmanEnvironmentFormat" xml:space="preserve">
+    <value>Ambiente Postman</value>
+  </data>  
   <data name="Folder/NewFolder" xml:space="preserve">
     <value>Nova pasta</value>
   </data>

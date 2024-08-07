@@ -177,31 +177,19 @@
   <data name="Collection/ChooseImportExportFormat" xml:space="preserve">
     <value></value>
   </data>
-  <data name="Collection/ExportAsPororocaCollection" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="Collection/ExportAsPororocaCollectionDialogTitle" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="Collection/ExportAsPostmanCollection" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="Collection/ExportAsPostmanCollectionDialogTitle" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="Collection/ExportCollection" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="Collection/ExportCollectionDialogTitle" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="Collection/ExportIncludeSecrets" xml:space="preserve">
     <value></value>
   </data>
   <data name="Collection/ImportCollectionDialogTitle" xml:space="preserve">
     <value></value>
   </data>
   <data name="Collection/ImportCollectionDialogTypes" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Collection/FailedToImportCollectionDialogTitle" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Collection/FailedToImportCollectionDialogMessage" xml:space="preserve">
     <value></value>
   </data>
   <data name="Collection/ImportEnvironment" xml:space="preserve">
@@ -213,13 +201,13 @@
   <data name="Collection/ImportEnvironmentDialogTypes" xml:space="preserve">
     <value></value>
   </data>
+  <data name="Collection/FailedToImportEnvironmentDialogTitle" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Collection/FailedToImportEnvironmentDialogMessage" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="Collection/NewCollection" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="Collection/PororocaCollectionFormat" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="Collection/PostmanCollectionFormat" xml:space="preserve">
     <value></value>
   </data>
   <data name="CollectionFolder/AddFolder" xml:space="preserve">
@@ -339,37 +327,10 @@
   <data name="Environment/AddVariable" xml:space="preserve">
     <value></value>
   </data>
-  <data name="Environment/ChooseImportExportFormat" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="Environment/ExportAsPororocaEnvironment" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="Environment/ExportAsPororocaEnvironmentDialogTitle" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="Environment/ExportAsPostmanEnvironment" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="Environment/ExportAsPostmanEnvironmentDialogTitle" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="Environment/ExportEnvironment" xml:space="preserve">
     <value></value>
   </data>
-  <data name="Environment/ExportEnvironmentDialogTitle" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="Environment/ExportIncludeSecrets" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="Environment/NewEnvironment" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="Environment/PororocaEnvironmentFormat" xml:space="preserve">
-    <value></value>
-  </data>
-  <data name="Environment/PostmanEnvironmentFormat" xml:space="preserve">
     <value></value>
   </data>
   <data name="Environment/RemoveVariable" xml:space="preserve">
@@ -384,6 +345,57 @@
   <data name="Environment/Tip" xml:space="preserve">
     <value></value>
   </data>
+  <data name="ExportCollection/Title" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ExportCollection/Export" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ExportCollection/Format" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ExportCollection/DialogTitle" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ExportCollection/IncludeCollectionVariablesSecrets" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ExportCollection/PororocaCollectionFormat" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ExportCollection/PostmanCollectionFormat" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ExportCollection/EnvironmentInclude" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ExportCollection/EnvironmentName" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ExportCollection/EnvironmentWithSecretVariables" xml:space="preserve">
+    <value></value>
+  </data>  
+  <data name="ExportEnvironment/Title" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ExportEnvironment/Export" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ExportEnvironment/Format" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ExportEnvironment/DialogTitle" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ExportEnvironment/IncludeVariablesSecrets" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ExportEnvironment/PororocaEnvironmentFormat" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ExportEnvironment/PostmanEnvironmentFormat" xml:space="preserve">
+    <value></value>
+  </data>  
   <data name="Folder/NewFolder" xml:space="preserve">
     <value></value>
   </data>
