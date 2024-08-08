@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.5.0.1](#3501-2024-08-08)
 * [3.5.0](#350-2024-08-07)
 * [3.4.2](#342-2024-07-02)
 * [3.4.1](#341-2024-06-12)
@@ -27,6 +28,12 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.5.0.1](https://github.com/alexandrehtrb/Pororoca/tree/3.5.0.1) (2024-08-08)
+
+### Hot Fix
+
+* Updates Debian required dependencies, adds `libicu74`, fixes installation on Ubuntu 24.04.
 
 ## [3.5.0](https://github.com/alexandrehtrb/Pororoca/tree/3.5.0) (2024-08-07)
 
