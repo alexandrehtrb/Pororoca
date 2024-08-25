@@ -28,11 +28,26 @@ public sealed class SwitchThemesUITest : UITest
         await Robot.Options_Theme_Light.ClickOn();
 
         AssertHasIconVisible(Robot.Options_Theme_Light);
+        AssertHasIconHidden(Robot.Options_Theme_Light2);
         AssertHasIconHidden(Robot.Options_Theme_Dark);
         AssertHasIconHidden(Robot.Options_Theme_Pampa);
         AssertHasIconHidden(Robot.Options_Theme_AmazonianNight);
 
         AssertBackgroundColor(MainWindowPanel, "#DCDCDC");
+
+        // light 2
+
+        await Robot.Options.ClickOn();
+        await Robot.Options_Theme.ClickOn();
+        await Robot.Options_Theme_Light2.ClickOn();
+
+        AssertHasIconHidden(Robot.Options_Theme_Light);
+        AssertHasIconVisible(Robot.Options_Theme_Light2);
+        AssertHasIconHidden(Robot.Options_Theme_Dark);
+        AssertHasIconHidden(Robot.Options_Theme_Pampa);
+        AssertHasIconHidden(Robot.Options_Theme_AmazonianNight);
+
+        AssertBackgroundColor(MainWindowPanel, "#FAFAFA");
 
         // dark
         await Robot.Options.ClickOn();
@@ -40,6 +55,7 @@ public sealed class SwitchThemesUITest : UITest
         await Robot.Options_Theme_Dark.ClickOn();
 
         AssertHasIconHidden(Robot.Options_Theme_Light);
+        AssertHasIconHidden(Robot.Options_Theme_Light2);
         AssertHasIconVisible(Robot.Options_Theme_Dark);
         AssertHasIconHidden(Robot.Options_Theme_Pampa);
         AssertHasIconHidden(Robot.Options_Theme_AmazonianNight);
@@ -52,6 +68,7 @@ public sealed class SwitchThemesUITest : UITest
         await Robot.Options_Theme_Pampa.ClickOn();
 
         AssertHasIconHidden(Robot.Options_Theme_Light);
+        AssertHasIconHidden(Robot.Options_Theme_Light2);
         AssertHasIconHidden(Robot.Options_Theme_Dark);
         AssertHasIconVisible(Robot.Options_Theme_Pampa);
         AssertHasIconHidden(Robot.Options_Theme_AmazonianNight);
@@ -64,6 +81,7 @@ public sealed class SwitchThemesUITest : UITest
         await Robot.Options_Theme_AmazonianNight.ClickOn();
 
         AssertHasIconHidden(Robot.Options_Theme_Light);
+        AssertHasIconHidden(Robot.Options_Theme_Light2);
         AssertHasIconHidden(Robot.Options_Theme_Dark);
         AssertHasIconHidden(Robot.Options_Theme_Pampa);
         AssertHasIconVisible(Robot.Options_Theme_AmazonianNight);

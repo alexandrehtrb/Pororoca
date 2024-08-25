@@ -36,6 +36,7 @@ public sealed class TopMenuUITest : UITest
 
         await Robot.Options_Theme.ClickOn();
         AssertIsVisible(Robot.Options_Theme_Light);
+        AssertIsVisible(Robot.Options_Theme_Light2);
         AssertIsVisible(Robot.Options_Theme_Dark);
         AssertIsVisible(Robot.Options_Theme_Pampa);
         AssertIsVisible(Robot.Options_Theme_AmazonianNight);
