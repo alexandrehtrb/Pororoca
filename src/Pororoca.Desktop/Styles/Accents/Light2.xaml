@@ -37,12 +37,21 @@
       <Color x:Key="WebSocketConnectedColor">#a90a4c</Color>
       <Color x:Key="WebSocketMessageFromClientPrimaryColor">#780736</Color>
       <Color x:Key="WebSocketMessageFromServerPrimaryColor">Green</Color>
-      <Color x:Key="DefaultIconsColor">Black</Color>
+      <Color x:Key="DefaultIconsColor">#777777</Color>
       <Color x:Key="DefaultTextForegroundColor">#777777</Color>
       <Color x:Key="TextEditorBackgroundColor">White</Color>
       <Color x:Key="TextEditorForegroundColor">Black</Color>
       <Color x:Key="ResponseCapturedValueTextColor">#a90a4c</Color>
-      <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="Black"/>
+      <SolidColorBrush x:Key="TextControlBorderBrush" Color="#939397"/>
+      <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="#7c7c83"/>
+      <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#7c7c83"/>
+      <SolidColorBrush x:Key="TextControlForeground" Color="#595959"/>
+      <SolidColorBrush x:Key="TextControlForegroundPointerOver" Color="#4d4d4d"/>
+      <SolidColorBrush x:Key="TextControlForegroundFocused" Color="#4d4d4d"/>
+      <SolidColorBrush x:Key="ComboBoxBorderBrush" Color="#939397"/>
+      <SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver" Color="#7c7c83"/>
+      <SolidColorBrush x:Key="ComboBoxForeground" Color="#595959"/>
+      <SolidColorBrush x:Key="ComboBoxForegroundFocused" Color="#4d4d4d"/>
       <SolidColorBrush x:Key="CheckBoxBorderBrushCheckedPointerOver" Color="Black"/>
       <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPointerOver" Color="Black"/>
       <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="#a90a4c"/>
@@ -50,6 +59,9 @@
       <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#cff33f"/>
       <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPressed" Color="#c4f00f"/>
       <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="#dbf66f"/>
+      <SolidColorBrush x:Key="TreeViewItemBackgroundPointerOver" Color="#e3f989"/>
+      <SolidColorBrush x:Key="TreeViewItemBackgroundPressed" Color="#bae50d"/>
+      <SolidColorBrush x:Key="TreeViewItemBackgroundSelectedPressed" Color="#bae50d"/>
       <!--Color x:Key="TreeViewItemTargetMovementHighlightColor">#22000000</Color-->
     </ResourceDictionary>
   </ResourceDictionary.ThemeDictionaries>
