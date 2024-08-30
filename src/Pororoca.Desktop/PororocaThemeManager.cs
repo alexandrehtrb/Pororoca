@@ -76,7 +76,7 @@ public static class PororocaThemeManager
         theme switch
         {
             PororocaTheme.Light => Brushes.ForestGreen,
-            PororocaTheme.Light2 => Brushes.Goldenrod,
+            PororocaTheme.Light2 => Brushes.MediumVioletRed,
             PororocaTheme.Pampa => Brushes.MediumBlue,
             _ => Brushes.Gold
         };
