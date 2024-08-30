@@ -103,6 +103,10 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     public ReactiveCommand<Unit, Unit> SwitchToLightThemeCmd { get; }
 
     [Reactive]
+    public bool IsThemeLight2 { get; set; }
+    public ReactiveCommand<Unit, Unit> SwitchToLight2ThemeCmd { get; }
+
+    [Reactive]
     public bool IsThemeDark { get; set; }
     public ReactiveCommand<Unit, Unit> SwitchToDarkThemeCmd { get; }
 
@@ -208,6 +212,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
         #region THEMES
         SwitchToLightThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Light));
+        SwitchToLight2ThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Light2));
         SwitchToPampaThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Pampa));
         SwitchToDarkThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Dark));
         SwitchToAmazonianNightThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.AmazonianNight));
@@ -357,6 +362,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     private void UpdateMenuSelectedTheme()
     {
         IsThemeLight = PororocaThemeManager.CurrentTheme == PororocaTheme.Light;
+        IsThemeLight2 = PororocaThemeManager.CurrentTheme == PororocaTheme.Light2;
         IsThemeDark = PororocaThemeManager.CurrentTheme == PororocaTheme.Dark;
         IsThemePampa = PororocaThemeManager.CurrentTheme == PororocaTheme.Pampa;
         IsThemeAmazonianNight = PororocaThemeManager.CurrentTheme == PororocaTheme.AmazonianNight;
