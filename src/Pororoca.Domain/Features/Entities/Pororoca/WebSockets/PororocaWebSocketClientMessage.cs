@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 
 public enum PororocaWebSocketClientMessageContentMode
@@ -6,6 +8,9 @@ public enum PororocaWebSocketClientMessageContentMode
     File
 }
 
+#if DEBUG
+[DebuggerDisplay("{Name,nq}")]
+#endif
 public record PororocaWebSocketClientMessage
 (
     PororocaWebSocketMessageType MessageType,

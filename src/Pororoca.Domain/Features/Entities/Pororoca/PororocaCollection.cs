@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
@@ -5,6 +6,9 @@ using Pororoca.Domain.Features.VariableResolution;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca;
 
+#if DEBUG
+[DebuggerDisplay("{Name,nq}")]
+#endif
 public sealed record PororocaCollection
 (
     [property: JsonInclude] Guid Id,
@@ -23,12 +27,18 @@ public sealed record PororocaCollection
     [JsonPropertyOrder(-1)]
     public string Schema => SchemaVersion; // Needs to be object variable, not static
 
+#if DEBUG
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+#endif
     [JsonIgnore] // JSON IGNORE
     public IReadOnlyList<PororocaHttpRequest> HttpRequests =>
         Requests.OfType<PororocaHttpRequest>()
                 .ToList()
                 .AsReadOnly();
 
+#if DEBUG
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+#endif
     [JsonIgnore] // JSON IGNORE
     public IReadOnlyList<PororocaWebSocketConnection> WebSocketConnections =>
         Requests.OfType<PororocaWebSocketConnection>()
