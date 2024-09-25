@@ -53,6 +53,14 @@ public static class PororocaPredefinedVariableEvaluator
             "Teresa",
             "María",
             "Elena"
+        ]),
+        ("de", [
+            "Frida",
+            "Maria",
+            "Elsa",
+            "Amalia",
+            "Claudia",
+            "Barbara"
         ])
     ];
 
@@ -103,6 +111,14 @@ public static class PororocaPredefinedVariableEvaluator
             "Javier",
             "Miguel",
             "Guillermo"
+        ]),
+        ("de", [
+            "Hans",
+            "Karl",
+            "Fritz",
+            "Heinrich",
+            "Thomas",
+            "Michael"
         ])
     ];
 
@@ -157,6 +173,16 @@ public static class PororocaPredefinedVariableEvaluator
             "Zambrano",
             "La Cruz",
             "Martínez"
+        ]),
+        ("de", [
+            "Spieler",
+            "Schneider",
+            "Fischer",
+            "Gruber",
+            "Schürrle",
+            "Ammer",
+            "Bauer",
+            "Meissner"
         ])
     ];
 
