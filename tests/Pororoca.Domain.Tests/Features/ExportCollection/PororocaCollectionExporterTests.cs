@@ -1,6 +1,3 @@
-using System.Text;
-using System.Text.Json;
-using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Xunit;

@@ -11,11 +11,4 @@ public sealed class CollectionScopedAuthViewModel : CollectionOrganizationItemVi
     public CollectionScopedAuthViewModel(ICollectionOrganizationItemParentViewModel parentVm,
                                          PororocaCollection col) : base(parentVm, string.Empty) =>
         AuthVm = new(col.CollectionScopedAuth, false, () => { });
-
-    #region COLLECTION ORGANIZATION
-
-    protected override void CopyThis() =>
-        throw new NotImplementedException();
-
-    #endregion
 }

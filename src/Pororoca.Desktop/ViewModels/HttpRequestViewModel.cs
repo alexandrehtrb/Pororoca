@@ -1,10 +1,8 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
 using AvaloniaEdit.Document;
-using Pororoca.Desktop.Behaviors;
 using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
-using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Domain.Features.Common;
@@ -329,9 +327,6 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     }
 
     #region COLLECTION ORGANIZATION
-
-    protected override void CopyThis() =>
-        ClipboardArea.Instance.PushToCopy(ToHttpRequest());
 
     private void OnLanguageChanged()
     {

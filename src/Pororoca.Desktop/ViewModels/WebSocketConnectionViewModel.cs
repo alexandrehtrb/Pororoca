@@ -4,13 +4,11 @@ using System.Net;
 using System.Reactive;
 using System.Security.Authentication;
 using AvaloniaEdit.Document;
-using Pororoca.Desktop.Behaviors;
 using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.ViewModels.DataGrids;
-using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.Requester;
@@ -34,8 +32,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 {
     #region COLLECTION ORGANIZATION
 
-    public override Action OnAfterItemDeleted => Parent.OnAfterItemDeleted;
-    public override Action<CollectionOrganizationItemViewModel> OnRenameSubItemSelected => Parent.OnRenameSubItemSelected;
     public ReactiveCommand<Unit, Unit> AddNewWebSocketClientMessageCmd { get; }
 
     #endregion
@@ -43,8 +39,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     #region CONNECTION
 
     private readonly CollectionViewModel col;
-    private static readonly TimeSpan oneSecond = TimeSpan.FromSeconds(1);
-    private static readonly TimeSpan oneMinute = TimeSpan.FromMinutes(1);
     private readonly IPororocaHttpClientProvider httpClientProvider;
     private readonly PororocaWebSocketConnector connector;
 
@@ -450,9 +444,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region COLLECTION ORGANIZATION
 
-    protected override void CopyThis() =>
-        ClipboardArea.Instance.PushToCopy(ToWebSocketConnection());
-
     public override void PasteToThis()
     {
         var itemsToPaste = ClipboardArea.Instance.FetchCopiesOfWebSocketClientMessages();
@@ -593,7 +584,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     {
         var wsConn = ToWebSocketConnection();
         var effectiveVars = ((IPororocaVariableResolver)this.col).GetEffectiveVariables();
-        bool disableTlsVerification = ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled;
+        bool disableTlsVerification = MainWindowVm.IsSslVerificationDisabled;
 
         if (!IsValidConnection(effectiveVars, this.col.CollectionScopedAuth, wsConn, out var resolvedUri, out string? translateUriErrorCode))
         {
@@ -644,7 +635,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     private void DisableTlsVerification()
     {
-        ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled = true;
+        MainWindowVm.IsSslVerificationDisabled = true;
         IsDisableTlsVerificationVisible = false;
     }
 

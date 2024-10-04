@@ -1,10 +1,8 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
-using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.VariableResolution;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
 
@@ -94,7 +92,7 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
         for (int x = 0; x < Items.Count; x++)
         {
             var colItemVm = Items[x];
-            int indexOfLastSubfolder = Items.GetLastIndexOf<CollectionFolderViewModel>();
+            int indexOfLastSubfolder = GetLastIndexOf<CollectionFolderViewModel>(Items);
             if (colItemVm is CollectionVariablesViewModel || colItemVm is CollectionScopedAuthViewModel || colItemVm is EnvironmentsGroupViewModel)
             {
                 // Variables and Environments must remain at their positions
@@ -113,20 +111,14 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
         }
     }
 
-    private void ShowCollectionScopedHeaders()
-    {
-        var mainWindowVm = ((MainWindowViewModel)MainWindow.Instance!.DataContext!);
-        mainWindowVm.SwitchVisiblePage(CollectionScopedRequestHeadersVm);
-    }
+    private void ShowCollectionScopedHeaders() =>
+        MainWindowVm.SwitchVisiblePage(CollectionScopedRequestHeadersVm);
 
     private void AddNewEnvironment() =>
         EnvironmentsGroupVm.AddNewEnvironment();
 
     private Task ImportEnvironmentsAsync() =>
         EnvironmentsGroupVm.ImportEnvironmentsAsync();
-
-    protected override void CopyThis() =>
-        throw new NotImplementedException();
 
     public override void PasteToThis()
     {
@@ -136,11 +128,8 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
 
     #region EXPORT COLLECTION
 
-    private void GoToExportCollection()
-    {
-        var mwvm = (MainWindowViewModel)MainWindow.Instance!.DataContext!;
-        mwvm.SwitchVisiblePage(ExportCollectionVm);
-    }
+    private void GoToExportCollection() =>
+        MainWindowVm.SwitchVisiblePage(ExportCollectionVm);
 
     #endregion
 

@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Text.Json;
 using Pororoca.Domain.Features.Entities.Insomnia;
 using Pororoca.Domain.Features.Entities.Pororoca;
@@ -166,16 +165,11 @@ public static class InsomniaCollectionV4Importer
     private static PororocaKeyValueParam ToKeyValueParam(InsomniaCollectionV4NameValueParam p) =>
         new(!p.Disabled, p.Name, p.Value);
 
-    private static PororocaRequestAuth ToAuth(InsomniaCollectionV4RequestAuth? auth)
-    {
-        switch (auth?.Type)
+    private static PororocaRequestAuth ToAuth(InsomniaCollectionV4RequestAuth? auth) =>
+        (auth?.Type) switch
         {
-            case "basic":
-                return PororocaRequestAuth.MakeBasicAuth(auth.Username!, auth.Password!);
-            case "bearer":
-                return PororocaRequestAuth.MakeBearerAuth(auth.Token!);
-            default:
-                return PororocaRequestAuth.InheritedFromCollection;
-        }
-    }
+            "basic" => PororocaRequestAuth.MakeBasicAuth(auth.Username!, auth.Password!),
+            "bearer" => PororocaRequestAuth.MakeBearerAuth(auth.Token!),
+            _ => PororocaRequestAuth.InheritedFromCollection,
+        };
 }

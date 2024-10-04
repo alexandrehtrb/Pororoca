@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using Avalonia.Controls;
-using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.UITesting.Robots;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.ViewModels.DataGrids;
@@ -317,14 +316,13 @@ public class SaveAndRestoreCollectionUITest : UITest
         await TreeRobot.Select("COL1");
         var collection = ((CollectionViewModel)ColRobot.RootView!.DataContext!).ToCollection(forExporting: false);
         string json = PororocaCollectionExporter.ExportAsPororocaCollection(collection);
-        var mwvm = ((MainWindowViewModel)MainWindow.Instance!.DataContext!);
-        mwvm.CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
-        mwvm.CollectionsGroupViewDataCtx.Items.Clear();
+        MainWindowVm.CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
+        MainWindowVm.CollectionsGroupViewDataCtx.Items.Clear();
 
         AssertTreeItemNotExists(CollectionsGroup, "COL1");
 
         Assert(PororocaCollectionImporter.TryImportPororocaCollection(json, preserveId: true, out var reimportedCollection));
-        mwvm.AddCollection(reimportedCollection!, showItemInScreen: true);
+        MainWindowVm.AddCollection(reimportedCollection!, showItemInScreen: true);
     }
 
     private async Task AssertCollectionReimportedSuccessfully()

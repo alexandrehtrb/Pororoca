@@ -5,42 +5,41 @@ namespace Pororoca.Desktop.ViewModels;
 
 public interface ICollectionOrganizationItemParentViewModel
 {
-    Action<CollectionOrganizationItemViewModel> OnRenameSubItemSelected { get; }
-    Action OnAfterItemDeleted { get; }
-    void MoveSubItem(ICollectionOrganizationItemViewModel colItemVm, MoveableItemMovementDirection direction);
-    void DeleteSubItem(ICollectionOrganizationItemViewModel item);
+    void MoveSubItemUp(CollectionOrganizationItemViewModel colItemVm);
+    void MoveSubItemDown(CollectionOrganizationItemViewModel colItemVm);
+    void DeleteSubItem(CollectionOrganizationItemViewModel item);
 }
 
-public abstract class CollectionOrganizationItemParentViewModel<T> : CollectionOrganizationItemViewModel, ICollectionOrganizationItemParentViewModel where T : ICollectionOrganizationItemViewModel
+public abstract class CollectionOrganizationItemParentViewModel<T> : CollectionOrganizationItemViewModel, ICollectionOrganizationItemParentViewModel where T : CollectionOrganizationItemViewModel
 {
     [Reactive]
     public bool IsExpanded { get; set; }
 
     public abstract ObservableCollection<T> Items { get; }
-    public abstract Action<CollectionOrganizationItemViewModel> OnRenameSubItemSelected { get; }
-    public abstract Action OnAfterItemDeleted { get; }
 
     public CollectionOrganizationItemParentViewModel(ICollectionOrganizationItemParentViewModel parentVm, string name) : base(parentVm, name)
     {
     }
 
-    public void MoveSubItem(ICollectionOrganizationItemViewModel colItemVm, MoveableItemMovementDirection direction)
+    public void MoveSubItemUp(CollectionOrganizationItemViewModel colItemVm)
     {
         int currentIndex = Items.IndexOf((T)colItemVm);
-        if (currentIndex != -1)
+        if (currentIndex != -1 && colItemVm.CanMoveUp)
         {
-            if (direction == MoveableItemMovementDirection.Up && colItemVm.CanMoveUp)
-            {
-                int newIndex = currentIndex - 1;
-                Items.Move(currentIndex, newIndex);
-                RefreshSubItemsAvailableMovements();
-            }
-            else if (direction == MoveableItemMovementDirection.Down && colItemVm.CanMoveDown)
-            {
-                int newIndex = currentIndex + 1;
-                Items.Move(currentIndex, newIndex);
-                RefreshSubItemsAvailableMovements();
-            }
+            int newIndex = currentIndex - 1;
+            Items.Move(currentIndex, newIndex);
+            RefreshSubItemsAvailableMovements();
+        }
+    }
+
+    public void MoveSubItemDown(CollectionOrganizationItemViewModel colItemVm)
+    {
+        int currentIndex = Items.IndexOf((T)colItemVm);
+        if (currentIndex != -1 && colItemVm.CanMoveDown)
+        {
+            int newIndex = currentIndex + 1;
+            Items.Move(currentIndex, newIndex);
+            RefreshSubItemsAvailableMovements();
         }
     }
 
@@ -58,10 +57,10 @@ public abstract class CollectionOrganizationItemParentViewModel<T> : CollectionO
 
     public abstract void PasteToThis();
 
-    public void DeleteSubItem(ICollectionOrganizationItemViewModel item)
+    public void DeleteSubItem(CollectionOrganizationItemViewModel item)
     {
         Items.Remove((T)item);
         RefreshSubItemsAvailableMovements();
-        OnAfterItemDeleted();
+        MainWindowVm.HideAllPages();
     }
 }

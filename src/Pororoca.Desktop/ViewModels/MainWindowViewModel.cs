@@ -1,12 +1,6 @@
 using System.Diagnostics;
 using System.Reactive;
 using System.Reflection;
-using Avalonia.Controls;
-using Avalonia.Media.Imaging;
-using Avalonia.Platform;
-using Avalonia.Threading;
-using MsBox.Avalonia;
-using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
@@ -25,10 +19,6 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     [Reactive]
     public CollectionsGroupViewModel CollectionsGroupViewDataCtx { get; set; }
-
-    public Action<CollectionOrganizationItemViewModel> OnRenameSubItemSelected => onRenameItemSelected;
-
-    Action ICollectionOrganizationItemParentViewModel.OnAfterItemDeleted => onAfterItemDeleted;
 
     public ReactiveCommand<Unit, Unit> AddNewCollectionCmd { get; }
     public ReactiveCommand<Unit, Unit> ImportCollectionsFromFileCmd { get; }
@@ -284,8 +274,11 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #region COLLECTIONS ORGANIZATION
 
-    public void MoveSubItem(ICollectionOrganizationItemViewModel colItemVm, MoveableItemMovementDirection direction) =>
-        CollectionsGroupViewDataCtx.MoveSubItem(colItemVm, direction);
+    public void MoveSubItemUp(CollectionOrganizationItemViewModel colItemVm) =>
+        CollectionsGroupViewDataCtx.MoveSubItemUp(colItemVm);
+
+    public void MoveSubItemDown(CollectionOrganizationItemViewModel colItemVm) =>
+        CollectionsGroupViewDataCtx.MoveSubItemDown(colItemVm);
 
     public void AddNewCollection()
     {
@@ -310,18 +303,15 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         AddCollection(collectionCopy);
     }
 
-    private void onRenameItemSelected(ViewModelBase vm) =>
-        SwitchVisiblePage(vm);
-
-    public void DeleteSubItem(ICollectionOrganizationItemViewModel item)
+    public void DeleteSubItem(CollectionOrganizationItemViewModel item)
     {
         CollectionsGroupViewDataCtx.Items.Remove((CollectionViewModel)item);
         CollectionsGroupViewDataCtx.RefreshSubItemsAvailableMovements();
-        onAfterItemDeleted();
+        HideAllPages();
         ShowWelcomeIfNoCollectionsExist();
     }
 
-    private void onAfterItemDeleted() =>
+    public void HideAllPages() =>
         this.pages.ForEach(p => p.Visible = false);
 
     public Task ImportCollectionsAsync() =>

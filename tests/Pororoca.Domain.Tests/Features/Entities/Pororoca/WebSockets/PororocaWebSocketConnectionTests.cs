@@ -1,10 +1,6 @@
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Xunit;
 using static Pororoca.Domain.Features.Entities.Pororoca.PororocaRequestAuth;
-using System.Net;
-using System;
-using System.Security.Authentication;
-using System.Xml.Linq;
 
 namespace Pororoca.Domain.Tests.Features.Entities.Pororoca.WebSockets;
 

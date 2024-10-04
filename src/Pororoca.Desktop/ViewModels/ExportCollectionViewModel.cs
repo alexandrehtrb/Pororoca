@@ -1,7 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
 using Pororoca.Desktop.Converters;
-using Pororoca.Desktop.Views;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using static Pororoca.Desktop.ExportImport.FileExporterImporter;
@@ -35,11 +34,8 @@ public sealed class ExportCollectionViewModel : ViewModelBase
         ExportCollectionCmd = ReactiveCommand.CreateFromTask(ExportCollectionAsync);
     }
 
-    private void GoBack()
-    {
-        var mainWindowVm = ((MainWindowViewModel)MainWindow.Instance!.DataContext!);
-        mainWindowVm.SwitchVisiblePage(Collection);
-    }
+    private void GoBack() =>
+        MainWindowVm.SwitchVisiblePage(Collection);
 
     private Task ExportCollectionAsync() =>
         ShowExportCollectionToFileDialogAsync(Collection.ToCollection(forExporting: true), ExportFormat);

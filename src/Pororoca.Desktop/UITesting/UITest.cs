@@ -22,6 +22,8 @@ public abstract partial class UITest
 
     public TimeSpan ElapsedTime => this.stopwatch.Elapsed;
 
+    protected MainWindowViewModel MainWindowVm => ((MainWindowViewModel)MainWindow.Instance!.DataContext!);
+
     public UITest()
     {
         this.logAppender = new();
@@ -52,9 +54,8 @@ public abstract partial class UITest
 
     protected virtual void Teardown()
     {
-        var mwvm = ((MainWindowViewModel)MainWindow.Instance!.DataContext!);
-        mwvm.CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
-        mwvm.CollectionsGroupViewDataCtx.Items.Clear();
+        MainWindowVm.CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
+        MainWindowVm.CollectionsGroupViewDataCtx.Items.Clear();
     }
 
     public Task Wait(double seconds) => Task.Delay((int)(seconds * 1000));

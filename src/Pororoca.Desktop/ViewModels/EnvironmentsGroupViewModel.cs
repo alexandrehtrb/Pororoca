@@ -13,8 +13,6 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
 {
     #region COLLECTION ORGANIZATION
 
-    public override Action<CollectionOrganizationItemViewModel> OnRenameSubItemSelected => Parent.OnRenameSubItemSelected;
-    public override Action OnAfterItemDeleted => Parent.OnAfterItemDeleted;
     public ReactiveCommand<Unit, Unit> AddNewEnvironmentCmd { get; }
 
     #endregion
@@ -29,20 +27,9 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
 
     #endregion
 
-    #region OTHERS
-
-    private readonly bool isOperatingSystemMacOsx;
-
-    #endregion
-
     public EnvironmentsGroupViewModel(ICollectionOrganizationItemParentViewModel parentVm,
-                                      IEnumerable<PororocaEnvironment> envs,
-                                      Func<bool>? isOperatingSystemMacOsx = null) : base(parentVm, string.Empty)
+                                      IEnumerable<PororocaEnvironment> envs) : base(parentVm, string.Empty)
     {
-        #region OTHERS
-        this.isOperatingSystemMacOsx = (isOperatingSystemMacOsx ?? OperatingSystem.IsMacOS)();
-        #endregion
-
         #region COLLECTION ORGANIZATION
         AddNewEnvironmentCmd = ReactiveCommand.Create(AddNewEnvironment);
         ImportEnvironmentsCmd = ReactiveCommand.CreateFromTask(ImportEnvironmentsAsync);
@@ -76,9 +63,6 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
         RefreshSubItemsAvailableMovements();
         SetAsItemInFocus(envToAddVm, showItemInScreen);
     }
-
-    protected override void CopyThis() =>
-        throw new NotImplementedException();
 
     public override void PasteToThis()
     {

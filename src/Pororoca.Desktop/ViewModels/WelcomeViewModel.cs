@@ -1,15 +1,11 @@
 using System.Reactive;
 using Pororoca.Desktop.ExportImport;
-using Pororoca.Desktop.Views;
 using ReactiveUI;
 
 namespace Pororoca.Desktop.ViewModels;
 
 public sealed class WelcomeViewModel : ViewModelBase
 {
-    private static MainWindowViewModel MainWindowVm =>
-        (MainWindowViewModel)MainWindow.Instance!.DataContext!;
-
     public static readonly WelcomeViewModel Instance = new();
 
     public ReactiveCommand<Unit, Unit> AddNewCollectionCmd =>

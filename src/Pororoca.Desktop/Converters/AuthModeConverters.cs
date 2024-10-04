@@ -1,4 +1,3 @@
-using System.Numerics;
 using Pororoca.Domain.Features.Entities.Pororoca;
 
 namespace Pororoca.Desktop.Converters;

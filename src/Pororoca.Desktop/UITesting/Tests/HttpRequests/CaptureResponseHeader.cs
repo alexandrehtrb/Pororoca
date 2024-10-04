@@ -1,5 +1,3 @@
-using Pororoca.Domain.Features.Entities.Pororoca;
-
 namespace Pororoca.Desktop.UITesting.Tests;
 
 public sealed partial class ResponseCapturesUITest : UITest
@@ -10,10 +8,10 @@ public sealed partial class ResponseCapturesUITest : UITest
         await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/get/headers");
         await HttpRobot.SetEmptyBody();
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqHeaders);
-        await HttpRobot.SetRequestHeaders(new PororocaKeyValueParam[]
-        {
+        await HttpRobot.SetRequestHeaders(
+        [
             new(true, "Header1", "oi"),
-        });
+        ]);
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResCapture);
         await HttpRobot.ResAddCaptureHeader.ClickOn();
         await HttpRobot.EditResponseCaptureAt(0, "MyCapturedHeaderValue", "MIRRORED-Header1");

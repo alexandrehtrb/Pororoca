@@ -3,7 +3,6 @@ using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.UITesting.Robots;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.ViewModels.DataGrids;
-using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.ExportEnvironment;
 using Pororoca.Domain.Features.ImportEnvironment;
 
@@ -107,8 +106,7 @@ public sealed class ExportEnvironmentsUITest : SaveAndRestoreCollectionUITest
         await TreeRobot.Select("COL1");
         var cvm = ((CollectionViewModel)ColRobot.RootView!.DataContext!);
         cvm.EnvironmentsGroupVm.Items.Clear();
-        var mwvm = ((MainWindowViewModel)MainWindow.Instance!.DataContext!);
-        mwvm.CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
+        MainWindowVm.CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
     }
 
     private async Task RestoreEnvironment(ExportEnvironmentFormat format, string json)
@@ -142,9 +140,8 @@ public sealed class ExportEnvironmentsUITest : SaveAndRestoreCollectionUITest
 
     private void ClearAllCollections()
     {
-        var mwvm = ((MainWindowViewModel)MainWindow.Instance!.DataContext!);
-        mwvm.CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
-        mwvm.CollectionsGroupViewDataCtx.Items.Clear();
+        MainWindowVm.CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
+        MainWindowVm.CollectionsGroupViewDataCtx.Items.Clear();
         AssertTreeItemNotExists(CollectionsGroup, "COL1");
     }
 

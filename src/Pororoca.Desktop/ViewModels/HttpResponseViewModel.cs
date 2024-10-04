@@ -4,7 +4,6 @@ using AvaloniaEdit.Document;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.ViewModels.DataGrids;
-using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -153,7 +152,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
 
     private void DisableTlsVerification()
     {
-        ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled = true;
+        MainWindowVm.IsSslVerificationDisabled = true;
         IsDisableTlsVerificationVisible = false;
     }
 
@@ -196,7 +195,7 @@ public sealed class HttpResponseViewModel : ViewModelBase
             ResponseRawContent = res.Exception!.ToString();
             IsSaveResponseBodyToFileVisible = false;
             IsExportLogFileVisible = false;
-            bool isSslVerificationDisabled = ((MainWindowViewModel)MainWindow.Instance!.DataContext!).IsSslVerificationDisabled;
+            bool isSslVerificationDisabled = MainWindowVm.IsSslVerificationDisabled;
             IsDisableTlsVerificationVisible = !isSslVerificationDisabled && res.FailedDueToTlsVerification;
         }
         else if (this.res == null || res == null) // No response obtained yet, or clearing up.
