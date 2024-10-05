@@ -59,7 +59,7 @@ function Get-RuntimesToPublishFor
 	# Windows releases should be built on a Windows machine, because of dotnet
 	# Linux and Mac OS releases should be built on one of those OSs, because of chmod and zip
 	#return $IsWindows ? $windowsRuntimes : $unixRuntimes
-	return @("debian-x64")
+	return @("win-x64_installer")
 }
 
 #################### Pre-release build and tests ####################
@@ -259,13 +259,15 @@ function Publish-PororocaDesktop
 		[bool]$isInstallOnDebianRelease = $false
     )
 
-	if (($runtime -like "*win*") -or ($runtime -like "*linux*"))
+	if (($runtime -like "win*portable") -or ($runtime -like "linux*"))
 	{
 		# .NET SDK 6.0.3xx and greater allows for single file publishing for Windows 7
 		# for HTTP/3 to work, we cannot ship as single-file application,
 		# unless, and only for Windows, if we include msquic.dll next to the generated .exe file
 		# https://github.com/dotnet/runtime/issues/79727
 		# update (2023-12-11): let's try single-file publishing for Linux too
+		# update (2024-10-05): let's leave single-file only for portable releases,
+		# because single-files are compressed and take a longer time for start-up
 		$publishSingleFile = $True
 	}
 	else
