@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.6.0](#360-2024-10-07)
 * [3.5.0.1](#3501-2024-08-08)
 * [3.5.0](#350-2024-08-07)
 * [3.4.2](#342-2024-07-02)
@@ -28,6 +29,24 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.6.0](https://github.com/alexandrehtrb/Pororoca/tree/3.6.0) (2024-10-07)
+
+### Features
+
+* Light 2 theme by [@lilacse](https://github.com/lilacse).
+* German names and surnames added to random name generator.
+* `$timestamp` predefined variable.
+
+### Refactors
+
+* Added `[DebuggerDisplay]` attributes on domain classes to aid debugging visualization.
+* Code clean-up.
+
+### Others
+
+* Faster start-up time for Windows installer releases.
+* Raised .NET SDK to 8.0.402.
 
 ## [3.5.0.1](https://github.com/alexandrehtrb/Pororoca/tree/3.5.0.1) (2024-08-08)
 
