@@ -1,6 +1,4 @@
 using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Interactivity;
 using AvaloniaEdit;
 using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.ViewModels;

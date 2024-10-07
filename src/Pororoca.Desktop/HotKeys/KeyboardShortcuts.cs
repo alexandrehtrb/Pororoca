@@ -1,11 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
 using Avalonia.Controls;
-using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 using Avalonia.Threading;
-using MsBox.Avalonia;
-using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.ViewModels;
@@ -43,9 +39,6 @@ public sealed class KeyboardShortcuts : ViewModelBase
     public ReactiveCommand<Unit, Unit> FocusOnUrlCmd { get; }
 
     #region HELPER PROPERTIES
-
-    private MainWindowViewModel MainWindowVm =>
-        ((MainWindowViewModel)MainWindow.Instance!.DataContext!);
 
     private CollectionsGroupViewModel CollectionsGroupVm =>
         MainWindowVm.CollectionsGroupViewDataCtx;
@@ -342,7 +335,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
     {
         if (SelectedItem is CollectionViewModel cvm)
         {
-            ((MainWindowViewModel)cvm.Parent).DuplicateCollection(cvm);
+            MainWindowVm.DuplicateCollection(cvm);
         }
     }
 

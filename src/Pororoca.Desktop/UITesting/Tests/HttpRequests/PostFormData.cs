@@ -8,12 +8,12 @@ public sealed partial class HttpRequestsUITest : UITest
     {
         await HttpRobot.HttpMethod.Select("POST");
         await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/post/multipartformdata");
-        await HttpRobot.SetFormDataBody(new PororocaHttpRequestFormDataParam[]
-        {
+        await HttpRobot.SetFormDataBody(
+        [
             PororocaHttpRequestFormDataParam.MakeTextParam(true, "a", "xyz{{SpecialValue1}}", "text/plain"),
             PororocaHttpRequestFormDataParam.MakeTextParam(true, "b", "[]", "application/json"),
             PororocaHttpRequestFormDataParam.MakeFileParam(true, "arq", "{{TestFilesDir}}/arq.txt", "text/plain")
-        });
+        ]);
         await HttpRobot.ClickOnSendAndWaitForResponse();
 
         AssertContainsText(HttpRobot.ResTitle, "Response: 200 OK");

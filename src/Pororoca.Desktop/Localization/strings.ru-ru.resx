@@ -966,6 +966,9 @@
   <data name="TopMenuTheme/Light" xml:space="preserve">
     <value>Светлая</value>
   </data>
+  <data name="TopMenuTheme/Light2" xml:space="preserve">
+    <value>Светлая 2</value>
+  </data>
   <data name="TopMenuTheme/Pampa" xml:space="preserve">
     <value>Pampa</value>
   </data>

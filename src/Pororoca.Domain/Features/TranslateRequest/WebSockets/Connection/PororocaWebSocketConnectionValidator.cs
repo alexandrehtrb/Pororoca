@@ -1,6 +1,5 @@
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
-using Pororoca.Domain.Features.VariableResolution;
 using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
 using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonTranslator;
 using static Pororoca.Domain.Features.TranslateRequest.Common.PororocaRequestCommonValidator;

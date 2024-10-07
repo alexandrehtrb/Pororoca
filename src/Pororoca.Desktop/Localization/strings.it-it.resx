@@ -975,6 +975,9 @@
   <data name="TopMenuTheme/Light" xml:space="preserve">
     <value>Chiaro</value>
   </data>
+  <data name="TopMenuTheme/Light2" xml:space="preserve">
+    <value>Chiaro 2</value>
+  </data>
   <data name="TopMenuTheme/Pampa" xml:space="preserve">
     <value>Pampa</value>
   </data>

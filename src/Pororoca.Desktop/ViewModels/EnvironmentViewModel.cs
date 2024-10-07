@@ -1,9 +1,5 @@
 using System.Reactive;
-using Pororoca.Desktop.Behaviors;
-using Pororoca.Desktop.ExportImport;
-using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.ViewModels.DataGrids;
-using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -59,9 +55,6 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
 
     #region COLLECTION ORGANIZATION
 
-    protected override void CopyThis() =>
-        ClipboardArea.Instance.PushToCopy(ToEnvironment(forExporting: false));
-
     protected override void OnNameUpdated(string newName)
     {
         base.OnNameUpdated(newName);
@@ -79,11 +72,8 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
 
     #region EXPORT ENVIRONMENT
 
-    private void GoToExportEnvironment()
-    {
-        var mwvm = (MainWindowViewModel)MainWindow.Instance!.DataContext!;
-        mwvm.SwitchVisiblePage(ExportEnvironmentVm);
-    }
+    private void GoToExportEnvironment() =>
+        MainWindowVm.SwitchVisiblePage(ExportEnvironmentVm);
 
     #endregion
 

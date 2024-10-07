@@ -1,4 +1,3 @@
-using Avalonia.Controls;
 using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.Views;
 

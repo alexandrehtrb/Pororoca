@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca;
@@ -11,6 +12,9 @@ public enum PororocaRequestAuthMode
     ClientCertificate
 }
 
+#if DEBUG
+[DebuggerDisplay("{Mode,nq}")]
+#endif
 public sealed record PororocaRequestAuth
 (
     [property: JsonInclude] PororocaRequestAuthMode Mode,

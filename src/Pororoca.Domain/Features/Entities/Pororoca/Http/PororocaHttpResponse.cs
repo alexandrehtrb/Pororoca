@@ -1,12 +1,9 @@
 using System.Collections.Frozen;
 using System.Net;
-using System.Security.Authentication;
 using System.Text;
-using System.Text.Json;
 using System.Xml;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.VariableCapture;
-using static Pororoca.Domain.Features.Common.JsonConfiguration;
 using static Pororoca.Domain.Features.ResponseParsing.PororocaHttpMultipartResponseBodyReader;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca.Http;

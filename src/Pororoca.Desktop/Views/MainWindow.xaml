@@ -96,6 +96,20 @@
               </MenuItem.Icon>
             </MenuItem>
             <MenuItem
+                x:Name="topMenuItemOptionsThemeLight2"
+                Header="{Binding i18n.TopMenuTheme.Light2}"
+                Command="{Binding SwitchToLight2ThemeCmd}">
+              <MenuItem.Icon>
+                <Image
+                    IsVisible="{Binding IsThemeLight2}"
+                    Classes="MenuItemCheckMark">
+                  <Image.Source>
+                    <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                  </Image.Source>
+                </Image>
+              </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem
                 x:Name="topMenuItemOptionsThemeDark"
                 Header="{Binding i18n.TopMenuTheme.Dark}"
                 Command="{Binding SwitchToDarkThemeCmd}">

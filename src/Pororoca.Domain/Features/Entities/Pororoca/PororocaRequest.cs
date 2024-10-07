@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca;
@@ -9,6 +10,9 @@ public enum PororocaRequestType
     HttpRepetition
 }
 
+#if DEBUG
+[DebuggerDisplay("{Name,nq}")]
+#endif
 public abstract record PororocaRequest
 (
     [property: JsonPropertyOrder(-3)] PororocaRequestType RequestType,

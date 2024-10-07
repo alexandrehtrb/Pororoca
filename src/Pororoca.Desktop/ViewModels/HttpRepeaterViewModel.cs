@@ -6,7 +6,6 @@ using Avalonia.Threading;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
-using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
@@ -470,9 +469,6 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
             }
         }
     }
-
-    protected override void CopyThis() =>
-        ClipboardArea.Instance.PushToCopy(ToHttpRepetition());
 
     internal PororocaHttpRepetition ToHttpRepetition() => new(
         Name: Name,

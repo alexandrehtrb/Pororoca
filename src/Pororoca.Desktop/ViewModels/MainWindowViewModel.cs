@@ -1,12 +1,6 @@
 using System.Diagnostics;
 using System.Reactive;
 using System.Reflection;
-using Avalonia.Controls;
-using Avalonia.Media.Imaging;
-using Avalonia.Platform;
-using Avalonia.Threading;
-using MsBox.Avalonia;
-using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
@@ -25,10 +19,6 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     [Reactive]
     public CollectionsGroupViewModel CollectionsGroupViewDataCtx { get; set; }
-
-    public Action<CollectionOrganizationItemViewModel> OnRenameSubItemSelected => onRenameItemSelected;
-
-    Action ICollectionOrganizationItemParentViewModel.OnAfterItemDeleted => onAfterItemDeleted;
 
     public ReactiveCommand<Unit, Unit> AddNewCollectionCmd { get; }
     public ReactiveCommand<Unit, Unit> ImportCollectionsFromFileCmd { get; }
@@ -101,6 +91,10 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     [Reactive]
     public bool IsThemeLight { get; set; }
     public ReactiveCommand<Unit, Unit> SwitchToLightThemeCmd { get; }
+
+    [Reactive]
+    public bool IsThemeLight2 { get; set; }
+    public ReactiveCommand<Unit, Unit> SwitchToLight2ThemeCmd { get; }
 
     [Reactive]
     public bool IsThemeDark { get; set; }
@@ -208,6 +202,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
         #region THEMES
         SwitchToLightThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Light));
+        SwitchToLight2ThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Light2));
         SwitchToPampaThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Pampa));
         SwitchToDarkThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Dark));
         SwitchToAmazonianNightThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.AmazonianNight));
@@ -279,8 +274,11 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #region COLLECTIONS ORGANIZATION
 
-    public void MoveSubItem(ICollectionOrganizationItemViewModel colItemVm, MoveableItemMovementDirection direction) =>
-        CollectionsGroupViewDataCtx.MoveSubItem(colItemVm, direction);
+    public void MoveSubItemUp(CollectionOrganizationItemViewModel colItemVm) =>
+        CollectionsGroupViewDataCtx.MoveSubItemUp(colItemVm);
+
+    public void MoveSubItemDown(CollectionOrganizationItemViewModel colItemVm) =>
+        CollectionsGroupViewDataCtx.MoveSubItemDown(colItemVm);
 
     public void AddNewCollection()
     {
@@ -305,18 +303,15 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         AddCollection(collectionCopy);
     }
 
-    private void onRenameItemSelected(ViewModelBase vm) =>
-        SwitchVisiblePage(vm);
-
-    public void DeleteSubItem(ICollectionOrganizationItemViewModel item)
+    public void DeleteSubItem(CollectionOrganizationItemViewModel item)
     {
         CollectionsGroupViewDataCtx.Items.Remove((CollectionViewModel)item);
         CollectionsGroupViewDataCtx.RefreshSubItemsAvailableMovements();
-        onAfterItemDeleted();
+        HideAllPages();
         ShowWelcomeIfNoCollectionsExist();
     }
 
-    private void onAfterItemDeleted() =>
+    public void HideAllPages() =>
         this.pages.ForEach(p => p.Visible = false);
 
     public Task ImportCollectionsAsync() =>
@@ -357,6 +352,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     private void UpdateMenuSelectedTheme()
     {
         IsThemeLight = PororocaThemeManager.CurrentTheme == PororocaTheme.Light;
+        IsThemeLight2 = PororocaThemeManager.CurrentTheme == PororocaTheme.Light2;
         IsThemeDark = PororocaThemeManager.CurrentTheme == PororocaTheme.Dark;
         IsThemePampa = PororocaThemeManager.CurrentTheme == PororocaTheme.Pampa;
         IsThemeAmazonianNight = PororocaThemeManager.CurrentTheme == PororocaTheme.AmazonianNight;

@@ -1,12 +1,10 @@
 using Pororoca.Desktop.Converters;
-using Pororoca.Desktop.HotKeys;
 using Pororoca.Domain.Features.Entities.Pororoca;
 
 namespace Pororoca.Desktop.ViewModels;
 
 public sealed class CollectionFolderViewModel : RequestsAndFoldersParentViewModel
 {
-
     public CollectionFolderViewModel(ICollectionOrganizationItemParentViewModel parentVm,
                                      PororocaCollectionFolder folder) : base(parentVm, folder.Name)
     {
@@ -21,7 +19,7 @@ public sealed class CollectionFolderViewModel : RequestsAndFoldersParentViewMode
         for (int x = 0; x < Items.Count; x++)
         {
             var colItemVm = Items[x];
-            int indexOfLastSubfolder = Items.GetLastIndexOf<CollectionFolderViewModel>();
+            int indexOfLastSubfolder = GetLastIndexOf<CollectionFolderViewModel>(Items);
             if (colItemVm is CollectionFolderViewModel)
             {
                 colItemVm.CanMoveUp = x > 0;
@@ -34,9 +32,6 @@ public sealed class CollectionFolderViewModel : RequestsAndFoldersParentViewMode
             }
         }
     }
-
-    protected override void CopyThis() =>
-        ClipboardArea.Instance.PushToCopy(ToCollectionFolder());
 
     #endregion
 

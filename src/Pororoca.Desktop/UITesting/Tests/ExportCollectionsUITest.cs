@@ -216,9 +216,8 @@ public sealed class ExportCollectionsUITest : SaveAndRestoreCollectionUITest
 
     private void ClearAllCollections()
     {
-        var mwvm = ((MainWindowViewModel)MainWindow.Instance!.DataContext!);
-        mwvm.CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
-        mwvm.CollectionsGroupViewDataCtx.Items.Clear();
+        MainWindowVm.CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
+        MainWindowVm.CollectionsGroupViewDataCtx.Items.Clear();
         AssertTreeItemNotExists(CollectionsGroup, "COL1");
     }
 

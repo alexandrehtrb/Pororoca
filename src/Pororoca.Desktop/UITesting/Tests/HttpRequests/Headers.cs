@@ -1,5 +1,3 @@
-using Pororoca.Domain.Features.Entities.Pororoca;
-
 namespace Pororoca.Desktop.UITesting.Tests;
 
 public sealed partial class HttpRequestsUITest : UITest

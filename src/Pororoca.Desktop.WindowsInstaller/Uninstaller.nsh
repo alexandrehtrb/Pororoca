@@ -27,22 +27,8 @@ Section "un.$(SectionProgramFiles)" SectionUninstallProgram
 	${endif}
 
 	; Try to delete the EXE as the first step - if it's in use, don't remove anything else
-	!insertmacro DeleteRetryAbort "$INSTDIR\${PROGEXE}"
-	!insertmacro DeleteRetryAbort "$INSTDIR\av_libglesv2.dll"
-	!insertmacro DeleteRetryAbort "$INSTDIR\libHarfBuzzSharp.dll"
-	!insertmacro DeleteRetryAbort "$INSTDIR\libSkiaSharp.dll"
-	${if} ${RunningX64}
-		!insertmacro DeleteRetryAbort "$INSTDIR\onigwrap-x64.dll"
-	${else}
-		!insertmacro DeleteRetryAbort "$INSTDIR\onigwrap-x86.dll"
-	${endif}
-	!insertmacro DeleteRetryAbort "$INSTDIR\msquic.dll"
-	!insertmacro DeleteRetryAbort "$INSTDIR\pororoca_icon.ico"
-	!insertmacro DeleteRetryAbort "$INSTDIR\sbom.json"
-	
-	!ifdef LICENSE_FILE
-		!insertmacro DeleteRetryAbort "$INSTDIR\${LICENSE_FILE}"
-	!endif
+	!insertmacro DeleteRetryAbort "$INSTDIR\${PROGEXE}"	
+	RMDir /r "$INSTDIR" ; delete entire folder
 
 	; Clean up "Documentation"
 	; !insertmacro DeleteRetryAbort "$INSTDIR\readme.txt"

@@ -1,5 +1,3 @@
-using Pororoca.Domain.Features.Entities.Pororoca;
-
 namespace Pororoca.Desktop.UITesting.Tests;
 
 public sealed partial class HttpRequestsUITest : UITest
@@ -8,14 +6,14 @@ public sealed partial class HttpRequestsUITest : UITest
     {
         await HttpRobot.HttpMethod.Select("POST");
         await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/post/urlencoded");
-        await HttpRobot.SetUrlEncodedBody(new PororocaKeyValueParam[]
-        {
+        await HttpRobot.SetUrlEncodedBody(
+        [
             new(true, "a", "xyz"),
             new(true, "b", "123"),
             new(false, "c", "false"),
             new(true, "c", "true"),
             new(true, "myIdSecret", "{{SpecialValue1}}")
-        });
+        ]);
         await HttpRobot.ClickOnSendAndWaitForResponse();
 
         AssertContainsText(HttpRobot.ResTitle, "Response: 200 OK");

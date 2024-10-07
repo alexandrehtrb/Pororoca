@@ -14,8 +14,6 @@ public abstract class RequestsAndFoldersParentViewModel : CollectionOrganization
 {
     #region COLLECTION ORGANIZATION
 
-    public override Action OnAfterItemDeleted => Parent.OnAfterItemDeleted;
-    public override Action<CollectionOrganizationItemViewModel> OnRenameSubItemSelected => Parent.OnRenameSubItemSelected;
     public ReactiveCommand<Unit, Unit> AddNewFolderCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewHttpRequestCmd { get; }
     public ReactiveCommand<Unit, Unit> AddNewWebSocketConnectionCmd { get; }
@@ -130,12 +128,12 @@ public abstract class RequestsAndFoldersParentViewModel : CollectionOrganization
         if (this is CollectionViewModel)
         {
             const int numberOfFixedItems = 3; // variables, auth, environments
-            int indexOfLastFolder = Items.GetLastIndexOf<CollectionFolderViewModel>();
+            int indexOfLastFolder = GetLastIndexOf<CollectionFolderViewModel>(Items);
             indexToInsertAt = indexOfLastFolder == -1 ? numberOfFixedItems : (indexOfLastFolder + 1);
         }
         else
         {
-            indexToInsertAt = Items.GetLastIndexOf<CollectionFolderViewModel>() + 1;
+            indexToInsertAt = GetLastIndexOf<CollectionFolderViewModel>(Items) + 1;
         }
 
         CollectionFolderViewModel folderToAddVm = new(this, folderToAdd);
@@ -178,6 +176,15 @@ public abstract class RequestsAndFoldersParentViewModel : CollectionOrganization
         IsExpanded = true;
         RefreshSubItemsAvailableMovements();
         SetAsItemInFocus(repToAddVm, isNewItem);
+    }
+
+    protected static int GetLastIndexOf<T>(ObservableCollection<CollectionOrganizationItemViewModel> items) where T : CollectionOrganizationItemViewModel
+    {
+        var last = items.LastOrDefault(x => x is T);
+        if (last is null)
+            return -1;
+        else
+            return items.IndexOf(last);
     }
 
     #endregion
