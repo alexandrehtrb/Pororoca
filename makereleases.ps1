@@ -59,7 +59,7 @@ function Get-RuntimesToPublishFor
 	# Windows releases should be built on a Windows machine, because of dotnet
 	# Linux and Mac OS releases should be built on one of those OSs, because of chmod and zip
 	#return $IsWindows ? $windowsRuntimes : $unixRuntimes
-	return @("win-x64_installer")
+	return @("osx-x64")
 }
 
 #################### Pre-release build and tests ####################
@@ -352,16 +352,23 @@ function Make-AppFolderIfMacOS
 	{
 		Write-Host "Remember to update Info.plist file with the correct version!" -ForegroundColor Magenta
 		Write-Host "Creating custom folder structure for Mac OSX .app..." -ForegroundColor DarkYellow
-		[void](mkdir "${outputFolder}/Pororoca.app")
-		[void](mkdir "${outputFolder}/Pororoca.app/Contents")
-		[void](mkdir "${outputFolder}/Pororoca.app/Contents/MacOS")
-		[void](mkdir "${outputFolder}/Pororoca.app/Contents/Resources")
+
+		$tempAppOutputFolder = $outputFolder + "_app"
+
+		[void](mkdir "$tempAppOutputFolder")
+		[void](mkdir "$tempAppOutputFolder/Contents")
+		[void](mkdir "$tempAppOutputFolder/Contents/MacOS")
+		[void](mkdir "$tempAppOutputFolder/Contents/Resources")
 		Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/Info.plist" `
-				  -Destination "${outputFolder}/Pororoca.app/Contents/"
+				  -Destination "$tempAppOutputFolder/Contents/"
 		Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/pororoca.icns" `
-				  -Destination "${outputFolder}/Pororoca.app/Contents/Resources/"
-		Get-ChildItem $outputFolder -File | Copy-Item -Destination "${outputFolder}/Pororoca.app/Contents/MacOS/" -Force
-		Get-ChildItem $outputFolder -File | Remove-Item
+				  -Destination "$tempAppOutputFolder/Contents/Resources/"
+		Copy-Item -Force -Recurse -Path "$outputFolder/*" -Destination "$tempAppOutputFolder/Contents/MacOS/"
+		Remove-Item -Recurse -Force -Path "$outputFolder/*"
+
+		[void](mkdir "$outputFolder/Pororoca.app")
+		Copy-Item -Force -Recurse -Path "$tempAppOutputFolder/*" -Destination "$outputFolder/Pororoca.app/"
+		Remove-Item -Recurse -Force -Path $tempAppOutputFolder
 	}
 }
 
