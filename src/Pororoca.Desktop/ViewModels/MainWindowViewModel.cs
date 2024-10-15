@@ -329,7 +329,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #region LANGUAGE
 
-    private void SelectLanguage(Language lang)
+    internal void SelectLanguage(Language lang)
     {
         Localizer.Instance.CurrentLanguage = lang;
         IsLanguagePortuguese = lang == Language.Portuguese;
@@ -465,35 +465,11 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     #region UI TESTS
 
 #if DEBUG || UI_TESTS_ENABLED
-    private async Task RunUITestsAsync()
+    private Task RunUITestsAsync()
     {
-        /*
-        IMPORTANT:
-        To run the UI tests, run Pororoca.TestServer in localhost and
-        have the TestFiles directory inside the PororocaUserData folder.
-        */
-
-        // making a backup of the items' tree and clearing it before the tests
-        var bkupedLang = Localizer.Instance.CurrentLanguage;
-        var bkupedItems = CollectionsGroupViewDataCtx.Items.ToList();
-        CollectionsGroupViewDataCtx.Items.Clear();
-        SelectLanguage(Language.English);
-        if (Pororoca.Desktop.Views.MainWindow.Instance!.Clipboard is Avalonia.Input.Platform.IClipboard systemClipboard)
-        {
-            await systemClipboard.ClearAsync();
-        }
-
-        string resultsLog = await Pororoca.Desktop.UITesting.UITestsRunner.RunAllTestsAsync();
-
-        // restoring the items' tree after the tests
-        foreach (var item in bkupedItems) { CollectionsGroupViewDataCtx.Items.Add(item); }
-        CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
-        SelectLanguage(bkupedLang);
-
-        Dialogs.ShowDialog(
-            title: "UI tests results",
-            message: resultsLog,
-            buttons: ButtonEnum.Ok);
+        Pororoca.Desktop.Views.UITestsPrepareWindow uiTestsPrepareWindow = new();
+        uiTestsPrepareWindow.Show(Pororoca.Desktop.Views.MainWindow.Instance!);
+        return Task.CompletedTask;
     }
 #else
     private Task RunUITestsAsync() => Task.CompletedTask;

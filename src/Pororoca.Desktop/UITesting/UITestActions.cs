@@ -9,10 +9,9 @@ namespace Pororoca.Desktop.UITesting;
 
 internal static class UITestActions
 {
-    // increase the time below to make the tests run slower
-    private static readonly TimeSpan defaultWaitingTimeAfterActions = TimeSpan.FromSeconds(0.05);
+    internal static TimeSpan WaitingTimeAfterActions;
 
-    internal static Task WaitAfterActionAsync() => Task.Delay(defaultWaitingTimeAfterActions);
+    internal static Task WaitAfterActionAsync() => Task.Delay(WaitingTimeAfterActions);
 
     internal static TreeViewItem? GetTreeViewItemViewAtIndex(this TreeView parentView, int index) =>
         (TreeViewItem?)parentView.ItemsView[index];

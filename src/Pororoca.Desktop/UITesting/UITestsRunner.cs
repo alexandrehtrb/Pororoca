@@ -1,48 +1,13 @@
 using System.Text;
-using Pororoca.Desktop.UITesting.Tests;
 
 namespace Pororoca.Desktop.UITesting;
 
 public static class UITestsRunner
 {
-    public static Task<string> RunAllTestsAsync() => RunTestsAsync(
-    [
-        new TopMenuUITest(),
-        new SwitchLanguagesUITest(),
-        new SwitchThemesUITest(),
-        new EditableTextBlockUITest(),
-        new CollectionAndCollectionFolderUITest(),
-        new TreeCopyAndPasteItemsUITest(),
-        new TreeCutAndPasteItemsUITest(),
-        new TreeDeleteItemsUITest(),
-        new HttpRequestValidationsUITest(),
-        new HttpRequestsUITest(),
-        new VariablesCutCopyPasteDeleteUITest(),
-        new HeadersCutCopyPasteDeleteUITest(),
-        new UrlEncodedParamsCutCopyPasteDeleteUITest(),
-        new FormDataParamsCutCopyPasteDeleteUITest(),
-        new WebSocketsValidationsUITest(),
-        new WebSocketsUITest(),
-        new SaveAndRestoreCollectionUITest(),
-        new ExportCollectionsUITest(),
-        new ExportEnvironmentsUITest(),
-        new CollectionScopedAuthUITest(),
-        new HttpRepeaterUITest(),
-        new HttpRepeaterValidationsUITest(),
-        new ResponseCapturesUITest(),
-        // Out of scope of automated UI tests:
-        // some keybindings
-        // all dialogs
-        // context menu actions
-        // form data add text and file params buttons
-        // cut collection, cut and paste to itself
-        // save responses to file
-        // welcome screen
-        // http headers names and values autocomplete
-    ]);
-
-    private static async Task<string> RunTestsAsync(params UITest[] tests)
+    internal static async Task<string> RunTestsAsync(TimeSpan waitingTimeBetweenActions, params UITest[] tests)
     {
+        UITestActions.WaitingTimeAfterActions = waitingTimeBetweenActions;
+
         static TimeSpan SumTotalTime(IEnumerable<UITest> ts)
         {
             var totalTime = TimeSpan.Zero;

@@ -64,7 +64,7 @@ public abstract partial class UITest
 
     public abstract Task RunAsync();
 
-    protected static string GetTestFilesDirPath()
+    internal static string GetTestFilesDirPath()
     {
         var userDataDir = UserDataManager.GetUserDataFolder();
         return Path.Combine(userDataDir.FullName, "TestFiles");
