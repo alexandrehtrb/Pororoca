@@ -374,7 +374,7 @@
   </data>
   <data name="ExportCollection/EnvironmentWithSecretVariables" xml:space="preserve">
     <value>COM SEGREDOS</value>
-  </data>  
+  </data>
   <data name="ExportEnvironment/Title" xml:space="preserve">
     <value>Exportar ambiente…</value>
   </data>
@@ -395,7 +395,7 @@
   </data>
   <data name="ExportEnvironment/PostmanEnvironmentFormat" xml:space="preserve">
     <value>Ambiente Postman</value>
-  </data>  
+  </data>
   <data name="Folder/NewFolder" xml:space="preserve">
     <value>Nova pasta</value>
   </data>
@@ -1157,5 +1157,29 @@
   </data>
   <data name="WebSocketExchangedMessages/TextContentDescriptionFormat" xml:space="preserve">
     <value>texto, {0} bytes</value>
-  </data>  
+  </data>
+  <data name="UITestsPrepare/Title" xml:space="preserve">
+    <value>Testes de UI</value>
+  </data>
+  <data name="UITestsPrepare/TestFilesFolderNotFound" xml:space="preserve">
+    <value>Pasta TestFiles não encontrada!!!</value>
+  </data>
+  <data name="UITestsPrepare/WaitingTimeBetweenActions" xml:space="preserve">
+    <value>Tempo de espera entre ações (ms)</value>
+  </data>
+  <data name="UITestsPrepare/TestInclude" xml:space="preserve">
+    <value>Incluir</value>
+  </data>
+  <data name="UITestsPrepare/TestName" xml:space="preserve">
+    <value>Teste</value>
+  </data>
+  <data name="UITestsPrepare/RunTests" xml:space="preserve">
+    <value>Rodar testes!</value>
+  </data>
+  <data name="UITestsPrepare/SelectAll" xml:space="preserve">
+    <value>Todos</value>
+  </data>
+  <data name="UITestsPrepare/DeselectAll" xml:space="preserve">
+    <value>Nenhum</value>
+  </data>
 </root>

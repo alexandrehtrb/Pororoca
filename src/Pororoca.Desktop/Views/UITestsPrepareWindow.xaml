@@ -33,7 +33,7 @@
         VerticalAlignment="Center"
         TextWrapping="Wrap"
         Classes="SectionTitle"
-        Text="UI tests"/>
+        Text="{Binding i18n.UITestsPrepare.Title}"/>
 
       <TextBlock
         HorizontalAlignment="Left"
@@ -43,7 +43,7 @@
         Classes="SectionTitle"
         FontSize="14"
         Foreground="{DynamicResource WebSocketConnectedBrush}"
-        Text="TestFiles folder not found!!!"
+        Text="{Binding i18n.UITestsPrepare.TestFilesFolderNotFound}"
         IsVisible="{Binding !TestFilesFolderFound}"/>
       
     </StackPanel>
@@ -57,7 +57,7 @@
         HorizontalAlignment="Stretch"
         VerticalAlignment="Center"
         Margin="0,0,6,0"
-        Text="Waiting time between actions (ms)"/>
+        Text="{Binding i18n.UITestsPrepare.WaitingTimeBetweenActions}"/>
       
       <NumericUpDown
         Margin="6,0,0,0"
@@ -82,7 +82,7 @@
           Width="0.35*"
           Binding="{Binding Include}">
           <DataGridCheckBoxColumn.Header>
-            <TextBlock Text="Include"/>
+            <TextBlock Text="{Binding i18n.UITestsPrepare.TestInclude}"/>
           </DataGridCheckBoxColumn.Header>
         </DataGridCheckBoxColumn>
         <DataGridTextColumn
@@ -90,7 +90,7 @@
           Binding="{Binding Name}"
           IsReadOnly="True">
           <DataGridTextColumn.Header>
-            <TextBlock Text="Test"/>
+            <TextBlock Text="{Binding i18n.UITestsPrepare.TestName}"/>
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
       </DataGrid.Columns>
@@ -104,7 +104,7 @@
         HorizontalContentAlignment="Center"
         VerticalContentAlignment="Center"
         Click="RunTests"
-        Content="Run tests!"
+        Content="{Binding i18n.UITestsPrepare.RunTests}"
         Classes="Primary"/>
 
       <Button
@@ -113,7 +113,7 @@
         HorizontalContentAlignment="Center"
         VerticalContentAlignment="Center"
         Command="{Binding SelectAllTestsCmd}"
-        Content="All"
+        Content="{Binding i18n.UITestsPrepare.SelectAll}"
         Classes="Secondary"/>
 
       <Button
@@ -122,7 +122,7 @@
         HorizontalContentAlignment="Center"
         VerticalContentAlignment="Center"
         Command="{Binding DeselectAllTestsCmd}"
-        Content="None"
+        Content="{Binding i18n.UITestsPrepare.DeselectAll}"
         Classes="Secondary"/>
 
     </StackPanel>

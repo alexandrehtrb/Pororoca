@@ -179,7 +179,7 @@
   </data>
   <data name="Collection/ExportCollection" xml:space="preserve">
     <value>Export collection…</value>
-  </data>  
+  </data>
   <data name="Collection/ImportCollectionDialogTitle" xml:space="preserve">
     <value>Import collection / OpenAPI files</value>
   </data>
@@ -1157,5 +1157,29 @@
   </data>
   <data name="WebSocketExchangedMessages/TextContentDescriptionFormat" xml:space="preserve">
     <value>text, {0} bytes</value>
-  </data>  
+  </data>
+  <data name="UITestsPrepare/Title" xml:space="preserve">
+    <value>UI tests</value>
+  </data>
+  <data name="UITestsPrepare/TestFilesFolderNotFound" xml:space="preserve">
+    <value>Test files folder not found!!!</value>
+  </data>
+  <data name="UITestsPrepare/WaitingTimeBetweenActions" xml:space="preserve">
+    <value>Waiting time between actions (ms)</value>
+  </data>
+  <data name="UITestsPrepare/TestInclude" xml:space="preserve">
+    <value>Include</value>
+  </data>
+  <data name="UITestsPrepare/TestName" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="UITestsPrepare/RunTests" xml:space="preserve">
+    <value>Run tests!</value>
+  </data>
+  <data name="UITestsPrepare/SelectAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="UITestsPrepare/DeselectAll" xml:space="preserve">
+    <value>None</value>
+  </data>
 </root>

@@ -51,7 +51,7 @@ public sealed class UITestsPrepareWindowViewModel : ViewModelBase
 
     private UITestsPrepareWindowViewModel()
     {
-        ActionsWaitingTimeInMs = 50;
+        ActionsWaitingTimeInMs = 20;
         Tests =
         [
 #if DEBUG || UI_TESTS_ENABLED
