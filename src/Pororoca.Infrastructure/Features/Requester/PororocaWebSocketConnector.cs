@@ -37,7 +37,9 @@ public class PororocaWebSocketConnector
         }
     }
 
-    public ObservableCollection<PororocaWebSocketMessage> ExchangedMessages { get; } = new();
+    private ChannelWriter<PororocaWebSocketMessage>? exchangedMessagesCollectorWriter;
+
+    public ChannelReader<PororocaWebSocketMessage>? ExchangedMessagesCollector { get; private set; }
 
     private Channel<PororocaWebSocketClientMessageToSend>? MessagesToSendChannel { get; set; }
 
@@ -116,6 +118,7 @@ public class PororocaWebSocketConnector
         this.client = resolvedClient;
         ClearAfterConnect();
         MessagesToSendChannel = BuildMessagesToSendChannel();
+        SetupExchangedMessagesCollectorChannel();
 
         ConnectionHttpStatusCode = resolvedClient.HttpStatusCode;
         ConnectionHttpHeaders = resolvedClient.HttpResponseHeaders;
@@ -128,20 +131,12 @@ public class PororocaWebSocketConnector
     private void ClearAfterConnect()
     {
         ConnectionException = null;
-        foreach (var msg in ExchangedMessages)
-        {
-            if (msg is IDisposable disposableMsg)
-            {
-                disposableMsg.Dispose();
-            }
-        }
-        ExchangedMessages.Clear();
+        this.exchangedMessagesCollectorWriter = null;
+        ExchangedMessagesCollector = null;
     }
 
     private void ClearAfterClosure()
     {
-        // ExchangedMessages and ConnectionException will not be cleared here;
-        // will be cleared only when a new connection is successful
         this.client?.Dispose();
         this.client = null;
         MessagesToSendChannel = null;
@@ -149,6 +144,10 @@ public class PororocaWebSocketConnector
         this.cancelSendingAndReceivingTokenSource?.Cancel();
         // Then, to clear this cancellation token source:
         this.cancelSendingAndReceivingTokenSource = null;
+
+        // Closing ExchangedMessagesCollector channel.
+        // The reader will remain, so its messages can still be drained and read.
+        this.exchangedMessagesCollectorWriter?.TryComplete();
     }
 
     private Channel<PororocaWebSocketClientMessageToSend> BuildMessagesToSendChannel()
@@ -160,6 +159,18 @@ public class PororocaWebSocketConnector
             FullMode = BoundedChannelFullMode.Wait
         };
         return Channel.CreateBounded<PororocaWebSocketClientMessageToSend>(sendChannelOpts);
+    }
+
+    private void SetupExchangedMessagesCollectorChannel()
+    {
+        UnboundedChannelOptions sendChannelOpts = new()
+        {
+            SingleReader = true,
+            SingleWriter = false
+        };
+        var channel = Channel.CreateUnbounded<PororocaWebSocketMessage>(sendChannelOpts);
+        this.exchangedMessagesCollectorWriter = channel.Writer;
+        ExchangedMessagesCollector = channel.Reader;
     }
 
     #endregion
@@ -242,7 +253,7 @@ public class PororocaWebSocketConnector
                 {
                     // closure message already received
                     var closingMsg = PororocaWebSocketServerMessage.Make(this.client?.CloseStatusDescription);
-                    ExchangedMessages.Add(closingMsg);
+                    this.exchangedMessagesCollectorWriter?.TryWrite(closingMsg);
                     await FinishClosureStartedByServerAsync();
                     break; // exits the reception thread
                 }
@@ -300,11 +311,14 @@ public class PororocaWebSocketConnector
                 }
                 ArrayPool<byte>.Shared.Return(buffer);
                 buffer = null;
+                // Dispose() below is necessary for freeing FileStreams in case of file-based ws client messages.
+                // If it's a MemoryStream, calling.ToArray() later won't cause exceptions.
+                msg.BytesStream.Dispose();
             }
 
             if (!cancellationToken.IsCancellationRequested && msg.ReachedEndOfStream())
             {
-                ExchangedMessages.Add(msg);
+                this.exchangedMessagesCollectorWriter?.TryWrite(msg);
             }
         }
         catch
@@ -353,7 +367,7 @@ public class PororocaWebSocketConnector
                 PororocaWebSocketServerMessage.Make(this.client?.CloseStatusDescription) :
                 PororocaWebSocketServerMessage.Make(msgType, accumulator.ToArray());
 
-            ExchangedMessages.Add(msg);
+            this.exchangedMessagesCollectorWriter?.TryWrite(msg);
             return msg;
         }
         catch
@@ -409,7 +423,7 @@ public class PororocaWebSocketConnector
                 else
                 {
                     await this.client!.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, closingMsg.Text, cancellationToken);
-                    ExchangedMessages.Add(closingMsg);
+                    this.exchangedMessagesCollectorWriter?.TryWrite(closingMsg);
                 }
             }
         }

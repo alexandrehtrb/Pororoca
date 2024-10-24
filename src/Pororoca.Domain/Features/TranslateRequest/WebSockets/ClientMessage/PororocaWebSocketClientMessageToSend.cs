@@ -19,7 +19,7 @@ public sealed record PororocaWebSocketClientMessageToSend
     PororocaWebSocketMessageRawContentSyntax? RawContentSyntax = null,
     string? FileSrcPath = null,
     bool DisableCompressionForThis = false
-) : PororocaWebSocketClientMessage(MessageType, Name, ContentMode, RawContent, RawContentSyntax, FileSrcPath, DisableCompressionForThis), IDisposable
+) : PororocaWebSocketClientMessage(MessageType, Name, ContentMode, RawContent, RawContentSyntax, FileSrcPath, DisableCompressionForThis)
 {
     public PororocaWebSocketClientMessageToSend(PororocaWebSocketClientMessage templateWsCliMsg, Stream bytesStream, string? resolvedText) :
         this(MessageType: templateWsCliMsg.MessageType,
@@ -49,8 +49,6 @@ public sealed record PororocaWebSocketClientMessageToSend
     }
 
     public bool ReachedEndOfStream() =>
-        BytesStream.Position == BytesStream.Length;
-
-    public void Dispose() =>
-        BytesStream.Dispose();
+        !BytesStream.CanRead || (BytesStream.Position == BytesStream.Length);
+        // CanRead check above is required to avoid exceptions
 }

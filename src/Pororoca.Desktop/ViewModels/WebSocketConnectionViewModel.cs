@@ -1,8 +1,9 @@
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Net;
 using System.Reactive;
 using System.Security.Authentication;
+using System.Threading.Channels;
+using Avalonia.Threading;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
@@ -328,11 +329,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         set
         {
             this.RaiseAndSetIfChanged(ref this.selectedExchangedMessageField, value);
-
-            if (value is not null)
-            {
-                OnSelectedExchangedMessageChanged(value);
-            }
+            OnSelectedExchangedMessageChanged(value);
         }
     }
 
@@ -430,7 +427,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         #region EXCHANGED MESSAGES
         ConnectionResponseHeadersTableVm = new(new List<PororocaKeyValueParam>());
         ExchangedMessages = new();
-        this.connector.ExchangedMessages.CollectionChanged += OnConnectorExchangedMessagesUpdated;
         SendMessageCmd = ReactiveCommand.CreateFromTask(SendMessageAsync);
         #endregion
 
@@ -598,22 +594,33 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         else
         {
             InvalidConnectionErrorCode = null;
+            ExchangedMessages.Clear();
             this.cancelConnectionAttemptTokenSource = new();
             // This needs to be done in a different thread.
             // Awaiting the request.RequestAsync() here, or simply returning its Task,
             // causes the UI to freeze for a few seconds, especially when performing the first request to a server.
             // That is why we are invoking the code to run in a new thread, like below.
-            await Task.Run(() => this.connector.ConnectAsync(resolvedClients.wsCli!, resolvedClients.httpCli!, resolvedUri!, this.cancelConnectionAttemptTokenSource.Token));
-            WasConnectionSuccessful = this.connector.ConnectionException is null;
-            ResponseStatusCodeElapsedTimeTitle = FormatResponseTitle(this.connector.ElapsedConnectionTimeSpan, resolvedClients.wsCli!.HttpStatusCode);
-            ConnectionResponseHeadersTableVm.Items.Clear();
-            var resHeaders = this.connector.ConnectionHttpHeaders?.SelectMany(
-                kv => kv.Value.Select(val => new KeyValueParamViewModel(ConnectionResponseHeadersTableVm.Items, true, kv.Key, val))).ToList()
-                ?? new List<KeyValueParamViewModel>();
-            foreach (var header in resHeaders)
+            await Task.Run(async () =>
             {
-                ConnectionResponseHeadersTableVm.Items.Add(header);
-            }
+                await this.connector.ConnectAsync(resolvedClients.wsCli!, resolvedClients.httpCli!, resolvedUri!, this.cancelConnectionAttemptTokenSource.Token);
+                Dispatcher.UIThread.Post(async () =>
+                {
+                    WasConnectionSuccessful = this.connector.ConnectionException is null;
+                    ResponseStatusCodeElapsedTimeTitle = FormatResponseTitle(this.connector.ElapsedConnectionTimeSpan, resolvedClients.wsCli!.HttpStatusCode);
+                    ConnectionResponseHeadersTableVm.Items.Clear();
+                    var resHeaders = this.connector.ConnectionHttpHeaders?.SelectMany(
+                        kv => kv.Value.Select(val => new KeyValueParamViewModel(ConnectionResponseHeadersTableVm.Items, true, kv.Key, val))).ToList()
+                        ?? new List<KeyValueParamViewModel>();
+                    foreach (var header in resHeaders)
+                    {
+                        ConnectionResponseHeadersTableVm.Items.Add(header);
+                    }
+                    if (WasConnectionSuccessful)
+                    {
+                        await CollectExchangedMessagesAsync(this.connector.ExchangedMessagesCollector!);
+                    }
+                });
+            });
         }
     }
 
@@ -674,19 +681,11 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         }
     }
 
-    private void OnConnectorExchangedMessagesUpdated(object? sender, NotifyCollectionChangedEventArgs e)
+    private async Task CollectExchangedMessagesAsync(ChannelReader<PororocaWebSocketMessage> channelReader)
     {
-        if (e.Action == NotifyCollectionChangedAction.Reset)
+        await foreach (var msg in channelReader.ReadAllAsync())
         {
-            ExchangedMessages.Clear();
-        }
-        else if (e.Action == NotifyCollectionChangedAction.Add)
-        {
-            foreach (object newItem in e.NewItems!)
-            {
-                var msg = (PororocaWebSocketMessage)newItem;
-                ExchangedMessages.Insert(0, new(msg));
-            }
+            ExchangedMessages.Insert(0, new(msg));
         }
     }
 
@@ -694,35 +693,47 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region MESSAGE DETAIL
 
-    private void OnSelectedExchangedMessageChanged(WebSocketExchangedMessageViewModel vm)
+    private void OnSelectedExchangedMessageChanged(WebSocketExchangedMessageViewModel? vm)
     {
-        SelectedExchangedMessageType = vm.TypeDescription;
-        SelectedExchangedMessageContent = vm.TextContent;
-        IsSaveSelectedExchangedMessageToFileVisible = vm.CanBeSavedToFile;
+        SelectedExchangedMessageType = vm?.TypeDescription;
+        SelectedExchangedMessageContent = vm?.TextContent;
+        IsSaveSelectedExchangedMessageToFileVisible = vm?.CanBeSavedToFile ?? false;
     }
 
-    public async Task SaveSelectedExchangedMessageToFileAsync()
+    public Task SaveSelectedExchangedMessageToFileAsync()
     {
-        static string GenerateDefaultInitialFileName(WebSocketExchangedMessageViewModel vm)
-        {
-            string fileExtensionWithoutDot = vm.IsJsonTextContent ? "json" :
-                                             vm.Type == PororocaWebSocketMessageType.Text ? "txt" :
-                                             string.Empty;
-
-            return $"websocket-msg-{vm.ShortInstantDescription}.{fileExtensionWithoutDot}";
-        }
-
         if (SelectedExchangedMessage is not null && SelectedExchangedMessage.CanBeSavedToFile)
         {
-            string initialFileName = GenerateDefaultInitialFileName(SelectedExchangedMessage);
+            return SaveExchangedMessageToFileAsync(SelectedExchangedMessage);
+        }
+        else
+        {
+            return Task.CompletedTask;
+        }
+    }
 
-            string? saveFileOutputPath = await FileExporterImporter.SelectPathForFileToBeSavedAsync(initialFileName);
-            if (saveFileOutputPath != null)
-            {
-                const int fileStreamBufferSize = 4096;
-                using FileStream fs = new(saveFileOutputPath, FileMode.Create, FileAccess.Write, FileShare.None, fileStreamBufferSize, useAsync: true);
-                await fs.WriteAsync((Memory<byte>)SelectedExchangedMessage.Bytes!);
-            }
+    private async Task SaveExchangedMessageToFileAsync(WebSocketExchangedMessageViewModel exchangedMessage)
+    {
+        static string GenerateDefaultInitialFileName(string wsName, int index, WebSocketExchangedMessageViewModel vm)
+        {
+            string fileExtensionWithoutDot = vm.IsJsonTextContent ? "json" : "txt";
+            string from = vm.IsFromClient ? "fromClient" : "fromServer";
+
+            return $"ws-{wsName}-msg{index}-{from}-{vm.ShortInstantDescription}.{fileExtensionWithoutDot}";
+        }
+        // WARNING: WebSocket messages that came from the client
+        // and are file-based cannot be saved.
+        int index = ExchangedMessages.Contains(exchangedMessage) ?
+                    ExchangedMessages.Count - ExchangedMessages.IndexOf(exchangedMessage) :
+                    0;
+        string initialFileName = GenerateDefaultInitialFileName(Name, index, exchangedMessage);
+
+        string? saveFileOutputPath = await FileExporterImporter.SelectPathForFileToBeSavedAsync(initialFileName);
+        if (saveFileOutputPath != null)
+        {
+            const int fileStreamBufferSize = 4096;
+            using FileStream fs = new(saveFileOutputPath, FileMode.Create, FileAccess.Write, FileShare.None, fileStreamBufferSize, useAsync: true);
+            await fs.WriteAsync((Memory<byte>)exchangedMessage.Bytes!);
         }
     }
 
