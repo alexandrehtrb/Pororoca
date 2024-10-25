@@ -1,7 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Pororoca.Desktop.ViewModels.DataGrids;
-using static Pororoca.Desktop.Views.DataGridSelectionUpdater;
 
 namespace Pororoca.Desktop.Controls;
 
@@ -11,9 +10,6 @@ public sealed class VariablesTableView : UserControl
 
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
-    public void OnSelectedVariablesChanged(object sender, SelectionChangedEventArgs e)
-    {
-        var tableVm = (VariablesDataGridViewModel)DataContext!;
-        UpdateVmSelectedItems(tableVm, e);
-    }
+    public void OnSelectedVariablesChanged(object sender, SelectionChangedEventArgs e) =>
+        ((VariablesDataGridViewModel)DataContext!).UpdateSelectedItems(e);
 }
