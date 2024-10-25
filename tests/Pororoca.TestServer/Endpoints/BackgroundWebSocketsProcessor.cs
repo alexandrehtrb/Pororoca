@@ -26,7 +26,7 @@ public static class BackgroundWebSocketsProcessor
         {
             try
             {
-                await Task.Delay(waitForClientPeriod, serverDisconnectToken);
+                await Task.Delay(waitForClientPeriod);
                 return true;
             }
             catch (OperationCanceledException)
@@ -44,7 +44,7 @@ public static class BackgroundWebSocketsProcessor
             {
                 // we are using only ping here,
                 // this is for a hypothetical case
-                return messagesToSendChannel!.Reader.WaitToReadAsync(serverDisconnectToken).AsTask();
+                return messagesToSendChannel!.Reader.WaitToReadAsync().AsTask();
             }
             catch (OperationCanceledException)
             {
@@ -56,7 +56,7 @@ public static class BackgroundWebSocketsProcessor
         {
             try
             {
-                return ws.ReceiveAsync(Memory<byte>.Empty, serverDisconnectToken).AsTask();
+                return ws.ReceiveAsync(Memory<byte>.Empty, default).AsTask();
             }
             catch (OperationCanceledException)
             {
@@ -70,7 +70,7 @@ public static class BackgroundWebSocketsProcessor
             {
                 while (ws.State != WebSocketState.CloseReceived && ws.State != WebSocketState.Aborted)
                 {
-                    await Task.Delay(checkClientDisconnectSamplingPeriod, serverDisconnectToken);
+                    await Task.Delay(checkClientDisconnectSamplingPeriod);
                 };
                 return true;
             }
@@ -84,13 +84,11 @@ public static class BackgroundWebSocketsProcessor
             messagesToSendChannel.Reader.ReadAsync(CancellationToken.None);
 
         bool CanSendMessages() =>
-            !serverDisconnectToken.IsCancellationRequested
-         && (ws.State == WebSocketState.Open || ws.State == WebSocketState.Connecting || ws.State == WebSocketState.CloseReceived)
+            (ws.State == WebSocketState.Open || ws.State == WebSocketState.Connecting || ws.State == WebSocketState.CloseReceived)
          && messagesToSendChannel is not null;
 
         bool CanReceiveMessages() =>
-            !serverDisconnectToken.IsCancellationRequested
-         && (ws.State == WebSocketState.Open || ws.State == WebSocketState.Connecting || ws.State == WebSocketState.CloseSent);
+            (ws.State == WebSocketState.Open || ws.State == WebSocketState.Connecting || ws.State == WebSocketState.CloseSent);
 
         while (CanSendMessages() && CanReceiveMessages())
         {

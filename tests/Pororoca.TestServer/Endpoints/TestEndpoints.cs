@@ -218,11 +218,13 @@ public static class TestEndpoints
 
     #region WEBSOCKETS
 
-    private static async Task<IResult> TestHttp1WebSocket(HttpContext httpCtx)
+    private static async Task TestHttp1WebSocket(HttpContext httpCtx)
     {
         if (!httpCtx.WebSockets.IsWebSocketRequest)
         {
-            return Results.BadRequest("Only WebSockets requests are accepted here!");
+            byte[] txtBytes = Encoding.UTF8.GetBytes("Only WebSockets requests are accepted here!");
+            httpCtx.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            await httpCtx.Response.BodyWriter.WriteAsync(txtBytes);
         }
         else
         {
@@ -231,16 +233,16 @@ public static class TestEndpoints
 
             await BackgroundWebSocketsProcessor.RegisterAndProcessAsync(webSocket, socketFinishedTcs);
             await socketFinishedTcs.Task;
-
-            return Results.NoContent();
         }
     }
 
-    private static async Task<IResult> TestHttp2WebSocket(HttpContext httpCtx)
+    private static async Task TestHttp2WebSocket(HttpContext httpCtx)
     {
         if (httpCtx.Request.Protocol != "HTTP/2" || !httpCtx.WebSockets.IsWebSocketRequest)
         {
-            return Results.BadRequest("Only HTTP/2 websocket requests are accepted here!");
+            byte[] txtBytes = Encoding.UTF8.GetBytes("Only HTTP/2 websocket requests are accepted here!");
+            httpCtx.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            await httpCtx.Response.BodyWriter.WriteAsync(txtBytes);
         }
         else
         {
@@ -249,8 +251,6 @@ public static class TestEndpoints
 
             await BackgroundWebSocketsProcessor.RegisterAndProcessAsync(webSocket, socketFinishedTcs);
             await socketFinishedTcs.Task;
-
-            return Results.NoContent();
         }
     }
 
