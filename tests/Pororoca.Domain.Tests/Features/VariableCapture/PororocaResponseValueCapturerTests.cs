@@ -12,6 +12,9 @@ public static partial class PororocaResponseValueCapturerTests
     private const string testJsonArr = "[" + testJsonObj + ", " + testJsonObj + "]";
     private const string testJsonMatrix = "[" + testJsonArr + ", " + testJsonArr + "]";
 
+    private const string testJsonComplexObj = "[{\"id\": 1, \"name\": \"ghi\"}, {\"id\": 2, \"name\": \"abc\"}, {\"id\": 3, \"name\": \"def\"}, {\"id\": 4, \"name\": \"def\"}]";
+
+
     private const string testXmlSimpleObj = @"<SessionInfo>
                                                 <SessionID>MSCB2B-UKT3517_f2823910df-5eff81-528aff-11e6f-0d2ed2408332</SessionID>
                                                 <Profile>A</Profile>
@@ -104,6 +107,14 @@ public static partial class PororocaResponseValueCapturerTests
     [InlineData("1", "$.first().myObj.myObj2.arr.first()", testJsonArr)]
     public static void TestJsonValueCaptureFirstFunction(string? expectedCapture, string path, string json) =>
         Assert.Equal(expectedCapture, CaptureJsonValue(path, json));
+
+    [Theory]
+    [InlineData("{\"id\": 2, \"name\": \"abc\"}", "$.firstWhere(name == \"abc\")", testJsonComplexObj)]
+    [InlineData("{\"id\": 2, \"name\": \"abc\"}", "$.firstWhere(id == 2)", testJsonComplexObj)]
+    [InlineData("{\"id\": 3, \"name\": \"def\"}", "$.firstWhere(id == 3)", testJsonComplexObj)]
+    [InlineData("{\"id\": 3, \"name\": \"def\"}", "$.firstWhere(id == \"def\")", testJsonComplexObj)]
+    public static void TestJsonValueCaptureFirstWhereFunction(string? expectedCapture, string path, string json) =>
+    Assert.Equal(expectedCapture, CaptureJsonValue(path, json));
 
     [Theory]
     [InlineData("3", "$.myObj.myObj2.arr.last()", testJsonObj)]
