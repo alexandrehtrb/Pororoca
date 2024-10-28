@@ -190,6 +190,7 @@
 
             <StackPanel
                 Margin="0,12,0,0"
+                Spacing="12"
                 Orientation="Vertical">
 
               <ComboBox
@@ -213,7 +214,6 @@
 
               <StackPanel
                   Orientation="Horizontal"
-                  Margin="0,12,0,0"
                   IsVisible="{Binding RepetitionModeSelectedIndex,
                               Mode=OneWay,
                               Converter={StaticResource repetitionModeMatch},
@@ -239,7 +239,6 @@
 
               <StackPanel
                   Orientation="Horizontal"
-                  Margin="0,12,0,0"
                   IsVisible="{Binding RepetitionModeSelectedIndex,
                               Mode=OneWay,
                               Converter={StaticResource repetitionModeMatch},
@@ -263,9 +262,7 @@
                     Classes.HasValidationProblem="{Binding HasMaxDopValidationProblem}"/>
               </StackPanel>
 
-              <StackPanel
-                  Orientation="Horizontal"
-                  Margin="0,12,0,0">
+              <StackPanel Orientation="Horizontal">
                 <TextBlock
                     TextWrapping="Wrap"
                     FontSize="14"
@@ -289,6 +286,32 @@
                     IsEnabled="{Binding !IsRepetitionRunning}"
                     Classes.HasValidationProblem="{Binding HasDelayValidationProblem}"/>
               </StackPanel>
+
+              <StackPanel Orientation="Horizontal">
+                <TextBlock
+                  TextWrapping="Wrap"
+                  FontSize="14"
+                  Classes="TipText"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Center"
+                  Margin="0,0,2,0"
+                  Text="{Binding i18n.HttpRepeater.MaximumRate}"/>
+                <TextBlock
+                  VerticalAlignment="Center"
+                  Margin="2,0,6,0"
+                  ToolTip.Tip="{Binding i18n.HttpRepeater.MaximumRateTip}"
+                  Classes="TipQuestionMark"/>
+                <NumericUpDown
+                  Name="nudMaximumRate"
+                  Margin="6,0,0,0"
+                  VerticalAlignment="Center"
+                  Increment="1"
+                  Minimum="0"
+                  Value="{Binding MaximumRate, Mode=TwoWay}"
+                  IsEnabled="{Binding !IsRepetitionRunning}"
+                  Classes.HasValidationProblem="{Binding HasMaximumRateValidationProblem}"/>
+              </StackPanel>
+              
             </StackPanel>
           </TabItem>
           <!-- REPETITION INPUT DATA -->

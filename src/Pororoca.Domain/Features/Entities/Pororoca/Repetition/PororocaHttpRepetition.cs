@@ -55,6 +55,7 @@ public sealed record PororocaHttpRepetition
     int? NumberOfRepetitions, // only for Simple and Random
     int? MaxDop, // only for Simple and Random
     int? DelayInMs,
+    int? MaxRatePerSecond,
     PororocaRepetitionInputData? InputData // only for Sequential and Random
 ) : PororocaRequest(PororocaRequestType.HttpRepetition, Name)
 {
@@ -65,6 +66,7 @@ public sealed record PororocaHttpRepetition
         NumberOfRepetitions: null,
         MaxDop: null,
         DelayInMs: null,
+        MaxRatePerSecond: null,
         InputData: inputDataRawComment is null ? null : MakeRawJsonInputDataExample(inputDataRawComment))
     { }
 

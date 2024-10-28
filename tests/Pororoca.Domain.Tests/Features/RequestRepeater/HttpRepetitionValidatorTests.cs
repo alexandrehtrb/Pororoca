@@ -63,6 +63,23 @@ public static class HttpRepetitionValidatorTests
         Assert.Null(resolvedInputData);
     }
 
+    [Fact]
+    public static async Task Should_disallow_repetition_with_negative_maximum_rate_per_second()
+    {
+        // GIVEN
+        PororocaVariable[] effVars = [];
+        PororocaHttpRequest? baseReq = new(string.Empty);
+        var rep = MakeExampleRep() with { MaxRatePerSecond = -11 };
+
+        // WHEN
+        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
+
+        // THEN
+        Assert.False(valid);
+        Assert.Equal(TranslateRepetitionErrors.MaximumRateCantBeNegative, errorCode);
+        Assert.Null(resolvedInputData);
+    }
+
     [Theory]
     [InlineData(0)]
     [InlineData(-2)]

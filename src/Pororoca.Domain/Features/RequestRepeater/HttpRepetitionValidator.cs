@@ -24,6 +24,9 @@ public static class HttpRepetitionValidator
         if (rep.DelayInMs is not null && rep.DelayInMs < 0L)
             return (false, TranslateRepetitionErrors.DelayCantBeNegative, null);
 
+        if (rep.MaxRatePerSecond is not null && rep.MaxRatePerSecond < 0L)
+            return (false, TranslateRepetitionErrors.MaximumRateCantBeNegative, null);
+
         if (rep.RepetitionMode == PororocaRepetitionMode.Simple
          || rep.RepetitionMode == PororocaRepetitionMode.Random)
         {

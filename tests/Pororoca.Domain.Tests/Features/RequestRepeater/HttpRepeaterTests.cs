@@ -271,6 +271,53 @@ public static class HttpRepeaterTests
     }
 
     [Theory]
+    [InlineData(PororocaRepetitionMode.Simple, 1)]
+    [InlineData(PororocaRepetitionMode.Sequential, 2)]
+    [InlineData(PororocaRepetitionMode.Random, 3)]
+    public static async Task Should_apply_rate_limiter_correctly(PororocaRepetitionMode repMode, int maximumRatePerSecond)
+    {
+        // GIVEN
+        var requester = Substitute.For<IPororocaRequester>();
+        PororocaVariable[] colEffVars = [];
+        PororocaVariable[] inputLine = [new(true, "Var1", "ABC", true), new(true, "Var2", "123", true)];
+        PororocaVariable[][]? resolvedInputData =
+        [
+            inputLine,inputLine,inputLine,inputLine,inputLine,inputLine
+            // this is necessary to make 6 reqs for sequential rep
+        ];
+        var colScopedAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
+        List<PororocaKeyValueParam>? colScopedReqHeaders = null;
+        var rep = MakeExampleRep(repMode) with
+        {
+            NumberOfRepetitions = 6,
+            DelayInMs = 0,
+            MaxDop = maximumRatePerSecond, // parallelism must not interfere with max rate
+            MaxRatePerSecond = maximumRatePerSecond
+        };
+        TimeSpan expectedTotalTime = TimeSpan.FromSeconds((int)rep.NumberOfRepetitions! / maximumRatePerSecond);
+        PororocaHttpRequest baseReq = new("basereq");
+
+        requester.IsValidRequest(default!, default, default!, out _)
+                 .ReturnsForAnyArgs(true);
+
+        // WHEN
+        Stopwatch sw = new();
+        sw.Start();
+        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, default);
+
+        // THEN
+        List<PororocaHttpRepetitionResult> results = new();
+        await foreach (var result in channelReader.ReadAllAsync())
+        {
+            results.Add(result);
+        }
+        sw.Stop();
+
+        var errorMargin = TimeSpan.FromSeconds(1); // this test was flaky
+        Assert.True((sw.Elapsed + errorMargin) >= expectedTotalTime);
+    }
+
+    [Theory]
     [InlineData(PororocaRepetitionMode.Simple)]
     [InlineData(PororocaRepetitionMode.Sequential)]
     [InlineData(PororocaRepetitionMode.Random)]

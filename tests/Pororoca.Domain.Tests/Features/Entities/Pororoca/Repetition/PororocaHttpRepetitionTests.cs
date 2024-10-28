@@ -23,6 +23,7 @@ public static class PororocaHttpRepetitionTests
             NumberOfRepetitions: 8000,
             MaxDop: 20,
             DelayInMs: 10,
+            MaxRatePerSecond: 12,
             InputData: inputData
         );
 
@@ -37,6 +38,7 @@ public static class PororocaHttpRepetitionTests
         Assert.Equal(rep.NumberOfRepetitions, copy.NumberOfRepetitions);
         Assert.Equal(rep.MaxDop, copy.MaxDop);
         Assert.Equal(rep.DelayInMs, copy.DelayInMs);
+        Assert.Equal(rep.MaxRatePerSecond, copy.MaxRatePerSecond);
         Assert.NotSame(rep.InputData, copy.InputData);
         Assert.Equal(rep.InputData, copy.InputData);
     }
@@ -52,6 +54,7 @@ public static class PororocaHttpRepetitionTests
             NumberOfRepetitions: 10,
             MaxDop: null,
             DelayInMs: null,
+            MaxRatePerSecond: null,
             InputData: null
         );
 
@@ -66,6 +69,7 @@ public static class PororocaHttpRepetitionTests
         Assert.Equal(rep.NumberOfRepetitions, copy.NumberOfRepetitions);
         Assert.Equal(rep.MaxDop, copy.MaxDop);
         Assert.Equal(rep.DelayInMs, copy.DelayInMs);
+        Assert.Equal(rep.MaxRatePerSecond, copy.MaxRatePerSecond);
         Assert.Equal(rep.InputData, copy.InputData);
     }
 }

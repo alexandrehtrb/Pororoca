@@ -456,6 +456,12 @@
   <data name="HttpRepeater/DelayTip" xml:space="preserve">
     <value></value>
   </data>
+  <data name="HttpRepeater/MaximumRate" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="HttpRepeater/MaximumRateTip" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="HttpRepeater/InputData" xml:space="preserve">
     <value></value>
   </data>
@@ -868,6 +874,9 @@
     <value></value>
   </data>
   <data name="RequestValidation/RepetitionDelayCantBeNegative" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="RequestValidation/RepetitionMaximumRateCantBeNegative" xml:space="preserve">
     <value></value>
   </data>
   <data name="RequestValidation/RepetitionNumberOfRepetitionsMustBeAtLeast1" xml:space="preserve">

@@ -456,6 +456,12 @@
   <data name="HttpRepeater/DelayTip" xml:space="preserve">
     <value>Tempo di attesa tra una risposta e l'invio della richiesta successiva.</value>
   </data>
+  <data name="HttpRepeater/MaximumRate" xml:space="preserve">
+    <value>Portata massima</value>
+  </data>
+  <data name="HttpRepeater/MaximumRateTip" xml:space="preserve">
+    <value>Limita il numero massimo di richieste al secondo. Il valore zero significa che non ci sono limitazioni.</value>
+  </data>
   <data name="HttpRepeater/InputData" xml:space="preserve">
     <value>Dati di input</value>
   </data>
@@ -869,6 +875,9 @@
   </data>
   <data name="RequestValidation/RepetitionDelayCantBeNegative" xml:space="preserve">
     <value>Il ritardo deve essere maggiore o uguale a zero.</value>
+  </data>
+  <data name="RequestValidation/RepetitionMaximumRateCantBeNegative" xml:space="preserve">
+    <value>La portata massima deve essere maggiore o uguale a zero.</value>
   </data>
   <data name="RequestValidation/RepetitionNumberOfRepetitionsMustBeAtLeast1" xml:space="preserve">
     <value>Il numero di ripetizione deve essere maggiore o uguale a uno.</value>
