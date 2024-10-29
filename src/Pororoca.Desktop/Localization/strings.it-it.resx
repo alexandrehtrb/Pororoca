@@ -457,7 +457,7 @@
     <value>Tempo di attesa tra una risposta e l'invio della richiesta successiva.</value>
   </data>
   <data name="HttpRepeater/MaximumRate" xml:space="preserve">
-    <value>Portata massima</value>
+    <value>Max reqs/s</value>
   </data>
   <data name="HttpRepeater/MaximumRateTip" xml:space="preserve">
     <value>Limita il numero massimo di richieste al secondo. Il valore zero significa che non ci sono limitazioni.</value>

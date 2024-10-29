@@ -457,7 +457,7 @@
     <value>Время ожидания между ответом и отправкой следующего запроса.</value>
   </data>
   <data name="HttpRepeater/MaximumRate" xml:space="preserve">
-    <value>Максимальный расход</value>
+    <value>Макс reqs/s</value>
   </data>
   <data name="HttpRepeater/MaximumRateTip" xml:space="preserve">
     <value>Ограничивает максимальное количество запросов в секунду. Нулевое значение означает отсутствие ограничений.</value>
