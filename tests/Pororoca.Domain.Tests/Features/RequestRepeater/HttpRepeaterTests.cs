@@ -229,9 +229,9 @@ public static class HttpRepeaterTests
     }
 
     [Theory]
-    [InlineData(PororocaRepetitionMode.Simple, 500)]
-    [InlineData(PororocaRepetitionMode.Sequential, 250)]
-    [InlineData(PororocaRepetitionMode.Random, 1000)]
+    [InlineData(PororocaRepetitionMode.Simple, 20)]
+    [InlineData(PororocaRepetitionMode.Sequential, 30)]
+    [InlineData(PororocaRepetitionMode.Random, 40)]
     public static async Task Should_delay_between_executions_correctly(PororocaRepetitionMode repMode, int delayInMs)
     {
         // GIVEN
@@ -266,14 +266,14 @@ public static class HttpRepeaterTests
         }
         sw.Stop();
 
-        var errorMargin = TimeSpan.FromMilliseconds(500); // this test was flaky
+        var errorMargin = TimeSpan.FromMilliseconds(10); // this test was flaky
         Assert.True((sw.Elapsed + errorMargin) >= TimeSpan.FromMilliseconds(delayInMs));
     }
 
     [Theory]
-    [InlineData(PororocaRepetitionMode.Simple, 1)]
-    [InlineData(PororocaRepetitionMode.Sequential, 2)]
-    [InlineData(PororocaRepetitionMode.Random, 3)]
+    [InlineData(PororocaRepetitionMode.Simple, 2)]
+    [InlineData(PororocaRepetitionMode.Sequential, 3)]
+    [InlineData(PororocaRepetitionMode.Random, 6)]
     public static async Task Should_apply_rate_limiter_correctly(PororocaRepetitionMode repMode, int maximumRatePerSecond)
     {
         // GIVEN
