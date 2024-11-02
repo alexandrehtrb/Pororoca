@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Text;
 using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.UITesting.Robots;
 using Pororoca.Desktop.ViewModels;
@@ -208,7 +209,7 @@ public sealed class ExportCollectionsUITest : SaveAndRestoreCollectionUITest
         var collection = ((CollectionViewModel)ColRobot.RootView!.DataContext!).ToCollection(forExporting: true);
         return format switch
         {
-            ExportCollectionFormat.Pororoca => PororocaCollectionExporter.ExportAsPororocaCollection(collection),
+            ExportCollectionFormat.Pororoca => Encoding.UTF8.GetString(PororocaCollectionExporter.ExportAsPororocaCollection(collection)),
             ExportCollectionFormat.Postman => PostmanCollectionV21Exporter.ExportAsPostmanCollectionV21(collection),
             _ => string.Empty
         };

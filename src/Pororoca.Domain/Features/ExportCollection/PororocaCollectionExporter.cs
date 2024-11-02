@@ -6,6 +6,6 @@ namespace Pororoca.Domain.Features.ExportCollection;
 
 public static class PororocaCollectionExporter
 {
-    public static string ExportAsPororocaCollection(PororocaCollection col) =>
-        JsonSerializer.Serialize(col, MainJsonCtxWithConverters.PororocaCollection);
+    public static byte[] ExportAsPororocaCollection(PororocaCollection col) =>
+        JsonSerializer.SerializeToUtf8Bytes(col, MainJsonCtxWithConverters.PororocaCollection);
 }

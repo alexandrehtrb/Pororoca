@@ -19,7 +19,7 @@ public sealed class UITestViewModel : ViewModelBase
     public bool Include { get; set; }
 
     [Reactive]
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
 #if DEBUG || UI_TESTS_ENABLED
     public UITest Test { get; }

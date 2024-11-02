@@ -1,3 +1,4 @@
+using System.Text;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Xunit;
@@ -12,7 +13,7 @@ public static class PororocaCollectionExporterTests
     private const string testName = "MyCollection";
 
     [Fact]
-    public static void Should_export_and_reimport_pororoca_collection_successfully()
+    public static void Should_export_and_reimport_pororoca_collection_as_string_successfully()
     {
         // GIVEN
         string json1 = ReadTestFileText("FullCollection.pororoca_collection.json");
@@ -25,19 +26,19 @@ public static class PororocaCollectionExporterTests
 
         // WHEN AND THEN
         string minifiedInputJson = MinifyJsonString(json1);
-        string minifiedOutputJson = MinifyJsonString(ExportAsPororocaCollection(col));
+        string minifiedOutputJson = MinifyJsonString(Encoding.UTF8.GetString(ExportAsPororocaCollection(col)));
         Assert.Equal(minifiedOutputJson, minifiedInputJson);
     }
 
     [Fact]
-    public static void Should_export_and_reimport_pororoca_collection_successfully_2()
+    public static async Task Should_export_and_reimport_pororoca_collection_as_bytes_successfully()
     {
         // GIVEN
         var col = CreateTestCollection();
 
         // WHEN AND THEN
-        string json = ExportAsPororocaCollection(col);
-        Assert.True(TryImportPororocaCollection(json, preserveId: true, out var colReimported));
+        MemoryStream colMs = new(ExportAsPororocaCollection(col));
+        var colReimported = await ImportPororocaCollectionAsync(colMs, preserveId: true);
         Assert.NotNull(colReimported);
         AssertCollection(colReimported);
     }

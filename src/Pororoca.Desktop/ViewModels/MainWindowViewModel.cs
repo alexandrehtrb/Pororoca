@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Reactive;
 using System.Reflection;
+using Avalonia.Threading;
 using MsBox.Avalonia.Enums;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
@@ -374,6 +375,12 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     private void LoadUserData()
     {
+        LoadUserPreferences();
+        LoadUserCollections();
+    }
+
+    private void LoadUserPreferences()
+    {
         // this needs to be before the migration dialog,
         // because here we load the localization strings
         UserPrefs = UserDataManager.LoadUserPreferences() ?? GetDefaultUserPrefs();
@@ -395,13 +402,26 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
             UserDataManager.ExecuteMacOSXUserDataFolderMigrationToV3();
             ShowMacOSXUserDataFolderMigratedV3Dialog();
         }
-
-        var cols = UserDataManager.LoadUserCollections();
-        foreach (var col in cols)
-        {
-            AddCollection(col);
-        }
     }
+
+    private void LoadUserCollections() =>
+        Task.Run(async () =>
+        {
+            var cols = await Task.WhenAll(UserDataManager.LoadUserCollectionsAsync());
+            if (cols != null)
+            {
+                Dispatcher.UIThread.Post(() =>
+                {
+                    foreach (var col in cols)
+                    {
+                        if (col != null)
+                        {
+                            AddCollection(col);
+                        }
+                    }
+                });
+            }
+        });
 
     public void SaveUserData()
     {
