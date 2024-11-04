@@ -13,20 +13,21 @@ public static class BackgroundWebSocketsProcessor
     private static readonly TimeSpan checkClientDisconnectSamplingPeriod = TimeSpan.FromMilliseconds(250);
     private static readonly Channel<string> messagesToSendChannel = BuildMessagesToSendChannel();
 
-    public static async Task RegisterAndProcessAsync(WebSocket ws, TaskCompletionSource<object> socketFinishedTcs)
+    public static async Task RegisterAndProcessAsync(WebSocket ws, string? subprotocol, TaskCompletionSource<object> socketFinishedTcs)
     {
         CancellationTokenSource cts = new(maximumLifetimePeriod);
-        await ProcessMessagesExchangesAsync(ws, cts.Token);
+        await ProcessMessagesExchangesAsync(ws, subprotocol, cts.Token);
         socketFinishedTcs.SetResult(true);
     }
 
-    private static async Task ProcessMessagesExchangesAsync(WebSocket ws, CancellationToken serverDisconnectToken = default)
+    private static async Task ProcessMessagesExchangesAsync(WebSocket ws, string? subprotocol, CancellationToken serverDisconnectToken = default)
     {
         async Task<bool> HasPingToSendAsync()
         {
             try
             {
-                await Task.Delay(waitForClientPeriod);
+                // don't use server cancellation token here
+                await Task.Delay(waitForClientPeriod, CancellationToken.None);
                 return true;
             }
             catch (OperationCanceledException)
@@ -44,7 +45,8 @@ public static class BackgroundWebSocketsProcessor
             {
                 // we are using only ping here,
                 // this is for a hypothetical case
-                return messagesToSendChannel!.Reader.WaitToReadAsync().AsTask();
+                // also, don't use server cancellation token here
+                return messagesToSendChannel!.Reader.WaitToReadAsync(CancellationToken.None).AsTask();
             }
             catch (OperationCanceledException)
             {
@@ -56,7 +58,8 @@ public static class BackgroundWebSocketsProcessor
         {
             try
             {
-                return ws.ReceiveAsync(Memory<byte>.Empty, default).AsTask();
+                // don't use server cancellation token here
+                return ws.ReceiveAsync(Memory<byte>.Empty, CancellationToken.None).AsTask();
             }
             catch (OperationCanceledException)
             {
@@ -70,7 +73,8 @@ public static class BackgroundWebSocketsProcessor
             {
                 while (ws.State != WebSocketState.CloseReceived && ws.State != WebSocketState.Aborted)
                 {
-                    await Task.Delay(checkClientDisconnectSamplingPeriod);
+                    // don't use server cancellation token here
+                    await Task.Delay(checkClientDisconnectSamplingPeriod, CancellationToken.None);
                 };
                 return true;
             }
@@ -81,7 +85,7 @@ public static class BackgroundWebSocketsProcessor
         }
 
         ValueTask<string> DequeueMessageToSendAsync() =>
-            messagesToSendChannel.Reader.ReadAsync(CancellationToken.None);
+            messagesToSendChannel.Reader.ReadAsync(CancellationToken.None); // don't use server cancellation token here
 
         bool CanSendMessages() =>
             (ws.State == WebSocketState.Open || ws.State == WebSocketState.Connecting || ws.State == WebSocketState.CloseReceived)
@@ -101,12 +105,12 @@ public static class BackgroundWebSocketsProcessor
 
             if (serverDisconnectToken.IsCancellationRequested)
             {
-                await CloseStartingByServerAsync(ws, "maximum lifetime, bye", CancellationToken.None);
-                return;
+                await CloseOverMaximumLifetimeAsync(ws, subprotocol, CancellationToken.None);
+                return; // exits the reception thread
             }
             else if (firstOperation == beganClientDisconnecting && CanSendMessages())
             {
-                await FinishClosingStartedByClientAsync(ws, "ok, bye");
+                await FinishClosingStartedByClientAsync(ws, subprotocol);
                 return; // exits the reception thread
             }
             else if (firstOperation == beganSending && CanSendMessages())
@@ -116,10 +120,7 @@ public static class BackgroundWebSocketsProcessor
             }
             else if (firstOperation == beganPinging && CanSendMessages())
             {
-                await PingClientAsync(ws, "{\"ping\": \"hey client\"}", serverDisconnectToken);
-                //ws.Abort();
-                //await ws.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, null, serverDisconnectToken);
-                //return;
+                await PingClientAsync(ws, subprotocol, serverDisconnectToken);
             }
             else if (firstOperation == beganReceiving)
             {
@@ -127,7 +128,7 @@ public static class BackgroundWebSocketsProcessor
                 if (isClosing)
                 {
                     // closure message already received
-                    await FinishClosingStartedByClientAsync(ws, "ok, bye");
+                    await FinishClosingStartedByClientAsync(ws, subprotocol);
                     return; // exits the reception thread
                 }
                 else if (CanReceiveMessages())
@@ -135,12 +136,12 @@ public static class BackgroundWebSocketsProcessor
                     var (receivedMsgType, receivedBytes) = await ReceiveMessageAsync(ws, serverDisconnectToken);
                     if (receivedMsgType == WebSocketMessageType.Close)
                     {
-                        await FinishClosingStartedByClientAsync(ws, "ok, bye");
+                        await FinishClosingStartedByClientAsync(ws, subprotocol);
                         return; // exits the reception thread
                     }
                     else
                     {
-                        await ReplyToClientAsync(ws, receivedMsgType, receivedBytes, serverDisconnectToken);
+                        await ReplyToClientAsync(ws, subprotocol, receivedMsgType, receivedBytes, serverDisconnectToken);
                     }
                 }
             }
@@ -185,16 +186,31 @@ public static class BackgroundWebSocketsProcessor
         vwsrr.MessageType != WebSocketMessageType.Close
         && vwsrr.EndOfMessage == false;
 
-    private static Task ReplyToClientAsync(WebSocket ws, WebSocketMessageType receivedMsgType, ArraySegment<byte> receivedMsg, CancellationToken cancellationToken = default)
+    private static Task PingClientAsync(WebSocket ws, string? subprotocol, CancellationToken cancellationToken = default)
+    {
+        string reply = subprotocol == "json" ?
+                    $"{{\"messageType\":\"text\",\"text\":\"¡ping!\"}}" :
+                    "¡ping!";
+
+        return SendTextMessageAsync(ws, reply, cancellationToken);
+    }
+
+    private static Task ReplyToClientAsync(WebSocket ws, string? subprotocol, WebSocketMessageType receivedMsgType, ArraySegment<byte> receivedMsg, CancellationToken cancellationToken = default)
     {
         if (receivedMsgType == WebSocketMessageType.Text)
         {
             string receivedStr = Encoding.UTF8.GetString(receivedMsg);
-            return SendTextMessageAsync(ws, $"received text ({receivedMsg.Count} bytes): {receivedStr}", cancellationToken);
+            string reply = subprotocol == "json" ?
+                $"{{\"bytesReceived\":{receivedMsg.Count},\"messageType\":\"text\",\"text\":\"{receivedStr}\"}}" :
+                $"received text ({receivedMsg.Count} bytes): {receivedStr}";
+            return SendTextMessageAsync(ws, reply, cancellationToken);
         }
         else if (receivedMsgType == WebSocketMessageType.Binary)
         {
-            return SendTextMessageAsync(ws, $"received binary {receivedMsg.Count} bytes", cancellationToken);
+            string reply = subprotocol == "json" ?
+                $"{{\"bytesReceived\":{receivedMsg.Count},\"messageType\":\"binary\"}}" :
+                $"received binary {receivedMsg.Count} bytes";
+            return SendTextMessageAsync(ws, reply, cancellationToken);
         }
         else
         {
@@ -202,17 +218,30 @@ public static class BackgroundWebSocketsProcessor
         }
     }
 
-    private static Task FinishClosingStartedByClientAsync(WebSocket ws, string msg)
+    private static Task FinishClosingStartedByClientAsync(WebSocket ws, string? subprotocol)
     {
+        string reply = subprotocol == "json" ?
+            $"{{\"messageType\":\"close\",\"text\":\"ok, bye\"}}" :
+            "ok, bye";
+
         // These are the valid states for calling client.CloseOutputAsync()
         if (ws.State == WebSocketState.Open || ws.State == WebSocketState.CloseReceived)
         {
-            return ws.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, msg, default);
+            return ws.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, reply, default);
         }
         else
         {
             return Task.CompletedTask;
         }
+    }
+
+    private static Task CloseOverMaximumLifetimeAsync(WebSocket ws, string? subprotocol, CancellationToken cancellationToken = default)
+    {
+        string reply = subprotocol == "json" ?
+            $"{{\"messageType\":\"close\",\"text\":\"maximum lifetime, bye\"}}" :
+            "maximum lifetime, bye";
+
+        return CloseStartingByServerAsync(ws, reply, CancellationToken.None);
     }
 
     private static async Task CloseStartingByServerAsync(WebSocket ws, string? closingMsg = null, CancellationToken cancellationToken = default)
@@ -230,9 +259,6 @@ public static class BackgroundWebSocketsProcessor
             }
         }
     }
-
-    private static Task PingClientAsync(WebSocket ws, string msg, CancellationToken cancellationToken = default) =>
-        SendTextMessageAsync(ws, msg, cancellationToken);
 
     private static Task SendTextMessageAsync(WebSocket ws, string msg, CancellationToken cancellationToken = default)
     {

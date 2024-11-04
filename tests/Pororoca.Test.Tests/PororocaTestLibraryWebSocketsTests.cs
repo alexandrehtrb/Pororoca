@@ -192,4 +192,54 @@ public sealed class PororocaTestLibraryWebSocketsTests
         }
         this.output.WriteLine($"Number of msgs in test ({wsConnName}): {msgCount}");
     }
+
+    [Theory]
+    [InlineData("WebSocket HTTP1 JSON")]
+    [InlineData("WebSocket HTTP2 JSON")]
+    public async Task Should_use_subprotocol_and_parse_JSON_successfully(string wsConnName)
+    {
+        // GIVEN
+        var ws = await this.pororocaTest.ConnectWebSocketAsync(wsConnName);
+        Assert.Equal(PororocaWebSocketConnectorState.Connected, ws.State);
+        // WHEN
+        await ws.SendMessageAsync("Hello");
+        // THEN
+        // The server should reply with a JSON text message
+        int msgCount = 0;
+        await foreach (var msg in ws.ExchangedMessagesCollector!.ReadAllAsync())
+        {
+            if (msgCount == 0)
+            {
+                var msg1 = Assert.IsType<PororocaWebSocketClientMessageToSend>(msg);
+                Assert.Equal(PororocaWebSocketMessageType.Text, msg1.MessageType);
+                Assert.Equal("Hello", msg1.Text);
+            }
+            else if (msgCount == 1)
+            {
+                var msg2 = Assert.IsType<PororocaWebSocketServerMessage>(msg);
+                Assert.Equal(PororocaWebSocketMessageType.Text, msg2.MessageType);
+                Assert.Equal($"{{\"bytesReceived\":5,\"messageType\":\"text\",\"text\":\"Hello\"}}", msg2.Text);
+                var msg2Json = msg2.ReadAsJson<TestServerWebSocketMessage>()!;
+                Assert.Equal(5, msg2Json.BytesReceived);
+                Assert.Equal("text", msg2Json.MessageType);
+                Assert.Equal("Hello", msg2Json.Text);
+
+                // Teardown
+                await ws.DisconnectAsync();
+            }
+
+            msgCount++;
+        }
+        this.output.WriteLine($"Number of msgs in test ({wsConnName}): {msgCount}");
+
+        Assert.Null(ws.ConnectionException);
+        Assert.Equal(PororocaWebSocketConnectorState.Disconnected, ws.State);
+    }
+}
+
+public sealed class TestServerWebSocketMessage
+{
+    public int? BytesReceived { get; set; }
+    public string? MessageType { get; set; }
+    public string? Text { get; set; }
 }

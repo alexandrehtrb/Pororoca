@@ -230,8 +230,9 @@ public static class TestEndpoints
         {
             using var webSocket = await httpCtx.WebSockets.AcceptWebSocketAsync();
             TaskCompletionSource<object> socketFinishedTcs = new();
+            string? subprotocol = webSocket.SubProtocol ?? httpCtx.WebSockets.WebSocketRequestedProtocols.FirstOrDefault();
 
-            await BackgroundWebSocketsProcessor.RegisterAndProcessAsync(webSocket, socketFinishedTcs);
+            await BackgroundWebSocketsProcessor.RegisterAndProcessAsync(webSocket, subprotocol, socketFinishedTcs);
             await socketFinishedTcs.Task;
         }
     }
@@ -248,8 +249,9 @@ public static class TestEndpoints
         {
             using var webSocket = await httpCtx.WebSockets.AcceptWebSocketAsync();
             TaskCompletionSource<object> socketFinishedTcs = new();
+            string? subprotocol = webSocket.SubProtocol ?? httpCtx.WebSockets.WebSocketRequestedProtocols.FirstOrDefault();
 
-            await BackgroundWebSocketsProcessor.RegisterAndProcessAsync(webSocket, socketFinishedTcs);
+            await BackgroundWebSocketsProcessor.RegisterAndProcessAsync(webSocket, subprotocol, socketFinishedTcs);
             await socketFinishedTcs.Task;
         }
     }

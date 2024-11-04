@@ -59,7 +59,7 @@ function Get-RuntimesToPublishFor
 	# Windows releases should be built on a Windows machine, because of dotnet
 	# Linux and Mac OS releases should be built on one of those OSs, because of chmod and zip
 	#return $IsWindows ? $windowsRuntimes : $unixRuntimes
-	return @("osx-x64")
+	return @("win-x64_installer")
 }
 
 #################### Pre-release build and tests ####################

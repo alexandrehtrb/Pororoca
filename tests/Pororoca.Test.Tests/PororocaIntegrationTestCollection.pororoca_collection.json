@@ -358,7 +358,7 @@
               "messageType": "close"
             }
           ]
-        },
+        },		
         {
           "requestType": "websocket",
           "name": "WebSocket HTTP2",
@@ -392,6 +392,40 @@
               "disableCompressionForThis": false,
               "direction": "fromClient",
               "messageType": "close"
+            }
+          ]
+        },
+		{
+          "requestType": "websocket",
+          "name": "WebSocket HTTP1 JSON",
+          "httpVersion": 1.1,
+          "url": "{{BaseUrlWss}}/test/http1websocket",
+		  "subprotocols": [ {"enabled": true, "key": "json"} ],
+          "clientMessages": [
+            {
+              "name": "Hello",
+              "contentMode": "raw",
+              "rawContent": "Hello",
+              "disableCompressionForThis": false,
+              "direction": "fromClient",
+              "messageType": "text"
+            }
+          ]
+        },
+		{
+          "requestType": "websocket",
+          "name": "WebSocket HTTP2 JSON",
+          "httpVersion": 2.0,
+          "url": "{{BaseUrlWss}}/test/http2websocket",
+		  "subprotocols": [ {"enabled": true, "key": "json"} ],
+          "clientMessages": [
+            {
+              "name": "Hello",
+              "contentMode": "raw",
+              "rawContent": "Hello",
+              "disableCompressionForThis": false,
+              "direction": "fromClient",
+              "messageType": "text"
             }
           ]
         }
