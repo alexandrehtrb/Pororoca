@@ -6,6 +6,9 @@ namespace Pororoca.Domain.Features.ExportCollection;
 
 public static class PororocaCollectionExporter
 {
-    public static byte[] ExportAsPororocaCollection(PororocaCollection col) =>
-        JsonSerializer.SerializeToUtf8Bytes(col, MainJsonCtxWithConverters.PororocaCollection);
+    public static void ExportAsPororocaCollection(Stream streamToWrite, PororocaCollection col) =>
+        JsonSerializer.Serialize(streamToWrite, col, MainJsonCtxWithConverters.PororocaCollection);
+
+    public static Task ExportAsPororocaCollectionAsync(Stream streamToWrite, PororocaCollection col) =>
+        JsonSerializer.SerializeAsync(streamToWrite, col, MainJsonCtxWithConverters.PororocaCollection);
 }

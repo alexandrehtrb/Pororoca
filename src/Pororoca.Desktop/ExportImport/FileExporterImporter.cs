@@ -18,6 +18,7 @@ using Pororoca.Desktop.Converters;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Desktop.HotKeys;
 using MsBox.Avalonia.Enums;
+using Pororoca.Domain.Features.ExportCollection;
 
 namespace Pororoca.Desktop.ExportImport;
 
@@ -90,8 +91,8 @@ internal static partial class FileExporterImporter
         {
             if (format == ExportCollectionFormat.Pororoca)
             {
-                byte[] bytes = ExportAsPororocaCollection(col);
-                await File.WriteAllBytesAsync(destFilePath, bytes);
+                using FileStream fs = new(destFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite, bufferSize: 16384, useAsync: true);
+                await ExportAsPororocaCollectionAsync(fs, col);
             }
             else if (format == ExportCollectionFormat.Postman)
             {

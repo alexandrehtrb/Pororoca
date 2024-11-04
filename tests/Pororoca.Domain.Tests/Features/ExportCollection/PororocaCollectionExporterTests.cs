@@ -25,20 +25,24 @@ public static class PororocaCollectionExporterTests
         Assert.NotNull(col);
 
         // WHEN AND THEN
+        MemoryStream ms = new(16384);
+        ExportAsPororocaCollection(ms, col);
         string minifiedInputJson = MinifyJsonString(json1);
-        string minifiedOutputJson = MinifyJsonString(Encoding.UTF8.GetString(ExportAsPororocaCollection(col)));
+        string minifiedOutputJson = MinifyJsonString(Encoding.UTF8.GetString(ms.ToArray()));
         Assert.Equal(minifiedOutputJson, minifiedInputJson);
     }
 
     [Fact]
-    public static async Task Should_export_and_reimport_pororoca_collection_as_bytes_successfully()
+    public static async Task Should_export_and_reimport_pororoca_collection_from_stream_successfully()
     {
         // GIVEN
         var col = CreateTestCollection();
 
         // WHEN AND THEN
-        MemoryStream colMs = new(ExportAsPororocaCollection(col));
-        var colReimported = await ImportPororocaCollectionAsync(colMs, preserveId: true);
+        MemoryStream ms = new(16384);
+        ExportAsPororocaCollection(ms, col);
+        ms.Seek(0, SeekOrigin.Begin);
+        var colReimported = await ImportPororocaCollectionAsync(ms, preserveId: true);
         Assert.NotNull(colReimported);
         AssertCollection(colReimported);
     }

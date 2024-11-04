@@ -113,9 +113,10 @@ public static class UserDataManager
         foreach (var col in collections)
         {
             string path = GetUserDataFilePath($"{col.Id}.{PororocaCollectionExtension}");
-            byte[] bytes = PororocaCollectionExporter.ExportAsPororocaCollection(col);
 
-            File.WriteAllBytes(path, bytes);
+            using FileStream fs = new(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite, bufferSize: 16384, useAsync: false);
+            PororocaCollectionExporter.ExportAsPororocaCollection(fs, col);
+
             // Marking collections that were deleted, to delete their files
             savedColsIds.Remove(col.Id);
         }

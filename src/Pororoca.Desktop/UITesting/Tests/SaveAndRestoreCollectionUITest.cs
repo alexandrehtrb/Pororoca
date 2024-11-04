@@ -315,7 +315,9 @@ public class SaveAndRestoreCollectionUITest : UITest
     {
         await TreeRobot.Select("COL1");
         var collection = ((CollectionViewModel)ColRobot.RootView!.DataContext!).ToCollection(forExporting: false);
-        MemoryStream colMs = new(PororocaCollectionExporter.ExportAsPororocaCollection(collection));
+        MemoryStream colMs = new(16384);
+        PororocaCollectionExporter.ExportAsPororocaCollection(colMs, collection);
+        colMs.Seek(0, SeekOrigin.Begin);
         MainWindowVm.CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
         MainWindowVm.CollectionsGroupViewDataCtx.Items.Clear();
 
