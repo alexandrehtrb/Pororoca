@@ -23,6 +23,7 @@ public static class HttpRepetitionReporter
         string[] allInputDataKeys = results.SelectMany(r => (r.InputLine ?? []).Select(x => x.Key))
                                            .Distinct().ToArray();
         StringBuilder sbCsv = new();
+        sbCsv.AppendLine("sep=,");
         sbCsv.Append(MakeCsvHeaderLine(allInputDataKeys));
         sbCsv.AppendLine();
 
