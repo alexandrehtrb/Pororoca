@@ -969,6 +969,9 @@
   <data name="TopMenuOptions/EnableTlsVerification" xml:space="preserve">
     <value>Habilitar verificação de TLS</value>
   </data>
+  <data name="TopMenuOptions/AutoCheckForUpdates" xml:space="preserve">
+    <value>Auto-verificar atualizações</value>
+  </data>
   <data name="TopMenuOptions/Language" xml:space="preserve">
     <value>Idioma</value>
   </data>
@@ -1006,7 +1009,7 @@
     <value>Ir ao site</value>
   </data>
   <data name="UpdateReminder/DialogMessage" xml:space="preserve">
-    <value>Lembre-se de verificar periodicamente por novas atualizações!</value>
+    <value>Nova versão disponível!\\n\\n{0}\\n\\nDeseja visitar a página de download?</value>
   </data>
   <data name="UpdateReminder/DialogTitle" xml:space="preserve">
     <value>Pororoca</value>

@@ -969,6 +969,9 @@
   <data name="TopMenuOptions/EnableTlsVerification" xml:space="preserve">
     <value>启用 TLS 验证</value>
   </data>
+  <data name="TopMenuOptions/AutoCheckForUpdates" xml:space="preserve">
+    <value>自动检查更新</value>
+  </data>
   <data name="TopMenuOptions/Language" xml:space="preserve">
     <value>语言</value>
   </data>
@@ -1006,7 +1009,7 @@
     <value>前往网站</value>
   </data>
   <data name="UpdateReminder/DialogMessage" xml:space="preserve">
-    <value>请记住定期检查更新!</value>
+    <value>新版本可用！\\n\\n{0}\\n\\n 您想访问下载页面吗？</value>
   </data>
   <data name="UpdateReminder/DialogTitle" xml:space="preserve">
     <value>Pororoca</value>

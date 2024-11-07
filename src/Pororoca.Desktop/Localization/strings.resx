@@ -969,6 +969,9 @@
   <data name="TopMenuOptions/EnableTlsVerification" xml:space="preserve">
     <value></value>
   </data>
+  <data name="TopMenuOptions/AutoCheckForUpdates" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="TopMenuOptions/Language" xml:space="preserve">
     <value></value>
   </data>

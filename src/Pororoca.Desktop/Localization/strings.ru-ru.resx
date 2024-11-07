@@ -960,6 +960,9 @@
   <data name="TopMenuOptions/EnableTlsVerification" xml:space="preserve">
     <value>Включить TLS проверку</value>
   </data>
+  <data name="TopMenuOptions/AutoCheckForUpdates" xml:space="preserve">
+    <value>Автопроверка обновлений</value>
+  </data>
   <data name="TopMenuOptions/Language" xml:space="preserve">
     <value>Язык</value>
   </data>
@@ -1003,7 +1006,7 @@
     <value>Pororoca</value>
   </data>
   <data name="UpdateReminder/DialogMessage" xml:space="preserve">
-    <value>Не забывайте периодически проверять наличие обновлений!</value>
+    <value>Доступна новая версия!\\n\\n{0}\\n\\nХотите посетить страницу загрузки?</value>
   </data>
   <data name="UpdateReminder/DialogGoToSite" xml:space="preserve">
     <value>Перейти на сайт</value>

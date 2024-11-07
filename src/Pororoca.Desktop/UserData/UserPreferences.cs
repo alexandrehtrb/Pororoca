@@ -7,12 +7,13 @@ namespace Pororoca.Desktop.UserData;
 
 public sealed class UserPreferences
 {
-    private static readonly TimeSpan updateReminderPeriod = TimeSpan.FromDays(60);
+    private static readonly TimeSpan updateReminderPeriod = TimeSpan.FromDays(15);
 
 #nullable disable warnings
     public string Lang { get; set; }
-    public string? UpdateReminderLastShownAt { get; set; }
     public PororocaTheme? Theme { get; set; }
+    public bool? AutoCheckForUpdates { get; set; }
+    public string? UpdateReminderLastShownAt { get; set; }
 
     public UserPreferences()
     {
@@ -20,11 +21,12 @@ public sealed class UserPreferences
     }
 #nullable enable warnings
 
-    public UserPreferences(Language lang, DateTime updateReminderLastShownDate, PororocaTheme theme)
+    public UserPreferences(Language lang, PororocaTheme theme, bool autoCheckForUpdates, DateTime updateReminderLastShownDate)
     {
         Lang = lang.ToLCID();
-        UpdateReminderLastShownAt = updateReminderLastShownDate.ToString("yyyy-MM-dd");
         Theme = theme;
+        AutoCheckForUpdates = autoCheckForUpdates;
+        UpdateReminderLastShownAt = updateReminderLastShownDate.ToString("yyyy-MM-dd");
     }
 
     public Language GetLanguage() =>
@@ -52,7 +54,8 @@ public sealed class UserPreferences
         }
     }
 
-    public bool NeedsToShowUpdateReminder() =>
+    public bool NeedsToCheckForUpdates() =>
+        AutoCheckForUpdates == true &&
         UpdateReminderLastShownDate is not null &&
         (DateTime.Now - UpdateReminderLastShownDate) > updateReminderPeriod;
 

@@ -7,7 +7,9 @@ using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.UserData;
+using Pororoca.Domain.Features.Entities.GitHub;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.UpdateChecker;
 using Pororoca.Infrastructure.Features.Requester;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -132,6 +134,23 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     private UserPreferences? UserPrefs { get; set; }
 
+
+    private bool autoCheckForUpdatesEnabledField;
+    public bool AutoCheckForUpdatesEnabled
+    {
+        get => this.autoCheckForUpdatesEnabledField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.autoCheckForUpdatesEnabledField, value);
+            if (UserPrefs != null)
+            {
+                UserPrefs.AutoCheckForUpdates = value;
+            }
+        }
+    }
+
+    public ReactiveCommand<Unit, Unit> ToggleAutoCheckForUpdatesCmd { get; }
+
     #endregion
 
     #region UI TESTS
@@ -215,6 +234,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         #endregion
 
         #region USER DATA
+        ToggleAutoCheckForUpdatesCmd = ReactiveCommand.Create(ToggleAutoCheckForUpdates);
         LoadUserData();
         ShowWelcomeIfNoCollectionsExist();
         #endregion
@@ -368,10 +388,30 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #endregion
 
+    #region AUTO-CHECK FOR UPDATES
+
+    private void ToggleAutoCheckForUpdates() =>
+        AutoCheckForUpdatesEnabled = !AutoCheckForUpdatesEnabled;
+
+    private void CheckForUpdates() =>
+        Task.Run(() => UpdateAvailableChecker.CheckForUpdatesAsync(
+            PororocaRequester.Singleton,
+            Assembly.GetExecutingAssembly().GetName().Version!,
+            (latestReleaseInfo) =>
+            {
+                Dispatcher.UIThread.Post(() =>
+                {
+                    ShowUpdateReminder(latestReleaseInfo);
+                    UserPrefs!.SetUpdateReminderLastShownDateAsToday();
+                });
+            }));
+
+    #endregion
+
     #region USER DATA
 
     private static UserPreferences GetDefaultUserPrefs() =>
-        new(Language.English, DateTime.Now, PororocaThemeManager.DefaultTheme);
+        new(Language.English, PororocaThemeManager.DefaultTheme, true, DateTime.Now);
 
     private void LoadUserData()
     {
@@ -385,10 +425,13 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         // because here we load the localization strings
         UserPrefs = UserDataManager.LoadUserPreferences() ?? GetDefaultUserPrefs();
         SelectLanguage(UserPrefs.GetLanguage());
-        if (UserPrefs.NeedsToShowUpdateReminder())
+
+        // setting for userPrefs that don't have this flag
+        AutoCheckForUpdatesEnabled = UserPrefs.AutoCheckForUpdates ?? true;
+
+        if (UserPrefs.NeedsToCheckForUpdates())
         {
-            ShowUpdateReminder();
-            UserPrefs.SetUpdateReminderLastShownDateAsToday();
+            CheckForUpdates();
         }
         else if (UserPrefs.HasUpdateReminderLastShownDate() == false)
         {
@@ -438,12 +481,12 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         UserDataManager.SaveUserData(UserPrefs, cols);
     }
 
-    private void ShowUpdateReminder() =>
+    private void ShowUpdateReminder(GitHubGetReleaseResponse latestVersionInfo) =>
         Dialogs.ShowDialog(
             title: Localizer.Instance.UpdateReminder.DialogTitle,
-            message: Localizer.Instance.UpdateReminder.DialogMessage,
+            message: string.Format(Localizer.Instance.UpdateReminder.DialogMessage, latestVersionInfo.Description),
             buttons: ButtonEnum.OkCancel,
-            onButtonOkClicked: () => OpenWebBrowser(GitHubRepoUrl));
+            onButtonOkClicked: () => OpenWebBrowser(latestVersionInfo.HtmlUrl));
 
     private void ShowMacOSXUserDataFolderMigratedV3Dialog()
     {
