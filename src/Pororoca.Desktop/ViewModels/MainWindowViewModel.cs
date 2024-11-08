@@ -399,11 +399,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
             Assembly.GetExecutingAssembly().GetName().Version!,
             (latestReleaseInfo) =>
             {
-                Dispatcher.UIThread.Post(() =>
-                {
-                    ShowUpdateReminder(latestReleaseInfo);
-                    UserPrefs!.SetUpdateReminderLastShownDateAsToday();
-                });
+                Dispatcher.UIThread.Post(() => ShowUpdateReminder(latestReleaseInfo));
             }));
 
     #endregion
@@ -431,11 +427,12 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
         if (UserPrefs.NeedsToCheckForUpdates())
         {
+            UserPrefs!.SetLastUpdateCheckDateAsToday();
             CheckForUpdates();
         }
-        else if (UserPrefs.HasUpdateReminderLastShownDate() == false)
+        else if (UserPrefs.HasLastUpdateCheckDate() == false)
         {
-            UserPrefs.SetUpdateReminderLastShownDateAsToday();
+            UserPrefs.SetLastUpdateCheckDateAsToday();
         }
 
         if (UserDataManager.NeedsMacOSXUserDataFolderMigrationToV3())

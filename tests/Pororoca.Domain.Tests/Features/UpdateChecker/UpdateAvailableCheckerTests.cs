@@ -42,14 +42,14 @@ public sealed class UpdateAvailableCheckerTests
         var res = MockGetLatestReleaseResponseFailed();
         this.requester.RequestAsync([], null, null, Arg.Any<PororocaHttpRequest>(), Arg.Any<CancellationToken>())
                       .Returns(res);
-        bool callBackExecuted = false;
-        void callback(GitHubGetReleaseResponse _) => callBackExecuted = true;
+        GitHubGetReleaseResponse? callbackBody = null;
+        void callback(GitHubGetReleaseResponse x) => callbackBody = x;
 
         // WHEN
         await CheckForUpdatesAsync(this.requester, currentVersion, callback);
 
         // THEN
-        Assert.False(callBackExecuted);
+        Assert.Null(callbackBody);
         await this.requester.ReceivedWithAnyArgs().RequestAsync(null!, null, null, null!, default);
     }
 
@@ -63,14 +63,14 @@ public sealed class UpdateAvailableCheckerTests
         var res = MockGetLatestReleaseResponseSuccess(latestVersion);
         this.requester.RequestAsync([], null, null, Arg.Any<PororocaHttpRequest>(), Arg.Any<CancellationToken>())
                       .Returns(res);
-        bool callBackExecuted = false;
-        void callback(GitHubGetReleaseResponse _) => callBackExecuted = true;
+        GitHubGetReleaseResponse? callbackBody = null;
+        void callback(GitHubGetReleaseResponse x) => callbackBody = x;
 
         // WHEN
         await CheckForUpdatesAsync(this.requester, currentVersion, callback);
 
         // THEN
-        Assert.False(callBackExecuted);
+        Assert.Null(callbackBody);
         await this.requester.ReceivedWithAnyArgs().RequestAsync(null!, null, null, null!, default);
     }
 
@@ -85,14 +85,17 @@ public sealed class UpdateAvailableCheckerTests
         var res = MockGetLatestReleaseResponseSuccess(latestVersion);
         this.requester.RequestAsync([], null, null, Arg.Any<PororocaHttpRequest>(), Arg.Any<CancellationToken>())
                       .Returns(res);
-        bool callBackExecuted = false;
-        void callback(GitHubGetReleaseResponse _) => callBackExecuted = true;
+        GitHubGetReleaseResponse? callbackBody = null;
+        void callback(GitHubGetReleaseResponse x) => callbackBody = x;
 
         // WHEN
         await CheckForUpdatesAsync(this.requester, currentVersion, callback);
 
         // THEN
-        Assert.True(callBackExecuted);
+        Assert.NotNull(callbackBody);
+        Assert.Equal("https://github.com/alexandrehtrb/Pororoca/releases/tag/" + latestVersion, callbackBody.HtmlUrl);
+        Assert.Equal(latestVersion, callbackBody.VersionName);
+        Assert.Equal("markdown description here", callbackBody.Description);
         await this.requester.ReceivedWithAnyArgs().RequestAsync(null!, null, null, null!, default);
     }
 

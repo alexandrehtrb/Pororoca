@@ -7,13 +7,13 @@ namespace Pororoca.Desktop.UserData;
 
 public sealed class UserPreferences
 {
-    private static readonly TimeSpan updateReminderPeriod = TimeSpan.FromDays(15);
+    private static readonly TimeSpan checkForUpdatesPeriod = TimeSpan.FromDays(15);
 
 #nullable disable warnings
     public string Lang { get; set; }
     public PororocaTheme? Theme { get; set; }
     public bool? AutoCheckForUpdates { get; set; }
-    public string? UpdateReminderLastShownAt { get; set; }
+    public string? LastCheckedForUpdatesAt { get; set; }
 
     public UserPreferences()
     {
@@ -21,12 +21,12 @@ public sealed class UserPreferences
     }
 #nullable enable warnings
 
-    public UserPreferences(Language lang, PororocaTheme theme, bool autoCheckForUpdates, DateTime updateReminderLastShownDate)
+    public UserPreferences(Language lang, PororocaTheme theme, bool autoCheckForUpdates, DateTime lastCheckedForUpdatesDate)
     {
         Lang = lang.ToLCID();
         Theme = theme;
         AutoCheckForUpdates = autoCheckForUpdates;
-        UpdateReminderLastShownAt = updateReminderLastShownDate.ToString("yyyy-MM-dd");
+        LastCheckedForUpdatesAt = lastCheckedForUpdatesDate.ToString("yyyy-MM-dd");
     }
 
     public Language GetLanguage() =>
@@ -35,15 +35,15 @@ public sealed class UserPreferences
     public void SetLanguage(Language lang) =>
         Lang = lang.ToLCID();
 
-    private DateTime? UpdateReminderLastShownDate
+    private DateTime? LastCheckedForUpdatesDate
     {
         get
         {
-            if (UpdateReminderLastShownAt is null)
+            if (LastCheckedForUpdatesAt is null)
             {
                 return null;
             }
-            else if (DateTime.TryParseExact(UpdateReminderLastShownAt, "yyyy-MM-dd", null, DateTimeStyles.AssumeLocal, out var parsedDate))
+            else if (DateTime.TryParseExact(LastCheckedForUpdatesAt, "yyyy-MM-dd", null, DateTimeStyles.AssumeLocal, out var parsedDate))
             {
                 return parsedDate;
             }
@@ -56,14 +56,14 @@ public sealed class UserPreferences
 
     public bool NeedsToCheckForUpdates() =>
         AutoCheckForUpdates == true &&
-        UpdateReminderLastShownDate is not null &&
-        (DateTime.Now - UpdateReminderLastShownDate) > updateReminderPeriod;
+        LastCheckedForUpdatesDate is not null &&
+        (DateTime.Now - LastCheckedForUpdatesDate) > checkForUpdatesPeriod;
 
-    public bool HasUpdateReminderLastShownDate() =>
-        UpdateReminderLastShownDate is not null;
+    public bool HasLastUpdateCheckDate() =>
+        LastCheckedForUpdatesDate is not null;
 
-    public void SetUpdateReminderLastShownDateAsToday() =>
-        UpdateReminderLastShownAt = DateTime.Now.ToString("yyyy-MM-dd");
+    public void SetLastUpdateCheckDateAsToday() =>
+        LastCheckedForUpdatesAt = DateTime.Now.ToString("yyyy-MM-dd");
 }
 
 [JsonSourceGenerationOptions(
