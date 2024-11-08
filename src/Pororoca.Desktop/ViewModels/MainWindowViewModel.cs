@@ -20,6 +20,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 {
     #region COLLECTIONS ORGANIZATION
 
+    private bool finishedLoadingUserCollections;
+
     [Reactive]
     public CollectionsGroupViewModel CollectionsGroupViewDataCtx { get; set; }
 
@@ -188,6 +190,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     public MainWindowViewModel()
     {
         #region COLLECTIONS ORGANIZATION
+        this.finishedLoadingUserCollections = false;
         CollectionsGroupViewDataCtx = new(this, SwitchVisiblePage);
         ImportCollectionsFromFileCmd = ReactiveCommand.CreateFromTask(ImportCollectionsAsync);
         AddNewCollectionCmd = ReactiveCommand.Create(AddNewCollection);
@@ -459,12 +462,22 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
                             AddCollection(col);
                         }
                     }
+                    this.finishedLoadingUserCollections = true;
                 });
             }
         });
 
     public void SaveUserData()
     {
+        if (this.finishedLoadingUserCollections == false)
+        {
+            // IMPORTANT!
+            // This protects against deleting all collections
+            // if they were not loaded yet, in case of the
+            // startup takes a longer time.
+            return;
+        }
+
         UserPrefs!.SetLanguage(Localizer.Instance.CurrentLanguage);
 
         var cols = CollectionsGroupViewDataCtx
