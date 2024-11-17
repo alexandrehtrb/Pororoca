@@ -13,6 +13,8 @@ namespace Pororoca.Domain.Features.ImportCollection;
 
 public static class OpenApiImporter
 {
+    private const int maxSchemaResolutionDepth = 4;
+
     private static string ToPororocaTemplateStyle(this string input) =>
         input.Replace("{", "{{").Replace("}", "}}");
 
@@ -122,7 +124,7 @@ public static class OpenApiImporter
     private static List<PororocaKeyValueParam> ReadRequestHeaders(IList<OpenApiParameter> reqParams, IDictionary<string, string>? colScopedSecHeaders, IList<OpenApiSecurityRequirement> reqSecurity)
     {
         var reqHeaders = reqParams.Where(p => p.In == ParameterLocation.Header)
-                                  .Select(p => new PororocaKeyValueParam(true, p.Name, ConvertOpenApiSchemaToObject(p.Schema)?.ToString()))
+                                  .Select(p => new PororocaKeyValueParam(true, p.Name, ConvertOpenApiSchemaToObject(p.Schema, 1)?.ToString()))
                                   .ToList();
 
         var reqSecHeaders = ReadRequestScopedSecurity(reqSecurity, ParameterLocation.Header);
@@ -144,7 +146,7 @@ public static class OpenApiImporter
     {
         List<(string name, string? defaultValue)> qryParams =
             parameters.Where(p => p.In == ParameterLocation.Query)
-                      .Select(p => (p.Name, ConvertOpenApiSchemaToObject(p.Schema)?.ToString()))
+                      .Select(p => (p.Name, ConvertOpenApiSchemaToObject(p.Schema, 1)?.ToString()))
                       .ToList();
 
         var reqApiKeyQueryParams = ReadRequestScopedSecurity(reqSecurity, ParameterLocation.Query);
@@ -231,11 +233,11 @@ public static class OpenApiImporter
         JsonNode? node = null;
         if (input is OpenApiSchema schema)
         {
-            node = ConvertOpenApiSchemaToObject(schema);
+            node = ConvertOpenApiSchemaToObject(schema, 1);
         }
         else if (input is IOpenApiAny any)
         {
-            node = ConvertOpenApiAnyToObject(any);
+            node = ConvertOpenApiAnyToObject(any, 1);
         }
 
         if (contentType?.Contains("json") == true)
@@ -507,14 +509,19 @@ public static class OpenApiImporter
         else return JsonSerializer.Serialize(node, PrettifyJsonCtx.JsonNode);
     }
 
-    private static JsonNode? ConvertOpenApiAnyToObject(IOpenApiAny? val)
+    private static JsonNode? ConvertOpenApiAnyToObject(IOpenApiAny? val, int depth)
     {
+        // The condition below protects against stack overflow 
+        // in case of infinite recursive schemas
+        if (depth >= maxSchemaResolutionDepth)
+            return null;
+
         if (val is OpenApiObject o)
         {
             JsonObject obj = [];
             foreach (var (k, v) in o)
             {
-                obj.Add(k, ConvertOpenApiAnyToObject(v));
+                obj.Add(k, ConvertOpenApiAnyToObject(v, (depth+1)));
             }
             return obj;
         }
@@ -557,20 +564,25 @@ public static class OpenApiImporter
         return null;
     }
 
-    private static JsonNode? ConvertOpenApiSchemaToObject(OpenApiSchema schema)
+    private static JsonNode? ConvertOpenApiSchemaToObject(OpenApiSchema schema, int depth)
     {
+        // The condition below protects against stack overflow 
+        // in case of infinite recursive schemas
+        if (depth >= maxSchemaResolutionDepth)
+            return null;
+
         if (schema.Example is not null)
         {
-            return ConvertOpenApiAnyToObject(schema.Example);
+            return ConvertOpenApiAnyToObject(schema.Example, depth);
         }
         else if (schema.Default is not null)
         {
-            return ConvertOpenApiAnyToObject(schema.Default);
+            return ConvertOpenApiAnyToObject(schema.Default, depth);
         }
         else if (schema.Enum?.Any() == true)
         {
             var firstEnumExample = schema.Enum.First();
-            return ConvertOpenApiAnyToObject(firstEnumExample);
+            return ConvertOpenApiAnyToObject(firstEnumExample, depth);
         }
         else if (schema.Type == "integer")
         {
@@ -593,7 +605,7 @@ public static class OpenApiImporter
         }
         else if (schema.Type == "array")
         {
-            var innerObj = ConvertOpenApiSchemaToObject(schema.Items);
+            var innerObj = ConvertOpenApiSchemaToObject(schema.Items, depth);
             return innerObj is not null ? new JsonArray(innerObj) : [];
         }
         else if (schema.Type == "object")
@@ -601,7 +613,7 @@ public static class OpenApiImporter
             JsonObject obj = [];
             foreach (var (k, v) in schema.Properties)
             {
-                obj.Add(k, ConvertOpenApiSchemaToObject(v));
+                obj.Add(k, ConvertOpenApiSchemaToObject(v, (depth+1)));
             }
             return obj;
         }
