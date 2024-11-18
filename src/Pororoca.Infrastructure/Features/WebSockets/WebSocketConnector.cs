@@ -89,6 +89,8 @@ public abstract class WebSocketConnector
 
     private void ClearAfterClosure()
     {
+        this.ws?.Dispose();
+        this.ws = null;
         MessagesToSendChannel?.Writer?.TryComplete();
         MessagesToSendChannel = null;
         // To cancel the emission and reception threads:
