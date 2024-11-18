@@ -27,6 +27,7 @@ public static class HttpRepetitionReporterTests
 
         // THEN
         StringBuilder sb = new();
+        sb.AppendLine("sep=,");
         sb.AppendLine(@"""iteration"",""result"",""startedAt"",""durationInMs"",");
         sb.AppendLine(@"""1"",""TranslateRequest_InvalidUrl"","""",""0"",");
         sb.AppendLine(@"""2"",""200 OK"",""19:05:17"",""187"",");
@@ -56,6 +57,7 @@ public static class HttpRepetitionReporterTests
 
         // THEN
         StringBuilder sb = new();
+        sb.AppendLine("sep=,");
         sb.AppendLine(@"""iteration"",""result"",""startedAt"",""durationInMs"",""Z"",""Elemento"",");
         sb.AppendLine(@"""1"",""TranslateRequest_InvalidUrl"","""",""0"",""1"",""Hidrogênio"",");
         sb.AppendLine(@"""2"",""200 OK"",""19:05:17"",""187"",""7"",""Nitrogênio"",");
@@ -85,6 +87,7 @@ public static class HttpRepetitionReporterTests
 
         // THEN
         StringBuilder sb = new();
+        sb.AppendLine("sep=,");
         sb.AppendLine(@"""iteration"",""result"",""startedAt"",""durationInMs"",""Z"",""Elemento"",");
         sb.AppendLine(@"""1"",""TranslateRequest_InvalidUrl"","""",""0"","""","""",");
         sb.AppendLine(@"""2"",""200 OK"",""19:05:17"",""187"",""7"",""Nitrogênio"",");
