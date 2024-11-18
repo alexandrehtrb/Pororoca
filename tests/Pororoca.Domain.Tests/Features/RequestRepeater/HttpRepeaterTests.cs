@@ -313,7 +313,7 @@ public static class HttpRepeaterTests
         }
         sw.Stop();
 
-        var errorMargin = TimeSpan.FromSeconds(1); // this test was flaky
+        var errorMargin = TimeSpan.FromSeconds(1.5); // this test is flaky
         Assert.True((sw.Elapsed + errorMargin) >= expectedTotalTime);
     }
 

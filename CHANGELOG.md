@@ -43,6 +43,7 @@
 ### Bug Fixes
 
 - Fixed packaging of macOS releases, moved locale folders to inside `Pororoca.app`.
+- Protection against infinite recursive schemas in OpenAPI import. (issue #128)
 
 ### Refactors
 
@@ -59,7 +60,7 @@
 - Dialog for selecting UI tests to run and their execution speed. (issue #125)
 - Improved WebSocket endpoints in TestServer with maximum lifetime messages and subprotocols. Removed HTTP status code being set after connection closed.
 - Fixed flaky WebSocket tests.
-- Raised .NET SDK to 8.0.404.
+- Raised System.Text.Json version for security.
 
 ## [3.6.0](https://github.com/alexandrehtrb/Pororoca/tree/3.6.0) (2024-10-07)
 
