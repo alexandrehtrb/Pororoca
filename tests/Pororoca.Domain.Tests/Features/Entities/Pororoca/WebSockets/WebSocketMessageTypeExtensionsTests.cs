@@ -8,14 +8,6 @@ public static class WebSocketMessageTypeExtensionsTests
 {
 
     [Theory]
-    [InlineData(PororocaWebSocketMessageType.Text, WebSocketMessageType.Text)]
-    [InlineData(PororocaWebSocketMessageType.Close, WebSocketMessageType.Close)]
-    [InlineData(PororocaWebSocketMessageType.Binary, WebSocketMessageType.Binary)]
-    [InlineData(PororocaWebSocketMessageType.Binary, (WebSocketMessageType)11)]
-    public static void Should_correctly_map_dotnet_ws_msg_type_to_pororoca_ws_msg_type(PororocaWebSocketMessageType expectedMappedWsMsgType, WebSocketMessageType dotnetWsMsgType) =>
-        Assert.Equal(expectedMappedWsMsgType, dotnetWsMsgType.ToPororocaWebSocketMessageType());
-
-    [Theory]
     [InlineData(WebSocketMessageType.Text, PororocaWebSocketMessageType.Text)]
     [InlineData(WebSocketMessageType.Close, PororocaWebSocketMessageType.Close)]
     [InlineData(WebSocketMessageType.Binary, PororocaWebSocketMessageType.Binary)]

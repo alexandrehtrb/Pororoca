@@ -16,6 +16,7 @@ using Pororoca.Domain.Features.Requester;
 using Pororoca.Domain.Features.TranslateRequest;
 using Pororoca.Domain.Features.VariableResolution;
 using Pororoca.Infrastructure.Features.Requester;
+using Pororoca.Infrastructure.Features.WebSockets;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using static Pororoca.Desktop.Localization.TimeTextFormatter;
@@ -41,7 +42,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     private readonly CollectionViewModel col;
     private readonly IPororocaHttpClientProvider httpClientProvider;
-    private readonly PororocaWebSocketConnector connector;
+    private readonly WebSocketClientSideConnector connector;
 
     [Reactive]
     public string ConnectDisconnectCancelButtonText { get; set; }
@@ -49,44 +50,46 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     [Reactive]
     public string ConnectDisconnectCancelButtonToolTip { get; set; }
 
-    private PororocaWebSocketConnectorState connectionStateField;
-    public PororocaWebSocketConnectorState ConnectionState
+    private WebSocketConnectorState connectionStateField;
+    public WebSocketConnectorState ConnectionState
     {
+        // At the beginning, this.connectionStateField will be 0,
+        // which corresponds to Disconnected in the enum.
         get => this.connectionStateField;
         set
         {
             NameEditableVm.Icon = value switch
             {
-                PororocaWebSocketConnectorState.Connected or
-                PororocaWebSocketConnectorState.Disconnecting => EditableTextBlockIcon.ConnectedWebSocket,
+                WebSocketConnectorState.Connected or
+                WebSocketConnectorState.Disconnecting => EditableTextBlockIcon.ConnectedWebSocket,
                 _ => EditableTextBlockIcon.DisconnectedWebSocket
             };
             IsConnected = value switch
             {
-                PororocaWebSocketConnectorState.Connected or
-                PororocaWebSocketConnectorState.Disconnecting => true,
+                WebSocketConnectorState.Connected or
+                WebSocketConnectorState.Disconnecting => true,
                 _ => false
             };
             IsConnectingOrDisconnecting = value switch
             {
-                PororocaWebSocketConnectorState.Connecting or
-                PororocaWebSocketConnectorState.Disconnecting => true,
+                WebSocketConnectorState.Connecting or
+                WebSocketConnectorState.Disconnecting => true,
                 _ => false
             };
             ConnectDisconnectCancelButtonText = value switch
             {
-                PororocaWebSocketConnectorState.Disconnected => Localizer.Instance.WebSocketConnection.Connect,
-                PororocaWebSocketConnectorState.Connecting => Localizer.Instance.WebSocketConnection.CancelConnect,
-                PororocaWebSocketConnectorState.Connected => Localizer.Instance.WebSocketConnection.Disconnect,
-                PororocaWebSocketConnectorState.Disconnecting => Localizer.Instance.WebSocketConnection.CancelDisconnect,
+                WebSocketConnectorState.Disconnected => Localizer.Instance.WebSocketConnection.Connect,
+                WebSocketConnectorState.Connecting => Localizer.Instance.WebSocketConnection.CancelConnect,
+                WebSocketConnectorState.Connected => Localizer.Instance.WebSocketConnection.Disconnect,
+                WebSocketConnectorState.Disconnecting => Localizer.Instance.WebSocketConnection.CancelDisconnect,
                 _ => string.Empty
             };
             ConnectDisconnectCancelButtonToolTip = value switch
             {
-                PororocaWebSocketConnectorState.Disconnected => Localizer.Instance.WebSocketConnection.ConnectToolTip,
-                PororocaWebSocketConnectorState.Connecting => Localizer.Instance.WebSocketConnection.CancelConnectToolTip,
-                PororocaWebSocketConnectorState.Connected => Localizer.Instance.WebSocketConnection.DisconnectToolTip,
-                PororocaWebSocketConnectorState.Disconnecting => Localizer.Instance.WebSocketConnection.CancelDisconnect,
+                WebSocketConnectorState.Disconnected => Localizer.Instance.WebSocketConnection.ConnectToolTip,
+                WebSocketConnectorState.Connecting => Localizer.Instance.WebSocketConnection.CancelConnectToolTip,
+                WebSocketConnectorState.Connected => Localizer.Instance.WebSocketConnection.DisconnectToolTip,
+                WebSocketConnectorState.Disconnecting => Localizer.Instance.WebSocketConnection.CancelDisconnect,
                 _ => string.Empty
             };
             this.connectionStateField = value;
@@ -357,7 +360,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
         this.col = col;
         this.httpClientProvider = PororocaHttpClientProvider.Singleton;
-        this.connector = new(OnWebSocketConnectionChanged, OnWebSocketMessageSending);
+        this.connector = new();
+        this.connector.OnConnectionChanged = OnWebSocketConnectionChanged;
 
         if (ws.ClientMessages is not null)
         {
@@ -538,11 +542,11 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         RequestAuthDataCtx.ClearRequestAuthValidationWarnings();
     }
 
-    private void OnWebSocketConnectionChanged(PororocaWebSocketConnectorState state, Exception? ex)
+    private void OnWebSocketConnectionChanged(WebSocketConnectorState state, Exception? ex)
     {
         ConnectionState = state;
         ConnectionExceptionContent = ex?.ToString();
-        if (state == PororocaWebSocketConnectorState.Connected || ex is not null)
+        if (state == WebSocketConnectorState.Connected || ex is not null)
         {
             // TODO: do not use fixed integers here, find a better way
             SelectedConnectionTabIndex = 2;
@@ -554,21 +558,18 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         ex?.InnerException?.InnerException is AuthenticationException aex
      && aex.Message.Contains("remote certificate is invalid", StringComparison.InvariantCultureIgnoreCase);
 
-    private void OnWebSocketMessageSending(bool isSendingAMessage) =>
-        IsSendingAMessage = isSendingAMessage;
-
     public Task ConnectDisconnectCancelAsync()
     {
         switch (ConnectionState)
         {
-            case PororocaWebSocketConnectorState.Disconnected:
+            case WebSocketConnectorState.Disconnected:
                 return ConnectAsync();
-            case PororocaWebSocketConnectorState.Connecting:
+            case WebSocketConnectorState.Connecting:
                 CancelConnect();
                 return Task.CompletedTask;
-            case PororocaWebSocketConnectorState.Connected:
+            case WebSocketConnectorState.Connected:
                 return DisconnectAsync();
-            case PororocaWebSocketConnectorState.Disconnecting:
+            case WebSocketConnectorState.Disconnecting:
                 CancelDisconnect();
                 return Task.CompletedTask;
             default:
@@ -657,7 +658,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     private async Task SendMessageAsync()
     {
-        if (ConnectionState != PororocaWebSocketConnectorState.Connected)
+        if (ConnectionState != WebSocketConnectorState.Connected)
         {
             InvalidClientMessageErrorCode = TranslateRequestErrors.WebSocketNotConnected;
         }
@@ -669,23 +670,23 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             {
                 InvalidClientMessageErrorCode = validationErrorCode;
             }
-            else if (!TryTranslateClientMessage(effectiveVars, msg, out var resolvedMsgToSend, out string? translationErrorCode))
+            else if (!TryTranslateClientMessage(effectiveVars, msg, out var resolvedStreamToSend, out string? translationErrorCode))
             {
                 InvalidClientMessageErrorCode = translationErrorCode;
             }
             else
             {
                 InvalidClientMessageErrorCode = null;
-                await this.connector.SendMessageAsync(resolvedMsgToSend!);
+                await this.connector.SendMessageAsync(msg.MessageType.ToWebSocketMessageType(), resolvedStreamToSend!, msg.DisableCompressionForThis);
             }
         }
     }
 
-    private async Task CollectExchangedMessagesAsync(ChannelReader<PororocaWebSocketMessage> channelReader)
+    private async Task CollectExchangedMessagesAsync(ChannelReader<WebSocketMessage> channelReader)
     {
         await foreach (var msg in channelReader.ReadAllAsync())
         {
-            ExchangedMessages.Insert(0, new(msg));
+            ExchangedMessages.Insert(0, new(msg, DateTimeOffset.Now));
         }
     }
 
