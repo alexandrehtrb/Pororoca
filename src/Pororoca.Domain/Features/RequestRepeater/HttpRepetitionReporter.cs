@@ -23,6 +23,9 @@ public static class HttpRepetitionReporter
         string[] allInputDataKeys = results.SelectMany(r => (r.InputLine ?? []).Select(x => x.Key))
                                            .Distinct().ToArray();
         StringBuilder sbCsv = new();
+        // Microsoft Excel reads the first CSV line "sep=,"
+        // and understands comma as separator for values,
+        // loading the CSV as a table.
         sbCsv.AppendLine("sep=,");
         sbCsv.Append(MakeCsvHeaderLine(allInputDataKeys));
         sbCsv.AppendLine();
