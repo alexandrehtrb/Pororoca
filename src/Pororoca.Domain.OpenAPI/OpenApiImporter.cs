@@ -13,7 +13,7 @@ namespace Pororoca.Domain.Features.ImportCollection;
 
 public static class OpenApiImporter
 {
-    private const int maxSchemaResolutionDepth = 4;
+    private const int maxSchemaResolutionDepth = 6;
 
     private static string ToPororocaTemplateStyle(this string input) =>
         input.Replace("{", "{{").Replace("}", "}}");
