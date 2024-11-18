@@ -126,7 +126,9 @@ jobs:
         reports: TestResults/**/coverage.cobertura.xml
         targetdir: TestResults
         reporttypes: JsonSummary
-        assemblyfilters: +Pororoca.Domain;+Pororoca.Domain.OpenAPI
+        assemblyfilters: +Pororoca.Domain;+Pororoca.Domain.OpenAPI        
+        classfilters: -System.Threading.RateLimiting.*;-System.Collections.Generic.*
+        riskhotspotclassfilters: -System.Threading.RateLimiting.*;-System.Collections.Generic.*        
         filefilters: -*.g.cs
         customSettings: 'minimumCoverageThresholds:lineCoverage=90;minimumCoverageThresholds:branchCoverage=80'
 

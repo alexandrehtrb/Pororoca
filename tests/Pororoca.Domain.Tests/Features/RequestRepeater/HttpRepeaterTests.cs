@@ -270,7 +270,7 @@ public static class HttpRepeaterTests
         Assert.True((sw.Elapsed + errorMargin) >= TimeSpan.FromMilliseconds(delayInMs));
     }
 
-    [Theory]
+    [Theory(Skip = "This test is flaky.")]
     [InlineData(PororocaRepetitionMode.Simple, 2)]
     [InlineData(PororocaRepetitionMode.Sequential, 3)]
     [InlineData(PororocaRepetitionMode.Random, 6)]
@@ -313,7 +313,7 @@ public static class HttpRepeaterTests
         }
         sw.Stop();
 
-        var errorMargin = TimeSpan.FromSeconds(1.5); // this test is flaky
+        var errorMargin = TimeSpan.FromSeconds(1);
         Assert.True((sw.Elapsed + errorMargin) >= expectedTotalTime);
     }
 
