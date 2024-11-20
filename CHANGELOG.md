@@ -1,6 +1,6 @@
 # Changelog
 
-* [3.7.0](#370-2024-11-18)
+* [3.7.0](#370-2024-11-??)
 * [3.6.0](#360-2024-10-07)
 * [3.5.0.1](#3501-2024-08-08)
 * [3.5.0](#350-2024-08-07)
@@ -31,7 +31,7 @@
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
 
-## [3.7.0](https://github.com/alexandrehtrb/Pororoca/tree/3.7.0) (2024-11-18)
+## [3.7.0](https://github.com/alexandrehtrb/Pororoca/tree/3.7.0) (2024-11-??)
 
 ### Features
 
@@ -60,6 +60,7 @@
 - Dialog for selecting UI tests to run and their execution speed. (issue #125)
 - Improved WebSocket endpoints in TestServer with maximum lifetime messages and subprotocols. Removed HTTP status code being set after connection closed.
 - Fixed flaky WebSocket tests.
+- Raised .NET SDK version to 8.0.404.
 - Raised System.Text.Json version for security.
 
 ## [3.6.0](https://github.com/alexandrehtrb/Pororoca/tree/3.6.0) (2024-10-07)
