@@ -1,7 +1,4 @@
 using System.Net.WebSockets;
-using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
-using Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage;
-using Pororoca.Infrastructure.Features.Requester;
 using Pororoca.Infrastructure.Features.WebSockets;
 using Xunit;
 using Xunit.Abstractions;
@@ -35,26 +32,15 @@ public sealed class PororocaTestLibraryWebSocketsTests
         Assert.Equal(WebSocketConnectorState.Connected, ws.State);
         // WHEN
         await ws.DisconnectAsync();
-        await Task.Delay(100);
-
+        await Task.Delay(500);
         // THEN
-        Assert.Null(ws.ConnectionException);
         Assert.Equal(WebSocketConnectorState.Disconnected, ws.State);
-        // THEN
         int msgCount = 0;
         await foreach (var msg in ws.ExchangedMessagesCollector!.ReadAllAsync())
         {
-            // The server closing goodbye message may or may not be captured.
-            if (msgCount == 0)
-            {
-                Assert.Equal(WebSocketMessageDirection.FromServer, msg.Direction);
-                Assert.Equal(WebSocketMessageType.Close, msg.Type);
-                Assert.Equal("ok, bye", msg.ReadAsUtf8Text());
-            }
-
             msgCount++;
         }
-        this.output.WriteLine($"Number of msgs in test ({wsConnName}): {msgCount}");
+        Assert.Equal(0, msgCount);
     }
 
     [Theory]
@@ -87,21 +73,11 @@ public sealed class PororocaTestLibraryWebSocketsTests
         await foreach (var msg in ws.ExchangedMessagesCollector!.ReadAllAsync())
         {
             msgCount++;
-
-            // Because of the parallelism, the Server message
-            // may arrive earlier than the Client closing message.
-            // The Server closing goodbye message may or may not be captured.
-
-            string expectedMsg = msg.Direction switch
-            {
-                WebSocketMessageDirection.FromClient => "Adiós",
-                WebSocketMessageDirection.FromServer => "ok, bye",
-            _ => string.Empty
-            };
+            Assert.Equal(WebSocketMessageDirection.FromClient, msg.Direction);
             Assert.Equal(WebSocketMessageType.Close, msg.Type);
-            Assert.Equal(expectedMsg, msg.ReadAsUtf8Text());
+            Assert.Equal("Adiós", msg.ReadAsUtf8Text());
         }
-        this.output.WriteLine($"Number of msgs in test ({wsConnName}): {msgCount}");
+        Assert.Equal(1, msgCount);
     }
 
     [Theory]
@@ -119,13 +95,14 @@ public sealed class PororocaTestLibraryWebSocketsTests
         int msgCount = 0;
         await foreach (var msg in ws.ExchangedMessagesCollector!.ReadAllAsync())
         {
-            if (msgCount == 0)
+            msgCount++;
+            if (msgCount == 1)
             {
                 Assert.Equal(WebSocketMessageDirection.FromClient, msg.Direction);
                 Assert.Equal(WebSocketMessageType.Text, msg.Type);
                 Assert.Equal("Hello", msg.ReadAsUtf8Text());
             }
-            else if (msgCount == 1)
+            else if (msgCount == 2)
             {
                 Assert.Equal(WebSocketMessageDirection.FromServer, msg.Direction);
                 Assert.Equal(WebSocketMessageType.Text, msg.Type);
@@ -134,18 +111,8 @@ public sealed class PororocaTestLibraryWebSocketsTests
                 // Teardown
                 await ws.DisconnectAsync();
             }
-            else if (msgCount == 2)
-            {
-                // This is in case the server replies with a closing goodbye message.
-                // It may or may not be captured.
-                Assert.Equal(WebSocketMessageDirection.FromServer, msg.Direction);
-                Assert.Equal(WebSocketMessageType.Close, msg.Type);
-                Assert.Equal("ok, bye", msg.ReadAsUtf8Text());
-            }
-
-            msgCount++;
         }
-        this.output.WriteLine($"Number of msgs in test ({wsConnName}): {msgCount}");
+        Assert.Equal(2, msgCount);
     }
 
     [Theory]
@@ -164,13 +131,14 @@ public sealed class PororocaTestLibraryWebSocketsTests
         int msgCount = 0;
         await foreach (var msg in ws.ExchangedMessagesCollector!.ReadAllAsync())
         {
-            if (msgCount == 0)
+            msgCount++;
+            if (msgCount == 1)
             {
                 Assert.Equal(WebSocketMessageDirection.FromClient, msg.Direction);
                 Assert.Equal(WebSocketMessageType.Binary, msg.Type);
                 Assert.Equal(Path.Combine(GetTestFilesDir(), "homem_aranha.jpg"), ((FileStream)msg.BytesStream).Name);
             }
-            else if (msgCount == 1)
+            else if (msgCount == 2)
             {
                 Assert.Equal(WebSocketMessageDirection.FromServer, msg.Direction);
                 Assert.Equal(WebSocketMessageType.Text, msg.Type);
@@ -179,18 +147,8 @@ public sealed class PororocaTestLibraryWebSocketsTests
                 // Teardown
                 await ws.DisconnectAsync();
             }
-            else if (msgCount == 2)
-            {
-                // This is in case the server replies with a closing goodbye message.
-                // It may or may not be captured.
-                Assert.Equal(WebSocketMessageDirection.FromServer, msg.Direction);
-                Assert.Equal(WebSocketMessageType.Close, msg.Type);
-                Assert.Equal("ok, bye", msg.ReadAsUtf8Text());
-            }
-
-            msgCount++;
         }
-        this.output.WriteLine($"Number of msgs in test ({wsConnName}): {msgCount}");
+        Assert.Equal(2, msgCount);
     }
 
     [Theory]
@@ -208,13 +166,14 @@ public sealed class PororocaTestLibraryWebSocketsTests
         int msgCount = 0;
         await foreach (var msg in ws.ExchangedMessagesCollector!.ReadAllAsync())
         {
-            if (msgCount == 0)
+            msgCount++;
+            if (msgCount == 1)
             {
                 Assert.Equal(WebSocketMessageDirection.FromClient, msg.Direction);
                 Assert.Equal(WebSocketMessageType.Text, msg.Type);
                 Assert.Equal("Hello", msg.ReadAsUtf8Text());
             }
-            else if (msgCount == 1)
+            else if (msgCount == 2)
             {
                 Assert.Equal(WebSocketMessageDirection.FromServer, msg.Direction);
                 Assert.Equal(WebSocketMessageType.Text, msg.Type);
@@ -227,13 +186,9 @@ public sealed class PororocaTestLibraryWebSocketsTests
                 // Teardown
                 await ws.DisconnectAsync();
             }
-
-            msgCount++;
         }
-        this.output.WriteLine($"Number of msgs in test ({wsConnName}): {msgCount}");
-
-        Assert.Null(ws.ConnectionException);
         Assert.Equal(WebSocketConnectorState.Disconnected, ws.State);
+        Assert.Equal(2, msgCount);
     }
 }
 

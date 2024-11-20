@@ -16,7 +16,7 @@ public class WebSocketClientSideConnector : WebSocketConnector
 
     #region CONNECTION
 
-    public async Task ConnectAsync(ClientWebSocket client, HttpClient httpClient, Uri uri, CancellationToken cancellationToken = default)
+    public async Task ConnectAsync(ClientWebSocket ws, HttpClient httpClient, Uri uri, CancellationToken cancellationToken = default)
     {
         if (ConnectionState == WebSocketConnectorState.Connected || ConnectionState == WebSocketConnectorState.Connecting)
             return;  // Not throwing exception if user tried to connect whilst WebSocket is connected
@@ -26,9 +26,9 @@ public class WebSocketClientSideConnector : WebSocketConnector
         {
             SetIsConnecting();
             sw.Start();
-            await client.ConnectAsync(uri!, httpClient, cancellationToken);
+            await ws.ConnectAsync(uri!, httpClient, cancellationToken);
             sw.Stop();
-            SetupAfterConnected(client, sw.Elapsed);
+            SetupAfterConnected(ws, sw.Elapsed);
             SetIsConnected();
         }
         catch (Exception ex)
@@ -40,9 +40,7 @@ public class WebSocketClientSideConnector : WebSocketConnector
     private void SetupAfterConnected(ClientWebSocket ws, TimeSpan elapsedConnectionTimeSpan)
     {
         this.ws = ws;
-
-        CancellationTokenSource cts = new(); // no maximum lifetime period
-        base.SetupAfterConnected(cts);
+        base.SetupAfterConnected();
 
         ConnectionHttpStatusCode = ((ClientWebSocket)this.ws).HttpStatusCode;
         ConnectionHttpHeaders = ((ClientWebSocket)this.ws).HttpResponseHeaders;

@@ -601,27 +601,22 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             // Awaiting the request.RequestAsync() here, or simply returning its Task,
             // causes the UI to freeze for a few seconds, especially when performing the first request to a server.
             // That is why we are invoking the code to run in a new thread, like below.
-            await Task.Run(async () =>
+            await Task.Yield();
+            await this.connector.ConnectAsync(resolvedClients.wsCli!, resolvedClients.httpCli!, resolvedUri!, this.cancelConnectionAttemptTokenSource.Token);
+            WasConnectionSuccessful = this.connector.ConnectionException is null;
+            ResponseStatusCodeElapsedTimeTitle = FormatResponseTitle(this.connector.ElapsedConnectionTimeSpan, resolvedClients.wsCli!.HttpStatusCode);
+            ConnectionResponseHeadersTableVm.Items.Clear();
+            var resHeaders = this.connector.ConnectionHttpHeaders?.SelectMany(
+                kv => kv.Value.Select(val => new KeyValueParamViewModel(ConnectionResponseHeadersTableVm.Items, true, kv.Key, val))).ToList()
+                ?? new List<KeyValueParamViewModel>();
+            foreach (var header in resHeaders)
             {
-                await this.connector.ConnectAsync(resolvedClients.wsCli!, resolvedClients.httpCli!, resolvedUri!, this.cancelConnectionAttemptTokenSource.Token);
-                Dispatcher.UIThread.Post(async () =>
-                {
-                    WasConnectionSuccessful = this.connector.ConnectionException is null;
-                    ResponseStatusCodeElapsedTimeTitle = FormatResponseTitle(this.connector.ElapsedConnectionTimeSpan, resolvedClients.wsCli!.HttpStatusCode);
-                    ConnectionResponseHeadersTableVm.Items.Clear();
-                    var resHeaders = this.connector.ConnectionHttpHeaders?.SelectMany(
-                        kv => kv.Value.Select(val => new KeyValueParamViewModel(ConnectionResponseHeadersTableVm.Items, true, kv.Key, val))).ToList()
-                        ?? new List<KeyValueParamViewModel>();
-                    foreach (var header in resHeaders)
-                    {
-                        ConnectionResponseHeadersTableVm.Items.Add(header);
-                    }
-                    if (WasConnectionSuccessful)
-                    {
-                        await CollectExchangedMessagesAsync(this.connector.ExchangedMessagesCollector!);
-                    }
-                });
-            });
+                ConnectionResponseHeadersTableVm.Items.Add(header);
+            }
+            if (WasConnectionSuccessful)
+            {
+                await CollectExchangedMessagesAsync(this.connector.ExchangedMessagesCollector!);
+            }
         }
     }
 

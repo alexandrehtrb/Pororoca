@@ -131,17 +131,6 @@ public sealed partial class WebSocketsUITest : UITest
             await Wait(3);
             AssertIsHidden(WsRobot.IsWsConnected);
             Assert(WsRobot.Name.Icon == EditableTextBlockIcon.DisconnectedWebSocket);
-
-            // The server goodbye message may or may not be captured.
-            if (WsRobot.ExchangedMessages.Items.Count == 5)
-            {
-                AppendToLog($"Captured WS server goodbye.");
-                await AssertExchangedMessage(4, "server -> client", "closing, 7 bytes", "Closing message", "ok, bye");
-            }
-            else
-            {
-                AppendToLog($"Couldn't capture WS server goodbye.");
-            }
         }
 
         if (OperatingSystem.IsLinux())

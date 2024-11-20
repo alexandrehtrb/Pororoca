@@ -218,7 +218,7 @@ public static class TestEndpoints
 
     #region WEBSOCKETS
 
-    private static async Task TestHttp1WebSocket(HttpContext httpCtx)
+    private static async Task TestHttp1WebSocket(ILogger<WebSocketServerSideConnector> logger, HttpContext httpCtx)
     {
         if (!httpCtx.WebSockets.IsWebSocketRequest)
         {
@@ -232,12 +232,12 @@ public static class TestEndpoints
             TaskCompletionSource<object> socketFinishedTcs = new();
             string? subprotocol = webSocket.SubProtocol ?? httpCtx.WebSockets.WebSocketRequestedProtocols.FirstOrDefault();
 
-            await BackgroundWebSocketsProcessor.RegisterAndProcessAsync(webSocket, subprotocol, socketFinishedTcs);
+            await BackgroundWebSocketsProcessor.RegisterAndProcessAsync(logger, webSocket, subprotocol, socketFinishedTcs);
             await socketFinishedTcs.Task;
         }
     }
 
-    private static async Task TestHttp2WebSocket(HttpContext httpCtx)
+    private static async Task TestHttp2WebSocket(ILogger<WebSocketServerSideConnector> logger, HttpContext httpCtx)
     {
         if (httpCtx.Request.Protocol != "HTTP/2" || !httpCtx.WebSockets.IsWebSocketRequest)
         {
@@ -251,7 +251,7 @@ public static class TestEndpoints
             TaskCompletionSource<object> socketFinishedTcs = new();
             string? subprotocol = webSocket.SubProtocol ?? httpCtx.WebSockets.WebSocketRequestedProtocols.FirstOrDefault();
 
-            await BackgroundWebSocketsProcessor.RegisterAndProcessAsync(webSocket, subprotocol, socketFinishedTcs);
+            await BackgroundWebSocketsProcessor.RegisterAndProcessAsync(logger, webSocket, subprotocol, socketFinishedTcs);
             await socketFinishedTcs.Task;
         }
     }
