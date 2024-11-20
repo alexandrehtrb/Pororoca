@@ -47,7 +47,7 @@
 
 ### Refactors
 
-- WebSocket implementation is more robust and uses a `Channel<T>` to collect exchanged messages. *This is a breaking change if you use Pororoca.Test for WebSocket testing*. Read more about in the [docs](https://pororoca.io/docs/automated-tests#websocket-tests). (issue #78)
+- More robust WebSocket implementation with `Channel<T>` to collect exchanged messages. *This is a breaking change if you use Pororoca.Test for WebSocket testing*. Read more about in the [docs](https://pororoca.io/docs/automated-tests#websocket-tests). (issue #78)
 - FileStreams of WebSocket client messages are now disposed after the messages are sent.
 - WebSocket messages are now saved into files with better naming.
 - The user saved collections are now loaded asynchronously and in parallel, resulting in much faster start-up time, on all platforms.
@@ -61,7 +61,7 @@
 - Improved WebSocket endpoints in TestServer with maximum lifetime messages and subprotocols. Removed HTTP status code being set after connection closed.
 - Fixed flaky WebSocket tests.
 - Raised .NET SDK version to 8.0.404.
-- Raised System.Text.Json version for security.
+- Raised System.Text.Json version to 9.0.0 for security.
 
 ## [3.6.0](https://github.com/alexandrehtrb/Pororoca/tree/3.6.0) (2024-10-07)
 
