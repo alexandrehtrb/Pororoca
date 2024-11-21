@@ -4,14 +4,6 @@ namespace Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 
 public static class WebSocketMessageTypeExtensions
 {
-    public static PororocaWebSocketMessageType ToPororocaWebSocketMessageType(this WebSocketMessageType msgType) =>
-        msgType switch
-        {
-            WebSocketMessageType.Text => PororocaWebSocketMessageType.Text,
-            WebSocketMessageType.Close => PororocaWebSocketMessageType.Close,
-            _ => PororocaWebSocketMessageType.Binary
-        };
-
     public static WebSocketMessageType ToWebSocketMessageType(this PororocaWebSocketMessageType msgType) =>
         msgType switch
         {

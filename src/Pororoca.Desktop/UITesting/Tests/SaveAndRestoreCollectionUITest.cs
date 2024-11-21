@@ -315,13 +315,16 @@ public class SaveAndRestoreCollectionUITest : UITest
     {
         await TreeRobot.Select("COL1");
         var collection = ((CollectionViewModel)ColRobot.RootView!.DataContext!).ToCollection(forExporting: false);
-        string json = PororocaCollectionExporter.ExportAsPororocaCollection(collection);
+        MemoryStream colMs = new(16384);
+        PororocaCollectionExporter.ExportAsPororocaCollection(colMs, collection);
+        colMs.Seek(0, SeekOrigin.Begin);
         MainWindowVm.CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
         MainWindowVm.CollectionsGroupViewDataCtx.Items.Clear();
 
         AssertTreeItemNotExists(CollectionsGroup, "COL1");
 
-        Assert(PororocaCollectionImporter.TryImportPororocaCollection(json, preserveId: true, out var reimportedCollection));
+        var reimportedCollection = await PororocaCollectionImporter.ImportPororocaCollectionAsync(colMs, preserveId: true);
+        Assert(reimportedCollection is not null);
         MainWindowVm.AddCollection(reimportedCollection!, showItemInScreen: true);
     }
 

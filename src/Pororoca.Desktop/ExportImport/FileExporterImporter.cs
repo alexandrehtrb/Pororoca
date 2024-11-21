@@ -18,6 +18,7 @@ using Pororoca.Desktop.Converters;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Desktop.HotKeys;
 using MsBox.Avalonia.Enums;
+using Pororoca.Domain.Features.ExportCollection;
 
 namespace Pororoca.Desktop.ExportImport;
 
@@ -88,19 +89,16 @@ internal static partial class FileExporterImporter
 
         if (destFilePath != null)
         {
-            string json = format switch
+            if (format == ExportCollectionFormat.Pororoca)
             {
-                ExportCollectionFormat.Pororoca => ExportAsPororocaCollection(col),
-                ExportCollectionFormat.Postman => ExportAsPostmanCollectionV21(col),
-                _ => string.Empty
-            };
-            var encoding = format switch
+                using FileStream fs = new(destFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite, bufferSize: 16384, useAsync: true);
+                await ExportAsPororocaCollectionAsync(fs, col);
+            }
+            else if (format == ExportCollectionFormat.Postman)
             {
-                ExportCollectionFormat.Pororoca => Encoding.UTF8,
-                ExportCollectionFormat.Postman => utf8EncodingWithoutBOM,
-                _ => Encoding.UTF8
-            };
-            await File.WriteAllTextAsync(destFilePath, json, encoding);
+                string json = ExportAsPostmanCollectionV21(col);
+                await File.WriteAllTextAsync(destFilePath, json, utf8EncodingWithoutBOM);
+            }
         }
     }
 
@@ -148,19 +146,16 @@ internal static partial class FileExporterImporter
 
         if (destFilePath != null)
         {
-            string json = format switch
+            if (format == ExportEnvironmentFormat.Pororoca)
             {
-                ExportEnvironmentFormat.Pororoca => ExportAsPororocaEnvironment(env),
-                ExportEnvironmentFormat.Postman => ExportAsPostmanEnvironment(env),
-                _ => string.Empty
-            };
-            var encoding = format switch
+                byte[] bytes = ExportAsPororocaEnvironment(env);
+                await File.WriteAllBytesAsync(destFilePath, bytes);
+            }
+            else if (format == ExportEnvironmentFormat.Postman)
             {
-                ExportEnvironmentFormat.Pororoca => Encoding.UTF8,
-                ExportEnvironmentFormat.Postman => utf8EncodingWithoutBOM,
-                _ => Encoding.UTF8
-            };
-            await File.WriteAllTextAsync(destFilePath, json, encoding);
+                string json = ExportAsPostmanEnvironment(env);
+                await File.WriteAllTextAsync(destFilePath, json, utf8EncodingWithoutBOM);
+            }
         }
     }
 

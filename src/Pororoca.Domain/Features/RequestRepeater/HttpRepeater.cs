@@ -3,6 +3,7 @@ using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Requester;
+using System.Threading.RateLimiting;
 
 namespace Pororoca.Domain.Features.RequestRepeater;
 
@@ -83,9 +84,11 @@ public static class HttpRepeater
         options.MaxDegreeOfParallelism = (int)rep.MaxDop!;
         options.CancellationToken = combinedCts.Token; // will stop either externally or by a validation error
 
+        using var rateLimiter = MakeRateLimiter(rep);
+
         await Parallel.ForAsync(0, (int)rep.NumberOfRepetitions!, options, async (i, ct) =>
         {
-            bool valid = await ExecuteRepetitionIfValidAsync(channelWriter, requester, collectionEffectiveVars, null, collectionScopedAuth, collectionScopedRequestHeaders, rep, baseReq, ct);
+            bool valid = await ExecuteRepetitionIfValidAsync(channelWriter, requester, collectionEffectiveVars, null, collectionScopedAuth, collectionScopedRequestHeaders, rep, baseReq, rateLimiter, ct);
             if (!valid) internalCts.Cancel();
         });
     }
@@ -101,6 +104,8 @@ public static class HttpRepeater
         PororocaHttpRequest baseReq,
         CancellationToken cancellationToken)
     {
+        using var rateLimiter = MakeRateLimiter(rep);
+
         // sequential --> not parallel
         foreach (var inputLine in resolvedInputData)
         {
@@ -108,7 +113,7 @@ public static class HttpRepeater
             if (cancellationToken.IsCancellationRequested)
                 break;
 
-            bool valid = await ExecuteRepetitionIfValidAsync(channelWriter, requester, collectionEffectiveVars, inputLine, collectionScopedAuth, collectionScopedRequestHeaders, rep, baseReq, cancellationToken);
+            bool valid = await ExecuteRepetitionIfValidAsync(channelWriter, requester, collectionEffectiveVars, inputLine, collectionScopedAuth, collectionScopedRequestHeaders, rep, baseReq, rateLimiter, cancellationToken);
             if (!valid) break;
         }
     }
@@ -131,6 +136,8 @@ public static class HttpRepeater
         options.MaxDegreeOfParallelism = (int)rep.MaxDop!;
         options.CancellationToken = combinedCts.Token; // will stop either externally or by a validation error
 
+        using var rateLimiter = MakeRateLimiter(rep);
+
         await Parallel.ForAsync(0, (int)rep.NumberOfRepetitions!, options, async (i, ct) =>
         {
             // Random.Shared is thread-safe
@@ -139,13 +146,18 @@ public static class HttpRepeater
                             null :
                             resolvedInputData[Random.Shared.Next(0, resolvedInputData.Length)];
 
-            bool valid = await ExecuteRepetitionIfValidAsync(channelWriter, requester, collectionEffectiveVars, inputLine, collectionScopedAuth, collectionScopedRequestHeaders, rep, baseReq, ct);
+            bool valid = await ExecuteRepetitionIfValidAsync(channelWriter, requester, collectionEffectiveVars, inputLine, collectionScopedAuth, collectionScopedRequestHeaders, rep, baseReq, rateLimiter, ct);
             if (!valid) internalCts.Cancel();
         });
     }
 
-    private static async Task<bool> ExecuteRepetitionIfValidAsync(ChannelWriter<PororocaHttpRepetitionResult> channelWriter, IPororocaRequester requester, IEnumerable<PororocaVariable> collectionEffectiveVars, PororocaVariable[]? inputLine, PororocaRequestAuth? collectionScopedAuth, List<PororocaKeyValueParam>? collectionScopedRequestHeaders, PororocaHttpRepetition rep, PororocaHttpRequest baseReq, CancellationToken cancellationToken)
+    private static async Task<bool> ExecuteRepetitionIfValidAsync(ChannelWriter<PororocaHttpRepetitionResult> channelWriter, IPororocaRequester requester, IEnumerable<PororocaVariable> collectionEffectiveVars, PororocaVariable[]? inputLine, PororocaRequestAuth? collectionScopedAuth, List<PororocaKeyValueParam>? collectionScopedRequestHeaders, PororocaHttpRepetition rep, PororocaHttpRequest baseReq, SlidingWindowRateLimiter? rateLimiter, CancellationToken cancellationToken)
     {
+        if (rateLimiter is not null)
+        {
+            await rateLimiter.AcquireAsync(1, cancellationToken);
+        }
+
         var effectiveVars = CombineEffectiveVarsWithInputLine(collectionEffectiveVars, inputLine);
 
         if (!requester.IsValidRequest(effectiveVars, collectionScopedAuth, baseReq, out string? errorCode))
@@ -175,6 +187,18 @@ public static class HttpRepeater
         var colEffectiveVarsNotIntersectingInputLine = colEffectiveVars.Where(v => !inputLine.Any(ilv => ilv.Key == v.Key));
         return colEffectiveVarsNotIntersectingInputLine.Concat(inputLine);
     }
+
+    internal static SlidingWindowRateLimiter? MakeRateLimiter(PororocaHttpRepetition rep) =>
+        rep.MaxRatePerSecond is null ?
+        null :
+        new(new()
+        {
+            Window = TimeSpan.FromSeconds(1),
+            SegmentsPerWindow = 40, // 25ms each
+            AutoReplenishment = true,
+            PermitLimit = (int) rep.MaxRatePerSecond,
+            QueueLimit = (int) rep.MaxDop!
+        });
 
     public static TimeSpan EstimateRemainingTime(int total, int numberExecuted, TimeSpan elapsedSoFar) =>
         ((((float)total) / numberExecuted) - 1) * elapsedSoFar;

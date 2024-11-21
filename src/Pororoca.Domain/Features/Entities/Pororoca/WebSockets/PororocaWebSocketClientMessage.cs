@@ -11,7 +11,7 @@ public enum PororocaWebSocketClientMessageContentMode
 #if DEBUG
 [DebuggerDisplay("{Name,nq}")]
 #endif
-public record PororocaWebSocketClientMessage
+public sealed record PororocaWebSocketClientMessage
 (
     PororocaWebSocketMessageType MessageType,
     string Name,

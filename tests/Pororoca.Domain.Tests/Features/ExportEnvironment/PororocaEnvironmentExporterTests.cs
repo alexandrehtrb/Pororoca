@@ -1,3 +1,4 @@
+using System.Text;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Xunit;
 using static Pororoca.Domain.Features.ExportEnvironment.PororocaEnvironmentExporter;
@@ -18,7 +19,7 @@ public static class PororocaEnvironmentExporterTests
         var env = CreateTestPororocaEnvironment();
 
         // WHEN AND THEN
-        string json = ExportAsPororocaEnvironment(env);
+        string json = Encoding.UTF8.GetString(ExportAsPororocaEnvironment(env));
         Assert.True(TryImportPororocaEnvironment(json, out var reimportedEnv));
         Assert.NotNull(reimportedEnv);
         AssertEnvironment(reimportedEnv);

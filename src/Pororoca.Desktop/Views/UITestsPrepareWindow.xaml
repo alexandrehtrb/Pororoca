@@ -1,0 +1,132 @@
+<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:Pororoca.Desktop.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    Width="474"
+    Height="600"
+    x:Class="Pororoca.Desktop.Views.UITestsPrepareWindow"
+    x:CompileBindings="True"
+    x:DataType="vm:UITestsPrepareWindowViewModel"
+    FontFamily="{StaticResource DefaultFontFamily}"
+    Icon="/Assets/pororoca_icon.ico"
+    Title="Pororoca UI Tests">
+
+  <Design.DataContext>
+    <vm:UITestsPrepareWindowViewModel/>
+  </Design.DataContext>
+
+  <StackPanel
+    HorizontalAlignment="Stretch"
+    VerticalAlignment="Stretch"
+    Margin="24"
+    Spacing="24">
+
+    <StackPanel Orientation="Horizontal">
+
+      <TextBlock
+        HorizontalAlignment="Left"
+        VerticalAlignment="Center"
+        TextWrapping="Wrap"
+        Classes="SectionTitle"
+        Text="{Binding i18n.UITestsPrepare.Title}"/>
+
+      <TextBlock
+        HorizontalAlignment="Left"
+        VerticalAlignment="Center"
+        TextWrapping="Wrap"
+        Margin="24,0,0,0"
+        Classes="SectionTitle"
+        FontSize="14"
+        Foreground="{DynamicResource WebSocketConnectedBrush}"
+        Text="{Binding i18n.UITestsPrepare.TestFilesFolderNotFound}"
+        IsVisible="{Binding !TestFilesFolderFound}"/>
+      
+    </StackPanel>
+
+    <StackPanel Orientation="Horizontal">
+      
+      <TextBlock
+        TextWrapping="Wrap"
+        FontSize="14"
+        Classes="TipText"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Center"
+        Margin="0,0,6,0"
+        Text="{Binding i18n.UITestsPrepare.WaitingTimeBetweenActions}"/>
+      
+      <NumericUpDown
+        Margin="6,0,0,0"
+        VerticalAlignment="Center"
+        Increment="10"
+        Minimum="20"
+        Value="{Binding ActionsWaitingTimeInMs, Mode=TwoWay}"/>
+      
+    </StackPanel>
+
+    <DataGrid
+      HorizontalAlignment="Left"
+      VerticalAlignment="Stretch"
+      Width="420"
+      Height="384"
+      AutoGenerateColumns="False"
+      ItemsSource="{Binding Tests}"
+      CanUserResizeColumns="True"
+      HeadersVisibility="All">
+      <DataGrid.Columns>
+        <DataGridCheckBoxColumn
+          Width="0.35*"
+          Binding="{Binding Include}">
+          <DataGridCheckBoxColumn.Header>
+            <TextBlock Text="{Binding i18n.UITestsPrepare.TestInclude}"/>
+          </DataGridCheckBoxColumn.Header>
+        </DataGridCheckBoxColumn>
+        <DataGridTextColumn
+          Width="0.65*"
+          Binding="{Binding Name}"
+          IsReadOnly="True">
+          <DataGridTextColumn.Header>
+            <TextBlock Text="{Binding i18n.UITestsPrepare.TestName}"/>
+          </DataGridTextColumn.Header>
+        </DataGridTextColumn>
+      </DataGrid.Columns>
+    </DataGrid>
+
+    <StackPanel Orientation="Horizontal" Spacing="12">
+
+      <Button
+        Height="40"
+        Width="104"
+        HorizontalContentAlignment="Center"
+        VerticalContentAlignment="Center"
+        Click="RunTests"
+        Content="{Binding i18n.UITestsPrepare.RunTests}"
+        Classes="Primary"/>
+
+      <Button
+        Height="40"
+        Width="104"
+        HorizontalContentAlignment="Center"
+        VerticalContentAlignment="Center"
+        Command="{Binding SelectAllTestsCmd}"
+        Content="{Binding i18n.UITestsPrepare.SelectAll}"
+        Classes="Secondary"/>
+
+      <Button
+        Height="40"
+        Width="104"
+        HorizontalContentAlignment="Center"
+        VerticalContentAlignment="Center"
+        Command="{Binding DeselectAllTestsCmd}"
+        Content="{Binding i18n.UITestsPrepare.DeselectAll}"
+        Classes="Secondary"/>
+
+    </StackPanel>
+
+  </StackPanel>
+
+</Window>

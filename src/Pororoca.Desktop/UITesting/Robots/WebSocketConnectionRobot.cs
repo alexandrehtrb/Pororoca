@@ -3,7 +3,7 @@ using AvaloniaEdit;
 using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.Views;
-using Pororoca.Infrastructure.Features.Requester;
+using Pororoca.Infrastructure.Features.WebSockets;
 using static Pororoca.Domain.Features.Common.HttpVersionFormatter;
 
 namespace Pororoca.Desktop.UITesting.Robots;
@@ -59,7 +59,7 @@ public sealed class WebSocketConnectionRobot : BaseNamedRobot
             // because the first request causes a little lag in the screen
             await Task.Delay(1500);
         }
-        while (!cts.IsCancellationRequested && vm.ConnectionState == PororocaWebSocketConnectorState.Connecting);
+        while (!cts.IsCancellationRequested && vm.ConnectionState == WebSocketConnectorState.Connecting);
     }
 
     internal async Task ClickOnDisconnectAndWaitForDisconnection()
@@ -73,6 +73,6 @@ public sealed class WebSocketConnectionRobot : BaseNamedRobot
             // because the first request causes a little lag in the screen
             await Task.Delay(750);
         }
-        while (!cts.IsCancellationRequested && vm.ConnectionState == PororocaWebSocketConnectorState.Disconnecting);
+        while (!cts.IsCancellationRequested && vm.ConnectionState == WebSocketConnectorState.Disconnecting);
     }
 }

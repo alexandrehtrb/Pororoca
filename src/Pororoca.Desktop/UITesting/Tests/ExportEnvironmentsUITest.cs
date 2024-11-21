@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Text;
 using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.UITesting.Robots;
 using Pororoca.Desktop.ViewModels;
@@ -95,7 +96,7 @@ public sealed class ExportEnvironmentsUITest : SaveAndRestoreCollectionUITest
         var env = ((EnvironmentViewModel)EnvRobot.RootView!.DataContext!).ToEnvironment(forExporting: true);
         return format switch
         {
-            ExportEnvironmentFormat.Pororoca => PororocaEnvironmentExporter.ExportAsPororocaEnvironment(env),
+            ExportEnvironmentFormat.Pororoca => Encoding.UTF8.GetString(PororocaEnvironmentExporter.ExportAsPororocaEnvironment(env)),
             ExportEnvironmentFormat.Postman => PostmanEnvironmentExporter.ExportAsPostmanEnvironment(env),
             _ => string.Empty
         };

@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Text;
 using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.UITesting.Robots;
 using Pororoca.Desktop.ViewModels;
@@ -206,11 +207,19 @@ public sealed class ExportCollectionsUITest : SaveAndRestoreCollectionUITest
     {
         await TreeRobot.Select("COL1");
         var collection = ((CollectionViewModel)ColRobot.RootView!.DataContext!).ToCollection(forExporting: true);
-        return format switch
+        if (format == ExportCollectionFormat.Pororoca)
         {
-            ExportCollectionFormat.Pororoca => PororocaCollectionExporter.ExportAsPororocaCollection(collection),
-            ExportCollectionFormat.Postman => PostmanCollectionV21Exporter.ExportAsPostmanCollectionV21(collection),
-            _ => string.Empty
+            MemoryStream ms = new(16384);
+            PororocaCollectionExporter.ExportAsPororocaCollection(ms, collection);
+            return Encoding.UTF8.GetString(ms.ToArray());
+        }
+        else if (format == ExportCollectionFormat.Postman)
+        {
+            return PostmanCollectionV21Exporter.ExportAsPostmanCollectionV21(collection);
+        }
+        else
+        {
+            return string.Empty;
         };
     }
 

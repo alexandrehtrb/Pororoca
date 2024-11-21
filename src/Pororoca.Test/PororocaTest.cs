@@ -9,6 +9,7 @@ using Pororoca.Domain.Features.TranslateRequest.Http;
 using Pororoca.Domain.Features.TranslateRequest.WebSockets.Connection;
 using Pororoca.Domain.Features.VariableResolution;
 using Pororoca.Infrastructure.Features.Requester;
+using Pororoca.Infrastructure.Features.WebSockets;
 using static Pororoca.Domain.Features.RequestRepeater.HttpRepeater;
 using static Pororoca.Domain.Features.RequestRepeater.HttpRepetitionValidator;
 
@@ -156,14 +157,13 @@ public sealed class PororocaTest
     }
 
     public Task<PororocaTestWebSocketConnector> ConnectWebSocketAsync(string wsName,
-                                                                      OnWebSocketConnectionChanged? onConnectionChanged = null,
-                                                                      OnWebSocketMessageSending? onMessageSending = null,
+                                                                      Action<WebSocketConnectorState, Exception?>? onConnectionChanged = null,
                                                                       CancellationToken cancellationToken = default)
     {
         var ws = FindWebSocketInCollection(x => x.Name == wsName);
         if (ws != null)
         {
-            return ConnectWebSocketAsync(ws, onConnectionChanged, onMessageSending, cancellationToken);
+            return ConnectWebSocketAsync(ws, onConnectionChanged, cancellationToken);
         }
         else
         {
@@ -172,8 +172,7 @@ public sealed class PororocaTest
     }
 
     public async Task<PororocaTestWebSocketConnector> ConnectWebSocketAsync(PororocaWebSocketConnection ws,
-                                                                            OnWebSocketConnectionChanged? onConnectionChanged = null,
-                                                                            OnWebSocketMessageSending? onMessageSending = null,
+                                                                            Action<WebSocketConnectorState, Exception?>? onConnectionChanged = null,
                                                                             CancellationToken cancellationToken = default)
     {
         var effectiveVars = ((IPororocaVariableResolver)Collection).GetEffectiveVariables();
@@ -188,7 +187,7 @@ public sealed class PororocaTest
         }
         else
         {
-            PororocaTestWebSocketConnector connector = new(Collection, ws, onConnectionChanged, onMessageSending);
+            PororocaTestWebSocketConnector connector = new(Collection, ws, onConnectionChanged);
             await connector.ConnectAsync(wsAndHttpCli.wsCli!, wsAndHttpCli.httpCli!, resolvedUri!, cancellationToken);
             if (connector.ConnectionException is not null)
             {

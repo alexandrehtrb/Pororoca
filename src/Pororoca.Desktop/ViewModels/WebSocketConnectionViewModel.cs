@@ -1,8 +1,9 @@
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Net;
 using System.Reactive;
 using System.Security.Authentication;
+using System.Threading.Channels;
+using Avalonia.Threading;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
@@ -15,6 +16,7 @@ using Pororoca.Domain.Features.Requester;
 using Pororoca.Domain.Features.TranslateRequest;
 using Pororoca.Domain.Features.VariableResolution;
 using Pororoca.Infrastructure.Features.Requester;
+using Pororoca.Infrastructure.Features.WebSockets;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using static Pororoca.Desktop.Localization.TimeTextFormatter;
@@ -40,7 +42,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     private readonly CollectionViewModel col;
     private readonly IPororocaHttpClientProvider httpClientProvider;
-    private readonly PororocaWebSocketConnector connector;
+    private readonly WebSocketClientSideConnector connector;
 
     [Reactive]
     public string ConnectDisconnectCancelButtonText { get; set; }
@@ -48,44 +50,46 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     [Reactive]
     public string ConnectDisconnectCancelButtonToolTip { get; set; }
 
-    private PororocaWebSocketConnectorState connectionStateField;
-    public PororocaWebSocketConnectorState ConnectionState
+    private WebSocketConnectorState connectionStateField;
+    public WebSocketConnectorState ConnectionState
     {
+        // At the beginning, this.connectionStateField will be 0,
+        // which corresponds to Disconnected in the enum.
         get => this.connectionStateField;
         set
         {
             NameEditableVm.Icon = value switch
             {
-                PororocaWebSocketConnectorState.Connected or
-                PororocaWebSocketConnectorState.Disconnecting => EditableTextBlockIcon.ConnectedWebSocket,
+                WebSocketConnectorState.Connected or
+                WebSocketConnectorState.Disconnecting => EditableTextBlockIcon.ConnectedWebSocket,
                 _ => EditableTextBlockIcon.DisconnectedWebSocket
             };
             IsConnected = value switch
             {
-                PororocaWebSocketConnectorState.Connected or
-                PororocaWebSocketConnectorState.Disconnecting => true,
+                WebSocketConnectorState.Connected or
+                WebSocketConnectorState.Disconnecting => true,
                 _ => false
             };
             IsConnectingOrDisconnecting = value switch
             {
-                PororocaWebSocketConnectorState.Connecting or
-                PororocaWebSocketConnectorState.Disconnecting => true,
+                WebSocketConnectorState.Connecting or
+                WebSocketConnectorState.Disconnecting => true,
                 _ => false
             };
             ConnectDisconnectCancelButtonText = value switch
             {
-                PororocaWebSocketConnectorState.Disconnected => Localizer.Instance.WebSocketConnection.Connect,
-                PororocaWebSocketConnectorState.Connecting => Localizer.Instance.WebSocketConnection.CancelConnect,
-                PororocaWebSocketConnectorState.Connected => Localizer.Instance.WebSocketConnection.Disconnect,
-                PororocaWebSocketConnectorState.Disconnecting => Localizer.Instance.WebSocketConnection.CancelDisconnect,
+                WebSocketConnectorState.Disconnected => Localizer.Instance.WebSocketConnection.Connect,
+                WebSocketConnectorState.Connecting => Localizer.Instance.WebSocketConnection.CancelConnect,
+                WebSocketConnectorState.Connected => Localizer.Instance.WebSocketConnection.Disconnect,
+                WebSocketConnectorState.Disconnecting => Localizer.Instance.WebSocketConnection.CancelDisconnect,
                 _ => string.Empty
             };
             ConnectDisconnectCancelButtonToolTip = value switch
             {
-                PororocaWebSocketConnectorState.Disconnected => Localizer.Instance.WebSocketConnection.ConnectToolTip,
-                PororocaWebSocketConnectorState.Connecting => Localizer.Instance.WebSocketConnection.CancelConnectToolTip,
-                PororocaWebSocketConnectorState.Connected => Localizer.Instance.WebSocketConnection.DisconnectToolTip,
-                PororocaWebSocketConnectorState.Disconnecting => Localizer.Instance.WebSocketConnection.CancelDisconnect,
+                WebSocketConnectorState.Disconnected => Localizer.Instance.WebSocketConnection.ConnectToolTip,
+                WebSocketConnectorState.Connecting => Localizer.Instance.WebSocketConnection.CancelConnectToolTip,
+                WebSocketConnectorState.Connected => Localizer.Instance.WebSocketConnection.DisconnectToolTip,
+                WebSocketConnectorState.Disconnecting => Localizer.Instance.WebSocketConnection.CancelDisconnect,
                 _ => string.Empty
             };
             this.connectionStateField = value;
@@ -328,11 +332,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         set
         {
             this.RaiseAndSetIfChanged(ref this.selectedExchangedMessageField, value);
-
-            if (value is not null)
-            {
-                OnSelectedExchangedMessageChanged(value);
-            }
+            OnSelectedExchangedMessageChanged(value);
         }
     }
 
@@ -360,7 +360,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
         this.col = col;
         this.httpClientProvider = PororocaHttpClientProvider.Singleton;
-        this.connector = new(OnWebSocketConnectionChanged, OnWebSocketMessageSending);
+        this.connector = new();
+        this.connector.OnConnectionChanged = OnWebSocketConnectionChanged;
 
         if (ws.ClientMessages is not null)
         {
@@ -430,7 +431,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         #region EXCHANGED MESSAGES
         ConnectionResponseHeadersTableVm = new(new List<PororocaKeyValueParam>());
         ExchangedMessages = new();
-        this.connector.ExchangedMessages.CollectionChanged += OnConnectorExchangedMessagesUpdated;
         SendMessageCmd = ReactiveCommand.CreateFromTask(SendMessageAsync);
         #endregion
 
@@ -542,11 +542,11 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         RequestAuthDataCtx.ClearRequestAuthValidationWarnings();
     }
 
-    private void OnWebSocketConnectionChanged(PororocaWebSocketConnectorState state, Exception? ex)
+    private void OnWebSocketConnectionChanged(WebSocketConnectorState state, Exception? ex)
     {
         ConnectionState = state;
         ConnectionExceptionContent = ex?.ToString();
-        if (state == PororocaWebSocketConnectorState.Connected || ex is not null)
+        if (state == WebSocketConnectorState.Connected || ex is not null)
         {
             // TODO: do not use fixed integers here, find a better way
             SelectedConnectionTabIndex = 2;
@@ -558,21 +558,18 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         ex?.InnerException?.InnerException is AuthenticationException aex
      && aex.Message.Contains("remote certificate is invalid", StringComparison.InvariantCultureIgnoreCase);
 
-    private void OnWebSocketMessageSending(bool isSendingAMessage) =>
-        IsSendingAMessage = isSendingAMessage;
-
     public Task ConnectDisconnectCancelAsync()
     {
         switch (ConnectionState)
         {
-            case PororocaWebSocketConnectorState.Disconnected:
+            case WebSocketConnectorState.Disconnected:
                 return ConnectAsync();
-            case PororocaWebSocketConnectorState.Connecting:
+            case WebSocketConnectorState.Connecting:
                 CancelConnect();
                 return Task.CompletedTask;
-            case PororocaWebSocketConnectorState.Connected:
+            case WebSocketConnectorState.Connected:
                 return DisconnectAsync();
-            case PororocaWebSocketConnectorState.Disconnecting:
+            case WebSocketConnectorState.Disconnecting:
                 CancelDisconnect();
                 return Task.CompletedTask;
             default:
@@ -598,12 +595,14 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         else
         {
             InvalidConnectionErrorCode = null;
+            ExchangedMessages.Clear();
             this.cancelConnectionAttemptTokenSource = new();
             // This needs to be done in a different thread.
             // Awaiting the request.RequestAsync() here, or simply returning its Task,
             // causes the UI to freeze for a few seconds, especially when performing the first request to a server.
             // That is why we are invoking the code to run in a new thread, like below.
-            await Task.Run(() => this.connector.ConnectAsync(resolvedClients.wsCli!, resolvedClients.httpCli!, resolvedUri!, this.cancelConnectionAttemptTokenSource.Token));
+            await Task.Yield();
+            await this.connector.ConnectAsync(resolvedClients.wsCli!, resolvedClients.httpCli!, resolvedUri!, this.cancelConnectionAttemptTokenSource.Token);
             WasConnectionSuccessful = this.connector.ConnectionException is null;
             ResponseStatusCodeElapsedTimeTitle = FormatResponseTitle(this.connector.ElapsedConnectionTimeSpan, resolvedClients.wsCli!.HttpStatusCode);
             ConnectionResponseHeadersTableVm.Items.Clear();
@@ -613,6 +612,10 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             foreach (var header in resHeaders)
             {
                 ConnectionResponseHeadersTableVm.Items.Add(header);
+            }
+            if (WasConnectionSuccessful)
+            {
+                await CollectExchangedMessagesAsync(this.connector.ExchangedMessagesCollector!);
             }
         }
     }
@@ -650,7 +653,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     private async Task SendMessageAsync()
     {
-        if (ConnectionState != PororocaWebSocketConnectorState.Connected)
+        if (ConnectionState != WebSocketConnectorState.Connected)
         {
             InvalidClientMessageErrorCode = TranslateRequestErrors.WebSocketNotConnected;
         }
@@ -662,31 +665,23 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             {
                 InvalidClientMessageErrorCode = validationErrorCode;
             }
-            else if (!TryTranslateClientMessage(effectiveVars, msg, out var resolvedMsgToSend, out string? translationErrorCode))
+            else if (!TryTranslateClientMessage(effectiveVars, msg, out var resolvedStreamToSend, out string? translationErrorCode))
             {
                 InvalidClientMessageErrorCode = translationErrorCode;
             }
             else
             {
                 InvalidClientMessageErrorCode = null;
-                await this.connector.SendMessageAsync(resolvedMsgToSend!);
+                await this.connector.SendMessageAsync(msg.MessageType.ToWebSocketMessageType(), resolvedStreamToSend!, msg.DisableCompressionForThis);
             }
         }
     }
 
-    private void OnConnectorExchangedMessagesUpdated(object? sender, NotifyCollectionChangedEventArgs e)
+    private async Task CollectExchangedMessagesAsync(ChannelReader<WebSocketMessage> channelReader)
     {
-        if (e.Action == NotifyCollectionChangedAction.Reset)
+        await foreach (var msg in channelReader.ReadAllAsync())
         {
-            ExchangedMessages.Clear();
-        }
-        else if (e.Action == NotifyCollectionChangedAction.Add)
-        {
-            foreach (object newItem in e.NewItems!)
-            {
-                var msg = (PororocaWebSocketMessage)newItem;
-                ExchangedMessages.Insert(0, new(msg));
-            }
+            ExchangedMessages.Insert(0, new(msg, DateTimeOffset.Now));
         }
     }
 
@@ -694,35 +689,47 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region MESSAGE DETAIL
 
-    private void OnSelectedExchangedMessageChanged(WebSocketExchangedMessageViewModel vm)
+    private void OnSelectedExchangedMessageChanged(WebSocketExchangedMessageViewModel? vm)
     {
-        SelectedExchangedMessageType = vm.TypeDescription;
-        SelectedExchangedMessageContent = vm.TextContent;
-        IsSaveSelectedExchangedMessageToFileVisible = vm.CanBeSavedToFile;
+        SelectedExchangedMessageType = vm?.TypeDescription;
+        SelectedExchangedMessageContent = vm?.TextContent;
+        IsSaveSelectedExchangedMessageToFileVisible = vm?.CanBeSavedToFile ?? false;
     }
 
-    public async Task SaveSelectedExchangedMessageToFileAsync()
+    public Task SaveSelectedExchangedMessageToFileAsync()
     {
-        static string GenerateDefaultInitialFileName(WebSocketExchangedMessageViewModel vm)
-        {
-            string fileExtensionWithoutDot = vm.IsJsonTextContent ? "json" :
-                                             vm.Type == PororocaWebSocketMessageType.Text ? "txt" :
-                                             string.Empty;
-
-            return $"websocket-msg-{vm.ShortInstantDescription}.{fileExtensionWithoutDot}";
-        }
-
         if (SelectedExchangedMessage is not null && SelectedExchangedMessage.CanBeSavedToFile)
         {
-            string initialFileName = GenerateDefaultInitialFileName(SelectedExchangedMessage);
+            return SaveExchangedMessageToFileAsync(SelectedExchangedMessage);
+        }
+        else
+        {
+            return Task.CompletedTask;
+        }
+    }
 
-            string? saveFileOutputPath = await FileExporterImporter.SelectPathForFileToBeSavedAsync(initialFileName);
-            if (saveFileOutputPath != null)
-            {
-                const int fileStreamBufferSize = 4096;
-                using FileStream fs = new(saveFileOutputPath, FileMode.Create, FileAccess.Write, FileShare.None, fileStreamBufferSize, useAsync: true);
-                await fs.WriteAsync((Memory<byte>)SelectedExchangedMessage.Bytes!);
-            }
+    private async Task SaveExchangedMessageToFileAsync(WebSocketExchangedMessageViewModel exchangedMessage)
+    {
+        static string GenerateDefaultInitialFileName(string wsName, int index, WebSocketExchangedMessageViewModel vm)
+        {
+            string fileExtensionWithoutDot = vm.IsJsonTextContent ? "json" : "txt";
+            string from = vm.IsFromClient ? "fromClient" : "fromServer";
+
+            return $"ws-{wsName}-msg{index}-{from}-{vm.ShortInstantDescription}.{fileExtensionWithoutDot}";
+        }
+        // WARNING: WebSocket messages that came from the client
+        // and are file-based cannot be saved.
+        int index = ExchangedMessages.Contains(exchangedMessage) ?
+                    ExchangedMessages.Count - ExchangedMessages.IndexOf(exchangedMessage) :
+                    0;
+        string initialFileName = GenerateDefaultInitialFileName(Name, index, exchangedMessage);
+
+        string? saveFileOutputPath = await FileExporterImporter.SelectPathForFileToBeSavedAsync(initialFileName);
+        if (saveFileOutputPath != null)
+        {
+            const int fileStreamBufferSize = 4096;
+            using FileStream fs = new(saveFileOutputPath, FileMode.Create, FileAccess.Write, FileShare.None, fileStreamBufferSize, useAsync: true);
+            await fs.WriteAsync((Memory<byte>)exchangedMessage.Bytes!);
         }
     }
 

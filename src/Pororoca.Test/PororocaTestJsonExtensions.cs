@@ -5,12 +5,12 @@ using Pororoca.Domain.Features.Entities.Pororoca.Http;
 
 namespace Pororoca.Test;
 
-public static class PororocaHttpResponseExtensions
+public static class PororocaTestJsonExtensions
 {
-    private static readonly JsonSerializerOptions minifyOptions = SetupMinifyJsonOptions();
+    public static readonly JsonSerializerOptions MinifyJsonOptions = SetupMinifyJsonOptions();
 
     public static T? GetJsonBodyAs<T>(this PororocaHttpResponse res) =>
-        res.GetJsonBodyAs<T>(minifyOptions);
+        res.GetJsonBodyAs<T>(MinifyJsonOptions);
 
     public static T? GetJsonBodyAs<T>(this PororocaHttpResponse res, JsonSerializerOptions jsonOptions) =>
         JsonSerializer.Deserialize<T>(res.GetBodyAsBinary(), jsonOptions);

@@ -374,7 +374,7 @@
   </data>
   <data name="ExportCollection/EnvironmentWithSecretVariables" xml:space="preserve">
     <value>С СЕКРЕТАМИ</value>
-  </data>  
+  </data>
   <data name="ExportEnvironment/Title" xml:space="preserve">
     <value>Экспорт окружения…</value>
   </data>
@@ -395,7 +395,7 @@
   </data>
   <data name="ExportEnvironment/PostmanEnvironmentFormat" xml:space="preserve">
     <value>Postman окружение</value>
-  </data>  
+  </data>
   <data name="Folder/NewFolder" xml:space="preserve">
     <value>Новая папка</value>
   </data>
@@ -455,6 +455,12 @@
   </data>
   <data name="HttpRepeater/DelayTip" xml:space="preserve">
     <value>Время ожидания между ответом и отправкой следующего запроса.</value>
+  </data>
+  <data name="HttpRepeater/MaximumRate" xml:space="preserve">
+    <value>Макс reqs/s</value>
+  </data>
+  <data name="HttpRepeater/MaximumRateTip" xml:space="preserve">
+    <value>Ограничивает максимальное количество запросов в секунду. Нулевое значение означает отсутствие ограничений.</value>
   </data>
   <data name="HttpRepeater/InputData" xml:space="preserve">
     <value>Входные данные</value>
@@ -870,6 +876,9 @@
   <data name="RequestValidation/RepetitionDelayCantBeNegative" xml:space="preserve">
     <value>Задержка должна быть больше или равна нулю.</value>
   </data>
+  <data name="RequestValidation/RepetitionMaximumRateCantBeNegative" xml:space="preserve">
+    <value>Максимальный расход должна быть больше или равна нулю.</value>
+  </data>
   <data name="RequestValidation/RepetitionNumberOfRepetitionsMustBeAtLeast1" xml:space="preserve">
     <value>Количество повторений должно быть больше или равно одному.</value>
   </data>
@@ -951,6 +960,9 @@
   <data name="TopMenuOptions/EnableTlsVerification" xml:space="preserve">
     <value>Включить TLS проверку</value>
   </data>
+  <data name="TopMenuOptions/AutoCheckForUpdates" xml:space="preserve">
+    <value>Автопроверка обновлений</value>
+  </data>
   <data name="TopMenuOptions/Language" xml:space="preserve">
     <value>Язык</value>
   </data>
@@ -994,7 +1006,7 @@
     <value>Pororoca</value>
   </data>
   <data name="UpdateReminder/DialogMessage" xml:space="preserve">
-    <value>Не забывайте периодически проверять наличие обновлений!</value>
+    <value>Доступна новая версия!\\n\\n{0}\\n\\nХотите посетить страницу загрузки?</value>
   </data>
   <data name="UpdateReminder/DialogGoToSite" xml:space="preserve">
     <value>Перейти на сайт</value>
@@ -1157,5 +1169,29 @@
   </data>
   <data name="WebSocketClientMessage/RawContentOtherSyntax" xml:space="preserve">
     <value>Другой</value>
+  </data>
+  <data name="UITestsPrepare/Title" xml:space="preserve">
+    <value>UI tests</value>
+  </data>
+  <data name="UITestsPrepare/TestFilesFolderNotFound" xml:space="preserve">
+    <value>Test files folder not found!!!</value>
+  </data>
+  <data name="UITestsPrepare/WaitingTimeBetweenActions" xml:space="preserve">
+    <value>Waiting time between actions (ms)</value>
+  </data>
+  <data name="UITestsPrepare/TestInclude" xml:space="preserve">
+    <value>Include</value>
+  </data>
+  <data name="UITestsPrepare/TestName" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="UITestsPrepare/RunTests" xml:space="preserve">
+    <value>Run tests!</value>
+  </data>
+  <data name="UITestsPrepare/SelectAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="UITestsPrepare/DeselectAll" xml:space="preserve">
+    <value>None</value>
   </data>
 </root>

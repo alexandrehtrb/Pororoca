@@ -240,6 +240,20 @@
               </Image>
             </MenuItem.Icon>
           </MenuItem>
+          <MenuItem
+            x:Name="topMenuItemOptionsAutoCheckForUpdates"
+            Header="{Binding i18n.TopMenuOptions.AutoCheckForUpdates}"
+            Command="{Binding ToggleAutoCheckForUpdatesCmd}">
+            <MenuItem.Icon>
+              <Image
+                IsVisible="{Binding AutoCheckForUpdatesEnabled}"
+                Classes="MenuItemCheckMark">
+                <Image.Source>
+                  <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                </Image.Source>
+              </Image>
+            </MenuItem.Icon>
+          </MenuItem>
         </MenuItem>
         <MenuItem
             x:Name="topMenuItemHelp"

@@ -7,6 +7,7 @@ using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.Views;
 using Pororoca.Infrastructure.Features.Requester;
+using Pororoca.Infrastructure.Features.WebSockets;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -466,7 +467,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
             Dispatcher.UIThread.Post(async () => await mwvm.HttpRepeaterView.VM.StartRepetitionAsync());
         }
         else if (mwvm.WebSocketConnectionView.Visible
-              && mwvm.WebSocketConnectionView.VM?.ConnectionState == PororocaWebSocketConnectorState.Disconnected)
+              && mwvm.WebSocketConnectionView.VM?.ConnectionState == WebSocketConnectorState.Disconnected)
         {
             Dispatcher.UIThread.Post(async () => await mwvm.WebSocketConnectionView.VM.ConnectAsync());
         }
@@ -489,11 +490,11 @@ public sealed class KeyboardShortcuts : ViewModelBase
         }
         else if (mwvm.WebSocketConnectionView.Visible)
         {
-            if (mwvm.WebSocketConnectionView.VM?.ConnectionState == PororocaWebSocketConnectorState.Connected)
+            if (mwvm.WebSocketConnectionView.VM?.ConnectionState == WebSocketConnectorState.Connected)
             {
                 Dispatcher.UIThread.Post(async () => await mwvm.WebSocketConnectionView.VM.DisconnectAsync());
             }
-            else if (mwvm.WebSocketConnectionView.VM?.ConnectionState == PororocaWebSocketConnectorState.Connecting)
+            else if (mwvm.WebSocketConnectionView.VM?.ConnectionState == WebSocketConnectorState.Connecting)
             {
                 mwvm.WebSocketConnectionView.VM.CancelConnect();
             }

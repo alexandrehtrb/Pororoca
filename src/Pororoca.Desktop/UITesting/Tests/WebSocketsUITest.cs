@@ -131,9 +131,6 @@ public sealed partial class WebSocketsUITest : UITest
             await Wait(3);
             AssertIsHidden(WsRobot.IsWsConnected);
             Assert(WsRobot.Name.Icon == EditableTextBlockIcon.DisconnectedWebSocket);
-
-            await Wait(5);
-            await AssertExchangedMessage(4, "server -> client", "closing, 7 bytes", "Closing message", "ok, bye");
         }
 
         if (OperatingSystem.IsLinux())

@@ -6,6 +6,30 @@ namespace Pororoca.Domain.Features.ImportCollection;
 
 public static class PororocaCollectionImporter
 {
+    public static async Task<PororocaCollection?> ImportPororocaCollectionAsync(Stream utf8JsonStream, bool preserveId)
+    {
+        try
+        {
+            var col = await JsonSerializer.DeserializeAsync(utf8JsonStream, MainJsonCtxWithConverters.PororocaCollection);
+
+            // Generates a new id when importing a collection manually, in case user imports the same collection twice
+            // This is to avoid overwriting when saving user collections
+            // But if importing a collection from saved data, the id should be preserved
+            if (col != null && preserveId == false)
+            {
+                return col with { Id = Guid.NewGuid() };
+            }
+            else
+            {
+                return col;
+            }
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
     public static bool TryImportPororocaCollection(string pororocaCollectionFileContent, bool preserveId, out PororocaCollection? pororocaCollection)
     {
         try
