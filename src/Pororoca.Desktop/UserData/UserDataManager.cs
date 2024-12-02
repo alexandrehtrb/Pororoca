@@ -77,7 +77,8 @@ public static class UserDataManager
         {
             return userDataFolder
                 .GetFiles()
-                .Where(f => f.FullName.EndsWith(PororocaCollectionExtension));
+                .Where(f => f.FullName.EndsWith(PororocaCollectionExtension)
+                        && (f.Name.StartsWith("deleted_") == false));
         }
     }
 
@@ -121,11 +122,13 @@ public static class UserDataManager
             savedColsIds.Remove(col.Id);
         }
 
-        // The collections found in the folder that do not exist anymore will be deleted
+        // The collections found in the folder that do not exist anymore will be soft-deleted
         foreach (var savedColId in savedColsIds)
         {
-            string path = GetUserDataFilePath($"{savedColId}.{PororocaCollectionExtension}");
-            File.Delete(path);
+            // Executing soft delete for safety
+            string originalPath = GetUserDataFilePath($"{savedColId}.{PororocaCollectionExtension}");
+            string renamedPath = GetUserDataFilePath($"deleted_{savedColId}.{PororocaCollectionExtension}");
+            File.Move(originalPath, renamedPath);
         }
     }
 
