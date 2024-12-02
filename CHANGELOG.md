@@ -1,6 +1,7 @@
 # Changelog
 
-* [3.7.0](#370-2024-11-??)
+* [3.7.0.1](#3701-2024-12-02)
+* [3.7.0](#370-2024-11-21)
 * [3.6.0](#360-2024-10-07)
 * [3.5.0.1](#3501-2024-08-08)
 * [3.5.0](#350-2024-08-07)
@@ -31,7 +32,13 @@
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
 
-## [3.7.0](https://github.com/alexandrehtrb/Pororoca/tree/3.7.0) (2024-11-??)
+## [3.7.0.1](https://github.com/alexandrehtrb/Pororoca/tree/3.7.1) (2024-12-02)
+
+### Hot Fix
+
+- Soft-delete collection files instead of hard-delete, in user data folder. Deleted collection files will remain with the `deleted_` prefix.
+
+## [3.7.0](https://github.com/alexandrehtrb/Pororoca/tree/3.7.0) (2024-11-21)
 
 ### Features
 
