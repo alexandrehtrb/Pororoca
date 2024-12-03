@@ -43,6 +43,6 @@ public sealed class PororocaTestLibraryLargeRepetitionTests
         var repChannelReader = await this.pororocaTest.StartHttpRepetitionAsync(repName, default);
         await foreach (var _ in repChannelReader.ReadAllAsync(default)) { count++; }
         sw.Stop();
-        this.output.WriteLine($"Finished {repName}: {count} reps, elapsed time: {sw.Elapsed.ToString("hh':'mm':'ss")}");
+        this.output.WriteLine($"Finished {repName}: {count} reps, elapsed time: {sw.Elapsed:hh':'mm':'ss}");
     }
 }

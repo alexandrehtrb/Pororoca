@@ -6,6 +6,6 @@ namespace Pororoca.Domain.Features.ExportEnvironment;
 
 public static class PororocaEnvironmentExporter
 {
-    public static string ExportAsPororocaEnvironment(PororocaEnvironment env) =>
-        JsonSerializer.Serialize(env, MainJsonCtx.PororocaEnvironment);
+    public static byte[] ExportAsPororocaEnvironment(PororocaEnvironment env) =>
+        JsonSerializer.SerializeToUtf8Bytes(env, MainJsonCtx.PororocaEnvironment);
 }

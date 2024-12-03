@@ -1,5 +1,3 @@
-using Pororoca.Desktop.UITesting.Robots;
-
 namespace Pororoca.Desktop.UITesting.Tests;
 
 public sealed partial class ResponseCapturesUITest : UITest

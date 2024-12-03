@@ -9,42 +9,38 @@ public static class PororocaWebSocketClientMessageTranslator
 {
     public static bool TryTranslateClientMessage(IEnumerable<PororocaVariable> effectiveVars,
                                                  PororocaWebSocketClientMessage wsCliMsg,
-                                                 out PororocaWebSocketClientMessageToSend? resolvedMsgToSend,
+                                                 out Stream? resolvedMsgStream,
                                                  out string? errorCode)
     {
         try
         {
-            resolvedMsgToSend = wsCliMsg.ContentMode switch
+            resolvedMsgStream = wsCliMsg.ContentMode switch
             {
-                PororocaWebSocketClientMessageContentMode.File => GetMessageToSendFromFileContent(effectiveVars, wsCliMsg),
-                _ => GetMessageToSendFromRawContent(effectiveVars, wsCliMsg)
+                PororocaWebSocketClientMessageContentMode.File => GetStreamToSendFromFileContent(effectiveVars, wsCliMsg),
+                _ => GetStreamToSendFromRawContent(effectiveVars, wsCliMsg)
             };
             errorCode = null;
             return true;
         }
         catch
         {
-            resolvedMsgToSend = null;
+            resolvedMsgStream = null;
             errorCode = TranslateRequestErrors.WebSocketUnknownClientMessageTranslationError;
             return false;
         }
     }
 
-    private static PororocaWebSocketClientMessageToSend GetMessageToSendFromRawContent(IEnumerable<PororocaVariable> effectiveVars, PororocaWebSocketClientMessage wsCliMsg)
+    private static Stream GetStreamToSendFromRawContent(IEnumerable<PororocaVariable> effectiveVars, PororocaWebSocketClientMessage wsCliMsg)
     {
         string txt = IPororocaVariableResolver.ReplaceTemplates(wsCliMsg.RawContent, effectiveVars);
-        byte[] bytes = Encoding.UTF8.GetBytes(txt);
-        MemoryStream ms = new();
-        ms.Write(bytes);
-        return new(wsCliMsg, ms, txt);
+        return new MemoryStream(Encoding.UTF8.GetBytes(txt));
     }
 
-    private static PororocaWebSocketClientMessageToSend GetMessageToSendFromFileContent(IEnumerable<PororocaVariable> effectiveVars, PororocaWebSocketClientMessage wsCliMsg)
+    private static Stream GetStreamToSendFromFileContent(IEnumerable<PororocaVariable> effectiveVars, PororocaWebSocketClientMessage wsCliMsg)
     {
         const int fileStreamBufferSize = 4096;
         string resolvedFilePath = IPororocaVariableResolver.ReplaceTemplates(wsCliMsg.FileSrcPath, effectiveVars);
         // DO NOT USE "USING" FOR FILESTREAM HERE --> it will be disposed later, by the PororocaWebSocketConnector
-        FileStream fs = new(resolvedFilePath, FileMode.Open, FileAccess.Read, FileShare.Read, fileStreamBufferSize, useAsync: true);
-        return new(wsCliMsg, fs, null);
+        return new FileStream(resolvedFilePath, FileMode.Open, FileAccess.Read, FileShare.Read, fileStreamBufferSize, useAsync: true);
     }
 }

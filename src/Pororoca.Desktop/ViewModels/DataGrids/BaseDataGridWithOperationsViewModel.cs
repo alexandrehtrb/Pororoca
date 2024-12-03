@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Reactive;
+using Avalonia.Controls;
 using Pororoca.Desktop.HotKeys;
 using ReactiveUI;
 
@@ -108,4 +109,16 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
 
     internal List<D> ConvertItemsToDomain() =>
         Items.Select(ToDomain).ToList();
+
+    internal void UpdateSelectedItems(SelectionChangedEventArgs e)
+    {
+        foreach (object av in e.AddedItems)
+        {
+            SelectedItems.TryAdd((VM)av, true);
+        }
+        foreach (object rv in e.RemovedItems)
+        {
+            SelectedItems.TryRemove((VM)rv, out _);
+        }
+    }
 }

@@ -1,30 +1,28 @@
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.VariableResolution;
-using Pororoca.Infrastructure.Features.Requester;
+using Pororoca.Infrastructure.Features.WebSockets;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage.PororocaWebSocketClientMessageTranslator;
 using static Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage.PororocaWebSocketClientMessageValidator;
 
 namespace Pororoca.Test;
 
-public sealed class PororocaTestWebSocketConnector : PororocaWebSocketConnector
+public sealed class PororocaTestWebSocketConnector : WebSocketClientSideConnector
 {
     private readonly IPororocaVariableResolver varResolver;
     private readonly PororocaWebSocketConnection connection;
 
+    public WebSocketConnectorState State => ConnectionState;
+
     public PororocaTestWebSocketConnector(IPororocaVariableResolver varResolver,
                                           PororocaWebSocketConnection connection,
-                                          OnWebSocketConnectionChanged? onConnectionChanged = null,
-                                          OnWebSocketMessageSending? onMessageBeingSent = null)
-        : base(onConnectionChanged, onMessageBeingSent)
+                                          Action<WebSocketConnectorState, Exception?>? onConnectionChanged = null)
     {
         this.varResolver = varResolver;
         this.connection = connection;
+        this.OnConnectionChanged = onConnectionChanged;
     }
 
-    public Task SendMessageAsync(string msgName, float waitingTimeInSeconds = 0.5f) =>
-        SendMessageAsync(msgName, TimeSpan.FromSeconds(waitingTimeInSeconds));
-
-    public Task SendMessageAsync(string msgName, TimeSpan waitingTime)
+    public Task SendMessageAsync(string msgName)
     {
         var msg = this.connection.ClientMessages?.FirstOrDefault(cm => cm.Name == msgName);
         if (msg is null)
@@ -33,12 +31,12 @@ public sealed class PororocaTestWebSocketConnector : PororocaWebSocketConnector
         }
         else
         {
-            return SendMessageAsync(msg!, waitingTime);
+            return SendMessageAsync(msg!);
         }
     }
 
 #pragma warning disable CA1061
-    public async Task SendMessageAsync(PororocaWebSocketClientMessage msg, TimeSpan waitingTimeInSeconds)
+    public async Task SendMessageAsync(PororocaWebSocketClientMessage msg)
 #pragma warning restore CA1061
     {
         var effectiveVars = this.varResolver.GetEffectiveVariables();
@@ -46,24 +44,13 @@ public sealed class PororocaTestWebSocketConnector : PororocaWebSocketConnector
         {
             throw new Exception($"Error: Could not send WebSocket client message. Cause: '{validationErrorCode}'.");
         }
-        else if (!TryTranslateClientMessage(effectiveVars, msg, out var resolvedMsgToSend, out string? translationErrorCode))
+        else if (!TryTranslateClientMessage(effectiveVars, msg, out var resolvedStreamToSend, out string? translationErrorCode))
         {
             throw new Exception($"Error: Could not send WebSocket client message. Cause: '{translationErrorCode}'.");
         }
         else
         {
-            var waitForSendingTask = Task.Delay(waitingTimeInSeconds);
-            var sendingTask = base.SendMessageAsync(resolvedMsgToSend!).AsTask();
-            await Task.WhenAll(waitForSendingTask, sendingTask);
-        }
-    }
-
-    public override async Task DisconnectAsync(CancellationToken cancellationToken = default)
-    {
-        await base.DisconnectAsync(cancellationToken);
-        if (ConnectionException is not null)
-        {
-            throw ConnectionException;
+            await SendMessageAsync(msg.MessageType.ToWebSocketMessageType(), resolvedStreamToSend!, msg.DisableCompressionForThis);
         }
     }
 }

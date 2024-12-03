@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -374,7 +374,7 @@
   </data>
   <data name="ExportCollection/EnvironmentWithSecretVariables" xml:space="preserve">
     <value></value>
-  </data>  
+  </data>
   <data name="ExportEnvironment/Title" xml:space="preserve">
     <value></value>
   </data>
@@ -395,7 +395,7 @@
   </data>
   <data name="ExportEnvironment/PostmanEnvironmentFormat" xml:space="preserve">
     <value></value>
-  </data>  
+  </data>
   <data name="Folder/NewFolder" xml:space="preserve">
     <value></value>
   </data>
@@ -454,6 +454,12 @@
     <value></value>
   </data>
   <data name="HttpRepeater/DelayTip" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="HttpRepeater/MaximumRate" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="HttpRepeater/MaximumRateTip" xml:space="preserve">
     <value></value>
   </data>
   <data name="HttpRepeater/InputData" xml:space="preserve">
@@ -870,6 +876,9 @@
   <data name="RequestValidation/RepetitionDelayCantBeNegative" xml:space="preserve">
     <value></value>
   </data>
+  <data name="RequestValidation/RepetitionMaximumRateCantBeNegative" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="RequestValidation/RepetitionNumberOfRepetitionsMustBeAtLeast1" xml:space="preserve">
     <value></value>
   </data>
@@ -960,6 +969,9 @@
   <data name="TopMenuOptions/EnableTlsVerification" xml:space="preserve">
     <value></value>
   </data>
+  <data name="TopMenuOptions/AutoCheckForUpdates" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="TopMenuOptions/Language" xml:space="preserve">
     <value></value>
   </data>
@@ -973,6 +985,9 @@
     <value></value>
   </data>
   <data name="TopMenuTheme/Light" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="TopMenuTheme/Light2" xml:space="preserve">
     <value></value>
   </data>
   <data name="TopMenuTheme/Pampa" xml:space="preserve">
@@ -1153,6 +1168,30 @@
     <value></value>
   </data>
   <data name="WebSocketExchangedMessages/TextContentDescriptionFormat" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="UITestsPrepare/Title" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="UITestsPrepare/TestFilesFolderNotFound" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="UITestsPrepare/WaitingTimeBetweenActions" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="UITestsPrepare/TestInclude" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="UITestsPrepare/TestName" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="UITestsPrepare/RunTests" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="UITestsPrepare/SelectAll" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="UITestsPrepare/DeselectAll" xml:space="preserve">
     <value></value>
   </data>
 </root>

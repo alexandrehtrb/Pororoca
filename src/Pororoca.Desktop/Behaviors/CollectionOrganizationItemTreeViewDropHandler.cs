@@ -1,11 +1,9 @@
 using System.Collections;
-using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.ViewModels;
-using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.Behaviors;
 

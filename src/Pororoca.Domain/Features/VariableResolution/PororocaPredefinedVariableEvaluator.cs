@@ -53,6 +53,14 @@ public static class PororocaPredefinedVariableEvaluator
             "Teresa",
             "María",
             "Elena"
+        ]),
+        ("de", [
+            "Frida",
+            "Maria",
+            "Elsa",
+            "Amalia",
+            "Claudia",
+            "Barbara"
         ])
     ];
 
@@ -103,6 +111,14 @@ public static class PororocaPredefinedVariableEvaluator
             "Javier",
             "Miguel",
             "Guillermo"
+        ]),
+        ("de", [
+            "Hans",
+            "Karl",
+            "Fritz",
+            "Heinrich",
+            "Thomas",
+            "Michael"
         ])
     ];
 
@@ -157,6 +173,16 @@ public static class PororocaPredefinedVariableEvaluator
             "Zambrano",
             "La Cruz",
             "Martínez"
+        ]),
+        ("de", [
+            "Spieler",
+            "Schneider",
+            "Fischer",
+            "Gruber",
+            "Schürrle",
+            "Ammer",
+            "Bauer",
+            "Meissner"
         ])
     ];
 
@@ -173,6 +199,7 @@ public static class PororocaPredefinedVariableEvaluator
             "$guid" => GetRandomGuid(),
             "$now" => GetNow(),
             "$today" => GetToday(),
+            "$timestamp" => GetNowTimestamp(),
             "$randombirthdate" => GetRandomBirthDate(atLeast18YearsOld: false),
             "$randombirthdateover18" => GetRandomBirthDate(atLeast18YearsOld: true),
             "$randomint" => GetRandomInt(),
@@ -200,6 +227,9 @@ public static class PororocaPredefinedVariableEvaluator
     private static string GetNow() => DateTimeOffset.Now.ToString("O");
 
     private static string GetToday() => DateTime.Today.ToString("yyyy-MM-dd");
+
+    // timestamps are always in UTC
+    private static string GetNowTimestamp() => DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
 
     private static string GetRandomBirthDate(bool atLeast18YearsOld)
     {

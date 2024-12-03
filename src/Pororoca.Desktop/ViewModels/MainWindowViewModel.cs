@@ -1,18 +1,15 @@
 using System.Diagnostics;
 using System.Reactive;
 using System.Reflection;
-using Avalonia.Controls;
-using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 using Avalonia.Threading;
-using MsBox.Avalonia;
-using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.UserData;
+using Pororoca.Domain.Features.Entities.GitHub;
 using Pororoca.Domain.Features.Entities.Pororoca;
+using Pororoca.Domain.Features.UpdateChecker;
 using Pororoca.Infrastructure.Features.Requester;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -23,12 +20,10 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 {
     #region COLLECTIONS ORGANIZATION
 
+    private bool finishedLoadingUserData;
+
     [Reactive]
     public CollectionsGroupViewModel CollectionsGroupViewDataCtx { get; set; }
-
-    public Action<CollectionOrganizationItemViewModel> OnRenameSubItemSelected => onRenameItemSelected;
-
-    Action ICollectionOrganizationItemParentViewModel.OnAfterItemDeleted => onAfterItemDeleted;
 
     public ReactiveCommand<Unit, Unit> AddNewCollectionCmd { get; }
     public ReactiveCommand<Unit, Unit> ImportCollectionsFromFileCmd { get; }
@@ -103,6 +98,10 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     public ReactiveCommand<Unit, Unit> SwitchToLightThemeCmd { get; }
 
     [Reactive]
+    public bool IsThemeLight2 { get; set; }
+    public ReactiveCommand<Unit, Unit> SwitchToLight2ThemeCmd { get; }
+
+    [Reactive]
     public bool IsThemeDark { get; set; }
     public ReactiveCommand<Unit, Unit> SwitchToDarkThemeCmd { get; }
 
@@ -136,6 +135,23 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     #region USER PREFERENCES
 
     private UserPreferences? UserPrefs { get; set; }
+
+
+    private bool autoCheckForUpdatesEnabledField;
+    public bool AutoCheckForUpdatesEnabled
+    {
+        get => this.autoCheckForUpdatesEnabledField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.autoCheckForUpdatesEnabledField, value);
+            if (UserPrefs != null)
+            {
+                UserPrefs.AutoCheckForUpdates = value;
+            }
+        }
+    }
+
+    public ReactiveCommand<Unit, Unit> ToggleAutoCheckForUpdatesCmd { get; }
 
     #endregion
 
@@ -174,6 +190,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     public MainWindowViewModel()
     {
         #region COLLECTIONS ORGANIZATION
+        this.finishedLoadingUserData = false;
         CollectionsGroupViewDataCtx = new(this, SwitchVisiblePage);
         ImportCollectionsFromFileCmd = ReactiveCommand.CreateFromTask(ImportCollectionsAsync);
         AddNewCollectionCmd = ReactiveCommand.Create(AddNewCollection);
@@ -208,6 +225,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
         #region THEMES
         SwitchToLightThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Light));
+        SwitchToLight2ThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Light2));
         SwitchToPampaThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Pampa));
         SwitchToDarkThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Dark));
         SwitchToAmazonianNightThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.AmazonianNight));
@@ -219,6 +237,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         #endregion
 
         #region USER DATA
+        ToggleAutoCheckForUpdatesCmd = ReactiveCommand.Create(ToggleAutoCheckForUpdates);
         LoadUserData();
         ShowWelcomeIfNoCollectionsExist();
         #endregion
@@ -279,8 +298,11 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #region COLLECTIONS ORGANIZATION
 
-    public void MoveSubItem(ICollectionOrganizationItemViewModel colItemVm, MoveableItemMovementDirection direction) =>
-        CollectionsGroupViewDataCtx.MoveSubItem(colItemVm, direction);
+    public void MoveSubItemUp(CollectionOrganizationItemViewModel colItemVm) =>
+        CollectionsGroupViewDataCtx.MoveSubItemUp(colItemVm);
+
+    public void MoveSubItemDown(CollectionOrganizationItemViewModel colItemVm) =>
+        CollectionsGroupViewDataCtx.MoveSubItemDown(colItemVm);
 
     public void AddNewCollection()
     {
@@ -305,18 +327,15 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         AddCollection(collectionCopy);
     }
 
-    private void onRenameItemSelected(ViewModelBase vm) =>
-        SwitchVisiblePage(vm);
-
-    public void DeleteSubItem(ICollectionOrganizationItemViewModel item)
+    public void DeleteSubItem(CollectionOrganizationItemViewModel item)
     {
         CollectionsGroupViewDataCtx.Items.Remove((CollectionViewModel)item);
         CollectionsGroupViewDataCtx.RefreshSubItemsAvailableMovements();
-        onAfterItemDeleted();
+        HideAllPages();
         ShowWelcomeIfNoCollectionsExist();
     }
 
-    private void onAfterItemDeleted() =>
+    public void HideAllPages() =>
         this.pages.ForEach(p => p.Visible = false);
 
     public Task ImportCollectionsAsync() =>
@@ -334,7 +353,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #region LANGUAGE
 
-    private void SelectLanguage(Language lang)
+    internal void SelectLanguage(Language lang)
     {
         Localizer.Instance.CurrentLanguage = lang;
         IsLanguagePortuguese = lang == Language.Portuguese;
@@ -357,6 +376,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     private void UpdateMenuSelectedTheme()
     {
         IsThemeLight = PororocaThemeManager.CurrentTheme == PororocaTheme.Light;
+        IsThemeLight2 = PororocaThemeManager.CurrentTheme == PororocaTheme.Light2;
         IsThemeDark = PororocaThemeManager.CurrentTheme == PororocaTheme.Dark;
         IsThemePampa = PororocaThemeManager.CurrentTheme == PororocaTheme.Pampa;
         IsThemeAmazonianNight = PororocaThemeManager.CurrentTheme == PororocaTheme.AmazonianNight;
@@ -371,25 +391,51 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #endregion
 
+    #region AUTO-CHECK FOR UPDATES
+
+    private void ToggleAutoCheckForUpdates() =>
+        AutoCheckForUpdatesEnabled = !AutoCheckForUpdatesEnabled;
+
+    private void CheckForUpdates() =>
+        Task.Run(() => UpdateAvailableChecker.CheckForUpdatesAsync(
+            PororocaRequester.Singleton,
+            Assembly.GetExecutingAssembly().GetName().Version!,
+            (latestReleaseInfo) =>
+            {
+                Dispatcher.UIThread.Post(() => ShowUpdateReminder(latestReleaseInfo));
+            }));
+
+    #endregion
+
     #region USER DATA
 
     private static UserPreferences GetDefaultUserPrefs() =>
-        new(Language.English, DateTime.Now, PororocaThemeManager.DefaultTheme);
+        new(Language.English, PororocaThemeManager.DefaultTheme, true, DateTime.Now);
 
     private void LoadUserData()
+    {
+        LoadUserPreferences();
+        LoadUserCollections();
+    }
+
+    private void LoadUserPreferences()
     {
         // this needs to be before the migration dialog,
         // because here we load the localization strings
         UserPrefs = UserDataManager.LoadUserPreferences() ?? GetDefaultUserPrefs();
         SelectLanguage(UserPrefs.GetLanguage());
-        if (UserPrefs.NeedsToShowUpdateReminder())
+
+        // setting for userPrefs that don't have this flag
+        AutoCheckForUpdatesEnabled = UserPrefs.AutoCheckForUpdates ?? true;
+
+        if (UserPrefs.NeedsToCheckForUpdates())
         {
-            ShowUpdateReminder();
-            UserPrefs.SetUpdateReminderLastShownDateAsToday();
+            UserPrefs!.SetLastUpdateCheckDateAsToday();
+            CheckForUpdates();
         }
-        else if (UserPrefs.HasUpdateReminderLastShownDate() == false)
+        else if (UserPrefs.HasLastUpdateCheckDate() == false)
         {
-            UserPrefs.SetUpdateReminderLastShownDateAsToday();
+            UserPrefs.SetLastUpdateCheckDateAsToday();
         }
 
         if (UserDataManager.NeedsMacOSXUserDataFolderMigrationToV3())
@@ -399,16 +445,39 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
             UserDataManager.ExecuteMacOSXUserDataFolderMigrationToV3();
             ShowMacOSXUserDataFolderMigratedV3Dialog();
         }
-
-        var cols = UserDataManager.LoadUserCollections();
-        foreach (var col in cols)
-        {
-            AddCollection(col);
-        }
     }
+
+    private void LoadUserCollections() =>
+        Task.Run(async () =>
+        {
+            var cols = await Task.WhenAll(UserDataManager.LoadUserCollectionsAsync());
+            if (cols != null)
+            {
+                Dispatcher.UIThread.Post(() =>
+                {
+                    foreach (var col in cols)
+                    {
+                        if (col != null)
+                        {
+                            AddCollection(col);
+                        }
+                    }
+                    this.finishedLoadingUserData = true;
+                });
+            }
+        });
 
     public void SaveUserData()
     {
+        if (this.finishedLoadingUserData == false)
+        {
+            // IMPORTANT!
+            // This protects against deleting all collections
+            // if they were not loaded yet, in case the
+            // startup takes a longer time.
+            return;
+        }
+
         UserPrefs!.SetLanguage(Localizer.Instance.CurrentLanguage);
 
         var cols = CollectionsGroupViewDataCtx
@@ -422,12 +491,12 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         UserDataManager.SaveUserData(UserPrefs, cols);
     }
 
-    private void ShowUpdateReminder() =>
+    private void ShowUpdateReminder(GitHubGetReleaseResponse latestVersionInfo) =>
         Dialogs.ShowDialog(
             title: Localizer.Instance.UpdateReminder.DialogTitle,
-            message: Localizer.Instance.UpdateReminder.DialogMessage,
+            message: string.Format(Localizer.Instance.UpdateReminder.DialogMessage, latestVersionInfo.Description),
             buttons: ButtonEnum.OkCancel,
-            onButtonOkClicked: () => OpenWebBrowser(GitHubRepoUrl));
+            onButtonOkClicked: () => OpenWebBrowser(latestVersionInfo.HtmlUrl));
 
     private void ShowMacOSXUserDataFolderMigratedV3Dialog()
     {
@@ -469,35 +538,11 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     #region UI TESTS
 
 #if DEBUG || UI_TESTS_ENABLED
-    private async Task RunUITestsAsync()
+    private Task RunUITestsAsync()
     {
-        /*
-        IMPORTANT:
-        To run the UI tests, run Pororoca.TestServer in localhost and
-        have the TestFiles directory inside the PororocaUserData folder.
-        */
-
-        // making a backup of the items' tree and clearing it before the tests
-        var bkupedLang = Localizer.Instance.CurrentLanguage;
-        var bkupedItems = CollectionsGroupViewDataCtx.Items.ToList();
-        CollectionsGroupViewDataCtx.Items.Clear();
-        SelectLanguage(Language.English);
-        if (Pororoca.Desktop.Views.MainWindow.Instance!.Clipboard is Avalonia.Input.Platform.IClipboard systemClipboard)
-        {
-            await systemClipboard.ClearAsync();
-        }
-
-        string resultsLog = await Pororoca.Desktop.UITesting.UITestsRunner.RunAllTestsAsync();
-
-        // restoring the items' tree after the tests
-        foreach (var item in bkupedItems) { CollectionsGroupViewDataCtx.Items.Add(item); }
-        CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
-        SelectLanguage(bkupedLang);
-
-        Dialogs.ShowDialog(
-            title: "UI tests results",
-            message: resultsLog,
-            buttons: ButtonEnum.Ok);
+        Pororoca.Desktop.Views.UITestsPrepareWindow uiTestsPrepareWindow = new();
+        uiTestsPrepareWindow.Show(Pororoca.Desktop.Views.MainWindow.Instance!);
+        return Task.CompletedTask;
     }
 #else
     private Task RunUITestsAsync() => Task.CompletedTask;

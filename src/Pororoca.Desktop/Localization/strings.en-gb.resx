@@ -179,7 +179,7 @@
   </data>
   <data name="Collection/ExportCollection" xml:space="preserve">
     <value>Export collection…</value>
-  </data>  
+  </data>
   <data name="Collection/ImportCollectionDialogTitle" xml:space="preserve">
     <value>Import collection / OpenAPI files</value>
   </data>
@@ -455,6 +455,12 @@
   </data>
   <data name="HttpRepeater/DelayTip" xml:space="preserve">
     <value>Waiting time between a response and sending the next request.</value>
+  </data>
+  <data name="HttpRepeater/MaximumRate" xml:space="preserve">
+    <value>Max reqs/s</value>
+  </data>
+  <data name="HttpRepeater/MaximumRateTip" xml:space="preserve">
+    <value>Limits the maximum number of requests per second. Zero value means no limitation.</value>
   </data>
   <data name="HttpRepeater/InputData" xml:space="preserve">
     <value>Input data</value>
@@ -870,6 +876,9 @@
   <data name="RequestValidation/RepetitionDelayCantBeNegative" xml:space="preserve">
     <value>The delay has to be greater or equal to zero.</value>
   </data>
+  <data name="RequestValidation/RepetitionMaximumRateCantBeNegative" xml:space="preserve">
+    <value>The maximum rate must be greater or equal to zero.</value>
+  </data>
   <data name="RequestValidation/RepetitionNumberOfRepetitionsMustBeAtLeast1" xml:space="preserve">
     <value>The number of repetitions needs to be greater or equal to one.</value>
   </data>
@@ -960,6 +969,9 @@
   <data name="TopMenuOptions/EnableTlsVerification" xml:space="preserve">
     <value>Enable TLS verification</value>
   </data>
+  <data name="TopMenuOptions/AutoCheckForUpdates" xml:space="preserve">
+    <value>Auto-check for updates</value>
+  </data>
   <data name="TopMenuOptions/Language" xml:space="preserve">
     <value>Language</value>
   </data>
@@ -974,6 +986,9 @@
   </data>
   <data name="TopMenuTheme/Light" xml:space="preserve">
     <value>Light</value>
+  </data>
+  <data name="TopMenuTheme/Light2" xml:space="preserve">
+    <value>Light 2</value>
   </data>
   <data name="TopMenuTheme/Pampa" xml:space="preserve">
     <value>Pampa</value>
@@ -994,7 +1009,7 @@
     <value>Go to site</value>
   </data>
   <data name="UpdateReminder/DialogMessage" xml:space="preserve">
-    <value>Remember to periodically check for updates!</value>
+    <value>New version available!\\n\\n{0}\\n\\nWould you like to visit the download page?</value>
   </data>
   <data name="UpdateReminder/DialogTitle" xml:space="preserve">
     <value>Pororoca</value>
@@ -1154,5 +1169,29 @@
   </data>
   <data name="WebSocketExchangedMessages/TextContentDescriptionFormat" xml:space="preserve">
     <value>text, {0} bytes</value>
-  </data>  
+  </data>
+  <data name="UITestsPrepare/Title" xml:space="preserve">
+    <value>UI tests</value>
+  </data>
+  <data name="UITestsPrepare/TestFilesFolderNotFound" xml:space="preserve">
+    <value>Test files folder not found!!!</value>
+  </data>
+  <data name="UITestsPrepare/WaitingTimeBetweenActions" xml:space="preserve">
+    <value>Waiting time between actions (ms)</value>
+  </data>
+  <data name="UITestsPrepare/TestInclude" xml:space="preserve">
+    <value>Include</value>
+  </data>
+  <data name="UITestsPrepare/TestName" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="UITestsPrepare/RunTests" xml:space="preserve">
+    <value>Run tests!</value>
+  </data>
+  <data name="UITestsPrepare/SelectAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="UITestsPrepare/DeselectAll" xml:space="preserve">
+    <value>None</value>
+  </data>
 </root>

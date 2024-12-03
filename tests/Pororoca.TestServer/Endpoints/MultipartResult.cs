@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using Microsoft.Net.Http.Headers;
 
 namespace Pororoca.TestServer.Endpoints;
 

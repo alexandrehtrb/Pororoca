@@ -1,7 +1,5 @@
 using System.Reactive;
-using Pororoca.Desktop.Behaviors;
 using Pororoca.Desktop.ViewModels.DataGrids;
-using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
 
@@ -22,14 +20,8 @@ public sealed class CollectionScopedRequestHeadersViewModel : CollectionOrganiza
 
     #region COLLECTION ORGANIZATION
 
-    protected override void CopyThis() =>
-        throw new NotImplementedException();
-
-    private void GoBack()
-    {
-        var mainWindowVm = ((MainWindowViewModel)MainWindow.Instance!.DataContext!);
-        mainWindowVm.SwitchVisiblePage((ViewModelBase)Parent);
-    }
+    private void GoBack() =>
+        MainWindowVm.SwitchVisiblePage((ViewModelBase)Parent);
 
     public List<PororocaKeyValueParam>? ToCollectionScopedRequestHeaders() =>
         RequestHeadersTableVm.Items.Count > 0 ?

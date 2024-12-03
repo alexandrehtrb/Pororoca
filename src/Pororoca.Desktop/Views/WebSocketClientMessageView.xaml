@@ -139,7 +139,7 @@
           Grid.Column="0"
           Grid.Row="3"
           Margin="0,12,0,0"
-          Width="200"
+          Width="480"
           HorizontalAlignment="Left"
           VerticalAlignment="Stretch"
           Orientation="Vertical"

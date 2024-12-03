@@ -37,8 +37,9 @@ public static class UserDataManager
 
         try
         {
-            string json = File.ReadAllText(userPreferencesFilePath, Encoding.UTF8);
-            return JsonSerializer.Deserialize(json, UserPreferencesJsonSrcGenContext.Default.UserPreferences);
+            using FileStream fs = new(userPreferencesFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, bufferSize: 128, useAsync: false);
+            var userPrefs = JsonSerializer.Deserialize(fs, UserPreferencesJsonSrcGenContext.Default.UserPreferences);
+            return userPrefs;
         }
         catch
         {
@@ -46,30 +47,23 @@ public static class UserDataManager
         }
     }
 
-    public static PororocaCollection[] LoadUserCollections() =>
-        FetchSavedUserCollectionsFiles()
-        .Select(f =>
+    public static IEnumerable<Task<PororocaCollection?>> LoadUserCollectionsAsync() =>
+        FetchSavedUserCollectionsFiles().Select(LoadUserCollectionAsync);
+
+    private static async Task<PororocaCollection?> LoadUserCollectionAsync(FileInfo fi)
+    {
+        try
         {
-            try
-            {
-                string json = File.ReadAllText(f.FullName, Encoding.UTF8);
-                if (PororocaCollectionImporter.TryImportPororocaCollection(json, preserveId: true, out var col))
-                {
-                    return col;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch
-            {
-                return null;
-            }
-        })
-        .Where(c => c != null)
-        .Cast<PororocaCollection>()
-        .ToArray();
+            using FileStream fs = new(fi.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, bufferSize: 16384, useAsync: true);
+            var col = await PororocaCollectionImporter.ImportPororocaCollectionAsync(fs, preserveId: true);
+            // await above is necessary because of the "using" on the FileStream
+            return col;
+        }
+        catch
+        {
+            return null;
+        }
+    }
 
     private static IEnumerable<FileInfo> FetchSavedUserCollectionsFiles()
     {
@@ -83,7 +77,8 @@ public static class UserDataManager
         {
             return userDataFolder
                 .GetFiles()
-                .Where(f => f.FullName.EndsWith(PororocaCollectionExtension));
+                .Where(f => f.FullName.EndsWith(PororocaCollectionExtension)
+                        && (f.Name.StartsWith("deleted_") == false));
         }
     }
 
@@ -119,18 +114,21 @@ public static class UserDataManager
         foreach (var col in collections)
         {
             string path = GetUserDataFilePath($"{col.Id}.{PororocaCollectionExtension}");
-            string json = PororocaCollectionExporter.ExportAsPororocaCollection(col);
 
-            File.WriteAllText(path, json, Encoding.UTF8);
+            using FileStream fs = new(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite, bufferSize: 16384, useAsync: false);
+            PororocaCollectionExporter.ExportAsPororocaCollection(fs, col);
+
             // Marking collections that were deleted, to delete their files
             savedColsIds.Remove(col.Id);
         }
 
-        // The collections found in the folder that do not exist anymore will be deleted
+        // The collections found in the folder that do not exist anymore will be soft-deleted
         foreach (var savedColId in savedColsIds)
         {
-            string path = GetUserDataFilePath($"{savedColId}.{PororocaCollectionExtension}");
-            File.Delete(path);
+            // Executing soft delete for safety
+            string originalPath = GetUserDataFilePath($"{savedColId}.{PororocaCollectionExtension}");
+            string renamedPath = GetUserDataFilePath($"deleted_{savedColId}.{PororocaCollectionExtension}");
+            File.Move(originalPath, renamedPath);
         }
     }
 

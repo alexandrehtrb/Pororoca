@@ -2,6 +2,7 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using Pororoca.Domain.Features.Entities.GitHub;
 using Pororoca.Domain.Features.Entities.Insomnia;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
@@ -93,6 +94,7 @@ internal partial class PororocaJsonSrcGenContext : JsonSerializerContext
 [JsonSerializable(typeof(JsonDocument))]
 [JsonSerializable(typeof(JsonElement))]
 [JsonSerializable(typeof(Dictionary<string, string>[]))]
+[JsonSerializable(typeof(GitHubGetReleaseResponse))]
 internal partial class MinifyJsonSrcGenContext : JsonSerializerContext
 {
 }

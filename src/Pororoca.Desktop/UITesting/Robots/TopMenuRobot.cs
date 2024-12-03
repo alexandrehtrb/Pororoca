@@ -13,6 +13,7 @@ public sealed class TopMenuRobot : BaseRobot
     internal MenuItem Options => GetChildView<MenuItem>("topMenuItemOptions")!;
     internal MenuItem Options_Theme => GetChildView<MenuItem>("topMenuItemOptionsTheme")!;
     internal MenuItem Options_Theme_Light => GetChildView<MenuItem>("topMenuItemOptionsThemeLight")!;
+    internal MenuItem Options_Theme_Light2 => GetChildView<MenuItem>("topMenuItemOptionsThemeLight2")!;
     internal MenuItem Options_Theme_Dark => GetChildView<MenuItem>("topMenuItemOptionsThemeDark")!;
     internal MenuItem Options_Theme_Pampa => GetChildView<MenuItem>("topMenuItemOptionsThemePampa")!;
     internal MenuItem Options_Theme_AmazonianNight => GetChildView<MenuItem>("topMenuItemOptionsThemeAmazonianNight")!;

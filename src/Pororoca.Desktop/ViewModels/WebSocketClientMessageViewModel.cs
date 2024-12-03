@@ -2,7 +2,6 @@ using System.Reactive;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
-using Pororoca.Desktop.HotKeys;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -78,9 +77,6 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
     }
 
     #region COLLECTION ORGANIZATION
-
-    protected override void CopyThis() =>
-        ClipboardArea.Instance.PushToCopy(ToWebSocketClientMessage());
 
     public PororocaWebSocketClientMessage ToWebSocketClientMessage()
     {

@@ -1,9 +1,7 @@
 using Avalonia.Controls;
-using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.Views;
-using Pororoca.Domain.Features.Entities.Pororoca;
 
 namespace Pororoca.Desktop.UITesting.Robots;
 

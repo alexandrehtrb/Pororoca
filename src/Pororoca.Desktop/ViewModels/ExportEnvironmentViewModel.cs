@@ -1,7 +1,5 @@
-using System.Collections.ObjectModel;
 using System.Reactive;
 using Pororoca.Desktop.Converters;
-using Pororoca.Desktop.Views;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using static Pororoca.Desktop.ExportImport.FileExporterImporter;
@@ -38,11 +36,8 @@ public sealed class ExportEnvironmentViewModel : ViewModelBase
         ExportEnvironmentCmd = ReactiveCommand.CreateFromTask(ExportEnvironmentAsync);
     }
 
-    private void GoBack()
-    {
-        var mainWindowVm = ((MainWindowViewModel)MainWindow.Instance!.DataContext!);
-        mainWindowVm.SwitchVisiblePage(Environment);
-    }
+    private void GoBack() =>
+        MainWindowVm.SwitchVisiblePage(Environment);
 
     private Task ExportEnvironmentAsync() =>
         ShowExportEnvironmentToFileDialogAsync(Environment.ToEnvironment(forExporting: true), ExportFormat);

@@ -6,7 +6,6 @@ using Avalonia.Threading;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
-using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
@@ -86,6 +85,9 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
     public bool HasNumberOfRepetitionsValidationProblem { get; set; }
 
     [Reactive]
+    public bool HasMaximumRateValidationProblem { get; set; }
+
+    [Reactive]
     public bool HasMaxDopValidationProblem { get; set; }
 
     [Reactive]
@@ -104,6 +106,7 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
                 TranslateRepetitionErrors.BaseHttpRequestNotSelected => Localizer.Instance.RequestValidation.RepetitionBaseHttpRequestNotSelected,
                 TranslateRepetitionErrors.BaseHttpRequestNotFound => Localizer.Instance.RequestValidation.RepetitionBaseHttpRequestNotFound,
                 TranslateRepetitionErrors.DelayCantBeNegative => Localizer.Instance.RequestValidation.RepetitionDelayCantBeNegative,
+                TranslateRepetitionErrors.MaximumRateCantBeNegative => Localizer.Instance.RequestValidation.RepetitionMaximumRateCantBeNegative,
                 TranslateRepetitionErrors.NumberOfRepetitionsMustBeAtLeast1 => Localizer.Instance.RequestValidation.RepetitionNumberOfRepetitionsMustBeAtLeast1,
                 TranslateRepetitionErrors.MaxDopMustBeAtLeast1 => Localizer.Instance.RequestValidation.RepetitionMaxDopMustBeAtLeast1,
                 TranslateRepetitionErrors.InputDataFileNotFound => Localizer.Instance.RequestValidation.RepetitionInputDataFileNotFound,
@@ -116,6 +119,7 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
                                                  || value == TranslateRepetitionErrors.BaseHttpRequestNotFound);
 
             HasDelayValidationProblem = value == TranslateRepetitionErrors.DelayCantBeNegative;
+            HasMaximumRateValidationProblem = value == TranslateRepetitionErrors.MaximumRateCantBeNegative;
             HasNumberOfRepetitionsValidationProblem = value == TranslateRepetitionErrors.NumberOfRepetitionsMustBeAtLeast1;
             HasMaxDopValidationProblem = value == TranslateRepetitionErrors.MaxDopMustBeAtLeast1;
 
@@ -126,6 +130,7 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
             {
                 TranslateRepetitionErrors.NumberOfRepetitionsMustBeAtLeast1 or
                 TranslateRepetitionErrors.DelayCantBeNegative or
+                TranslateRepetitionErrors.MaximumRateCantBeNegative or
                 TranslateRepetitionErrors.MaxDopMustBeAtLeast1 => 0,
 
                 TranslateRepetitionErrors.InputDataFileNotFound or
@@ -152,6 +157,17 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
                 >= minigunThreshold => EditableTextBlockIcon.HttpMinigun,
                 _ => EditableTextBlockIcon.HttpRepeater
             };
+        }
+    }
+
+    private int maximumRateField;
+    public int MaximumRate
+    {
+        get => this.maximumRateField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.maximumRateField, value);
+            InvalidRepetitionErrorCode = null;
         }
     }
 
@@ -471,14 +487,12 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
         }
     }
 
-    protected override void CopyThis() =>
-        ClipboardArea.Instance.PushToCopy(ToHttpRepetition());
-
     internal PororocaHttpRepetition ToHttpRepetition() => new(
         Name: Name,
         BaseRequestPath: BaseRequestPath ?? string.Empty,
         RepetitionMode: RepetitionMode,
         NumberOfRepetitions: RepetitionMode == PororocaRepetitionMode.Sequential ? null : NumberOfRepetitionsToExecute,
+        MaxRatePerSecond: MaximumRate == 0 ? null : MaximumRate,
         MaxDop: RepetitionMode == PororocaRepetitionMode.Sequential ? null : MaxDop,
         DelayInMs: DelayInMs == 0 ? null : DelayInMs,
         InputData: RepetitionMode == PororocaRepetitionMode.Simple ? null : new((PororocaRepetitionInputDataType)InputDataType!, InputDataRawText, InputDataFileSrcPath));

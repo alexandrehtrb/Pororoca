@@ -7,6 +7,12 @@
     <Nullable>enable</Nullable>
     <DebugType>embedded</DebugType>
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
+    <!--
+      flag below only for Debug, 
+      because there are some trimming warnings 
+      whilst publishing on Release
+    -->
+    <TreatWarningsAsErrors Condition="'$(Configuration)'=='Debug'">True</TreatWarningsAsErrors>
     <EmitCompilerGeneratedFiles Condition="'$(Configuration)'=='Debug'">true</EmitCompilerGeneratedFiles>
     <!--
       line below will include INSTALLED_ON_WINDOWS preprocessor directive
@@ -27,7 +33,7 @@
     <EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
     <!-- trimming properties end -->
     <ApplicationIcon>Assets/pororoca_icon.ico</ApplicationIcon>
-    <Version>3.5.0</Version>
+    <Version>3.7.0</Version>
     <FileVersion>$(Version)</FileVersion>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <Copyright>AlexandreHTRB</Copyright>
@@ -80,6 +86,9 @@
     <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.0.5" />
     <PackageReference Include="AvaloniaEdit.TextMate" Version="11.0.5" />
     <PackageReference Include="TextMateSharp.Grammars" Version="1.0.56" />
+
+    <!-- package below is to override version 7.0.0 that has vulnerability -->
+    <PackageReference Include="System.Text.Json" Version="9.0.0" />
 
     <PackageReference Include="ReactiveUI.Fody" Version="19.5.1" />
     <PackageReference Include="MessageBox.Avalonia" Version="3.1.5.1" />

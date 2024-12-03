@@ -7,5 +7,7 @@ dotnet test --collect:"XPlat Code Coverage" --results-directory "./TestResults/"
 reportgenerator "-reports:./TestResults/**/coverage.cobertura.xml" `
                 "-targetdir:./TestResults/" `
                 "-assemblyfilters:+Pororoca.Domain;+Pororoca.Domain.OpenAPI" `
+                "-classfilters:-System.Threading.RateLimiting.*;-System.Collections.Generic.*" `
+                "-riskhotspotclassfilters:-System.Threading.RateLimiting.*;-System.Collections.Generic.*" `
                 "-filefilters:-*.g.cs" `
                 "-reporttypes:Html"

@@ -1,5 +1,8 @@
 # Changelog
 
+* [3.7.0.1](#3701-2024-12-02)
+* [3.7.0](#370-2024-11-21)
+* [3.6.0](#360-2024-10-07)
 * [3.5.0.1](#3501-2024-08-08)
 * [3.5.0](#350-2024-08-07)
 * [3.4.2](#342-2024-07-02)
@@ -28,6 +31,62 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.7.0.1](https://github.com/alexandrehtrb/Pororoca/tree/3.7.1) (2024-12-02)
+
+### Hot Fix
+
+- Soft-delete collection files instead of hard-delete, in user data folder. Deleted collection files will remain with the `deleted_` prefix.
+
+## [3.7.0](https://github.com/alexandrehtrb/Pororoca/tree/3.7.0) (2024-11-21)
+
+### Features
+
+- Rate limiters in repeaters. Read more about it in the [docs](https://pororoca.io/docs/repeaters).
+- `ReadAsJson<T>()` methods for WebSocket messages, in Pororoca.Test.
+- Better CSV report compatibility with Microsoft Excel.
+- Auto-check for updates. You can control this in top menu > Options. (issue #126)
+
+### Bug Fixes
+
+- Fixed packaging of macOS releases, moved locale folders to inside `Pororoca.app`.
+- Protection against infinite recursive schemas in OpenAPI import. (issue #128)
+
+### Refactors
+
+- More robust WebSocket implementation with `Channel<T>` to collect exchanged messages. *This is a breaking change if you use Pororoca.Test for WebSocket testing*. Read more about in the [docs](https://pororoca.io/docs/automated-tests#websocket-tests). (issue #78)
+- FileStreams of WebSocket client messages are now disposed after the messages are sent.
+- WebSocket messages are now saved into files with better naming.
+- The user saved collections are now loaded asynchronously and in parallel, resulting in much faster start-up time, on all platforms.
+- Pororoca collections export and import now use Stream and JSON UTF-8 APIs, improved performance.
+- `TreatWarningsAsErrors` flag in desktop project.
+- Removed DataGridSelectionUpdater class.
+
+### Others
+
+- Dialog for selecting UI tests to run and their execution speed. (issue #125)
+- Improved WebSocket endpoints in TestServer with maximum lifetime messages and subprotocols. Removed HTTP status code being set after connection closed.
+- Fixed flaky WebSocket tests.
+- Raised .NET SDK version to 8.0.404.
+- Raised System.Text.Json version to 9.0.0 for security.
+
+## [3.6.0](https://github.com/alexandrehtrb/Pororoca/tree/3.6.0) (2024-10-07)
+
+### Features
+
+* Light 2 theme by [@lilacse](https://github.com/lilacse).
+* German names and surnames added to random name generator.
+* `$timestamp` predefined variable.
+
+### Refactors
+
+* Added `[DebuggerDisplay]` attributes on domain classes to aid debugging visualization.
+* Code clean-up.
+
+### Others
+
+* Faster start-up time for Windows installer releases.
+* Raised .NET SDK to 8.0.402.
 
 ## [3.5.0.1](https://github.com/alexandrehtrb/Pororoca/tree/3.5.0.1) (2024-08-08)
 

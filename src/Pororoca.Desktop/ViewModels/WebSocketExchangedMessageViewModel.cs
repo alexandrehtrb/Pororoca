@@ -1,7 +1,6 @@
 using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.Common;
-using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
-using Pororoca.Domain.Features.TranslateRequest.WebSockets.ClientMessage;
+using Pororoca.Infrastructure.Features.WebSockets;
 using ReactiveUI.Fody.Helpers;
 
 namespace Pororoca.Desktop.ViewModels;
@@ -35,21 +34,13 @@ public sealed class WebSocketExchangedMessageViewModel : ViewModelBase
     [Reactive]
     public bool IsJsonTextContent { get; set; }
 
-    public PororocaWebSocketMessageType Type =>
-        this.wsMsg.MessageType;
-
     public byte[]? Bytes
     {
         get
         {
-            if (IsFromServer)
+            if (CanBeSavedToFile)
             {
-                return ((PororocaWebSocketServerMessage)this.wsMsg).Bytes;
-            }
-            else if (IsClientMessageThatCanBeSaved)
-            {
-                var ms = (MemoryStream)((PororocaWebSocketClientMessageToSend)this.wsMsg).BytesStream;
-                return ms.ToArray();
+                return ((MemoryStream)this.wsMsg.BytesStream).ToArray();
             }
             else
             {
@@ -58,18 +49,16 @@ public sealed class WebSocketExchangedMessageViewModel : ViewModelBase
         }
     }
 
-    private bool IsClientMessageThatCanBeSaved =>
-        this.wsMsg is PororocaWebSocketClientMessageToSend wsCliMsg
-        && wsCliMsg.BytesStream is MemoryStream;
-
     public bool CanBeSavedToFile =>
-        IsFromServer || IsClientMessageThatCanBeSaved;
+        this.wsMsg.BytesStream is MemoryStream;
 
-    private readonly PororocaWebSocketMessage wsMsg;
+    private readonly WebSocketMessage wsMsg;
+    private readonly DateTimeOffset exchangedAt;
 
-    internal WebSocketExchangedMessageViewModel(PororocaWebSocketMessage wsMsg)
+    internal WebSocketExchangedMessageViewModel(WebSocketMessage wsMsg, DateTimeOffset exchangedAt)
     {
         this.wsMsg = wsMsg;
+        this.exchangedAt = exchangedAt;
         SetupTexts();
         // this language UI auto-update is disabled because ListBox items,
         // for some reason, do not change UI when texts are updated
@@ -78,42 +67,28 @@ public sealed class WebSocketExchangedMessageViewModel : ViewModelBase
 
     private void SetupTexts()
     {
-        if (this.wsMsg is PororocaWebSocketServerMessage wsSrvMsg)
-            SetupTexts(wsSrvMsg.Direction, wsSrvMsg.MessageType, wsSrvMsg.Bytes.Length, (DateTimeOffset)wsSrvMsg.ReceivedAtUtc!, wsSrvMsg.Text);
-        else if (this.wsMsg is PororocaWebSocketClientMessageToSend wsCliMsg)
-            SetupTexts(wsCliMsg.Direction, wsCliMsg.MessageType, wsCliMsg.BytesLength, (DateTimeOffset)wsCliMsg.SentAtUtc!, wsCliMsg.Text);
-    }
-
-    private void SetupTexts(PororocaWebSocketMessageDirection direction,
-                            PororocaWebSocketMessageType msgType,
-                            long lengthInBytes,
-                            DateTimeOffset dtUtc,
-                            string? txtContent)
-    {
         const string shortInstanceDtFormat = "yyyyMMdd-HHmmss";
         string instantDateTimeFormat = "HH:mm:ss, yyyy-MM-dd, 'GMT'z'h'";
-        if (direction == PororocaWebSocketMessageDirection.FromClient)
+        if (this.wsMsg.Direction == WebSocketMessageDirection.FromClient)
         {
             IsFromClient = true;
             OriginDescription = Localizer.Instance.WebSocketExchangedMessages.FromClientToServer;
-            InstantDescription = dtUtc.ToString(instantDateTimeFormat);
-            ShortInstantDescription = dtUtc.LocalDateTime.ToString(shortInstanceDtFormat);
         }
-        else if (direction == PororocaWebSocketMessageDirection.FromServer)
+        else if (this.wsMsg.Direction == WebSocketMessageDirection.FromServer)
         {
             IsFromServer = true;
             OriginDescription = Localizer.Instance.WebSocketExchangedMessages.FromServerToClient;
-            InstantDescription = dtUtc.ToString(instantDateTimeFormat);
-            ShortInstantDescription = dtUtc.LocalDateTime.ToString(shortInstanceDtFormat);
         }
+        InstantDescription = this.exchangedAt.ToString(instantDateTimeFormat);
+        ShortInstantDescription = this.exchangedAt.LocalDateTime.ToString(shortInstanceDtFormat);
 
         string format;
-        if (msgType == PororocaWebSocketMessageType.Close)
+        if (this.wsMsg.Type == System.Net.WebSockets.WebSocketMessageType.Close)
         {
             format = Localizer.Instance.WebSocketExchangedMessages.ClosingMessageContentDescriptionFormat;
             TypeDescription = Localizer.Instance.WebSocketClientMessage.MessageTypeClose;
         }
-        else if (msgType == PororocaWebSocketMessageType.Binary)
+        else if (this.wsMsg.Type == System.Net.WebSockets.WebSocketMessageType.Binary)
         {
             format = Localizer.Instance.WebSocketExchangedMessages.BinaryContentDescriptionFormat;
             TypeDescription = Localizer.Instance.WebSocketClientMessage.MessageTypeBinary;
@@ -124,7 +99,11 @@ public sealed class WebSocketExchangedMessageViewModel : ViewModelBase
             TypeDescription = Localizer.Instance.WebSocketClientMessage.MessageTypeText;
         }
 
-        MessageSizeDescription = string.Format(format, lengthInBytes);
+        MessageSizeDescription = string.Format(format, this.wsMsg.BytesLength);
+
+        string? txtContent = (this.wsMsg.Type == System.Net.WebSockets.WebSocketMessageType.Text
+                           || this.wsMsg.Type == System.Net.WebSockets.WebSocketMessageType.Close) ?
+                             this.wsMsg.ReadAsUtf8Text() : null;
 
         if (txtContent is null)
         {

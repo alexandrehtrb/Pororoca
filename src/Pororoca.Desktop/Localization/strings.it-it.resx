@@ -374,7 +374,7 @@
   </data>
   <data name="ExportCollection/EnvironmentWithSecretVariables" xml:space="preserve">
     <value>CON SEGRETI</value>
-  </data>  
+  </data>
   <data name="ExportEnvironment/Title" xml:space="preserve">
     <value>Esporta ambiente…</value>
   </data>
@@ -395,7 +395,7 @@
   </data>
   <data name="ExportEnvironment/PostmanEnvironmentFormat" xml:space="preserve">
     <value>Ambiente Postman</value>
-  </data>  
+  </data>
   <data name="Folder/NewFolder" xml:space="preserve">
     <value>Nuova cartella</value>
   </data>
@@ -455,6 +455,12 @@
   </data>
   <data name="HttpRepeater/DelayTip" xml:space="preserve">
     <value>Tempo di attesa tra una risposta e l'invio della richiesta successiva.</value>
+  </data>
+  <data name="HttpRepeater/MaximumRate" xml:space="preserve">
+    <value>Max reqs/s</value>
+  </data>
+  <data name="HttpRepeater/MaximumRateTip" xml:space="preserve">
+    <value>Limita il numero massimo di richieste al secondo. Il valore zero significa che non ci sono limitazioni.</value>
   </data>
   <data name="HttpRepeater/InputData" xml:space="preserve">
     <value>Dati di input</value>
@@ -870,6 +876,9 @@
   <data name="RequestValidation/RepetitionDelayCantBeNegative" xml:space="preserve">
     <value>Il ritardo deve essere maggiore o uguale a zero.</value>
   </data>
+  <data name="RequestValidation/RepetitionMaximumRateCantBeNegative" xml:space="preserve">
+    <value>La portata massima deve essere maggiore o uguale a zero.</value>
+  </data>
   <data name="RequestValidation/RepetitionNumberOfRepetitionsMustBeAtLeast1" xml:space="preserve">
     <value>Il numero di ripetizione deve essere maggiore o uguale a uno.</value>
   </data>
@@ -960,6 +969,9 @@
   <data name="TopMenuOptions/EnableTlsVerification" xml:space="preserve">
     <value>Abilita la verifica TLS</value>
   </data>
+  <data name="TopMenuOptions/AutoCheckForUpdates" xml:space="preserve">
+    <value>Controllo automatico degli aggiornamenti</value>
+  </data>
   <data name="TopMenuOptions/Language" xml:space="preserve">
     <value>Lingua</value>
   </data>
@@ -974,6 +986,9 @@
   </data>
   <data name="TopMenuTheme/Light" xml:space="preserve">
     <value>Chiaro</value>
+  </data>
+  <data name="TopMenuTheme/Light2" xml:space="preserve">
+    <value>Chiaro 2</value>
   </data>
   <data name="TopMenuTheme/Pampa" xml:space="preserve">
     <value>Pampa</value>
@@ -994,7 +1009,7 @@
     <value>Vai al sito</value>
   </data>
   <data name="UpdateReminder/DialogMessage" xml:space="preserve">
-    <value>Ricorda di controllare periodicamente gli aggiornamenti!</value>
+    <value>È disponibile una nuova versione!\\n\\n{0}\\n\\nVuoi visitare la pagina di download?</value>
   </data>
   <data name="UpdateReminder/DialogTitle" xml:space="preserve">
     <value>Pororoca</value>
@@ -1154,5 +1169,29 @@
   </data>
   <data name="WebSocketExchangedMessages/TextContentDescriptionFormat" xml:space="preserve">
     <value>testo, {0} byte</value>
-  </data>  
+  </data>
+  <data name="UITestsPrepare/Title" xml:space="preserve">
+    <value>UI tests</value>
+  </data>
+  <data name="UITestsPrepare/TestFilesFolderNotFound" xml:space="preserve">
+    <value>Test files folder not found!!!</value>
+  </data>
+  <data name="UITestsPrepare/WaitingTimeBetweenActions" xml:space="preserve">
+    <value>Waiting time between actions (ms)</value>
+  </data>
+  <data name="UITestsPrepare/TestInclude" xml:space="preserve">
+    <value>Include</value>
+  </data>
+  <data name="UITestsPrepare/TestName" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="UITestsPrepare/RunTests" xml:space="preserve">
+    <value>Run tests!</value>
+  </data>
+  <data name="UITestsPrepare/SelectAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="UITestsPrepare/DeselectAll" xml:space="preserve">
+    <value>None</value>
+  </data>
 </root>

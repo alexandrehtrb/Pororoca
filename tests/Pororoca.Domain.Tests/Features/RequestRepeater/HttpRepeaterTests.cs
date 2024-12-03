@@ -229,9 +229,9 @@ public static class HttpRepeaterTests
     }
 
     [Theory]
-    [InlineData(PororocaRepetitionMode.Simple, 500)]
-    [InlineData(PororocaRepetitionMode.Sequential, 250)]
-    [InlineData(PororocaRepetitionMode.Random, 1000)]
+    [InlineData(PororocaRepetitionMode.Simple, 20)]
+    [InlineData(PororocaRepetitionMode.Sequential, 30)]
+    [InlineData(PororocaRepetitionMode.Random, 40)]
     public static async Task Should_delay_between_executions_correctly(PororocaRepetitionMode repMode, int delayInMs)
     {
         // GIVEN
@@ -266,8 +266,55 @@ public static class HttpRepeaterTests
         }
         sw.Stop();
 
-        var errorMargin = TimeSpan.FromMilliseconds(500); // this test was flaky
+        var errorMargin = TimeSpan.FromMilliseconds(10); // this test was flaky
         Assert.True((sw.Elapsed + errorMargin) >= TimeSpan.FromMilliseconds(delayInMs));
+    }
+
+    [Theory(Skip = "This test is flaky.")]
+    [InlineData(PororocaRepetitionMode.Simple, 2)]
+    [InlineData(PororocaRepetitionMode.Sequential, 3)]
+    [InlineData(PororocaRepetitionMode.Random, 6)]
+    public static async Task Should_apply_rate_limiter_correctly(PororocaRepetitionMode repMode, int maximumRatePerSecond)
+    {
+        // GIVEN
+        var requester = Substitute.For<IPororocaRequester>();
+        PororocaVariable[] colEffVars = [];
+        PororocaVariable[] inputLine = [new(true, "Var1", "ABC", true), new(true, "Var2", "123", true)];
+        PororocaVariable[][]? resolvedInputData =
+        [
+            inputLine,inputLine,inputLine,inputLine,inputLine,inputLine
+            // this is necessary to make 6 reqs for sequential rep
+        ];
+        var colScopedAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
+        List<PororocaKeyValueParam>? colScopedReqHeaders = null;
+        var rep = MakeExampleRep(repMode) with
+        {
+            NumberOfRepetitions = 6,
+            DelayInMs = 0,
+            MaxDop = maximumRatePerSecond, // parallelism must not interfere with max rate
+            MaxRatePerSecond = maximumRatePerSecond
+        };
+        TimeSpan expectedTotalTime = TimeSpan.FromSeconds((int)rep.NumberOfRepetitions! / maximumRatePerSecond);
+        PororocaHttpRequest baseReq = new("basereq");
+
+        requester.IsValidRequest(default!, default, default!, out _)
+                 .ReturnsForAnyArgs(true);
+
+        // WHEN
+        Stopwatch sw = new();
+        sw.Start();
+        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, default);
+
+        // THEN
+        List<PororocaHttpRepetitionResult> results = new();
+        await foreach (var result in channelReader.ReadAllAsync())
+        {
+            results.Add(result);
+        }
+        sw.Stop();
+
+        var errorMargin = TimeSpan.FromSeconds(1);
+        Assert.True((sw.Elapsed + errorMargin) >= expectedTotalTime);
     }
 
     [Theory]

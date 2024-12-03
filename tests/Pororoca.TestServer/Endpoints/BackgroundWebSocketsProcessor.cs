@@ -1,308 +1,93 @@
-using System.Buffers;
 using System.Net.WebSockets;
-using System.Text;
-using System.Threading.Channels;
+using Pororoca.Infrastructure.Features.WebSockets;
 
 namespace Pororoca.TestServer.Endpoints;
 
 public static class BackgroundWebSocketsProcessor
 {
-    private const int bufferSize = 1440; // because Ethernet's MTU is around 1500 bytes
     private static readonly TimeSpan maximumLifetimePeriod = TimeSpan.FromMinutes(1);
     private static readonly TimeSpan waitForClientPeriod = TimeSpan.FromSeconds(12);
-    private static readonly TimeSpan checkClientDisconnectSamplingPeriod = TimeSpan.FromMilliseconds(250);
-    private static readonly Channel<string> messagesToSendChannel = BuildMessagesToSendChannel();
 
-    public static async Task RegisterAndProcessAsync(WebSocket ws, TaskCompletionSource<object> socketFinishedTcs)
+    public static async Task RegisterAndProcessAsync(ILogger<WebSocketServerSideConnector> logger, WebSocket ws, string? subprotocol, TaskCompletionSource<object> socketFinishedTcs)
     {
-        CancellationTokenSource cts = new(maximumLifetimePeriod);
-        await ProcessMessagesExchangesAsync(ws, cts.Token);
+        WebSocketServerSideConnector wsc = new(ws);
+
+        // periodic ping whenever client goes quiet
+        PeriodicTimer pingTimer = new(waitForClientPeriod);
+        _ = Task.Run(async () =>
+        {
+            while (await pingTimer.WaitForNextTickAsync())
+            {
+                if (wsc.ConnectionState == WebSocketConnectorState.Connected)
+                {
+                    await wsc.SendMessageAsync(WebSocketMessageType.Text, GetPingText(subprotocol), false);
+                }
+            }
+        });
+
+        // maximum lifetime closure message
+        _ = Task.Run(async () =>
+        {
+            await Task.Delay(maximumLifetimePeriod);
+            await wsc.SendMessageAsync(WebSocketMessageType.Close, GetMaximumLifetimeText(subprotocol), false);
+        });
+
+        int msgCount = 0;
+        await foreach (var msg in wsc.ExchangedMessagesCollector!.ReadAllAsync())
+        {
+            msgCount++;
+            string msgText = msg.Type switch
+            {
+                WebSocketMessageType.Binary => $"(binary, {msg.BytesLength} bytes)",
+                _ => msg.ReadAsUtf8Text()!
+            };
+            logger.LogInformation("Message {msgCount}, {direction}: {msgText}", msgCount, msg.Direction, msgText);
+
+            if (msg.Direction == WebSocketMessageDirection.FromServer)
+            {
+                continue;
+            }
+
+            // reset ping timer whenever a client msg is received
+            pingTimer.Reset();
+            await wsc.SendMessageAsync(WebSocketMessageType.Text, GetReplyText(subprotocol, msg), false);
+        }
+
+        pingTimer.Dispose();
         socketFinishedTcs.SetResult(true);
     }
 
-    private static async Task ProcessMessagesExchangesAsync(WebSocket ws, CancellationToken serverDisconnectToken = default)
+    private static void Reset(this PeriodicTimer timer) =>
+        timer.Period = timer.Period;
+
+    private static string GetPingText(string? subprotocol) =>
+        subprotocol == "json" ?
+        $"{{\"messageType\":\"text\",\"text\":\"¡ping!\"}}" :
+        "¡ping!";
+
+    private static string GetReplyText(string? subprotocol, WebSocketMessage receivedMsg)
     {
-        async Task<bool> HasPingToSendAsync()
+        if (receivedMsg.Type == WebSocketMessageType.Text)
         {
-            try
-            {
-                await Task.Delay(waitForClientPeriod, serverDisconnectToken);
-                return true;
-            }
-            catch (OperationCanceledException)
-            {
-                return false;
-            }
+            string receivedStr = receivedMsg.ReadAsUtf8Text()!;
+            return subprotocol == "json" ?
+                $"{{\"bytesReceived\":{receivedMsg.BytesLength},\"messageType\":\"text\",\"text\":\"{receivedStr}\"}}" :
+                $"received text ({receivedMsg.BytesLength} bytes): {receivedStr}";
         }
-
-        Task<bool> HasMessageToSendAsync()
+        else if (receivedMsg.Type == WebSocketMessageType.Binary)
         {
-            // We are using a channel as a queue here because two different messages
-            // should not be sent at the same time through a WebSocket,
-            // as the other party cannot distinguish which message part corresponds to which message.
-            try
-            {
-                // we are using only ping here,
-                // this is for a hypothetical case
-                return messagesToSendChannel!.Reader.WaitToReadAsync(serverDisconnectToken).AsTask();
-            }
-            catch (OperationCanceledException)
-            {
-                return Task.FromResult(false);
-            }
-        }
-
-        Task<ValueWebSocketReceiveResult> HasMessageToReceiveAsync()
-        {
-            try
-            {
-                return ws.ReceiveAsync(Memory<byte>.Empty, serverDisconnectToken).AsTask();
-            }
-            catch (OperationCanceledException)
-            {
-                return Task.FromResult(default(ValueWebSocketReceiveResult));
-            }
-        }
-
-        async Task<bool> HasClientTryingToDisconnectAsync()
-        {
-            try
-            {
-                while (ws.State != WebSocketState.CloseReceived && ws.State != WebSocketState.Aborted)
-                {
-                    await Task.Delay(checkClientDisconnectSamplingPeriod, serverDisconnectToken);
-                };
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        ValueTask<string> DequeueMessageToSendAsync() =>
-            messagesToSendChannel.Reader.ReadAsync(CancellationToken.None);
-
-        bool CanSendMessages() =>
-            !serverDisconnectToken.IsCancellationRequested
-         && (ws.State == WebSocketState.Open || ws.State == WebSocketState.Connecting || ws.State == WebSocketState.CloseReceived)
-         && messagesToSendChannel is not null;
-
-        bool CanReceiveMessages() =>
-            !serverDisconnectToken.IsCancellationRequested
-         && (ws.State == WebSocketState.Open || ws.State == WebSocketState.Connecting || ws.State == WebSocketState.CloseSent);
-
-        while (CanSendMessages() && CanReceiveMessages())
-        {
-            var beganSending = HasMessageToSendAsync();
-            var beganReceiving = HasMessageToReceiveAsync();
-            var beganPinging = HasPingToSendAsync();
-            var beganClientDisconnecting = HasClientTryingToDisconnectAsync();
-
-            var firstOperation = await Task.WhenAny(beganSending, beganReceiving, beganPinging, beganClientDisconnecting);
-
-            if (serverDisconnectToken.IsCancellationRequested)
-            {
-                await CloseStartingByServerAsync(ws, "maximum lifetime, bye", CancellationToken.None);
-                return;
-            }
-            else if (firstOperation == beganClientDisconnecting && CanSendMessages())
-            {
-                await FinishClosingStartedByClientAsync(ws, "ok, bye");
-                return; // exits the reception thread
-            }
-            else if (firstOperation == beganSending && CanSendMessages())
-            {
-                string msgToSend = await DequeueMessageToSendAsync();
-                await SendTextMessageAsync(ws, msgToSend, serverDisconnectToken);
-            }
-            else if (firstOperation == beganPinging && CanSendMessages())
-            {
-                await PingClientAsync(ws, "{\"ping\": \"hey client\"}", serverDisconnectToken);
-                //ws.Abort();
-                //await ws.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, null, serverDisconnectToken);
-                //return;
-            }
-            else if (firstOperation == beganReceiving)
-            {
-                bool isClosing = beganReceiving.Result.MessageType == WebSocketMessageType.Close;
-                if (isClosing)
-                {
-                    // closure message already received
-                    await FinishClosingStartedByClientAsync(ws, "ok, bye");
-                    return; // exits the reception thread
-                }
-                else if (CanReceiveMessages())
-                {
-                    var (receivedMsgType, receivedBytes) = await ReceiveMessageAsync(ws, serverDisconnectToken);
-                    if (receivedMsgType == WebSocketMessageType.Close)
-                    {
-                        await FinishClosingStartedByClientAsync(ws, "ok, bye");
-                        return; // exits the reception thread
-                    }
-                    else
-                    {
-                        await ReplyToClientAsync(ws, receivedMsgType, receivedBytes, serverDisconnectToken);
-                    }
-                }
-            }
-        }
-    }
-
-    private static async Task<(WebSocketMessageType, byte[])> ReceiveMessageAsync(WebSocket ws, CancellationToken disconnectToken)
-    {
-        using MemoryStream accumulator = new();
-        byte[]? buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
-        Array.Clear(buffer);
-        ValueWebSocketReceiveResult receivalResult;
-
-        try
-        {
-            do
-            {
-                var mem = buffer.AsMemory();
-                receivalResult = await ws.ReceiveAsync(mem, disconnectToken);
-                var trimmedBuffer = mem.TrimEnd((byte)0);
-                await accumulator.WriteAsync(trimmedBuffer, disconnectToken);
-                Array.Clear(buffer);
-            }
-            while (IsReceivingMessage(receivalResult) && !disconnectToken.IsCancellationRequested);
-
-            ArrayPool<byte>.Shared.Return(buffer);
-            buffer = null;
-
-            return (receivalResult.MessageType, accumulator.ToArray());
-        }
-        catch
-        {
-            if (buffer != null)
-            {
-                ArrayPool<byte>.Shared.Return(buffer);
-            }
-            return (WebSocketMessageType.Close, Array.Empty<byte>());
-        }
-    }
-
-    private static bool IsReceivingMessage(this ValueWebSocketReceiveResult vwsrr) =>
-        vwsrr.MessageType != WebSocketMessageType.Close
-        && vwsrr.EndOfMessage == false;
-
-    private static Task ReplyToClientAsync(WebSocket ws, WebSocketMessageType receivedMsgType, ArraySegment<byte> receivedMsg, CancellationToken cancellationToken = default)
-    {
-        if (receivedMsgType == WebSocketMessageType.Text)
-        {
-            string receivedStr = Encoding.UTF8.GetString(receivedMsg);
-            return SendTextMessageAsync(ws, $"received text ({receivedMsg.Count} bytes): {receivedStr}", cancellationToken);
-        }
-        else if (receivedMsgType == WebSocketMessageType.Binary)
-        {
-            return SendTextMessageAsync(ws, $"received binary {receivedMsg.Count} bytes", cancellationToken);
+            return subprotocol == "json" ?
+                $"{{\"bytesReceived\":{receivedMsg.BytesLength},\"messageType\":\"binary\"}}" :
+                $"received binary {receivedMsg.BytesLength} bytes";
         }
         else
         {
-            return Task.CompletedTask;
+            return string.Empty;
         }
     }
 
-    private static Task FinishClosingStartedByClientAsync(WebSocket ws, string msg)
-    {
-        // These are the valid states for calling client.CloseOutputAsync()
-        if (ws.State == WebSocketState.Open || ws.State == WebSocketState.CloseReceived)
-        {
-            return ws.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, msg, default);
-        }
-        else
-        {
-            return Task.CompletedTask;
-        }
-    }
-
-    private static async Task CloseStartingByServerAsync(WebSocket ws, string? closingMsg = null, CancellationToken cancellationToken = default)
-    {
-        // These are the valid states for calling client.CloseAsync()
-        if (ws.State == WebSocketState.Open || ws.State == WebSocketState.CloseReceived || ws.State == WebSocketState.CloseSent)
-        {
-            if (closingMsg is null)
-            {
-                await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, closingMsg, cancellationToken);
-            }
-            else
-            {
-                await ws.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, closingMsg, cancellationToken);
-            }
-        }
-    }
-
-    private static Task PingClientAsync(WebSocket ws, string msg, CancellationToken cancellationToken = default) =>
-        SendTextMessageAsync(ws, msg, cancellationToken);
-
-    private static Task SendTextMessageAsync(WebSocket ws, string msg, CancellationToken cancellationToken = default)
-    {
-        MemoryStream ms = new(Encoding.UTF8.GetBytes(msg));
-        return SendMessageAsync(ws, WebSocketMessageType.Text, ms, cancellationToken);
-    }
-
-    private static async Task SendMessageAsync(WebSocket ws, WebSocketMessageType msgType, Stream msgStream, CancellationToken cancellationToken = default)
-    {
-        byte[]? buffer = null;
-        try
-        {
-            if (msgType == WebSocketMessageType.Close)
-            {
-                await CloseStartingByServerAsync(ws, "closing starting by server", cancellationToken);
-                return;
-            }
-            else
-            {
-                buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
-                Array.Clear(buffer);
-                msgStream.Seek(0, SeekOrigin.Begin);
-#pragma warning disable CA1835
-                while (!cancellationToken.IsCancellationRequested
-                    && await msgStream.ReadAsync(buffer, 0, buffer.Length, cancellationToken) > 0)
-                {
-#pragma warning restore CA1835
-                    var trimmedBuffer = buffer.AsMemory().TrimEnd((byte)0);
-                    var flags = msgStream.DetermineFlags();
-                    await ws.SendAsync(trimmedBuffer, msgType, flags, cancellationToken);
-                    Array.Clear(buffer);
-                }
-                ArrayPool<byte>.Shared.Return(buffer);
-                buffer = null;
-            }
-        }
-        catch
-        {
-            // We will not attempt to close connection if an exception happens
-            if (buffer != null)
-            {
-                ArrayPool<byte>.Shared.Return(buffer);
-            }
-            throw;
-        }
-    }
-
-    private static Channel<string> BuildMessagesToSendChannel()
-    {
-        BoundedChannelOptions sendChannelOpts = new(20)
-        {
-            SingleReader = true,
-            SingleWriter = true,
-            FullMode = BoundedChannelFullMode.Wait
-        };
-        return Channel.CreateBounded<string>(sendChannelOpts);
-    }
-
-    private static WebSocketMessageFlags DetermineFlags(this Stream stream)
-    {
-        var flags = WebSocketMessageFlags.None;
-
-        if (stream.ReachedEnd())
-            flags |= WebSocketMessageFlags.EndOfMessage;
-
-        return flags;
-    }
-
-    private static bool ReachedEnd(this Stream stream) =>
-        stream.Position == stream.Length;
+    private static string GetMaximumLifetimeText(string? subprotocol) =>
+        subprotocol == "json" ?
+        $"{{\"messageType\":\"close\",\"text\":\"maximum lifetime, bye\"}}" :
+        "maximum lifetime, bye";
 }

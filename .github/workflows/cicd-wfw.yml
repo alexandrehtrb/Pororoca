@@ -77,7 +77,7 @@ jobs:
     - name: Install .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.303
+        dotnet-version: 8.0.404
 
     # GitHub Actions Windows Runners come with NSIS pre-installed
     # https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md
@@ -126,7 +126,9 @@ jobs:
         reports: TestResults/**/coverage.cobertura.xml
         targetdir: TestResults
         reporttypes: JsonSummary
-        assemblyfilters: +Pororoca.Domain;+Pororoca.Domain.OpenAPI
+        assemblyfilters: +Pororoca.Domain;+Pororoca.Domain.OpenAPI        
+        classfilters: -System.Threading.RateLimiting.*;-System.Collections.Generic.*
+        riskhotspotclassfilters: -System.Threading.RateLimiting.*;-System.Collections.Generic.*        
         filefilters: -*.g.cs
         customSettings: 'minimumCoverageThresholds:lineCoverage=90;minimumCoverageThresholds:branchCoverage=80'
 
@@ -213,7 +215,7 @@ jobs:
         foreach ($artifact in $arr)
         {
           $OUTPUT_FOLDER = $artifact.outputFolder
-          $PUBLISH_SINGLE_FILE = (($artifact.rid -ne $null) -and ($artifact.rid.StartsWith("win") -or $artifact.rid.StartsWith("linux")));
+          $PUBLISH_SINGLE_FILE = (($artifact.rid -ne $null) -and (($artifact.rid -like "win*portable") -or ($artifact.rid -like "linux*")));
           $WINDOWS_INSTALLER_RELEASE = $artifact.packaging -eq "nsis";
           $DEBIAN_INSTALLER_RELEASE = $artifact.packaging -eq "debian";
 
@@ -273,14 +275,20 @@ jobs:
       shell: pwsh
       run: |
         $OUTPUT_FOLDER = "./out/osx-x64";
+        $TEMP_APP_OUTPUT_FOLDER = $OUTPUT_FOLDER + "_app"
+        
+        [void](mkdir "$TEMP_APP_OUTPUT_FOLDER")
+        [void](mkdir "$TEMP_APP_OUTPUT_FOLDER/Contents")
+        [void](mkdir "$TEMP_APP_OUTPUT_FOLDER/Contents/MacOS")
+        [void](mkdir "$TEMP_APP_OUTPUT_FOLDER/Contents/Resources")
+        Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/Info.plist" -Destination "$TEMP_APP_OUTPUT_FOLDER/Contents/"
+        Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/pororoca.icns" -Destination "$TEMP_APP_OUTPUT_FOLDER/Contents/Resources/"        
+        Copy-Item -Force -Recurse -Path "$OUTPUT_FOLDER/*" -Destination "$TEMP_APP_OUTPUT_FOLDER/Contents/MacOS/"
+        
+        Remove-Item -Recurse -Force -Path "$OUTPUT_FOLDER/*"
         [void](mkdir "$OUTPUT_FOLDER/Pororoca.app")
-        [void](mkdir "$OUTPUT_FOLDER/Pororoca.app/Contents")
-        [void](mkdir "$OUTPUT_FOLDER/Pororoca.app/Contents/MacOS")
-        [void](mkdir "$OUTPUT_FOLDER/Pororoca.app/Contents/Resources")
-        Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/Info.plist" -Destination "$OUTPUT_FOLDER/Pororoca.app/Contents/"
-        Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/pororoca.icns" -Destination "$OUTPUT_FOLDER/Pororoca.app/Contents/Resources/"
-        Get-ChildItem $OUTPUT_FOLDER -File | Copy-Item -Destination "$OUTPUT_FOLDER/Pororoca.app/Contents/MacOS/" -Force
-        Get-ChildItem $OUTPUT_FOLDER -File | Remove-Item
+        Copy-Item -Force -Recurse -Path "$TEMP_APP_OUTPUT_FOLDER/*" -Destination "$OUTPUT_FOLDER/Pororoca.app/"
+        Remove-Item -Recurse -Force -Path $TEMP_APP_OUTPUT_FOLDER
 
     # so Linux users can create desktop launchers
     - name: Copy logo (Linux portable only)

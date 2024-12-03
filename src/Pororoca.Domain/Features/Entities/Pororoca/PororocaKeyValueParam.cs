@@ -6,4 +6,8 @@ public sealed record PororocaKeyValueParam(bool Enabled, string Key, string? Val
     public PororocaKeyValueParam() : this(true, string.Empty, string.Empty) { }
 
     public PororocaKeyValueParam Copy() => this with { };
+
+#if DEBUG
+    public override string ToString() => $"{(Enabled ? "✔️" : "⛔")} {Key}: \"{Value}\"";
+#endif
 }

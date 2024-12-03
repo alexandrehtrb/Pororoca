@@ -37,12 +37,12 @@ public sealed partial class FormDataParamsCutCopyPasteDeleteUITest : UITest
         await TreeRobot.Select("COL1");
         await ColRobot.AddHttpReq.ClickOn();
         await HttpRobot.Name.Edit("HTTP1");
-        await HttpRobot.SetFormDataBody(new[] { p1, p2 });
+        await HttpRobot.SetFormDataBody([p1, p2]);
 
         await TreeRobot.Select("COL1");
         await ColRobot.AddHttpReq.ClickOn();
         await HttpRobot.Name.Edit("HTTP2");
-        await HttpRobot.SetFormDataBody(new[] { p3, p4 });
+        await HttpRobot.SetFormDataBody([p3, p4]);
 
         // copy and paste
         await HttpRobot.SelectFormDataParams(HttpRobot.FormDataParamsVm.Items.ToArray());

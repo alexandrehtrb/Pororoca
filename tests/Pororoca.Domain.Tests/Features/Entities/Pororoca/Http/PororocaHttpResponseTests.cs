@@ -372,7 +372,7 @@ public static class PororocaHttpResponseTests
         Assert.Equal("100", res.CaptureValue(capture));
     }
 
-    internal static HttpResponseMessage CreateTestHttpResponseMessage(string? body, string? contentType, string? contentDisposition)
+    internal static HttpResponseMessage CreateTestHttpResponseMessage(string? body, string? contentType, string? contentDisposition, HttpStatusCode statusCode = HttpStatusCode.Accepted)
     {
         ByteArrayContent? content = null;
         if (body != null)
@@ -388,7 +388,7 @@ public static class PororocaHttpResponseTests
                 content.Headers.TryAddWithoutValidation("Content-Disposition", contentDisposition);
             }
         }
-        HttpResponseMessage resMsg = new(HttpStatusCode.Accepted)
+        HttpResponseMessage resMsg = new(statusCode)
         {
             Content = content
         };
