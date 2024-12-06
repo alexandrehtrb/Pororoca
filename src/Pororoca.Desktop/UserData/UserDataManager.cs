@@ -125,6 +125,13 @@ public static class UserDataManager
         {
             string path = GetUserDataFilePath($"{col.Id}.{PororocaCollectionExtension}");
 
+            // As soon as you leave the using block’s scope,
+            // the stream is closed and disposed.
+            // The Close() calls the Flush(),
+            // so you should not need to call it manually.
+            // Flush() writes the file bytes into the hard drive.
+            // https://stackoverflow.com/a/7710686
+
             using FileStream fs = new(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite, bufferSize: 16384, useAsync: false);
             PororocaCollectionExporter.ExportAsPororocaCollection(fs, col);
 
