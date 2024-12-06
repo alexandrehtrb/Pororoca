@@ -47,8 +47,18 @@ public static class UserDataManager
         }
     }
 
-    public static IEnumerable<Task<PororocaCollection?>> LoadUserCollectionsAsync() =>
-        FetchSavedUserCollectionsFiles().Select(LoadUserCollectionAsync);
+    public static async IAsyncEnumerable<PororocaCollection> LoadUserCollectionsAsync()
+    {
+        var files = FetchSavedUserCollectionsFiles();
+        foreach (var file in files)
+        {
+            var col = await LoadUserCollectionAsync(file);
+            if (col is not null)
+            {
+                yield return col;
+            }
+        }
+    }
 
     private static async Task<PororocaCollection?> LoadUserCollectionAsync(FileInfo fi)
     {

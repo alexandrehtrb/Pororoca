@@ -20,7 +20,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 {
     #region COLLECTIONS ORGANIZATION
 
-    private bool finishedLoadingUserData;
+    private static readonly SemaphoreSlim loadSaveUserDataSemaphore = new(1, 1);
 
     [Reactive]
     public CollectionsGroupViewModel CollectionsGroupViewDataCtx { get; set; }
@@ -190,7 +190,6 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     public MainWindowViewModel()
     {
         #region COLLECTIONS ORGANIZATION
-        this.finishedLoadingUserData = false;
         CollectionsGroupViewDataCtx = new(this, SwitchVisiblePage);
         ImportCollectionsFromFileCmd = ReactiveCommand.CreateFromTask(ImportCollectionsAsync);
         AddNewCollectionCmd = ReactiveCommand.Create(AddNewCollection);
@@ -450,26 +449,27 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     private void LoadUserCollections() =>
         Task.Run(async () =>
         {
-            var cols = await Task.WhenAll(UserDataManager.LoadUserCollectionsAsync());
-            if (cols != null)
+            // taken from:
+            // https://blog.cdemi.io/async-waiting-inside-c-sharp-locks/
+
+            await loadSaveUserDataSemaphore.WaitAsync();
+            try
             {
-                Dispatcher.UIThread.Post(() =>
+                await foreach (var col in UserDataManager.LoadUserCollectionsAsync())
                 {
-                    foreach (var col in cols)
-                    {
-                        if (col != null)
-                        {
-                            AddCollection(col);
-                        }
-                    }
-                    this.finishedLoadingUserData = true;
-                });
+                    Dispatcher.UIThread.Post(() => AddCollection(col));
+                }
+            }
+            finally
+            {
+                loadSaveUserDataSemaphore.Release();
             }
         });
 
     public void SaveUserData()
     {
-        if (this.finishedLoadingUserData == false)
+        // This means that the user data is still being loaded.
+        if (loadSaveUserDataSemaphore.CurrentCount == 0)
         {
             // IMPORTANT!
             // This protects against deleting all collections
