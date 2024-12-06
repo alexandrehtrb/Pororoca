@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.7.0.2](#3702-2024-12-06)
 * [3.7.0.1](#3701-2024-12-02)
 * [3.7.0](#370-2024-11-21)
 * [3.6.0](#360-2024-10-07)
@@ -32,7 +33,14 @@
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
 
-## [3.7.0.1](https://github.com/alexandrehtrb/Pororoca/tree/3.7.1) (2024-12-02)
+## [3.7.0.2](https://github.com/alexandrehtrb/Pororoca/tree/3.7.0.2) (2024-12-06)
+
+### Hot Fix
+
+- Loads saved collections via `IAsyncEnumerable`.
+- Protects against load-save race condition by using a `SemaphoreSlim`.
+
+## [3.7.0.1](https://github.com/alexandrehtrb/Pororoca/tree/3.7.0.1) (2024-12-02)
 
 ### Hot Fix
 
