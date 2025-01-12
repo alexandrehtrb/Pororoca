@@ -20,7 +20,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 {
     #region COLLECTIONS ORGANIZATION
 
-    private static readonly SemaphoreSlim loadSaveUserDataSemaphore = new(1, 1);
+    private volatile Task? loadUserCollectionsTask;
 
     [Reactive]
     public CollectionsGroupViewModel CollectionsGroupViewDataCtx { get; set; }
@@ -447,29 +447,21 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     }
 
     private void LoadUserCollections() =>
-        Task.Run(async () =>
+        this.loadUserCollectionsTask = Task.Run(async () =>
         {
-            // taken from:
-            // https://blog.cdemi.io/async-waiting-inside-c-sharp-locks/
-
-            await loadSaveUserDataSemaphore.WaitAsync();
-            try
+            await foreach (var col in UserDataManager.LoadUserCollectionsAsync())
             {
-                await foreach (var col in UserDataManager.LoadUserCollectionsAsync())
-                {
-                    Dispatcher.UIThread.Post(() => AddCollection(col));
-                }
-            }
-            finally
-            {
-                loadSaveUserDataSemaphore.Release();
+                // needs to be Invoke() instead of Post().
+                // Invoke() -> immediate execution
+                // Post() -> enqueue for future (but soon) execution
+                Dispatcher.UIThread.Invoke(() => AddCollection(col));
             }
         });
 
     public void SaveUserData()
     {
         // This means that the user data is still being loaded.
-        if (loadSaveUserDataSemaphore.CurrentCount == 0)
+        if (this.loadUserCollectionsTask == null || this.loadUserCollectionsTask.IsCompleted == false)
         {
             // IMPORTANT!
             // This protects against deleting all collections
