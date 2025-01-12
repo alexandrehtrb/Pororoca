@@ -53,7 +53,7 @@
 
 ; ----------------------------------------  INSTALLER ATTRIBUTES
 Name "${PRODUCT_NAME} ${SHORT_VERSION}"
-BrandingText "©2024 ${COMPANY_NAME}"
+BrandingText "©2025 ${COMPANY_NAME}"
 Icon "${INPUT_FILES_DIR}\pororoca_icon.ico"
 VIProductVersion "${PRODUCT_VERSION}"
 VIFileVersion "${VERSION}"
@@ -185,10 +185,10 @@ LangString CouldNotBeUninstalledPleaseRestart ${LANG_PORTUGUESEBR} "não pôde s
 LangString CouldNotBeUninstalledPleaseRestart ${LANG_ITALIAN} "non è stato possibile disinstallarlo completamente.$\r$\nRiavvia Windows ed esegui nuovamente il programma di disinstallazione."
 LangString CouldNotBeUninstalledPleaseRestart ${LANG_RUSSIAN} "не удалось полностью удалить.$\r$\nПожалуйста, перезагрузите Windows и снова запустите деинсталлятор."
 
-LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_ENGLISH} "Your collections and preferences will not be deleted. They are located at: 'Users\{you}\AppData\Roaming\Pororoca\PororocaUserData\'."
-LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_PORTUGUESEBR} "Suas coleções e preferências não serão excluídas. Elas estão em: 'Users\{você}\AppData\Roaming\Pororoca\PororocaUserData\'."
-LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_ITALIAN} "Le tue collezione e preferenze non verranno eliminate. Si trovano in: 'Utenti\{tu}\AppData\Roaming\Pororoca\PororocaUserData\'."
-LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_RUSSIAN} "Ваши коллекции и предпочтения не будут удалены. Они находятся по адресу: 'Users\{ты}\AppData\Roaming\Pororoca\PororocaUserData\'."
+LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_ENGLISH} "Your collections and preferences will not be deleted. They are located at: 'Users\you\AppData\Roaming\Pororoca\PororocaUserData\'."
+LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_PORTUGUESEBR} "Suas coleções e preferências não serão excluídas. Elas estão em: 'Users\você\AppData\Roaming\Pororoca\PororocaUserData\'."
+LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_ITALIAN} "Le tue collezione e preferenze non verranno eliminate. Si trovano in: 'Utenti\tu\AppData\Roaming\Pororoca\PororocaUserData\'."
+LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_RUSSIAN} "Ваши коллекции и предпочтения не будут удалены. Они находятся по адресу: 'Users\ты\AppData\Roaming\Pororoca\PororocaUserData\'."
 
 LangString InstallationCompleted ${LANG_ENGLISH} "Installation successful!"
 LangString InstallationCompleted ${LANG_PORTUGUESEBR} "Instalação concluída com sucesso!"
