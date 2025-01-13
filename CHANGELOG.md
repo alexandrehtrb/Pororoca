@@ -36,6 +36,12 @@
 
 ## [3.7.1](https://github.com/alexandrehtrb/Pororoca/tree/3.7.1) (2025-01-12)
 
+### Important
+
+- This release fixes a load-save race condition, that caused collections to disappear for some users.
+- Those collections should be inside the [user data folder](https://pororoca.io/docs/collections#saved-location), with names beginning with `deleted_` prefix; to restore them, either reimport them, or rename removing `deleted_` from their names.
+- If this bug still happens for you with version 3.7.1, please report in issue #130.
+
 ### Bug Fix
 
 - Protects against load-save race condition by using a `Task` and `Dispatcher.UIThread.Invoke()`.
