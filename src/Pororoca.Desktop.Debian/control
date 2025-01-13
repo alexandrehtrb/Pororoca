@@ -1,5 +1,5 @@
 Package: pororoca
-Version: 3.7.0
+Version: 3.7.1
 Section: devel
 Priority: optional
 Architecture: amd64
@@ -8,4 +8,4 @@ Depends: libx11-6, libice6, libsm6, libfontconfig1, ca-certificates, tzdata, lib
 Maintainer: Alexandre H. T. R. Bonfitto <alexandrehtrb@outlook.com>
 Homepage: https://pororoca.io
 Description: This is Pororoca, a HTTP inspection tool, for Debian-related distros.
-Copyright: 2022-2024 Alexandre H. T. R. Bonfitto <alexandrehtrb@outlook.com>
+Copyright: 2022-2025 Alexandre H. T. R. Bonfitto <alexandrehtrb@outlook.com>

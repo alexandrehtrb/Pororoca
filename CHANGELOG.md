@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.7.1](#371-2025-01-12)
 * [3.7.0.2](#3702-2024-12-06)
 * [3.7.0.1](#3701-2024-12-02)
 * [3.7.0](#370-2024-11-21)
@@ -32,6 +33,12 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.7.1](https://github.com/alexandrehtrb/Pororoca/tree/3.7.1) (2025-01-12)
+
+### Bug Fix
+
+- Protects against load-save race condition by using a `Task` and `Dispatcher.UIThread.Invoke()`.
 
 ## [3.7.0.2](https://github.com/alexandrehtrb/Pororoca/tree/3.7.0.2) (2024-12-06)
 
