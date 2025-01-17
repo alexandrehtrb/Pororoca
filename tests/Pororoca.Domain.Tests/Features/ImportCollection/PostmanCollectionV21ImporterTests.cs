@@ -289,6 +289,7 @@ public static class PostmanCollectionV21ImporterTests
             ContentType = "text/plain",
             Type = PostmanRequestBodyFormDataParamType.Text
         };
+
         PostmanRequestBodyFormDataParam p2t = new()
         {
             Key = "Key2Text",
@@ -302,7 +303,7 @@ public static class PostmanCollectionV21ImporterTests
         {
             Key = "Key1File",
             Src = @"C:\Pasta1\arq.txt",
-            ContentType = "text/plain",
+            ContentType = null,
             Type = PostmanRequestBodyFormDataParamType.File
         };
 
@@ -314,10 +315,20 @@ public static class PostmanCollectionV21ImporterTests
             Type = PostmanRequestBodyFormDataParamType.File,
             Disabled = true
         };
+
+        PostmanRequestBodyFormDataParam p1d = new()
+        {
+            Key = "Key1Default",
+            Value = "Value1Default",
+            ContentType = null,
+            Type = PostmanRequestBodyFormDataParamType.Default,
+            Disabled = true
+        };
+
         PostmanRequestBody postmanBody = new()
         {
             Mode = PostmanRequestBodyMode.Formdata,
-            Formdata = [p1t, p2t, p1f, p2f]
+            Formdata = [p1t, p2t, p1f, p2f, p1d]
         };
 
         // WHEN
@@ -327,7 +338,7 @@ public static class PostmanCollectionV21ImporterTests
         Assert.NotNull(reqBody);
         Assert.Equal(PororocaHttpRequestBodyMode.FormData, reqBody!.Mode);
 
-        Assert.Equal(4, reqBody.FormDataValues!.Count);
+        Assert.Equal(5, reqBody.FormDataValues!.Count);
 
         var f1t = reqBody.FormDataValues[0];
         Assert.True(f1t.Enabled);
@@ -348,7 +359,7 @@ public static class PostmanCollectionV21ImporterTests
         Assert.Equal(PororocaHttpRequestFormDataParamType.File, f1f.Type);
         Assert.Equal("Key1File", f1f.Key);
         Assert.Equal(@"C:\Pasta1\arq.txt", f1f.FileSrcPath);
-        Assert.Equal("text/plain", f1f.ContentType);
+        Assert.Equal("application/octet-stream", f1f.ContentType);
 
         var f2f = reqBody.FormDataValues[3];
         Assert.False(f2f.Enabled);
@@ -356,6 +367,13 @@ public static class PostmanCollectionV21ImporterTests
         Assert.Equal("Key2File", f2f.Key);
         Assert.Equal(@"C:/Pasta1/arq2.jpg", f2f.FileSrcPath);
         Assert.Equal("image/jpeg", f2f.ContentType);
+
+        var f1d = reqBody.FormDataValues[4];
+        Assert.False(f1d.Enabled);
+        Assert.Equal(PororocaHttpRequestFormDataParamType.Text, f1d.Type);
+        Assert.Equal("Key1Default", f1d.Key);
+        Assert.Equal("Value1Default", f1d.TextValue);
+        Assert.Equal("text/plain", f1d.ContentType);
     }
 
     [Fact]
