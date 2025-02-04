@@ -5,7 +5,7 @@ using Pororoca.Domain.Features.Entities.Pororoca;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed partial class UrlEncodedParamsCutCopyPasteDeleteUITest : UITest
+public sealed partial class UrlEncodedParamsCutCopyPasteDeleteUITest : PororocaUITest
 {
     private Control RootView { get; }
     private TopMenuRobot TopMenuRobot { get; }
@@ -55,38 +55,38 @@ public sealed partial class UrlEncodedParamsCutCopyPasteDeleteUITest : UITest
         await HttpRobot.PasteUrlEncodedParams();
 
         ueps = HttpRobot.UrlEncodedParamsVm.Items.Select(x => x.ToKeyValueParam()).ToArray();
-        Assert(ueps.Length == 4);
-        Assert(ueps.Contains(new(true, "k1", "v1")));
-        Assert(ueps.Contains(new(true, "k2", "v2")));
-        Assert(ueps.Contains(new(false, "k3", "v3")));
-        Assert(ueps.Contains(new(true, "k4", "v4")));
+        AssertCondition(ueps.Length == 4);
+        AssertCondition(ueps.Contains(new(true, "k1", "v1")));
+        AssertCondition(ueps.Contains(new(true, "k2", "v2")));
+        AssertCondition(ueps.Contains(new(false, "k3", "v3")));
+        AssertCondition(ueps.Contains(new(true, "k4", "v4")));
 
         // cut and paste
         await HttpRobot.SelectUrlEncodedParams(HttpRobot.UrlEncodedParamsVm.Items[0], HttpRobot.UrlEncodedParamsVm.Items[1]);
         await HttpRobot.CutSelectedUrlEncodedParams();
 
         ueps = HttpRobot.UrlEncodedParamsVm.Items.Select(x => x.ToKeyValueParam()).ToArray();
-        Assert(ueps.Length == 2);
-        Assert(ueps.Contains(new(false, "k3", "v3")));
-        Assert(ueps.Contains(new(true, "k4", "v4")));
+        AssertCondition(ueps.Length == 2);
+        AssertCondition(ueps.Contains(new(false, "k3", "v3")));
+        AssertCondition(ueps.Contains(new(true, "k4", "v4")));
 
         await TreeRobot.Select("COL1/HTTP2");
         await HttpRobot.PasteUrlEncodedParams();
 
         ueps = HttpRobot.UrlEncodedParamsVm.Items.Select(x => x.ToKeyValueParam()).ToArray();
-        Assert(ueps.Length == 4);
-        Assert(ueps.Contains(new(false, "k3", "v3")));
-        Assert(ueps.Contains(new(true, "k4", "v4")));
-        Assert(ueps.Contains(new(true, "k1", "v1")));
-        Assert(ueps.Contains(new(true, "k2", "v2")));
+        AssertCondition(ueps.Length == 4);
+        AssertCondition(ueps.Contains(new(false, "k3", "v3")));
+        AssertCondition(ueps.Contains(new(true, "k4", "v4")));
+        AssertCondition(ueps.Contains(new(true, "k1", "v1")));
+        AssertCondition(ueps.Contains(new(true, "k2", "v2")));
 
         // delete
         await HttpRobot.SelectUrlEncodedParams(HttpRobot.UrlEncodedParamsVm.Items[0], HttpRobot.UrlEncodedParamsVm.Items[1]);
         await HttpRobot.DeleteSelectedUrlEncodedParams();
 
         ueps = HttpRobot.UrlEncodedParamsVm.Items.Select(x => x.ToKeyValueParam()).ToArray();
-        Assert(ueps.Length == 2);
-        Assert(ueps.Contains(new(true, "k1", "v1")));
-        Assert(ueps.Contains(new(true, "k2", "v2")));
+        AssertCondition(ueps.Length == 2);
+        AssertCondition(ueps.Contains(new(true, "k1", "v1")));
+        AssertCondition(ueps.Contains(new(true, "k2", "v2")));
     }
 }

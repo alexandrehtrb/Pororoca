@@ -7,7 +7,7 @@ using Pororoca.Domain.Features.Common;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed partial class ResponseCapturesUITest : UITest
+public sealed partial class ResponseCapturesUITest : PororocaUITest
 {
     private static readonly ObservableCollection<VariableViewModel> defaultColVars = GenerateCollectionVariables();
     private static readonly ObservableCollection<VariableViewModel> defaultEnvVars = GenerateEnvironmentVariables();

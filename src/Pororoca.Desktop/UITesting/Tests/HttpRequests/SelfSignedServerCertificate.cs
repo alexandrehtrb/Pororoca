@@ -2,7 +2,7 @@ using Pororoca.Desktop.UITesting.Robots;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed partial class HttpRequestsUITest : UITest
+public sealed partial class HttpRequestsUITest : PororocaUITest
 {
     private async Task TestSelfSigned()
     {
@@ -15,21 +15,21 @@ public sealed partial class HttpRequestsUITest : UITest
         await HttpRobot.ClickOnSendAndWaitForResponse();
         await Wait(5);
 
-        AssertIsVisible(HttpRobot.ResDisableTlsVerification);
-        AssertContainsText(HttpRobot.ResBodyRawContent, "The remote certificate is invalid");
-        AssertContainsText(HttpRobot.ResTitle, "Response: Failed");
-        AssertIsHidden(HttpRobot.ResBodySaveToFile);
+        HttpRobot.ResDisableTlsVerification.AssertIsVisible();
+        HttpRobot.ResBodyRawContent.AssertContainsText("The remote certificate is invalid");
+        HttpRobot.ResTitle.AssertContainsText("Response: Failed");
+        HttpRobot.ResBodySaveToFile.AssertIsHidden();
 
         await HttpRobot.ResDisableTlsVerification.ClickOn();
-        AssertIsHidden(HttpRobot.ResDisableTlsVerification);
+        HttpRobot.ResDisableTlsVerification.AssertIsHidden();
         await AssertTopMenuTlsVerification(false);
 
         await HttpRobot.ClickOnSendAndWaitForResponse();
         await Wait(5);
-        AssertIsHidden(HttpRobot.ResDisableTlsVerification);
-        AssertContainsText(HttpRobot.ResBodyRawContent, "<html>");
-        AssertContainsText(HttpRobot.ResTitle, "Response: 200 OK");
-        AssertIsVisible(HttpRobot.ResBodySaveToFile);
+        HttpRobot.ResDisableTlsVerification.AssertIsHidden();
+        HttpRobot.ResBodyRawContent.AssertContainsText("<html>");
+        HttpRobot.ResTitle.AssertContainsText("Response: 200 OK");
+        HttpRobot.ResBodySaveToFile.AssertIsVisible();
 
         await TopMenuRobot.SwitchTlsVerification(true);
     }
@@ -40,11 +40,11 @@ public sealed partial class HttpRequestsUITest : UITest
         await UITestActions.WaitAfterActionAsync();
         if (shouldBeEnabled)
         {
-            AssertHasIconVisible(TopMenuRobot.Options_EnableTlsVerification);
+            TopMenuRobot.Options_EnableTlsVerification.AssertHasIconVisible();
         }
         else
         {
-            AssertHasIconHidden(TopMenuRobot.Options_EnableTlsVerification);
+            TopMenuRobot.Options_EnableTlsVerification.AssertHasIconHidden();
         }
         TopMenuRobot.Options.Close();
         await UITestActions.WaitAfterActionAsync();

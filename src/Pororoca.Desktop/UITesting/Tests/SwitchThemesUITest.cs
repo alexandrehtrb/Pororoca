@@ -4,7 +4,7 @@ using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed class SwitchThemesUITest : UITest
+public sealed class SwitchThemesUITest : PororocaUITest
 {
     private TopMenuRobot Robot { get; }
     private Panel MainWindowPanel { get; }
@@ -27,13 +27,13 @@ public sealed class SwitchThemesUITest : UITest
         await Robot.Options_Theme.ClickOn();
         await Robot.Options_Theme_Light.ClickOn();
 
-        AssertHasIconVisible(Robot.Options_Theme_Light);
-        AssertHasIconHidden(Robot.Options_Theme_Light2);
-        AssertHasIconHidden(Robot.Options_Theme_Dark);
-        AssertHasIconHidden(Robot.Options_Theme_Pampa);
-        AssertHasIconHidden(Robot.Options_Theme_AmazonianNight);
+        Robot.Options_Theme_Light.AssertHasIconVisible();
+        Robot.Options_Theme_Light2.AssertHasIconHidden();
+        Robot.Options_Theme_Dark.AssertHasIconHidden();
+        Robot.Options_Theme_Pampa.AssertHasIconHidden();
+        Robot.Options_Theme_AmazonianNight.AssertHasIconHidden();
 
-        AssertBackgroundColor(MainWindowPanel, "#DCDCDC");
+        MainWindowPanel.AssertBackgroundColor("#DCDCDC");
 
         // light 2
 
@@ -41,51 +41,51 @@ public sealed class SwitchThemesUITest : UITest
         await Robot.Options_Theme.ClickOn();
         await Robot.Options_Theme_Light2.ClickOn();
 
-        AssertHasIconHidden(Robot.Options_Theme_Light);
-        AssertHasIconVisible(Robot.Options_Theme_Light2);
-        AssertHasIconHidden(Robot.Options_Theme_Dark);
-        AssertHasIconHidden(Robot.Options_Theme_Pampa);
-        AssertHasIconHidden(Robot.Options_Theme_AmazonianNight);
+        Robot.Options_Theme_Light.AssertHasIconHidden();
+        Robot.Options_Theme_Light2.AssertHasIconVisible();
+        Robot.Options_Theme_Dark.AssertHasIconHidden();
+        Robot.Options_Theme_Pampa.AssertHasIconHidden();
+        Robot.Options_Theme_AmazonianNight.AssertHasIconHidden();
 
-        AssertBackgroundColor(MainWindowPanel, "#FAFAFA");
+        MainWindowPanel.AssertBackgroundColor("#FAFAFA");
 
         // dark
         await Robot.Options.ClickOn();
         await Robot.Options_Theme.ClickOn();
         await Robot.Options_Theme_Dark.ClickOn();
 
-        AssertHasIconHidden(Robot.Options_Theme_Light);
-        AssertHasIconHidden(Robot.Options_Theme_Light2);
-        AssertHasIconVisible(Robot.Options_Theme_Dark);
-        AssertHasIconHidden(Robot.Options_Theme_Pampa);
-        AssertHasIconHidden(Robot.Options_Theme_AmazonianNight);
+        Robot.Options_Theme_Light.AssertHasIconHidden();
+        Robot.Options_Theme_Light2.AssertHasIconHidden();
+        Robot.Options_Theme_Dark.AssertHasIconVisible();
+        Robot.Options_Theme_Pampa.AssertHasIconHidden();
+        Robot.Options_Theme_AmazonianNight.AssertHasIconHidden();
 
-        AssertBackgroundColor(MainWindowPanel, "#080808");
+        MainWindowPanel.AssertBackgroundColor("#080808");
 
         // pampa
         await Robot.Options.ClickOn();
         await Robot.Options_Theme.ClickOn();
         await Robot.Options_Theme_Pampa.ClickOn();
 
-        AssertHasIconHidden(Robot.Options_Theme_Light);
-        AssertHasIconHidden(Robot.Options_Theme_Light2);
-        AssertHasIconHidden(Robot.Options_Theme_Dark);
-        AssertHasIconVisible(Robot.Options_Theme_Pampa);
-        AssertHasIconHidden(Robot.Options_Theme_AmazonianNight);
+        Robot.Options_Theme_Light.AssertHasIconHidden();
+        Robot.Options_Theme_Light2.AssertHasIconHidden();
+        Robot.Options_Theme_Dark.AssertHasIconHidden();
+        Robot.Options_Theme_Pampa.AssertHasIconVisible();
+        Robot.Options_Theme_AmazonianNight.AssertHasIconHidden();
 
-        AssertBackgroundColor(MainWindowPanel, "#EEE8AA");
+        MainWindowPanel.AssertBackgroundColor("#EEE8AA");
 
         // amazonian night
         await Robot.Options.ClickOn();
         await Robot.Options_Theme.ClickOn();
         await Robot.Options_Theme_AmazonianNight.ClickOn();
 
-        AssertHasIconHidden(Robot.Options_Theme_Light);
-        AssertHasIconHidden(Robot.Options_Theme_Light2);
-        AssertHasIconHidden(Robot.Options_Theme_Dark);
-        AssertHasIconHidden(Robot.Options_Theme_Pampa);
-        AssertHasIconVisible(Robot.Options_Theme_AmazonianNight);
+        Robot.Options_Theme_Light.AssertHasIconHidden();
+        Robot.Options_Theme_Light2.AssertHasIconHidden();
+        Robot.Options_Theme_Dark.AssertHasIconHidden();
+        Robot.Options_Theme_Pampa.AssertHasIconHidden();
+        Robot.Options_Theme_AmazonianNight.AssertHasIconVisible();
 
-        AssertBackgroundColor(MainWindowPanel, "#04538B");
+        MainWindowPanel.AssertBackgroundColor("#04538B");
     }
 }

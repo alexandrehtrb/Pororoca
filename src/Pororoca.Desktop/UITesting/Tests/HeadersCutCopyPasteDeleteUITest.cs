@@ -5,7 +5,7 @@ using Pororoca.Domain.Features.Entities.Pororoca;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed partial class HeadersCutCopyPasteDeleteUITest : UITest
+public sealed partial class HeadersCutCopyPasteDeleteUITest : PororocaUITest
 {
     private Control RootView { get; }
     private TopMenuRobot TopMenuRobot { get; }
@@ -53,38 +53,38 @@ public sealed partial class HeadersCutCopyPasteDeleteUITest : UITest
         await HttpRobot.PasteRequestHeaders();
 
         headers = HttpRobot.ReqHeadersVm.Items.Select(x => x.ToKeyValueParam()).ToArray();
-        Assert(headers.Length == 4);
-        Assert(headers.Contains(new(true, "k1", "v1")));
-        Assert(headers.Contains(new(true, "k2", "v2")));
-        Assert(headers.Contains(new(false, "k3", "v3")));
-        Assert(headers.Contains(new(true, "k4", "v4")));
+        AssertCondition(headers.Length == 4);
+        AssertCondition(headers.Contains(new(true, "k1", "v1")));
+        AssertCondition(headers.Contains(new(true, "k2", "v2")));
+        AssertCondition(headers.Contains(new(false, "k3", "v3")));
+        AssertCondition(headers.Contains(new(true, "k4", "v4")));
 
         // cut and paste
         await HttpRobot.SelectRequestHeaders(HttpRobot.ReqHeadersVm.Items[0], HttpRobot.ReqHeadersVm.Items[1]);
         await HttpRobot.CutSelectedRequestHeaders();
 
         headers = HttpRobot.ReqHeadersVm.Items.Select(x => x.ToKeyValueParam()).ToArray();
-        Assert(headers.Length == 2);
-        Assert(headers.Contains(new(false, "k3", "v3")));
-        Assert(headers.Contains(new(true, "k4", "v4")));
+        AssertCondition(headers.Length == 2);
+        AssertCondition(headers.Contains(new(false, "k3", "v3")));
+        AssertCondition(headers.Contains(new(true, "k4", "v4")));
 
         await TreeRobot.Select("COL1/HTTP2");
         await HttpRobot.PasteRequestHeaders();
 
         headers = HttpRobot.ReqHeadersVm.Items.Select(x => x.ToKeyValueParam()).ToArray();
-        Assert(headers.Length == 4);
-        Assert(headers.Contains(new(false, "k3", "v3")));
-        Assert(headers.Contains(new(true, "k4", "v4")));
-        Assert(headers.Contains(new(true, "k1", "v1")));
-        Assert(headers.Contains(new(true, "k2", "v2")));
+        AssertCondition(headers.Length == 4);
+        AssertCondition(headers.Contains(new(false, "k3", "v3")));
+        AssertCondition(headers.Contains(new(true, "k4", "v4")));
+        AssertCondition(headers.Contains(new(true, "k1", "v1")));
+        AssertCondition(headers.Contains(new(true, "k2", "v2")));
 
         // delete
         await HttpRobot.SelectRequestHeaders(HttpRobot.ReqHeadersVm.Items[0], HttpRobot.ReqHeadersVm.Items[1]);
         await HttpRobot.DeleteSelectedRequestHeaders();
 
         headers = HttpRobot.ReqHeadersVm.Items.Select(x => x.ToKeyValueParam()).ToArray();
-        Assert(headers.Length == 2);
-        Assert(headers.Contains(new(true, "k1", "v1")));
-        Assert(headers.Contains(new(true, "k2", "v2")));
+        AssertCondition(headers.Length == 2);
+        AssertCondition(headers.Contains(new(true, "k1", "v1")));
+        AssertCondition(headers.Contains(new(true, "k2", "v2")));
     }
 }

@@ -45,6 +45,7 @@
     <TrimmableAssembly Include="Avalonia.Themes.Simple" />
     <TrimmableAssembly Include="ColorTextBlock.Avalonia" />
     <TrimmableAssembly Include="Markdown.Avalonia.Tight" />
+    <TrimmableAssembly Include="AlexandreHtrb.AvaloniaUITest" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Pororoca.Domain\Pororoca.Domain.csproj" />
@@ -81,6 +82,7 @@
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.5" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.5" />
     <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.0.5" />
+    <PackageReference Include="AlexandreHtrb.AvaloniaUITest" Version="11.0.0.2" Condition="'$(Configuration)'=='Debug' Or '$(UITestsEnabled)' == 'true'" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.5" />
     <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.0.5" />

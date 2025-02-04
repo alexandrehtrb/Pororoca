@@ -8,7 +8,7 @@ using Pororoca.Domain.Features.Common;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed partial class HttpRequestsUITest : UITest
+public sealed partial class HttpRequestsUITest : PororocaUITest
 {
     private static readonly ObservableCollection<VariableViewModel> defaultColVars = GenerateCollectionVariables();
     private static readonly ObservableCollection<VariableViewModel> defaultEnvVars = GenerateEnvironmentVariables();
@@ -122,13 +122,13 @@ public sealed partial class HttpRequestsUITest : UITest
     private void AssertContainsResponseHeader(string key)
     {
         var vm = ((HttpRequestViewModel)HttpRobot.RootView!.DataContext!).ResponseDataCtx.ResponseHeadersAndTrailersTableVm;
-        Assert(vm.Items.Any(h => h.Key == key));
+        AssertCondition(vm.Items.Any(h => h.Key == key));
     }
 
     private void AssertContainsResponseHeader(string key, string value)
     {
         var vm = ((HttpRequestViewModel)HttpRobot.RootView!.DataContext!).ResponseDataCtx.ResponseHeadersAndTrailersTableVm;
-        Assert(vm.Items.Any(h => h.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase) && h.Value == value));
+        AssertCondition(vm.Items.Any(h => h.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase) && h.Value == value));
     }
 
     private static ObservableCollection<VariableViewModel> GenerateCollectionVariables()

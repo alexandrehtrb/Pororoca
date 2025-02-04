@@ -7,7 +7,7 @@ using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed partial class CollectionScopedAuthUITest : UITest
+public sealed partial class CollectionScopedAuthUITest : PororocaUITest
 {
     private static readonly ObservableCollection<VariableViewModel> defaultColVars = GenerateCollectionVariables();
     private static readonly ObservableCollection<VariableViewModel> defaultEnvVars = GenerateEnvironmentVariables();
@@ -93,14 +93,14 @@ public sealed partial class CollectionScopedAuthUITest : UITest
         await TreeRobot.Select("COL1/HTTPREQ");
         await HttpRobot.ClickOnSendAndWaitForResponse();
 
-        AssertContainsText(HttpRobot.ResTitle, "Response: 200 OK");
+        HttpRobot.ResTitle.AssertContainsText("Response: 200 OK");
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResHeaders);
         AssertContainsResponseHeader("Date");
         AssertContainsResponseHeader("Server", "Kestrel");
         AssertContainsResponseHeader("Content-Type", "text/plain; charset=utf-8");
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResBody);
-        AssertHasText(HttpRobot.ResBodyRawContent, "Bearer token_local");
-        AssertIsVisible(HttpRobot.ResBodySaveToFile);
+        HttpRobot.ResBodyRawContent.AssertHasText("Bearer token_local");
+        HttpRobot.ResBodySaveToFile.AssertIsVisible();
     }
 
     private async Task TestClientCertificatePkcs12AuthInherited()
@@ -117,24 +117,24 @@ public sealed partial class CollectionScopedAuthUITest : UITest
         await HttpRobot.ClickOnSendAndWaitForResponse();
         await Wait(3);
 
-        AssertContainsText(HttpRobot.ResTitle, "Response: 200 OK");
+        HttpRobot.ResTitle.AssertContainsText("Response: 200 OK");
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResHeaders);
         //AssertContainsResponseHeader("Content-Type", "text/plain; charset=utf-8");
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResBody);
-        AssertContainsText(HttpRobot.ResBodyRawContent, "<html>");
-        AssertIsVisible(HttpRobot.ResBodySaveToFile);
+        HttpRobot.ResBodyRawContent.AssertContainsText("<html>");
+        HttpRobot.ResBodySaveToFile.AssertIsVisible();
     }
 
     private void AssertContainsResponseHeader(string key)
     {
         var vm = ((HttpRequestViewModel)HttpRobot.RootView!.DataContext!).ResponseDataCtx.ResponseHeadersAndTrailersTableVm;
-        Assert(vm.Items.Any(h => h.Key == key));
+        AssertCondition(vm.Items.Any(h => h.Key == key));
     }
 
     private void AssertContainsResponseHeader(string key, string value)
     {
         var vm = ((HttpRequestViewModel)HttpRobot.RootView!.DataContext!).ResponseDataCtx.ResponseHeadersAndTrailersTableVm;
-        Assert(vm.Items.Any(h => h.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase) && h.Value == value));
+        AssertCondition(vm.Items.Any(h => h.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase) && h.Value == value));
     }
 
     private static ObservableCollection<VariableViewModel> GenerateCollectionVariables()

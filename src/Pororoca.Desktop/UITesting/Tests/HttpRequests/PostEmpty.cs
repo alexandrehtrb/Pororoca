@@ -1,6 +1,6 @@
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed partial class HttpRequestsUITest : UITest
+public sealed partial class HttpRequestsUITest : PororocaUITest
 {
     private async Task TestPostEmptyBody()
     {
@@ -9,12 +9,12 @@ public sealed partial class HttpRequestsUITest : UITest
         await HttpRobot.SetEmptyBody();
         await HttpRobot.ClickOnSendAndWaitForResponse();
 
-        AssertContainsText(HttpRobot.ResTitle, "Response: 204 NoContent");
+        HttpRobot.ResTitle.AssertContainsText("Response: 204 NoContent");
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResHeaders);
         AssertContainsResponseHeader("Date");
         AssertContainsResponseHeader("Server", "Kestrel");
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResBody);
-        AssertHasText(HttpRobot.ResBodyRawContent, string.Empty);
-        AssertIsHidden(HttpRobot.ResBodySaveToFile);
+        HttpRobot.ResBodyRawContent.AssertHasText(string.Empty);
+        HttpRobot.ResBodySaveToFile.AssertIsHidden();
     }
 }

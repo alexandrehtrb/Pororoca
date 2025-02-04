@@ -7,7 +7,7 @@ using Pororoca.Domain.Features.Entities.Pororoca.Http;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed class HttpRequestValidationsUITest : UITest
+public sealed class HttpRequestValidationsUITest : PororocaUITest
 {
     private const string TestValidUrl = "https://localhost:5001";
 
@@ -61,13 +61,13 @@ public sealed class HttpRequestValidationsUITest : UITest
         async Task TestBadUrl(string url)
         {
             await HttpRobot.Url.ClearAndTypeText(url);
-            AssertIsHidden(HttpRobot.ErrorMsg);
-            AssertDoesntHaveStyleClass(HttpRobot.Url, "HasValidationProblem");
+            HttpRobot.ErrorMsg.AssertIsHidden();
+            HttpRobot.Url.AssertDoesntHaveStyleClass("HasValidationProblem");
             await HttpRobot.SendOrCancel.RaiseClickEvent();
             await Wait(0.5);
-            AssertIsVisible(HttpRobot.ErrorMsg);
-            AssertHasText(HttpRobot.ErrorMsg, "Invalid URL. Please, check it and try again.");
-            AssertHasStyleClass(HttpRobot.Url, "HasValidationProblem");
+            HttpRobot.ErrorMsg.AssertIsVisible();
+            HttpRobot.ErrorMsg.AssertHasText("Invalid URL. Please, check it and try again.");
+            HttpRobot.Url.AssertHasStyleClass("HasValidationProblem");
         }
 
         // bad url, non-parameterized
@@ -78,8 +78,8 @@ public sealed class HttpRequestValidationsUITest : UITest
         await TestBadUrl("{{MyDomain}}");
 
         await HttpRobot.Url.ClearAndTypeText(TestValidUrl);
-        AssertIsHidden(HttpRobot.ErrorMsg);
-        AssertDoesntHaveStyleClass(HttpRobot.Url, "HasValidationProblem");
+        HttpRobot.ErrorMsg.AssertIsHidden();
+        HttpRobot.Url.AssertDoesntHaveStyleClass("HasValidationProblem");
     }
 
     private async Task TestHttpVersionValidation()
@@ -87,106 +87,106 @@ public sealed class HttpRequestValidationsUITest : UITest
         if (!AvailablePororocaRequestSelectionOptions.IsHttpVersionAvailableInOS(2.0m, out _))
         {
             await HttpRobot.SetHttpVersion(2.0m);
-            AssertIsHidden(HttpRobot.ErrorMsg);
-            AssertDoesntHaveStyleClass(HttpRobot.HttpVersion, "HasValidationProblem");
+            HttpRobot.ErrorMsg.AssertIsHidden();
+            HttpRobot.HttpVersion.AssertDoesntHaveStyleClass("HasValidationProblem");
             await HttpRobot.Url.ClearAndTypeText(TestValidUrl);
             await HttpRobot.SendOrCancel.RaiseClickEvent();
             await Wait(0.5);
-            AssertIsVisible(HttpRobot.ErrorMsg);
-            AssertHasText(HttpRobot.ErrorMsg, "On Windows, support for HTTP/2 requires Windows 10 or greater.");
-            AssertHasStyleClass(HttpRobot.HttpVersion, "HasValidationProblem");
+            HttpRobot.ErrorMsg.AssertIsVisible();
+            HttpRobot.ErrorMsg.AssertHasText("On Windows, support for HTTP/2 requires Windows 10 or greater.");
+            HttpRobot.HttpVersion.AssertHasStyleClass("HasValidationProblem");
         }
 
         if (!AvailablePororocaRequestSelectionOptions.IsHttpVersionAvailableInOS(3.0m, out _))
         {
             await HttpRobot.SetHttpVersion(3.0m);
-            AssertIsHidden(HttpRobot.ErrorMsg);
-            AssertDoesntHaveStyleClass(HttpRobot.HttpVersion, "HasValidationProblem");
+            HttpRobot.ErrorMsg.AssertIsHidden();
+            HttpRobot.HttpVersion.AssertDoesntHaveStyleClass("HasValidationProblem");
             await HttpRobot.Url.ClearAndTypeText(TestValidUrl);
             await HttpRobot.SendOrCancel.RaiseClickEvent();
             await Wait(0.5);
-            AssertIsVisible(HttpRobot.ErrorMsg);
-            AssertHasText(HttpRobot.ErrorMsg, "HTTP/3 is only available for Linux with msquic or Windows 11 and greater.");
-            AssertHasStyleClass(HttpRobot.HttpVersion, "HasValidationProblem");
+            HttpRobot.ErrorMsg.AssertIsVisible();
+            HttpRobot.ErrorMsg.AssertHasText("HTTP/3 is only available for Linux with msquic or Windows 11 and greater.");
+            HttpRobot.HttpVersion.AssertHasStyleClass("HasValidationProblem");
         }
 
         await HttpRobot.SetHttpVersion(1.1m);
-        AssertIsHidden(HttpRobot.ErrorMsg);
-        AssertDoesntHaveStyleClass(HttpRobot.HttpVersion, "HasValidationProblem");
+        HttpRobot.ErrorMsg.AssertIsHidden();
+        HttpRobot.HttpVersion.AssertDoesntHaveStyleClass("HasValidationProblem");
     }
 
     private async Task TestRawBodyValidation()
     {
         // blank content-type
         await HttpRobot.SetRawBody(null, string.Empty);
-        AssertIsHidden(HttpRobot.ErrorMsg);
-        AssertDoesntHaveStyleClass(HttpRobot.ReqBodyRawContentType, "HasValidationProblem");
+        HttpRobot.ErrorMsg.AssertIsHidden();
+        HttpRobot.ReqBodyRawContentType.AssertDoesntHaveStyleClass("HasValidationProblem");
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqHeaders);
         await HttpRobot.SendOrCancel.RaiseClickEvent();
         await Wait(0.5);
-        AssertIsVisible(HttpRobot.ErrorMsg);
-        AssertHasText(HttpRobot.ErrorMsg, "The request body requires a Content-Type.");
-        AssertHasStyleClass(HttpRobot.ReqBodyRawContentType, "HasValidationProblem");
-        AssertIsVisible(HttpRobot.ReqBodyRawContentType); // input field should be visible
+        HttpRobot.ErrorMsg.AssertIsVisible();
+        HttpRobot.ErrorMsg.AssertHasText("The request body requires a Content-Type.");
+        HttpRobot.ReqBodyRawContentType.AssertHasStyleClass("HasValidationProblem");
+        HttpRobot.ReqBodyRawContentType.AssertIsVisible(); // input field should be visible
 
         // invalid content-type
         await HttpRobot.SetRawBody("gdgagadg", string.Empty);
-        AssertIsHidden(HttpRobot.ErrorMsg);
-        AssertDoesntHaveStyleClass(HttpRobot.ReqBodyRawContentType, "HasValidationProblem");
+        HttpRobot.ErrorMsg.AssertIsHidden();
+        HttpRobot.ReqBodyRawContentType.AssertDoesntHaveStyleClass("HasValidationProblem");
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqHeaders);
         await HttpRobot.SendOrCancel.RaiseClickEvent();
         await Wait(0.5);
-        AssertIsVisible(HttpRobot.ErrorMsg);
-        AssertHasText(HttpRobot.ErrorMsg, "Use one of the available Content-Types for the request body.");
-        AssertHasStyleClass(HttpRobot.ReqBodyRawContentType, "HasValidationProblem");
-        AssertIsVisible(HttpRobot.ReqBodyRawContentType); // input field should be visible
+        HttpRobot.ErrorMsg.AssertIsVisible();
+        HttpRobot.ErrorMsg.AssertHasText("Use one of the available Content-Types for the request body.");
+        HttpRobot.ReqBodyRawContentType.AssertHasStyleClass("HasValidationProblem");
+        HttpRobot.ReqBodyRawContentType.AssertIsVisible(); // input field should be visible
 
         await HttpRobot.SetRawBody("application/json", string.Empty);
-        AssertIsHidden(HttpRobot.ErrorMsg);
-        AssertDoesntHaveStyleClass(HttpRobot.ReqBodyRawContentType, "HasValidationProblem");
+        HttpRobot.ErrorMsg.AssertIsHidden();
+        HttpRobot.ReqBodyRawContentType.AssertDoesntHaveStyleClass("HasValidationProblem");
     }
 
     private async Task TestFileBodyValidation()
     {
         // blank content-type
         await HttpRobot.SetFileBody(null, string.Empty);
-        AssertIsHidden(HttpRobot.ErrorMsg);
-        AssertDoesntHaveStyleClass(HttpRobot.ReqBodyFileContentType, "HasValidationProblem");
+        HttpRobot.ErrorMsg.AssertIsHidden();
+        HttpRobot.ReqBodyFileContentType.AssertDoesntHaveStyleClass("HasValidationProblem");
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqHeaders);
         await HttpRobot.SendOrCancel.RaiseClickEvent();
         await Wait(0.5);
-        AssertIsVisible(HttpRobot.ErrorMsg);
-        AssertHasText(HttpRobot.ErrorMsg, "The request body requires a Content-Type.");
-        AssertHasStyleClass(HttpRobot.ReqBodyFileContentType, "HasValidationProblem");
-        AssertIsVisible(HttpRobot.ReqBodyFileContentType); // input field should be visible
+        HttpRobot.ErrorMsg.AssertIsVisible();
+        HttpRobot.ErrorMsg.AssertHasText("The request body requires a Content-Type.");
+        HttpRobot.ReqBodyFileContentType.AssertHasStyleClass("HasValidationProblem");
+        HttpRobot.ReqBodyFileContentType.AssertIsVisible(); // input field should be visible
 
         // invalid content-type
         await HttpRobot.SetFileBody("gdgagadg", string.Empty);
-        AssertIsHidden(HttpRobot.ErrorMsg);
-        AssertDoesntHaveStyleClass(HttpRobot.ReqBodyFileContentType, "HasValidationProblem");
+        HttpRobot.ErrorMsg.AssertIsHidden();
+        HttpRobot.ReqBodyFileContentType.AssertDoesntHaveStyleClass("HasValidationProblem");
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqHeaders);
         await HttpRobot.SendOrCancel.RaiseClickEvent();
         await Wait(0.5);
-        AssertIsVisible(HttpRobot.ErrorMsg);
-        AssertHasText(HttpRobot.ErrorMsg, "Use one of the available Content-Types for the request body.");
-        AssertHasStyleClass(HttpRobot.ReqBodyFileContentType, "HasValidationProblem");
-        AssertIsVisible(HttpRobot.ReqBodyFileContentType); // input field should be visible
+        HttpRobot.ErrorMsg.AssertIsVisible();
+        HttpRobot.ErrorMsg.AssertHasText("Use one of the available Content-Types for the request body.");
+        HttpRobot.ReqBodyFileContentType.AssertHasStyleClass("HasValidationProblem");
+        HttpRobot.ReqBodyFileContentType.AssertIsVisible(); // input field should be visible
 
         // file not found
         await HttpRobot.SetFileBody("application/json", "K:\\FILES\\file.json");
-        AssertIsHidden(HttpRobot.ErrorMsg);
-        AssertDoesntHaveStyleClass(HttpRobot.ReqBodyFileSrcPath, "HasValidationProblem");
+        HttpRobot.ErrorMsg.AssertIsHidden();
+        HttpRobot.ReqBodyFileSrcPath.AssertDoesntHaveStyleClass("HasValidationProblem");
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqHeaders);
         await HttpRobot.SendOrCancel.RaiseClickEvent();
         await Wait(0.5);
-        AssertIsVisible(HttpRobot.ErrorMsg);
-        AssertHasText(HttpRobot.ErrorMsg, "File for request body not found.");
-        AssertHasStyleClass(HttpRobot.ReqBodyFileSrcPath, "HasValidationProblem");
-        AssertIsVisible(HttpRobot.ReqBodyFileSrcPath); // input field should be visible
+        HttpRobot.ErrorMsg.AssertIsVisible();
+        HttpRobot.ErrorMsg.AssertHasText("File for request body not found.");
+        HttpRobot.ReqBodyFileSrcPath.AssertHasStyleClass("HasValidationProblem");
+        HttpRobot.ReqBodyFileSrcPath.AssertIsVisible(); // input field should be visible
 
         await HttpRobot.SetFileBody("application/json", string.Empty);
-        AssertIsHidden(HttpRobot.ErrorMsg);
-        AssertDoesntHaveStyleClass(HttpRobot.ReqBodyFileSrcPath, "HasValidationProblem");
+        HttpRobot.ErrorMsg.AssertIsHidden();
+        HttpRobot.ReqBodyFileSrcPath.AssertDoesntHaveStyleClass("HasValidationProblem");
     }
 
     private async Task TestFormDataValidation()
@@ -201,18 +201,18 @@ public sealed class HttpRequestValidationsUITest : UITest
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqHeaders);
         await HttpRobot.SendOrCancel.RaiseClickEvent();
         await Wait(0.5);
-        AssertIsVisible(HttpRobot.ErrorMsg);
-        AssertHasText(HttpRobot.ErrorMsg, "One of the Form Data parameters has an invalid Content-Type.");
-        // TODO: AssertIsVisible(HttpRobot.ReqBodyFormDataParams); // input field should be visible
+        HttpRobot.ErrorMsg.AssertIsVisible();
+        HttpRobot.ErrorMsg.AssertHasText("One of the Form Data parameters has an invalid Content-Type.");
+        // TODO: HttpRobot.ReqBodyFormDataParams.AssertIsVisible(); // input field should be visible
 
         paramVm.ContentType = "dagadgadgad";
         await UITestActions.WaitAfterActionAsync();
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqHeaders);
         await HttpRobot.SendOrCancel.RaiseClickEvent();
         await Wait(0.5);
-        AssertIsVisible(HttpRobot.ErrorMsg);
-        AssertHasText(HttpRobot.ErrorMsg, "One of the Form Data parameters has an invalid Content-Type.");
-        // TODO: AssertIsVisible(HttpRobot.ReqBodyFormDataParams); // input field should be visible
+        HttpRobot.ErrorMsg.AssertIsVisible();
+        HttpRobot.ErrorMsg.AssertHasText("One of the Form Data parameters has an invalid Content-Type.");
+        // TODO: HttpRobot.ReqBodyFormDataParams.AssertIsVisible(); // input field should be visible
 
         await HttpRobot.SetEmptyBody();
     }
@@ -223,24 +223,24 @@ public sealed class HttpRequestValidationsUITest : UITest
         await HttpRobot.SetPkcs12CertificateAuth("K:\\FILES\\cert.p12", string.Empty);
         await HttpRobot.SendOrCancel.RaiseClickEvent();
         await Wait(0.5);
-        AssertIsVisible(HttpRobot.ErrorMsg);
-        AssertHasText(HttpRobot.ErrorMsg, "Client certificate file not found.");
-        AssertIsVisible(HttpRobot.Auth.ClientCertificatePkcs12FilePath);
-        AssertHasStyleClass(HttpRobot.Auth.ClientCertificatePkcs12FilePath, "HasValidationProblem");
-        AssertDoesntHaveStyleClass(HttpRobot.Auth.ClientCertificatePkcs12FilePassword, "HasValidationProblem");
+        HttpRobot.ErrorMsg.AssertIsVisible();
+        HttpRobot.ErrorMsg.AssertHasText("Client certificate file not found.");
+        HttpRobot.Auth.ClientCertificatePkcs12FilePath.AssertIsVisible();
+        HttpRobot.Auth.ClientCertificatePkcs12FilePath.AssertHasStyleClass("HasValidationProblem");
+        HttpRobot.Auth.ClientCertificatePkcs12FilePassword.AssertDoesntHaveStyleClass("HasValidationProblem");
         // password cannot be blank
         string certFilePath = GetTestFilePath("ClientCertificates", "badssl.com-client.p12");
         await HttpRobot.SetPkcs12CertificateAuth(certFilePath, string.Empty);
         await HttpRobot.SendOrCancel.RaiseClickEvent();
         await Wait(0.5);
-        AssertIsVisible(HttpRobot.ErrorMsg);
-        AssertHasText(HttpRobot.ErrorMsg, "PKCS#12 client certificates need a password.");
-        AssertIsVisible(HttpRobot.Auth.ClientCertificatePkcs12FilePassword);
-        AssertHasStyleClass(HttpRobot.Auth.ClientCertificatePkcs12FilePassword, "HasValidationProblem");
-        AssertDoesntHaveStyleClass(HttpRobot.Auth.ClientCertificatePkcs12FilePath, "HasValidationProblem");
+        HttpRobot.ErrorMsg.AssertIsVisible();
+        HttpRobot.ErrorMsg.AssertHasText("PKCS#12 client certificates need a password.");
+        HttpRobot.Auth.ClientCertificatePkcs12FilePassword.AssertIsVisible();
+        HttpRobot.Auth.ClientCertificatePkcs12FilePassword.AssertHasStyleClass("HasValidationProblem");
+        HttpRobot.Auth.ClientCertificatePkcs12FilePath.AssertDoesntHaveStyleClass("HasValidationProblem");
 
         await HttpRobot.SetNoAuth();
-        AssertIsHidden(HttpRobot.ErrorMsg);
+        HttpRobot.ErrorMsg.AssertIsHidden();
     }
 
     private async Task TestClientCertificatePemValidation()
@@ -249,11 +249,11 @@ public sealed class HttpRequestValidationsUITest : UITest
         await HttpRobot.SetPemCertificateAuth("K:\\FILES\\cert.pem", string.Empty, string.Empty);
         await HttpRobot.SendOrCancel.RaiseClickEvent();
         await Wait(0.5);
-        AssertIsVisible(HttpRobot.ErrorMsg);
-        AssertHasText(HttpRobot.ErrorMsg, "Client certificate file not found.");
-        AssertIsVisible(HttpRobot.Auth.ClientCertificatePemCertificateFilePath);
-        AssertHasStyleClass(HttpRobot.Auth.ClientCertificatePemCertificateFilePath, "HasValidationProblem");
-        AssertDoesntHaveStyleClass(HttpRobot.Auth.ClientCertificatePemPrivateKeyFilePath, "HasValidationProblem");
+        HttpRobot.ErrorMsg.AssertIsVisible();
+        HttpRobot.ErrorMsg.AssertHasText("Client certificate file not found.");
+        HttpRobot.Auth.ClientCertificatePemCertificateFilePath.AssertIsVisible();
+        HttpRobot.Auth.ClientCertificatePemCertificateFilePath.AssertHasStyleClass("HasValidationProblem");
+        HttpRobot.Auth.ClientCertificatePemPrivateKeyFilePath.AssertDoesntHaveStyleClass("HasValidationProblem");
 
         // private key file specified, but not found
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqAuth);
@@ -262,14 +262,14 @@ public sealed class HttpRequestValidationsUITest : UITest
         await HttpRobot.SetPemCertificateAuth(certFilePath, prvKeyFilePath, string.Empty);
         await HttpRobot.SendOrCancel.RaiseClickEvent();
         await Wait(0.5);
-        AssertIsVisible(HttpRobot.ErrorMsg);
-        AssertHasText(HttpRobot.ErrorMsg, "Client certificate private key file not found.");
-        AssertIsVisible(HttpRobot.Auth.ClientCertificatePemPrivateKeyFilePath);
-        AssertHasStyleClass(HttpRobot.Auth.ClientCertificatePemPrivateKeyFilePath, "HasValidationProblem");
-        AssertDoesntHaveStyleClass(HttpRobot.Auth.ClientCertificatePemCertificateFilePath, "HasValidationProblem");
+        HttpRobot.ErrorMsg.AssertIsVisible();
+        HttpRobot.ErrorMsg.AssertHasText("Client certificate private key file not found.");
+        HttpRobot.Auth.ClientCertificatePemPrivateKeyFilePath.AssertIsVisible();
+        HttpRobot.Auth.ClientCertificatePemPrivateKeyFilePath.AssertHasStyleClass("HasValidationProblem");
+        HttpRobot.Auth.ClientCertificatePemCertificateFilePath.AssertDoesntHaveStyleClass("HasValidationProblem");
 
         await HttpRobot.SetNoAuth();
-        AssertIsHidden(HttpRobot.ErrorMsg);
+        HttpRobot.ErrorMsg.AssertIsHidden();
     }
 
     private async Task TestWindowsAuthValidation()
@@ -278,39 +278,39 @@ public sealed class HttpRequestValidationsUITest : UITest
         await HttpRobot.SetWindowsAuthOtherUser(string.Empty, "pwd", "domain");
         await HttpRobot.SendOrCancel.RaiseClickEvent();
         await Wait(0.5);
-        AssertIsVisible(HttpRobot.ErrorMsg);
-        AssertHasText(HttpRobot.ErrorMsg, "The login for Windows authentication cannot be blank.");
-        AssertIsVisible(HttpRobot.Auth.WindowsAuthLogin);
-        AssertHasStyleClass(HttpRobot.Auth.WindowsAuthLogin, "HasValidationProblem");
-        AssertDoesntHaveStyleClass(HttpRobot.Auth.WindowsAuthPassword, "HasValidationProblem");
-        AssertDoesntHaveStyleClass(HttpRobot.Auth.WindowsAuthDomain, "HasValidationProblem");
+        HttpRobot.ErrorMsg.AssertIsVisible();
+        HttpRobot.ErrorMsg.AssertHasText("The login for Windows authentication cannot be blank.");
+        HttpRobot.Auth.WindowsAuthLogin.AssertIsVisible();
+        HttpRobot.Auth.WindowsAuthLogin.AssertHasStyleClass("HasValidationProblem");
+        HttpRobot.Auth.WindowsAuthPassword.AssertDoesntHaveStyleClass("HasValidationProblem");
+        HttpRobot.Auth.WindowsAuthDomain.AssertDoesntHaveStyleClass("HasValidationProblem");
 
         // windows password blank
         await HttpRobot.SetWindowsAuthOtherUser("usr", string.Empty, "domain");
         await HttpRobot.SendOrCancel.RaiseClickEvent();
         await Wait(0.5);
-        AssertIsVisible(HttpRobot.ErrorMsg);
-        AssertHasText(HttpRobot.ErrorMsg, "The password for Windows authentication cannot be blank.");
-        AssertIsVisible(HttpRobot.Auth.WindowsAuthPassword);
-        AssertDoesntHaveStyleClass(HttpRobot.Auth.WindowsAuthLogin, "HasValidationProblem");
-        AssertHasStyleClass(HttpRobot.Auth.WindowsAuthPassword, "HasValidationProblem");
-        AssertDoesntHaveStyleClass(HttpRobot.Auth.WindowsAuthDomain, "HasValidationProblem");
+        HttpRobot.ErrorMsg.AssertIsVisible();
+        HttpRobot.ErrorMsg.AssertHasText("The password for Windows authentication cannot be blank.");
+        HttpRobot.Auth.WindowsAuthPassword.AssertIsVisible();
+        HttpRobot.Auth.WindowsAuthLogin.AssertDoesntHaveStyleClass("HasValidationProblem");
+        HttpRobot.Auth.WindowsAuthPassword.AssertHasStyleClass("HasValidationProblem");
+        HttpRobot.Auth.WindowsAuthDomain.AssertDoesntHaveStyleClass("HasValidationProblem");
 
         // windows domain blank
         await HttpRobot.SetWindowsAuthOtherUser("usr", "pwd", string.Empty);
         await HttpRobot.SendOrCancel.RaiseClickEvent();
         await Wait(0.5);
-        AssertIsVisible(HttpRobot.ErrorMsg);
-        AssertHasText(HttpRobot.ErrorMsg, "The domain for Windows authentication cannot be blank.");
-        AssertIsVisible(HttpRobot.Auth.WindowsAuthDomain);
-        AssertDoesntHaveStyleClass(HttpRobot.Auth.WindowsAuthLogin, "HasValidationProblem");
-        AssertDoesntHaveStyleClass(HttpRobot.Auth.WindowsAuthPassword, "HasValidationProblem");
-        AssertHasStyleClass(HttpRobot.Auth.WindowsAuthDomain, "HasValidationProblem");
+        HttpRobot.ErrorMsg.AssertIsVisible();
+        HttpRobot.ErrorMsg.AssertHasText("The domain for Windows authentication cannot be blank.");
+        HttpRobot.Auth.WindowsAuthDomain.AssertIsVisible();
+        HttpRobot.Auth.WindowsAuthLogin.AssertDoesntHaveStyleClass("HasValidationProblem");
+        HttpRobot.Auth.WindowsAuthPassword.AssertDoesntHaveStyleClass("HasValidationProblem");
+        HttpRobot.Auth.WindowsAuthDomain.AssertHasStyleClass("HasValidationProblem");
 
         await HttpRobot.SetWindowsAuthCurrentUser();
-        AssertIsHidden(HttpRobot.ErrorMsg);
+        HttpRobot.ErrorMsg.AssertIsHidden();
 
         await HttpRobot.SetNoAuth();
-        AssertIsHidden(HttpRobot.ErrorMsg);
+        HttpRobot.ErrorMsg.AssertIsHidden();
     }
 }

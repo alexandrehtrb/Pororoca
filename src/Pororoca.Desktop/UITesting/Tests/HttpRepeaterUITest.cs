@@ -7,7 +7,7 @@ using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed partial class HttpRepeaterUITest : UITest
+public sealed partial class HttpRepeaterUITest : PororocaUITest
 {
     private static readonly ObservableCollection<VariableViewModel> defaultColVars = GenerateCollectionVariables();
     private static readonly ObservableCollection<VariableViewModel> defaultEnvVars = GenerateEnvironmentVariables();
@@ -68,55 +68,55 @@ public sealed partial class HttpRepeaterUITest : UITest
         await RepeaterRobot.BaseHttpRequest.Select("HTTPREQ");
         await RepeaterRobot.TabControlRepetition.Select(RepeaterRobot.TabItemRepetitionMode);
         await RepeaterRobot.RepetitionMode.Select(RepeaterRobot.OptionRepetitionModeSimple);
-        AssertIsVisible(RepeaterRobot.NumberOfRepetitions);
-        AssertIsVisible(RepeaterRobot.MaxDop);
-        AssertIsVisible(RepeaterRobot.DelayInMs);
+        RepeaterRobot.NumberOfRepetitions.AssertIsVisible();
+        RepeaterRobot.MaxDop.AssertIsVisible();
+        RepeaterRobot.DelayInMs.AssertIsVisible();
         await RepeaterRobot.NumberOfRepetitions.SetValue(2);
         await RepeaterRobot.MaxDop.SetValue(1);
         await RepeaterRobot.DelayInMs.SetValue(0);
         await RepeaterRobot.StartOrStopRepetition.RaiseClickEvent();
         await Wait(3);
 
-        AssertIsHidden(RepeaterRobot.ErrorMessage);
-        AssertIsVisible(RepeaterRobot.RepetitionStatusMessage);
-        AssertContainsText(RepeaterRobot.RepetitionStatusMessage, "Finished 2 repetitions, 2 successful. Elapsed time:");
+        RepeaterRobot.ErrorMessage.AssertIsHidden();
+        RepeaterRobot.RepetitionStatusMessage.AssertIsVisible();
+        RepeaterRobot.RepetitionStatusMessage.AssertContainsText("Finished 2 repetitions, 2 successful. Elapsed time:");
         await AssertResultAsync(2, 0, "{{SpecialValue1}}");
         await AssertResultAsync(2, 1, "{{SpecialValue1}}");
-        AssertIsVisible(RepeaterRobot.RepetitionStatusMessage);
-        AssertIsVisible(RepeaterRobot.ExportReport);
-        AssertIsVisible(RepeaterRobot.SaveAllResponses);
-        AssertIsVisible(RepeaterRobot.ExportAllLogs);
+        RepeaterRobot.RepetitionStatusMessage.AssertIsVisible();
+        RepeaterRobot.ExportReport.AssertIsVisible();
+        RepeaterRobot.SaveAllResponses.AssertIsVisible();
+        RepeaterRobot.ExportAllLogs.AssertIsVisible();
 
         await RepeaterRobot.Name.Edit("REPSEQUENTIAL");
         await RepeaterRobot.BaseHttpRequest.Select("HTTPREQ");
         await RepeaterRobot.TabControlRepetition.Select(RepeaterRobot.TabItemRepetitionMode);
         await RepeaterRobot.RepetitionMode.Select(RepeaterRobot.OptionRepetitionModeSequential);
-        AssertIsHidden(RepeaterRobot.NumberOfRepetitions);
-        AssertIsHidden(RepeaterRobot.MaxDop);
-        AssertIsVisible(RepeaterRobot.DelayInMs);
+        RepeaterRobot.NumberOfRepetitions.AssertIsHidden();
+        RepeaterRobot.MaxDop.AssertIsHidden();
+        RepeaterRobot.DelayInMs.AssertIsVisible();
         await RepeaterRobot.TabControlRepetition.Select(RepeaterRobot.TabItemRepetitionInputData);
         await RepeaterRobot.InputDataType.Select(RepeaterRobot.OptionInputDataTypeRaw);
         await RepeaterRobot.InputDataRawEditor.ClearAndTypeText("[{\"SpecialValue1\":\"Nissan 300ZX\"},{\"SpecialValue1\":\"Nissan 350Z\"}]");
         await RepeaterRobot.StartOrStopRepetition.RaiseClickEvent();
         await Wait(3);
 
-        AssertIsHidden(RepeaterRobot.ErrorMessage);
-        AssertIsVisible(RepeaterRobot.RepetitionStatusMessage);
-        AssertContainsText(RepeaterRobot.RepetitionStatusMessage, "Finished 2 repetitions, 2 successful. Elapsed time:");
+        RepeaterRobot.ErrorMessage.AssertIsHidden();
+        RepeaterRobot.RepetitionStatusMessage.AssertIsVisible();
+        RepeaterRobot.RepetitionStatusMessage.AssertContainsText("Finished 2 repetitions, 2 successful. Elapsed time:");
         await AssertResultAsync(2, 0, "Nissan 300ZX");
         await AssertResultAsync(2, 1, "Nissan 350Z");
-        AssertIsVisible(RepeaterRobot.RepetitionStatusMessage);
-        AssertIsVisible(RepeaterRobot.ExportReport);
-        AssertIsVisible(RepeaterRobot.SaveAllResponses);
-        AssertIsVisible(RepeaterRobot.ExportAllLogs);
+        RepeaterRobot.RepetitionStatusMessage.AssertIsVisible();
+        RepeaterRobot.ExportReport.AssertIsVisible();
+        RepeaterRobot.SaveAllResponses.AssertIsVisible();
+        RepeaterRobot.ExportAllLogs.AssertIsVisible();
 
         await RepeaterRobot.Name.Edit("REPRANDOM");
         await RepeaterRobot.BaseHttpRequest.Select("HTTPREQ");
         await RepeaterRobot.TabControlRepetition.Select(RepeaterRobot.TabItemRepetitionMode);
         await RepeaterRobot.RepetitionMode.Select(RepeaterRobot.OptionRepetitionModeRandom);
-        AssertIsVisible(RepeaterRobot.NumberOfRepetitions);
-        AssertIsVisible(RepeaterRobot.MaxDop);
-        AssertIsVisible(RepeaterRobot.DelayInMs);
+        RepeaterRobot.NumberOfRepetitions.AssertIsVisible();
+        RepeaterRobot.MaxDop.AssertIsVisible();
+        RepeaterRobot.DelayInMs.AssertIsVisible();
         await RepeaterRobot.NumberOfRepetitions.SetValue(2);
         await RepeaterRobot.MaxDop.SetValue(1);
         await RepeaterRobot.DelayInMs.SetValue(0);
@@ -126,15 +126,15 @@ public sealed partial class HttpRepeaterUITest : UITest
         await RepeaterRobot.StartOrStopRepetition.RaiseClickEvent();
         await Wait(3);
 
-        AssertIsHidden(RepeaterRobot.ErrorMessage);
-        AssertIsVisible(RepeaterRobot.RepetitionStatusMessage);
-        AssertContainsText(RepeaterRobot.RepetitionStatusMessage, "Finished 2 repetitions, 2 successful. Elapsed time:");
+        RepeaterRobot.ErrorMessage.AssertIsHidden();
+        RepeaterRobot.RepetitionStatusMessage.AssertIsVisible();
+        RepeaterRobot.RepetitionStatusMessage.AssertContainsText("Finished 2 repetitions, 2 successful. Elapsed time:");
         await AssertResultAsync(2, 0, "Nissan Skyline");
         await AssertResultAsync(2, 1, "Nissan Skyline");
-        AssertIsVisible(RepeaterRobot.RepetitionStatusMessage);
-        AssertIsVisible(RepeaterRobot.ExportReport);
-        AssertIsVisible(RepeaterRobot.SaveAllResponses);
-        AssertIsVisible(RepeaterRobot.ExportAllLogs);
+        RepeaterRobot.RepetitionStatusMessage.AssertIsVisible();
+        RepeaterRobot.ExportReport.AssertIsVisible();
+        RepeaterRobot.SaveAllResponses.AssertIsVisible();
+        RepeaterRobot.ExportAllLogs.AssertIsVisible();
 
         if (OperatingSystem.IsLinux())
         {
@@ -147,32 +147,32 @@ public sealed partial class HttpRepeaterUITest : UITest
     {
         var results = RepeaterRobot.RepetitionResults.ItemsSource!.Cast<HttpRepetitionResultViewModel>();
 
-        Assert(expectedCount == results.Count());
+        AssertCondition(expectedCount == results.Count());
 
         var result = results.ElementAt(index);
         RepeaterRobot.RepetitionResults.SelectedItem = result;
         await UITestActions.WaitAfterActionAsync();
 
-        AssertContainsText(RepeaterRobot.ResultDetailTitle, "Response: 200 OK");
+        RepeaterRobot.ResultDetailTitle.AssertContainsText("Response: 200 OK");
         await RepeaterRobot.TabControlResultDetail.Select(RepeaterRobot.TabItemResultDetailHeaders);
         AssertContainsResponseHeader("Date");
         AssertContainsResponseHeader("Server", "Kestrel");
         AssertContainsResponseHeader("Content-Type", "application/json; charset=utf-8");
         await RepeaterRobot.TabControlResultDetail.Select(RepeaterRobot.TabItemResultDetailBody);
-        AssertHasText(RepeaterRobot.ResponseBodyRawEditor, "{" + Environment.NewLine + $"  \"myValue\": \"{myValue}\"" + Environment.NewLine + "}");
-        AssertIsVisible(RepeaterRobot.ResultDetailBodySaveToFile);
+        RepeaterRobot.ResponseBodyRawEditor.AssertHasText("{" + Environment.NewLine + $"  \"myValue\": \"{myValue}\"" + Environment.NewLine + "}");
+        RepeaterRobot.ResultDetailBodySaveToFile.AssertIsVisible();
     }
 
     private void AssertContainsResponseHeader(string key)
     {
         var vm = ((HttpRepeaterViewModel)RepeaterRobot.RootView!.DataContext!).ResponseDataCtx.ResponseHeadersAndTrailersTableVm;
-        Assert(vm.Items.Any(h => h.Key == key));
+        AssertCondition(vm.Items.Any(h => h.Key == key));
     }
 
     private void AssertContainsResponseHeader(string key, string value)
     {
         var vm = ((HttpRepeaterViewModel)RepeaterRobot.RootView!.DataContext!).ResponseDataCtx.ResponseHeadersAndTrailersTableVm;
-        Assert(vm.Items.Any(h => h.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase) && h.Value == value));
+        AssertCondition(vm.Items.Any(h => h.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase) && h.Value == value));
     }
 
     private static ObservableCollection<VariableViewModel> GenerateCollectionVariables()

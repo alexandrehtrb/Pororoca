@@ -6,7 +6,7 @@ using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed partial class HttpRepeaterValidationsUITest : UITest
+public sealed partial class HttpRepeaterValidationsUITest : PororocaUITest
 {
     private static readonly ObservableCollection<VariableViewModel> defaultColVars = GenerateCollectionVariables();
     private static readonly ObservableCollection<VariableViewModel> defaultEnvVars = GenerateEnvironmentVariables();
@@ -62,39 +62,39 @@ public sealed partial class HttpRepeaterValidationsUITest : UITest
 
     private async Task TestBaseRequestValidation()
     {
-        AssertIsHidden(RepeaterRobot.ErrorMessage);
-        AssertDoesntHaveStyleClass(RepeaterRobot.BaseHttpRequest, "HasValidationProblem");
+        RepeaterRobot.ErrorMessage.AssertIsHidden();
+        RepeaterRobot.BaseHttpRequest.AssertDoesntHaveStyleClass("HasValidationProblem");
         await RepeaterRobot.StartOrStopRepetition.RaiseClickEvent();
         await Wait(1);
-        AssertIsVisible(RepeaterRobot.ErrorMessage);
-        AssertHasText(RepeaterRobot.ErrorMessage, "Select the base HTTP request to repeat.");
-        AssertHasStyleClass(RepeaterRobot.BaseHttpRequest, "HasValidationProblem");
+        RepeaterRobot.ErrorMessage.AssertIsVisible();
+        RepeaterRobot.ErrorMessage.AssertHasText("Select the base HTTP request to repeat.");
+        RepeaterRobot.BaseHttpRequest.AssertHasStyleClass("HasValidationProblem");
         await RepeaterRobot.BaseHttpRequest.Select("HTTPREQ");
-        AssertIsHidden(RepeaterRobot.ErrorMessage);
-        AssertDoesntHaveStyleClass(RepeaterRobot.BaseHttpRequest, "HasValidationProblem");
+        RepeaterRobot.ErrorMessage.AssertIsHidden();
+        RepeaterRobot.BaseHttpRequest.AssertDoesntHaveStyleClass("HasValidationProblem");
     }
 
     private async Task TestInvalidInputData()
     {
-        AssertIsHidden(RepeaterRobot.ErrorMessage);
+        RepeaterRobot.ErrorMessage.AssertIsHidden();
         await RepeaterRobot.TabControlRepetition.Select(RepeaterRobot.TabItemRepetitionInputData);
         // raw
         await RepeaterRobot.InputDataType.Select(RepeaterRobot.OptionInputDataTypeRaw);
         await RepeaterRobot.InputDataRawEditor.ClearAndTypeText("[");
         await RepeaterRobot.StartOrStopRepetition.RaiseClickEvent();
         await Wait(1);
-        AssertIsVisible(RepeaterRobot.ErrorMessage);
-        AssertHasText(RepeaterRobot.ErrorMessage, "Invalid input data JSON array.");
+        RepeaterRobot.ErrorMessage.AssertIsVisible();
+        RepeaterRobot.ErrorMessage.AssertHasText("Invalid input data JSON array.");
         // error message will remain visible, because the text only changes inside the TextDocument object
         // file
         await RepeaterRobot.InputDataType.Select(RepeaterRobot.OptionInputDataTypeFile);
-        AssertDoesntHaveStyleClass(RepeaterRobot.InputDataFileSrcPath, "HasValidationProblem");
+        RepeaterRobot.InputDataFileSrcPath.AssertDoesntHaveStyleClass("HasValidationProblem");
         await RepeaterRobot.InputDataFileSrcPath.ClearAndTypeText("{{TestFilesDir}}/InputData.jso");
         await RepeaterRobot.StartOrStopRepetition.RaiseClickEvent();
         await Wait(1);
-        AssertIsVisible(RepeaterRobot.ErrorMessage);
-        AssertHasText(RepeaterRobot.ErrorMessage, "Input data file not found.");
-        AssertHasStyleClass(RepeaterRobot.InputDataFileSrcPath, "HasValidationProblem");
+        RepeaterRobot.ErrorMessage.AssertIsVisible();
+        RepeaterRobot.ErrorMessage.AssertHasText("Input data file not found.");
+        RepeaterRobot.InputDataFileSrcPath.AssertHasStyleClass("HasValidationProblem");
     }
 
     private static ObservableCollection<VariableViewModel> GenerateCollectionVariables()

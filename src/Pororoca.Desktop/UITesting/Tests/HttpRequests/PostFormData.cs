@@ -2,7 +2,7 @@ using Pororoca.Domain.Features.Entities.Pororoca.Http;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed partial class HttpRequestsUITest : UITest
+public sealed partial class HttpRequestsUITest : PororocaUITest
 {
     private async Task TestPostFormDataBody()
     {
@@ -16,25 +16,25 @@ public sealed partial class HttpRequestsUITest : UITest
         ]);
         await HttpRobot.ClickOnSendAndWaitForResponse();
 
-        AssertContainsText(HttpRobot.ResTitle, "Response: 200 OK");
+        HttpRobot.ResTitle.AssertContainsText("Response: 200 OK");
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResHeaders);
         AssertContainsResponseHeader("Date");
         AssertContainsResponseHeader("Server", "Kestrel");
         AssertContainsResponseHeader("Content-Type", "text/plain; charset=utf-8");
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResBody);
-        AssertContainsText(HttpRobot.ResBodyRawContent, "### Received multipart request ###");
+        HttpRobot.ResBodyRawContent.AssertContainsText("### Received multipart request ###");
         //
-        AssertContainsText(HttpRobot.ResBodyRawContent, "Content-Type: text/plain; charset=utf-8");
-        AssertContainsText(HttpRobot.ResBodyRawContent, "Content-Disposition: form-data; name=a");
-        AssertContainsText(HttpRobot.ResBodyRawContent, "Body: xyzTailândia");
+        HttpRobot.ResBodyRawContent.AssertContainsText("Content-Type: text/plain; charset=utf-8");
+        HttpRobot.ResBodyRawContent.AssertContainsText("Content-Disposition: form-data; name=a");
+        HttpRobot.ResBodyRawContent.AssertContainsText("Body: xyzTailândia");
         //
-        AssertContainsText(HttpRobot.ResBodyRawContent, "Content-Type: application/json; charset=utf-8");
-        AssertContainsText(HttpRobot.ResBodyRawContent, "Content-Disposition: form-data; name=b");
-        AssertContainsText(HttpRobot.ResBodyRawContent, "Body: []");
+        HttpRobot.ResBodyRawContent.AssertContainsText("Content-Type: application/json; charset=utf-8");
+        HttpRobot.ResBodyRawContent.AssertContainsText("Content-Disposition: form-data; name=b");
+        HttpRobot.ResBodyRawContent.AssertContainsText("Body: []");
         //
-        AssertContainsText(HttpRobot.ResBodyRawContent, "Content-Type: text/plain");
-        AssertContainsText(HttpRobot.ResBodyRawContent, "Content-Disposition: form-data; name=arq; filename=arq.txt; filename*=utf-8''arq.txt");
-        AssertContainsText(HttpRobot.ResBodyRawContent, "Body: oi");
-        AssertIsVisible(HttpRobot.ResBodySaveToFile);
+        HttpRobot.ResBodyRawContent.AssertContainsText("Content-Type: text/plain");
+        HttpRobot.ResBodyRawContent.AssertContainsText("Content-Disposition: form-data; name=arq; filename=arq.txt; filename*=utf-8''arq.txt");
+        HttpRobot.ResBodyRawContent.AssertContainsText("Body: oi");
+        HttpRobot.ResBodySaveToFile.AssertIsVisible();
     }
 }

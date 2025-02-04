@@ -1,6 +1,6 @@
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed partial class HttpRequestsUITest : UITest
+public sealed partial class HttpRequestsUITest : PororocaUITest
 {
     private async Task TestPostUrlEncodedBody()
     {
@@ -16,15 +16,15 @@ public sealed partial class HttpRequestsUITest : UITest
         ]);
         await HttpRobot.ClickOnSendAndWaitForResponse();
 
-        AssertContainsText(HttpRobot.ResTitle, "Response: 200 OK");
+        HttpRobot.ResTitle.AssertContainsText("Response: 200 OK");
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResHeaders);
         AssertContainsResponseHeader("Date");
         AssertContainsResponseHeader("Server", "Kestrel");
         AssertContainsResponseHeader("Content-Type", "text/plain; charset=utf-8");
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResBody);
-        AssertContainsText(HttpRobot.ResBodyRawContent, "--- Received URL encoded params ---");
-        AssertContainsText(HttpRobot.ResBodyRawContent, "Content-Type: application/x-www-form-urlencoded");
-        AssertContainsText(HttpRobot.ResBodyRawContent, "Body: a=xyz&b=123&c=true&myIdSecret=Tail%C3%A2ndia");
-        AssertIsVisible(HttpRobot.ResBodySaveToFile);
+        HttpRobot.ResBodyRawContent.AssertContainsText("--- Received URL encoded params ---");
+        HttpRobot.ResBodyRawContent.AssertContainsText("Content-Type: application/x-www-form-urlencoded");
+        HttpRobot.ResBodyRawContent.AssertContainsText("Body: a=xyz&b=123&c=true&myIdSecret=Tail%C3%A2ndia");
+        HttpRobot.ResBodySaveToFile.AssertIsVisible();
     }
 }

@@ -9,7 +9,7 @@ using Pororoca.Domain.Features.Common;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed partial class WebSocketsUITest : UITest
+public sealed partial class WebSocketsUITest : PororocaUITest
 {
     private static readonly ObservableCollection<VariableViewModel> defaultColVars = GenerateCollectionVariables();
     private static readonly ObservableCollection<VariableViewModel> defaultEnvVars = GenerateEnvironmentVariables();
@@ -87,19 +87,19 @@ public sealed partial class WebSocketsUITest : UITest
                 await WsRobot.Url.ClearAndTypeText("{{BaseUrlWs}}/{{WsHttp2Endpoint}}");
             }
 
-            AssertIsHidden(WsRobot.IsWsConnected);
-            Assert(WsRobot.Name.Icon == EditableTextBlockIcon.DisconnectedWebSocket);
+            WsRobot.IsWsConnected.AssertIsHidden();
+            AssertCondition(WsRobot.Name.Icon == EditableTextBlockIcon.DisconnectedWebSocket);
             await WsRobot.ClickOnConnectAndWaitForConnection();
-            AssertIsVisible(WsRobot.IsWsConnected);
-            Assert(WsRobot.Name.Icon == EditableTextBlockIcon.ConnectedWebSocket);
+            WsRobot.IsWsConnected.AssertIsVisible();
+            AssertCondition(WsRobot.Name.Icon == EditableTextBlockIcon.ConnectedWebSocket);
 
-            AssertIsHidden(WsRobot.ConnectionRequestException);
-            AssertIsVisible(WsRobot.ConnectionResponseStatusCode);
-            AssertIsVisible(WsRobot.ConnectionResponseHeaders);
+            WsRobot.ConnectionRequestException.AssertIsHidden();
+            WsRobot.ConnectionResponseStatusCode.AssertIsVisible();
+            WsRobot.ConnectionResponseHeaders.AssertIsVisible();
 
             if (version == 1.1m)
             {
-                AssertContainsText(WsRobot.ConnectionResponseStatusCode, "101 SwitchingProtocols");
+                WsRobot.ConnectionResponseStatusCode.AssertContainsText("101 SwitchingProtocols");
                 AssertContainsResponseHeader("Connection", "Upgrade");
                 AssertContainsResponseHeader("Server", "Kestrel");
                 AssertContainsResponseHeader("Upgrade", "websocket");
@@ -108,7 +108,7 @@ public sealed partial class WebSocketsUITest : UITest
             }
             else if (version == 2.0m)
             {
-                AssertContainsText(WsRobot.ConnectionResponseStatusCode, "200 OK");
+                WsRobot.ConnectionResponseStatusCode.AssertContainsText("200 OK");
                 AssertContainsResponseHeader("Server", "Kestrel");
                 AssertContainsResponseHeader("Date");
             }
@@ -129,8 +129,8 @@ public sealed partial class WebSocketsUITest : UITest
 
             await WsRobot.ClickOnDisconnectAndWaitForDisconnection();
             await Wait(3);
-            AssertIsHidden(WsRobot.IsWsConnected);
-            Assert(WsRobot.Name.Icon == EditableTextBlockIcon.DisconnectedWebSocket);
+            WsRobot.IsWsConnected.AssertIsHidden();
+            AssertCondition(WsRobot.Name.Icon == EditableTextBlockIcon.DisconnectedWebSocket);
         }
 
         if (OperatingSystem.IsLinux())
@@ -148,22 +148,22 @@ public sealed partial class WebSocketsUITest : UITest
         WsRobot.ExchangedMessages.SelectedItem = msg;
         await UITestActions.WaitAfterActionAsync();
 
-        Assert(msg.OriginDescription == originDescription);
-        Assert(msg.MessageSizeDescription == sizeDescription);
-        AssertHasText(WsRobot.MessageDetailType, typeDescription);
-        AssertHasText(WsRobot.MessageDetailContent, contentDescription);
+        AssertCondition(msg.OriginDescription == originDescription);
+        AssertCondition(msg.MessageSizeDescription == sizeDescription);
+        WsRobot.MessageDetailType.AssertHasText(typeDescription);
+        WsRobot.MessageDetailContent.AssertHasText(contentDescription);
     }
 
     private void AssertContainsResponseHeader(string key)
     {
         var vm = ((WebSocketConnectionViewModel)WsRobot.RootView!.DataContext!).ConnectionResponseHeadersTableVm;
-        Assert(vm.Items.Any(h => h.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase)));
+        AssertCondition(vm.Items.Any(h => h.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase)));
     }
 
     private void AssertContainsResponseHeader(string key, string value)
     {
         var vm = ((WebSocketConnectionViewModel)WsRobot.RootView!.DataContext!).ConnectionResponseHeadersTableVm;
-        Assert(vm.Items.Any(h => h.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase) && h.Value == value));
+        AssertCondition(vm.Items.Any(h => h.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase) && h.Value == value));
     }
 
     private static ObservableCollection<VariableViewModel> GenerateCollectionVariables()

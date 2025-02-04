@@ -1,6 +1,6 @@
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed partial class ResponseCapturesUITest : UITest
+public sealed partial class ResponseCapturesUITest : PororocaUITest
 {
     private async Task TestCaptureResponseJsonBody(bool saveCapturesInCurrentEnvironment)
     {
@@ -13,22 +13,22 @@ public sealed partial class ResponseCapturesUITest : UITest
         await HttpRobot.ClickOnSendAndWaitForResponse();
 
         var capture = HttpRobot.ResCapturesVm.Items[0];
-        Assert(capture.CapturedValue == "1");
+        AssertCondition(capture.CapturedValue == "1");
 
         if (saveCapturesInCurrentEnvironment)
         {
             await TreeRobot.Select("COL1/ENVS/ENV1");
             var targetVar = EnvRobot.VariablesVm.Items.First(x => x.Key == "MyCapturedJSONValue");
-            Assert(targetVar.Value == "1");
-            Assert(targetVar.IsSecret == true);
+            AssertCondition(targetVar.Value == "1");
+            AssertCondition(targetVar.IsSecret == true);
             targetVar.RemoveVariable();
         }
         else
         {
             await TreeRobot.Select("COL1/VARS");
             var targetVar = ColVarsRobot.VariablesVm.Items.First(x => x.Key == "MyCapturedJSONValue");
-            Assert(targetVar.Value == "1");
-            Assert(targetVar.IsSecret == true);
+            AssertCondition(targetVar.Value == "1");
+            AssertCondition(targetVar.IsSecret == true);
             targetVar.RemoveVariable();
         }
 
