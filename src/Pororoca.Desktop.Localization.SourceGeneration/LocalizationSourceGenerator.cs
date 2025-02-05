@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 using System.Text;
-using System.Xml;
+using System.Text.Json;
 using Microsoft.CodeAnalysis;
 
 namespace Pororoca.Desktop.Localization.SourceGeneration;
@@ -15,16 +15,16 @@ public sealed class LocalizationSourceGenerator : IIncrementalGenerator
         var assemblyNameProvider = context.CompilationProvider.Select(static (c, _) => c.AssemblyName);
 
         var keyFilesContentsProvider = context.AdditionalTextsProvider
-                                      .Where(static file => file.Path.EndsWith("strings.resx"))
+                                      .Where(static file => file.Path.EndsWith("i18n_keys.json"))
                                       .Select(static (file, ct) => file.GetText(ct)!.ToString())
-                                      .Select(static (text, _) => ReadResXStrings(text).Keys.ToArray())
+                                      .Select(static (text, _) => JsonSerializer.Deserialize<string[]>(text)!)
                                       .Collect();
 
         var langFilesProvider = context.AdditionalTextsProvider
-                                       .Where(static file => !file.Path.EndsWith("strings.resx") && file.Path.EndsWith(".resx"));
+                                       .Where(static file => file.Path.EndsWith(".i18n_lang.json"));
 
         var allLangsProvider = langFilesProvider
-                                .Select(static (file, _) => LanguageExtensions.GetLanguageByLCID(Path.GetFileNameWithoutExtension(file.Path).Split('.')[1]))
+                                .Select(static (file, _) => LanguageExtensions.GetLanguageByLCID(Path.GetFileNameWithoutExtension(file.Path).Split('.')[0]))
                                 .Collect();
 
         var allLangsAndAllKeysProvider = allLangsProvider.Combine(keyFilesContentsProvider).Combine(assemblyNameProvider);
@@ -38,9 +38,9 @@ public sealed class LocalizationSourceGenerator : IIncrementalGenerator
         context.RegisterSourceOutput(langFilesWithContentsProvider, (spc, x) =>
         {
             string name = x.Left.name, content = x.Left.content, assemblyName = x.Right!;
-            string lcid = name.Split('.')[1];
+            string lcid = name.Split('.')[0];
             var lang = LanguageExtensions.GetLanguageByLCID(lcid);
-            var langDict = ReadResXStrings(content);
+            var langDict = JsonSerializer.Deserialize<Dictionary<string, string>>(content)!;
             spc.AddSource($"{lang}Strings.g.cs", BuildCodeForLanguageClass(assemblyName, lang, langDict));
         });
 
@@ -65,28 +65,6 @@ public sealed class LocalizationSourceGenerator : IIncrementalGenerator
             spc.AddSource("Language.g.cs", BuildCodeForLanguagesEnum(assemblyName, allLangs));
             spc.AddSource("Localizer.g.cs", BuildCodeForLocalizerClass(assemblyName, allLangs, contextsWithKeys));
         });
-    }
-
-    private static Dictionary<string, string> ReadResXStrings(string resxFileContent)
-    {
-        Dictionary<string, string> dict = new();
-        XmlDocument doc = new();
-        doc.LoadXml(resxFileContent);
-        foreach (object obj in doc.SelectNodes("/root/data")!)
-        {
-            XmlNode node = (XmlNode)obj;
-            XmlNode valueChild = null!;
-            for (int i = 0; i < node.ChildNodes.Count; i++)
-            {
-                valueChild = node.ChildNodes[i]!;
-                if (valueChild.NodeType == XmlNodeType.Element)
-                    break;
-            }
-            string key = node!.Attributes!["name"]!.InnerText;
-            string value = valueChild.InnerText;
-            dict[key] = value;
-        }
-        return dict;
     }
 
     private static string BuildCodeForLanguagesEnum(string assemblyName, ImmutableArray<Language> langs)
@@ -169,7 +147,7 @@ public sealed class LocalizationSourceGenerator : IIncrementalGenerator
             foreach (var ctxKv in ctxKvs)
             {
                 string[] contextAndKey = ctxKv.Key.Split('/');
-                string key = contextAndKey[1], value = ctxKv.Value.Replace("\\\\", "\\");
+                string key = contextAndKey[1], value = ctxKv.Value;
                 sb.AppendLine($"\t\tpublic const string {key} = \"{value}\";");
             }
             sb.AppendLine("\t}");
