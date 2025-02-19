@@ -39,7 +39,7 @@ internal static class TextEditorConfiguration
         editor.TextArea.RightClickMovesCaret = true;
         editor.TextArea.TextView.LinkTextForegroundBrush = PororocaThemeManager.MapLinkColourForEditorTheme(PororocaThemeManager.CurrentTheme);
 
-        var textMateInstallation = editor.InstallTextMate(DefaultRegistryOptions.Value!);
+        var textMateInstallation = editor.InstallTextMate(DefaultRegistryOptions.Value!, false);
         // the line below must be added only after the TextMate installation above
         // otherwise, the pororoca variable highlighting may be bugged
         if (applyPororocaVariableHighlighting)
