@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -36,6 +37,7 @@ internal static class TextEditorConfiguration
         editor.Options.EnableEmailHyperlinks = true;
         editor.Options.EnableHyperlinks = true;
         editor.TextArea.IndentationStrategy = new AvaloniaEdit.Indentation.DefaultIndentationStrategy();
+        editor.GetObservable(Visual.BoundsProperty).Subscribe(bounds => editor.TextArea.Width = bounds.Width);
         editor.TextArea.RightClickMovesCaret = true;
         editor.TextArea.TextView.LinkTextForegroundBrush = PororocaThemeManager.MapLinkColourForEditorTheme(PororocaThemeManager.CurrentTheme);
 
