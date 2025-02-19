@@ -267,7 +267,7 @@
                   Grid.Row="1"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
-                  Margin="0,12,0,0"
+                  Margin="12,12,12,0"
                   IsReadOnly="False"
                   Document="{Binding RequestRawContentTextDocument, Mode=TwoWay}"
                   IsVisible="{Binding RequestBodyModeSelectedIndex,
@@ -672,6 +672,7 @@
                   Grid.Row="0"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
+                  Margin="12,0,12,0"
                   IsReadOnly="True"
                   Document="{Binding ResponseDataCtx.ResponseRawContentTextDocument, Mode=TwoWay}"/>
               <StackPanel
