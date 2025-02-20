@@ -46,10 +46,10 @@
       <Menu
           x:Name="topMenu"
           DockPanel.Dock="Top">
-          <Menu.ItemsPanel>
-            <ItemsPanelTemplate>
-                <DockPanel HorizontalAlignment="Stretch"/>
-            </ItemsPanelTemplate>
+        <Menu.ItemsPanel>
+          <ItemsPanelTemplate>
+            <DockPanel HorizontalAlignment="Stretch"/>
+          </ItemsPanelTemplate>
         </Menu.ItemsPanel>
         <MenuItem
             x:Name="topMenuItemFile"
@@ -281,102 +281,115 @@
         Header="{Binding i18n.TopMenu.Contribute}"/-->
       </Menu>
 
-      <Panel
-          DockPanel.Dock="Left"
-          Width="240"
-          Background="{DynamicResource MainWindowSidebarBrush}">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <!-- Width="Auto" MinWidth="240" causes the left panel
+           to expand after renaming an item to a big text -->
+          <ColumnDefinition Width="240" MinWidth="240"/>
+          <ColumnDefinition Width="0" />
+          <ColumnDefinition Width="1*" MinWidth="24"/>
+        </Grid.ColumnDefinitions>
+
         <v:CollectionsGroupView
             x:Name="mainWindowCollectionsGroup"
+            Grid.Column="0"
+            Background="{DynamicResource MainWindowSidebarBrush}"
             DataContext="{Binding CollectionsGroupViewDataCtx}"/>
-      </Panel>
 
-      <Panel
+        <GridSplitter
+            Grid.Column="1"
+            Background="{DynamicResource MainWindowSidebarBrush}"
+            ResizeDirection="Columns"/>
+
+        <Panel
           x:Name="mainWindowPanel"
+          Grid.Column="2"
           IsHitTestVisible="True"
           Background="{DynamicResource MainWindowBackgroundBrush}">
-        <Grid
-            VerticalAlignment="Stretch"
-            HorizontalAlignment="Stretch">
-          <v:WelcomeView
-              x:Name="welcomeView"
+          <Grid
               VerticalAlignment="Stretch"
-              HorizontalAlignment="Stretch"
-              IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).WelcomeView.Visible}"
-              DataContext="{Binding WelcomeView.VM}"/>
-          <v:CollectionView
-              x:Name="collectionView"
-              VerticalAlignment="Stretch"
-              HorizontalAlignment="Stretch"
-              IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).CollectionView.Visible}"
-              DataContext="{Binding CollectionView.VM}"/>
-          <v:ExportCollectionView
-              x:Name="exportCollectionView"
-              VerticalAlignment="Stretch"
-              HorizontalAlignment="Stretch"
-              IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).ExportCollectionView.Visible}"
-              DataContext="{Binding ExportCollectionView.VM}"/>
-          <v:CollectionVariablesView
-              x:Name="collectionVariablesView"
-              VerticalAlignment="Stretch"
-              HorizontalAlignment="Stretch"
-              IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).CollectionVariablesView.Visible}"
-              DataContext="{Binding CollectionVariablesView.VM}"/>
-          <v:CollectionScopedAuthView
-              x:Name="collectionScopedAuthView"
-              VerticalAlignment="Stretch"
-              HorizontalAlignment="Stretch"
-              IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).CollectionScopedAuthView.Visible}"
-              DataContext="{Binding CollectionScopedAuthView.VM}"/>
-          <v:CollectionScopedRequestHeadersView
-              x:Name="collectionScopedReqHeadersView"
-              VerticalAlignment="Stretch"
-              HorizontalAlignment="Stretch"
-              IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).CollectionScopedRequestHeadersView.Visible}"
-              DataContext="{Binding CollectionScopedRequestHeadersView.VM}"/>
-          <v:EnvironmentView
-              x:Name="environmentView"
-              VerticalAlignment="Stretch"
-              HorizontalAlignment="Stretch"
-              IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).EnvironmentView.Visible}"
-              DataContext="{Binding EnvironmentView.VM}"/>
-          <v:ExportEnvironmentView
-              x:Name="exportEnvironmentView"
-              VerticalAlignment="Stretch"
-              HorizontalAlignment="Stretch"
-              IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).ExportEnvironmentView.Visible}"
-              DataContext="{Binding ExportEnvironmentView.VM}"/>
-          <v:CollectionFolderView
-              x:Name="collectionFolderView"
-              VerticalAlignment="Stretch"
-              HorizontalAlignment="Stretch"
-              IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).CollectionFolderView.Visible}"
-              DataContext="{Binding CollectionFolderView.VM}"/>
-          <v:HttpRequestView
-              x:Name="httpReqView"
-              VerticalAlignment="Stretch"
-              HorizontalAlignment="Stretch"
-              IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).HttpRequestView.Visible}"
-              DataContext="{Binding HttpRequestView.VM}"/>
-          <v:WebSocketConnectionView
-              x:Name="wsConnView"
-              VerticalAlignment="Stretch"
-              HorizontalAlignment="Stretch"
-              IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).WebSocketConnectionView.Visible}"
-              DataContext="{Binding WebSocketConnectionView.VM}"/>
-          <v:WebSocketClientMessageView
-              x:Name="wsClientMsgView"
-              VerticalAlignment="Stretch"
-              HorizontalAlignment="Stretch"
-              IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).WebSocketClientMessageView.Visible}"
-              DataContext="{Binding WebSocketClientMessageView.VM}"/>
-          <v:HttpRepeaterView
-              x:Name="httpRepView"
-              VerticalAlignment="Stretch"
-              HorizontalAlignment="Stretch"
-              IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).HttpRepeaterView.Visible}"
-              DataContext="{Binding HttpRepeaterView.VM}"/>
-        </Grid>
-      </Panel>
+              HorizontalAlignment="Stretch">
+            <v:WelcomeView
+                x:Name="welcomeView"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).WelcomeView.Visible}"
+                DataContext="{Binding WelcomeView.VM}"/>
+            <v:CollectionView
+                x:Name="collectionView"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).CollectionView.Visible}"
+                DataContext="{Binding CollectionView.VM}"/>
+            <v:ExportCollectionView
+                x:Name="exportCollectionView"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).ExportCollectionView.Visible}"
+                DataContext="{Binding ExportCollectionView.VM}"/>
+            <v:CollectionVariablesView
+                x:Name="collectionVariablesView"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).CollectionVariablesView.Visible}"
+                DataContext="{Binding CollectionVariablesView.VM}"/>
+            <v:CollectionScopedAuthView
+                x:Name="collectionScopedAuthView"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).CollectionScopedAuthView.Visible}"
+                DataContext="{Binding CollectionScopedAuthView.VM}"/>
+            <v:CollectionScopedRequestHeadersView
+                x:Name="collectionScopedReqHeadersView"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).CollectionScopedRequestHeadersView.Visible}"
+                DataContext="{Binding CollectionScopedRequestHeadersView.VM}"/>
+            <v:EnvironmentView
+                x:Name="environmentView"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).EnvironmentView.Visible}"
+                DataContext="{Binding EnvironmentView.VM}"/>
+            <v:ExportEnvironmentView
+                x:Name="exportEnvironmentView"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).ExportEnvironmentView.Visible}"
+                DataContext="{Binding ExportEnvironmentView.VM}"/>
+            <v:CollectionFolderView
+                x:Name="collectionFolderView"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).CollectionFolderView.Visible}"
+                DataContext="{Binding CollectionFolderView.VM}"/>
+            <v:HttpRequestView
+                x:Name="httpReqView"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).HttpRequestView.Visible}"
+                DataContext="{Binding HttpRequestView.VM}"/>
+            <v:WebSocketConnectionView
+                x:Name="wsConnView"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).WebSocketConnectionView.Visible}"
+                DataContext="{Binding WebSocketConnectionView.VM}"/>
+            <v:WebSocketClientMessageView
+                x:Name="wsClientMsgView"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).WebSocketClientMessageView.Visible}"
+                DataContext="{Binding WebSocketClientMessageView.VM}"/>
+            <v:HttpRepeaterView
+                x:Name="httpRepView"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).HttpRepeaterView.Visible}"
+                DataContext="{Binding HttpRepeaterView.VM}"/>
+          </Grid>
+        </Panel>
+      </Grid>
 
     </DockPanel>
   </Panel>
