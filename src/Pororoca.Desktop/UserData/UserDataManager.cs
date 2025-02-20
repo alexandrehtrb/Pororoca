@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
@@ -69,8 +70,9 @@ public static class UserDataManager
             // await above is necessary because of the "using" on the FileStream
             return col;
         }
-        catch
+        catch (Exception ex)
         {
+            Debug.WriteLine("Load collection file error:\n\n" + ex.ToString());
             return null;
         }
     }
@@ -116,8 +118,9 @@ public static class UserDataManager
                 .Select(c => Guid.Parse(Path.GetFileName(c.FullName).Replace($".{PororocaCollectionExtension}", string.Empty)))
                 .ToList();
         }
-        catch
+        catch (Exception ex)
         {
+            Debug.WriteLine("Fetch saved user collections files ids error:\n\n" + ex.ToString());
             savedColsIds = new();
         }
 
