@@ -286,7 +286,7 @@
           <!-- Width="Auto" MinWidth="240" causes the left panel
            to expand after renaming an item to a big text -->
           <ColumnDefinition Width="240" MinWidth="240"/>
-          <ColumnDefinition Width="0" />
+          <ColumnDefinition Width="2" />
           <ColumnDefinition Width="1*" MinWidth="24"/>
         </Grid.ColumnDefinitions>
 
