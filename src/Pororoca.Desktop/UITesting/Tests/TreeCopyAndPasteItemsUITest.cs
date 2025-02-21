@@ -4,7 +4,7 @@ using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed class TreeCopyAndPasteItemsUITest : UITest
+public sealed class TreeCopyAndPasteItemsUITest : PororocaUITest
 {
     private Control RootView { get; }
     private TopMenuRobot TopMenuRobot { get; }
@@ -80,21 +80,21 @@ public sealed class TreeCopyAndPasteItemsUITest : UITest
         await TreeRobot.Paste();
 
         // check if items exist in both collections
-        AssertTreeItemExists(CollectionsGroup, "COL1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/ENVS/ENV1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/DIR1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/HTTP1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/WS1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/WS1/WS1_MSG1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/REP1");
+        CollectionsGroup.AssertTreeItemExists("COL1");
+        CollectionsGroup.AssertTreeItemExists("COL1/ENVS/ENV1");
+        CollectionsGroup.AssertTreeItemExists("COL1/DIR1");
+        CollectionsGroup.AssertTreeItemExists("COL1/HTTP1");
+        CollectionsGroup.AssertTreeItemExists("COL1/WS1");
+        CollectionsGroup.AssertTreeItemExists("COL1/WS1/WS1_MSG1");
+        CollectionsGroup.AssertTreeItemExists("COL1/REP1");
 
-        AssertTreeItemExists(CollectionsGroup, "COL2");
-        AssertTreeItemExists(CollectionsGroup, "COL2/ENVS/ENV1");
-        AssertTreeItemExists(CollectionsGroup, "COL2/DIR1");
-        AssertTreeItemExists(CollectionsGroup, "COL2/HTTP1");
-        AssertTreeItemExists(CollectionsGroup, "COL2/WS1");
-        AssertTreeItemExists(CollectionsGroup, "COL2/WS1/WS1_MSG1");
-        AssertTreeItemExists(CollectionsGroup, "COL2/REP1");
+        CollectionsGroup.AssertTreeItemExists("COL2");
+        CollectionsGroup.AssertTreeItemExists("COL2/ENVS/ENV1");
+        CollectionsGroup.AssertTreeItemExists("COL2/DIR1");
+        CollectionsGroup.AssertTreeItemExists("COL2/HTTP1");
+        CollectionsGroup.AssertTreeItemExists("COL2/WS1");
+        CollectionsGroup.AssertTreeItemExists("COL2/WS1/WS1_MSG1");
+        CollectionsGroup.AssertTreeItemExists("COL2/REP1");
 
         // let's rename items in col2 and ensure that they are not the same ones from col1
 
@@ -116,98 +116,98 @@ public sealed class TreeCopyAndPasteItemsUITest : UITest
         await TreeRobot.Select("COL2/REP1");
         await RepeaterRobot.Name.Edit("REP2");
 
-        AssertTreeItemExists(CollectionsGroup, "COL1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/ENVS/ENV1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/DIR1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/HTTP1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/WS1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/WS1/WS1_MSG1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/REP1");
+        CollectionsGroup.AssertTreeItemExists("COL1");
+        CollectionsGroup.AssertTreeItemExists("COL1/ENVS/ENV1");
+        CollectionsGroup.AssertTreeItemExists("COL1/DIR1");
+        CollectionsGroup.AssertTreeItemExists("COL1/HTTP1");
+        CollectionsGroup.AssertTreeItemExists("COL1/WS1");
+        CollectionsGroup.AssertTreeItemExists("COL1/WS1/WS1_MSG1");
+        CollectionsGroup.AssertTreeItemExists("COL1/REP1");
 
-        AssertTreeItemExists(CollectionsGroup, "COL2");
-        AssertTreeItemExists(CollectionsGroup, "COL2/ENVS/ENV2");
-        AssertTreeItemExists(CollectionsGroup, "COL2/DIR2");
-        AssertTreeItemExists(CollectionsGroup, "COL2/HTTP2");
-        AssertTreeItemExists(CollectionsGroup, "COL2/WS2");
-        AssertTreeItemExists(CollectionsGroup, "COL2/WS2/WS2_MSG1");
-        AssertTreeItemExists(CollectionsGroup, "COL2/REP2");
+        CollectionsGroup.AssertTreeItemExists("COL2");
+        CollectionsGroup.AssertTreeItemExists("COL2/ENVS/ENV2");
+        CollectionsGroup.AssertTreeItemExists("COL2/DIR2");
+        CollectionsGroup.AssertTreeItemExists("COL2/HTTP2");
+        CollectionsGroup.AssertTreeItemExists("COL2/WS2");
+        CollectionsGroup.AssertTreeItemExists("COL2/WS2/WS2_MSG1");
+        CollectionsGroup.AssertTreeItemExists("COL2/REP2");
 
         // let's copy and paste a single http req into a dir
         await TreeRobot.Select("COL1/HTTP1");
         await TreeRobot.Copy();
         await TreeRobot.Select("COL2/DIR2");
         await TreeRobot.Paste();
-        AssertTreeItemExists(CollectionsGroup, "COL2/DIR2/HTTP1");
+        CollectionsGroup.AssertTreeItemExists("COL2/DIR2/HTTP1");
 
         // let's copy and paste a single ws into a dir
         await TreeRobot.Select("COL1/WS1");
         await TreeRobot.Copy();
         await TreeRobot.Select("COL2/DIR2");
         await TreeRobot.Paste();
-        AssertTreeItemExists(CollectionsGroup, "COL2/DIR2/WS1");
-        AssertTreeItemExists(CollectionsGroup, "COL2/DIR2/WS1/WS1_MSG1");
+        CollectionsGroup.AssertTreeItemExists("COL2/DIR2/WS1");
+        CollectionsGroup.AssertTreeItemExists("COL2/DIR2/WS1/WS1_MSG1");
 
         // let's copy and paste a single http rep into a dir
         await TreeRobot.Select("COL1/REP1");
         await TreeRobot.Copy();
         await TreeRobot.Select("COL2/DIR2");
         await TreeRobot.Paste();
-        AssertTreeItemExists(CollectionsGroup, "COL2/DIR2/REP1");
+        CollectionsGroup.AssertTreeItemExists("COL2/DIR2/REP1");
 
         // let's copy and paste a single dir into another dir
         await TreeRobot.Select("COL1/DIR1");
         await TreeRobot.Copy();
         await TreeRobot.Select("COL2/DIR2");
         await TreeRobot.Paste();
-        AssertTreeItemExists(CollectionsGroup, "COL2/DIR2/DIR1");
+        CollectionsGroup.AssertTreeItemExists("COL2/DIR2/DIR1");
 
         // let's copy and paste a dir, should make a full depth copy
         await TreeRobot.Select("COL2/DIR2");
         await TreeRobot.Copy();
         await TreeRobot.Select("COL1");
         await TreeRobot.Paste();
-        AssertTreeItemExists(CollectionsGroup, "COL1/DIR2");
-        AssertTreeItemExists(CollectionsGroup, "COL1/DIR2/DIR1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/DIR2/HTTP1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/DIR2/WS1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/DIR2/WS1/WS1_MSG1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/DIR2/REP1");
+        CollectionsGroup.AssertTreeItemExists("COL1/DIR2");
+        CollectionsGroup.AssertTreeItemExists("COL1/DIR2/DIR1");
+        CollectionsGroup.AssertTreeItemExists("COL1/DIR2/HTTP1");
+        CollectionsGroup.AssertTreeItemExists("COL1/DIR2/WS1");
+        CollectionsGroup.AssertTreeItemExists("COL1/DIR2/WS1/WS1_MSG1");
+        CollectionsGroup.AssertTreeItemExists("COL1/DIR2/REP1");
 
         // let's copy and paste ws msgs
         await TreeRobot.Select("COL2/WS2/WS2_MSG1");
         await TreeRobot.Copy();
         await TreeRobot.Select("COL1/WS1");
         await TreeRobot.Paste();
-        AssertTreeItemExists(CollectionsGroup, "COL1/WS1/WS1_MSG1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/WS1/WS2_MSG1");
+        CollectionsGroup.AssertTreeItemExists("COL1/WS1/WS1_MSG1");
+        CollectionsGroup.AssertTreeItemExists("COL1/WS1/WS2_MSG1");
 
         // copying and pasting while keeping the same selection should cause duplication (http)
         await TreeRobot.Select("COL1/HTTP1");
         await TreeRobot.Copy();
         await HttpRobot.Name.Edit("HTTP0");
         await TreeRobot.Paste();
-        AssertTreeItemExists(CollectionsGroup, "COL1/HTTP0");
-        AssertTreeItemExists(CollectionsGroup, "COL1/HTTP1");
+        CollectionsGroup.AssertTreeItemExists("COL1/HTTP0");
+        CollectionsGroup.AssertTreeItemExists("COL1/HTTP1");
 
         // copying and pasting while keeping the same selection should cause duplication (ws)
         await TreeRobot.Select("COL1/WS1");
         await TreeRobot.Copy();
         await WsRobot.Name.Edit("WS0");
         await TreeRobot.Paste();
-        AssertTreeItemExists(CollectionsGroup, "COL1/WS0");
-        AssertTreeItemExists(CollectionsGroup, "COL1/WS0/WS1_MSG1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/WS0/WS2_MSG1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/WS1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/WS1/WS1_MSG1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/WS1/WS2_MSG1");
+        CollectionsGroup.AssertTreeItemExists("COL1/WS0");
+        CollectionsGroup.AssertTreeItemExists("COL1/WS0/WS1_MSG1");
+        CollectionsGroup.AssertTreeItemExists("COL1/WS0/WS2_MSG1");
+        CollectionsGroup.AssertTreeItemExists("COL1/WS1");
+        CollectionsGroup.AssertTreeItemExists("COL1/WS1/WS1_MSG1");
+        CollectionsGroup.AssertTreeItemExists("COL1/WS1/WS2_MSG1");
 
         // copying and pasting while keeping the same selection should cause duplication (rep)
         await TreeRobot.Select("COL1/REP1");
         await TreeRobot.Copy();
         await RepeaterRobot.Name.Edit("REP0");
         await TreeRobot.Paste();
-        AssertTreeItemExists(CollectionsGroup, "COL1/REP0");
-        AssertTreeItemExists(CollectionsGroup, "COL1/REP1");
+        CollectionsGroup.AssertTreeItemExists("COL1/REP0");
+        CollectionsGroup.AssertTreeItemExists("COL1/REP1");
 
         // copying and pasting while keeping the same selection (dir)
         // causes its copy to be pasted inside the original dir

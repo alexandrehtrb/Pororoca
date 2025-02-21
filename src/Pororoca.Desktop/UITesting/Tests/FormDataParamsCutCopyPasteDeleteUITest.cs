@@ -5,7 +5,7 @@ using Pororoca.Domain.Features.Entities.Pororoca.Http;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed partial class FormDataParamsCutCopyPasteDeleteUITest : UITest
+public sealed partial class FormDataParamsCutCopyPasteDeleteUITest : PororocaUITest
 {
     private Control RootView { get; }
     private TopMenuRobot TopMenuRobot { get; }
@@ -51,38 +51,38 @@ public sealed partial class FormDataParamsCutCopyPasteDeleteUITest : UITest
         await HttpRobot.PasteFormDataParams();
 
         fps = HttpRobot.FormDataParamsVm.Items.Select(x => x.ToFormDataParam()).ToArray();
-        Assert(fps.Length == 4);
-        Assert(fps.Contains(p1));
-        Assert(fps.Contains(p2));
-        Assert(fps.Contains(p3));
-        Assert(fps.Contains(p4));
+        AssertCondition(fps.Length == 4);
+        AssertCondition(fps.Contains(p1));
+        AssertCondition(fps.Contains(p2));
+        AssertCondition(fps.Contains(p3));
+        AssertCondition(fps.Contains(p4));
 
         // cut and paste
         await HttpRobot.SelectFormDataParams(HttpRobot.FormDataParamsVm.Items[0], HttpRobot.FormDataParamsVm.Items[1]);
         await HttpRobot.CutSelectedFormDataParams();
 
         fps = HttpRobot.FormDataParamsVm.Items.Select(x => x.ToFormDataParam()).ToArray();
-        Assert(fps.Length == 2);
-        Assert(fps.Contains(p3));
-        Assert(fps.Contains(p4));
+        AssertCondition(fps.Length == 2);
+        AssertCondition(fps.Contains(p3));
+        AssertCondition(fps.Contains(p4));
 
         await TreeRobot.Select("COL1/HTTP2");
         await HttpRobot.PasteFormDataParams();
 
         fps = HttpRobot.FormDataParamsVm.Items.Select(x => x.ToFormDataParam()).ToArray();
-        Assert(fps.Length == 4);
-        Assert(fps.Contains(p3));
-        Assert(fps.Contains(p4));
-        Assert(fps.Contains(p1));
-        Assert(fps.Contains(p2));
+        AssertCondition(fps.Length == 4);
+        AssertCondition(fps.Contains(p3));
+        AssertCondition(fps.Contains(p4));
+        AssertCondition(fps.Contains(p1));
+        AssertCondition(fps.Contains(p2));
 
         // delete
         await HttpRobot.SelectFormDataParams(HttpRobot.FormDataParamsVm.Items[0], HttpRobot.FormDataParamsVm.Items[1]);
         await HttpRobot.DeleteSelectedFormDataParams();
 
         fps = HttpRobot.FormDataParamsVm.Items.Select(x => x.ToFormDataParam()).ToArray();
-        Assert(fps.Length == 2);
-        Assert(fps.Contains(p1));
-        Assert(fps.Contains(p2));
+        AssertCondition(fps.Length == 2);
+        AssertCondition(fps.Contains(p1));
+        AssertCondition(fps.Contains(p2));
     }
 }

@@ -5,18 +5,18 @@ using Pororoca.Desktop.ViewModels;
 
 namespace Pororoca.Desktop.Views;
 
-public partial class UITestsPrepareWindow : Window
+public partial class UITestsRunnerWindow : Window
 {
-    public UITestsPrepareWindow()
+    public UITestsRunnerWindow()
     {
         AvaloniaXamlLoader.Load(this);
-        DataContext = UITestsPrepareWindowViewModel.Instance;
-        UITestsPrepareWindowViewModel.Instance.CheckIfTestFilesFolderExist();
+        DataContext = UITestsRunnerWindowViewModel.Instance;
+        UITestsRunnerWindowViewModel.Instance.CheckIfTestFilesFolderExist();
     }
 
     public void RunTests(object sender, RoutedEventArgs args)
     {
         Close();
-        UITestsPrepareWindowViewModel.Instance.RunTests();
+        UITestsRunnerWindowViewModel.Instance.RunTests();
     }
 }

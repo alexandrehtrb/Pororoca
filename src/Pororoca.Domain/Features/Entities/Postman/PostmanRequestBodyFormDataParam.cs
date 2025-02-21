@@ -5,7 +5,8 @@ namespace Pororoca.Domain.Features.Entities.Postman;
 internal enum PostmanRequestBodyFormDataParamType
 {
     Text,
-    File
+    File,
+    Default
 }
 
 internal class PostmanRequestBodyFormDataParam

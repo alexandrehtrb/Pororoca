@@ -4,7 +4,7 @@ using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed class SwitchLanguagesUITest : UITest
+public sealed class SwitchLanguagesUITest : PororocaUITest
 {
     private TopMenuRobot Robot { get; }
 
@@ -25,13 +25,13 @@ public sealed class SwitchLanguagesUITest : UITest
         await Robot.Options_Language.ClickOn();
         await Robot.Options_Language_English.ClickOn();
 
-        AssertHasIconVisible(Robot.Options_Language_English);
-        AssertHasIconHidden(Robot.Options_Language_Português);
-        AssertHasIconHidden(Robot.Options_Language_Russian);
+        Robot.Options_Language_English.AssertHasIconVisible();
+        Robot.Options_Language_Português.AssertHasIconHidden();
+        Robot.Options_Language_Russian.AssertHasIconHidden();
 
-        AssertHasText(Robot.File, "File");
-        AssertHasText(Robot.Options, "Options");
-        AssertHasText(Robot.Help, "Help");
+        Robot.File.AssertHasText("File");
+        Robot.Options.AssertHasText("Options");
+        Robot.Help.AssertHasText("Help");
 
         // português
 
@@ -39,13 +39,13 @@ public sealed class SwitchLanguagesUITest : UITest
         await Robot.Options_Language.ClickOn();
         await Robot.Options_Language_Português.ClickOn();
 
-        AssertHasIconHidden(Robot.Options_Language_English);
-        AssertHasIconVisible(Robot.Options_Language_Português);
-        AssertHasIconHidden(Robot.Options_Language_Russian);
+        Robot.Options_Language_English.AssertHasIconHidden();
+        Robot.Options_Language_Português.AssertHasIconVisible();
+        Robot.Options_Language_Russian.AssertHasIconHidden();
 
-        AssertHasText(Robot.File, "Arquivo");
-        AssertHasText(Robot.Options, "Opções");
-        AssertHasText(Robot.Help, "Ajuda");
+        Robot.File.AssertHasText("Arquivo");
+        Robot.Options.AssertHasText("Opções");
+        Robot.Help.AssertHasText("Ajuda");
 
         // finishing the test with english language set
         await Robot.Options.ClickOn();

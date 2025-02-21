@@ -1,6 +1,6 @@
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed partial class HttpRequestsUITest : UITest
+public sealed partial class HttpRequestsUITest : PororocaUITest
 {
     private async Task TestClientCertificatePkcs12Auth()
     {
@@ -11,12 +11,12 @@ public sealed partial class HttpRequestsUITest : UITest
         await HttpRobot.ClickOnSendAndWaitForResponse();
         await Wait(3);
 
-        AssertContainsText(HttpRobot.ResTitle, "Response: 200 OK");
+        HttpRobot.ResTitle.AssertContainsText("Response: 200 OK");
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResHeaders);
         //AssertContainsResponseHeader("Content-Type", "text/plain; charset=utf-8");
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResBody);
-        AssertContainsText(HttpRobot.ResBodyRawContent, "<html>");
-        AssertIsVisible(HttpRobot.ResBodySaveToFile);
+        HttpRobot.ResBodyRawContent.AssertContainsText("<html>");
+        HttpRobot.ResBodySaveToFile.AssertIsVisible();
     }
 
     private Task TestClientCertificatePemConjoinedUnencryptedAuth() =>
@@ -48,11 +48,11 @@ public sealed partial class HttpRequestsUITest : UITest
         await HttpRobot.ClickOnSendAndWaitForResponse();
         await Wait(2);
 
-        AssertContainsText(HttpRobot.ResTitle, "Response: 200 OK");
+        HttpRobot.ResTitle.AssertContainsText("Response: 200 OK");
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResHeaders);
         //AssertContainsResponseHeader("Content-Type", "text/plain; charset=utf-8");
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResBody);
-        AssertContainsText(HttpRobot.ResBodyRawContent, "<html>");
-        AssertIsVisible(HttpRobot.ResBodySaveToFile);
+        HttpRobot.ResBodyRawContent.AssertContainsText("<html>");
+        HttpRobot.ResBodySaveToFile.AssertIsVisible();
     }
 }

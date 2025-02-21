@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -36,10 +37,11 @@ internal static class TextEditorConfiguration
         editor.Options.EnableEmailHyperlinks = true;
         editor.Options.EnableHyperlinks = true;
         editor.TextArea.IndentationStrategy = new AvaloniaEdit.Indentation.DefaultIndentationStrategy();
+        editor.GetObservable(Visual.BoundsProperty).Subscribe(bounds => editor.TextArea.Width = bounds.Width);
         editor.TextArea.RightClickMovesCaret = true;
         editor.TextArea.TextView.LinkTextForegroundBrush = PororocaThemeManager.MapLinkColourForEditorTheme(PororocaThemeManager.CurrentTheme);
 
-        var textMateInstallation = editor.InstallTextMate(DefaultRegistryOptions.Value!);
+        var textMateInstallation = editor.InstallTextMate(DefaultRegistryOptions.Value!, false);
         // the line below must be added only after the TextMate installation above
         // otherwise, the pororoca variable highlighting may be bugged
         if (applyPororocaVariableHighlighting)

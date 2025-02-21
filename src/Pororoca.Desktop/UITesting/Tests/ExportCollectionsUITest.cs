@@ -195,7 +195,7 @@ public sealed class ExportCollectionsUITest : SaveAndRestoreCollectionUITest
         await TreeRobot.Select("COL1");
         await ColRobot.ExportCollection.ClickOn();
 
-        AssertHasText(ExportColRobot.CollectionName, "COL1");
+        ExportColRobot.CollectionName.AssertHasText("COL1");
 
         await ExportColRobot.SetIncludeColSecretVars(exportWithColVarsSecrets);
         await ExportColRobot.SelectExportFormat(format);
@@ -227,7 +227,7 @@ public sealed class ExportCollectionsUITest : SaveAndRestoreCollectionUITest
     {
         MainWindowVm.CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
         MainWindowVm.CollectionsGroupViewDataCtx.Items.Clear();
-        AssertTreeItemNotExists(CollectionsGroup, "COL1");
+        CollectionsGroup.AssertTreeItemNotExists("COL1");
     }
 
     private void RestoreCollection(ExportCollectionFormat format, string json)
@@ -235,84 +235,84 @@ public sealed class ExportCollectionsUITest : SaveAndRestoreCollectionUITest
         var mwvm = ((MainWindowViewModel)MainWindow.Instance!.DataContext!);
         if (format == ExportCollectionFormat.Pororoca)
         {
-            Assert(PororocaCollectionImporter.TryImportPororocaCollection(json, preserveId: true, out var reimportedCollection));
+            AssertCondition(PororocaCollectionImporter.TryImportPororocaCollection(json, preserveId: true, out var reimportedCollection));
             mwvm.AddCollection(reimportedCollection!, showItemInScreen: true);
         }
         else if (format == ExportCollectionFormat.Postman)
         {
-            Assert(PostmanCollectionV21Importer.TryImportPostmanCollection(json, out var reimportedCollection));
+            AssertCondition(PostmanCollectionV21Importer.TryImportPostmanCollection(json, out var reimportedCollection));
             mwvm.AddCollection(reimportedCollection!, showItemInScreen: true);
         }
     }
 
     private async Task AssertCollectionReimportedSuccessfully(ObservableCollection<VariableViewModel> expectedColVarsVms, ObservableCollection<VariableViewModel>? expectedEnv1VarsVms, ObservableCollection<VariableViewModel>? expectedEnv2VarsVms)
     {
-        AssertTreeItemExists(CollectionsGroup, "COL1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/AUTH");
+        CollectionsGroup.AssertTreeItemExists("COL1");
+        CollectionsGroup.AssertTreeItemExists("COL1/AUTH");
         if (expectedEnv1VarsVms is not null)
         {
-            AssertTreeItemExists(CollectionsGroup, "COL1/ENVS/ENV1");
+            CollectionsGroup.AssertTreeItemExists("COL1/ENVS/ENV1");
         }
         else
         {
-            AssertTreeItemNotExists(CollectionsGroup, "COL1/ENVS/ENV1");
+            CollectionsGroup.AssertTreeItemNotExists("COL1/ENVS/ENV1");
         }
         if (expectedEnv2VarsVms is not null)
         {
-            AssertTreeItemExists(CollectionsGroup, "COL1/ENVS/ENV2");
+            CollectionsGroup.AssertTreeItemExists("COL1/ENVS/ENV2");
         }
         else
         {
-            AssertTreeItemNotExists(CollectionsGroup, "COL1/ENVS/ENV2");
+            CollectionsGroup.AssertTreeItemNotExists("COL1/ENVS/ENV2");
         }
-        AssertTreeItemExists(CollectionsGroup, "COL1/HTTPHEADERS");
+        CollectionsGroup.AssertTreeItemExists("COL1/HTTPHEADERS");
 
         await TreeRobot.Select("COL1");
-        AssertIsVisible(ColRobot.RootView);
+        ColRobot.RootView.AssertIsVisible();
 
         await TreeRobot.Select("COL1/AUTH");
-        AssertIsVisible(ColAuthRobot.RootView);
-        AssertSelection(ColAuthRobot.Auth.AuthType, ColAuthRobot.Auth.AuthTypeOptionBearer);
-        AssertIsVisible(ColAuthRobot.Auth.BearerAuthToken);
-        AssertHasText(ColAuthRobot.Auth.BearerAuthToken, "token");
-        AssertIsHidden(ColAuthRobot.Auth.BasicAuthLogin);
-        AssertIsHidden(ColAuthRobot.Auth.ClientCertificateType);
+        ColAuthRobot.RootView.AssertIsVisible();
+        ColAuthRobot.Auth.AuthType.AssertSelection(ColAuthRobot.Auth.AuthTypeOptionBearer);
+        ColAuthRobot.Auth.BearerAuthToken.AssertIsVisible();
+        ColAuthRobot.Auth.BearerAuthToken.AssertHasText("token");
+        ColAuthRobot.Auth.BasicAuthLogin.AssertIsHidden();
+        ColAuthRobot.Auth.ClientCertificateType.AssertIsHidden();
 
         await TreeRobot.Select("COL1/VARS");
-        AssertIsVisible(ColVarsRobot.RootView);
+        ColVarsRobot.RootView.AssertIsVisible();
         var expectedColVars = expectedColVarsVms.Select(x => x.ToVariable()).ToList();
         var colVars = ColVarsRobot.VariablesVm.GetVariables(true);
-        Assert(Enumerable.SequenceEqual(expectedColVars, colVars));
+        AssertCondition(Enumerable.SequenceEqual(expectedColVars, colVars));
 
         if (expectedEnv1VarsVms is not null)
         {
             await TreeRobot.Select("COL1/ENVS/ENV1");
-            AssertIsVisible(EnvRobot.RootView);
+            EnvRobot.RootView.AssertIsVisible();
             var expectedEnv1Vars = expectedEnv1VarsVms.Select(x => x.ToVariable()).ToList();
             var env1Vars = EnvRobot.VariablesVm.GetVariables(true);
-            Assert(Enumerable.SequenceEqual(expectedEnv1Vars, env1Vars));
+            AssertCondition(Enumerable.SequenceEqual(expectedEnv1Vars, env1Vars));
         }
 
         if (expectedEnv2VarsVms is not null)
         {
             await TreeRobot.Select("COL1/ENVS/ENV2");
-            AssertIsVisible(EnvRobot.RootView);
+            EnvRobot.RootView.AssertIsVisible();
             var expectedEnv2Vars = expectedEnv2VarsVms.Select(x => x.ToVariable()).ToList();
             var env2Vars = EnvRobot.VariablesVm.GetVariables(true);
-            Assert(Enumerable.SequenceEqual(expectedEnv2Vars, env2Vars));
+            AssertCondition(Enumerable.SequenceEqual(expectedEnv2Vars, env2Vars));
         }
 
         await TreeRobot.Select("COL1/HTTPHEADERS");
-        AssertIsVisible(HttpRobot.RootView);
-        AssertHasText(HttpRobot.HttpMethod, "GET");
-        AssertHasText(HttpRobot.Url, "{{BaseUrl}}/test/get/headers");
-        AssertHasText(HttpRobot.HttpVersion, "HTTP/1.1");
+        HttpRobot.RootView.AssertIsVisible();
+        HttpRobot.HttpMethod.AssertHasText("GET");
+        HttpRobot.Url.AssertHasText("{{BaseUrl}}/test/get/headers");
+        HttpRobot.HttpVersion.AssertHasText("HTTP/1.1");
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqBody);
-        AssertSelection(HttpRobot.ReqBodyMode, HttpRobot.ReqBodyModeOptionNone);
+        HttpRobot.ReqBodyMode.AssertSelection(HttpRobot.ReqBodyModeOptionNone);
         var actualHeaders = HttpRobot.ReqHeadersVm.Items.Select(x => x.ToKeyValueParam()).ToArray();
-        Assert(Enumerable.SequenceEqual(headers, actualHeaders));
+        AssertCondition(Enumerable.SequenceEqual(headers, actualHeaders));
         await HttpRobot.TabControlReq.Select(HttpRobot.TabReqAuth);
-        AssertSelection(HttpRobot.Auth.AuthType, HttpRobot.Auth.AuthTypeOptionNone);
+        HttpRobot.Auth.AuthType.AssertSelection(HttpRobot.Auth.AuthTypeOptionNone);
     }
 
     #endregion

@@ -1,6 +1,6 @@
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed partial class HttpRequestsUITest : UITest
+public sealed partial class HttpRequestsUITest : PororocaUITest
 {
     private async Task TestPostRawJsonBody()
     {
@@ -9,13 +9,13 @@ public sealed partial class HttpRequestsUITest : UITest
         await HttpRobot.SetRawBody("application/json", "{\"myValue\":\"{{SpecialValue1}}\"}");
         await HttpRobot.ClickOnSendAndWaitForResponse();
 
-        AssertContainsText(HttpRobot.ResTitle, "Response: 200 OK");
+        HttpRobot.ResTitle.AssertContainsText("Response: 200 OK");
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResHeaders);
         AssertContainsResponseHeader("Date");
         AssertContainsResponseHeader("Server", "Kestrel");
         AssertContainsResponseHeader("Content-Type", "application/json; charset=utf-8");
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResBody);
-        AssertHasText(HttpRobot.ResBodyRawContent, "{" + Environment.NewLine + "  \"myValue\": \"Tailândia\"" + Environment.NewLine + "}");
-        AssertIsVisible(HttpRobot.ResBodySaveToFile);
+        HttpRobot.ResBodyRawContent.AssertHasText("{" + Environment.NewLine + "  \"myValue\": \"Tailândia\"" + Environment.NewLine + "}");
+        HttpRobot.ResBodySaveToFile.AssertIsVisible();
     }
 }

@@ -250,11 +250,12 @@ public static class PostmanCollectionV21Importer
                     fileSrcPath = je.Deserialize(MainJsonCtx.String);
                 }
             }
-            return PororocaHttpRequestFormDataParam.MakeFileParam(IsEnabledInPostman(f.Disabled), f.Key, fileSrcPath ?? string.Empty, f.ContentType ?? string.Empty);
+            return PororocaHttpRequestFormDataParam.MakeFileParam(IsEnabledInPostman(f.Disabled), f.Key, fileSrcPath ?? string.Empty, f.ContentType ?? DefaultMimeTypeForBinary);
         }
-        else if (f.Type == PostmanRequestBodyFormDataParamType.Text)
+        else if (f.Type == PostmanRequestBodyFormDataParamType.Text
+              || f.Type == PostmanRequestBodyFormDataParamType.Default)
         {
-            return PororocaHttpRequestFormDataParam.MakeTextParam(IsEnabledInPostman(f.Disabled), f.Key, f.Value ?? string.Empty, f.ContentType ?? string.Empty);
+            return PororocaHttpRequestFormDataParam.MakeTextParam(IsEnabledInPostman(f.Disabled), f.Key, f.Value ?? string.Empty, f.ContentType ?? DefaultMimeTypeForText);
         }
         return p;
     }

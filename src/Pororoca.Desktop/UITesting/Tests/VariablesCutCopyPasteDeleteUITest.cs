@@ -5,7 +5,7 @@ using Pororoca.Domain.Features.Entities.Pororoca;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed partial class VariablesCutCopyPasteDeleteUITest : UITest
+public sealed partial class VariablesCutCopyPasteDeleteUITest : PororocaUITest
 {
     private Control RootView { get; }
     private TopMenuRobot TopMenuRobot { get; }
@@ -54,46 +54,46 @@ public sealed partial class VariablesCutCopyPasteDeleteUITest : UITest
         await ColVarsRobot.PasteVariables();
 
         colVars = ColVarsRobot.VariablesVm.Items.Select(x => x.ToVariable()).ToArray();
-        Assert(colVars.Length == 5);
-        Assert(colVars.Contains(new PororocaVariable(true, "CV1", "cv1_value", false)));
-        Assert(colVars.Contains(new PororocaVariable(false, "CV2", "cv2_value", true)));
-        Assert(colVars.Contains(new PororocaVariable(true, "CV3", "cv3_value", true)));
-        Assert(colVars.Contains(new PororocaVariable(true, "EV2", "ev2_value", true)));
-        Assert(colVars.Contains(new PororocaVariable(false, "EV3", "ev3_value", true)));
+        AssertCondition(colVars.Length == 5);
+        AssertCondition(colVars.Contains(new PororocaVariable(true, "CV1", "cv1_value", false)));
+        AssertCondition(colVars.Contains(new PororocaVariable(false, "CV2", "cv2_value", true)));
+        AssertCondition(colVars.Contains(new PororocaVariable(true, "CV3", "cv3_value", true)));
+        AssertCondition(colVars.Contains(new PororocaVariable(true, "EV2", "ev2_value", true)));
+        AssertCondition(colVars.Contains(new PororocaVariable(false, "EV3", "ev3_value", true)));
 
         // delete col vars
         await ColVarsRobot.SelectVariables(ColVarsRobot.VariablesVm.Items[3], ColVarsRobot.VariablesVm.Items[4]);
         await ColVarsRobot.DeleteSelectedVariables();
 
         colVars = ColVarsRobot.VariablesVm.Items.Select(x => x.ToVariable()).ToArray();
-        Assert(colVars.Length == 3);
-        Assert(colVars.Contains(new PororocaVariable(true, "CV1", "cv1_value", false)));
-        Assert(colVars.Contains(new PororocaVariable(false, "CV2", "cv2_value", true)));
-        Assert(colVars.Contains(new PororocaVariable(true, "CV3", "cv3_value", true)));
+        AssertCondition(colVars.Length == 3);
+        AssertCondition(colVars.Contains(new PororocaVariable(true, "CV1", "cv1_value", false)));
+        AssertCondition(colVars.Contains(new PororocaVariable(false, "CV2", "cv2_value", true)));
+        AssertCondition(colVars.Contains(new PororocaVariable(true, "CV3", "cv3_value", true)));
 
         // cut from col vars to env
         await ColVarsRobot.SelectVariables(ColVarsRobot.VariablesVm.Items[0], ColVarsRobot.VariablesVm.Items[2]);
         await ColVarsRobot.CutSelectedVariables();
 
         colVars = ColVarsRobot.VariablesVm.Items.Select(x => x.ToVariable()).ToArray();
-        Assert(colVars.Length == 1);
-        Assert(colVars.Contains(new PororocaVariable(false, "CV2", "cv2_value", true)));
+        AssertCondition(colVars.Length == 1);
+        AssertCondition(colVars.Contains(new PororocaVariable(false, "CV2", "cv2_value", true)));
 
         await TreeRobot.Select("COL1/ENVS/ENV1");
         await EnvRobot.PasteVariables();
 
         envVars = EnvRobot.VariablesVm.Items.Select(x => x.ToVariable()).ToArray();
-        Assert(envVars.Length == 5);
-        Assert(envVars.Contains(new PororocaVariable(false, "EV1", "ev1_value", false)));
-        Assert(envVars.Contains(new PororocaVariable(true, "EV2", "ev2_value", true)));
-        Assert(envVars.Contains(new PororocaVariable(false, "EV3", "ev3_value", true)));
-        Assert(envVars.Contains(new PororocaVariable(true, "CV1", "cv1_value", false)));
-        Assert(envVars.Contains(new PororocaVariable(true, "CV3", "cv3_value", true)));
+        AssertCondition(envVars.Length == 5);
+        AssertCondition(envVars.Contains(new PororocaVariable(false, "EV1", "ev1_value", false)));
+        AssertCondition(envVars.Contains(new PororocaVariable(true, "EV2", "ev2_value", true)));
+        AssertCondition(envVars.Contains(new PororocaVariable(false, "EV3", "ev3_value", true)));
+        AssertCondition(envVars.Contains(new PororocaVariable(true, "CV1", "cv1_value", false)));
+        AssertCondition(envVars.Contains(new PororocaVariable(true, "CV3", "cv3_value", true)));
 
         // delete env vars
         await EnvRobot.SelectVariables(EnvRobot.VariablesVm.Items.ToArray());
         await EnvRobot.DeleteSelectedVariables();
         envVars = EnvRobot.VariablesVm.Items.Select(x => x.ToVariable()).ToArray();
-        Assert(envVars.Length == 0);
+        AssertCondition(envVars.Length == 0);
     }
 }

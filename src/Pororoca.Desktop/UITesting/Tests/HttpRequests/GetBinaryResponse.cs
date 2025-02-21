@@ -1,6 +1,6 @@
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed partial class HttpRequestsUITest : UITest
+public sealed partial class HttpRequestsUITest : PororocaUITest
 {
     private async Task TestGetBinaryResponse()
     {
@@ -9,14 +9,14 @@ public sealed partial class HttpRequestsUITest : UITest
         await HttpRobot.SetEmptyBody();
         await HttpRobot.ClickOnSendAndWaitForResponse();
 
-        AssertContainsText(HttpRobot.ResTitle, "Response: 200 OK");
+        HttpRobot.ResTitle.AssertContainsText("Response: 200 OK");
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResHeaders);
         AssertContainsResponseHeader("Date");
         AssertContainsResponseHeader("Server", "Kestrel");
         AssertContainsResponseHeader("Content-Type", "image/gif");
         AssertContainsResponseHeader("Content-Length", "888");
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResBody);
-        AssertContainsText(HttpRobot.ResBodyRawContent, "(binary content not shown, 888 bytes)");
-        AssertIsVisible(HttpRobot.ResBodySaveToFile);
+        HttpRobot.ResBodyRawContent.AssertContainsText("(binary content not shown, 888 bytes)");
+        HttpRobot.ResBodySaveToFile.AssertIsVisible();
     }
 }

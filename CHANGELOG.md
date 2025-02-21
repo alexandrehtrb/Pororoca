@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.7.2](#372-2025-02-21)
 * [3.7.1](#371-2025-01-12)
 * [3.7.0.2](#3702-2024-12-06)
 * [3.7.0.1](#3701-2024-12-02)
@@ -33,6 +34,28 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.7.2](https://github.com/alexandrehtrb/Pororoca/tree/3.7.2) (2025-02-21)
+
+### Features
+
+- Vertical scrollbars on text editors are now always visible. (issue #101, thanks @TWaalen!)
+- Left panel is now resizable.
+
+### Bug Fixes
+
+- Added 'default' as Postman form data param type. (issue #133)
+- Prevent TextMate installation exception. (@TWaalen)
+
+### Refactors
+
+- UI tests using [`AvaloniaUITest`](https://www.nuget.org/packages/AlexandreHtrb.AvaloniaUITest) NuGet package.
+- i18n language files changed back to JSON format.
+- Raised .NET SDK version to 8.0.406.
+
+### New Contributors
+
+* [@TWaalen](https://github.com/TWaalen) made his first contribution in PR [#134](https://github.com/alexandrehtrb/Pororoca/pull/134)
 
 ## [3.7.1](https://github.com/alexandrehtrb/Pororoca/tree/3.7.1) (2025-01-12)
 

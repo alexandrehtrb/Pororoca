@@ -5,7 +5,7 @@ using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed class EditableTextBlockUITest : UITest
+public sealed class EditableTextBlockUITest : PororocaUITest
 {
     private Control RootView { get; }
     private TopMenuRobot TopMenuRobot { get; }
@@ -24,37 +24,37 @@ public sealed class EditableTextBlockUITest : UITest
         var etbView = collectionView.FindControl<EditableTextBlock>("etbName")!;
         EditableTextBlockRobot robot = new(etbView);
 
-        AssertIsVisible(robot.RootView);
-        Assert(robot.Icon == null);
-        AssertIsVisible(robot.AppliedText);
-        AssertHasText(robot.AppliedText, "New collection");
-        AssertIsHidden(robot.TextBeingEdited);
-        AssertIsVisible(robot.ButtonEditOrApply);
-        AssertIsVisible(robot.ButtonIconEdit);
-        AssertIsHidden(robot.ButtonIconApply);
+        robot.RootView.AssertIsVisible();
+        AssertCondition(robot.Icon == null);
+        robot.AppliedText.AssertIsVisible();
+        robot.AppliedText.AssertHasText("New collection");
+        robot.TextBeingEdited.AssertIsHidden();
+        robot.ButtonEditOrApply.AssertIsVisible();
+        robot.ButtonIconEdit.AssertIsVisible();
+        robot.ButtonIconApply.AssertIsHidden();
 
         await robot.ButtonEditOrApply.ClickOn();
 
-        AssertIsVisible(robot.RootView);
-        Assert(robot.Icon == null);
-        AssertIsHidden(robot.AppliedText);
-        AssertIsVisible(robot.TextBeingEdited);
-        AssertHasText(robot.TextBeingEdited, "New collection");
-        AssertIsVisible(robot.ButtonEditOrApply);
-        AssertIsVisible(robot.ButtonIconApply);
-        AssertIsHidden(robot.ButtonIconEdit);
+        robot.RootView.AssertIsVisible();
+        AssertCondition(robot.Icon == null);
+        robot.AppliedText.AssertIsHidden();
+        robot.TextBeingEdited.AssertIsVisible();
+        robot.TextBeingEdited.AssertHasText("New collection");
+        robot.ButtonEditOrApply.AssertIsVisible();
+        robot.ButtonIconApply.AssertIsVisible();
+        robot.ButtonIconEdit.AssertIsHidden();
 
         await robot.TextBeingEdited.ClearText();
         await robot.TextBeingEdited.TypeText("COLLECTION");
         await robot.ButtonEditOrApply.ClickOn();
 
-        AssertIsVisible(robot.RootView);
-        Assert(robot.Icon == null);
-        AssertIsVisible(robot.AppliedText);
-        AssertHasText(robot.AppliedText, "COLLECTION");
-        AssertIsHidden(robot.TextBeingEdited);
-        AssertIsVisible(robot.ButtonEditOrApply);
-        AssertIsVisible(robot.ButtonIconEdit);
-        AssertIsHidden(robot.ButtonIconApply);
+        robot.RootView.AssertIsVisible();
+        AssertCondition(robot.Icon == null);
+        robot.AppliedText.AssertIsVisible();
+        robot.AppliedText.AssertHasText("COLLECTION");
+        robot.TextBeingEdited.AssertIsHidden();
+        robot.ButtonEditOrApply.AssertIsVisible();
+        robot.ButtonIconEdit.AssertIsVisible();
+        robot.ButtonIconApply.AssertIsHidden();
     }
 }

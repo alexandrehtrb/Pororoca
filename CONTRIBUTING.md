@@ -24,17 +24,15 @@ To generate the Windows Installer, you will need [NSIS](https://nsis.sourceforge
 
 ## I want to translate Pororoca to my language
 
-Pororoca uses `.resx` files for internationalization.
+Pororoca uses JSON files for internationalization. 
 
-[ResXResourceManager](https://github.com/dotnet/ResXResourceManager) is a great tool for managing translations in `.resx` files. In its bottom bar, tab Translate, you can automate translations by using popular APIs, like Google, Bing and MyMemory. But it is only available for Windows.
-
-For other platforms, there are VSCode extensions that allow visualization of `.resx` strings as tables. You can also use a text editor for them, as they follow a XML format.
+The [WebTranslateIt](https://converter.webtranslateit.com/) online tool allows you to convert those JSON files into other formats that you might feel more comfortable working on. After finishing your translations, you can convert again to JSON.
 
 1) In the *Pororoca.Desktop.Localization.SourceGeneration* project, add your language to the enum and extensions.
 
-2) In the *Pororoca.Desktop* project, create a new resx file with your language strings, inside the Localization folder, and reference in AdditionalFiles inside `Pororoca.Desktop.csproj`.
+2) In the *Pororoca.Desktop* project, create a new JSON file with your language strings, inside the Localization folder, and reference in AdditionalFiles inside `Pororoca.Desktop.csproj`.
 
-3) Insert a new key in the `strings.resx` file, of your language name, like: `"TopMenuLanguage/YourLanguage",`. The other language files will need a translation for this key.
+3) Insert a new key in the `i18n_keys.json` file, of your language name, like: `"TopMenuLanguage/YourLanguage",`. The other language files will need a translation for this key.
 
 4) Edit `MainWindow.xaml` and `MainWindowViewModel.cs` to add your language to the top menu.
 

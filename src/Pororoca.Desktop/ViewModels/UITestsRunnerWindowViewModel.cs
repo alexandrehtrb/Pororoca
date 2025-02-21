@@ -33,9 +33,9 @@ public sealed class UITestViewModel : ViewModelBase
 #endif
 }
 
-public sealed class UITestsPrepareWindowViewModel : ViewModelBase
+public sealed class UITestsRunnerWindowViewModel : ViewModelBase
 {
-    public static readonly UITestsPrepareWindowViewModel Instance = new();
+    public static readonly UITestsRunnerWindowViewModel Instance = new();
 
     [Reactive]
     public int ActionsWaitingTimeInMs { get; set; }
@@ -49,7 +49,7 @@ public sealed class UITestsPrepareWindowViewModel : ViewModelBase
 
     public ReactiveCommand<Unit, Unit> DeselectAllTestsCmd { get; }
 
-    private UITestsPrepareWindowViewModel()
+    private UITestsRunnerWindowViewModel()
     {
         ActionsWaitingTimeInMs = 20;
         Tests =
@@ -95,7 +95,7 @@ public sealed class UITestsPrepareWindowViewModel : ViewModelBase
 
     public void CheckIfTestFilesFolderExist() =>
 #if DEBUG || UI_TESTS_ENABLED
-        TestFilesFolderFound = Directory.Exists(UITest.GetTestFilesDirPath());
+        TestFilesFolderFound = Directory.Exists(PororocaUITest.GetTestFilesDirPath());
 #else
         TestFilesFolderFound = false;
 #endif

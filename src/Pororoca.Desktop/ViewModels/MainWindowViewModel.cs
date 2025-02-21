@@ -532,8 +532,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 #if DEBUG || UI_TESTS_ENABLED
     private Task RunUITestsAsync()
     {
-        Pororoca.Desktop.Views.UITestsPrepareWindow uiTestsPrepareWindow = new();
-        uiTestsPrepareWindow.Show(Pororoca.Desktop.Views.MainWindow.Instance!);
+        Pororoca.Desktop.Views.UITestsRunnerWindow uiTestsRunnerWindow = new();
+        uiTestsRunnerWindow.Show(Pororoca.Desktop.Views.MainWindow.Instance!);
         return Task.CompletedTask;
     }
 #else

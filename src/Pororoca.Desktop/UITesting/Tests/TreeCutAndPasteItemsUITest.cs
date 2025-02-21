@@ -4,7 +4,7 @@ using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed class TreeCutAndPasteItemsUITest : UITest
+public sealed class TreeCutAndPasteItemsUITest : PororocaUITest
 {
     private Control RootView { get; }
     private TopMenuRobot TopMenuRobot { get; }
@@ -80,21 +80,21 @@ public sealed class TreeCutAndPasteItemsUITest : UITest
         await TreeRobot.Paste();
 
         // check if items exist only in target collection
-        AssertTreeItemExists(CollectionsGroup, "COL1");
-        AssertTreeItemNotExists(CollectionsGroup, "COL1/ENVS/ENV1");
-        AssertTreeItemNotExists(CollectionsGroup, "COL1/DIR1");
-        AssertTreeItemNotExists(CollectionsGroup, "COL1/HTTP1");
-        AssertTreeItemNotExists(CollectionsGroup, "COL1/WS1");
-        AssertTreeItemNotExists(CollectionsGroup, "COL1/WS1/WS1_MSG1");
-        AssertTreeItemNotExists(CollectionsGroup, "COL1/REP1");
+        CollectionsGroup.AssertTreeItemExists("COL1");
+        CollectionsGroup.AssertTreeItemNotExists("COL1/ENVS/ENV1");
+        CollectionsGroup.AssertTreeItemNotExists("COL1/DIR1");
+        CollectionsGroup.AssertTreeItemNotExists("COL1/HTTP1");
+        CollectionsGroup.AssertTreeItemNotExists("COL1/WS1");
+        CollectionsGroup.AssertTreeItemNotExists("COL1/WS1/WS1_MSG1");
+        CollectionsGroup.AssertTreeItemNotExists("COL1/REP1");
 
-        AssertTreeItemExists(CollectionsGroup, "COL2");
-        AssertTreeItemExists(CollectionsGroup, "COL2/ENVS/ENV1");
-        AssertTreeItemExists(CollectionsGroup, "COL2/DIR1");
-        AssertTreeItemExists(CollectionsGroup, "COL2/HTTP1");
-        AssertTreeItemExists(CollectionsGroup, "COL2/WS1");
-        AssertTreeItemExists(CollectionsGroup, "COL2/WS1/WS1_MSG1");
-        AssertTreeItemExists(CollectionsGroup, "COL2/REP1");
+        CollectionsGroup.AssertTreeItemExists("COL2");
+        CollectionsGroup.AssertTreeItemExists("COL2/ENVS/ENV1");
+        CollectionsGroup.AssertTreeItemExists("COL2/DIR1");
+        CollectionsGroup.AssertTreeItemExists("COL2/HTTP1");
+        CollectionsGroup.AssertTreeItemExists("COL2/WS1");
+        CollectionsGroup.AssertTreeItemExists("COL2/WS1/WS1_MSG1");
+        CollectionsGroup.AssertTreeItemExists("COL2/REP1");
 
         // let's rename items in col2
 
@@ -121,26 +121,26 @@ public sealed class TreeCutAndPasteItemsUITest : UITest
         await TreeRobot.Cut();
         await TreeRobot.Select("COL2/DIR2");
         await TreeRobot.Paste();
-        AssertTreeItemNotExists(CollectionsGroup, "COL2/HTTP2");
-        AssertTreeItemExists(CollectionsGroup, "COL2/DIR2/HTTP2");
+        CollectionsGroup.AssertTreeItemNotExists("COL2/HTTP2");
+        CollectionsGroup.AssertTreeItemExists("COL2/DIR2/HTTP2");
 
         // let's cut and paste a single ws into a dir
         await TreeRobot.Select("COL2/WS2");
         await TreeRobot.Cut();
         await TreeRobot.Select("COL2/DIR2");
         await TreeRobot.Paste();
-        AssertTreeItemNotExists(CollectionsGroup, "COL2/WS2");
-        AssertTreeItemNotExists(CollectionsGroup, "COL2/WS2/WS2_MSG1");
-        AssertTreeItemExists(CollectionsGroup, "COL2/DIR2/WS2");
-        AssertTreeItemExists(CollectionsGroup, "COL2/DIR2/WS2/WS2_MSG1");
+        CollectionsGroup.AssertTreeItemNotExists("COL2/WS2");
+        CollectionsGroup.AssertTreeItemNotExists("COL2/WS2/WS2_MSG1");
+        CollectionsGroup.AssertTreeItemExists("COL2/DIR2/WS2");
+        CollectionsGroup.AssertTreeItemExists("COL2/DIR2/WS2/WS2_MSG1");
 
         // let's cut and paste a single http rep into a dir
         await TreeRobot.Select("COL2/REP2");
         await TreeRobot.Cut();
         await TreeRobot.Select("COL2/DIR2");
         await TreeRobot.Paste();
-        AssertTreeItemNotExists(CollectionsGroup, "COL2/REP2");
-        AssertTreeItemExists(CollectionsGroup, "COL2/DIR2/REP2");
+        CollectionsGroup.AssertTreeItemNotExists("COL2/REP2");
+        CollectionsGroup.AssertTreeItemExists("COL2/DIR2/REP2");
 
         // let's cut and paste a single dir into another dir
         await TreeRobot.Select("COL2");
@@ -150,26 +150,26 @@ public sealed class TreeCutAndPasteItemsUITest : UITest
         await TreeRobot.Cut();
         await TreeRobot.Select("COL2/DIR2");
         await TreeRobot.Paste();
-        AssertTreeItemNotExists(CollectionsGroup, "COL2/DIR1");
-        AssertTreeItemExists(CollectionsGroup, "COL2/DIR2/DIR1");
+        CollectionsGroup.AssertTreeItemNotExists("COL2/DIR1");
+        CollectionsGroup.AssertTreeItemExists("COL2/DIR2/DIR1");
 
         // let's cut and paste a dir, should make a full depth cut
         await TreeRobot.Select("COL2/DIR2");
         await TreeRobot.Cut();
         await TreeRobot.Select("COL1");
         await TreeRobot.Paste();
-        AssertTreeItemNotExists(CollectionsGroup, "COL2/DIR2");
-        AssertTreeItemNotExists(CollectionsGroup, "COL2/DIR2/DIR1");
-        AssertTreeItemNotExists(CollectionsGroup, "COL2/DIR2/HTTP2");
-        AssertTreeItemNotExists(CollectionsGroup, "COL2/DIR2/WS2");
-        AssertTreeItemNotExists(CollectionsGroup, "COL2/DIR2/WS2/WS2_MSG1");
-        AssertTreeItemNotExists(CollectionsGroup, "COL2/DIR2/REP2");
-        AssertTreeItemExists(CollectionsGroup, "COL1/DIR2");
-        AssertTreeItemExists(CollectionsGroup, "COL1/DIR2/DIR1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/DIR2/HTTP2");
-        AssertTreeItemExists(CollectionsGroup, "COL1/DIR2/WS2");
-        AssertTreeItemExists(CollectionsGroup, "COL1/DIR2/WS2/WS2_MSG1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/DIR2/REP2");
+        CollectionsGroup.AssertTreeItemNotExists("COL2/DIR2");
+        CollectionsGroup.AssertTreeItemNotExists("COL2/DIR2/DIR1");
+        CollectionsGroup.AssertTreeItemNotExists("COL2/DIR2/HTTP2");
+        CollectionsGroup.AssertTreeItemNotExists("COL2/DIR2/WS2");
+        CollectionsGroup.AssertTreeItemNotExists("COL2/DIR2/WS2/WS2_MSG1");
+        CollectionsGroup.AssertTreeItemNotExists("COL2/DIR2/REP2");
+        CollectionsGroup.AssertTreeItemExists("COL1/DIR2");
+        CollectionsGroup.AssertTreeItemExists("COL1/DIR2/DIR1");
+        CollectionsGroup.AssertTreeItemExists("COL1/DIR2/HTTP2");
+        CollectionsGroup.AssertTreeItemExists("COL1/DIR2/WS2");
+        CollectionsGroup.AssertTreeItemExists("COL1/DIR2/WS2/WS2_MSG1");
+        CollectionsGroup.AssertTreeItemExists("COL1/DIR2/REP2");
 
         // let's cut and paste ws msgs
         await TreeRobot.Select("COL1");
@@ -181,7 +181,7 @@ public sealed class TreeCutAndPasteItemsUITest : UITest
         await TreeRobot.Cut();
         await TreeRobot.Select("COL1/DIR2/WS2");
         await TreeRobot.Paste();
-        AssertTreeItemNotExists(CollectionsGroup, "COL1/WS1/WS1_MSG1");
-        AssertTreeItemExists(CollectionsGroup, "COL1/DIR2/WS2/WS1_MSG1");
+        CollectionsGroup.AssertTreeItemNotExists("COL1/WS1/WS1_MSG1");
+        CollectionsGroup.AssertTreeItemExists("COL1/DIR2/WS2/WS1_MSG1");
     }
 }

@@ -116,34 +116,34 @@ public sealed class ExportEnvironmentsUITest : SaveAndRestoreCollectionUITest
         var cvm = ((CollectionViewModel)ColRobot.RootView!.DataContext!);
         if (format == ExportEnvironmentFormat.Pororoca)
         {
-            Assert(PororocaEnvironmentImporter.TryImportPororocaEnvironment(json, out var reimportedEnv));
+            AssertCondition(PororocaEnvironmentImporter.TryImportPororocaEnvironment(json, out var reimportedEnv));
             cvm.EnvironmentsGroupVm.AddEnvironment(reimportedEnv!);
         }
         else if (format == ExportEnvironmentFormat.Postman)
         {
-            Assert(PostmanEnvironmentImporter.TryImportPostmanEnvironment(json, out var reimportedEnv));
+            AssertCondition(PostmanEnvironmentImporter.TryImportPostmanEnvironment(json, out var reimportedEnv));
             cvm.EnvironmentsGroupVm.AddEnvironment(reimportedEnv!);
         }
     }
 
     private async Task AssertEnvironmentReimportedSuccessfully(ObservableCollection<VariableViewModel> expectedEnvVarsVms)
     {
-        AssertTreeItemExists(CollectionsGroup, "COL1/ENVS/ENV");
+        CollectionsGroup.AssertTreeItemExists("COL1/ENVS/ENV");
 
         await TreeRobot.Select("COL1/ENVS/ENV");
-        AssertIsVisible(EnvRobot.RootView);
+        EnvRobot.RootView.AssertIsVisible();
         // imported env should be marked as not current
-        AssertIsVisible(EnvRobot.SetAsCurrentEnvironment);
+        EnvRobot.SetAsCurrentEnvironment.AssertIsVisible();
         var expectedEnvVars = expectedEnvVarsVms.Select(x => x.ToVariable()).ToList();
         var envVars = EnvRobot.VariablesVm.GetVariables(true);
-        Assert(Enumerable.SequenceEqual(expectedEnvVars, envVars));
+        AssertCondition(Enumerable.SequenceEqual(expectedEnvVars, envVars));
     }
 
     private void ClearAllCollections()
     {
         MainWindowVm.CollectionsGroupViewDataCtx.CollectionGroupSelectedItem = null;
         MainWindowVm.CollectionsGroupViewDataCtx.Items.Clear();
-        AssertTreeItemNotExists(CollectionsGroup, "COL1");
+        CollectionsGroup.AssertTreeItemNotExists("COL1");
     }
 
     #endregion
