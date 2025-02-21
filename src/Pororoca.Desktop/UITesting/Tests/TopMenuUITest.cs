@@ -44,7 +44,7 @@ public sealed class TopMenuUITest : PororocaUITest
         await Robot.Options_Language.ClickOn();
         Robot.Options_Theme_Light.AssertIsHidden();
         Robot.Options_Language_English.AssertIsVisible();
-        Robot.Options_Language_Português.AssertIsVisible();
+        Robot.Options_Language_PortuguÃªs.AssertIsVisible();
         Robot.Options_Language_Russian.AssertIsVisible();
 
         //await Robot.Help.ClickOn();
