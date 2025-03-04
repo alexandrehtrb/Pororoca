@@ -80,7 +80,7 @@ public static class HttpRepetitionValidator
         {
             string resolvedFilePath = IPororocaVariableResolver.ReplaceTemplates(inputData.InputFilePath, colEffectiveVariables);
 
-            using FileStream fs = new(resolvedFilePath!, FileMode.Open, FileAccess.Read, FileShare.Read, 65536, useAsync: true);
+            using FileStream fs = File.OpenRead(resolvedFilePath!);
             inputLines = (await JsonSerializer.DeserializeAsync(fs, MinifyingJsonCtx.DictionaryStringStringArray, cancellationToken))!;
         }
         else

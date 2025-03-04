@@ -91,7 +91,7 @@ internal static partial class FileExporterImporter
         {
             if (format == ExportCollectionFormat.Pororoca)
             {
-                using FileStream fs = new(destFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite, bufferSize: 16384, useAsync: true);
+                using FileStream fs = File.OpenWrite(destFilePath);
                 await ExportAsPororocaCollectionAsync(fs, col);
             }
             else if (format == ExportCollectionFormat.Postman)

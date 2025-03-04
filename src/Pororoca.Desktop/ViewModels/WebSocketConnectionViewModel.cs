@@ -727,8 +727,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         string? saveFileOutputPath = await FileExporterImporter.SelectPathForFileToBeSavedAsync(initialFileName);
         if (saveFileOutputPath != null)
         {
-            const int fileStreamBufferSize = 4096;
-            using FileStream fs = new(saveFileOutputPath, FileMode.Create, FileAccess.Write, FileShare.None, fileStreamBufferSize, useAsync: true);
+            using FileStream fs = File.OpenWrite(saveFileOutputPath);
             await fs.WriteAsync((Memory<byte>)exchangedMessage.Bytes!);
         }
     }

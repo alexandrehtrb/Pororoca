@@ -38,7 +38,7 @@ public static class UserDataManager
 
         try
         {
-            using FileStream fs = new(userPreferencesFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, bufferSize: 128, useAsync: false);
+            using FileStream fs = File.OpenRead(userPreferencesFilePath);
             var userPrefs = JsonSerializer.Deserialize(fs, UserPreferencesJsonSrcGenContext.Default.UserPreferences);
             return userPrefs;
         }
@@ -65,7 +65,9 @@ public static class UserDataManager
     {
         try
         {
-            using FileStream fs = new(fi.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, bufferSize: 16384, useAsync: true);
+            // File.OpenRead() uses flags FileAccess.Read and FileShare.Read,
+            // which means other processes can read at the same time.
+            using FileStream fs = File.OpenRead(fi.FullName);
             var col = await PororocaCollectionImporter.ImportPororocaCollectionAsync(fs, preserveId: true);
             // await above is necessary because of the "using" on the FileStream
             return col;
@@ -104,8 +106,8 @@ public static class UserDataManager
     private static void SaveUserPreferences(UserPreferences userPrefs)
     {
         string path = GetUserDataFilePath(userPreferencesFileName);
-        string json = JsonSerializer.Serialize(userPrefs, UserPreferencesJsonSrcGenContext.Default.UserPreferences);
-        File.WriteAllText(path, json, Encoding.UTF8);
+        using FileStream fs = File.OpenWrite(path);
+        JsonSerializer.Serialize(fs, userPrefs, UserPreferencesJsonSrcGenContext.Default.UserPreferences);
     }
 
     private static void SaveUserCollections(IEnumerable<PororocaCollection> collections)
@@ -135,7 +137,13 @@ public static class UserDataManager
             // Flush() writes the file bytes into the hard drive.
             // https://stackoverflow.com/a/7710686
 
-            using FileStream fs = new(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite, bufferSize: 16384, useAsync: false);
+            // IMPORTANT!
+            // File.OpenWrite() uses flags FileAccess.Write and FileShare.None,
+            // which means other processes CANNOT READ at the same time.
+            // If one instance of Pororoca is saving collection files,
+            // other instances should not be able to read those files,
+            // as they are still being written. This could lead to data corruption.
+            using FileStream fs = File.OpenWrite(path);
             PororocaCollectionExporter.ExportAsPororocaCollection(fs, col);
 
             // Marking collections that were deleted, to delete their files
