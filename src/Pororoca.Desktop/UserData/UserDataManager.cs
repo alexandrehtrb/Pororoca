@@ -106,8 +106,8 @@ public static class UserDataManager
     private static void SaveUserPreferences(UserPreferences userPrefs)
     {
         string path = GetUserDataFilePath(userPreferencesFileName);
-        using FileStream fs = File.OpenWrite(path);
-        JsonSerializer.Serialize(fs, userPrefs, UserPreferencesJsonSrcGenContext.Default.UserPreferences);
+        string json = JsonSerializer.Serialize(userPrefs, UserPreferencesJsonSrcGenContext.Default.UserPreferences);
+        File.WriteAllText(path, json, Encoding.UTF8);
     }
 
     private static void SaveUserCollections(IEnumerable<PororocaCollection> collections)
