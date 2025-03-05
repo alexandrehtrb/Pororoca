@@ -38,9 +38,8 @@ public static class PororocaWebSocketClientMessageTranslator
 
     private static Stream GetStreamToSendFromFileContent(IEnumerable<PororocaVariable> effectiveVars, PororocaWebSocketClientMessage wsCliMsg)
     {
-        const int fileStreamBufferSize = 4096;
         string resolvedFilePath = IPororocaVariableResolver.ReplaceTemplates(wsCliMsg.FileSrcPath, effectiveVars);
         // DO NOT USE "USING" FOR FILESTREAM HERE --> it will be disposed later, by the PororocaWebSocketConnector
-        return new FileStream(resolvedFilePath, FileMode.Open, FileAccess.Read, FileShare.Read, fileStreamBufferSize, useAsync: true);
+        return File.OpenRead(resolvedFilePath);
     }
 }

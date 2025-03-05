@@ -127,9 +127,8 @@ public static class PororocaHttpRequestTranslator
 
         StreamContent MakeFileContent(string resolvedFileSrcPath, string? contentType)
         {
-            const int fileStreamBufferSize = 4096;
             // DO NOT USE "USING" FOR FILESTREAM HERE --> it will be disposed later, by the PororocaRequester
-            FileStream fs = new(resolvedFileSrcPath, FileMode.Open, FileAccess.Read, FileShare.Read, fileStreamBufferSize, useAsync: true);
+            FileStream fs = File.OpenRead(resolvedFileSrcPath);
             StreamContent content = new(fs);
             content.Headers.ContentType = new(contentType ?? MimeTypesDetector.DefaultMimeTypeForBinary);
             return content;
