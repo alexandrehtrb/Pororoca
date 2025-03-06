@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
+using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.ExportCollection;
 using Pororoca.Domain.Features.ImportCollection;
@@ -42,8 +43,9 @@ public static class UserDataManager
             var userPrefs = JsonSerializer.Deserialize(fs, UserPreferencesJsonSrcGenContext.Default.UserPreferences);
             return userPrefs;
         }
-        catch
+        catch (Exception ex)
         {
+            PororocaLogger.Instance?.Log(PororocaLogLevel.Error, "Failed to read userPreferences.json.", ex);
             return null;
         }
     }
@@ -74,7 +76,7 @@ public static class UserDataManager
         }
         catch (Exception ex)
         {
-            Debug.WriteLine("Load collection file error:\n\n" + ex.ToString());
+            PororocaLogger.Instance?.Log(PororocaLogLevel.Error, "Failed to load user saved collection.", ex);
             return null;
         }
     }
@@ -122,7 +124,7 @@ public static class UserDataManager
         }
         catch (Exception ex)
         {
-            Debug.WriteLine("Fetch saved user collections files ids error:\n\n" + ex.ToString());
+            PororocaLogger.Instance?.Log(PororocaLogLevel.Error, "Failed to fetch user saved collections ids.", ex);
             savedColsIds = new();
         }
 
@@ -205,8 +207,9 @@ public static class UserDataManager
             string oldDirRenamedNewPath = Path.Combine(oldDir.Parent!.FullName, "PororocaUserData_old_backup");
             oldDir.MoveTo(oldDirRenamedNewPath);
         }
-        catch
+        catch (Exception ex)
         {
+            PororocaLogger.Instance?.Log(PororocaLogLevel.Error, "Failed to execute migration on MacOSX to V3.", ex);
         }
     }
 

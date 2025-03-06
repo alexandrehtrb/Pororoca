@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Postman;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
@@ -21,8 +22,9 @@ public static class PostmanEnvironmentImporter
 
             return TryConvertPostmanEnvironment(postmanEnvironment, out pororocaEnvironment);
         }
-        catch
+        catch (Exception ex)
         {
+            PororocaLogger.Instance?.Log(PororocaLogLevel.Error, "Failed to import Postman environment.", ex);
             pororocaEnvironment = null;
             return false;
         }
@@ -46,8 +48,9 @@ public static class PostmanEnvironmentImporter
 
             return true;
         }
-        catch
+        catch (Exception ex)
         {
+            PororocaLogger.Instance?.Log(PororocaLogLevel.Error, "Failed to convert Postman environment to Pororoca.", ex);
             pororocaEnvironment = null;
             return false;
         }

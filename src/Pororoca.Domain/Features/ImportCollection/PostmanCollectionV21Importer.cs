@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Postman;
@@ -24,8 +25,9 @@ public static class PostmanCollectionV21Importer
 
             return TryConvertToPororocaCollection(postmanCollection, out pororocaCollection);
         }
-        catch
+        catch (Exception ex)
         {
+            PororocaLogger.Instance?.Log(PororocaLogLevel.Error, "Failed to import Postman collection.", ex);
             pororocaCollection = null;
             return false;
         }
@@ -62,8 +64,9 @@ public static class PostmanCollectionV21Importer
             pororocaCollection = myCol;
             return true;
         }
-        catch
+        catch (Exception ex)
         {
+            PororocaLogger.Instance?.Log(PororocaLogLevel.Error, "Failed to convert Postman collection to Pororoca.", ex);
             pororocaCollection = null;
             return false;
         }

@@ -4,6 +4,7 @@ using System.Text.Json.Nodes;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Microsoft.OpenApi.Readers;
+using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
@@ -74,8 +75,9 @@ public static class OpenApiImporter
             pororocaCollection = col;
             return true;
         }
-        catch
+        catch (Exception ex)
         {
+            PororocaLogger.Instance?.Log(PororocaLogLevel.Error, "Failed to import OpenAPI collection.", ex);
             pororocaCollection = null;
             return false;
         }
@@ -210,8 +212,9 @@ public static class OpenApiImporter
 
             return null;
         }
-        catch
+        catch (Exception ex)
         {
+            PororocaLogger.Instance?.Log(PororocaLogLevel.Warning, "Failed to read OpenAPI request body.", ex);
             return null;
         }
     }
