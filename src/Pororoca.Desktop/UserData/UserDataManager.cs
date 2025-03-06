@@ -137,13 +137,16 @@ public static class UserDataManager
             // Flush() writes the file bytes into the hard drive.
             // https://stackoverflow.com/a/7710686
 
-            // IMPORTANT!
-            // File.OpenWrite() uses flags FileAccess.Write and FileShare.None,
+            // IMPORTANT 1!
+            // File.Create() uses flags FileMode.Create, FileAccess.ReadWrite and FileShare.None,
             // which means other processes CANNOT READ at the same time.
             // If one instance of Pororoca is saving collection files,
             // other instances should not be able to read those files,
             // as they are still being written. This could lead to data corruption.
-            using FileStream fs = File.OpenWrite(path);
+            // IMPORTANT 2!
+            // We must use File.Create() instead of File.OpenWrite(),
+            // to truncate the file first and then write on it.
+            using FileStream fs = File.Create(path);
             PororocaCollectionExporter.ExportAsPororocaCollection(fs, col);
 
             // Marking collections that were deleted, to delete their files

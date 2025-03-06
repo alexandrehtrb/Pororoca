@@ -11,7 +11,9 @@ public static class HttpRepetitionReporter
         IEnumerable<PororocaHttpRepetitionResult> results,
         string destinationFilePath)
     {
-        using var fs = File.OpenWrite(destinationFilePath);
+        // We must use File.Create() instead of File.OpenWrite(),
+        // to truncate the file first and then write on it.
+        using var fs = File.Create(destinationFilePath);
         using StreamWriter sw = new(fs);
         await WriteReportAsync(results, sw);
     }
