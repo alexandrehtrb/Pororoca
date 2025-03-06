@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.7.4](#374-2025-03-06)
 * [3.7.3](#373-2025-03-04)
 * [3.7.2](#372-2025-02-21)
 * [3.7.1](#371-2025-01-12)
@@ -35,6 +36,20 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.7.4](https://github.com/alexandrehtrb/Pororoca/tree/3.7.4) (2025-03-06)
+
+### Features
+
+- Errors are now logged to files in user data folder.
+
+### Bug Fixes
+
+- Saving files using FileMode.Create, to truncate first, then write. (issue #137)
+
+### Others
+
+- ReportGenerator GitHub Action version raised to 5.4.4.
 
 ## [3.7.3](https://github.com/alexandrehtrb/Pororoca/tree/3.7.3) (2025-03-04)
 

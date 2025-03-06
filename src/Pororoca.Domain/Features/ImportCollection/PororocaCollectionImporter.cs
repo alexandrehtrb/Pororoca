@@ -1,5 +1,5 @@
-using System.Diagnostics;
 using System.Text.Json;
+using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
 
@@ -27,7 +27,7 @@ public static class PororocaCollectionImporter
         }
         catch (Exception ex)
         {
-            Debug.WriteLine("Import collection async error:\n\n" + ex.ToString());
+            PororocaLogger.Instance?.Log(PororocaLogLevel.Error, "Failed to async import Pororoca collection.", ex);
             return null;
         }
     }
@@ -54,7 +54,7 @@ public static class PororocaCollectionImporter
         }
         catch (Exception ex)
         {
-            Debug.WriteLine("Try import collection error:\n\n" + ex.ToString());
+            PororocaLogger.Instance?.Log(PororocaLogLevel.Error, "Failed to try import Pororoca collection.", ex);
             pororocaCollection = null;
             return false;
         }

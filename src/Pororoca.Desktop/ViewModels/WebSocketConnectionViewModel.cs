@@ -727,7 +727,9 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         string? saveFileOutputPath = await FileExporterImporter.SelectPathForFileToBeSavedAsync(initialFileName);
         if (saveFileOutputPath != null)
         {
-            using FileStream fs = File.OpenWrite(saveFileOutputPath);
+            // We must use File.Create() instead of File.OpenWrite(),
+            // to truncate the file first and then write on it.
+            using FileStream fs = File.Create(saveFileOutputPath);
             await fs.WriteAsync((Memory<byte>)exchangedMessage.Bytes!);
         }
     }

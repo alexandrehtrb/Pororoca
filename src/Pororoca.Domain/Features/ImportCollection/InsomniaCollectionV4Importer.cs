@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Insomnia;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
@@ -25,8 +26,9 @@ public static class InsomniaCollectionV4Importer
 
             return TryConvertToPororocaCollection(insomniaCol, out pororocaCollection);
         }
-        catch
+        catch (Exception ex)
         {
+            PororocaLogger.Instance?.Log(PororocaLogLevel.Error, "Failed to import Insomnia collection.", ex);
             pororocaCollection = null;
             return false;
         }
@@ -59,8 +61,9 @@ public static class InsomniaCollectionV4Importer
             pororocaCollection = myCol;
             return true;
         }
-        catch
+        catch (Exception ex)
         {
+            PororocaLogger.Instance?.Log(PororocaLogLevel.Error, "Failed to convert Insomnia collection to Pororoca.", ex);
             pororocaCollection = null;
             return false;
         }
