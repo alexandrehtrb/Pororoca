@@ -121,14 +121,14 @@ jobs:
 
     - name: Report unit tests coverage
       if: ${{ inputs.postUnitTestsCoverageInPR }}
-      uses: danielpalme/ReportGenerator-GitHub-Action@5.2.4
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.4.4
       with:
         reports: TestResults/**/coverage.cobertura.xml
         targetdir: TestResults
         reporttypes: JsonSummary
         assemblyfilters: +Pororoca.Domain;+Pororoca.Domain.OpenAPI        
         classfilters: -System.Threading.RateLimiting.*;-System.Collections.Generic.*
-        riskhotspotclassfilters: -System.Threading.RateLimiting.*;-System.Collections.Generic.*        
+        riskhotspotclassfilters: -System.Threading.RateLimiting.*;-System.Collections.Generic.*
         filefilters: -*.g.cs
         customSettings: 'minimumCoverageThresholds:lineCoverage=90;minimumCoverageThresholds:branchCoverage=80'
 
