@@ -4,12 +4,17 @@ This is a tutorial for code contributions for the Pororoca project. Welcome!
 
 Remember to fork this repo and develop your code starting from the `develop` branch.
 
+* [Bug and crash reports](#bug-and-crash-reports)
 * [Machine requirements](#machine-requirements-for-development)
 * [I want to translate Pororoca to my language](#i-want-to-translate-pororoca-to-my-language)
 * [I want to make my own colour theme](#i-want-to-make-my-own-colour-theme)
 * [I want a custom keyboard shortcut](#i-want-a-custom-keyboard-shortcut)
 * [I want a predefined or random variable](#i-want-a-predefined-or-random-variable)
 * [Is there anything else I can contribute with?](#is-there-anything-else-i-can-contribute-with)
+
+## Bug and crash reports
+
+Fatal crashes and some other errors are logged inside the [user data folder](https://pororoca.io/docs/collections#saved-location). If you are opening a bug report, please check if there is an error log to include in the issue.
 
 ## Machine requirements for development
 
