@@ -1,4 +1,4 @@
-﻿{
+{
   "CannotCopyOrCutCollectionDialog/Content": "You can duplicate, but not copy or cut a collection.",
   "CannotCopyOrCutCollectionDialog/Title": "Pororoca - Copy items",
   "CannotPasteItemToItselfDialog/Content": "Cannot paste a cut item to itself.",
@@ -253,6 +253,10 @@
   "TextEditor/Copy": "Copy",
   "TextEditor/Cut": "Cut",
   "TextEditor/Paste": "Paste",
+  "TimeText/Hours": "h",
+  "TimeText/Minutes": "min",
+  "TimeText/Seconds": "s",
+  "TimeText/Milliseconds": "ms",
   "TimeText/HoursAndMinutesFormat": "{0}h {1]min",
   "TimeText/MillisecondsFormat": "{0}ms",
   "TimeText/MinutesAndSecondsFormat": "{0}min {1}s",

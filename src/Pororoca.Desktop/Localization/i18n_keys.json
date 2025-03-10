@@ -1,4 +1,4 @@
-﻿[
+[
   "CannotCopyOrCutCollectionDialog/Content",
   "CannotCopyOrCutCollectionDialog/Title",
   "CannotPasteItemToItselfDialog/Content",
@@ -253,11 +253,10 @@
   "TextEditor/Copy",
   "TextEditor/Cut",
   "TextEditor/Paste",
-  "TimeText/HoursAndMinutesFormat",
-  "TimeText/MillisecondsFormat",
-  "TimeText/MinutesAndSecondsFormat",
-  "TimeText/MinutesFormat",
-  "TimeText/SecondsFormat",
+  "TimeText/Hours",
+  "TimeText/Minutes",
+  "TimeText/Seconds",
+  "TimeText/Milliseconds",
   "TopMenu/Contribute",
   "TopMenu/File",
   "TopMenu/Help",
