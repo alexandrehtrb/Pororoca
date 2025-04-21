@@ -31,7 +31,7 @@ To generate the Windows Installer, you will need [NSIS](https://nsis.sourceforge
 
 Pororoca uses JSON files for internationalization. 
 
-The [WebTranslateIt](https://converter.webtranslateit.com/) online tool allows you to convert those JSON files into other formats that you might feel more comfortable working on. After finishing your translations, you can convert again to JSON.
+The [WebTranslateIt](https://converter.webtranslateit.com/) online tool allows you to convert those JSON files into other formats that you might feel more comfortable working on. After finishing your translations, you can convert again to JSON. There are several tools that can help you, just search online `"automate translation json"`. Another good tool is [ResX Resource Manager](https://github.com/dotnet/ResXResourceManager).
 
 1) Add your language to the [enum and extensions](https://github.com/alexandrehtrb/Pororoca/blob/develop/src/Pororoca.Desktop.Localization.SourceGeneration/Language.cs).
 
