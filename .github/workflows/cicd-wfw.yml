@@ -210,7 +210,7 @@ jobs:
         foreach ($artifact in $arr)
         {
           $OUTPUT_FOLDER = $artifact.outputFolder
-          $PUBLISH_SINGLE_FILE = (($artifact.rid -ne $null) -and (($artifact.rid -like "win*portable") -or ($artifact.rid -like "linux*")));
+          $PUBLISH_SINGLE_FILE = (($artifact.rid -ne $null) -and ((($artifact.rid -like "win*") -and ($artifact.packaging -eq $null)) -or ($artifact.rid -like "linux*")));
           $WINDOWS_INSTALLER_RELEASE = $artifact.packaging -eq "nsis";
           $DEBIAN_INSTALLER_RELEASE = $artifact.packaging -eq "debian";
 

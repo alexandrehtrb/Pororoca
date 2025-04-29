@@ -59,7 +59,7 @@ function Get-RuntimesToPublishFor
 	# Windows releases should be built on a Windows machine, because of dotnet
 	# Linux and Mac OS releases should be built on one of those OSs, because of chmod and zip
 	#return $IsWindows ? $windowsRuntimes : $unixRuntimes
-	return @("win-x64_installer")
+	return @("win-x64_portable")
 }
 
 #################### Pre-release build and tests ####################
@@ -213,13 +213,13 @@ function Generate-PororocaDesktopRelease {
 	$zipName = "${fullAppReleaseName}.zip"
 	$isInstallOnWindowsRelease = ($runtime -like "*_installer")
 	$isDebianDpkgRelease = ($runtime -like "debian*")
-	$dotnetPublishRuntime = $runtime.Replace("_installer","").Replace("_portable","").Replace("debian","linux")
+	$dotnetRid = $runtime.Replace("_installer","").Replace("_portable","").Replace("debian","linux")
 
 	Write-Host "Publishing Pororoca.Desktop for ${runtime}..." -ForegroundColor DarkYellow
 
 	$stopwatch.Restart()
 
-	Publish-PororocaDesktop -Runtime $dotnetPublishRuntime -IsInstallOnWindowsRelease $isInstallOnWindowsRelease -IsInstallOnDebianRelease $isDebianDpkgRelease -OutputFolder $outputFolder
+	Publish-PororocaDesktop -DotnetRid $dotnetRid -IsInstallOnWindowsRelease $isInstallOnWindowsRelease -IsInstallOnDebianRelease $isDebianDpkgRelease -OutputFolder $outputFolder
 	Rename-Executable -Runtime $runtime -OutputFolder $outputFolder
 	Set-ExecutableAttributesIfUnix -Runtime $runtime -OutputFolder $outputFolder
 	Make-AppFolderIfMacOS -Runtime $runtime -OutputFolder $outputFolder
@@ -232,14 +232,14 @@ function Generate-PororocaDesktopRelease {
 		Write-Host "Generating Windows installer for ${runtime}..." -ForegroundColor DarkYellow
 		Pack-ReleaseInWindowsInstaller -GeneralOutFolder ".\out" -InstallerFilesFolder $outputFolder -InstallerFileName "${fullAppReleaseName}.exe" -VersionName $versionName
 		$stopwatch.Stop()
-		Write-Host "Windows installer for ${dotnetPublishRuntime} created: ./out/${fullAppReleaseName}.exe ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
+		Write-Host "Windows installer for ${dotnetRid} created: ./out/${fullAppReleaseName}.exe ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
 	}
 	elseif ($isDebianDpkgRelease)
 	{
 		Write-Host "Generating Debian package for ${runtime}..." -ForegroundColor DarkYellow
 		Pack-ReleaseInDebianDpkg -GeneralOutFolder "./out" -InstallerFilesFolder $outputFolder -InstallerFileName "${fullAppReleaseName}.dpkg" -VersionName $versionName
 		$stopwatch.Stop()
-		Write-Host "Debian package for ${dotnetPublishRuntime} created: ./out/${fullAppReleaseName}.deb ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
+		Write-Host "Debian package for ${dotnetRid} created: ./out/${fullAppReleaseName}.deb ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
 	}
 	else
 	{
@@ -253,13 +253,13 @@ function Generate-PororocaDesktopRelease {
 function Publish-PororocaDesktop
 {
 	param (
-		[string]$runtime,
+		[string]$dotnetRid,
 		[string]$outputFolder,
 		[bool]$isInstallOnWindowsRelease = $false,
 		[bool]$isInstallOnDebianRelease = $false
     )
 
-	if (($runtime -like "win*portable") -or ($runtime -like "linux*"))
+	if ((($dotnetRid -like "win*") -and ($isInstallOnWindowsRelease -eq $false)) -or ($dotnetRid -like "linux*"))
 	{
 		# .NET SDK 6.0.3xx and greater allows for single file publishing for Windows 7
 		# for HTTP/3 to work, we cannot ship as single-file application,
@@ -289,13 +289,13 @@ function Publish-PororocaDesktop
 		-p:PublishForInstallOnDebian=${isInstallOnDebianReleaseArg} `
 		-p:UITestsEnabled=false `
 		--self-contained true `
-		--runtime $runtime `
+		--runtime $dotnetRid `
 		--output $outputFolder
 
-	if ($runtime -like "*win*")
+	if ($dotnetRid -like "*win*")
 	{
 		# let's copy the msquic.dll file next to the generated .exe
-		Copy-Item -Path "./src/Pororoca.Desktop/bin/Release/net8.0/${runtime}/msquic.dll" `
+		Copy-Item -Path "./src/Pororoca.Desktop/bin/Release/net8.0/${dotnetRid}/msquic.dll" `
 			  	  -Destination $outputFolder
 	}
 }
