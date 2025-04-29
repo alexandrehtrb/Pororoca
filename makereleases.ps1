@@ -433,7 +433,7 @@ function Compress-Package
 	{
 		Compress-Archive `
 			-CompressionLevel Optimal `
-			-Path $outputFolder `
+			-Path "${outputFolder}/*" `
 			-DestinationPath "./out/${zipName}"
 	}
 	else
