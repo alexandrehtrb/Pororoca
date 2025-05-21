@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Reactive;
 using System.Reflection;
 using Avalonia.Threading;
+using UiLanguage = Pororoca.Desktop.Localization.Language;
 using MsBox.Avalonia.Enums;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
@@ -76,6 +77,10 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     [Reactive]
     public bool IsLanguageEnglish { get; set; }
     public ReactiveCommand<Unit, Unit> SelectLanguageEnglishCmd { get; }
+
+    [Reactive]
+    public bool IsLanguageGerman { get; set; }
+    public ReactiveCommand<Unit, Unit> SelectLanguageGermanCmd { get; }
 
     [Reactive]
     public bool IsLanguageRussian { get; set; }
@@ -217,6 +222,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         #region LANGUAGE
         SelectLanguagePortuguesCmd = ReactiveCommand.Create(() => SelectLanguage(Language.Portuguese));
         SelectLanguageEnglishCmd = ReactiveCommand.Create(() => SelectLanguage(Language.English));
+        SelectLanguageGermanCmd = ReactiveCommand.Create(() => SelectLanguage(Language.German));
         SelectLanguageRussianCmd = ReactiveCommand.Create(() => SelectLanguage(Language.Russian));
         SelectLanguageItalianCmd = ReactiveCommand.Create(() => SelectLanguage(Language.Italian));
         SelectLanguageSimplifiedChineseCmd = ReactiveCommand.Create(() => SelectLanguage(Language.SimplifiedChinese));
@@ -352,14 +358,15 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #region LANGUAGE
 
-    internal void SelectLanguage(Language lang)
+    internal void SelectLanguage(UiLanguage lang)
     {
         Localizer.Instance.CurrentLanguage = lang;
-        IsLanguagePortuguese = lang == Language.Portuguese;
-        IsLanguageEnglish = lang == Language.English;
-        IsLanguageRussian = lang == Language.Russian;
-        IsLanguageItalian = lang == Language.Italian;
-        IsLanguageSimplifiedChinese = lang == Language.SimplifiedChinese;
+        IsLanguagePortuguese = lang == Pororoca.Desktop.Localization.Language.Portuguese;
+        IsLanguageEnglish = lang == Pororoca.Desktop.Localization.Language.English;
+        IsLanguageGerman = lang == Pororoca.Desktop.Localization.Language.German;
+        IsLanguageRussian = lang == Pororoca.Desktop.Localization.Language.Russian;
+        IsLanguageItalian = lang == Pororoca.Desktop.Localization.Language.Italian;
+        IsLanguageSimplifiedChinese = lang == Pororoca.Desktop.Localization.Language.SimplifiedChinese;
     }
 
     #endregion
