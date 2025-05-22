@@ -56,6 +56,7 @@
   <ItemGroup>
     <AdditionalFiles Include="./Localization/i18n_keys.json" />
     <AdditionalFiles Include="./Localization/en-gb.i18n_lang.json" />
+    <AdditionalFiles Include="./Localization/de-de.i18n_lang.json" />
     <AdditionalFiles Include="./Localization/pt-br.i18n_lang.json" />
     <AdditionalFiles Include="./Localization/ru-ru.i18n_lang.json" />
     <AdditionalFiles Include="./Localization/it-it.i18n_lang.json" />
