@@ -2,7 +2,6 @@ using System.Diagnostics;
 using System.Reactive;
 using System.Reflection;
 using Avalonia.Threading;
-using UiLanguage = Pororoca.Desktop.Localization.Language;
 using MsBox.Avalonia.Enums;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
