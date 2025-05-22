@@ -1,4 +1,4 @@
- <h1>Pororoca <img style="margin: 4px 0 0 4px" height="32" src="pororoca.png" alt="Pororoca Logo"/></h1>
+<h1>Pororoca <img style="margin: 4px 0 0 4px" height="32" src="pororoca.png" alt="Pororoca Logo"/></h1>
 
 [Read in english](README.md) | [Ler em português](README_pt.md) | [Leggi in italiano](README_it.md) | [以简体中文阅读](README_zh-cn.md) | [Auf Deutsch lesen](README_de.md)
 

@@ -1,4 +1,4 @@
-﻿{
+{
   "CannotCopyOrCutCollectionDialog/Content": "Você pode duplicar, mas não copiar ou recortar uma coleção.",
   "CannotCopyOrCutCollectionDialog/Title": "Pororoca - Copiar itens",
   "CannotPasteItemToItselfDialog/Content": "Não é possível colar um item recortado a si mesmo.",
@@ -137,7 +137,7 @@
   "HttpRequest/BodyGraphQlVariablesWatermark": "(variáveis graph ql aqui)",
   "HttpRequest/BodyModeFile": "Arquivo",
   "HttpRequest/BodyModeFormData": "Form Data",
-  "HttpRequest/BodyModeGraphQl": "Graph QL",
+  "HttpRequest/BodyModeGraphQl": "GraphQL",
   "HttpRequest/BodyModeNone": "Nenhum",
   "HttpRequest/BodyModeRaw": "Texto",
   "HttpRequest/BodyModeUrlEncoded": "URL encoded",

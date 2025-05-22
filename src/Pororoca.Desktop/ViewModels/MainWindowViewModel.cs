@@ -78,10 +78,6 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     public ReactiveCommand<Unit, Unit> SelectLanguageEnglishCmd { get; }
 
     [Reactive]
-    public bool IsLanguageGerman { get; set; }
-    public ReactiveCommand<Unit, Unit> SelectLanguageGermanCmd { get; }
-
-    [Reactive]
     public bool IsLanguageRussian { get; set; }
     public ReactiveCommand<Unit, Unit> SelectLanguageRussianCmd { get; }
 
@@ -92,6 +88,10 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     [Reactive]
     public bool IsLanguageSimplifiedChinese { get; set; }
     public ReactiveCommand<Unit, Unit> SelectLanguageSimplifiedChineseCmd { get; }
+
+    [Reactive]
+    public bool IsLanguageGerman { get; set; }
+    public ReactiveCommand<Unit, Unit> SelectLanguageGermanCmd { get; }
 
     #endregion
 
@@ -221,10 +221,10 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         #region LANGUAGE
         SelectLanguagePortuguesCmd = ReactiveCommand.Create(() => SelectLanguage(Language.Portuguese));
         SelectLanguageEnglishCmd = ReactiveCommand.Create(() => SelectLanguage(Language.English));
-        SelectLanguageGermanCmd = ReactiveCommand.Create(() => SelectLanguage(Language.German));
         SelectLanguageRussianCmd = ReactiveCommand.Create(() => SelectLanguage(Language.Russian));
         SelectLanguageItalianCmd = ReactiveCommand.Create(() => SelectLanguage(Language.Italian));
         SelectLanguageSimplifiedChineseCmd = ReactiveCommand.Create(() => SelectLanguage(Language.SimplifiedChinese));
+        SelectLanguageGermanCmd = ReactiveCommand.Create(() => SelectLanguage(Language.German));
         #endregion
 
         #region THEMES
@@ -363,9 +363,9 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         IsLanguagePortuguese = lang == Language.Portuguese;
         IsLanguageEnglish = lang == Language.English;
         IsLanguageRussian = lang == Language.Russian;
-        IsLanguageGerman = lang == Language.German;
         IsLanguageItalian = lang == Language.Italian;
         IsLanguageSimplifiedChinese = lang == Language.SimplifiedChinese;
+        IsLanguageGerman = lang == Language.German;
     }
 
     #endregion

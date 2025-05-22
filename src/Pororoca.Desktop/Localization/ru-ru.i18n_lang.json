@@ -1,4 +1,4 @@
-﻿{
+{
   "CannotCopyOrCutCollectionDialog/Content": "Вы можете дублировать, но не копировать или вырезать коллекцию.",
   "CannotCopyOrCutCollectionDialog/Title": "Pororoca - Копировать элементы",
   "CannotPasteItemToItselfDialog/Content": "Невозможно вставить вырезанный элемент сам в себя.",
@@ -137,7 +137,7 @@
   "HttpRequest/BodyGraphQlVariablesWatermark": "(graph ql переменные)",
   "HttpRequest/BodyModeFile": "Файл",
   "HttpRequest/BodyModeFormData": "Form Data",
-  "HttpRequest/BodyModeGraphQl": "Graph QL",
+  "HttpRequest/BodyModeGraphQl": "GraphQL",
   "HttpRequest/BodyModeNone": "Отсутствует",
   "HttpRequest/BodyModeRaw": "Raw",
   "HttpRequest/BodyModeUrlEncoded": "закодированный URL",

@@ -184,20 +184,6 @@
               </MenuItem.Icon>
             </MenuItem>
             <MenuItem
-                x:Name="topMenuItemOptionsLanguageGerman"
-                Header="{Binding i18n.TopMenuLanguage.German}"
-                Command="{Binding SelectLanguageGermanCmd}">
-              <MenuItem.Icon>
-                <Image
-                    IsVisible="{Binding IsLanguageGerman}"
-                    Classes="MenuItemCheckMark">
-                  <Image.Source>
-                    <DrawingImage Drawing="{StaticResource IconCheck}"/>
-                  </Image.Source>
-                </Image>
-              </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem
                 x:Name="topMenuItemOptionsLanguageRussian"
                 Header="{Binding i18n.TopMenuLanguage.Russian}"
                 Command="{Binding SelectLanguageRussianCmd}">
@@ -232,6 +218,20 @@
               <MenuItem.Icon>
                 <Image
                     IsVisible="{Binding IsLanguageSimplifiedChinese}"
+                    Classes="MenuItemCheckMark">
+                  <Image.Source>
+                    <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                  </Image.Source>
+                </Image>
+              </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem
+                x:Name="topMenuItemOptionsLanguageGerman"
+                Header="{Binding i18n.TopMenuLanguage.German}"
+                Command="{Binding SelectLanguageGermanCmd}">
+              <MenuItem.Icon>
+                <Image
+                    IsVisible="{Binding IsLanguageGerman}"
                     Classes="MenuItemCheckMark">
                   <Image.Source>
                     <DrawingImage Drawing="{StaticResource IconCheck}"/>

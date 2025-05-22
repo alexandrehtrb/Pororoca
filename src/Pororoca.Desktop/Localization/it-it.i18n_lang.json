@@ -137,7 +137,7 @@
   "HttpRequest/BodyGraphQlVariablesWatermark": "(qui le variabili di graphql)",
   "HttpRequest/BodyModeFile": "File",
   "HttpRequest/BodyModeFormData": "Form Data",
-  "HttpRequest/BodyModeGraphQl": "Graph QL",
+  "HttpRequest/BodyModeGraphQl": "GraphQL",
   "HttpRequest/BodyModeNone": "Nessuno",
   "HttpRequest/BodyModeRaw": "Testo",
   "HttpRequest/BodyModeUrlEncoded": "URL encoded",
