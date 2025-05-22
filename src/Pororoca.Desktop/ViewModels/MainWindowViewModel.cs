@@ -358,15 +358,15 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #region LANGUAGE
 
-    internal void SelectLanguage(UiLanguage lang)
+    internal void SelectLanguage(Language lang)
     {
         Localizer.Instance.CurrentLanguage = lang;
-        IsLanguagePortuguese = lang == Pororoca.Desktop.Localization.Language.Portuguese;
-        IsLanguageEnglish = lang == Pororoca.Desktop.Localization.Language.English;
-        IsLanguageGerman = lang == Pororoca.Desktop.Localization.Language.German;
-        IsLanguageRussian = lang == Pororoca.Desktop.Localization.Language.Russian;
-        IsLanguageItalian = lang == Pororoca.Desktop.Localization.Language.Italian;
-        IsLanguageSimplifiedChinese = lang == Pororoca.Desktop.Localization.Language.SimplifiedChinese;
+        IsLanguagePortuguese = lang == Language.Portuguese;
+        IsLanguageEnglish = lang == Language.English;
+        IsLanguageRussian = lang == Language.Russian;
+        IsLanguageGerman = lang == Language.German;
+        IsLanguageItalian = lang == Language.Italian;
+        IsLanguageSimplifiedChinese = lang == Language.SimplifiedChinese;
     }
 
     #endregion
