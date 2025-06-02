@@ -15,14 +15,16 @@ public sealed class PororocaLogger
     public static PororocaLogger? Instance;
 
     private readonly string baseDirPath;
+    private readonly string appVersion;
 
-    public PororocaLogger(DirectoryInfo userDataDir)
+    public PororocaLogger(Version? appVersion, DirectoryInfo userDataDir)
     {
         this.baseDirPath = Path.Combine(userDataDir.FullName, "Logs");
         if (!Directory.Exists(this.baseDirPath))
         {
             Directory.CreateDirectory(this.baseDirPath);
         }
+        this.appVersion = appVersion?.ToString(3) ?? "unknown";
     }
 
     public void Log(PororocaLogLevel level, string message, Exception? ex = null)
@@ -35,6 +37,7 @@ public sealed class PororocaLogger
             StringBuilder sb = new();
             sb.Append('#', 20);
             sb.AppendLine();
+            sb.AppendLine($"Program version: {this.appVersion}");
             sb.AppendLine($"Time: {now:HH:mm:ss}");
             sb.AppendLine($"Severity: {level}");
             sb.AppendLine($"Message: {message}");
