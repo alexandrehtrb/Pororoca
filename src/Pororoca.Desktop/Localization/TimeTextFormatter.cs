@@ -8,20 +8,18 @@ internal static class TimeTextFormatter
 
     internal static string FormatTimeText(TimeSpan time) =>
         time < oneSecond ?
-        string.Format(Localizer.Instance.TimeText.MillisecondsFormat, (int)time.TotalMilliseconds) :
+        string.Format("{0}{1}", (int)time.TotalMilliseconds, Localizer.Instance.TimeText.Milliseconds) :
         time < oneMinute ? // More or equal than one second, but less than one minute
-        string.Format(Localizer.Instance.TimeText.SecondsFormat, time.TotalSeconds) : // TODO: Format digit separator according to language
+        string.Format("{0:0.00}{1}", time.TotalSeconds, Localizer.Instance.TimeText.Seconds) : // TODO: Format digit separator according to language
         time < oneHour ? // More or equal than one minute, but less than one hour
-        string.Format(Localizer.Instance.TimeText.MinutesAndSecondsFormat, time.Minutes, time.Seconds) :
+        string.Format("{0}{1} {2}{3}", time.Minutes, Localizer.Instance.TimeText.Minutes, time.Seconds, Localizer.Instance.TimeText.Seconds) :
         // more than one hour
-        string.Format(Localizer.Instance.TimeText.HoursAndMinutesFormat, time.Hours, time.Minutes);
+        string.Format("{0}{1} {2}{3}", time.Hours, Localizer.Instance.TimeText.Hours, time.Minutes, Localizer.Instance.TimeText.Minutes);
 
     internal static string FormatRemainingTimeText(TimeSpan time) =>
         time < oneMinute ?
-        "< " + string.Format(Localizer.Instance.TimeText.MinutesFormat, 1) :
+        string.Format("< 1{0}", Localizer.Instance.TimeText.Minutes) :
         time < oneHour ?
-        string.Format(Localizer.Instance.TimeText.MinutesFormat, time.Minutes) :
-        string.Format(Localizer.Instance.TimeText.HoursAndMinutesFormat, time.Hours, time.Minutes);
-
-
+        string.Format("{0}{1}", time.Minutes, Localizer.Instance.TimeText.Minutes) :
+        string.Format("{0}{1} {2}{3}", time.Hours, Localizer.Instance.TimeText.Hours, time.Minutes, Localizer.Instance.TimeText.Minutes);
 }

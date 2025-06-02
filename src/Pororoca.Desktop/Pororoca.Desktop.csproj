@@ -33,7 +33,7 @@
     <EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
     <!-- trimming properties end -->
     <ApplicationIcon>Assets/pororoca_icon.ico</ApplicationIcon>
-    <Version>3.7.4</Version>
+    <Version>3.7.5</Version>
     <FileVersion>$(Version)</FileVersion>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <Copyright>AlexandreHTRB</Copyright>
@@ -56,13 +56,14 @@
   <ItemGroup>
     <AdditionalFiles Include="./Localization/i18n_keys.json" />
     <AdditionalFiles Include="./Localization/en-gb.i18n_lang.json" />
+    <AdditionalFiles Include="./Localization/de-de.i18n_lang.json" />
     <AdditionalFiles Include="./Localization/pt-br.i18n_lang.json" />
     <AdditionalFiles Include="./Localization/ru-ru.i18n_lang.json" />
     <AdditionalFiles Include="./Localization/it-it.i18n_lang.json" />
     <AdditionalFiles Include="./Localization/zh-cn.i18n_lang.json" />
   </ItemGroup>
   <!-- Removes UI tests code in release versions that are not flagged for UI tests -->
-  <ItemGroup Condition="'$(Configuration)'=='Release' And '$(UITestsEnabled)' == 'false'">
+  <ItemGroup Condition="'$(Configuration)' == 'Release' And '$(UITestsEnabled)' != 'true'">
     <Compile Remove="UITesting\**" />
     <Content Include="UITesting\**" />
   </ItemGroup>

@@ -112,6 +112,7 @@ dotnet_diagnostic.IDE0300.severity = suggestion # Collection initialization can 
 dotnet_diagnostic.IDE0301.severity = none # Collection initialization can be simplified
 dotnet_diagnostic.IDE0305.severity = none # Collection initialization can be simplified
 dotnet_diagnostic.CA1822.severity = none # Member can be marked as static
+dotnet_diagnostic.CA2241.severity = error # Provide correct arguments to formatting methods
 
 # Expression-level preferences
 dotnet_style_object_initializer = true:suggestion

@@ -56,6 +56,7 @@ public sealed class UITestsRunnerWindowViewModel : ViewModelBase
         [
 #if DEBUG || UI_TESTS_ENABLED
             new(nameof(TopMenuUITest), new TopMenuUITest()),
+            new(nameof(TimeTextFormattingUITest), new TimeTextFormattingUITest()),
             new(nameof(SwitchLanguagesUITest), new SwitchLanguagesUITest()),
             new(nameof(SwitchThemesUITest), new SwitchThemesUITest()),
             new(nameof(EditableTextBlockUITest), new EditableTextBlockUITest()),

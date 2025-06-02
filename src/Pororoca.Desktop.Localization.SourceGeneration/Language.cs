@@ -6,7 +6,8 @@ public enum Language
     English,
     Russian,
     Italian,
-    SimplifiedChinese
+    SimplifiedChinese,
+    German
 }
 
 public static class LanguageExtensions
@@ -17,6 +18,7 @@ public static class LanguageExtensions
         Language.English => "en-gb",
         Language.Russian => "ru-ru",
         Language.Italian => "it-it",
+        Language.German => "de-de",
         Language.SimplifiedChinese => "zh-cn",
         _ => "en-gb",
     };
@@ -25,6 +27,7 @@ public static class LanguageExtensions
     {
         "pt-br" => Language.Portuguese,
         "en-gb" => Language.English,
+        "de-de" => Language.German,
         "ru-ru" => Language.Russian,
         "it-it" => Language.Italian,
         "zh-cn" => Language.SimplifiedChinese,
