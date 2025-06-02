@@ -20,7 +20,7 @@
   "Collection/ImportEnvironmentDialogTitle": "Umgebungsdateien importieren",
   "Collection/ImportEnvironmentDialogTypes": "Umgebungsdateien",
   "Collection/NewCollection": "Neue Sammlung",
-  "Collection/SetCollectionScopedHeaders": "Set Collection Header",
+  "Collection/SetCollectionScopedHeaders": "Sammlungsheader",
   "CollectionFolder/AddFolder": "Ordner hinzufügen",
   "CollectionFolder/AddHttpRepeater": "Neuer HTTP-Repeater",
   "CollectionFolder/AddHttpRequest": "Neue HTTP-Anfrage",
