@@ -305,7 +305,7 @@
   "WebSocketClientMessage/ContentModeFile": "Datei",
   "WebSocketClientMessage/ContentModeRaw": "Roh",
   "WebSocketClientMessage/ContentRawWatermark": "(Rohinhalt hier)",
-  "WebSocketClientMessage/DisableCompressionExplanation": "SSeien Sie vorsichtig, wenn Sie Komprimierung mit verschlüsselten Daten verwenden – achten Sie auf CRIME-/BREACH-Angriffe.",
+  "WebSocketClientMessage/DisableCompressionExplanation": "Seien Sie vorsichtig, wenn Sie Komprimierung mit verschlüsselten Daten verwenden – achten Sie auf CRIME-/BREACH-Angriffe.",
   "WebSocketClientMessage/DisableCompressionForThisMessage": "Deaktivieren Sie die Komprimierung für diese Nachricht",
   "WebSocketClientMessage/MessageTypeBinary": "Binär",
   "WebSocketClientMessage/MessageTypeClose": "Schließnachricht",
