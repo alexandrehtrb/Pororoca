@@ -509,7 +509,7 @@ jobs:
       if: ${{ always() && inputs.runCD && inputs.producePororocaTestNuget && inputs.pushPackageToNuGetServer }}
       shell: pwsh
       run: |
-        $commentMsg = if ($env:NUGET_PUSH_OUTCOME == "success") { 
+        $commentMsg = if ($env:NUGET_PUSH_OUTCOME -eq "success") { 
           "📦✅ Pororoca.Test ${env:NUGET_VERSION_NAME} published to NuGet!"
         } else {
           "📦❌ Failed to publish Pororoca.Test ${env:NUGET_VERSION_NAME} to NuGet."
