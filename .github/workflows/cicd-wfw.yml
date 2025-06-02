@@ -340,7 +340,7 @@ jobs:
                      else                                { "Pororoca_${env:VERSION_NAME}_$($artifact.rid).zip" }
 
           if ($IsWindows) {
-            Compress-Archive -CompressionLevel Optimal -Path $OUTPUT_FOLDER -DestinationPath "./out/${zipName}"
+            Compress-Archive -CompressionLevel Optimal -Path "${OUTPUT_FOLDER}/*" -DestinationPath "./out/${zipName}"
           } else {
             cd $OUTPUT_FOLDER
             zip -9 -r ../${zipName} *
