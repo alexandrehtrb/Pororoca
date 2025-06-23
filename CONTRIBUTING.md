@@ -69,7 +69,7 @@ The [WebTranslateIt](https://converter.webtranslateit.com/) online tool allows y
 
 ## I want a predefined or random variable
 
-Add logic in [`PororocaPredefinedVariableEvaluator`](https://github.com/alexandrehtrb/Pororoca/blob/78abc423c8f61c99331d85b4ab19ff304ae155d6/src/Pororoca.Domain/Features/VariableResolution/PororocaPredefinedVariableEvaluator.cs#L197).
+Add logic in [`PororocaPredefinedVariableEvaluator`](https://github.com/alexandrehtrb/Pororoca/blob/develop/src/Pororoca.Domain/Features/VariableResolution/PororocaPredefinedVariableEvaluator.cs).
 
 ## Is there anything else I can contribute with?
 
