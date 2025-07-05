@@ -352,6 +352,7 @@
   "WebSocketExchangedMessages/SectionTitle": "Mensagens trocadas",
   "WebSocketExchangedMessages/SendMessage": "Enviar",
   "WebSocketExchangedMessages/TextContentDescriptionFormat": "texto, {0} bytes",
+  "WebSocketExchangedMessages/SaveAllToFiles": "Salvar todas em arquivos…",
   "Welcome/ImportCollection": "Importar coleção…",
   "Welcome/ImportOpenAPI": "Importar OpenAPI…",
   "Welcome/NewCollection": "Nova coleção",
