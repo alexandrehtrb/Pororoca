@@ -688,11 +688,9 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     {
         await foreach (var msg in channelReader.ReadAllAsync())
         {
-            //ExchangedMessages.Insert(0, new(msg, DateTimeOffset.Now));
             var vm = new WebSocketExchangedMessageViewModel(msg, DateTimeOffset.Now);
             ExchangedMessages.Insert(0, vm);
-            if (vm.CanBeSavedToFile)
-                IsSaveAllExchangedMessagesToFilesVisible = true;
+            IsSaveAllExchangedMessagesToFilesVisible = ExchangedMessages.Any(msg => msg.CanBeSavedToFile);
         }
     }
 
@@ -719,7 +717,6 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         }
     }
 
-    //private async Task SaveExchangedMessageToFileAsync(WebSocketExchangedMessageViewModel exchangedMessage)
     private static string GenerateDefaultInitialFileName(string wsName, int index, WebSocketExchangedMessageViewModel vm)
     {
         string fileExtensionWithoutDot = vm.IsJsonTextContent ? "json" : "txt";
@@ -755,17 +752,18 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             if (destinationFolderPath is null)
                 return;
 
+            int index = 1;
             for (int i = 0; i < ExchangedMessages.Count; i++)
             {
-                var vm = ExchangedMessages[ExchangedMessages.Count - 1 - i];
+                var vm = ExchangedMessages[i];
                 if (!vm.CanBeSavedToFile)
                     continue;
 
-                int index = i + 1;
                 string fileName = GenerateDefaultInitialFileName(Name, index, vm);
                 string filePath = Path.Combine(destinationFolderPath, fileName);
                 using FileStream fs = File.Create(filePath);
                 await fs.WriteAsync((Memory<byte>)vm.Bytes!);
+                index++;
             }
         }
 
