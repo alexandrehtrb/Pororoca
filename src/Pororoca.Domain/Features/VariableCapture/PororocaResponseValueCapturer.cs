@@ -7,9 +7,12 @@ namespace Pororoca.Domain.Features.VariableCapture;
 public static partial class PororocaResponseValueCapturer
 {
     private static readonly Regex arrayElementRegex = GenerateArrayElementRegex();
+    private static readonly Regex firstWhereRegex = FirstWhereRegex();
 
     [GeneratedRegex("\\[(\\d+)\\]")]
     private static partial Regex GenerateArrayElementRegex();
+    [GeneratedRegex("firstWhere\\((.+)\\)")]
+    private static partial Regex FirstWhereRegex();
 
     public static string? CaptureXmlValue(string xpath, XmlDocument? doc, XmlNamespaceManager? nsm)
     {
@@ -119,6 +122,11 @@ public static partial class PororocaResponseValueCapturer
             return false;
         }
 
+        var match = firstWhereRegex.Match(subpath);
+        var condition = match?.Groups?.Values?.Last().Value;
+        if (match != null && match.Success)
+            EvaluateFirstWhereCondition(condition, jsonNode);
+
         switch (subpath)
         {
             case "count()":
@@ -153,5 +161,11 @@ public static partial class PororocaResponseValueCapturer
     {
         var lastElement = node.AsArray().Last();
         return lastElement;
+    }
+
+    private static JsonNode? EvaluateFirstWhereCondition(string? condition, JsonNode node)
+    {
+
+        return null;
     }
 }
