@@ -1,6 +1,6 @@
 <h1>Pororoca <img style="margin: 4px 0 0 4px" height="32" src="pororoca.png" alt="Pororoca Logo"/></h1>
 
-[Read in english](README.md) | [Ler em português](README_pt.md) | [Читать на русском](README_ru.md) | [以简体中文阅读](README_zh-cn.md) | [Auf Deutsch lesen](README_de.md)
+Leggi in: [english](README.md) | [português](README_pt.md) | [русском](README_ru.md) | [中文](README_zh-cn.md) | [Deutsch](README_de.md)
 
 Pororoca è uno strumento di test HTTP, ispirato a Postman, ma con molti miglioramenti.
 

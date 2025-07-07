@@ -113,7 +113,7 @@
   <Style Selector="TextBox.CodeTextBox">
     <Setter
         Property="FontFamily"
-        Value="Cascadia Code,Consolas,Menlo,Monospace"/>
+        Value="{StaticResource CodeFontFamily}"/>
     <Setter
         Property="FontSize"
         Value="12"/>
@@ -446,7 +446,7 @@
         Value="True"/>
     <Setter
         Property="FontFamily"
-        Value="Cascadia Code,Consolas,Menlo,Monospace"/>
+        Value="{StaticResource CodeFontFamily}"/>
     <Setter
         Property="FontWeight"
         Value="Light"/>

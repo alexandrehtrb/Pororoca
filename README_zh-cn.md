@@ -1,6 +1,6 @@
 <h1>Pororoca <img style="margin: 4px 0 0 4px" height="32" src="pororoca.png" alt="Pororoca Logo"/></h1>
 
-[Read in english](README.md) | [Ler em português](README_pt.md) | [Читать на русском](README_ru.md) | [Leggi in italiano](README_it.md) | [Auf Deutsch lesen](README_de.md)
+阅读：[english](README.md) | [português](README_pt.md) | [italiano](README_it.md) | [русском](README_ru.md) | [Deutsch](README_de.md)
 
 Pororoca 是一款灵感来源于 Postman 的 HTTP 测试工具，但做了许多改进。
 

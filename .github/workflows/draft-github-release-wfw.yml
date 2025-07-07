@@ -78,7 +78,7 @@ jobs:
     - name: Add comment to PR
       if: ${{ env.RELEASE_IS_DRAFTED == '0' }}
       shell: pwsh
-      run: gh pr comment $env:PR_NUMBER --body "🌊 New release ${env:RELEASE_NAME} 🌊`n`n- [ ] 1) Test and validate the program`n- [ ] 2) Edit the release notes`n- [ ] 3) Submit Windows releases .exes to Microsoft Malware Analysis`n- [ ] 4) Merge this PR`n- [ ] 5) Check if NuGet was successfully published`n- [ ] 6) Publish (undraft) this release`n- [ ] 7) Update https://pororoca.io to reflect new version`n- [ ] 8) Unlist previous release on GitHub"
+      run: gh pr comment $env:PR_NUMBER --body "🌊 New release ${env:RELEASE_NAME} 🌊`n`n- [ ] 1) Test and validate the program`n- [ ] 2) Edit the release notes`n- [ ] 3) Merge this PR`n- [ ] 4) Check if NuGet was successfully published`n- [ ] 5) Publish (undraft) this release`n- [ ] 6) Update https://pororoca.io to reflect new version`n- [ ] 7) Unlist previous release on GitHub"
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PR_NUMBER: ${{ github.event.number }}

@@ -1,5 +1,7 @@
 # Changelog
 
+* [3.7.6](#376-2025-06-02)
+* 3.7.5 was accidentally deleted 😝
 * [3.7.4](#374-2025-03-06)
 * [3.7.3](#373-2025-03-04)
 * [3.7.2](#372-2025-02-21)
@@ -36,6 +38,34 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.7.6](https://github.com/alexandrehtrb/Pororoca/tree/3.7.6) (2025-06-02)
+
+### Features
+
+- German translation. (issue #143, thanks @Ali1996mf!)
+
+### Bug Fixes
+
+- Fixed crash when repeater remaining time was over 1 hour. (issue #140)
+
+### Refactors
+
+- Random name generation logic extracted to separate files.
+- Combined random CPF/CNPJ digits and string methods.
+- Fixed compilation error on Release build without UITestsEnabled.
+
+### Others
+
+- Raised .NET SDK version to 8.0.410.
+- Compressed folder level for win portable in `makereleases.ps1`.
+- Win portable releases back with single-file publishing. (issue #146)
+- Improved CONTRIBUTING.md.
+- Added GitHub issue templates.
+
+### New Contributors
+
+* [@Ali1996mf](https://github.com/Ali1996mf) made his first contribution in PR [#148](https://github.com/alexandrehtrb/Pororoca/pull/148)
 
 ## [3.7.4](https://github.com/alexandrehtrb/Pororoca/tree/3.7.4) (2025-03-06)
 
