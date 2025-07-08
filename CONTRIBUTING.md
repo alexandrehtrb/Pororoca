@@ -41,13 +41,15 @@ The [WebTranslateIt](https://converter.webtranslateit.com/) online tool allows y
 
 4) Add language to top menu ([xaml](https://github.com/alexandrehtrb/Pororoca/blob/78abc423c8f61c99331d85b4ab19ff304ae155d6/src/Pororoca.Desktop/Views/MainWindow.xaml#L172) and [ViewModel](https://github.com/alexandrehtrb/Pororoca/blob/78abc423c8f61c99331d85b4ab19ff304ae155d6/src/Pororoca.Desktop/ViewModels/MainWindowViewModel.cs#L355)).
 
-5) (RECOMMENDED) Add a README for your language.
+5) Define decimal separator in [TimeTextFormatter](https://github.com/alexandrehtrb/Pororoca/blob/develop/src/Pororoca.Desktop/Localization/TimeTextFormatter.cs).
 
-6) (OPTIONAL) Add language to [Windows installer](https://github.com/alexandrehtrb/Pororoca/blob/78abc423c8f61c99331d85b4ab19ff304ae155d6/src/Pororoca.Desktop.WindowsInstaller/Installer.nsi#L107).
+6) (RECOMMENDED) Add a README for your language.
 
-7) If you want to translate the documentation to your language, open an issue on GitHub and I will concede access to the documentation website repo.
+7) (OPTIONAL) Add language to [Windows installer](https://github.com/alexandrehtrb/Pororoca/blob/78abc423c8f61c99331d85b4ab19ff304ae155d6/src/Pororoca.Desktop.WindowsInstaller/Installer.nsi#L107).
 
-6) Done!
+8) If you want to translate the documentation to your language, open an issue on GitHub and I will concede access to the documentation website repo.
+
+9) Done!
 
 ## I want to make my own colour theme
 
