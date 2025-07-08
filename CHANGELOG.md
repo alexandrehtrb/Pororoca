@@ -44,12 +44,13 @@
 
 ### Features
 
-- Save all WebSocket response messages to files. (issue #60, thanks @alks97!)
+- Save to files all WebSocket exchanged messages. (issue #60, thanks @alks97!)
 
 ### UI/UX
 
 - More monospaced fonts added for compatibility on text editors. Previously, in some operating systems, like Linux Mint, serif fonts were used due to lack of available fonts. Now, a monospaced font is preferred.
 - GraphQL body and WebSocket exception TextBoxes now use the same monospaced font as other text editors in the program.
+- Decimal time texts according to user language (ex.: `1,23s` or `1.23s`).
 
 ### Others
 
