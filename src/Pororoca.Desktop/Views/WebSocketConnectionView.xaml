@@ -648,6 +648,16 @@
               Text="{Binding InvalidClientMessageError}"
               IsVisible="{Binding IsInvalidClientMessageErrorVisible}"/>
 
+          <Button
+              Name="btSaveAllMessages"
+              Margin="0,12,0,0"
+              HorizontalContentAlignment="Center"
+              VerticalContentAlignment="Center"
+              Command="{Binding SaveAllExchangedMessagesToFilesCmd}"
+              IsVisible="{Binding IsSaveAllExchangedMessagesToFilesVisible}"
+              Content="{Binding i18n.WebSocketExchangedMessages.SaveAllToFiles}"
+              Classes="Secondary"/>
+
         </StackPanel>
       </Grid>
       <Rectangle

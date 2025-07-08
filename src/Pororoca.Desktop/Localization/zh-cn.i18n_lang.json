@@ -352,6 +352,7 @@
   "WebSocketExchangedMessages/SectionTitle": "交换消息",
   "WebSocketExchangedMessages/SendMessage": "发送",
   "WebSocketExchangedMessages/TextContentDescriptionFormat": "文本，{0} 字节",
+  "WebSocketExchangedMessages/SaveAllToFiles": "全部保存到文件…",
   "Welcome/ImportCollection": "导入集合...",
   "Welcome/ImportOpenAPI": "导入 OpenAPI…",
   "Welcome/NewCollection": "新集合",

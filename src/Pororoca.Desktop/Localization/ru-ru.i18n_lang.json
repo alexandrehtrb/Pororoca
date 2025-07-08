@@ -352,6 +352,7 @@
   "WebSocketExchangedMessages/SectionTitle": "Обмен сообщениями",
   "WebSocketExchangedMessages/SendMessage": "Отправить",
   "WebSocketExchangedMessages/TextContentDescriptionFormat": "текст, {0} байтов",
+  "WebSocketExchangedMessages/SaveAllToFiles": "Сохранить всё в файлы…",
   "Welcome/ImportCollection": "Импорт коллекции…",
   "Welcome/ImportOpenAPI": "Импорт OpenAPI…",
   "Welcome/NewCollection": "Новая коллекция",
