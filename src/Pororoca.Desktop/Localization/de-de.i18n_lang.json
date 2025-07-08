@@ -353,6 +353,8 @@
   "WebSocketExchangedMessages/SendMessage": "Schicken",
   "WebSocketExchangedMessages/TextContentDescriptionFormat": "Text, {0} Bytes",
   "WebSocketExchangedMessages/SaveAllToFiles": "Alle in Dateien speichern…",
+  "WebSocketExchangedMessages/CouldNotSaveAllToFilesDialogTitle": "Pororoca - In Dateien speichern",
+  "WebSocketExchangedMessages/CouldNotSaveAllToFilesDialogMessage":  "WebSocket-Nachrichten können nicht in Dateien gespeichert werden.\\nÜberprüfen Sie, ob der WebSocket-Name unzulässige Zeichen enthält.",
   "Welcome/ImportCollection": "Sammlung importieren…",
   "Welcome/ImportOpenAPI": "OpenAPI importieren…",
   "Welcome/NewCollection": "Neue Sammlung",

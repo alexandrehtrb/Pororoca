@@ -5,11 +5,13 @@ using System.Security.Authentication;
 using System.Threading.Channels;
 using Avalonia.Threading;
 using AvaloniaEdit.Document;
+using MsBox.Avalonia.Enums;
 using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.ViewModels.DataGrids;
+using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.Requester;
@@ -744,28 +746,39 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     }
 
     private async Task SaveAllExchangedMessagesToFilesAsync()
+    {
+        if (!ExchangedMessages.Any())
+            return;
+
+        string? destinationFolderPath = await FileExporterImporter.SelectFolderAsync();
+        if (destinationFolderPath is null)
+            return;
+
+        try
         {
-            if (!ExchangedMessages.Any())
-                return;
-
-            string? destinationFolderPath = await FileExporterImporter.SelectFolderAsync();
-            if (destinationFolderPath is null)
-                return;
-
-            int index = 1;
             for (int i = 0; i < ExchangedMessages.Count; i++)
             {
-                var vm = ExchangedMessages[i];
+                // last msgs are the most recent; order is reversed.
+                var vm = ExchangedMessages[ExchangedMessages.Count - 1 - i];
                 if (!vm.CanBeSavedToFile)
                     continue;
 
-                string fileName = GenerateDefaultInitialFileName(Name, index, vm);
+                string fileName = GenerateDefaultInitialFileName(Name, i+1, vm);
                 string filePath = Path.Combine(destinationFolderPath, fileName);
                 using FileStream fs = File.Create(filePath);
                 await fs.WriteAsync((Memory<byte>)vm.Bytes!);
-                index++;
             }
         }
+        catch (Exception ex)
+        {
+            PororocaLogger.Instance?.Log(PororocaLogLevel.Warning, "Failed to save WebSocket messages to files.", ex);
+            Dialogs.ShowDialog(
+                title: Localizer.Instance.WebSocketExchangedMessages.CouldNotSaveAllToFilesDialogTitle,
+                message: Localizer.Instance.WebSocketExchangedMessages.CouldNotSaveAllToFilesDialogMessage,
+                buttons: ButtonEnum.Ok,
+                onButtonOkClicked: () => {});
+        }
+    }
 
     #endregion
 }

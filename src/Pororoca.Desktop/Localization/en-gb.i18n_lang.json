@@ -353,6 +353,8 @@
   "WebSocketExchangedMessages/SendMessage": "Send",
   "WebSocketExchangedMessages/TextContentDescriptionFormat": "text, {0} bytes",
   "WebSocketExchangedMessages/SaveAllToFiles": "Save all to files…",
+  "WebSocketExchangedMessages/CouldNotSaveAllToFilesDialogTitle": "Pororoca - Save to files",
+  "WebSocketExchangedMessages/CouldNotSaveAllToFilesDialogMessage": "It wasn't possible to save the WebSocket messages to files.\\nPlease check if the name of the WebSocket has an illegal character.",
   "Welcome/ImportCollection": "Import collection…",
   "Welcome/ImportOpenAPI": "Import OpenAPI…",
   "Welcome/NewCollection": "New collection",

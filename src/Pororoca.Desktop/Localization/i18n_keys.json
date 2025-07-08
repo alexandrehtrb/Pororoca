@@ -353,6 +353,8 @@
   "WebSocketExchangedMessages/SendMessage",
   "WebSocketExchangedMessages/TextContentDescriptionFormat",
   "WebSocketExchangedMessages/SaveAllToFiles",
+  "WebSocketExchangedMessages/CouldNotSaveAllToFilesDialogTitle",
+  "WebSocketExchangedMessages/CouldNotSaveAllToFilesDialogMessage",
   "Welcome/ImportCollection",
   "Welcome/ImportOpenAPI",
   "Welcome/NewCollection",
