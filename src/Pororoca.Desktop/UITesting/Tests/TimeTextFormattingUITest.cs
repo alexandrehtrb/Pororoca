@@ -1,26 +1,38 @@
+using Pororoca.Desktop.Localization;
 using static Pororoca.Desktop.Localization.TimeTextFormatter;
 
 namespace Pororoca.Desktop.UITesting.Tests;
 
 public sealed class TimeTextFormattingUITest : PororocaUITest
 {
-    public override Task RunAsync()
+    public override async Task RunAsync()
     {
         TimeSpan ts;
-        string expectedTimeText;
 
         ts = TimeSpan.Parse("00:00:00.1234000");
         AssertEqual("123ms", FormatTimeText(ts));
         AssertEqual("< 1min", FormatRemainingTimeText(ts));
 
+        MainWindowVm.SelectLanguage(Language.Portuguese);
+        await Wait(0.5);
+
         ts = TimeSpan.Parse("00:00:01.0000000");
-        expectedTimeText = FormatTimeText(ts);
-        AssertCondition("1,00s" == expectedTimeText || "1.00s" == expectedTimeText, FormatTimeText(ts));
+        AssertEqual("1,00s", FormatTimeText(ts));
         AssertEqual("< 1min", FormatRemainingTimeText(ts));
 
         ts = TimeSpan.Parse("00:00:01.2345000");
-        expectedTimeText = FormatTimeText(ts);
-        AssertCondition("1,23s" == expectedTimeText || "1.23s" == expectedTimeText, FormatTimeText(ts));
+        AssertEqual("1,23s", FormatTimeText(ts));
+        AssertEqual("< 1min", FormatRemainingTimeText(ts));
+
+        MainWindowVm.SelectLanguage(Language.English);
+        await Wait(0.5);
+
+        ts = TimeSpan.Parse("00:00:01.0000000");
+        AssertEqual("1.00s", FormatTimeText(ts));
+        AssertEqual("< 1min", FormatRemainingTimeText(ts));
+
+        ts = TimeSpan.Parse("00:00:01.2345000");
+        AssertEqual("1.23s", FormatTimeText(ts));
         AssertEqual("< 1min", FormatRemainingTimeText(ts));
 
         ts = TimeSpan.Parse("00:01:00.0000000");
@@ -74,8 +86,6 @@ public sealed class TimeTextFormattingUITest : PororocaUITest
         ts = TimeSpan.Parse("02:54:04.5678000");
         AssertEqual("2h 54min", FormatTimeText(ts));
         AssertEqual("2h 54min", FormatRemainingTimeText(ts));
-
-        return Task.CompletedTask;
     }
 
     private static void AssertEqual(string expected, string actual) =>

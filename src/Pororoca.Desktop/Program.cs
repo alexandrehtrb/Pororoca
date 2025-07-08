@@ -1,3 +1,4 @@
+using System.Reflection;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -17,7 +18,9 @@ public static class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        PororocaLogger.Instance = new(UserDataManager.GetUserDataFolder());
+        PororocaLogger.Instance = new(
+            appVersion: Assembly.GetExecutingAssembly().GetName().Version,
+            userDataDir: UserDataManager.GetUserDataFolder());
         try
         {
             BuildAvaloniaApp()

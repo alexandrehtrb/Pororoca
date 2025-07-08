@@ -509,12 +509,46 @@
           Grid.Row="0"
           RowDefinitions="Auto, * , Auto">
 
-        <TextBlock
+        <Grid
+          Grid.Column="0"
+          Grid.Row="0"
+          ColumnDefinitions="* , Auto"
+          Margin="12,28,12,0">
+
+          <TextBlock
             Grid.Column="0"
             Grid.Row="0"
-            Margin="12,28,12,0"
             Classes="SectionTitle"
             Text="{Binding i18n.WebSocketExchangedMessages.SectionTitle}"/>
+
+          <Button
+            Grid.Column="1"
+            Grid.Row="0"
+            x:Name="btSaveAllMessages"
+            Width="36"
+            Margin="12,0,0,0"
+            Command="{Binding SaveAllExchangedMessagesToFilesCmd}"
+            IsVisible="{Binding IsSaveAllExchangedMessagesToFilesVisible}"
+            ToolTip.Tip="{Binding i18n.WebSocketExchangedMessages.SaveAllToFiles}"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Stretch"
+            Classes="Secondary">
+            <Panel>
+              <Image
+                Width="16"
+                Height="16"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center">
+                <Image.Source>
+                  <DrawingImage Drawing="{StaticResource IconExport}"/>
+                </Image.Source>
+              </Image>
+            </Panel>
+          </Button>
+
+        </Grid>
 
         <ListBox
             Name="ExchangedMessagesList"
@@ -647,7 +681,6 @@
               Classes="ErrorMessage"
               Text="{Binding InvalidClientMessageError}"
               IsVisible="{Binding IsInvalidClientMessageErrorVisible}"/>
-
         </StackPanel>
       </Grid>
       <Rectangle

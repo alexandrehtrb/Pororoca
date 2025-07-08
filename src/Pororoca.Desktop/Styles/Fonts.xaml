@@ -5,6 +5,6 @@
     xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop">
   <Styles.Resources>
     <FontFamily x:Key="DefaultFontFamily">avares://Pororoca.Desktop/Assets/Fonts#Cabin</FontFamily>
-    <FontFamily x:Key="CodeFontFamily">Cascadia Code,Consolas,Menlo,Monospace</FontFamily>
+    <FontFamily x:Key="CodeFontFamily">Cascadia Mono,Consolas,Comic Mono,Monaco,Noto Sans Mono,Liberation Mono,Courier New,DejaVu Sans Mono,Menlo,monospace</FontFamily>
   </Styles.Resources>
 </Styles>

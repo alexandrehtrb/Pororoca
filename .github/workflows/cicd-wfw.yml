@@ -77,7 +77,7 @@ jobs:
     - name: Install .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.410
+        dotnet-version: 8.0.412
 
     # GitHub Actions Windows Runners come with NSIS pre-installed
     # https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md
@@ -116,7 +116,7 @@ jobs:
 
     - name: Report unit tests coverage
       if: ${{ inputs.postUnitTestsCoverageInPR }}
-      uses: danielpalme/ReportGenerator-GitHub-Action@5.4.4
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.4.8
       with:
         reports: TestResults/**/coverage.cobertura.xml
         targetdir: TestResults

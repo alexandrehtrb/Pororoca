@@ -33,7 +33,7 @@
     <EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
     <!-- trimming properties end -->
     <ApplicationIcon>Assets/pororoca_icon.ico</ApplicationIcon>
-    <Version>3.7.6</Version>
+    <Version>3.7.7</Version>
     <FileVersion>$(Version)</FileVersion>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <Copyright>AlexandreHTRB</Copyright>
@@ -91,7 +91,7 @@
     <PackageReference Include="TextMateSharp.Grammars" Version="1.0.56" />
 
     <!-- package below is to override version 7.0.0 that has vulnerability -->
-    <PackageReference Include="System.Text.Json" Version="9.0.1" />
+    <PackageReference Include="System.Text.Json" Version="9.0.7" />
 
     <PackageReference Include="ReactiveUI.Fody" Version="19.5.1" />
     <PackageReference Include="MessageBox.Avalonia" Version="3.1.5.1" />

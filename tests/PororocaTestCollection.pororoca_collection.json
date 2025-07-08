@@ -106,7 +106,7 @@
         {
           "enabled": true,
           "key": "BadSslClientCertDir",
-          "value": "C:\\Projetos\\Pororoca\\tests\\Pororoca.Test.Tests\\BadSslClientCertificates",
+          "value": "C:\\Projetos\\Pororoca\\tests\\TestFiles\\ClientCertificates",
           "isSecret": false
         }
       ]
@@ -766,7 +766,7 @@
         {
           "name": "Spiderman",
           "contentMode": "file",
-          "fileSrcPath": "C:\\Projetos\\Pororoca\\tests\\Pororoca.Test.Tests\\TestFiles\\homem_aranha.jpg",
+          "fileSrcPath": "C:\\Projetos\\Pororoca\\tests\\TestFiles\\homem_aranha.jpg",
           "disableCompressionForThis": false,
           "direction": "fromClient",
           "messageType": "binary"
@@ -818,7 +818,7 @@
         {
           "name": "Spiderman",
           "contentMode": "file",
-          "fileSrcPath": "C:\\Projetos\\Pororoca\\tests\\Pororoca.Test.Tests\\TestFiles\\homem_aranha.jpg",
+          "fileSrcPath": "C:\\Projetos\\Pororoca\\tests\\TestFiles\\homem_aranha.jpg",
           "disableCompressionForThis": false,
           "direction": "fromClient",
           "messageType": "binary"

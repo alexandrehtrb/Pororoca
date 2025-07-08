@@ -5,11 +5,13 @@ using System.Security.Authentication;
 using System.Threading.Channels;
 using Avalonia.Threading;
 using AvaloniaEdit.Document;
+using MsBox.Avalonia.Enums;
 using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.ViewModels.DataGrids;
+using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using Pororoca.Domain.Features.Requester;
@@ -341,7 +343,12 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     [Reactive]
     public bool IsSaveSelectedExchangedMessageToFileVisible { get; set; }
 
+    [Reactive]
+    public bool IsSaveAllExchangedMessagesToFilesVisible { get; set; }
+
     public ReactiveCommand<Unit, Unit> SaveSelectedExchangedMessageToFileCmd { get; }
+
+    public ReactiveCommand<Unit, Unit> SaveAllExchangedMessagesToFilesCmd { get; }
 
     #endregion
 
@@ -439,6 +446,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         // to initialize with a TextDocument object
         SelectedExchangedMessageContent = null;
         SaveSelectedExchangedMessageToFileCmd = ReactiveCommand.CreateFromTask(SaveSelectedExchangedMessageToFileAsync);
+        SaveAllExchangedMessagesToFilesCmd = ReactiveCommand.CreateFromTask(SaveAllExchangedMessagesToFilesAsync);
         #endregion
     }
 
@@ -596,6 +604,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         {
             InvalidConnectionErrorCode = null;
             ExchangedMessages.Clear();
+            IsSaveAllExchangedMessagesToFilesVisible = false;
             this.cancelConnectionAttemptTokenSource = new();
             // This needs to be done in a different thread.
             // Awaiting the request.RequestAsync() here, or simply returning its Task,
@@ -681,7 +690,9 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     {
         await foreach (var msg in channelReader.ReadAllAsync())
         {
-            ExchangedMessages.Insert(0, new(msg, DateTimeOffset.Now));
+            var vm = new WebSocketExchangedMessageViewModel(msg, DateTimeOffset.Now);
+            ExchangedMessages.Insert(0, vm);
+            IsSaveAllExchangedMessagesToFilesVisible = ExchangedMessages.Any(msg => msg.CanBeSavedToFile);
         }
     }
 
@@ -708,15 +719,15 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         }
     }
 
+    private static string GenerateDefaultInitialFileName(string wsName, int index, WebSocketExchangedMessageViewModel vm)
+    {
+        string fileExtensionWithoutDot = vm.IsJsonTextContent ? "json" : "txt";
+        string from = vm.IsFromClient ? "fromClient" : "fromServer";
+        return $"ws-{wsName}-msg{index}-{from}-{vm.ShortInstantDescription}.{fileExtensionWithoutDot}";
+    }
+
     private async Task SaveExchangedMessageToFileAsync(WebSocketExchangedMessageViewModel exchangedMessage)
     {
-        static string GenerateDefaultInitialFileName(string wsName, int index, WebSocketExchangedMessageViewModel vm)
-        {
-            string fileExtensionWithoutDot = vm.IsJsonTextContent ? "json" : "txt";
-            string from = vm.IsFromClient ? "fromClient" : "fromServer";
-
-            return $"ws-{wsName}-msg{index}-{from}-{vm.ShortInstantDescription}.{fileExtensionWithoutDot}";
-        }
         // WARNING: WebSocket messages that came from the client
         // and are file-based cannot be saved.
         int index = ExchangedMessages.Contains(exchangedMessage) ?
@@ -731,6 +742,41 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             // to truncate the file first and then write on it.
             using FileStream fs = File.Create(saveFileOutputPath);
             await fs.WriteAsync((Memory<byte>)exchangedMessage.Bytes!);
+        }
+    }
+
+    private async Task SaveAllExchangedMessagesToFilesAsync()
+    {
+        if (!ExchangedMessages.Any())
+            return;
+
+        string? destinationFolderPath = await FileExporterImporter.SelectFolderAsync();
+        if (destinationFolderPath is null)
+            return;
+
+        try
+        {
+            for (int i = 0; i < ExchangedMessages.Count; i++)
+            {
+                // last msgs are the most recent; order is reversed.
+                var vm = ExchangedMessages[ExchangedMessages.Count - 1 - i];
+                if (!vm.CanBeSavedToFile)
+                    continue;
+
+                string fileName = GenerateDefaultInitialFileName(Name, i+1, vm);
+                string filePath = Path.Combine(destinationFolderPath, fileName);
+                using FileStream fs = File.Create(filePath);
+                await fs.WriteAsync((Memory<byte>)vm.Bytes!);
+            }
+        }
+        catch (Exception ex)
+        {
+            PororocaLogger.Instance?.Log(PororocaLogLevel.Warning, "Failed to save WebSocket messages to files.", ex);
+            Dialogs.ShowDialog(
+                title: Localizer.Instance.WebSocketExchangedMessages.CouldNotSaveAllToFilesDialogTitle,
+                message: Localizer.Instance.WebSocketExchangedMessages.CouldNotSaveAllToFilesDialogMessage,
+                buttons: ButtonEnum.Ok,
+                onButtonOkClicked: () => {});
         }
     }
 
