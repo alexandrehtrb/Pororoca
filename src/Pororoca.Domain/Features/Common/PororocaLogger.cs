@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Pororoca.Domain.Features.Common;
@@ -37,6 +38,14 @@ public sealed class PororocaLogger
             StringBuilder sb = new();
             sb.Append('#', 20);
             sb.AppendLine();
+            sb.AppendLine($"Operating system: {RuntimeInformation.OSDescription}");
+            sb.AppendLine($"Architecture: {RuntimeInformation.OSArchitecture}");
+#if INSTALLED_ON_WINDOWS
+            sb.AppendLine($"Installed on Windows? Yes");
+#endif
+#if INSTALLED_ON_DEBIAN
+            sb.AppendLine($"Installed on Debian? Yes");
+#endif
             sb.AppendLine($"Program version: {this.appVersion}");
             sb.AppendLine($"Time: {now:HH:mm:ss}");
             sb.AppendLine($"Severity: {level}");
