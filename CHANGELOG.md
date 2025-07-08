@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.7.7](#377-2025-07-08)
 * [3.7.6](#376-2025-06-02)
 * 3.7.5 was accidentally deleted 😝
 * [3.7.4](#374-2025-03-06)
@@ -38,6 +39,29 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.7.7](https://github.com/alexandrehtrb/Pororoca/tree/3.7.7) (2025-07-08)
+
+### Features
+
+- Save all WebSocket response messages to files. (issue #60, thanks @alks97!)
+
+### UI/UX
+
+- More monospaced fonts added for compatibility on text editors. Previously, in some operating systems, like Linux Mint, serif fonts were used due to lack of available fonts. Now, a monospaced font is preferred.
+- GraphQL body and WebSocket exception TextBoxes now use the same monospaced font as other text editors in the program.
+
+### Others
+
+- Raised .NET SDK version to 8.0.412.
+- Raised STJ version to 9.0.7.
+- Updated test dependencies (xunit, NSubstitute, coverlet, Microsoft.NET.Test.Sdk).
+- ReportGenerator GitHub Action version raised to 5.4.8.
+- Additional informations in error logs: O.S. and program versions, and installation type. (no telemetry is used; read our data protection policy.)
+
+### New Contributors
+
+* [@alks97](https://github.com/alks97) made his first contribution in PR [#153](https://github.com/alexandrehtrb/Pororoca/pull/153)
 
 ## [3.7.6](https://github.com/alexandrehtrb/Pororoca/tree/3.7.6) (2025-06-02)
 

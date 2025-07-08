@@ -33,7 +33,7 @@
     <EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
     <!-- trimming properties end -->
     <ApplicationIcon>Assets/pororoca_icon.ico</ApplicationIcon>
-    <Version>3.7.6</Version>
+    <Version>3.7.7</Version>
     <FileVersion>$(Version)</FileVersion>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <Copyright>AlexandreHTRB</Copyright>
