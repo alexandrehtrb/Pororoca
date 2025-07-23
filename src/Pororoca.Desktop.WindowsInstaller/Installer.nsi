@@ -206,7 +206,7 @@ LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_ENGLISH} "Your col
 LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_PORTUGUESEBR} "Suas coleções e preferências não serão excluídas. Elas estão em: 'Users\você\AppData\Roaming\Pororoca\PororocaUserData\'."
 LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_ITALIAN} "Le tue collezione e preferenze non verranno eliminate. Si trovano in: 'Utenti\tu\AppData\Roaming\Pororoca\PororocaUserData\'."
 LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_RUSSIAN} "Ваши коллекции и предпочтения не будут удалены. Они находятся по адресу: 'Users\ты\AppData\Roaming\Pororoca\PororocaUserData\'."
-LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_SPANISH} "Tus colecciones y preferencias no se eliminarán. Se encuentran en: 'Users\you\AppData\Roaming\Pororoca\PororocaUserData\'."
+LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_SPANISH} "Tus colecciones y preferencias no se eliminarán. Se encuentran en: 'Users\tu\AppData\Roaming\Pororoca\PororocaUserData\'."
 
 LangString InstallationCompleted ${LANG_ENGLISH} "Installation successful!"
 LangString InstallationCompleted ${LANG_PORTUGUESEBR} "Instalação concluída com sucesso!"
