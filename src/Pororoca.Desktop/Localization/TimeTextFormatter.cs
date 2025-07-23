@@ -33,6 +33,7 @@ internal static class TimeTextFormatter
 
             Language.English or
             Language.SimplifiedChinese or
+            Language.Spanish or
             _ => formattedNumber
         };
 }

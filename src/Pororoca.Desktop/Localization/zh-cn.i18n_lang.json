@@ -275,6 +275,7 @@
   "TopMenuLanguage/Russian": "Russian",
   "TopMenuLanguage/German": "German",
   "TopMenuLanguage/SimplifiedChinese": "中文（简体）",
+  "TopMenuLanguage/Spanish": "西班牙语",
   "TopMenuOptions/AutoCheckForUpdates": "自动检查更新",
   "TopMenuOptions/EnableTlsVerification": "启用 TLS 验证",
   "TopMenuOptions/Language": "语言",

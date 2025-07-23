@@ -105,95 +105,114 @@ LoadLanguageFile "${NSISDIR}\Contrib\Language files\English.nlf"
 LoadLanguageFile "${NSISDIR}\Contrib\Language files\PortugueseBR.nlf"
 LoadLanguageFile "${NSISDIR}\Contrib\Language files\Italian.nlf"
 LoadLanguageFile "${NSISDIR}\Contrib\Language files\Russian.nlf"
+LoadLanguageFile "${NSISDIR}\Contrib\Language files\Spanish.nlf"
 LicenseLangString langLicenseData ${LANG_ENGLISH} "${INPUT_FILES_DIR}\LICENCE.md"
 LicenseLangString langLicenseData ${LANG_PORTUGUESEBR} "${INPUT_FILES_DIR}\LICENCE.md"
 LicenseLangString langLicenseData ${LANG_ITALIAN} "${INPUT_FILES_DIR}\LICENCE.md"
 LicenseLangString langLicenseData ${LANG_RUSSIAN} "${INPUT_FILES_DIR}\LICENCE.md"
+LicenseLangString langLicenseData ${LANG_SPANISH} "${INPUT_FILES_DIR}\LICENCE.md"
 
 LangString InstallationTypical ${LANG_ENGLISH} "Typical"
 LangString InstallationTypical ${LANG_PORTUGUESEBR} "Típica"
 LangString InstallationTypical ${LANG_ITALIAN} "Tipica"
 LangString InstallationTypical ${LANG_RUSSIAN} "Типичный"
+LangString InstallationTypical ${LANG_SPANISH} "Típica"
 
 LangString InstallationMinimal ${LANG_ENGLISH} "Minimal"
 LangString InstallationMinimal ${LANG_PORTUGUESEBR} "Mínima"
 LangString InstallationMinimal ${LANG_ITALIAN} "Minima"
 LangString InstallationMinimal ${LANG_RUSSIAN} "Минимальный"
+LangString InstallationMinimal ${LANG_SPANISH} "Mínima"
 
 LangString InstallationFull ${LANG_ENGLISH} "Full"
 LangString InstallationFull ${LANG_PORTUGUESEBR} "Completa"
 LangString InstallationFull ${LANG_ITALIAN} "Completa"
 LangString InstallationFull ${LANG_RUSSIAN} "Полный"
+LangString InstallationFull ${LANG_SPANISH} "Completa"
 
 LangString SectionProgramFiles ${LANG_ENGLISH} "Program files"
 LangString SectionProgramFiles ${LANG_PORTUGUESEBR} "Arquivos do programa"
 LangString SectionProgramFiles ${LANG_ITALIAN} "File di programma"
 LangString SectionProgramFiles ${LANG_RUSSIAN} "Программные файлы"
+LangString SectionProgramFiles ${LANG_SPANISH} "Archivos del programa"
 
 LangString SectionDocumentation ${LANG_ENGLISH} "Documentation"
 LangString SectionDocumentation ${LANG_PORTUGUESEBR} "Documentação"
 LangString SectionDocumentation ${LANG_ITALIAN} "Documentazione"
 LangString SectionDocumentation ${LANG_RUSSIAN} "Документация"
+LangString SectionDocumentation ${LANG_SPANISH} "Documentación"
 
 LangString SectionGroupShortcuts ${LANG_ENGLISH} "Shortcuts"
 LangString SectionGroupShortcuts ${LANG_PORTUGUESEBR} "Atalhos"
 LangString SectionGroupShortcuts ${LANG_ITALIAN} "Scelta rapida"
 LangString SectionGroupShortcuts ${LANG_RUSSIAN} "Ярлыки"
+LangString SectionGroupShortcuts ${LANG_SPANISH} "Accesos directos"
 
 LangString SectionStartMenuGroup ${LANG_ENGLISH} "Start Menu group"
 LangString SectionStartMenuGroup ${LANG_PORTUGUESEBR} "Grupo no Menu Iniciar"
 LangString SectionStartMenuGroup ${LANG_ITALIAN} "Gruppo Menu Start"
 LangString SectionStartMenuGroup ${LANG_RUSSIAN} "Группа меню «Пуск»"
+LangString SectionStartMenuGroup ${LANG_SPANISH} "Grupo del Menú Inicio"
 
 LangString SectionStartMenuHighlight ${LANG_ENGLISH} "Start Menu highlight"
 LangString SectionStartMenuHighlight ${LANG_PORTUGUESEBR} "Destaque no Menu Iniciar"
 LangString SectionStartMenuHighlight ${LANG_ITALIAN} "Evidenziazione del menu Start"
 LangString SectionStartMenuHighlight ${LANG_RUSSIAN} "Выделение меню «Пуск»"
+LangString SectionStartMenuHighlight ${LANG_SPANISH} "Destacado en el Menú Inicio"
 
 LangString SectionQuickLaunchShortcut ${LANG_ENGLISH} "Quick Launch icon"
 LangString SectionQuickLaunchShortcut ${LANG_PORTUGUESEBR} "Inicialização Rápida"
 LangString SectionQuickLaunchShortcut ${LANG_ITALIAN} "Icona Avvio veloce"
 LangString SectionQuickLaunchShortcut ${LANG_RUSSIAN} "Значок быстрого запуска"
+LangString SectionQuickLaunchShortcut ${LANG_SPANISH} "Icono de Inicio rápido"
 
 LangString SectionDesktopShortcut ${LANG_ENGLISH} "Desktop icon"
 LangString SectionDesktopShortcut ${LANG_PORTUGUESEBR} "Ícone na Área de Trabalho"
 LangString SectionDesktopShortcut ${LANG_ITALIAN} "Icona del desktop"
 LangString SectionDesktopShortcut ${LANG_RUSSIAN} "Значок на рабочем столе"
+LangString SectionDesktopShortcut ${LANG_SPANISH} "Icono en el Escritorio"
 
 LangString CurrentUserOnly ${LANG_ENGLISH} "(current user only)"
 LangString CurrentUserOnly ${LANG_PORTUGUESEBR} "(apenas para o usuário atual)"
 LangString CurrentUserOnly ${LANG_ITALIAN} "(solo utente corrente)"
 LangString CurrentUserOnly ${LANG_RUSSIAN} "(только для текущего пользователя)"
+LangString CurrentUserOnly ${LANG_SPANISH} "(solo el usuario actual)"
 
 LangString ExitSetupQuestion ${LANG_ENGLISH} "Are you sure you want to quit the installation?"
 LangString ExitSetupQuestion ${LANG_PORTUGUESEBR} "Tem certeza de que quer sair da instalação?"
 LangString ExitSetupQuestion ${LANG_ITALIAN} "Sei sicuro di voler uscire dall'installazione?"
 LangString ExitSetupQuestion ${LANG_RUSSIAN} "Вы уверены, что хотите выйти из настройки?"
+LangString ExitSetupQuestion ${LANG_SPANISH} "¿Seguro que deseas salir de la instalación?"
 
 LangString ExitUninstallQuestion ${LANG_ENGLISH} "Are you sure you want to quit the uninstall?"
 LangString ExitUninstallQuestion ${LANG_PORTUGUESEBR} "Tem certeza de que quer sair da desinstalação?"
 LangString ExitUninstallQuestion ${LANG_ITALIAN} "Sei sicuro di voler uscire dalla disinstallazione?"
 LangString ExitUninstallQuestion ${LANG_RUSSIAN} "Вы уверены, что хотите выйти из удаления?"
+LangString ExitUninstallQuestion ${LANG_SPANISH} "¿Seguro que deseas salir de la desinstalación?"
 
 LangString CouldNotBeInstalledPleaseRestart ${LANG_ENGLISH} "could not be fully installed.$\r$\nPlease, restart Windows and run the setup program again."
 LangString CouldNotBeInstalledPleaseRestart ${LANG_PORTUGUESEBR} "não pôde ser completamente instalado.$\r$\nPor favor, reinicie o Windows e execute o instalador novamente."
 LangString CouldNotBeInstalledPleaseRestart ${LANG_ITALIAN} "non è stato possibile installarlo completamente.$\r$\nRiavvia Windows ed esegui nuovamente il programma di installazione."
 LangString CouldNotBeInstalledPleaseRestart ${LANG_RUSSIAN} "не удалось установить полностью.$\r$\nПожалуйста, перезагрузите Windows и снова запустите программу установки."
+LangString CouldNotBeInstalledPleaseRestart ${LANG_SPANISH} "no se pudo completar la instalación.$\r$\nPor favor, reinicia Windows y vuelve a ejecutar el programa de instalación."
 
 LangString CouldNotBeUninstalledPleaseRestart ${LANG_ENGLISH} "could not be fully uninstalled.$\r$\nPlease, restart Windows and run the uninstaller again."
 LangString CouldNotBeUninstalledPleaseRestart ${LANG_PORTUGUESEBR} "não pôde ser completamente desinstalado.$\r$\nPor favor, reinicie o Windows e execute o desisntalador novamente."
 LangString CouldNotBeUninstalledPleaseRestart ${LANG_ITALIAN} "non è stato possibile disinstallarlo completamente.$\r$\nRiavvia Windows ed esegui nuovamente il programma di disinstallazione."
 LangString CouldNotBeUninstalledPleaseRestart ${LANG_RUSSIAN} "не удалось полностью удалить.$\r$\nПожалуйста, перезагрузите Windows и снова запустите деинсталлятор."
+LangString CouldNotBeUninstalledPleaseRestart ${LANG_SPANISH} "no se pudo completar la desinstalación.$\r$\nPor favor, reinicia Windows y vuelve a ejecutar el desinstalador."
 
 LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_ENGLISH} "Your collections and preferences will not be deleted. They are located at: 'Users\you\AppData\Roaming\Pororoca\PororocaUserData\'."
 LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_PORTUGUESEBR} "Suas coleções e preferências não serão excluídas. Elas estão em: 'Users\você\AppData\Roaming\Pororoca\PororocaUserData\'."
 LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_ITALIAN} "Le tue collezione e preferenze non verranno eliminate. Si trovano in: 'Utenti\tu\AppData\Roaming\Pororoca\PororocaUserData\'."
 LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_RUSSIAN} "Ваши коллекции и предпочтения не будут удалены. Они находятся по адресу: 'Users\ты\AppData\Roaming\Pororoca\PororocaUserData\'."
+LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_SPANISH} "Tus colecciones y preferencias no se eliminarán. Se encuentran en: 'Users\you\AppData\Roaming\Pororoca\PororocaUserData\'."
 
 LangString InstallationCompleted ${LANG_ENGLISH} "Installation successful!"
 LangString InstallationCompleted ${LANG_PORTUGUESEBR} "Instalação concluída com sucesso!"
 LangString InstallationCompleted ${LANG_ITALIAN} "Installazione riuscita!"
 LangString InstallationCompleted ${LANG_RUSSIAN} "Установка прошла успешно!"
+LangString InstallationCompleted ${LANG_SPANISH} "¡Instalación completada con éxito!"
 CompletedText $(InstallationCompleted)
 
 
@@ -213,6 +232,8 @@ CompletedText $(InstallationCompleted)
 			Push "Italiano"
 			Push ${LANG_RUSSIAN}
 			Push "Русский"
+			Push ${LANG_SPANISH}
+			Push "Español"
 			Push "A" ; A means auto count languages; for the auto count to work the first empty push (Push "") must remain
 			LangDLL::LangDialog "Installer Language" "Please select the language of the installer"
 
