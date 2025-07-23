@@ -29,6 +29,7 @@ internal static class TimeTextFormatter
             Language.Portuguese or
             Language.Italian or
             Language.German or
+            Language.Spanish or
             Language.Russian => formattedNumber.Replace('.', ','),
 
             Language.English or
