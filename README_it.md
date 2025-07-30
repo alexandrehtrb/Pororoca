@@ -53,11 +53,14 @@ Contattaci se stai cercando un supporto più avanzato, personalizzazioni special
 
 ## Donazioni
 
-Puoi anche contribuire con donazioni in denaro.
+Le donazioni in denaro sono molto importanti e ci aiutano a coprire le nostre spese. Scopri di più nel nostro [annuncio](https://github.com/alexandrehtrb/Pororoca/discussions/159)!
 
-| ![Fai una donazione con Pix](./misc/pix_botao_doacao.png) | [![Fai una donazione con PayPal](./misc/paypal_donation_button.png)](https://www.paypal.com/donate/?hosted_button_id=NUADRWF3WNYQ2) |
-|--|--|
-| [Visualizza il codice QR](./misc/pix_doacao_qr_code.png) | [Visualizza il codice QR](./misc/paypal_donation_qr_code.png) |
+I nostri canali di donazione sono:
+
+- [OpenCollective](https://opencollective.com/pororoca)
+- [GitHub Sponsors](https://github.com/sponsors/alexandrehtrb)
+- [Wise](https://wise.com/pay/me/alexandrehenriquet2) (tag: **@alexandrehenriquet2**)
+- PIX 🇧🇷 (chave: alexandrehtrb@outlook.com)
 
 ## Contatto
 
