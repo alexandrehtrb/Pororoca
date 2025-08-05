@@ -10,7 +10,7 @@ internal static class TimeTextFormatter
         time < oneSecond ?
         string.Format("{0}{1}", (int)time.TotalMilliseconds, Localizer.Instance.TimeText.Milliseconds) :
         time < oneMinute ? // More or equal than one second, but less than one minute
-        string.Format("{0:0.00}{1}", time.TotalSeconds, Localizer.Instance.TimeText.Seconds).AdjustDecimalSeparator() :
+        string.Format("{0:0.00}{1}", time.TotalSeconds, Localizer.Instance.TimeText.Seconds) :
         time < oneHour ? // More or equal than one minute, but less than one hour
         string.Format("{0}{1} {2}{3}", time.Minutes, Localizer.Instance.TimeText.Minutes, time.Seconds, Localizer.Instance.TimeText.Seconds) :
         // more than one hour
@@ -23,17 +23,4 @@ internal static class TimeTextFormatter
         string.Format("{0}{1}", time.Minutes, Localizer.Instance.TimeText.Minutes) :
         string.Format("{0}{1} {2}{3}", time.Hours, Localizer.Instance.TimeText.Hours, time.Minutes, Localizer.Instance.TimeText.Minutes);
 
-    private static string AdjustDecimalSeparator(this string formattedNumber) =>
-        Localizer.Instance.CurrentLanguage switch
-        {
-            Language.Portuguese or
-            Language.Italian or
-            Language.German or
-            Language.Spanish or
-            Language.Russian => formattedNumber.Replace('.', ','),
-
-            Language.English or
-            Language.SimplifiedChinese or
-            _ => formattedNumber
-        };
 }

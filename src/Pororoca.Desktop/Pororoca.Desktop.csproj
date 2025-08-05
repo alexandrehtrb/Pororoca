@@ -28,7 +28,8 @@
     <TrimMode>partial</TrimMode>
     <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
     <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport>
-    <InvariantGlobalization>true</InvariantGlobalization>
+    <!-- disabling below because some Spanish-speaking countries use ',' decimal separator (Spain and most LATAM) and some use '.' (MX and Central America) -->
+    <!--InvariantGlobalization>true</InvariantGlobalization-->
     <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
     <EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
     <!-- trimming properties end -->
