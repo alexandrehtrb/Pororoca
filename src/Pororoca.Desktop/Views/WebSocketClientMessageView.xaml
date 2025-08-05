@@ -132,7 +132,13 @@
           IsVisible="{Binding ContentModeSelectedIndex,
                       Mode=OneWay,
                       Converter={StaticResource contentModeMatch},
-                      ConverterParameter=Raw}"/>
+                      ConverterParameter=Raw}">
+        <FlyoutBase.AttachedFlyout>
+          <Flyout ShowMode="TransientWithDismissOnPointerMoveAway">
+            <SelectableTextBlock x:Name="stbPopupText" Classes="HoverVariablePopup"/>
+          </Flyout>
+        </FlyoutBase.AttachedFlyout>
+      </AvaloniaEdit:TextEditor>
 
       <StackPanel
           x:Name="spWsCliMsgContentFile"

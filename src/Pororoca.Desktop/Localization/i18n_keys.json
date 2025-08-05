@@ -83,6 +83,8 @@
   "GoBack/Hint",
   "HelpDialog/Content",
   "HelpDialog/Title",
+  "HoverVariableInEditor/NoMatchingVariable",
+  "HoverVariableInEditor/PredefinedVariable",
   "HttpRepeater/Delay",
   "HttpRepeater/DelayTip",
   "HttpRepeater/ExportAllLogs",

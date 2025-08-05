@@ -271,7 +271,13 @@
                   IsVisible="{Binding RequestBodyModeSelectedIndex,
                               Mode=OneWay,
                               Converter={StaticResource reqBodyModeMatch},
-                              ConverterParameter=Raw}"/>
+                              ConverterParameter=Raw}">
+                <FlyoutBase.AttachedFlyout>
+                  <Flyout ShowMode="TransientWithDismissOnPointerMoveAway">
+                    <SelectableTextBlock x:Name="stbPopupText" Classes="HoverVariablePopup"/>
+                  </Flyout>
+                </FlyoutBase.AttachedFlyout>
+              </AvaloniaEdit:TextEditor>
               <!-- REQUEST BODY FILE -->
               <StackPanel
                   x:Name="grReqBodyFile"

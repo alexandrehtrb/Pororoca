@@ -22,14 +22,16 @@ public sealed class HttpRequestView : UserControl
     {
         InitializeComponent();
 
+        var varResolverObtainer = () => ((HttpRequestViewModel)DataContext!).col;
+
         var httpReqRawBodyEditor = this.FindControl<TextEditor>("teReqBodyRawContent");
-        this.httpReqRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(httpReqRawBodyEditor!, true);
+        this.httpReqRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(httpReqRawBodyEditor!, true, varResolverObtainer);
 
         var httpReqRawContentTypeSelector = this.FindControl<AutoCompleteBox>("acbReqBodyRawContentType")!;
         httpReqRawContentTypeSelector.SelectionChanged += OnRequestBodyRawContentTypeChanged;
 
         var httpResRawBodyEditor = this.FindControl<TextEditor>("ResponseBodyRawContentEditor")!;
-        this.httpResRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(httpResRawBodyEditor!, false);
+        this.httpResRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(httpResRawBodyEditor!, false, null);
         httpResRawBodyEditor.DocumentChanged += OnResponseRawBodyEditorDocumentChanged;
     }
 

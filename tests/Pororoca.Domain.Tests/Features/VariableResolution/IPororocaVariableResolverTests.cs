@@ -230,4 +230,47 @@ public static class IPororocaVariableResolverTests
     }
 
     #endregion
+
+    #region HOVER OVER VARIABLE
+
+    [Theory]
+    [InlineData("{{fafa}}", "{{fafa}} {{hwx}} {{}}", 0)]
+    [InlineData("{{fafa}}", "{{fafa}} {{hwx}} {{}}", 1)]
+    [InlineData("{{fafa}}", "{{fafa}} {{hwx}} {{}}", 2)]
+    [InlineData("{{fafa}}", "{{fafa}} {{hwx}} {{}}", 3)]
+    [InlineData("{{fafa}}", "{{fafa}} {{hwx}} {{}}", 4)]
+    [InlineData("{{fafa}}", "{{fafa}} {{hwx}} {{}}", 5)]
+    [InlineData("{{fafa}}", "{{fafa}} {{hwx}} {{}}", 6)]
+    [InlineData("{{fafa}}", "{{fafa}} {{hwx}} {{}}", 7)]
+    [InlineData(null, "{{fafa}} {{hwx}} {{}}", 8)]
+    [InlineData("{{hwx}}", "{{fafa}} {{hwx}} {{}}", 9)]
+    [InlineData("{{hwx}}", "{{fafa}} {{hwx}} {{}}", 10)]
+    [InlineData("{{hwx}}", "{{fafa}} {{hwx}} {{}}", 11)]
+    [InlineData("{{hwx}}", "{{fafa}} {{hwx}} {{}}", 12)]
+    [InlineData("{{hwx}}", "{{fafa}} {{hwx}} {{}}", 13)]
+    [InlineData("{{hwx}}", "{{fafa}} {{hwx}} {{}}", 14)]
+    [InlineData("{{hwx}}", "{{fafa}} {{hwx}} {{}}", 15)]
+    [InlineData(null, "{{fafa}} {{hwx}} {{}}", 16)]
+    [InlineData(null, "{{fafa}} {{hwx}} {{}}", 17)]
+    [InlineData(null, "{{fafa}} {{hwx}} {{}}", 18)]
+    [InlineData(null, "{{fafa}} {{hwx}} {{}}", 19)]
+    [InlineData(null, "{{fafa}} {{hwx}} {{}}", 20)]
+    [InlineData(null, "{{fafa}} {{hwx}} {{}}", 21)]
+    [InlineData(null, "{fafa}} {{hwx}} {{}}", 2)]
+    [InlineData(null, "{{fafa}} {{hwx} {{}}", 9)]
+    [InlineData("{{a}}", "{{a}}", 0)]
+    [InlineData("{{a}}", "{{a}}", 1)]
+    [InlineData("{{a}}", "{{a}}", 2)]
+    [InlineData("{{a}}", "{{a}}", 3)]
+    [InlineData("{{a}}", "{{a}}", 4)]
+    [InlineData(null, "{{afas{fa}}", 4)]
+    [InlineData(null, "{{af}sfa}}", 4)]
+    [InlineData(null, "{{f{sfa}}", 5)]
+    [InlineData(null, "", 0)]
+    [InlineData(null, "   ", 3)]
+    [InlineData(null, "{{}}", 1)]
+    public static void Should_detect_hovered_variable_correctly(string? expectedVariable, string lineText, int pointerIndex) =>
+        Assert.Equal(expectedVariable, IPororocaVariableResolver.GetPointerHoverVariable(lineText, pointerIndex));
+
+    #endregion
 }

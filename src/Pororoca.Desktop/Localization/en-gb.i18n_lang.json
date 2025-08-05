@@ -83,6 +83,8 @@
   "GoBack/Hint": "Go back",
   "HelpDialog/Content": "Keyboard shortcuts\\n\\nF1 - Show help\\nF2 - Rename\\nF4 - Focus on URL\\nF5 - Send request / connect WebSocket\\nF6 - Cancel request / disconnect WebSocket\\nF7 - Set previous environment as active\\nF8 - Set next environment as active\\nF9 - Save response body to file\\nF10 - Export HTTP log to file\\nCtrl+PageUp - Switch to item above in tree\\nCtrl+PageDown - Switch to item below in tree\\nCtrl+Shift+S - Save all\\n\\nFull documentation on site: https://pororoca.io",
   "HelpDialog/Title": "Help",
+  "HoverVariableInEditor/NoMatchingVariable": "(no matching variable)",
+  "HoverVariableInEditor/PredefinedVariable": "(predefined variable)",
   "HttpRepeater/Delay": "Delay (ms)",
   "HttpRepeater/DelayTip": "Waiting time between a response and sending the next request.",
   "HttpRepeater/ExportAllLogs": "Export all logs…",

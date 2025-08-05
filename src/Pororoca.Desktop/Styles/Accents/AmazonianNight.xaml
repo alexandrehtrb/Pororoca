@@ -39,8 +39,19 @@
       <Color x:Key="WebSocketMessageFromServerPrimaryColor">Lime</Color>
       <Color x:Key="DefaultIconsColor">#F2F2F2</Color>
       <Color x:Key="DefaultTextForegroundColor">#F2F2F2</Color>
+      <x:String x:Key="TextEditorTheme">Dark</x:String>
       <Color x:Key="TextEditorBackgroundColor">#1E1E1E</Color>
       <Color x:Key="TextEditorForegroundColor">#D4D4D4</Color>
+      <SolidColorBrush x:Key="TextEditorHyperlinkForegroundBrush" Color="LightBlue"/>
+      <SolidColorBrush x:Key="TextEditorRegularVariableForegroundBrush" Color="DarkGoldenrod"/>
+      <SolidColorBrush x:Key="TextEditorPredefinedVariableForegroundBrush" Color="Goldenrod"/>
+      <!-- don't rename key below -->
+      <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="#814718"/>
+      <!-- value below sets hover variable popup max width -->
+      <x:Double x:Key="FlyoutThemeMaxWidth">720</x:Double>
+      <Color x:Key="TextEditorRegularVariablePopupForegroundColor">DarkKhaki</Color>
+      <Color x:Key="TextEditorPredefinedVariablePopupForegroundColor">Goldenrod</Color>
+      <Color x:Key="TextEditorNoMatchingVariablePopupForegroundColor">LightSalmon</Color>
       <Color x:Key="ResponseCapturedValueTextColor">#99E3D5</Color>
       <!--Color x:Key="TreeViewItemTargetMovementHighlightColor">LawnGreen</Color-->
     </ResourceDictionary>

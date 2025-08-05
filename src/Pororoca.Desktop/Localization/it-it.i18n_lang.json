@@ -83,6 +83,8 @@
     "GoBack/Hint": "Indietro",
     "HelpDialog/Content": "Scorciatoie da tastiera\\n\\nF1 - Mostra aiuto\\nF2 - Rinomina\\nF4 - Focus sull'URL\\nF5 - Invia richiesta / connetti WebSocket\\nF6 - Annulla richiesta / disconnetti WebSocket\\nF7 - Imposta l'ambiente precedente come attivo\\nF8 - Imposta il prossimo ambiente come attivo\\nF9 - Salva il corpo della risposta su file\\nF10 - Esporta HTTP log su file\\nCtrl+PagSu - Passa all'elemento sopra nell'albero\\nCtrl+PagGiù - Passa all'elemento sotto nell'albero\\nCtrl+Shift+S - Salva tutto\\n\\nDocumentazione completa sul sito: https://pororoca.io",
     "HelpDialog/Title": "Aiuto",
+    "HoverVariableInEditor/NoMatchingVariable": "(nessuna variabile corrispondente)",
+    "HoverVariableInEditor/PredefinedVariable": "(variabile predefinita)",
     "HttpRepeater/Delay": "Ritardo (ms)",
     "HttpRepeater/DelayTip": "Tempo di attesa tra una risposta e l'invio della richiesta successiva.",
     "HttpRepeater/ExportAllLogs": "Esporta logs…",

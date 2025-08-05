@@ -42,7 +42,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region CONNECTION
 
-    private readonly CollectionViewModel col;
+    internal readonly CollectionViewModel col;
     private readonly IPororocaHttpClientProvider httpClientProvider;
     private readonly WebSocketClientSideConnector connector;
 
