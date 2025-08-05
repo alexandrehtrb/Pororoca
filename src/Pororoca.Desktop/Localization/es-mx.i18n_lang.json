@@ -83,7 +83,7 @@
   "GoBack/Hint": "Regresar",
   "HelpDialog/Content": "Atajos de teclado\\n\\nF1 - Mostrar ayuda\\nF2 - Renombrar\\nF4 - Enfocar en URL\\nF5 - Enviar solicitud / conectar WebSocket\\nF6 - Cancelar solicitud / desconectar WebSocket\\nF7 - Activar el entorno anterior\\nF8 - Activar el siguiente entorno\\nF9 - Guardar cuerpo de respuesta en archivo\\nF10 - Exportar registro HTTP a archivo\\nCtrl+PageUp - Cambiar al elemento superior en el árbol\\nCtrl+PageDown - Cambiar al elemento inferior en el árbol\\nCtrl+Shift+S - Guardar todo\\n\\nDocumentación completa en el sitio: https://pororoca.io",
   "HelpDialog/Title": "Ayuda",
-  "HoverVariableInEditor/NoMatchingVariable": "(no hay variable que coincida)",
+  "HoverVariableInEditor/NoMatchingVariable": "(ninguna variable correspondiente)",
   "HoverVariableInEditor/PredefinedVariable": "(variable predefinida)",
   "HttpRepeater/Delay": "Retraso (ms)",
   "HttpRepeater/DelayTip": "Tiempo de espera entre una respuesta y el envío de la siguiente solicitud.",
