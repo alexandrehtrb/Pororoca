@@ -171,7 +171,7 @@
   "HttpResponse/BodyCouldNotReadAsUTF8": "(konnte den Körper nicht als UTF-8-Text lesen, {0} Bytes)",
   "HttpResponse/BodySaveToFile": "Sparen als…",
   "HttpResponse/BodySaveToFileToolTip": "Speichern Sie als… (F9)",
-  "HttpResponse/Capture": "Erfassen",
+  "HttpResponse/Capture": "Erfassung",
   "HttpResponse/CaptureAddBodyCapture": "Fügen Sie die Körpereinfassung hinzu",
   "HttpResponse/CaptureAddHeaderCapture": "Fügen Sie Header Capture hinzu",
   "HttpResponse/CaptureCapturedValue": "WERT",
