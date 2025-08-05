@@ -199,7 +199,7 @@
     "RequestAuth/AuthModeBearer": "Bearer",
     "RequestAuth/AuthModeBearerTokenWatermark": "(bearer auth token)",
     "RequestAuth/AuthModeClientCertificate": "Certificato del client",
-    "RequestAuth/AuthModeInheritFromCollection": "Eredita dalla raccolta",
+    "RequestAuth/AuthModeInheritFromCollection": "Eredita dalla collezione",
     "RequestAuth/AuthModeNone": "Nessuno",
     "RequestAuth/AuthModeWindows": "Windows / NTLM",
     "RequestAuth/AuthModeWindowsDomainWatermark": "(dominio)",

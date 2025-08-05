@@ -152,7 +152,7 @@
   "HttpRequest/BodyUrlEncodedParamValue": "VALOR",
   "HttpRequest/CancelRequest": "Cancelar",
   "HttpRequest/CancelRequestToolTip": "Cancelar (F6)",
-  "HttpRequest/CustomAuth": "Custom Auth",
+  "HttpRequest/CustomAuth": "Autenticación",
   "HttpRequest/HeaderAdd": "Agregar encabezado",
   "HttpRequest/HeaderEnabled": "ACTIVADO",
   "HttpRequest/HeaderName": "NOMBRE DE ENCABEZADO",
