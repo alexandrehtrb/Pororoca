@@ -83,7 +83,7 @@
   "GoBack/Hint": "返回",
   "HelpDialog/Content": "键盘快捷方式\\n\\nF1 - 显示帮助\\nF2 - 重命名\\nF4 - 关注 URL\\nF5 - 发送请求/连接 WebSocket\\nF6 - 取消请求/断开 WebSocket\\nF7 - 将上一个环境设置为活动\\nF8 - 将下一个环境设置为活动\\nF9 - 将响应正文保存到文件\\nF10 - 将 HTTP 日志输出到文件\\nCtrl+PageUp -切换到树中上方的项\\nCtrl+PageDown -切换到树中的下方的项\\nCtrl+Shift+S -保存所有\\n\\n网站上的完整文档：https://pororoca.io",
   "HelpDialog/Title": "帮助",
-  "HoverVariableInEditor/NoMatchingVariable": "(没有匹配的变量)",
+  "HoverVariableInEditor/NoMatchingVariable": "(未找到变量)",
   "HoverVariableInEditor/PredefinedVariable": "(预定义变量)",
   "HttpRepeater/Delay": "延迟 (ms)",
   "HttpRepeater/DelayTip": "响应和发送下一个请求之间的等待时间。",

@@ -83,7 +83,7 @@
   "GoBack/Hint": "Geh zurück",
   "HelpDialog/Content": "Tastaturverknüpfungen\\n\\nF1 – Hilfe\\nF2 – Umbenennen\\nF4 – Fokus auf URL\\nF5 – Anfragen/WebSocket verbinden\\nF6 – Anfrage abbrechen/Drucken\\nF7 - Vorherige Umgebung als aktiv festlegen\\nF8 - Nächste Umgebung als aktiv festlegen\\nF9 - Antworttext in Datei speichern\\nF10 - HTTP-Protokoll in Datei exportieren\\nCtrl+PageUp - Zum oberen Element im Baum wechseln\\nCtrl+PageDown - Zum nächsten Element im Baum wechseln\\nCtrl+Shift+S - Rette alles\\n\\nVollständige Dokumentation auf der Website: https://pororoca.io",
   "HelpDialog/Title": "Helfen",
-  "HoverVariableInEditor/NoMatchingVariable": "(Keine übereinstimmende Variable)",
+  "HoverVariableInEditor/NoMatchingVariable": "(Variable nicht gefunden)",
   "HoverVariableInEditor/PredefinedVariable": "(vordefinierte Variable)",
   "HttpRepeater/Delay": "Verzögerung (ms)",
   "HttpRepeater/DelayTip": "Wartezeit zwischen einer Antwort und dem Senden der nächsten Anfrage.",

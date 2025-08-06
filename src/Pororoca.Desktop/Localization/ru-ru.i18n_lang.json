@@ -83,7 +83,7 @@
     "GoBack/Hint": "Вернуться",
     "HelpDialog/Content": "Горячие клавиши\\n\\nF1 - Показать справку\\nF2 - Переименовать\\nF4 - Сосредоточиться на URL-адресе\\nF5 - Отправить запрос / подключить WebSocket\\nF6 - Отменить запрос / отключить WebSocket\\nF7 - Установить предыдущую среду как активную\\nF8 - Установить следующую среду как активную\\nF9 - Сохранить тело ответа в файл\\nF10 - Экспорт журнала HTTP в файл\\nCtrl+PageUp - Переключиться на элемент выше в дереве\\nCtrl+PageDown - Переключитесь на элемент ниже в дереве\\nCtrl+Shift+S - Сохранить все\\n\\nПолная документация на сайте: https://pororoca.io",
     "HelpDialog/Title": "Ажуда",
-    "HoverVariableInEditor/NoMatchingVariable": "(нет соответствующей переменной)",
+    "HoverVariableInEditor/NoMatchingVariable": "(переменная не найдена)",
     "HoverVariableInEditor/PredefinedVariable": "(предустановленная переменная)",
     "HttpRepeater/Delay": "Задержка (мс)",
     "HttpRepeater/DelayTip": "Время ожидания между ответом и отправкой следующего запроса.",
