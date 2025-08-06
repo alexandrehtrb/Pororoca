@@ -58,6 +58,7 @@
 
 - Raised .NET SDK version to 8.0.413.
 - Disabled `InvariantGlobalization` to use O.S.-defined decimal separators.
+- Added info about new donation channels.
 
 ### New Contributors
 
