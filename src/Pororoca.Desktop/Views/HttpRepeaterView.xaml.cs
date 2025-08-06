@@ -21,12 +21,14 @@ public sealed class HttpRepeaterView : UserControl
     {
         InitializeComponent();
 
+        var varResolverObtainer = () => ((HttpRepeaterViewModel)DataContext!).Collection;
+
         var rawInputDataEditor = this.FindControl<TextEditor>("teRepetitionInputDataRaw");
-        this.rawInputDataEditorTextMateInstallation = TextEditorConfiguration.Setup(rawInputDataEditor!, true);
+        this.rawInputDataEditorTextMateInstallation = TextEditorConfiguration.Setup(rawInputDataEditor!, true, varResolverObtainer);
         this.rawInputDataEditorTextMateInstallation.SetEditorSyntax(ref this.currentRawInputDataSyntaxLangId, MimeTypesDetector.DefaultMimeTypeForJson);
 
         var httpResRawBodyEditor = this.FindControl<TextEditor>("ResponseBodyRawContentEditor")!;
-        this.httpResRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(httpResRawBodyEditor!, false);
+        this.httpResRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(httpResRawBodyEditor!, false, null);
         httpResRawBodyEditor.DocumentChanged += OnResponseRawBodyEditorDocumentChanged;
     }
 

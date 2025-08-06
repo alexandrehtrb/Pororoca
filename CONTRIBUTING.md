@@ -53,9 +53,9 @@ The [WebTranslateIt](https://converter.webtranslateit.com/) online tool allows y
 
 ## I want to make my own colour theme
 
-1) Create a new theme file in the [Accents](https://github.com/alexandrehtrb/Pororoca/tree/develop/src/Pororoca.Desktop/Styles/Accents) folder. If dark-based, copy from `AmazonianNight`; if light-based, copy from `Pampa`. Light-based themes require a few more colour definitions than dark-based themes.
+1) Create a new theme file inside the [Accents](https://github.com/alexandrehtrb/Pororoca/tree/develop/src/Pororoca.Desktop/Styles/Accents) folder. If dark-based, copy from `AmazonianNight`; if light-based, copy from `Pampa`. Light-based themes require a few more colour definitions than dark-based themes.
 
-2) Reference it on [`Themes.xaml`](https://github.com/alexandrehtrb/Pororoca/blob/develop/src/Pororoca.Desktop/Styles/Themes.xaml) and [`PororocaThemeManager`](https://github.com/alexandrehtrb/Pororoca/blob/develop/src/Pororoca.Desktop/PororocaThemeManager.cs). The latter also controls the text editor theme and variable highlight colour.
+2) Reference it on [`Themes.xaml`](https://github.com/alexandrehtrb/Pororoca/blob/develop/src/Pororoca.Desktop/Styles/Themes.xaml) and [`PororocaThemeManager`](https://github.com/alexandrehtrb/Pororoca/blob/develop/src/Pororoca.Desktop/PororocaThemeManager.cs).
 
 3) Insert a key `"TopMenuLanguage/YourTheme"` in [`i18n_keys.json`](https://github.com/alexandrehtrb/Pororoca/blob/78abc423c8f61c99331d85b4ab19ff304ae155d6/src/Pororoca.Desktop/Localization/i18n_keys.json#L272) with translations for each language.
 

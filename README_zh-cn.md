@@ -1,6 +1,6 @@
 <h1>Pororoca <img style="margin: 4px 0 0 4px" height="32" src="pororoca.png" alt="Pororoca Logo"/></h1>
 
-阅读：[english](README.md) | [português](README_pt.md) | [italiano](README_it.md) | [русском](README_ru.md) | [Deutsch](README_de.md)
+阅读：[english](README.md) | [português](README_pt.md) | [italiano](README_it.md) | [русском](README_ru.md) | [Deutsch](README_de.md) | [español](README_es.md)
 
 Pororoca 是一款灵感来源于 Postman 的 HTTP 测试工具，但做了许多改进。
 
@@ -53,11 +53,14 @@ Pororoca 不会将用户数据（例如设置、集合、环境、硬件信息�
 
 ## 捐赠
 
-你也可以通过捐款来帮助我们。
+捐款非常重要，可以帮助我们支付开支。更多信息，请参阅我们的[公告](https://github.com/alexandrehtrb/Pororoca/discussions/159)！
 
-| ![通过 Pix 捐款](./misc/pix_botao_doacao.png) | [![通过 PayPal 捐款](./misc/paypal_donation_button.png)](https://www.paypal.com/donate/?hosted_button_id=NUADRWF3WNYQ2) |
-|--|--|
-| [查看二维码](./misc/pix_doacao_qr_code.png) | [查看二维码](./misc/paypal_donation_qr_code.png) |
+我们的捐款渠道包括：
+
+- [OpenCollective](https://opencollective.com/pororoca)
+- [GitHub Sponsors](https://github.com/sponsors/alexandrehtrb)
+- [Wise](https://wise.com/pay/me/alexandrehenriquet2) (tag: **@alexandrehenriquet2**)
+- PIX 🇧🇷 (chave: alexandrehtrb@outlook.com)
 
 ## 联系方式
 

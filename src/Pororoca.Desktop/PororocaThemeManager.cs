@@ -23,12 +23,6 @@ public static class PororocaThemeManager
     public static readonly ThemeVariant Pampa = new("Pampa", ThemeVariant.Light);
     public static readonly ThemeVariant AmazonianNight = new("AmazonianNight", ThemeVariant.Dark);
 
-    private static readonly SolidColorBrush LightTextSelectionForeground = new(Color.Parse("#DBF66F"));
-    private static readonly SolidColorBrush Light2TextSelectionForeground = new(Color.Parse("#DBF66F"));
-    private static readonly SolidColorBrush DarkTextSelectionForeground = new(Color.Parse("#814718"));
-    private static readonly SolidColorBrush PampaTextSelectionForeground = new(Color.Parse("#B6CCFC"));
-    private static readonly SolidColorBrush AmazonianNightTextSelectionForeground = new(Color.Parse("#814718"));
-
     private static PororocaTheme currentThemeField;
 
     public static PororocaTheme CurrentTheme
@@ -39,8 +33,24 @@ public static class PororocaThemeManager
 
     public static PororocaTheme DefaultTheme => PororocaTheme.Dark;
 
+    public static ThemeName TextEditorThemeName =>
+        Enum.Parse<ThemeName>(GetResource<string>("TextEditorTheme"));
+
+    public static SolidColorBrush RegularVariableForegroundBrush =>
+        GetResource<SolidColorBrush>("TextEditorRegularVariableForegroundBrush");
+
+    public static SolidColorBrush PredefinedVariableForegroundBrush =>
+        GetResource<SolidColorBrush>("TextEditorPredefinedVariableForegroundBrush");
+
+    public static SolidColorBrush HyperlinkForegroundBrush =>
+        GetResource<SolidColorBrush>("TextEditorHyperlinkForegroundBrush");    
+
+    public static SolidColorBrush TextEditorSelectionHighlightBrush =>
+        GetResource<SolidColorBrush>("TextControlSelectionHighlightColor");
+
+
     private static void ApplyTheme(PororocaTheme theme)
-    {
+    {       
         Application.Current!.RequestedThemeVariant = theme switch
         {
             PororocaTheme.Light => Light,
@@ -51,20 +61,22 @@ public static class PororocaThemeManager
             _ => AmazonianNight
         };
 
-        var pororocaVarHighlightBrush = MapPororocaVariableHighlightBrush(theme);
 
-        TextEditorConfiguration.PororocaVariableHighlightingTransformers.ForEach(t => t.PororocaVariableHighlightBrush = pororocaVarHighlightBrush);
+        TextEditorConfiguration.PororocaVariableHighlightingTransformers.ForEach(t =>
+        {
+            t.RegularVariableForegroundBrush = RegularVariableForegroundBrush;
+            t.PredefinedVariableForegroundBrush = PredefinedVariableForegroundBrush;
+        });
 
         // Only setting text editors' theme if the TextEditors were already setup,
         // otherwise, a wrong text editor theme will be loaded before the corresponding user saved theme
         if (TextEditorConfiguration.TextMateInstallations.Count > 0)
         {
-            var textEditorThemeName = MapTextEditorTheme(theme);
-            var textEditorTheme = TextEditorConfiguration.DefaultRegistryOptions!.Value!.LoadTheme(textEditorThemeName);
+            var textEditorTheme = TextEditorConfiguration.DefaultRegistryOptions!.Value!.LoadTheme(TextEditorThemeName);
             TextEditorConfiguration.TextMateInstallations.ForEach(tmi =>
             {
-                tmi.Item1.TextArea.SelectionBrush = MapTextEditorSelectionForegroundBrush(theme);
-                tmi.Item1.TextArea.TextView.LinkTextForegroundBrush = MapLinkColourForEditorTheme(theme);
+                tmi.Item1.TextArea.SelectionBrush = TextEditorSelectionHighlightBrush;
+                tmi.Item1.TextArea.TextView.LinkTextForegroundBrush = HyperlinkForegroundBrush;
                 tmi.Item2.SetTheme(textEditorTheme);
             });
         }
@@ -72,46 +84,13 @@ public static class PororocaThemeManager
         currentThemeField = theme;
     }
 
-    public static ISolidColorBrush MapPororocaVariableHighlightBrush(PororocaTheme theme) =>
-        theme switch
-        {
-            PororocaTheme.Light => Brushes.ForestGreen,
-            PororocaTheme.Light2 => Brushes.MediumVioletRed,
-            PororocaTheme.Pampa => Brushes.MediumBlue,
-            _ => Brushes.Gold
-        };
+    private static T GetResource<T>(string key)
+    {
+        Application.Current!.TryGetResource(
+            key,
+            Application.Current!.RequestedThemeVariant,
+            out object? resourceValue);
 
-    public static ThemeName MapTextEditorTheme(PororocaTheme theme) =>
-        theme switch
-        {
-            PororocaTheme.Light => ThemeName.Light,
-            PororocaTheme.Light2 => ThemeName.Light,
-            PororocaTheme.Pampa => ThemeName.LightPlus,
-            PororocaTheme.Dark => ThemeName.DarkPlus,
-            PororocaTheme.AmazonianNight => ThemeName.Dark,
-            _ => ThemeName.DarkPlus
-        };
-
-    public static ISolidColorBrush MapTextEditorSelectionForegroundBrush(PororocaTheme theme) =>
-        // TextControlSelectionHighlightColor
-        theme switch
-        {
-            PororocaTheme.Light => LightTextSelectionForeground,
-            PororocaTheme.Light2 => LightTextSelectionForeground,
-            PororocaTheme.Pampa => PampaTextSelectionForeground,
-            PororocaTheme.Dark => DarkTextSelectionForeground,
-            PororocaTheme.AmazonianNight => AmazonianNightTextSelectionForeground,
-            _ => DarkTextSelectionForeground
-        };
-
-    public static IImmutableSolidColorBrush MapLinkColourForEditorTheme(PororocaTheme theme) =>
-        theme switch
-        {
-            PororocaTheme.Light => Brushes.DarkBlue,
-            PororocaTheme.Light2 => Brushes.DarkBlue,
-            PororocaTheme.Pampa => Brushes.DarkBlue,
-            PororocaTheme.Dark => Brushes.LightBlue,
-            PororocaTheme.AmazonianNight => Brushes.LightBlue,
-            _ => Brushes.LightBlue
-        };
+        return (T)resourceValue!;
+    }
 }

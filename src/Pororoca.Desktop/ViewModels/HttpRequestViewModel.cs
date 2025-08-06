@@ -24,7 +24,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #region REQUEST
 
     private readonly PororocaRequester requester = PororocaRequester.Singleton;
-    private readonly CollectionViewModel col;
+    internal readonly CollectionViewModel col;
 
     // To preserve the state of the last shown request tab
     [Reactive]

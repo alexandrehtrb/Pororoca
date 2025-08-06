@@ -455,4 +455,37 @@
         Value="14"/>
   </Style>
 
+  <Style Selector="SelectableTextBlock.HoverVariablePopup">
+    <Setter
+        Property="Foreground"
+        Value="{DynamicResource RegularVariablePopupForegroundBrush}"/>
+    <Setter
+        Property="FontFamily"
+        Value="{StaticResource CodeFontFamily}"/>
+    <Setter
+        Property="FontSize"
+        Value="14"/>
+    <Setter
+        Property="MaxWidth"
+        Value="720"/>
+    <Setter
+        Property="TextWrapping"
+        Value="Wrap"/>
+    <Setter
+        Property="MaxLines"
+        Value="10"/>
+  </Style>
+
+  <Style Selector="SelectableTextBlock.HoverVariablePopup.NoMatchingVariable">
+    <Setter
+        Property="Foreground"
+        Value="{DynamicResource NoMatchingVariablePopupForegroundBrush}"/>
+  </Style>
+
+  <Style Selector="SelectableTextBlock.HoverVariablePopup.PredefinedVariable">
+    <Setter
+        Property="Foreground"
+        Value="{DynamicResource PredefinedVariablePopupForegroundBrush}"/>
+  </Style>
+
 </Styles>

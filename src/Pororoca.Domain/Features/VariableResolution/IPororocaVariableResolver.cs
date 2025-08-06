@@ -8,7 +8,7 @@ public partial interface IPororocaVariableResolver
 {
     public static readonly Regex PororocaVariableRegex = GeneratePororocaVariableRegex();
 
-    [GeneratedRegex("\\{\\{\\s*(?<k>[\\w\\d_\\-\\.\\$]+)\\s*\\}\\}")]
+    [GeneratedRegex("\\{\\{\\s*(?<k>\\$?[\\w\\d_\\-\\.]+)\\s*\\}\\}")]
     private static partial Regex GeneratePororocaVariableRegex();
 
     List<PororocaVariable> Variables { get; } // collection variables
@@ -74,5 +74,85 @@ public partial interface IPororocaVariableResolver
                 }
             });
         }
+    }
+
+    // Este método só é usado no Pororoca.Desktop,
+    // porém está na camada de Domain porque é lógica pesada
+    // e queremos testes unitários nele.
+    public static string? GetPointerHoverVariable(string? lineText, int pointerIndex)
+    {
+        int startIndex = -1, endIndex = -1;
+
+        if (string.IsNullOrWhiteSpace(lineText) || lineText.Length < 5)
+        {
+            return null; // no mínimo "{{x}}"
+        }
+        if (pointerIndex == lineText.Length)
+        {
+            return null; // ponteiro sobre o final da linha ('\n')
+        }     
+
+        if (pointerIndex <= (lineText.Length - 2) && lineText[pointerIndex] == '{' && lineText[pointerIndex + 1] == '{')
+        {
+            startIndex = pointerIndex;
+        }
+        else
+        {
+            for (int i = pointerIndex; i >= 1; i--)
+            {
+                // o i <= (pointerIndex - 2) é para aceitar caractér de fechamento
+                // no caso de o mouse estar em cima da dupla de fechamento ("}}")
+                if ((i <= (pointerIndex - 2)) && lineText[i] == '}')
+                {
+                    // encontrou caractér de fechamento ('}')
+                    // antes de encontrar dupla de abertura ("{{")
+                    break;
+                }
+                if (lineText[i] == '{' && lineText[i - 1] == '{')
+                {
+                    startIndex = i - 1;
+                    break;
+                }
+            }
+        }
+
+        if (startIndex == -1)
+        {
+            return null;
+        }
+
+        if (pointerIndex >= 1 && lineText[pointerIndex] == '}' && lineText[pointerIndex - 1] == '}')
+        {
+            endIndex = pointerIndex;
+        }
+        else
+        {
+            for (int i = pointerIndex; i <= lineText.Length - 2; i++)
+            {
+                // o i >= (pointerIndex + 2) é para aceitar caractér de abertura
+                // no caso de o mouse estar em cima da dupla de abertura ("{{")
+                if ((i >= (pointerIndex + 2)) && lineText[i] == '{')
+                {
+                    // encontrou caractér de abertura ('{')
+                    // antes de encontrar dupla de fechamento ("}}")
+                    break;
+                }
+                if (lineText[i] == '}' && lineText[i + 1] == '}')
+                {
+                    endIndex = i + 1;
+                    break;
+                }
+            }
+        }
+
+        if (endIndex == -1)
+        {
+            return null;
+        }
+
+        string hoveringVar = lineText[startIndex..(endIndex + 1)];
+
+        var regexMatch = PororocaVariableRegex.Match(hoveringVar);
+        return regexMatch.Success ? hoveringVar : null;
     }
 }

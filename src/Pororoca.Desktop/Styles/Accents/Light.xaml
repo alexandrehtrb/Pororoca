@@ -38,8 +38,19 @@
       <Color x:Key="WebSocketMessageFromServerPrimaryColor">Green</Color>
       <Color x:Key="DefaultIconsColor">Black</Color>
       <Color x:Key="DefaultTextForegroundColor">#CC000000</Color>
+      <x:String x:Key="TextEditorTheme">Light</x:String>
       <Color x:Key="TextEditorBackgroundColor">White</Color>
       <Color x:Key="TextEditorForegroundColor">Black</Color>
+      <SolidColorBrush x:Key="TextEditorHyperlinkForegroundBrush" Color="Blue"/>
+      <SolidColorBrush x:Key="TextEditorRegularVariableForegroundBrush" Color="MediumVioletRed"/>
+      <SolidColorBrush x:Key="TextEditorPredefinedVariableForegroundBrush" Color="Orchid"/>
+      <!-- don't rename key below -->
+      <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="#DBF66F"/>
+      <!-- value below sets hover variable popup max width -->
+      <x:Double x:Key="FlyoutThemeMaxWidth">720</x:Double>
+      <Color x:Key="TextEditorRegularVariablePopupForegroundColor">#a2116d</Color>
+      <Color x:Key="TextEditorPredefinedVariablePopupForegroundColor">Orchid</Color>
+      <Color x:Key="TextEditorNoMatchingVariablePopupForegroundColor">DarkRed</Color>
       <Color x:Key="ResponseCapturedValueTextColor">#a90a4c</Color>
       <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="Black"/>
       <SolidColorBrush x:Key="CheckBoxBorderBrushCheckedPointerOver" Color="Black"/>
@@ -48,7 +59,6 @@
       <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="#dbf66f"/>
       <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#cff33f"/>
       <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPressed" Color="#c4f00f"/>
-      <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="#DBF66F"/>
       <!--Color x:Key="TreeViewItemTargetMovementHighlightColor">#22000000</Color-->
     </ResourceDictionary>
   </ResourceDictionary.ThemeDictionaries>

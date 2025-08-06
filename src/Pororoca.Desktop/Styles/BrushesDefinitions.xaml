@@ -87,6 +87,9 @@
     <SolidColorBrush x:Key="DefaultIconsBrush" Color="{DynamicResource DefaultIconsColor}"/>
     <SolidColorBrush x:Key="TextEditorBackgroundBrush" Color="{DynamicResource TextEditorBackgroundColor}"/>
     <SolidColorBrush x:Key="TextEditorForegroundBrush" Color="{DynamicResource TextEditorForegroundColor}"/>
+    <SolidColorBrush x:Key="RegularVariablePopupForegroundBrush" Color="{DynamicResource TextEditorRegularVariablePopupForegroundColor}"/>
+    <SolidColorBrush x:Key="NoMatchingVariablePopupForegroundBrush" Color="{DynamicResource TextEditorNoMatchingVariablePopupForegroundColor}"/>
+    <SolidColorBrush x:Key="PredefinedVariablePopupForegroundBrush" Color="{DynamicResource TextEditorPredefinedVariablePopupForegroundColor}"/>
     <SolidColorBrush x:Key="InputBackgroundValidationProblemBrush" Color="{DynamicResource InputBackgroundValidationProblemColor}"/>
     <SolidColorBrush x:Key="ResponseCapturedValueTextBrush" Color="{DynamicResource ResponseCapturedValueTextColor}"/>
     <!-- TODO: Configurar tema do editor de texto e cor de variável Pororoca através de styles -->

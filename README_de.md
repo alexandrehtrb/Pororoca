@@ -1,6 +1,6 @@
 <h1>Pororoca <img style="margin: 4px 0 0 4px" height="32" src="pororoca.png" alt="Pororoca-Logo"/></h1>
 
-Lesen in: [english](README.md) | [português](README_pt.md) | [русском](README_ru.md) | [italiano](README_it.md) | [中文](README_zh-cn.md) |
+Lesen in: [english](README.md) | [português](README_pt.md) | [русском](README_ru.md) | [italiano](README_it.md) | [中文](README_zh-cn.md) | [español](README_es.md)
 
 Pororoca ist ein HTTP-Testwerkzeug, das von Postman inspiriert wurde, jedoch zahlreiche Verbesserungen bietet.
 
@@ -53,11 +53,14 @@ Kontaktiere uns für erweiterten Support, individuelle Anpassungen oder Schulung
 
 ## Spenden
 
-Du kannst das Projekt auch finanziell unterstützen.
+Geldspenden sind sehr wichtig und helfen uns, unsere Kosten zu decken. Mehr dazu in unserer [Ankündigung](https://github.com/alexandrehtrb/Pororoca/discussions/159)!
 
-| ![Spende per Pix](./misc/pix_botao_doacao.png) | [![Spende per PayPal](./misc/paypal_donation_button.png)](https://www.paypal.com/donate/?hosted_button_id=NUADRWF3WNYQ2) |
-|--|--|
-| [QR-Code anzeigen](./misc/pix_doacao_qr_code.png) | [QR-Code anzeigen](./misc/paypal_donation_qr_code.png) |
+Unsere Spendenkanäle sind:
+
+- [OpenCollective](https://opencollective.com/pororoca)
+- [GitHub Sponsors](https://github.com/sponsors/alexandrehtrb)
+- [Wise](https://wise.com/pay/me/alexandrehenriquet2) (tag: **@alexandrehenriquet2**)
+- PIX 🇧🇷 (chave: alexandrehtrb@outlook.com)
 
 ## Kontakt
 

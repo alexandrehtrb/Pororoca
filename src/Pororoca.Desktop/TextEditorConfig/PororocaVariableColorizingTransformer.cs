@@ -8,10 +8,14 @@ namespace Pororoca.Desktop.TextEditorConfig;
 
 internal partial class PororocaVariableColorizingTransformer : DocumentColorizingTransformer
 {
-    public IBrush PororocaVariableHighlightBrush { get; set; }
+    public SolidColorBrush RegularVariableForegroundBrush { get; set; }
+    public SolidColorBrush PredefinedVariableForegroundBrush { get; set; }
 
-    public PororocaVariableColorizingTransformer(IBrush initialHighlightBrush) =>
-        PororocaVariableHighlightBrush = initialHighlightBrush;
+    public PororocaVariableColorizingTransformer(SolidColorBrush initialRegularVarForegroundBrush, SolidColorBrush initialPredefVarForegroundBrush)
+    {
+        RegularVariableForegroundBrush = initialRegularVarForegroundBrush;
+        PredefinedVariableForegroundBrush = initialPredefVarForegroundBrush;
+    }
 
     protected override void ColorizeLine(DocumentLine line)
     {
@@ -28,8 +32,12 @@ internal partial class PororocaVariableColorizingTransformer : DocumentColorizin
                     line.Offset + capture.Index + capture.Length,
                     visualLine =>
                     {
+                        bool isPredefVar = capture.ValueSpan.Contains('$');
                         // TODO: Get variable highlight color from Styles.xaml
-                        visualLine.TextRunProperties.SetForegroundBrush(PororocaVariableHighlightBrush);
+                        visualLine.TextRunProperties.SetForegroundBrush(
+                            isPredefVar ?
+                            PredefinedVariableForegroundBrush :
+                            RegularVariableForegroundBrush);
                     }
                 );
             }

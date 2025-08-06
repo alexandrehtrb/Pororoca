@@ -28,12 +28,13 @@
     <TrimMode>partial</TrimMode>
     <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
     <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport>
-    <InvariantGlobalization>true</InvariantGlobalization>
+    <!-- disabling below because some Spanish-speaking countries use ',' decimal separator (Spain and most LATAM) and some use '.' (MX and Central America) -->
+    <!--InvariantGlobalization>true</InvariantGlobalization-->
     <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
     <EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
     <!-- trimming properties end -->
     <ApplicationIcon>Assets/pororoca_icon.ico</ApplicationIcon>
-    <Version>3.7.7</Version>
+    <Version>3.8.0</Version>
     <FileVersion>$(Version)</FileVersion>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <Copyright>AlexandreHTRB</Copyright>
@@ -61,6 +62,7 @@
     <AdditionalFiles Include="./Localization/ru-ru.i18n_lang.json" />
     <AdditionalFiles Include="./Localization/it-it.i18n_lang.json" />
     <AdditionalFiles Include="./Localization/zh-cn.i18n_lang.json" />
+    <AdditionalFiles Include="./Localization/es-mx.i18n_lang.json" />
   </ItemGroup>
   <!-- Removes UI tests code in release versions that are not flagged for UI tests -->
   <ItemGroup Condition="'$(Configuration)' == 'Release' And '$(UITestsEnabled)' != 'true'">
