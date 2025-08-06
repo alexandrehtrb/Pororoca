@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.8.0](#380-2025-08-06)
 * [3.7.7](#377-2025-07-08)
 * [3.7.6](#376-2025-06-02)
 * 3.7.5 was accidentally deleted 😝
@@ -39,6 +40,28 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.8.0](https://github.com/alexandrehtrb/Pororoca/tree/3.8.0) (2025-08-06)
+
+### Features
+
+- Spanish translation. (issue #145, thanks @marcoPacheco1!)
+- Hovering a variable now reveals its value, on text editors.
+- Predefined variables have different highlight colours than other variables.
+- Slight changes in Light, Pampa and Amazonian Night themes on text editors.
+
+### Refactors
+
+- All colour definitions are now centralized in XAML theme files.
+
+### Others
+
+- Raised .NET SDK version to 8.0.413.
+- Disabled `InvariantGlobalization` to use O.S.-defined decimal separators.
+
+### New Contributors
+
+* [@marcoPacheco1](https://github.com/marcoPacheco1) made his first contribution in PR [#157](https://github.com/alexandrehtrb/Pororoca/pull/157)
 
 ## [3.7.7](https://github.com/alexandrehtrb/Pororoca/tree/3.7.7) (2025-07-08)
 
