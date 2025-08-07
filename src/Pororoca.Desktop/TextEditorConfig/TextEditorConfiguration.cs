@@ -4,6 +4,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaEdit;
+using AvaloniaEdit.CodeCompletion;
 using AvaloniaEdit.TextMate;
 using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.Common;
@@ -141,6 +142,59 @@ internal static class TextEditorConfiguration
         catch (Exception ex)
         {
             PororocaLogger.Instance?.Log(PororocaLogLevel.Warning, "Error when stopped hovering mouse over text editor.", ex);
+        }
+    }
+
+    #endregion
+
+    #region AUTO COMPLETE VARIABLES
+
+    internal static void OnTextEnteringInEditorWithVariables(TextEditor textEditor, TextInputEventArgs e, ref CompletionWindow? completionWindow)
+    {
+        if (!string.IsNullOrWhiteSpace(e.Text) && completionWindow != null)
+        {
+            if (!char.IsLetterOrDigit(e.Text[0]))
+            {
+                // Whenever a non-letter is typed while the completion window is open,
+                // insert the currently selected element.
+                completionWindow.CompletionList.RequestInsertion(e);
+            }
+        }
+
+        // Do not set e.Handled=true.
+        // We still want to insert the character that was typed.
+    }
+
+    internal static void OnTextEnteredInEditorWithVariables(TextEditor textEditor, TextInputEventArgs e, Func<IPororocaVariableResolver> varResolverObtainer, ref CompletionWindow? completionWindow, EventHandler<EventArgs> onCompletionWindowClosed)
+    {
+        int caretOffset = textEditor.TextArea.Caret.Offset;
+        // input char is '{' and previous char is also '{'
+        if (
+            (e.Text == "{" && (caretOffset >= 2) && (textEditor.Text[caretOffset - 2] == '{'))
+         || (e.Text == " " && (caretOffset >= 3) && (textEditor.Text[caretOffset - 3] == '{') && (textEditor.Text[caretOffset - 2] == '{'))
+            )
+        {
+            char enteredChar = e.Text[0];
+            var effectiveVars = varResolverObtainer().GetEffectiveVariables();
+
+            if (effectiveVars.Any())
+            {
+                completionWindow = new CompletionWindow(textEditor.TextArea);
+                // below line: closing " }}" after selection and insertion
+                completionWindow.CompletionList.InsertionRequested += (sender, e) =>
+                    textEditor.TextArea.PerformTextInput(
+                        enteredChar == ' ' ? " }}" : "}}");
+                completionWindow.Closed += onCompletionWindowClosed;// (o, args) => completionWindow = null;
+
+                var data = completionWindow.CompletionList.CompletionData;
+
+                foreach (var v in effectiveVars)
+                {
+                    data.Add(new PororocaVariableTextEditorCompletionData(v));
+                }
+
+                completionWindow.Show();
+            }
         }
     }
 

@@ -455,6 +455,15 @@
         Value="14"/>
   </Style>
 
+  <Style Selector="TextBlock.AutoCompleteListOption">
+    <Setter
+        Property="FontFamily"
+        Value="{StaticResource DefaultFontFamily}"/>
+    <Setter
+        Property="FontSize"
+        Value="14"/>
+  </Style>
+
   <Style Selector="SelectableTextBlock.HoverVariablePopup">
     <Setter
         Property="Foreground"

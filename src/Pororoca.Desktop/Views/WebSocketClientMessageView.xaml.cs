@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using AvaloniaEdit;
+using AvaloniaEdit.CodeCompletion;
 using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.TextEditorConfig;
 using Pororoca.Desktop.ViewModels;
@@ -14,6 +15,7 @@ public sealed class WebSocketClientMessageView : UserControl
     private readonly AvaloniaEdit.TextMate.TextMate.Installation rawContentEditorTextMateInstallation;
     private string? currentRawContentSyntaxLangId;
     //private readonly ComboBox syntaxThemeCombo;
+    private CompletionWindow? rawContentCompletionWindow;
 
     public WebSocketClientMessageView()
     {
@@ -21,8 +23,10 @@ public sealed class WebSocketClientMessageView : UserControl
 
         var varResolverObtainer = () => ((WebSocketConnectionViewModel) (((WebSocketClientMessageViewModel)DataContext!).Parent)).col;
 
-        var rawContentTextEditor = this.FindControl<TextEditor>("teContentRaw");
-        this.rawContentEditorTextMateInstallation = TextEditorConfiguration.Setup(rawContentTextEditor!, true, varResolverObtainer);
+        var rawContentTextEditor = this.FindControl<TextEditor>("teContentRaw")!;
+        this.rawContentEditorTextMateInstallation = TextEditorConfiguration.Setup(rawContentTextEditor, true, varResolverObtainer);
+        rawContentTextEditor.TextArea.TextEntering += (sender, e) => TextEditorConfiguration.OnTextEnteringInEditorWithVariables(rawContentTextEditor, e, ref this.rawContentCompletionWindow);
+        rawContentTextEditor.TextArea.TextEntered += (sender, e) => TextEditorConfiguration.OnTextEnteredInEditorWithVariables(rawContentTextEditor, e, varResolverObtainer, ref this.rawContentCompletionWindow, (sender, e) => this.rawContentCompletionWindow = null);
 
         var rawContentSyntaxSelector = this.FindControl<ComboBox>("cbContentRawSyntax")!;
         rawContentSyntaxSelector.SelectionChanged += OnRawContentSyntaxChanged;

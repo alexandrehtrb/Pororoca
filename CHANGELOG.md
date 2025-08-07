@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.8.1](#381-2025-08-07)
 * [3.8.0](#380-2025-08-06)
 * [3.7.7](#377-2025-07-08)
 * [3.7.6](#376-2025-06-02)
@@ -40,6 +41,18 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.8.1](https://github.com/alexandrehtrb/Pororoca/tree/3.8.1) (2025-08-07)
+
+### Features
+
+- Autocomplete variables in text editors.
+
+### Others
+
+- Raised AvaloniaEdit version to 11.3.0 and TextMateSharp to 1.0.70.
+- Fixed TimeTextFormattingUITest.
+- Changed Dark theme variable highlight colours.
 
 ## [3.8.0](https://github.com/alexandrehtrb/Pororoca/tree/3.8.0) (2025-08-06)
 

@@ -42,14 +42,14 @@
       <Color x:Key="TextEditorBackgroundColor">#181818</Color>
       <Color x:Key="TextEditorForegroundColor">#D4D4D4</Color>
       <SolidColorBrush x:Key="TextEditorHyperlinkForegroundBrush" Color="LightBlue"/>
-      <SolidColorBrush x:Key="TextEditorRegularVariableForegroundBrush" Color="Gold"/>
-      <SolidColorBrush x:Key="TextEditorPredefinedVariableForegroundBrush" Color="Goldenrod"/>
+      <SolidColorBrush x:Key="TextEditorRegularVariableForegroundBrush" Color="SandyBrown"/>
+      <SolidColorBrush x:Key="TextEditorPredefinedVariableForegroundBrush" Color="PeachPuff"/>
       <!-- don't rename key below -->
       <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="#814718"/>
       <!-- value below sets hover variable popup max width -->
       <x:Double x:Key="FlyoutThemeMaxWidth">720</x:Double>
-      <Color x:Key="TextEditorRegularVariablePopupForegroundColor">#ccad00</Color>
-      <Color x:Key="TextEditorPredefinedVariablePopupForegroundColor">Goldenrod</Color>
+      <Color x:Key="TextEditorRegularVariablePopupForegroundColor">SandyBrown</Color>
+      <Color x:Key="TextEditorPredefinedVariablePopupForegroundColor">PeachPuff</Color>
       <Color x:Key="TextEditorNoMatchingVariablePopupForegroundColor">LightSalmon</Color>
       <Color x:Key="ResponseCapturedValueTextColor">#99E3D5</Color>
       <!--Color x:Key="TreeViewItemTargetMovementHighlightColor">LawnGreen</Color-->
