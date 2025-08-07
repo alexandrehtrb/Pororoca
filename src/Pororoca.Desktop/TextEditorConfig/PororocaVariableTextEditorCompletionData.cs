@@ -13,7 +13,7 @@ internal sealed class PororocaVariableTextEditorCompletionData : ICompletionData
     public PororocaVariableTextEditorCompletionData(PororocaVariable v)
     {
         Text = v.Key;
-        Description = v.Value ?? string.Empty;
+        this.descriptionText = v.Value ?? string.Empty;
     }
 
     public IImage Image => null!;
@@ -24,6 +24,7 @@ internal sealed class PororocaVariableTextEditorCompletionData : ICompletionData
     private Control? _contentControl;
     public object Content => _contentControl ??= BuildContentControl();
 
+    private readonly string descriptionText;
     private Control? _descriptionControl;
     public object Description => _descriptionControl ??= BuildDescriptionControl();
 
@@ -47,7 +48,7 @@ internal sealed class PororocaVariableTextEditorCompletionData : ICompletionData
     private Control BuildDescriptionControl()
     {
         TextBlock textBlock = new TextBlock();
-        textBlock.Text = Text;
+        textBlock.Text = this.descriptionText;
         textBlock.Margin = new Thickness(4);
         textBlock.Classes.Add("AutoCompleteListOptionDescription");
 
