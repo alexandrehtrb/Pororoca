@@ -4,6 +4,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using AvaloniaEdit;
+using AvaloniaEdit.CodeCompletion;
 using Pororoca.Desktop.TextEditorConfig;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
@@ -15,6 +16,8 @@ public sealed class HttpRequestView : UserControl
     private readonly AvaloniaEdit.TextMate.TextMate.Installation httpReqRawBodyEditorTextMateInstallation;
     private string? currentHttpReqRawBodySyntaxLangId;
 
+    private CompletionWindow? httpReqRawBodyCompletionWindow;
+
     private readonly AvaloniaEdit.TextMate.TextMate.Installation httpResRawBodyEditorTextMateInstallation;
     private string? currentHttpResRawBodySyntaxLangId;
 
@@ -24,8 +27,10 @@ public sealed class HttpRequestView : UserControl
 
         var varResolverObtainer = () => ((HttpRequestViewModel)DataContext!).col;
 
-        var httpReqRawBodyEditor = this.FindControl<TextEditor>("teReqBodyRawContent");
-        this.httpReqRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(httpReqRawBodyEditor!, true, varResolverObtainer);
+        var httpReqRawBodyEditor = this.FindControl<TextEditor>("teReqBodyRawContent")!;
+        this.httpReqRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(httpReqRawBodyEditor, true, varResolverObtainer);
+        httpReqRawBodyEditor.TextArea.TextEntering += (sender, e) => TextEditorConfiguration.OnTextEnteringInEditorWithVariables(httpReqRawBodyEditor, e, ref this.httpReqRawBodyCompletionWindow);
+        httpReqRawBodyEditor.TextArea.TextEntered += (sender, e) => TextEditorConfiguration.OnTextEnteredInEditorWithVariables(httpReqRawBodyEditor, e, varResolverObtainer, ref this.httpReqRawBodyCompletionWindow, (sender, e) => this.httpReqRawBodyCompletionWindow = null);
 
         var httpReqRawContentTypeSelector = this.FindControl<AutoCompleteBox>("acbReqBodyRawContentType")!;
         httpReqRawContentTypeSelector.SelectionChanged += OnRequestBodyRawContentTypeChanged;

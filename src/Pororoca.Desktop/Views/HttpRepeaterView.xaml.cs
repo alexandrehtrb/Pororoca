@@ -3,6 +3,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using AvaloniaEdit;
+using AvaloniaEdit.CodeCompletion;
 using Pororoca.Desktop.TextEditorConfig;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Domain.Features.Common;
@@ -14,6 +15,8 @@ public sealed class HttpRepeaterView : UserControl
     private readonly AvaloniaEdit.TextMate.TextMate.Installation rawInputDataEditorTextMateInstallation;
     private string? currentRawInputDataSyntaxLangId;
 
+    private CompletionWindow? rawInputDataCompletionWindow;
+
     private readonly AvaloniaEdit.TextMate.TextMate.Installation httpResRawBodyEditorTextMateInstallation;
     private string? currentHttpResRawBodySyntaxLangId;
 
@@ -23,9 +26,11 @@ public sealed class HttpRepeaterView : UserControl
 
         var varResolverObtainer = () => ((HttpRepeaterViewModel)DataContext!).Collection;
 
-        var rawInputDataEditor = this.FindControl<TextEditor>("teRepetitionInputDataRaw");
-        this.rawInputDataEditorTextMateInstallation = TextEditorConfiguration.Setup(rawInputDataEditor!, true, varResolverObtainer);
+        var rawInputDataEditor = this.FindControl<TextEditor>("teRepetitionInputDataRaw")!;
+        this.rawInputDataEditorTextMateInstallation = TextEditorConfiguration.Setup(rawInputDataEditor, true, varResolverObtainer);
         this.rawInputDataEditorTextMateInstallation.SetEditorSyntax(ref this.currentRawInputDataSyntaxLangId, MimeTypesDetector.DefaultMimeTypeForJson);
+        rawInputDataEditor.TextArea.TextEntering += (sender, e) => TextEditorConfiguration.OnTextEnteringInEditorWithVariables(rawInputDataEditor, e, ref this.rawInputDataCompletionWindow);
+        rawInputDataEditor.TextArea.TextEntered += (sender, e) => TextEditorConfiguration.OnTextEnteredInEditorWithVariables(rawInputDataEditor, e, varResolverObtainer, ref this.rawInputDataCompletionWindow, (sender, e) => this.rawInputDataCompletionWindow = null);
 
         var httpResRawBodyEditor = this.FindControl<TextEditor>("ResponseBodyRawContentEditor")!;
         this.httpResRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(httpResRawBodyEditor!, false, null);
