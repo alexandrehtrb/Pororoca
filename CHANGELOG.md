@@ -52,6 +52,7 @@
 
 - Raised AvaloniaEdit version to 11.3.0 and TextMateSharp to 1.0.70.
 - Fixed TimeTextFormattingUITest.
+- Changed Dark theme variable highlight colours.
 
 ## [3.8.0](https://github.com/alexandrehtrb/Pororoca/tree/3.8.0) (2025-08-06)
 
