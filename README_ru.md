@@ -6,7 +6,7 @@ Pororoca - это инструмент тестирования HTTP, вдохн
 
 Он доступен для Windows, macOS и Linux.
 
-![ExampleScreen](./misc/example_screen_ru.png)
+![ExampleScreen](./misc/example_screen_en.png)
 
 ## Установка
 
