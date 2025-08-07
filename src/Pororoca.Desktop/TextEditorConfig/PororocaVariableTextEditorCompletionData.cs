@@ -24,7 +24,8 @@ internal sealed class PororocaVariableTextEditorCompletionData : ICompletionData
     private Control? _contentControl;
     public object Content => _contentControl ??= BuildContentControl();
 
-    public object Description { get; }
+    private Control? _descriptionControl;
+    public object Description => _descriptionControl ??= BuildDescriptionControl();
 
     public double Priority { get; } = 0;
 
@@ -39,6 +40,16 @@ internal sealed class PororocaVariableTextEditorCompletionData : ICompletionData
         textBlock.Text = Text;
         textBlock.Margin = new Thickness(5);
         textBlock.Classes.Add("AutoCompleteListOption");
+
+        return textBlock;
+    }
+
+    private Control BuildDescriptionControl()
+    {
+        TextBlock textBlock = new TextBlock();
+        textBlock.Text = Text;
+        textBlock.Margin = new Thickness(4);
+        textBlock.Classes.Add("AutoCompleteListOptionDescription");
 
         return textBlock;
     }
