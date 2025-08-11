@@ -26,6 +26,7 @@
       <Color x:Key="CurrentEnvironmentLabelColor">#0743c5</Color>
       <Color x:Key="ListBoxBackgroundColor">DarkKhaki</Color>
       <Color x:Key="ListBoxItemSelectedBackgroundColor">PaleGoldenrod</Color>
+      <Color x:Key="ResultsListBoxItemSelectedBackgroundColor">PaleGoldenrod</Color>
       <Color x:Key="DragAndDropItemDraggingColor">Black</Color>
       
       <Thickness x:Key="ButtonSecondaryBorderThickness">0</Thickness>

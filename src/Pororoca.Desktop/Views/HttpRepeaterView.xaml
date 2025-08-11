@@ -429,6 +429,15 @@
             ItemsSource="{Binding RepetitionResults, Mode=TwoWay}"
             SelectedItem="{Binding SelectedRepetitionResult, Mode=TwoWay}">
 
+          <ListBox.Styles>
+            <!-- this needs to be HERE, not in ComponentsCustomStyling.xaml -->
+            <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+              <Setter
+                  Property="Background"
+                  Value="{DynamicResource ResultsListBoxItemSelectedBackgroundBrush}"/>
+            </Style>
+          </ListBox.Styles>
+          
           <ListBox.ItemTemplate>
             <DataTemplate>
               <StackPanel

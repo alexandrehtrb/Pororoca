@@ -64,7 +64,11 @@
     <SolidColorBrush x:Key="TreeViewItemBackgroundSelectedPointerOver" Color="{DynamicResource SystemAccentColorLight1}"/>
     <!--SolidColorBrush x:Key="TreeViewItemTargetMovementHighlightBrush" Color="{DynamicResource TreeViewItemTargetMovementHighlightColor}"/-->
     <SolidColorBrush x:Key="ListBoxBackgroundBrush" Color="{DynamicResource ListBoxBackgroundColor}"/>
+    <!-- other list boxes -->
+    <!-- use accentcolordark1 for dark themes, accentcolorlight1 for light themes -->
     <SolidColorBrush x:Key="ListBoxItemSelectedBackgroundBrush" Color="{DynamicResource ListBoxItemSelectedBackgroundColor}"/>
+    <!-- results list box: ws conversation and repeater results -->
+    <SolidColorBrush x:Key="ResultsListBoxItemSelectedBackgroundBrush" Color="{DynamicResource ResultsListBoxItemSelectedBackgroundColor}"/>
     <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="{DynamicResource SystemAccentColorLight1}"/>
     <SolidColorBrush x:Key="DragAndDropItemDraggingBrush" Color="{DynamicResource DragAndDropItemDraggingColor}"/>
     <SolidColorBrush x:Key="ButtonPrimaryBackgroundBrush" Color="{DynamicResource SystemAccentColor}"/>
