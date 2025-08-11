@@ -88,9 +88,9 @@
     <PackageReference Include="AlexandreHtrb.AvaloniaUITest" Version="11.0.0.2" Condition="'$(Configuration)'=='Debug' Or '$(UITestsEnabled)' == 'true'" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.5" />
-    <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.3.0" />
-    <PackageReference Include="AvaloniaEdit.TextMate" Version="11.3.0" />
-    <PackageReference Include="TextMateSharp.Grammars" Version="1.0.70" />
+    <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.0.5" />
+    <PackageReference Include="AvaloniaEdit.TextMate" Version="11.0.5" />
+    <PackageReference Include="TextMateSharp.Grammars" Version="1.0.56" />
 
     <!-- package below is to override version 7.0.0 that has vulnerability -->
     <PackageReference Include="System.Text.Json" Version="9.0.7" />
