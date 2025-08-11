@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.8.2](#382-2025-08-11)
 * [3.8.1](#381-2025-08-07) (removed due to a bug)
 * [3.8.0](#380-2025-08-06) (supplanted by 3.8.1)
 * [3.7.7](#377-2025-07-08)
@@ -41,6 +42,13 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.8.2](https://github.com/alexandrehtrb/Pororoca/tree/3.8.2) (2025-08-11)
+
+### Others
+
+- Reverted AvaloniaEdit back to 11.0.5 and TextMateSharp to 1.0.56.
+- Autocomplete variables feature has a known bug that selecting a variable with the mouse doesn't work. The fix for this bug requires AvaloniaEdit >= 11.3.0, but the current version of AvaloniaEdit carries another bug that randomly crashes the app. We need to wait for a fix on their code.
 
 ## [3.8.1](https://github.com/alexandrehtrb/Pororoca/tree/3.8.1) (2025-08-07)
 
