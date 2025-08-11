@@ -25,7 +25,8 @@
       <Color x:Key="MainWindowSeparatorsColor">Black</Color>
       <Color x:Key="CurrentEnvironmentLabelColor">#99E3D5</Color>
       <Color x:Key="ListBoxBackgroundColor">Black</Color>
-      <Color x:Key="ListBoxItemSelectedBackgroundColor">#292929</Color>
+      <Color x:Key="ListBoxItemSelectedBackgroundColor">#562F10</Color>
+      <Color x:Key="ResultsListBoxItemSelectedBackgroundColor">#292929</Color>
       <Color x:Key="DragAndDropItemDraggingColor">White</Color>
       
       <Thickness x:Key="ButtonSecondaryBorderThickness">0</Thickness>
@@ -49,7 +50,7 @@
       <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="#814718"/>
       <!-- value below sets hover variable popup max width -->
       <x:Double x:Key="FlyoutThemeMaxWidth">720</x:Double>
-      <Color x:Key="TextEditorRegularVariablePopupForegroundColor">DarkKhaki</Color>
+      <Color x:Key="TextEditorRegularVariablePopupForegroundColor">Goldenrod</Color>
       <Color x:Key="TextEditorPredefinedVariablePopupForegroundColor">Goldenrod</Color>
       <Color x:Key="TextEditorNoMatchingVariablePopupForegroundColor">LightSalmon</Color>
       <Color x:Key="ResponseCapturedValueTextColor">#99E3D5</Color>
