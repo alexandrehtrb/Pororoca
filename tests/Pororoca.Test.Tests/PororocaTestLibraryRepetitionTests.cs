@@ -54,7 +54,7 @@ public sealed class PororocaTestLibraryRepetitionTests
         await AssertSimpleRepetitionAsync(channelReader);
     }
 
-    [Fact]
+    [FactOnlyIfOSSupportsHttp3]
     public async Task Should_run_simple_repetition_http_3_successfully()
     {
         this.pororocaTest.SetCollectionVariable("MyTxt", "ABC");
