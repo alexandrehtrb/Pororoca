@@ -59,6 +59,23 @@ public static class IPororocaVariableResolverTests
         // THEN
         Assert.Equal($"Today is {todayStr}", resolvedString);
     }
+    
+     [Fact]
+    public static void Should_replace_recursive_variables_correctly()
+    {
+        // GIVEN
+        PororocaCollection col = new(string.Empty);
+        col.Variables.Add(new(true, "FirstName", "John", false));
+        col.Variables.Add(new(true, "LastName", "McClane", false));
+        col.Variables.Add(new(true, "FullName", "{{ FirstName }} {{ LastName }}", false));
+
+        // WHEN
+        var effectiveVars = ((IPororocaVariableResolver)col).GetEffectiveVariables();
+        string resolvedString = IPororocaVariableResolver.ReplaceTemplates("{{ FullName }}", effectiveVars);
+
+        // THEN
+        Assert.Equal("John McClane", resolvedString);
+    }
 
     #endregion
 

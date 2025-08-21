@@ -49,30 +49,48 @@ public partial interface IPororocaVariableResolver
 
     public static string ReplaceTemplates(string? strToReplaceTemplatedVariables, IEnumerable<PororocaVariable> effectiveVars)
     {
-        if (string.IsNullOrEmpty(strToReplaceTemplatedVariables))
+        return ReplaceTemplatesInternal(strToReplaceTemplatedVariables, effectiveVars, new HashSet<string>());
+
+        static string ReplaceTemplatesInternal(string? strToReplaceTemplatedVariables, IEnumerable<PororocaVariable> effectiveVars, HashSet<string> currentlyProcessing)
         {
-            return strToReplaceTemplatedVariables ?? string.Empty;
-        }
-        else if (effectiveVars.Any() == false && !strToReplaceTemplatedVariables.Contains('$'))
-        {
-            // no need to run regex replacer if there are no effective variables and no predefined variables
-            return strToReplaceTemplatedVariables;
-        }
-        else
-        {
-            return PororocaVariableRegex.Replace(strToReplaceTemplatedVariables, match =>
+             if (string.IsNullOrEmpty(strToReplaceTemplatedVariables))
             {
-                string keyName = match.Groups["k"].Value;
-                if (IsPredefinedVariable(keyName, out string? predefinedVarValue))
+                return strToReplaceTemplatedVariables ?? string.Empty;
+            }
+            else if (!effectiveVars.Any() && !strToReplaceTemplatedVariables.Contains('$'))
+            {
+                // no need to run regex replacer if there are no effective variables and no predefined variables
+                return strToReplaceTemplatedVariables;
+            }
+            else
+            {
+                return PororocaVariableRegex.Replace(strToReplaceTemplatedVariables, match =>
                 {
-                    return predefinedVarValue!;
-                }
-                else
-                {
-                    var effectiveVar = effectiveVars.FirstOrDefault(v => v.Key == keyName);
-                    return effectiveVar?.Value ?? match.Value;
-                }
-            });
+                    string keyName = match.Groups["k"].Value;
+                    if (IsPredefinedVariable(keyName, out string? predefinedVarValue))
+                    {
+                        return predefinedVarValue!;
+                    }
+                    else
+                    {
+                        var effectiveVar = effectiveVars.FirstOrDefault(v => v.Key == keyName);
+                        if (effectiveVar == null)
+                        {
+                            return match.Value;
+                        }
+
+                        if (!currentlyProcessing.Add(keyName))
+                        {
+                            // cycle detected, return raw match to avoid infinite recursion
+                            return match.Value;
+                        }
+
+                        string resolved = ReplaceTemplatesInternal(effectiveVar.Value, effectiveVars, currentlyProcessing);
+                        currentlyProcessing.Remove(keyName);
+                        return resolved;
+                    }
+                });
+            }
         }
     }
 
