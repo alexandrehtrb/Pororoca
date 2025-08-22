@@ -60,7 +60,7 @@ public static class IPororocaVariableResolverTests
         Assert.Equal($"Today is {todayStr}", resolvedString);
     }
     
-     [Fact]
+    [Fact]
     public static void Should_replace_recursive_variables_correctly()
     {
         // GIVEN
@@ -75,6 +75,134 @@ public static class IPororocaVariableResolverTests
 
         // THEN
         Assert.Equal("John McClane", resolvedString);
+    }
+
+    [Fact]
+    public static void Should_replace_depth_1_recursion_correctly()
+    {
+        // GIVEN
+        PororocaCollection col = new(string.Empty);
+        col.Variables.Add(new(true, "A", "Hello", false));
+        col.Variables.Add(new(true, "B", "{{A}} World", false));
+
+        // WHEN
+        var effectiveVars = ((IPororocaVariableResolver)col).GetEffectiveVariables();
+        string resolvedString = IPororocaVariableResolver.ReplaceTemplates("{{B}}", effectiveVars);
+
+        // THEN
+        Assert.Equal("Hello World", resolvedString);
+    }
+
+    [Fact]
+    public static void Should_replace_depth_2_recursion_correctly()
+    {
+        // GIVEN
+        PororocaCollection col = new(string.Empty);
+        col.Variables.Add(new(true, "A", "Hello", false));
+        col.Variables.Add(new(true, "B", "{{A}}", false));
+        col.Variables.Add(new(true, "C", "{{B}} World", false));
+
+        // WHEN
+        var effectiveVars = ((IPororocaVariableResolver)col).GetEffectiveVariables();
+        string resolvedString = IPororocaVariableResolver.ReplaceTemplates("{{C}}", effectiveVars);
+
+        // THEN
+        Assert.Equal("Hello World", resolvedString);
+    }
+
+    [Fact]
+    public static void Should_replace_depth_3_recursion_correctly()
+    {
+        // GIVEN
+        PororocaCollection col = new(string.Empty);
+        col.Variables.Add(new(true, "A", "Hello", false));
+        col.Variables.Add(new(true, "B", "{{A}}", false));
+        col.Variables.Add(new(true, "C", "{{B}}", false));
+        col.Variables.Add(new(true, "D", "{{C}} World", false));
+
+        // WHEN
+        var effectiveVars = ((IPororocaVariableResolver)col).GetEffectiveVariables();
+        string resolvedString = IPororocaVariableResolver.ReplaceTemplates("{{D}}", effectiveVars);
+
+        // THEN
+        Assert.Equal("Hello World", resolvedString);
+    }
+
+    [Fact]
+    public static void Should_stop_at_max_recursion_depth()
+    {
+        // GIVEN
+        PororocaCollection col = new(string.Empty);
+        col.Variables.Add(new(true, "A", "Hello", false));
+        col.Variables.Add(new(true, "B", "{{A}}", false));
+        col.Variables.Add(new(true, "C", "{{B}}", false));
+        col.Variables.Add(new(true, "D", "{{C}}", false));
+        col.Variables.Add(new(true, "E", "{{D}} World", false));
+
+        // WHEN
+        var effectiveVars = ((IPororocaVariableResolver)col).GetEffectiveVariables();
+        string resolvedString = IPororocaVariableResolver.ReplaceTemplates("{{E}}", effectiveVars);
+
+        // THEN
+        // The recursion should resolve: E -> D -> C -> B -> A (depth 4)
+        // At depth 4, it should stop and return the unresolved template
+        // E (depth 0) -> D (depth 1) -> C (depth 2) -> B (depth 3) -> A (depth 4, stops)
+        // So D resolves to "{{A}}" because A is at depth 4 and stops
+        // Therefore E resolves to "{{A}} World"
+        Assert.Equal("{{A}} World", resolvedString);
+    }
+
+    [Fact]
+    public static void Should_test_exact_recursion_limit()
+    {
+        // GIVEN
+        PororocaCollection col = new(string.Empty);
+        col.Variables.Add(new(true, "A", "Hello", false));
+        col.Variables.Add(new(true, "B", "{{A}}", false));
+        col.Variables.Add(new(true, "C", "{{B}}", false));
+        col.Variables.Add(new(true, "D", "{{C}}", false));
+
+        // WHEN
+        var effectiveVars = ((IPororocaVariableResolver)col).GetEffectiveVariables();
+        string resolvedString = IPororocaVariableResolver.ReplaceTemplates("{{D}}", effectiveVars);
+
+        // THEN
+        // D -> C -> B -> A (depth 3), should work
+        Assert.Equal("Hello", resolvedString);
+    }
+
+
+
+    [Fact]
+    public static void Should_handle_recursion_with_predefined_variables()
+    {
+        // GIVEN
+        PororocaCollection col = new(string.Empty);
+        col.Variables.Add(new(true, "Greeting", "Hello {{ $today }}", false));
+
+        // WHEN
+        var effectiveVars = ((IPororocaVariableResolver)col).GetEffectiveVariables();
+        string todayStr = DateTime.Today.ToString("yyyy-MM-dd");
+        string resolvedString = IPororocaVariableResolver.ReplaceTemplates("{{ Greeting }}", effectiveVars);
+
+        // THEN
+        Assert.Equal($"Hello {todayStr}", resolvedString);
+    }
+
+    [Fact]
+    public static void Should_handle_recursion_when_inner_variable_not_found()
+    {
+        // GIVEN
+        PororocaCollection col = new(string.Empty);
+        col.Variables.Add(new(true, "A", "{{B}} World", false));
+        // B is not defined
+
+        // WHEN
+        var effectiveVars = ((IPororocaVariableResolver)col).GetEffectiveVariables();
+        string resolvedString = IPororocaVariableResolver.ReplaceTemplates("{{A}}", effectiveVars);
+
+        // THEN
+        Assert.Equal("{{B}} World", resolvedString);
     }
 
     #endregion

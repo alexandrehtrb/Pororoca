@@ -47,50 +47,37 @@ public partial interface IPororocaVariableResolver
     // Environment variables have precedence over collection variables.
     // If the variable key is not declared or the variable is not enabled, then the raw key should be used as is.
 
-    public static string ReplaceTemplates(string? strToReplaceTemplatedVariables, IEnumerable<PororocaVariable> effectiveVars)
+    public static string ReplaceTemplates(string? strToReplaceTemplatedVariables, IEnumerable<PororocaVariable> effectiveVars, int recursionDepth = 0)
     {
-        return ReplaceTemplatesInternal(strToReplaceTemplatedVariables, effectiveVars, new HashSet<string>());
-
-        static string ReplaceTemplatesInternal(string? strToReplaceTemplatedVariables, IEnumerable<PororocaVariable> effectiveVars, HashSet<string> currentlyProcessing)
+        if (string.IsNullOrEmpty(strToReplaceTemplatedVariables) || recursionDepth >= 4)
         {
-             if (string.IsNullOrEmpty(strToReplaceTemplatedVariables))
+            return strToReplaceTemplatedVariables ?? string.Empty;
+        }
+        else if (!effectiveVars.Any() && !strToReplaceTemplatedVariables.Contains('$'))
+        {
+            // no need to run regex replacer if there are no effective variables and no predefined variables
+            return strToReplaceTemplatedVariables;
+        }
+        else
+        {
+            return PororocaVariableRegex.Replace(strToReplaceTemplatedVariables, match =>
             {
-                return strToReplaceTemplatedVariables ?? string.Empty;
-            }
-            else if (!effectiveVars.Any() && !strToReplaceTemplatedVariables.Contains('$'))
-            {
-                // no need to run regex replacer if there are no effective variables and no predefined variables
-                return strToReplaceTemplatedVariables;
-            }
-            else
-            {
-                return PororocaVariableRegex.Replace(strToReplaceTemplatedVariables, match =>
+                string keyName = match.Groups["k"].Value;
+                if (IsPredefinedVariable(keyName, out string? predefinedVarValue))
                 {
-                    string keyName = match.Groups["k"].Value;
-                    if (IsPredefinedVariable(keyName, out string? predefinedVarValue))
+                    return predefinedVarValue!;
+                }
+                else
+                {
+                    var effectiveVar = effectiveVars.FirstOrDefault(v => v.Key == keyName);
+                    if (effectiveVar == null)
                     {
-                        return predefinedVarValue!;
+                        return match.Value;
                     }
-                    else
-                    {
-                        var effectiveVar = effectiveVars.FirstOrDefault(v => v.Key == keyName);
-                        if (effectiveVar == null)
-                        {
-                            return match.Value;
-                        }
 
-                        if (!currentlyProcessing.Add(keyName))
-                        {
-                            // cycle detected, return raw match to avoid infinite recursion
-                            return match.Value;
-                        }
-
-                        string resolved = ReplaceTemplatesInternal(effectiveVar.Value, effectiveVars, currentlyProcessing);
-                        currentlyProcessing.Remove(keyName);
-                        return resolved;
-                    }
-                });
-            }
+                    return ReplaceTemplates(effectiveVar.Value, effectiveVars, recursionDepth + 1);
+                }
+            });
         }
     }
 
