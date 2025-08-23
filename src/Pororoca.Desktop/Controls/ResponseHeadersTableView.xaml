@@ -27,7 +27,7 @@
       <ContextMenu>
         <MenuItem
             Header="{Binding i18n.ContextMenu.Copy, Mode=OneWay}"
-            Command="{Binding CopyCmd}"
+            Command="{Binding CopyCmd, Mode=OneWay}"
             InputGesture="Ctrl+C"/>
       </ContextMenu>
     </DataGrid.ContextMenu>

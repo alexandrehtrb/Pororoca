@@ -346,7 +346,7 @@
                       <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                           <Button
-                              Command="{Binding RemoveParamCmd}"
+                              Command="{Binding RemoveParamCmd, Mode=OneWay}"
                               VerticalAlignment="Center"
                               HorizontalAlignment="Center"
                               HorizontalContentAlignment="Center"
@@ -468,7 +468,7 @@
                     Content="{Binding i18n.HttpResponse.DisableTlsVerification, Mode=OneWay}"
                     Margin="0,0,0,12"
                     IsVisible="{Binding IsDisableTlsVerificationVisible}"
-                    Command="{Binding DisableTlsVerificationCmd}"
+                    Command="{Binding DisableTlsVerificationCmd, Mode=OneWay}"
                     Classes="Primary"/>
               </Grid>
               <Grid
@@ -527,7 +527,7 @@
             x:Name="btSaveAllMessages"
             Width="36"
             Margin="12,0,0,0"
-            Command="{Binding SaveAllExchangedMessagesToFilesCmd}"
+            Command="{Binding SaveAllExchangedMessagesToFilesCmd, Mode=OneWay}"
             IsVisible="{Binding IsSaveAllExchangedMessagesToFilesVisible}"
             ToolTip.Tip="{Binding i18n.WebSocketExchangedMessages.SaveAllToFiles, Mode=OneWay}"
             HorizontalContentAlignment="Center"
@@ -634,7 +634,7 @@
                 Margin="0,0,12,0"
                 Classes="Secondary"
                 ToolTip.Tip="{Binding i18n.WebSocketClientMessage.NewMessage, Mode=OneWay}"
-                Command="{Binding AddNewWebSocketClientMessageCmd}">
+                Command="{Binding AddNewWebSocketClientMessageCmd, Mode=OneWay}">
               <Button.Content>
                 <Image
                     VerticalAlignment="Center"
@@ -672,7 +672,7 @@
                 Margin="12,0,0,0"
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
-                Command="{Binding SendMessageCmd}"
+                Command="{Binding SendMessageCmd, Mode=OneWay}"
                 Content="{Binding i18n.WebSocketExchangedMessages.SendMessage, Mode=OneWay}"
                 Classes="Primary"/>
 
@@ -742,7 +742,7 @@
             ToolTip.Placement="Top"
             Margin="12,0,12,24"
             IsVisible="{Binding IsSaveSelectedExchangedMessageToFileVisible}"
-            Command="{Binding SaveSelectedExchangedMessageToFileCmd}"
+            Command="{Binding SaveSelectedExchangedMessageToFileCmd, Mode=OneWay}"
             Classes="Secondary"/>
       </Grid>
     </Grid>

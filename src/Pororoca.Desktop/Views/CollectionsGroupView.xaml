@@ -72,19 +72,19 @@
             <ContextMenu>
               <MenuItem
                   Header="{Binding i18n.ContextMenu.NewFolder, Mode=OneWay}"
-                  Command="{Binding AddNewFolderCmd}"
+                  Command="{Binding AddNewFolderCmd, Mode=OneWay}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
                   Header="{Binding i18n.ContextMenu.NewHttpRequest, Mode=OneWay}"
-                  Command="{Binding AddNewHttpRequestCmd}"
+                  Command="{Binding AddNewHttpRequestCmd, Mode=OneWay}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
                   Header="{Binding i18n.ContextMenu.NewWebSocketConnection, Mode=OneWay}"
-                  Command="{Binding AddNewWebSocketConnectionCmd}"
+                  Command="{Binding AddNewWebSocketConnectionCmd, Mode=OneWay}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
                   Header="{Binding i18n.ContextMenu.NewHttpRepeater, Mode=OneWay}"
-                  Command="{Binding AddNewHttpRepeaterCmd}"
+                  Command="{Binding AddNewHttpRepeaterCmd, Mode=OneWay}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
                   Header="{Binding i18n.ContextMenu.Duplicate, Mode=OneWay}"
@@ -129,19 +129,19 @@
             <ContextMenu>
               <MenuItem
                   Header="{Binding i18n.ContextMenu.NewFolder, Mode=OneWay}"
-                  Command="{Binding AddNewFolderCmd}"
+                  Command="{Binding AddNewFolderCmd, Mode=OneWay}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
                   Header="{Binding i18n.ContextMenu.NewHttpRequest, Mode=OneWay}"
-                  Command="{Binding AddNewHttpRequestCmd}"
+                  Command="{Binding AddNewHttpRequestCmd, Mode=OneWay}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
                   Header="{Binding i18n.ContextMenu.NewWebSocketConnection, Mode=OneWay}"
-                  Command="{Binding AddNewWebSocketConnectionCmd}"
+                  Command="{Binding AddNewWebSocketConnectionCmd, Mode=OneWay}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
                   Header="{Binding i18n.ContextMenu.NewHttpRepeater, Mode=OneWay}"
-                  Command="{Binding AddNewHttpRepeaterCmd}"
+                  Command="{Binding AddNewHttpRepeaterCmd, Mode=OneWay}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
                   Header="{Binding i18n.ContextMenu.Cut, Mode=OneWay}"
@@ -189,7 +189,7 @@
             <ContextMenu>
               <MenuItem
                   Header="{Binding i18n.ContextMenu.NewEnvironment, Mode=OneWay}"
-                  Command="{Binding AddNewEnvironmentCmd}"
+                  Command="{Binding AddNewEnvironmentCmd, Mode=OneWay}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
                   Header="{Binding i18n.ContextMenu.Paste, Mode=OneWay}"
@@ -198,7 +198,7 @@
                   IsEnabled="{Binding ClipboardArea.CanPasteEnvironment}"/>
               <MenuItem
                   Header="{Binding i18n.ContextMenu.ImportEnvironment, Mode=OneWay}"
-                  Command="{Binding ImportEnvironmentsCmd}"
+                  Command="{Binding ImportEnvironmentsCmd, Mode=OneWay}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
             </ContextMenu>
           </StackPanel.ContextMenu>
@@ -290,7 +290,7 @@
             <ContextMenu>
               <MenuItem
                   Header="{Binding i18n.ContextMenu.NewWebSocketClientMessage, Mode=OneWay}"
-                  Command="{Binding AddNewWebSocketClientMessageCmd}"
+                  Command="{Binding AddNewWebSocketClientMessageCmd, Mode=OneWay}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
                   Header="{Binding i18n.ContextMenu.Cut, Mode=OneWay}"
@@ -373,7 +373,7 @@
             <ContextMenu>
               <MenuItem
                   Header="{Binding i18n.ContextMenu.SetAsCurrentEnvironment, Mode=OneWay}"
-                  Command="{Binding ToggleEnabledEnvironmentCmd}"
+                  Command="{Binding ToggleEnabledEnvironmentCmd, Mode=OneWay}"
                   IsEnabled="{Binding !IsCurrentEnvironment}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem

@@ -104,7 +104,7 @@
             Grid.Row="0"
             Width="40"
             Margin="6,0,6,0"
-            Command="{Binding RefreshBaseRequestsListCmd}"
+            Command="{Binding RefreshBaseRequestsListCmd, Mode=OneWay}"
             IsEnabled="{Binding !IsRepetitionRunning}"
             ToolTip.Tip="{Binding i18n.HttpRepeater.RefreshBaseRequestsListTip, Mode=OneWay}"
             HorizontalContentAlignment="Center"
@@ -390,7 +390,7 @@
                     Name="btRepetitionInputDataFileSearch"
                     Content="{Binding i18n.HttpRepeater.InputDataFileSearch, Mode=OneWay}"
                     Margin="0,12,0,0"
-                    Command="{Binding SearchInputDataFileCmd}"
+                    Command="{Binding SearchInputDataFileCmd, Mode=OneWay}"
                     Classes="Secondary"/>
               </StackPanel>
 
@@ -477,7 +477,7 @@
             HorizontalContentAlignment="Center"
             VerticalContentAlignment="Center"
             IsVisible="{Binding HasFinishedRepetition}"
-            Command="{Binding ExportReportCmd}"
+            Command="{Binding ExportReportCmd, Mode=OneWay}"
             Content="{Binding i18n.HttpRepeater.ExportReport, Mode=OneWay}"
             Classes="Secondary"/>
 
@@ -493,7 +493,7 @@
               Margin="0,0,6,0"
               HorizontalContentAlignment="Center"
               VerticalContentAlignment="Center"
-              Command="{Binding SaveAllResponsesCmd}"
+              Command="{Binding SaveAllResponsesCmd, Mode=OneWay}"
               Content="{Binding i18n.HttpRepeater.SaveAllResponses, Mode=OneWay}"
               Classes="Secondary"/>
 
@@ -502,7 +502,7 @@
               Margin="0,0,6,0"
               HorizontalContentAlignment="Center"
               VerticalContentAlignment="Center"
-              Command="{Binding ExportAllLogsCmd}"
+              Command="{Binding ExportAllLogsCmd, Mode=OneWay}"
               Content="{Binding i18n.HttpRepeater.ExportAllLogs, Mode=OneWay}"
               Classes="Secondary"/>
         </StackPanel>

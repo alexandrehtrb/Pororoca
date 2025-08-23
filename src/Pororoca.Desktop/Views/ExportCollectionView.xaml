@@ -34,7 +34,7 @@
         Grid.Column="0"
         Height="40"
         Width="40"
-        Command="{Binding GoBackCmd}"
+        Command="{Binding GoBackCmd, Mode=OneWay}"
         ToolTip.Tip="{Binding i18n.GoBack.Hint, Mode=OneWay}"
         HorizontalContentAlignment="Center"
         VerticalContentAlignment="Center"
@@ -71,7 +71,7 @@
         Margin="24,0,0,0"
         HorizontalContentAlignment="Center"
         VerticalContentAlignment="Center"
-        Command="{Binding ExportCollectionCmd}"
+        Command="{Binding ExportCollectionCmd, Mode=OneWay}"
         Content="{Binding i18n.ExportCollection.Export, Mode=OneWay}"
         Classes="Primary"/>
     </Grid>

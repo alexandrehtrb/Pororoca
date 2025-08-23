@@ -165,7 +165,7 @@
         <Button
             Margin="0,12,0,0"
             Content="{Binding i18n.WebSocketClientMessage.ContentFileSearchFile, Mode=OneWay}"
-            Command="{Binding SearchContentFileCmd}"
+            Command="{Binding SearchContentFileCmd, Mode=OneWay}"
             Classes="Secondary"/>
 
       </StackPanel>

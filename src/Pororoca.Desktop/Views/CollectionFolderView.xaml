@@ -30,25 +30,25 @@
         Margin="0,32,0,0"
         Icon="{StaticResource IconAddFolderGeometry}"
         Text="{Binding i18n.CollectionFolder.AddFolder, Mode=OneWay}"
-        Command="{Binding AddNewFolderCmd}"/>
+        Command="{Binding AddNewFolderCmd, Mode=OneWay}"/>
 
     <controls:IconButton
         x:Name="btAddHttpReq"
         Icon="{StaticResource IconAddGeometry}"
         Text="{Binding i18n.CollectionFolder.AddHttpRequest, Mode=OneWay}"
-        Command="{Binding AddNewHttpRequestCmd}"/>
+        Command="{Binding AddNewHttpRequestCmd, Mode=OneWay}"/>
 
     <controls:IconButton
         x:Name="btAddWebSocket"
         Icon="{StaticResource IconWebsocketGeometry}"
         Text="{Binding i18n.CollectionFolder.AddWebSocketConnection, Mode=OneWay}"
-        Command="{Binding AddNewWebSocketConnectionCmd}"/>
+        Command="{Binding AddNewWebSocketConnectionCmd, Mode=OneWay}"/>
 
     <controls:IconButton
         x:Name="btAddHttpRep"
         Icon="{StaticResource IconRifleGunGeometry}"
         Text="{Binding i18n.CollectionFolder.AddHttpRepeater, Mode=OneWay}"
-        Command="{Binding AddNewHttpRepeaterCmd}"/>
+        Command="{Binding AddNewHttpRepeaterCmd, Mode=OneWay}"/>
 
   </StackPanel>
 

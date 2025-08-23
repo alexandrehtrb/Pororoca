@@ -112,7 +112,7 @@
         Width="104"
         HorizontalContentAlignment="Center"
         VerticalContentAlignment="Center"
-        Command="{Binding SelectAllTestsCmd}"
+        Command="{Binding SelectAllTestsCmd, Mode=OneWay}"
         Content="{Binding i18n.UITestsPrepare.SelectAll, Mode=OneWay}"
         Classes="Secondary"/>
 
@@ -121,7 +121,7 @@
         Width="104"
         HorizontalContentAlignment="Center"
         VerticalContentAlignment="Center"
-        Command="{Binding DeselectAllTestsCmd}"
+        Command="{Binding DeselectAllTestsCmd, Mode=OneWay}"
         Content="{Binding i18n.UITestsPrepare.DeselectAll, Mode=OneWay}"
         Classes="Secondary"/>
 

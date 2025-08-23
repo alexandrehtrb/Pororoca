@@ -32,31 +32,31 @@
         Margin="0,32,0,0"
         Icon="{StaticResource IconAddGeometry}"
         Text="{Binding i18n.Welcome.NewCollection, Mode=OneWay}"
-        Command="{Binding AddNewCollectionCmd}"/>
+        Command="{Binding AddNewCollectionCmd, Mode=OneWay}"/>
 
     <controls:IconButton
         x:Name="btImportCollection"
         Icon="{StaticResource IconImportGeometry}"
         Text="{Binding i18n.Welcome.ImportCollection, Mode=OneWay}"
-        Command="{Binding ImportCollectionCmd}"/>
+        Command="{Binding ImportCollectionCmd, Mode=OneWay}"/>
 
     <controls:IconButton
         x:Name="btImportOpenAPI"
         Icon="{StaticResource IconImportGeometry}"
         Text="{Binding i18n.Welcome.ImportOpenAPI, Mode=OneWay}"
-        Command="{Binding ImportOpenAPICmd}"/>
+        Command="{Binding ImportOpenAPICmd, Mode=OneWay}"/>
 
     <controls:IconButton
         x:Name="btGoToWebsite"
         Icon="{StaticResource IconHttpGeometry}"
         Text="{Binding i18n.Welcome.OpenDocsWebsite, Mode=OneWay}"
-        Command="{Binding GoToDocsWebSiteCmd}"/>
+        Command="{Binding GoToDocsWebSiteCmd, Mode=OneWay}"/>
 
     <controls:IconButton
         x:Name="btVisitGitHubRepo"
         Icon="{StaticResource IconGitHubGeometry}"
         Text="{Binding i18n.Welcome.VisitGitHubRepo, Mode=OneWay}"
-        Command="{Binding VisitGitHubRepoCmd}"/>
+        Command="{Binding VisitGitHubRepoCmd, Mode=OneWay}"/>
 
   </StackPanel>
 

@@ -32,20 +32,20 @@
       <ContextMenu>
         <MenuItem
             Header="{Binding i18n.ContextMenu.Cut, Mode=OneWay}"
-            Command="{Binding CutCmd}"
+            Command="{Binding CutCmd, Mode=OneWay}"
             InputGesture="Ctrl+X"/>
         <MenuItem
             Header="{Binding i18n.ContextMenu.Copy, Mode=OneWay}"
-            Command="{Binding CopyCmd}"
+            Command="{Binding CopyCmd, Mode=OneWay}"
             InputGesture="Ctrl+C"/>
         <MenuItem
             Header="{Binding i18n.ContextMenu.Paste, Mode=OneWay}"
-            Command="{Binding PasteCmd}"
+            Command="{Binding PasteCmd, Mode=OneWay}"
             InputGesture="Ctrl+V"
             IsEnabled="{Binding InnerClipboardArea.CanPaste}"/>
         <MenuItem
             Header="{Binding i18n.ContextMenu.Delete, Mode=OneWay}"
-            Command="{Binding DeleteCmd}"
+            Command="{Binding DeleteCmd, Mode=OneWay}"
             InputGesture="Delete"/>
       </ContextMenu>
     </DataGrid.ContextMenu>
@@ -84,7 +84,7 @@
         <DataGridTemplateColumn.CellTemplate>
           <DataTemplate>
             <Button
-                Command="{Binding RemoveVariableCmd}"
+                Command="{Binding RemoveVariableCmd, Mode=OneWay}"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Center"
                 HorizontalContentAlignment="Center"

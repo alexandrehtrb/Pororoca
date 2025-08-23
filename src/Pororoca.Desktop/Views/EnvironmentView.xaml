@@ -37,20 +37,20 @@
           Name="btSetAsCurrentEnvironment"
           Content="{Binding i18n.Environment.SetAsCurrentEnvironment, Mode=OneWay}"
           IsVisible="{Binding !IsCurrentEnvironment}"
-          Command="{Binding ToggleEnabledEnvironmentCmd}"
+          Command="{Binding ToggleEnabledEnvironmentCmd, Mode=OneWay}"
           Classes="Secondary TextButton"/>
       <Button
           Name="btUnsetAsCurrentEnvironment"
           Content="{Binding i18n.Environment.UnsetAsCurrentEnvironment, Mode=OneWay}"
           IsVisible="{Binding IsCurrentEnvironment}"
-          Command="{Binding ToggleEnabledEnvironmentCmd}"
+          Command="{Binding ToggleEnabledEnvironmentCmd, Mode=OneWay}"
           Classes="Secondary TextButton"/>
       <controls:IconButton
           Name="btExportEnvironment"
           Margin="12,0,0,0"
           Icon="{StaticResource IconExportGeometry}"
           Text="{Binding i18n.Environment.ExportEnvironment, Mode=OneWay}"
-          Command="{Binding ExportEnvironmentCmd}"/>
+          Command="{Binding ExportEnvironmentCmd, Mode=OneWay}"/>
     </StackPanel>
 
     <Button

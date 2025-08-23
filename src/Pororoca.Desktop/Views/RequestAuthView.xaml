@@ -227,7 +227,7 @@
         <Button
             Margin="0,12,0,0"
             Content="{Binding i18n.RequestAuth.Pkcs12SearchFile, Mode=OneWay}"
-            Command="{Binding SearchClientCertificatePkcs12FileCmd}"
+            Command="{Binding SearchClientCertificatePkcs12FileCmd, Mode=OneWay}"
             Classes="Secondary"/>
       </StackPanel>
       <!-- CLIENT CERTIFICATE AUTH PEM -->
@@ -273,12 +273,12 @@
           <Button
               Content="{Binding i18n.RequestAuth.PemSearchCertFile, Mode=OneWay}"
               Margin="0,0,6,0"
-              Command="{Binding SearchClientCertificatePemCertFileCmd}"
+              Command="{Binding SearchClientCertificatePemCertFileCmd, Mode=OneWay}"
               Classes="Secondary"/>
           <Button
               Content="{Binding i18n.RequestAuth.PemSearchPrivateKeyFile, Mode=OneWay}"
               Margin="6,0,0,0"
-              Command="{Binding SearchClientCertificatePemPrivateKeyFileCmd}"
+              Command="{Binding SearchClientCertificatePemPrivateKeyFileCmd, Mode=OneWay}"
               Classes="Secondary"/>
         </StackPanel>
         <TextBlock

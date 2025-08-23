@@ -313,7 +313,7 @@
                 <Button
                     Name="btReqBodyFileSearch"
                     Content="{Binding i18n.HttpRequest.BodyFileSearchFile, Mode=OneWay}"
-                    Command="{Binding SearchRequestBodyRawFileCmd}"
+                    Command="{Binding SearchRequestBodyRawFileCmd, Mode=OneWay}"
                     Classes="Secondary"/>
               </StackPanel>
               <!-- REQUEST BODY URL ENCODED -->
@@ -419,7 +419,7 @@
                       <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                           <Button
-                              Command="{Binding RemoveParamCmd}"
+                              Command="{Binding RemoveParamCmd, Mode=OneWay}"
                               VerticalAlignment="Center"
                               HorizontalAlignment="Center"
                               HorizontalContentAlignment="Center"
@@ -543,7 +543,7 @@
                       <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                           <Button
-                              Command="{Binding RemoveParamCmd}"
+                              Command="{Binding RemoveParamCmd, Mode=OneWay}"
                               VerticalAlignment="Center"
                               HorizontalAlignment="Center"
                               HorizontalContentAlignment="Center"
@@ -841,7 +841,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                       <DataTemplate>
                         <Button
-                            Command="{Binding RemoveCaptureCmd}"
+                            Command="{Binding RemoveCaptureCmd, Mode=OneWay}"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center"
                             HorizontalContentAlignment="Center"

@@ -28,7 +28,7 @@
           x:Name="btGoBack"
           Height="36"
           Width="36"
-          Command="{Binding GoBackCmd}"
+          Command="{Binding GoBackCmd, Mode=OneWay}"
           ToolTip.Tip="{Binding i18n.GoBack.Hint, Mode=OneWay}"
           HorizontalContentAlignment="Center"
           VerticalContentAlignment="Center"
