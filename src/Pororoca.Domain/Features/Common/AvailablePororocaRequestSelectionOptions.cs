@@ -9,9 +9,9 @@ namespace Pororoca.Domain.Features.Common;
 [ExcludeFromCodeCoverage(Justification = "This class only holds available options and the check HTTP versions methods depend on the machine.")]
 public static class AvailablePororocaRequestSelectionOptions
 {
-    private static readonly Lazy<Dictionary<decimal, (bool, string?)>> HttpReqVersionOSAvailability = new(BuildHttpReqVersionOSAvailabilityMap, true);
+    private static readonly Lazy<Dictionary<decimal, (bool, string?)>> HttpReqVersionOSAvailability = new(BuildHttpReqVersionOSAvailabilityMap, LazyThreadSafetyMode.PublicationOnly);
 
-    private static readonly Lazy<Dictionary<decimal, (bool, string?)>> WebSocketHttpVersionOSAvailability = new(BuildWebSocketHttpVersionOSAvailabilityMap, true);
+    private static readonly Lazy<Dictionary<decimal, (bool, string?)>> WebSocketHttpVersionOSAvailability = new(BuildWebSocketHttpVersionOSAvailabilityMap, LazyThreadSafetyMode.PublicationOnly);
 
     public static readonly ImmutableList<HttpMethod> AvailableHttpMethods =
     [
