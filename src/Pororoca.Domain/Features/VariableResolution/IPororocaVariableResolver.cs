@@ -47,13 +47,13 @@ public partial interface IPororocaVariableResolver
     // Environment variables have precedence over collection variables.
     // If the variable key is not declared or the variable is not enabled, then the raw key should be used as is.
 
-    public static string ReplaceTemplates(string? strToReplaceTemplatedVariables, IEnumerable<PororocaVariable> effectiveVars)
+    public static string ReplaceTemplates(string? strToReplaceTemplatedVariables, IEnumerable<PororocaVariable> effectiveVars, int recursionDepth = 0)
     {
-        if (string.IsNullOrEmpty(strToReplaceTemplatedVariables))
+        if (string.IsNullOrEmpty(strToReplaceTemplatedVariables) || recursionDepth >= 4)
         {
             return strToReplaceTemplatedVariables ?? string.Empty;
         }
-        else if (effectiveVars.Any() == false && !strToReplaceTemplatedVariables.Contains('$'))
+        else if (!effectiveVars.Any() && !strToReplaceTemplatedVariables.Contains('$'))
         {
             // no need to run regex replacer if there are no effective variables and no predefined variables
             return strToReplaceTemplatedVariables;
@@ -70,7 +70,12 @@ public partial interface IPororocaVariableResolver
                 else
                 {
                     var effectiveVar = effectiveVars.FirstOrDefault(v => v.Key == keyName);
-                    return effectiveVar?.Value ?? match.Value;
+                    if (effectiveVar == null)
+                    {
+                        return match.Value;
+                    }
+
+                    return ReplaceTemplates(effectiveVar.Value, effectiveVars, recursionDepth + 1);
                 }
             });
         }
