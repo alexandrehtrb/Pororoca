@@ -318,7 +318,7 @@
                           Header="{Binding i18n.ContextMenu.Paste, Mode=OneWay}"
                           Command="{Binding SubprotocolsTableVm.PasteCmd, Mode=OneWay}"
                           InputGesture="Ctrl+V"
-                          IsEnabled="{Binding SubprotocolsTableVm.InnerClipboardArea.CanPaste}"/>
+                          IsEnabled="{Binding SubprotocolsTableVm.InnerClipboardArea.CanPaste, Mode=OneWay}"/>
                       <MenuItem
                           Header="{Binding i18n.ContextMenu.Delete, Mode=OneWay}"
                           Command="{Binding SubprotocolsTableVm.DeleteCmd, Mode=OneWay}"

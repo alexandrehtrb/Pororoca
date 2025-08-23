@@ -384,7 +384,7 @@
                           Header="{Binding i18n.ContextMenu.Paste, Mode=OneWay}"
                           Command="{Binding UrlEncodedParamsTableVm.PasteCmd, Mode=OneWay}"
                           InputGesture="Ctrl+V"
-                          IsEnabled="{Binding UrlEncodedParamsTableVm.InnerClipboardArea.CanPaste}"/>
+                          IsEnabled="{Binding UrlEncodedParamsTableVm.InnerClipboardArea.CanPaste, Mode=OneWay}"/>
                       <MenuItem
                           Header="{Binding i18n.ContextMenu.Delete, Mode=OneWay}"
                           Command="{Binding UrlEncodedParamsTableVm.DeleteCmd, Mode=OneWay}"
@@ -493,7 +493,7 @@
                           Header="{Binding i18n.ContextMenu.Paste, Mode=OneWay}"
                           Command="{Binding FormDataParamsTableVm.PasteCmd, Mode=OneWay}"
                           InputGesture="Ctrl+V"
-                          IsEnabled="{Binding FormDataParamsTableVm.InnerClipboardArea.CanPaste}"/>
+                          IsEnabled="{Binding FormDataParamsTableVm.InnerClipboardArea.CanPaste, Mode=OneWay}"/>
                       <MenuItem
                           Header="{Binding i18n.ContextMenu.Delete, Mode=OneWay}"
                           Command="{Binding FormDataParamsTableVm.DeleteCmd, Mode=OneWay}"
@@ -796,7 +796,7 @@
                         Header="{Binding i18n.ContextMenu.Paste, Mode=OneWay}"
                         Command="{Binding ResCapturesTableVm.PasteCmd, Mode=OneWay}"
                         InputGesture="Ctrl+V"
-                        IsEnabled="{Binding ResCapturesTableVm.InnerClipboardArea.CanPaste}"/>
+                        IsEnabled="{Binding ResCapturesTableVm.InnerClipboardArea.CanPaste, Mode=OneWay}"/>
                     <MenuItem
                         Header="{Binding i18n.ContextMenu.Delete, Mode=OneWay}"
                         Command="{Binding ResCapturesTableVm.DeleteCmd, Mode=OneWay}"

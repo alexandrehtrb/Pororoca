@@ -66,7 +66,7 @@
               Name="cbBaseHttpRequest"
               Height="40"
               HorizontalAlignment="Stretch"
-              IsEnabled="{Binding !IsRepetitionRunning}"
+              IsEnabled="{Binding !IsRepetitionRunning, Mode=OneWay}"
               Classes.HasValidationProblem="{Binding HasBaseHttpRequestValidationProblem}"
               PlaceholderText="{Binding i18n.HttpRepeater.SelectBaseRequest, Mode=OneWay}"
               ItemsSource="{Binding CollectionHttpRequestsPaths}"
@@ -105,7 +105,7 @@
             Width="40"
             Margin="6,0,6,0"
             Command="{Binding RefreshBaseRequestsListCmd, Mode=OneWay}"
-            IsEnabled="{Binding !IsRepetitionRunning}"
+            IsEnabled="{Binding !IsRepetitionRunning, Mode=OneWay}"
             ToolTip.Tip="{Binding i18n.HttpRepeater.RefreshBaseRequestsListTip, Mode=OneWay}"
             HorizontalContentAlignment="Center"
             VerticalContentAlignment="Center"
@@ -199,7 +199,7 @@
                   Width="190"
                   HorizontalAlignment="Left"
                   VerticalAlignment="Stretch"
-                  IsEnabled="{Binding !IsRepetitionRunning}"
+                  IsEnabled="{Binding !IsRepetitionRunning, Mode=OneWay}"
                   SelectedIndex="{Binding RepetitionModeSelectedIndex, Mode=TwoWay}">
                 <ComboBoxItem
                     x:Name="cbiRepetitionModeSimple"
@@ -233,7 +233,7 @@
                     Increment="1"
                     Minimum="1"
                     Value="{Binding NumberOfRepetitionsToExecute, Mode=TwoWay}"
-                    IsEnabled="{Binding !IsRepetitionRunning}"
+                    IsEnabled="{Binding !IsRepetitionRunning, Mode=OneWay}"
                     Classes.HasValidationProblem="{Binding HasNumberOfRepetitionsValidationProblem}"/>
               </StackPanel>
 
@@ -258,7 +258,7 @@
                     Increment="1"
                     Minimum="1"
                     Value="{Binding MaxDop, Mode=TwoWay}"
-                    IsEnabled="{Binding !IsRepetitionRunning}"
+                    IsEnabled="{Binding !IsRepetitionRunning, Mode=OneWay}"
                     Classes.HasValidationProblem="{Binding HasMaxDopValidationProblem}"/>
               </StackPanel>
 
@@ -283,7 +283,7 @@
                     Increment="1"
                     Minimum="0"
                     Value="{Binding DelayInMs, Mode=TwoWay}"
-                    IsEnabled="{Binding !IsRepetitionRunning}"
+                    IsEnabled="{Binding !IsRepetitionRunning, Mode=OneWay}"
                     Classes.HasValidationProblem="{Binding HasDelayValidationProblem}"/>
               </StackPanel>
 
@@ -308,7 +308,7 @@
                   Increment="1"
                   Minimum="0"
                   Value="{Binding MaximumRate, Mode=TwoWay}"
-                  IsEnabled="{Binding !IsRepetitionRunning}"
+                  IsEnabled="{Binding !IsRepetitionRunning, Mode=OneWay}"
                   Classes.HasValidationProblem="{Binding HasMaximumRateValidationProblem}"/>
               </StackPanel>
               

@@ -42,7 +42,7 @@
             Header="{Binding i18n.ContextMenu.Paste, Mode=OneWay}"
             Command="{Binding PasteCmd, Mode=OneWay}"
             InputGesture="Ctrl+V"
-            IsEnabled="{Binding InnerClipboardArea.CanPaste}"/>
+            IsEnabled="{Binding InnerClipboardArea.CanPaste, Mode=OneWay}"/>
         <MenuItem
             Header="{Binding i18n.ContextMenu.Delete, Mode=OneWay}"
             Command="{Binding DeleteCmd, Mode=OneWay}"
