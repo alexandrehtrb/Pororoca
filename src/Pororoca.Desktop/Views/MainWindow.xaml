@@ -341,79 +341,79 @@
                 x:Name="welcomeView"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
-                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).WelcomeView.Visible}"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).WelcomeView.Visible, Mode=OneWay}"
                 DataContext="{Binding WelcomeView.VM, Mode=OneWay}"/>
             <v:CollectionView
                 x:Name="collectionView"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
-                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).CollectionView.Visible}"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).CollectionView.Visible, Mode=OneWay}"
                 DataContext="{Binding CollectionView.VM, Mode=OneWay}"/>
             <v:ExportCollectionView
                 x:Name="exportCollectionView"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
-                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).ExportCollectionView.Visible}"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).ExportCollectionView.Visible, Mode=OneWay}"
                 DataContext="{Binding ExportCollectionView.VM, Mode=OneWay}"/>
             <v:CollectionVariablesView
                 x:Name="collectionVariablesView"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
-                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).CollectionVariablesView.Visible}"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).CollectionVariablesView.Visible, Mode=OneWay}"
                 DataContext="{Binding CollectionVariablesView.VM, Mode=OneWay}"/>
             <v:CollectionScopedAuthView
                 x:Name="collectionScopedAuthView"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
-                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).CollectionScopedAuthView.Visible}"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).CollectionScopedAuthView.Visible, Mode=OneWay}"
                 DataContext="{Binding CollectionScopedAuthView.VM, Mode=OneWay}"/>
             <v:CollectionScopedRequestHeadersView
                 x:Name="collectionScopedReqHeadersView"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
-                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).CollectionScopedRequestHeadersView.Visible}"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).CollectionScopedRequestHeadersView.Visible, Mode=OneWay}"
                 DataContext="{Binding CollectionScopedRequestHeadersView.VM, Mode=OneWay}"/>
             <v:EnvironmentView
                 x:Name="environmentView"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
-                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).EnvironmentView.Visible}"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).EnvironmentView.Visible, Mode=OneWay}"
                 DataContext="{Binding EnvironmentView.VM, Mode=OneWay}"/>
             <v:ExportEnvironmentView
                 x:Name="exportEnvironmentView"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
-                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).ExportEnvironmentView.Visible}"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).ExportEnvironmentView.Visible, Mode=OneWay}"
                 DataContext="{Binding ExportEnvironmentView.VM, Mode=OneWay}"/>
             <v:CollectionFolderView
                 x:Name="collectionFolderView"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
-                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).CollectionFolderView.Visible}"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).CollectionFolderView.Visible, Mode=OneWay}"
                 DataContext="{Binding CollectionFolderView.VM, Mode=OneWay}"/>
             <v:HttpRequestView
                 x:Name="httpReqView"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
-                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).HttpRequestView.Visible}"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).HttpRequestView.Visible, Mode=OneWay}"
                 DataContext="{Binding HttpRequestView.VM, Mode=OneWay}"/>
             <v:WebSocketConnectionView
                 x:Name="wsConnView"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
-                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).WebSocketConnectionView.Visible}"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).WebSocketConnectionView.Visible, Mode=OneWay}"
                 DataContext="{Binding WebSocketConnectionView.VM, Mode=OneWay}"/>
             <v:WebSocketClientMessageView
                 x:Name="wsClientMsgView"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
-                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).WebSocketClientMessageView.Visible}"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).WebSocketClientMessageView.Visible, Mode=OneWay}"
                 DataContext="{Binding WebSocketClientMessageView.VM, Mode=OneWay}"/>
             <v:HttpRepeaterView
                 x:Name="httpRepView"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
-                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).HttpRepeaterView.Visible}"
+                IsVisible="{Binding #mainWindow.((vm:MainWindowViewModel)DataContext).HttpRepeaterView.Visible, Mode=OneWay}"
                 DataContext="{Binding HttpRepeaterView.VM, Mode=OneWay}"/>
           </Grid>
         </Panel>

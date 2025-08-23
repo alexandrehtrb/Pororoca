@@ -134,8 +134,8 @@
             HorizontalContentAlignment="Center"
             VerticalContentAlignment="Center"
             Click="StartOrStopRepetition"
-            Content="{Binding StartOrStopRepetitionButtonText}"
-            ToolTip.Tip="{Binding StartOrStopRepetitionButtonToolTip}"
+            Content="{Binding StartOrStopRepetitionButtonText, Mode=OneWay}"
+            ToolTip.Tip="{Binding StartOrStopRepetitionButtonToolTip, Mode=OneWay}"
             Classes.Primary="{Binding !IsRepetitionRunning, Mode=OneWay}"
             Classes.PrimaryInverted="{Binding IsRepetitionRunning, Mode=OneWay}"/>
 
@@ -357,7 +357,7 @@
                   x:Name="teRepetitionInputDataRaw"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
-                  IsReadOnly="{Binding IsRepetitionRunning}"
+                  IsReadOnly="{Binding IsRepetitionRunning, Mode=OneWay}"
                   Document="{Binding InputDataRawTextDocument, Mode=TwoWay}"
                   IsVisible="{Binding InputDataTypeSelectedIndex,
                               Mode=OneWay,

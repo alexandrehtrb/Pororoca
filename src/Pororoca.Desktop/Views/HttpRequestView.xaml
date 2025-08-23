@@ -79,7 +79,7 @@
               Text="{Binding RequestUrl}"
               Watermark="{Binding i18n.HttpRequest.UrlWatermark, Mode=OneWay}"
               VerticalContentAlignment="Center"
-              ToolTip.Tip="{Binding ResolvedRequestUrlToolTip}"
+              ToolTip.Tip="{Binding ResolvedRequestUrlToolTip, Mode=OneWay}"
               Classes="SingleLine"
               Classes.HasValidationProblem="{Binding HasRequestUrlValidationProblem, Mode=OneWay}"
               PointerEntered="OnRequestUrlPointerEnter"/>
@@ -88,7 +88,7 @@
               Name="tbErrorMsg"
               Margin="12,6,12,0"
               Classes="ErrorMessage"
-              Text="{Binding InvalidRequestMessage}"
+              Text="{Binding InvalidRequestMessage, Mode=OneWay}"
               IsVisible="{Binding IsInvalidRequestMessageVisible, Mode=OneWay}"/>
 
         </StackPanel>
@@ -120,8 +120,8 @@
             HorizontalContentAlignment="Center"
             VerticalContentAlignment="Center"
             Click="SendOrCancelRequest"
-            Content="{Binding SendOrCancelRequestButtonText}"
-            ToolTip.Tip="{Binding SendOrCancelRequestButtonToolTip}"
+            Content="{Binding SendOrCancelRequestButtonText, Mode=OneWay}"
+            ToolTip.Tip="{Binding SendOrCancelRequestButtonToolTip, Mode=OneWay}"
             Classes.Primary="{Binding !IsRequesting, Mode=OneWay}"
             Classes.PrimaryInverted="{Binding IsRequesting, Mode=OneWay}"/>
 

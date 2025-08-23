@@ -67,7 +67,7 @@
               Text="{Binding Url}"
               Watermark="{Binding i18n.WebSocketConnection.UrlWatermark, Mode=OneWay}"
               VerticalContentAlignment="Center"
-              ToolTip.Tip="{Binding ResolvedUrlToolTip}"
+              ToolTip.Tip="{Binding ResolvedUrlToolTip, Mode=OneWay}"
               Classes="SingleLine"
               PointerEntered="OnUrlPointerEnter"
               Classes.HasValidationProblem="{Binding HasUrlValidationProblem, Mode=OneWay}"/>
@@ -112,8 +112,8 @@
             HorizontalContentAlignment="Center"
             VerticalContentAlignment="Center"
             Click="ConnectDisconnectCancel"
-            Content="{Binding ConnectDisconnectCancelButtonText}"
-            ToolTip.Tip="{Binding ConnectDisconnectCancelButtonToolTip}"
+            Content="{Binding ConnectDisconnectCancelButtonText, Mode=OneWay}"
+            ToolTip.Tip="{Binding ConnectDisconnectCancelButtonToolTip, Mode=OneWay}"
             Classes.Primary="{Binding !IsConnected, Mode=OneWay}"
             Classes.PrimaryInverted="{Binding IsConnected, Mode=OneWay}"/>
 
