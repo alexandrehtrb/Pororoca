@@ -9,6 +9,10 @@ namespace Pororoca.Domain.Features.Common;
 [ExcludeFromCodeCoverage(Justification = "This class only holds available options and the check HTTP versions methods depend on the machine.")]
 public static class AvailablePororocaRequestSelectionOptions
 {
+    private static readonly Lazy<Dictionary<decimal, (bool, string?)>> HttpReqVersionOSAvailability = new(BuildHttpReqVersionOSAvailabilityMap, true);
+
+    private static readonly Lazy<Dictionary<decimal, (bool, string?)>> WebSocketHttpVersionOSAvailability = new(BuildWebSocketHttpVersionOSAvailabilityMap, true);
+
     public static readonly ImmutableList<HttpMethod> AvailableHttpMethods =
     [
         HttpMethod.Get,
@@ -37,6 +41,15 @@ public static class AvailablePororocaRequestSelectionOptions
     ];
 
     public static bool IsHttpVersionAvailableInOS(decimal httpVersion, out string? errorCode)
+    {
+        // let's cache system checks to reduce CPU usage
+        var dict = HttpReqVersionOSAvailability.Value;
+        var tuple = dict[httpVersion];
+        errorCode = tuple.Item2;
+        return tuple.Item1;
+    }
+
+    private static bool IsHttpVersionAvailableInOSInternal(decimal httpVersion, out string? errorCode)
     {
 #pragma warning disable CA1416
         if (httpVersion == 3.0m && !(OperatingSystem.IsLinux() || QuicConnection.IsSupported))
@@ -71,6 +84,15 @@ public static class AvailablePororocaRequestSelectionOptions
 
     public static bool IsWebSocketHttpVersionAvailableInOS(decimal httpVersion, out string? errorCode)
     {
+        // let's cache system checks to reduce CPU usage
+        var dict = WebSocketHttpVersionOSAvailability.Value;
+        var tuple = dict[httpVersion];
+        errorCode = tuple.Item2;
+        return tuple.Item1;
+    }
+
+    private static bool IsWebSocketHttpVersionAvailableInOSInternal(decimal httpVersion, out string? errorCode)
+    {
         if (httpVersion == 3.0m)
         {
             // .NET 7 supports WebSockets over HTTP/1.1 and HTTP/2
@@ -92,6 +114,39 @@ public static class AvailablePororocaRequestSelectionOptions
             errorCode = null;
             return true;
         }
+    }
+
+    private static Dictionary<decimal, (bool, string?)> BuildHttpReqVersionOSAvailabilityMap()
+    {
+        Dictionary<decimal, (bool, string?)> dict = new(4)
+        {
+            { 1.0m, (true, null) },
+            { 1.1m, (true, null) }
+        };
+
+        bool http2ReqAvailable = IsHttpVersionAvailableInOSInternal(2.0m, out string? http2ReqAvailableErrorCode);
+        dict.Add(2.0m, (http2ReqAvailable, http2ReqAvailableErrorCode));
+
+        bool http3ReqAvailable = IsHttpVersionAvailableInOSInternal(3.0m, out string? http3ReqAvailableErrorCode);
+        dict.Add(3.0m, (http3ReqAvailable, http3ReqAvailableErrorCode));
+
+        return dict;
+    }
+
+    private static Dictionary<decimal, (bool, string?)> BuildWebSocketHttpVersionOSAvailabilityMap()
+    {
+        Dictionary<decimal, (bool, string?)> dict = new(4)
+        {
+             // HTTP/1.0 not available for WebSockets!
+            { 1.1m, (true, null) }
+        };
+
+        bool wsHttp2ReqAvailable = IsWebSocketHttpVersionAvailableInOSInternal(2.0m, out string? wsHttp2ReqAvailableErrorCode);
+        dict.Add(2.0m, (wsHttp2ReqAvailable, wsHttp2ReqAvailableErrorCode));
+
+        // HTTP/3 currently not available for WebSockets!
+
+        return dict;
     }
 
     public static readonly FrozenSet<string> MostCommonHeaders = new[]
