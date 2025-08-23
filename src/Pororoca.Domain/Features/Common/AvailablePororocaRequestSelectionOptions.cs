@@ -9,9 +9,9 @@ namespace Pororoca.Domain.Features.Common;
 [ExcludeFromCodeCoverage(Justification = "This class only holds available options and the check HTTP versions methods depend on the machine.")]
 public static class AvailablePororocaRequestSelectionOptions
 {
-    private static readonly Lazy<Dictionary<decimal, (bool, string?)>> HttpReqVersionOSAvailability = new(BuildHttpReqVersionOSAvailabilityMap, LazyThreadSafetyMode.PublicationOnly);
+    private static readonly Dictionary<decimal, (bool, string?)> httpReqVersionOSAvailability = BuildHttpReqVersionOSAvailabilityMap();
 
-    private static readonly Lazy<Dictionary<decimal, (bool, string?)>> WebSocketHttpVersionOSAvailability = new(BuildWebSocketHttpVersionOSAvailabilityMap, LazyThreadSafetyMode.PublicationOnly);
+    private static readonly Dictionary<decimal, (bool, string?)> wsHttpVersionOSAvailability = BuildWebSocketHttpVersionOSAvailabilityMap();
 
     public static readonly ImmutableList<HttpMethod> AvailableHttpMethods =
     [
@@ -43,8 +43,7 @@ public static class AvailablePororocaRequestSelectionOptions
     public static bool IsHttpVersionAvailableInOS(decimal httpVersion, out string? errorCode)
     {
         // let's cache system checks to reduce CPU usage
-        var dict = HttpReqVersionOSAvailability.Value;
-        var tuple = dict[httpVersion];
+        var tuple = httpReqVersionOSAvailability[httpVersion];
         errorCode = tuple.Item2;
         return tuple.Item1;
     }
@@ -85,8 +84,7 @@ public static class AvailablePororocaRequestSelectionOptions
     public static bool IsWebSocketHttpVersionAvailableInOS(decimal httpVersion, out string? errorCode)
     {
         // let's cache system checks to reduce CPU usage
-        var dict = WebSocketHttpVersionOSAvailability.Value;
-        var tuple = dict[httpVersion];
+        var tuple = wsHttpVersionOSAvailability[httpVersion];
         errorCode = tuple.Item2;
         return tuple.Item1;
     }
@@ -135,7 +133,7 @@ public static class AvailablePororocaRequestSelectionOptions
 
     private static Dictionary<decimal, (bool, string?)> BuildWebSocketHttpVersionOSAvailabilityMap()
     {
-        Dictionary<decimal, (bool, string?)> dict = new(4)
+        Dictionary<decimal, (bool, string?)> dict = new(2)
         {
              // HTTP/1.0 not available for WebSockets!
             { 1.1m, (true, null) }
