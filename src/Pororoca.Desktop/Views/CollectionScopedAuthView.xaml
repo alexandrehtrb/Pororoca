@@ -20,7 +20,7 @@
       Margin="24">
 
     <TextBlock
-        Text="{Binding i18n.CollectionScopedAuth.Title}"
+        Text="{Binding i18n.CollectionScopedAuth.Title, Mode=OneWay}"
         HorizontalAlignment="Left"
         VerticalAlignment="Top"
         TextWrapping="Wrap"

@@ -77,7 +77,7 @@
               x:Name="tbUrl"
               Height="40"
               Text="{Binding RequestUrl}"
-              Watermark="{Binding i18n.HttpRequest.UrlWatermark}"
+              Watermark="{Binding i18n.HttpRequest.UrlWatermark, Mode=OneWay}"
               VerticalContentAlignment="Center"
               ToolTip.Tip="{Binding ResolvedRequestUrlToolTip}"
               Classes="SingleLine"
@@ -151,7 +151,7 @@
             Grid.Row="0"
             Margin="12,28,12,0"
             Classes="SectionTitle"
-            Text="{Binding i18n.HttpRequest.SectionTitle}"/>
+            Text="{Binding i18n.HttpRequest.SectionTitle, Mode=OneWay}"/>
         <TabControl
             Name="tabControlReq"
             Grid.Column="0"
@@ -164,7 +164,7 @@
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
-                  Text="{Binding i18n.HttpRequest.Headers}"/>
+                  Text="{Binding i18n.HttpRequest.Headers, Mode=OneWay}"/>
             </TabItem.Header>
             <Grid Margin="-12,12,-12,12" RowDefinitions="Auto,*">
               <Button
@@ -178,8 +178,8 @@
                   Padding="2"
                   Margin="12,0,0,0"
                   Classes="Secondary"
-                  ToolTip.Tip="{Binding i18n.HttpRequest.HeaderAdd}"
-                  Command="{Binding RequestHeadersTableVm.AddNewCmd}">
+                  ToolTip.Tip="{Binding i18n.HttpRequest.HeaderAdd, Mode=OneWay}"
+                  Command="{Binding RequestHeadersTableVm.AddNewCmd, Mode=OneWay}">
                 <Button.Content>
                   <Image
                       VerticalAlignment="Center"
@@ -205,7 +205,7 @@
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
-                  Text="{Binding i18n.HttpRequest.Body}"/>
+                  Text="{Binding i18n.HttpRequest.Body, Mode=OneWay}"/>
             </TabItem.Header>
             <Grid Margin="-12,12,-12,12" RowDefinitions="Auto,*">
               <StackPanel
@@ -224,22 +224,22 @@
                     SelectedIndex="{Binding RequestBodyModeSelectedIndex, Mode=TwoWay}">
                   <ComboBoxItem
                       x:Name="cbiReqBodyModeNone"
-                      Content="{Binding i18n.HttpRequest.BodyModeNone}"/>
+                      Content="{Binding i18n.HttpRequest.BodyModeNone, Mode=OneWay}"/>
                   <ComboBoxItem
                       x:Name="cbiReqBodyModeRaw"
-                      Content="{Binding i18n.HttpRequest.BodyModeRaw}"/>
+                      Content="{Binding i18n.HttpRequest.BodyModeRaw, Mode=OneWay}"/>
                   <ComboBoxItem
                       x:Name="cbiReqBodyModeFile"
-                      Content="{Binding i18n.HttpRequest.BodyModeFile}"/>
+                      Content="{Binding i18n.HttpRequest.BodyModeFile, Mode=OneWay}"/>
                   <ComboBoxItem
                       x:Name="cbiReqBodyModeUrlEncoded"
-                      Content="{Binding i18n.HttpRequest.BodyModeUrlEncoded}"/>
+                      Content="{Binding i18n.HttpRequest.BodyModeUrlEncoded, Mode=OneWay}"/>
                   <ComboBoxItem
                       x:Name="cbiReqBodyModeFormData"
-                      Content="{Binding i18n.HttpRequest.BodyModeFormData}"/>
+                      Content="{Binding i18n.HttpRequest.BodyModeFormData, Mode=OneWay}"/>
                   <ComboBoxItem
                       x:Name="cbiReqBodyModeGraphQl"
-                      Content="{Binding i18n.HttpRequest.BodyModeGraphQl}"/>
+                      Content="{Binding i18n.HttpRequest.BodyModeGraphQl, Mode=OneWay}"/>
                 </ComboBox>
 
                 <AutoCompleteBox
@@ -248,7 +248,7 @@
                     Width="190"
                     FontSize="14"
                     HorizontalAlignment="Left"
-                    Watermark="{Binding i18n.HttpRequest.BodyRawContentTypeWatermark}"
+                    Watermark="{Binding i18n.HttpRequest.BodyRawContentTypeWatermark, Mode=OneWay}"
                     ItemsSource="{Binding AllMimeTypes}"
                     SelectedItem="{Binding RequestRawContentType, Mode=TwoWay}"
                     FilterMode="Contains"
@@ -296,14 +296,14 @@
                     Width="180"
                     FontSize="14"
                     HorizontalAlignment="Left"
-                    Watermark="{Binding i18n.HttpRequest.BodyFileContentTypeWatermark}"
+                    Watermark="{Binding i18n.HttpRequest.BodyFileContentTypeWatermark, Mode=OneWay}"
                     Text="{Binding RequestFileContentType}"
                     ItemsSource="{Binding AllMimeTypes}"
                     FilterMode="Contains"
                     Classes.HasValidationProblem="{Binding HasRequestFileContentTypeValidationProblem}"/>
                 <TextBox
                     Name="tbReqBodyFileSrcPath"
-                    Watermark="{Binding i18n.HttpRequest.BodyFileSrcPathWatermark}"
+                    Watermark="{Binding i18n.HttpRequest.BodyFileSrcPathWatermark, Mode=OneWay}"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Left"
                     VerticalContentAlignment="Center"
@@ -312,7 +312,7 @@
                     Text="{Binding RequestBodyFileSrcPath}"/>
                 <Button
                     Name="btReqBodyFileSearch"
-                    Content="{Binding i18n.HttpRequest.BodyFileSearchFile}"
+                    Content="{Binding i18n.HttpRequest.BodyFileSearchFile, Mode=OneWay}"
                     Command="{Binding SearchRequestBodyRawFileCmd}"
                     Classes="Secondary"/>
               </StackPanel>
@@ -338,8 +338,8 @@
                     VerticalContentAlignment="Center"
                     Padding="2"
                     Classes="Secondary"
-                    ToolTip.Tip="{Binding i18n.HttpRequest.BodyUrlEncodedParamAdd}"
-                    Command="{Binding UrlEncodedParamsTableVm.AddNewCmd}">
+                    ToolTip.Tip="{Binding i18n.HttpRequest.BodyUrlEncodedParamAdd, Mode=OneWay}"
+                    Command="{Binding UrlEncodedParamsTableVm.AddNewCmd, Mode=OneWay}">
                   <Button.Content>
                     <Image
                         VerticalAlignment="Center"
@@ -364,30 +364,30 @@
                     HeadersVisibility="All"
                     Classes="DragAndDrop UrlEncodedParamsDragAndDrop">
                   <!--DataGrid.KeyBindings>
-                      <KeyBinding Command="{Binding UrlEncodedParamsTableVm.CutCmd}" Gesture="Ctrl+X" />
-                      <KeyBinding Command="{Binding UrlEncodedParamsTableVm.CopyCmd}" Gesture="Ctrl+C" />
-                      <KeyBinding Command="{Binding UrlEncodedParamsTableVm.PasteCmd}" Gesture="Ctrl+V" />
-                      <KeyBinding Command="{Binding UrlEncodedParamsTableVm.DuplicateCmd}" Gesture="Ctrl+D" />
-                      <KeyBinding Command="{Binding UrlEncodedParamsTableVm.DeleteCmd}" Gesture="Delete" />
+                      <KeyBinding Command="{Binding UrlEncodedParamsTableVm.CutCmd, Mode=OneWay}" Gesture="Ctrl+X" />
+                      <KeyBinding Command="{Binding UrlEncodedParamsTableVm.CopyCmd, Mode=OneWay}" Gesture="Ctrl+C" />
+                      <KeyBinding Command="{Binding UrlEncodedParamsTableVm.PasteCmd, Mode=OneWay}" Gesture="Ctrl+V" />
+                      <KeyBinding Command="{Binding UrlEncodedParamsTableVm.DuplicateCmd, Mode=OneWay}" Gesture="Ctrl+D" />
+                      <KeyBinding Command="{Binding UrlEncodedParamsTableVm.DeleteCmd, Mode=OneWay}" Gesture="Delete" />
                     </DataGrid.KeyBindings-->
                   <DataGrid.ContextMenu>
                     <ContextMenu>
                       <MenuItem
-                          Header="{Binding i18n.ContextMenu.Cut}"
-                          Command="{Binding UrlEncodedParamsTableVm.CutCmd}"
+                          Header="{Binding i18n.ContextMenu.Cut, Mode=OneWay}"
+                          Command="{Binding UrlEncodedParamsTableVm.CutCmd, Mode=OneWay}"
                           InputGesture="Ctrl+X"/>
                       <MenuItem
-                          Header="{Binding i18n.ContextMenu.Copy}"
-                          Command="{Binding UrlEncodedParamsTableVm.CopyCmd}"
+                          Header="{Binding i18n.ContextMenu.Copy, Mode=OneWay}"
+                          Command="{Binding UrlEncodedParamsTableVm.CopyCmd, Mode=OneWay}"
                           InputGesture="Ctrl+C"/>
                       <MenuItem
-                          Header="{Binding i18n.ContextMenu.Paste}"
-                          Command="{Binding UrlEncodedParamsTableVm.PasteCmd}"
+                          Header="{Binding i18n.ContextMenu.Paste, Mode=OneWay}"
+                          Command="{Binding UrlEncodedParamsTableVm.PasteCmd, Mode=OneWay}"
                           InputGesture="Ctrl+V"
                           IsEnabled="{Binding UrlEncodedParamsTableVm.InnerClipboardArea.CanPaste}"/>
                       <MenuItem
-                          Header="{Binding i18n.ContextMenu.Delete}"
-                          Command="{Binding UrlEncodedParamsTableVm.DeleteCmd}"
+                          Header="{Binding i18n.ContextMenu.Delete, Mode=OneWay}"
+                          Command="{Binding UrlEncodedParamsTableVm.DeleteCmd, Mode=OneWay}"
                           InputGesture="Delete"/>
                     </ContextMenu>
                   </DataGrid.ContextMenu>
@@ -396,21 +396,21 @@
                         Width="0.22*"
                         Binding="{Binding Enabled}">
                       <DataGridCheckBoxColumn.Header>
-                        <TextBlock Text="{Binding i18n.HttpRequest.BodyUrlEncodedParamEnabled}"/>
+                        <TextBlock Text="{Binding i18n.HttpRequest.BodyUrlEncodedParamEnabled, Mode=OneWay}"/>
                       </DataGridCheckBoxColumn.Header>
                     </DataGridCheckBoxColumn>
                     <DataGridTextColumn
                         Width="0.32*"
                         Binding="{Binding Key}">
                       <DataGridTextColumn.Header>
-                        <TextBlock Text="{Binding i18n.HttpRequest.BodyUrlEncodedParamName}"/>
+                        <TextBlock Text="{Binding i18n.HttpRequest.BodyUrlEncodedParamName, Mode=OneWay}"/>
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTextColumn
                         Width="0.32*"
                         Binding="{Binding Value}">
                       <DataGridTextColumn.Header>
-                        <TextBlock Text="{Binding i18n.HttpRequest.BodyUrlEncodedParamValue}"/>
+                        <TextBlock Text="{Binding i18n.HttpRequest.BodyUrlEncodedParamValue, Mode=OneWay}"/>
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTemplateColumn
@@ -450,15 +450,15 @@
                     Margin="12,12,0,0">
                   <Button
                       Name="btReqBodyFormDataAddTextParam"
-                      Content="{Binding i18n.HttpRequest.BodyFormDataTextParamAdd}"
+                      Content="{Binding i18n.HttpRequest.BodyFormDataTextParamAdd, Mode=OneWay}"
                       Margin="0,0,3,0"
-                      Command="{Binding FormDataParamsTableVm.AddNewFormDataTextParamCmd}"
+                      Command="{Binding FormDataParamsTableVm.AddNewFormDataTextParamCmd, Mode=OneWay}"
                       Classes="Secondary"/>
                   <Button
                       Name="btReqBodyFormDataAddFileParam"
-                      Content="{Binding i18n.HttpRequest.BodyFormDataFileParamAdd}"
+                      Content="{Binding i18n.HttpRequest.BodyFormDataFileParamAdd, Mode=OneWay}"
                       Margin="3,0,0,0"
-                      Command="{Binding FormDataParamsTableVm.AddNewFormDataFileParamCmd}"
+                      Command="{Binding FormDataParamsTableVm.AddNewFormDataFileParamCmd, Mode=OneWay}"
                       Classes="Secondary"/>
                 </StackPanel>
                 <DataGrid
@@ -473,30 +473,30 @@
                     HeadersVisibility="All"
                     Classes="DragAndDrop FormDataParamsDragAndDrop">
                   <!--DataGrid.KeyBindings>
-                    <KeyBinding Command="{Binding FormDataParamsTableVm.CutCmd}" Gesture="Ctrl+X" />
-                    <KeyBinding Command="{Binding FormDataParamsTableVm.CopyCmd}" Gesture="Ctrl+C" />
-                    <KeyBinding Command="{Binding FormDataParamsTableVm.PasteCmd}" Gesture="Ctrl+V" />
-                    <KeyBinding Command="{Binding FormDataParamsTableVm.DuplicateCmd}" Gesture="Ctrl+D" />
-                    <KeyBinding Command="{Binding FormDataParamsTableVm.DeleteCmd}" Gesture="Delete" />
+                    <KeyBinding Command="{Binding FormDataParamsTableVm.CutCmd, Mode=OneWay}" Gesture="Ctrl+X" />
+                    <KeyBinding Command="{Binding FormDataParamsTableVm.CopyCmd, Mode=OneWay}" Gesture="Ctrl+C" />
+                    <KeyBinding Command="{Binding FormDataParamsTableVm.PasteCmd, Mode=OneWay}" Gesture="Ctrl+V" />
+                    <KeyBinding Command="{Binding FormDataParamsTableVm.DuplicateCmd, Mode=OneWay}" Gesture="Ctrl+D" />
+                    <KeyBinding Command="{Binding FormDataParamsTableVm.DeleteCmd, Mode=OneWay}" Gesture="Delete" />
                   </DataGrid.KeyBindings-->
                   <DataGrid.ContextMenu>
                     <ContextMenu>
                       <MenuItem
-                          Header="{Binding i18n.ContextMenu.Cut}"
-                          Command="{Binding FormDataParamsTableVm.CutCmd}"
+                          Header="{Binding i18n.ContextMenu.Cut, Mode=OneWay}"
+                          Command="{Binding FormDataParamsTableVm.CutCmd, Mode=OneWay}"
                           InputGesture="Ctrl+X"/>
                       <MenuItem
-                          Header="{Binding i18n.ContextMenu.Copy}"
-                          Command="{Binding FormDataParamsTableVm.CopyCmd}"
+                          Header="{Binding i18n.ContextMenu.Copy, Mode=OneWay}"
+                          Command="{Binding FormDataParamsTableVm.CopyCmd, Mode=OneWay}"
                           InputGesture="Ctrl+C"/>
                       <MenuItem
-                          Header="{Binding i18n.ContextMenu.Paste}"
-                          Command="{Binding FormDataParamsTableVm.PasteCmd}"
+                          Header="{Binding i18n.ContextMenu.Paste, Mode=OneWay}"
+                          Command="{Binding FormDataParamsTableVm.PasteCmd, Mode=OneWay}"
                           InputGesture="Ctrl+V"
                           IsEnabled="{Binding FormDataParamsTableVm.InnerClipboardArea.CanPaste}"/>
                       <MenuItem
-                          Header="{Binding i18n.ContextMenu.Delete}"
-                          Command="{Binding FormDataParamsTableVm.DeleteCmd}"
+                          Header="{Binding i18n.ContextMenu.Delete, Mode=OneWay}"
+                          Command="{Binding FormDataParamsTableVm.DeleteCmd, Mode=OneWay}"
                           InputGesture="Delete"/>
                     </ContextMenu>
                   </DataGrid.ContextMenu>
@@ -505,7 +505,7 @@
                         Width="0.11*"
                         Binding="{Binding Enabled}">
                       <DataGridCheckBoxColumn.Header>
-                        <TextBlock Text="{Binding i18n.HttpRequest.BodyFormDataParamEnabled}"/>
+                        <TextBlock Text="{Binding i18n.HttpRequest.BodyFormDataParamEnabled, Mode=OneWay}"/>
                       </DataGridCheckBoxColumn.Header>
                     </DataGridCheckBoxColumn>
                     <DataGridTextColumn
@@ -513,28 +513,28 @@
                         Binding="{Binding Type}"
                         IsReadOnly="True">
                       <DataGridTextColumn.Header>
-                        <TextBlock Text="{Binding i18n.HttpRequest.BodyFormDataParamType}"/>
+                        <TextBlock Text="{Binding i18n.HttpRequest.BodyFormDataParamType, Mode=OneWay}"/>
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTextColumn
                         Width="0.2*"
                         Binding="{Binding Key}">
                       <DataGridTextColumn.Header>
-                        <TextBlock Text="{Binding i18n.HttpRequest.BodyFormDataParamName}"/>
+                        <TextBlock Text="{Binding i18n.HttpRequest.BodyFormDataParamName, Mode=OneWay}"/>
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTextColumn
                         Width="0.21*"
                         Binding="{Binding Value}">
                       <DataGridTextColumn.Header>
-                        <TextBlock Text="{Binding i18n.HttpRequest.BodyFormDataParamTextOrSrcPath}"/>
+                        <TextBlock Text="{Binding i18n.HttpRequest.BodyFormDataParamTextOrSrcPath, Mode=OneWay}"/>
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTextColumn
                         Width="0.23*"
                         Binding="{Binding ContentType}">
                       <DataGridTextColumn.Header>
-                        <TextBlock Text="{Binding i18n.HttpRequest.BodyFormDataParamContentType}"/>
+                        <TextBlock Text="{Binding i18n.HttpRequest.BodyFormDataParamContentType, Mode=OneWay}"/>
                       </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTemplateColumn
@@ -583,7 +583,7 @@
                     Name="tbReqBodyGraphQlQuery"
                     Grid.Column="0"
                     Grid.Row="0"
-                    Watermark="{Binding i18n.HttpRequest.BodyGraphQlQueryWatermark}"
+                    Watermark="{Binding i18n.HttpRequest.BodyGraphQlQueryWatermark, Mode=OneWay}"
                     HorizontalAlignment="Stretch"
                     Classes="CodeTextBox"
                     Text="{Binding RequestBodyGraphQlQuery}"/>
@@ -598,7 +598,7 @@
                     Name="tbReqBodyGraphQlVariables"
                     Grid.Column="2"
                     Grid.Row="0"
-                    Watermark="{Binding i18n.HttpRequest.BodyGraphQlVariablesWatermark}"
+                    Watermark="{Binding i18n.HttpRequest.BodyGraphQlVariablesWatermark, Mode=OneWay}"
                     HorizontalAlignment="Stretch"
                     Classes="CodeTextBox"
                     Text="{Binding RequestBodyGraphQlVariables}"/>
@@ -610,7 +610,7 @@
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
-                  Text="{Binding i18n.HttpRequest.CustomAuth}"/>
+                  Text="{Binding i18n.HttpRequest.CustomAuth, Mode=OneWay}"/>
             </TabItem.Header>
             <v:RequestAuthView
                 x:Name="reqAuthView"
@@ -650,7 +650,7 @@
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
-                  Text="{Binding i18n.HttpResponse.Headers}"/>
+                  Text="{Binding i18n.HttpResponse.Headers, Mode=OneWay}"/>
             </TabItem.Header>
             <controls:ResponseHeadersTableView
                 x:Name="rhtvResHeaders"
@@ -662,7 +662,7 @@
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
-                  Text="{Binding i18n.HttpResponse.Body}"/>
+                  Text="{Binding i18n.HttpResponse.Body, Mode=OneWay}"/>
             </TabItem.Header>
             <Grid
                 Margin="-12,12,-12,0"
@@ -686,28 +686,28 @@
                   Margin="0,12,0,0">
                 <Button
                     Name="btResBodySaveToFile"
-                    Content="{Binding i18n.HttpResponse.BodySaveToFile}"
-                    ToolTip.Tip="{Binding i18n.HttpResponse.BodySaveToFileToolTip}"
+                    Content="{Binding i18n.HttpResponse.BodySaveToFile, Mode=OneWay}"
+                    ToolTip.Tip="{Binding i18n.HttpResponse.BodySaveToFileToolTip, Mode=OneWay}"
                     ToolTip.Placement="Top"
                     Margin="0,0,6,12"
                     IsVisible="{Binding ResponseDataCtx.IsSaveResponseBodyToFileVisible}"
-                    Command="{Binding ResponseDataCtx.SaveResponseBodyToFileCmd}"
+                    Command="{Binding ResponseDataCtx.SaveResponseBodyToFileCmd, Mode=OneWay}"
                     Classes="Secondary"/>
                 <Button
                     Name="btResExportLogFile"
-                    Content="{Binding i18n.HttpResponse.ExportLog}"
-                    ToolTip.Tip="{Binding i18n.HttpResponse.ExportLogToolTip}"
+                    Content="{Binding i18n.HttpResponse.ExportLog, Mode=OneWay}"
+                    ToolTip.Tip="{Binding i18n.HttpResponse.ExportLogToolTip, Mode=OneWay}"
                     ToolTip.Placement="Top"
                     Margin="6,0,6,12"
                     IsVisible="{Binding ResponseDataCtx.IsExportLogFileVisible}"
-                    Command="{Binding ResponseDataCtx.ExportLogFileCmd}"
+                    Command="{Binding ResponseDataCtx.ExportLogFileCmd, Mode=OneWay}"
                     Classes="Secondary"/>
                 <Button
                     Name="btResDisableTlsVerification"
-                    Content="{Binding i18n.HttpResponse.DisableTlsVerification}"
+                    Content="{Binding i18n.HttpResponse.DisableTlsVerification, Mode=OneWay}"
                     Margin="6,0,0,12"
                     IsVisible="{Binding ResponseDataCtx.IsDisableTlsVerificationVisible}"
-                    Command="{Binding ResponseDataCtx.DisableTlsVerificationCmd}"
+                    Command="{Binding ResponseDataCtx.DisableTlsVerificationCmd, Mode=OneWay}"
                     Classes="Primary"/>
               </StackPanel>
 
@@ -718,7 +718,7 @@
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
-                  Text="{Binding i18n.HttpResponse.Capture}"/>
+                  Text="{Binding i18n.HttpResponse.Capture, Mode=OneWay}"/>
             </TabItem.Header>
             <Grid RowDefinitions="Auto,*">
               <StackPanel
@@ -729,8 +729,8 @@
                 <Button
                     x:Name="btResCaptureExecuteCaptures"
                     Margin="3,0,3,0"
-                    Command="{Binding ResponseDataCtx.ExecuteCapturesCmd}"
-                    ToolTip.Tip="{Binding i18n.HttpResponse.ExecuteCapturesTooltip}"
+                    Command="{Binding ResponseDataCtx.ExecuteCapturesCmd, Mode=OneWay}"
+                    ToolTip.Tip="{Binding i18n.HttpResponse.ExecuteCapturesTooltip, Mode=OneWay}"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
                     Classes="Secondary">
@@ -749,20 +749,20 @@
                 </Button>
                 <Button
                     Name="btResCaptureAddHeaderCapture"
-                    Content="{Binding i18n.HttpResponse.CaptureAddHeaderCapture}"
+                    Content="{Binding i18n.HttpResponse.CaptureAddHeaderCapture, Mode=OneWay}"
                     Margin="3,0,3,0"
-                    Command="{Binding ResCapturesTableVm.AddNewHeaderCaptureCmd}"
+                    Command="{Binding ResCapturesTableVm.AddNewHeaderCaptureCmd, Mode=OneWay}"
                     Classes="Secondary"/>
                 <Button
                     Name="btResCaptureAddBodyCapture"
-                    Content="{Binding i18n.HttpResponse.CaptureAddBodyCapture}"
+                    Content="{Binding i18n.HttpResponse.CaptureAddBodyCapture, Mode=OneWay}"
                     Margin="3,0,3,0"
-                    Command="{Binding ResCapturesTableVm.AddNewBodyCaptureCmd}"
+                    Command="{Binding ResCapturesTableVm.AddNewBodyCaptureCmd, Mode=OneWay}"
                     Classes="Secondary"/>
                 <TextBlock
                     VerticalAlignment="Center"
                     Margin="6,0,0,0"
-                    ToolTip.Tip="{Binding i18n.HttpResponse.CaptureTip}"
+                    ToolTip.Tip="{Binding i18n.HttpResponse.CaptureTip, Mode=OneWay}"
                     Classes="TipQuestionMark"/>
                 <!-- Adding a TextBlock Tip at the end of the Grid causes the separator GridSplitter
                 to "jam" while resizing -->
@@ -780,26 +780,26 @@
                   HeadersVisibility="All"
                   Classes="DragAndDrop ResponseCapturesDragAndDrop">
                 <!--DataGrid.KeyBindings>
-                  <KeyBinding Command="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.CopyCmd}" Gesture="Ctrl+C" />
+                  <KeyBinding Command="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm.CopyCmd, Mode=OneWay}" Gesture="Ctrl+C" />
                 </DataGrid.KeyBindings-->
                 <DataGrid.ContextMenu>
                   <ContextMenu>
                     <MenuItem
-                        Header="{Binding i18n.ContextMenu.Cut}"
-                        Command="{Binding ResCapturesTableVm.CutCmd}"
+                        Header="{Binding i18n.ContextMenu.Cut, Mode=OneWay}"
+                        Command="{Binding ResCapturesTableVm.CutCmd, Mode=OneWay}"
                         InputGesture="Ctrl+X"/>
                     <MenuItem
-                        Header="{Binding i18n.ContextMenu.Copy}"
-                        Command="{Binding ResCapturesTableVm.CopyCmd}"
+                        Header="{Binding i18n.ContextMenu.Copy, Mode=OneWay}"
+                        Command="{Binding ResCapturesTableVm.CopyCmd, Mode=OneWay}"
                         InputGesture="Ctrl+C"/>
                     <MenuItem
-                        Header="{Binding i18n.ContextMenu.Paste}"
-                        Command="{Binding ResCapturesTableVm.PasteCmd}"
+                        Header="{Binding i18n.ContextMenu.Paste, Mode=OneWay}"
+                        Command="{Binding ResCapturesTableVm.PasteCmd, Mode=OneWay}"
                         InputGesture="Ctrl+V"
                         IsEnabled="{Binding ResCapturesTableVm.InnerClipboardArea.CanPaste}"/>
                     <MenuItem
-                        Header="{Binding i18n.ContextMenu.Delete}"
-                        Command="{Binding ResCapturesTableVm.DeleteCmd}"
+                        Header="{Binding i18n.ContextMenu.Delete, Mode=OneWay}"
+                        Command="{Binding ResCapturesTableVm.DeleteCmd, Mode=OneWay}"
                         InputGesture="Delete"/>
                   </ContextMenu>
                 </DataGrid.ContextMenu>
@@ -808,7 +808,7 @@
                       Width="0.25*"
                       Binding="{Binding TargetVariable}">
                     <DataGridTextColumn.Header>
-                      <TextBlock Text="{Binding i18n.HttpResponse.CaptureTargetVariable}"/>
+                      <TextBlock Text="{Binding i18n.HttpResponse.CaptureTargetVariable, Mode=OneWay}"/>
                     </DataGridTextColumn.Header>
                   </DataGridTextColumn>
                   <DataGridTextColumn
@@ -816,14 +816,14 @@
                       Binding="{Binding Type}"
                       IsReadOnly="True">
                     <DataGridTextColumn.Header>
-                      <TextBlock Text="{Binding i18n.HttpResponse.CaptureType}"/>
+                      <TextBlock Text="{Binding i18n.HttpResponse.CaptureType, Mode=OneWay}"/>
                     </DataGridTextColumn.Header>
                   </DataGridTextColumn>
                   <DataGridTextColumn
                       Width="0.30*"
                       Binding="{Binding HeaderNameOrBodyPath}">
                     <DataGridTextColumn.Header>
-                      <TextBlock Text="{Binding i18n.HttpResponse.CaptureHeaderNameOrBodyPath}"/>
+                      <TextBlock Text="{Binding i18n.HttpResponse.CaptureHeaderNameOrBodyPath, Mode=OneWay}"/>
                     </DataGridTextColumn.Header>
                   </DataGridTextColumn>
                   <DataGridTextColumn
@@ -832,7 +832,7 @@
                       Foreground="{DynamicResource ResponseCapturedValueTextBrush}">
                     <!-- TODO: Set text colour using Classes and ComponentsCustomStyling.xaml -->
                     <DataGridTextColumn.Header>
-                      <TextBlock Text="{Binding i18n.HttpResponse.CaptureCapturedValue}"/>
+                      <TextBlock Text="{Binding i18n.HttpResponse.CaptureCapturedValue, Mode=OneWay}"/>
                     </DataGridTextColumn.Header>
                   </DataGridTextColumn>
                   <DataGridTemplateColumn

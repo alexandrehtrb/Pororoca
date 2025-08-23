@@ -23,7 +23,7 @@
     <TextBlock
         Grid.Column="0"
         Grid.Row="0"
-        Text="{Binding i18n.CollectionVariables.Title}"
+        Text="{Binding i18n.CollectionVariables.Title, Mode=OneWay}"
         HorizontalAlignment="Left"
         VerticalAlignment="Top"
         TextWrapping="Wrap"
@@ -40,8 +40,8 @@
         Padding="2"
         Margin="0,36,0,0"
         Classes="Secondary"
-        ToolTip.Tip="{Binding i18n.CollectionVariables.AddVariable}"
-        Command="{Binding VariablesTableVm.AddNewCmd}">
+        ToolTip.Tip="{Binding i18n.CollectionVariables.AddVariable, Mode=OneWay}"
+        Command="{Binding VariablesTableVm.AddNewCmd, Mode=OneWay}">
       <Image
           VerticalAlignment="Center"
           HorizontalAlignment="Center"
@@ -65,7 +65,7 @@
         Grid.Row="3"
         HorizontalAlignment="Stretch"
         Margin="0,24,0,0"
-        Text="{Binding i18n.CollectionVariables.Tip}"
+        Text="{Binding i18n.CollectionVariables.Tip, Mode=OneWay}"
         Classes="TipText"/>
 
   </Grid>

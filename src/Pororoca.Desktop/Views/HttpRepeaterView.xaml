@@ -68,7 +68,7 @@
               HorizontalAlignment="Stretch"
               IsEnabled="{Binding !IsRepetitionRunning}"
               Classes.HasValidationProblem="{Binding HasBaseHttpRequestValidationProblem}"
-              PlaceholderText="{Binding i18n.HttpRepeater.SelectBaseRequest}"
+              PlaceholderText="{Binding i18n.HttpRepeater.SelectBaseRequest, Mode=OneWay}"
               ItemsSource="{Binding CollectionHttpRequestsPaths}"
               SelectedItem="{Binding BaseRequestPath, Mode=TwoWay}"/>
 
@@ -90,7 +90,7 @@
 
             <TextBlock
                 Margin="4,0,0,0"
-                ToolTip.Tip="{Binding i18n.HttpRepeater.RepetitionSuccessTip}"
+                ToolTip.Tip="{Binding i18n.HttpRepeater.RepetitionSuccessTip, Mode=OneWay}"
                 IsVisible="{Binding ShowRepetitionSuccessfulTip}"
                 Classes="TipQuestionMark"/>
 
@@ -106,7 +106,7 @@
             Margin="6,0,6,0"
             Command="{Binding RefreshBaseRequestsListCmd}"
             IsEnabled="{Binding !IsRepetitionRunning}"
-            ToolTip.Tip="{Binding i18n.HttpRepeater.RefreshBaseRequestsListTip}"
+            ToolTip.Tip="{Binding i18n.HttpRepeater.RefreshBaseRequestsListTip, Mode=OneWay}"
             HorizontalContentAlignment="Center"
             VerticalContentAlignment="Center"
             VerticalAlignment="Stretch"
@@ -172,7 +172,7 @@
             Grid.Row="0"
             Margin="12,28,12,0"
             Classes="SectionTitle"
-            Text="{Binding i18n.HttpRepeater.RepetitionSectionTitle}"/>
+            Text="{Binding i18n.HttpRepeater.RepetitionSectionTitle, Mode=OneWay}"/>
         <TabControl
             Name="tabControlRepetition"
             Grid.Column="0"
@@ -185,7 +185,7 @@
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
-                  Text="{Binding i18n.HttpRepeater.RepetitionMode}"/>
+                  Text="{Binding i18n.HttpRepeater.RepetitionMode, Mode=OneWay}"/>
             </TabItem.Header>
 
             <StackPanel
@@ -203,13 +203,13 @@
                   SelectedIndex="{Binding RepetitionModeSelectedIndex, Mode=TwoWay}">
                 <ComboBoxItem
                     x:Name="cbiRepetitionModeSimple"
-                    Content="{Binding i18n.HttpRepeater.RepetitionModeSimple}"/>
+                    Content="{Binding i18n.HttpRepeater.RepetitionModeSimple, Mode=OneWay}"/>
                 <ComboBoxItem
                     x:Name="cbiRepetitionModeSequential"
-                    Content="{Binding i18n.HttpRepeater.RepetitionModeSequential}"/>
+                    Content="{Binding i18n.HttpRepeater.RepetitionModeSequential, Mode=OneWay}"/>
                 <ComboBoxItem
                     x:Name="cbiRepetitionModeRandom"
-                    Content="{Binding i18n.HttpRepeater.RepetitionModeRandom}"/>
+                    Content="{Binding i18n.HttpRepeater.RepetitionModeRandom, Mode=OneWay}"/>
               </ComboBox>
 
               <StackPanel
@@ -225,7 +225,7 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
                     Margin="0,0,6,0"
-                    Text="{Binding i18n.HttpRepeater.NumberOfRepetitions}"/>
+                    Text="{Binding i18n.HttpRepeater.NumberOfRepetitions, Mode=OneWay}"/>
                 <NumericUpDown
                     Name="nudNumberOfRepetitions"
                     Margin="6,0,0,0"
@@ -250,7 +250,7 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
                     Margin="0,0,6,0"
-                    Text="{Binding i18n.HttpRepeater.MaxDOP}"/>
+                    Text="{Binding i18n.HttpRepeater.MaxDOP, Mode=OneWay}"/>
                 <NumericUpDown
                     Name="nudMaxDop"
                     Margin="6,0,0,0"
@@ -270,11 +270,11 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
                     Margin="0,0,2,0"
-                    Text="{Binding i18n.HttpRepeater.Delay}"/>
+                    Text="{Binding i18n.HttpRepeater.Delay, Mode=OneWay}"/>
                 <TextBlock
                     VerticalAlignment="Center"
                     Margin="2,0,6,0"
-                    ToolTip.Tip="{Binding i18n.HttpRepeater.DelayTip}"
+                    ToolTip.Tip="{Binding i18n.HttpRepeater.DelayTip, Mode=OneWay}"
                     Classes="TipQuestionMark"/>
                 <NumericUpDown
                     Name="nudDelayInMs"
@@ -295,11 +295,11 @@
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Center"
                   Margin="0,0,2,0"
-                  Text="{Binding i18n.HttpRepeater.MaximumRate}"/>
+                  Text="{Binding i18n.HttpRepeater.MaximumRate, Mode=OneWay}"/>
                 <TextBlock
                   VerticalAlignment="Center"
                   Margin="2,0,6,0"
-                  ToolTip.Tip="{Binding i18n.HttpRepeater.MaximumRateTip}"
+                  ToolTip.Tip="{Binding i18n.HttpRepeater.MaximumRateTip, Mode=OneWay}"
                   Classes="TipQuestionMark"/>
                 <NumericUpDown
                   Name="nudMaximumRate"
@@ -324,7 +324,7 @@
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
-                  Text="{Binding i18n.HttpRepeater.InputData}"/>
+                  Text="{Binding i18n.HttpRepeater.InputData, Mode=OneWay}"/>
             </TabItem.Header>
 
             <Grid
@@ -344,10 +344,10 @@
                   SelectedIndex="{Binding InputDataTypeSelectedIndex, Mode=TwoWay}">
                 <ComboBoxItem
                     x:Name="cbiRepetitionInputDataTypeRaw"
-                    Content="{Binding i18n.HttpRepeater.InputDataTypeRaw}"/>
+                    Content="{Binding i18n.HttpRepeater.InputDataTypeRaw, Mode=OneWay}"/>
                 <ComboBoxItem
                     x:Name="cbiRepetitionInputDataTypeFile"
-                    Content="{Binding i18n.HttpRepeater.InputDataTypeFile}"/>
+                    Content="{Binding i18n.HttpRepeater.InputDataTypeFile, Mode=OneWay}"/>
               </ComboBox>
 
               <AvaloniaEdit:TextEditor
@@ -379,7 +379,7 @@
                               ConverterParameter=File}">
                 <TextBox
                     Name="tbRepetitionInputDataFileSrcPath"
-                    Watermark="{Binding i18n.HttpRepeater.InputDataFileSrcPathWatermark}"
+                    Watermark="{Binding i18n.HttpRepeater.InputDataFileSrcPathWatermark, Mode=OneWay}"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Left"
                     VerticalContentAlignment="Center"
@@ -388,7 +388,7 @@
                     Text="{Binding InputDataFileSrcPath}"/>
                 <Button
                     Name="btRepetitionInputDataFileSearch"
-                    Content="{Binding i18n.HttpRepeater.InputDataFileSearch}"
+                    Content="{Binding i18n.HttpRepeater.InputDataFileSearch, Mode=OneWay}"
                     Margin="0,12,0,0"
                     Command="{Binding SearchInputDataFileCmd}"
                     Classes="Secondary"/>
@@ -417,7 +417,7 @@
             Grid.Row="0"
             Margin="0,28,0,0"
             Classes="SectionTitle"
-            Text="{Binding i18n.HttpRepeater.Results}"/>
+            Text="{Binding i18n.HttpRepeater.Results, Mode=OneWay}"/>
 
         <ListBox
             Name="lbRepetitionResults"
@@ -478,7 +478,7 @@
             VerticalContentAlignment="Center"
             IsVisible="{Binding HasFinishedRepetition}"
             Command="{Binding ExportReportCmd}"
-            Content="{Binding i18n.HttpRepeater.ExportReport}"
+            Content="{Binding i18n.HttpRepeater.ExportReport, Mode=OneWay}"
             Classes="Secondary"/>
 
         <StackPanel
@@ -494,7 +494,7 @@
               HorizontalContentAlignment="Center"
               VerticalContentAlignment="Center"
               Command="{Binding SaveAllResponsesCmd}"
-              Content="{Binding i18n.HttpRepeater.SaveAllResponses}"
+              Content="{Binding i18n.HttpRepeater.SaveAllResponses, Mode=OneWay}"
               Classes="Secondary"/>
 
           <Button
@@ -503,7 +503,7 @@
               HorizontalContentAlignment="Center"
               VerticalContentAlignment="Center"
               Command="{Binding ExportAllLogsCmd}"
-              Content="{Binding i18n.HttpRepeater.ExportAllLogs}"
+              Content="{Binding i18n.HttpRepeater.ExportAllLogs, Mode=OneWay}"
               Classes="Secondary"/>
         </StackPanel>
       </Grid>
@@ -541,7 +541,7 @@
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
-                  Text="{Binding i18n.HttpResponse.Headers}"/>
+                  Text="{Binding i18n.HttpResponse.Headers, Mode=OneWay}"/>
             </TabItem.Header>
             <controls:ResponseHeadersTableView
                 x:Name="rhtvResHeaders"
@@ -553,7 +553,7 @@
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
-                  Text="{Binding i18n.HttpResponse.Body}"/>
+                  Text="{Binding i18n.HttpResponse.Body, Mode=OneWay}"/>
             </TabItem.Header>
             <Grid
                 Margin="-12,12,-12,0"
@@ -577,28 +577,28 @@
                   Margin="0,12,0,0">
                 <Button
                     Name="btResBodySaveToFile"
-                    Content="{Binding i18n.HttpResponse.BodySaveToFile}"
-                    ToolTip.Tip="{Binding i18n.HttpResponse.BodySaveToFileToolTip}"
+                    Content="{Binding i18n.HttpResponse.BodySaveToFile, Mode=OneWay}"
+                    ToolTip.Tip="{Binding i18n.HttpResponse.BodySaveToFileToolTip, Mode=OneWay}"
                     ToolTip.Placement="Top"
                     Margin="0,0,6,12"
                     IsVisible="{Binding ResponseDataCtx.IsSaveResponseBodyToFileVisible}"
-                    Command="{Binding ResponseDataCtx.SaveResponseBodyToFileCmd}"
+                    Command="{Binding ResponseDataCtx.SaveResponseBodyToFileCmd, Mode=OneWay}"
                     Classes="Secondary"/>
                 <Button
                     Name="btResExportLogFile"
-                    Content="{Binding i18n.HttpResponse.ExportLog}"
-                    ToolTip.Tip="{Binding i18n.HttpResponse.ExportLogToolTip}"
+                    Content="{Binding i18n.HttpResponse.ExportLog, Mode=OneWay}"
+                    ToolTip.Tip="{Binding i18n.HttpResponse.ExportLogToolTip, Mode=OneWay}"
                     ToolTip.Placement="Top"
                     Margin="6,0,6,12"
                     IsVisible="{Binding ResponseDataCtx.IsExportLogFileVisible}"
-                    Command="{Binding ResponseDataCtx.ExportLogFileCmd}"
+                    Command="{Binding ResponseDataCtx.ExportLogFileCmd, Mode=OneWay}"
                     Classes="Secondary"/>
                 <Button
                     Name="btResDisableTlsVerification"
-                    Content="{Binding i18n.HttpResponse.DisableTlsVerification}"
+                    Content="{Binding i18n.HttpResponse.DisableTlsVerification, Mode=OneWay}"
                     Margin="6,0,0,12"
                     IsVisible="{Binding ResponseDataCtx.IsDisableTlsVerificationVisible}"
-                    Command="{Binding ResponseDataCtx.DisableTlsVerificationCmd}"
+                    Command="{Binding ResponseDataCtx.DisableTlsVerificationCmd, Mode=OneWay}"
                     Classes="Primary"/>
               </StackPanel>
 
@@ -609,7 +609,7 @@
             <TabItem.Header>
               <TextBlock
                   Classes="TabItemHeader"
-                  Text="{Binding i18n.HttpRepeater.InputLine}"/>
+                  Text="{Binding i18n.HttpRepeater.InputLine, Mode=OneWay}"/>
             </TabItem.Header>
             <DataGrid
                 Name="dgResInputLine"
@@ -623,14 +623,14 @@
                     Width="*"
                     Binding="{Binding Key}">
                   <DataGridTextColumn.Header>
-                    <TextBlock Text="{Binding i18n.HttpRepeater.InputLineKey}"/>
+                    <TextBlock Text="{Binding i18n.HttpRepeater.InputLineKey, Mode=OneWay}"/>
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="*"
                     Binding="{Binding Value}">
                   <DataGridTextColumn.Header>
-                    <TextBlock Text="{Binding i18n.HttpRepeater.InputLineValue}"/>
+                    <TextBlock Text="{Binding i18n.HttpRepeater.InputLineValue, Mode=OneWay}"/>
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
               </DataGrid.Columns>

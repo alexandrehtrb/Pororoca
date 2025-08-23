@@ -22,19 +22,19 @@
 
   <Window.KeyBindings>
     <!-- Keyboard shortcuts are defined in CollectionsGroupView and MainWindow -->
-    <KeyBinding Command="{Binding HotKeys.ShowHelpCmd}" Gesture="F1"/>
-    <KeyBinding Command="{Binding HotKeys.RenameCmd}" Gesture="F2"/>
-    <KeyBinding Command="{Binding HotKeys.FocusOnUrlCmd}" Gesture="F4"/>
-    <KeyBinding Command="{Binding HotKeys.SendRequestOrConnectWebSocketCmd}" Gesture="F5"/>
-    <KeyBinding Command="{Binding HotKeys.CancelRequestOrDisconnectWebSocketCmd}" Gesture="F6"/>
-    <KeyBinding Command="{Binding HotKeys.CyclePreviousEnvironmentToActiveCmd}" Gesture="F7"/>
-    <KeyBinding Command="{Binding HotKeys.CycleNextEnvironmentToActiveCmd}" Gesture="F8"/>
-    <KeyBinding Command="{Binding HotKeys.SaveResponseToFileCmd}" Gesture="F9"/>
-    <KeyBinding Command="{Binding HotKeys.ExportHttpLogToFileCmd}" Gesture="F10"/>
-    <KeyBinding Command="{Binding HotKeys.MoveUpCmd}" Gesture="Alt+Up"/>
-    <KeyBinding Command="{Binding HotKeys.MoveDownCmd}" Gesture="Alt+Down"/>
-    <KeyBinding Command="{Binding HotKeys.SwitchToPreviousItemCmd}" Gesture="Ctrl+PageUp"/>
-    <KeyBinding Command="{Binding HotKeys.SwitchToNextItemCmd}" Gesture="Ctrl+PageDown"/>
+    <KeyBinding Command="{Binding HotKeys.ShowHelpCmd, Mode=OneWay}" Gesture="F1"/>
+    <KeyBinding Command="{Binding HotKeys.RenameCmd, Mode=OneWay}" Gesture="F2"/>
+    <KeyBinding Command="{Binding HotKeys.FocusOnUrlCmd, Mode=OneWay}" Gesture="F4"/>
+    <KeyBinding Command="{Binding HotKeys.SendRequestOrConnectWebSocketCmd, Mode=OneWay}" Gesture="F5"/>
+    <KeyBinding Command="{Binding HotKeys.CancelRequestOrDisconnectWebSocketCmd, Mode=OneWay}" Gesture="F6"/>
+    <KeyBinding Command="{Binding HotKeys.CyclePreviousEnvironmentToActiveCmd, Mode=OneWay}" Gesture="F7"/>
+    <KeyBinding Command="{Binding HotKeys.CycleNextEnvironmentToActiveCmd, Mode=OneWay}" Gesture="F8"/>
+    <KeyBinding Command="{Binding HotKeys.SaveResponseToFileCmd, Mode=OneWay}" Gesture="F9"/>
+    <KeyBinding Command="{Binding HotKeys.ExportHttpLogToFileCmd, Mode=OneWay}" Gesture="F10"/>
+    <KeyBinding Command="{Binding HotKeys.MoveUpCmd, Mode=OneWay}" Gesture="Alt+Up"/>
+    <KeyBinding Command="{Binding HotKeys.MoveDownCmd, Mode=OneWay}" Gesture="Alt+Down"/>
+    <KeyBinding Command="{Binding HotKeys.SwitchToPreviousItemCmd, Mode=OneWay}" Gesture="Ctrl+PageUp"/>
+    <KeyBinding Command="{Binding HotKeys.SwitchToNextItemCmd, Mode=OneWay}" Gesture="Ctrl+PageDown"/>
     <KeyBinding Command="{Binding RunUITestsCmd}" Gesture="Ctrl+F12"/>
     <KeyBinding Command="{Binding SaveAllCmd}" Gesture="Ctrl+Shift+S"/>
   </Window.KeyBindings>
@@ -53,37 +53,37 @@
         </Menu.ItemsPanel>
         <MenuItem
             x:Name="topMenuItemFile"
-            Header="{Binding i18n.TopMenu.File}">
+            Header="{Binding i18n.TopMenu.File, Mode=OneWay}">
           <MenuItem
               x:Name="topMenuItemFileNewCollection"
-              Header="{Binding i18n.TopMenuFile.NewCollection}"
+              Header="{Binding i18n.TopMenuFile.NewCollection, Mode=OneWay}"
               Command="{Binding AddNewCollectionCmd}"/>
           <Separator/>
           <MenuItem
               x:Name="topMenuItemFileImportCollectionsFromFile"
-              Header="{Binding i18n.TopMenuFile.ImportFromFile}"
+              Header="{Binding i18n.TopMenuFile.ImportFromFile, Mode=OneWay}"
               Command="{Binding ImportCollectionsFromFileCmd}"/>
           <Separator/>
           <MenuItem
-              Header="{Binding i18n.TopMenuFile.SaveAll}"
+              Header="{Binding i18n.TopMenuFile.SaveAll, Mode=OneWay}"
               InputGesture="Ctrl+Shift+S"
               Command="{Binding SaveAllCmd}"/>
           <Separator/>
           <MenuItem
               x:Name="topMenuItemFileExit"
-              Header="{Binding i18n.TopMenuFile.Exit}"
+              Header="{Binding i18n.TopMenuFile.Exit, Mode=OneWay}"
               InputGesture="Alt+F4"
               Click="OnCloseMainWindow"/>
         </MenuItem>
         <MenuItem
             x:Name="topMenuItemOptions"
-            Header="{Binding i18n.TopMenu.Options}">
+            Header="{Binding i18n.TopMenu.Options, Mode=OneWay}">
           <MenuItem
               x:Name="topMenuItemOptionsTheme"
-              Header="{Binding i18n.TopMenuOptions.Theme}">
+              Header="{Binding i18n.TopMenuOptions.Theme, Mode=OneWay}">
             <MenuItem
                 x:Name="topMenuItemOptionsThemeLight"
-                Header="{Binding i18n.TopMenuTheme.Light}"
+                Header="{Binding i18n.TopMenuTheme.Light, Mode=OneWay}"
                 Command="{Binding SwitchToLightThemeCmd}">
               <MenuItem.Icon>
                 <Image
@@ -97,7 +97,7 @@
             </MenuItem>
             <MenuItem
                 x:Name="topMenuItemOptionsThemeLight2"
-                Header="{Binding i18n.TopMenuTheme.Light2}"
+                Header="{Binding i18n.TopMenuTheme.Light2, Mode=OneWay}"
                 Command="{Binding SwitchToLight2ThemeCmd}">
               <MenuItem.Icon>
                 <Image
@@ -111,7 +111,7 @@
             </MenuItem>
             <MenuItem
                 x:Name="topMenuItemOptionsThemeDark"
-                Header="{Binding i18n.TopMenuTheme.Dark}"
+                Header="{Binding i18n.TopMenuTheme.Dark, Mode=OneWay}"
                 Command="{Binding SwitchToDarkThemeCmd}">
               <MenuItem.Icon>
                 <Image
@@ -125,7 +125,7 @@
             </MenuItem>
             <MenuItem
                 x:Name="topMenuItemOptionsThemePampa"
-                Header="{Binding i18n.TopMenuTheme.Pampa}"
+                Header="{Binding i18n.TopMenuTheme.Pampa, Mode=OneWay}"
                 Command="{Binding SwitchToPampaThemeCmd}">
               <MenuItem.Icon>
                 <Image
@@ -139,7 +139,7 @@
             </MenuItem>
             <MenuItem
                 x:Name="topMenuItemOptionsThemeAmazonianNight"
-                Header="{Binding i18n.TopMenuTheme.AmazonianNight}"
+                Header="{Binding i18n.TopMenuTheme.AmazonianNight, Mode=OneWay}"
                 Command="{Binding SwitchToAmazonianNightThemeCmd}">
               <MenuItem.Icon>
                 <Image
@@ -154,10 +154,10 @@
           </MenuItem>
           <MenuItem
               x:Name="topMenuItemOptionsLanguage"
-              Header="{Binding i18n.TopMenuOptions.Language}">
+              Header="{Binding i18n.TopMenuOptions.Language, Mode=OneWay}">
             <MenuItem
                 x:Name="topMenuItemOptionsLanguagePortuguês"
-                Header="{Binding i18n.TopMenuLanguage.Português}"
+                Header="{Binding i18n.TopMenuLanguage.Português, Mode=OneWay}"
                 Command="{Binding SelectLanguagePortuguesCmd}">
               <MenuItem.Icon>
                 <Image
@@ -171,7 +171,7 @@
             </MenuItem>
             <MenuItem
                 x:Name="topMenuItemOptionsLanguageEnglish"
-                Header="{Binding i18n.TopMenuLanguage.English}"
+                Header="{Binding i18n.TopMenuLanguage.English, Mode=OneWay}"
                 Command="{Binding SelectLanguageEnglishCmd}">
               <MenuItem.Icon>
                 <Image
@@ -185,7 +185,7 @@
             </MenuItem>
             <MenuItem
                 x:Name="topMenuItemOptionsLanguageRussian"
-                Header="{Binding i18n.TopMenuLanguage.Russian}"
+                Header="{Binding i18n.TopMenuLanguage.Russian, Mode=OneWay}"
                 Command="{Binding SelectLanguageRussianCmd}">
               <MenuItem.Icon>
                 <Image
@@ -199,7 +199,7 @@
             </MenuItem>
             <MenuItem
                 x:Name="topMenuItemOptionsLanguageItalian"
-                Header="{Binding i18n.TopMenuLanguage.Italian}"
+                Header="{Binding i18n.TopMenuLanguage.Italian, Mode=OneWay}"
                 Command="{Binding SelectLanguageItalianCmd}">
               <MenuItem.Icon>
                 <Image
@@ -213,7 +213,7 @@
             </MenuItem>
             <MenuItem
                 x:Name="topMenuItemOptionsLanguageSimplifiedChinese"
-                Header="{Binding i18n.TopMenuLanguage.SimplifiedChinese}"
+                Header="{Binding i18n.TopMenuLanguage.SimplifiedChinese, Mode=OneWay}"
                 Command="{Binding SelectLanguageSimplifiedChineseCmd}">
               <MenuItem.Icon>
                 <Image
@@ -227,7 +227,7 @@
             </MenuItem>
             <MenuItem
                 x:Name="topMenuItemOptionsLanguageGerman"
-                Header="{Binding i18n.TopMenuLanguage.German}"
+                Header="{Binding i18n.TopMenuLanguage.German, Mode=OneWay}"
                 Command="{Binding SelectLanguageGermanCmd}">
               <MenuItem.Icon>
                 <Image
@@ -241,7 +241,7 @@
             </MenuItem>
             <MenuItem
                 x:Name="topMenuItemOptionsLanguageSpanish"
-                Header="{Binding i18n.TopMenuLanguage.Spanish}"
+                Header="{Binding i18n.TopMenuLanguage.Spanish, Mode=OneWay}"
                 Command="{Binding SelectLanguageSpanishCmd}">
               <MenuItem.Icon>
                 <Image
@@ -256,7 +256,7 @@
           </MenuItem>
           <MenuItem
               x:Name="topMenuItemOptionsEnableTlsVerification"
-              Header="{Binding i18n.TopMenuOptions.EnableTlsVerification}"
+              Header="{Binding i18n.TopMenuOptions.EnableTlsVerification, Mode=OneWay}"
               Command="{Binding ToggleSSLVerificationCmd}">
             <MenuItem.Icon>
               <Image
@@ -270,7 +270,7 @@
           </MenuItem>
           <MenuItem
             x:Name="topMenuItemOptionsAutoCheckForUpdates"
-            Header="{Binding i18n.TopMenuOptions.AutoCheckForUpdates}"
+            Header="{Binding i18n.TopMenuOptions.AutoCheckForUpdates, Mode=OneWay}"
             Command="{Binding ToggleAutoCheckForUpdatesCmd}">
             <MenuItem.Icon>
               <Image
@@ -285,28 +285,28 @@
         </MenuItem>
         <MenuItem
             x:Name="topMenuItemHelp"
-            Header="{Binding i18n.TopMenu.Help}">
+            Header="{Binding i18n.TopMenu.Help, Mode=OneWay}">
           <MenuItem
-            Header="{Binding i18n.TopMenuHelp.ViewKeyboardShortcuts}"
-            Command="{Binding HotKeys.ShowHelpCmd}"/>
+            Header="{Binding i18n.TopMenuHelp.ViewKeyboardShortcuts, Mode=OneWay}"
+            Command="{Binding HotKeys.ShowHelpCmd, Mode=OneWay}"/>
           <MenuItem
-            Header="{Binding i18n.TopMenuHelp.OpenDocsWebsite}"
+            Header="{Binding i18n.TopMenuHelp.OpenDocsWebsite, Mode=OneWay}"
             Command="{Binding OpenDocsInWebBrowserCmd}"/>
           <Separator/>
           <MenuItem
             Header="{Binding VersionName}"
             IsEnabled="False"/>
           <MenuItem
-            Header="{Binding i18n.TopMenuHelp.RunUITests}"
+            Header="{Binding i18n.TopMenuHelp.RunUITests, Mode=OneWay}"
             IsVisible="{Binding IsRunUITestsVisible}"
             Command="{Binding RunUITestsCmd}"/>
         </MenuItem>
         <MenuItem
-            Header="{Binding i18n.TopMenu.Saved}"
+            Header="{Binding i18n.TopMenu.Saved, Mode=OneWay}"
             HorizontalAlignment="Right"
             IsVisible="{Binding IsSavedLabelVisible}"/>
         <!--MenuItem
-        Header="{Binding i18n.TopMenu.Contribute}"/-->
+        Header="{Binding i18n.TopMenu.Contribute, Mode=OneWay}"/-->
       </Menu>
 
       <Grid>

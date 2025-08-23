@@ -35,13 +35,13 @@
         Margin="0,48,0,0">
       <Button
           Name="btSetAsCurrentEnvironment"
-          Content="{Binding i18n.Environment.SetAsCurrentEnvironment}"
+          Content="{Binding i18n.Environment.SetAsCurrentEnvironment, Mode=OneWay}"
           IsVisible="{Binding !IsCurrentEnvironment}"
           Command="{Binding ToggleEnabledEnvironmentCmd}"
           Classes="Secondary TextButton"/>
       <Button
           Name="btUnsetAsCurrentEnvironment"
-          Content="{Binding i18n.Environment.UnsetAsCurrentEnvironment}"
+          Content="{Binding i18n.Environment.UnsetAsCurrentEnvironment, Mode=OneWay}"
           IsVisible="{Binding IsCurrentEnvironment}"
           Command="{Binding ToggleEnabledEnvironmentCmd}"
           Classes="Secondary TextButton"/>
@@ -49,7 +49,7 @@
           Name="btExportEnvironment"
           Margin="12,0,0,0"
           Icon="{StaticResource IconExportGeometry}"
-          Text="{Binding i18n.Environment.ExportEnvironment}"
+          Text="{Binding i18n.Environment.ExportEnvironment, Mode=OneWay}"
           Command="{Binding ExportEnvironmentCmd}"/>
     </StackPanel>
 
@@ -64,8 +64,8 @@
         Padding="2"
         Margin="0,36,0,0"
         Classes="Secondary"
-        ToolTip.Tip="{Binding i18n.Environment.AddVariable}"
-        Command="{Binding VariablesTableVm.AddNewCmd}">
+        ToolTip.Tip="{Binding i18n.Environment.AddVariable, Mode=OneWay}"
+        Command="{Binding VariablesTableVm.AddNewCmd, Mode=OneWay}">
       <Image
           VerticalAlignment="Center"
           HorizontalAlignment="Center"
@@ -89,7 +89,7 @@
         Grid.Row="4"
         HorizontalAlignment="Stretch"
         Margin="0,24,0,0"
-        Text="{Binding i18n.Environment.Tip}"
+        Text="{Binding i18n.Environment.Tip, Mode=OneWay}"
         Classes="TipText"/>
 
   </Grid>

@@ -22,29 +22,29 @@
       HeadersVisibility="All"
       Classes="DragAndDrop VariablesDragAndDrop">
     <!--DataGrid.KeyBindings>
-      <KeyBinding Command="{Binding VariablesTableVm.CutCmd}" Gesture="Ctrl+X" />
-      <KeyBinding Command="{Binding VariablesTableVm.CopyCmd}" Gesture="Ctrl+C" />
-      <KeyBinding Command="{Binding VariablesTableVm.PasteCmd}" Gesture="Ctrl+V" />
-      <KeyBinding Command="{Binding VariablesTableVm.DuplicateCmd}" Gesture="Ctrl+D" />
-      <KeyBinding Command="{Binding VariablesTableVm.DeleteCmd}" Gesture="Delete" />
+      <KeyBinding Command="{Binding VariablesTableVm.CutCmd, Mode=OneWay}" Gesture="Ctrl+X" />
+      <KeyBinding Command="{Binding VariablesTableVm.CopyCmd, Mode=OneWay}" Gesture="Ctrl+C" />
+      <KeyBinding Command="{Binding VariablesTableVm.PasteCmd, Mode=OneWay}" Gesture="Ctrl+V" />
+      <KeyBinding Command="{Binding VariablesTableVm.DuplicateCmd, Mode=OneWay}" Gesture="Ctrl+D" />
+      <KeyBinding Command="{Binding VariablesTableVm.DeleteCmd, Mode=OneWay}" Gesture="Delete" />
     </DataGrid.KeyBindings-->
     <DataGrid.ContextMenu>
       <ContextMenu>
         <MenuItem
-            Header="{Binding i18n.ContextMenu.Cut}"
+            Header="{Binding i18n.ContextMenu.Cut, Mode=OneWay}"
             Command="{Binding CutCmd}"
             InputGesture="Ctrl+X"/>
         <MenuItem
-            Header="{Binding i18n.ContextMenu.Copy}"
+            Header="{Binding i18n.ContextMenu.Copy, Mode=OneWay}"
             Command="{Binding CopyCmd}"
             InputGesture="Ctrl+C"/>
         <MenuItem
-            Header="{Binding i18n.ContextMenu.Paste}"
+            Header="{Binding i18n.ContextMenu.Paste, Mode=OneWay}"
             Command="{Binding PasteCmd}"
             InputGesture="Ctrl+V"
             IsEnabled="{Binding InnerClipboardArea.CanPaste}"/>
         <MenuItem
-            Header="{Binding i18n.ContextMenu.Delete}"
+            Header="{Binding i18n.ContextMenu.Delete, Mode=OneWay}"
             Command="{Binding DeleteCmd}"
             InputGesture="Delete"/>
       </ContextMenu>
@@ -54,28 +54,28 @@
           Width="*"
           Binding="{Binding Enabled}">
         <DataGridCheckBoxColumn.Header>
-          <TextBlock Text="{Binding i18n.Variables.Enabled}"/>
+          <TextBlock Text="{Binding i18n.Variables.Enabled, Mode=OneWay}"/>
         </DataGridCheckBoxColumn.Header>
       </DataGridCheckBoxColumn>
       <DataGridTextColumn
           Width="2*"
           Binding="{Binding Key}">
         <DataGridTextColumn.Header>
-          <TextBlock Text="{Binding i18n.Variables.Name}"/>
+          <TextBlock Text="{Binding i18n.Variables.Name, Mode=OneWay}"/>
         </DataGridTextColumn.Header>
       </DataGridTextColumn>
       <DataGridTextColumn
           Width="2*"
           Binding="{Binding Value}">
         <DataGridTextColumn.Header>
-          <TextBlock Text="{Binding i18n.Variables.Value}"/>
+          <TextBlock Text="{Binding i18n.Variables.Value, Mode=OneWay}"/>
         </DataGridTextColumn.Header>
       </DataGridTextColumn>
       <DataGridCheckBoxColumn
           Width="*"
           Binding="{Binding IsSecret}">
         <DataGridCheckBoxColumn.Header>
-          <TextBlock Text="{Binding i18n.Variables.IsSecret}"/>
+          <TextBlock Text="{Binding i18n.Variables.IsSecret, Mode=OneWay}"/>
         </DataGridCheckBoxColumn.Header>
       </DataGridCheckBoxColumn>
       <DataGridTemplateColumn

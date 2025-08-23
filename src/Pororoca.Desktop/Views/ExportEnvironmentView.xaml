@@ -31,7 +31,7 @@
         Height="40"
         Width="40"
         Command="{Binding GoBackCmd}"
-        ToolTip.Tip="{Binding i18n.GoBack.Hint}"
+        ToolTip.Tip="{Binding i18n.GoBack.Hint, Mode=OneWay}"
         HorizontalContentAlignment="Center"
         VerticalContentAlignment="Center"
         HorizontalAlignment="Left"
@@ -53,7 +53,7 @@
         Grid.Row="0"
         Grid.Column="1"
         Margin="24,0,0,0"
-        Text="{Binding i18n.ExportEnvironment.Title}"
+        Text="{Binding i18n.ExportEnvironment.Title, Mode=OneWay}"
         HorizontalAlignment="Left"
         VerticalAlignment="Center"
         TextWrapping="Wrap"
@@ -68,7 +68,7 @@
         HorizontalContentAlignment="Center"
         VerticalContentAlignment="Center"
         Command="{Binding ExportEnvironmentCmd}"
-        Content="{Binding i18n.ExportEnvironment.Export}"
+        Content="{Binding i18n.ExportEnvironment.Export, Mode=OneWay}"
         Classes="Primary"/>
     </Grid>
 
@@ -84,7 +84,7 @@
 
     <CheckBox
       x:Name="cbIncludeSecretsWhenExporting"
-      Content="{Binding i18n.ExportEnvironment.IncludeVariablesSecrets}"
+      Content="{Binding i18n.ExportEnvironment.IncludeVariablesSecrets, Mode=OneWay}"
       IsChecked="{Binding IncludeSecretVariables}"/>
 
     <StackPanel Orientation="Horizontal">
@@ -95,7 +95,7 @@
         HorizontalAlignment="Stretch"
         VerticalAlignment="Center"
         Margin="0,0,6,0"
-        Text="{Binding i18n.ExportEnvironment.Format}"/>
+        Text="{Binding i18n.ExportEnvironment.Format, Mode=OneWay}"/>
       <ComboBox
         x:Name="cbExportFormat"
         Height="36"

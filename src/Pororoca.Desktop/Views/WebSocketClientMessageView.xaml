@@ -49,13 +49,13 @@
 
         <CheckBox
             Name="chkbDisableCompressionForThisMessage"
-            Content="{Binding i18n.WebSocketClientMessage.DisableCompressionForThisMessage}"
+            Content="{Binding i18n.WebSocketClientMessage.DisableCompressionForThisMessage, Mode=OneWay}"
             IsChecked="{Binding DisableCompressionForThisMessage}"/>
 
         <TextBlock
             VerticalAlignment="Center"
             Margin="4,0,0,0"
-            ToolTip.Tip="{Binding i18n.WebSocketClientMessage.DisableCompressionExplanation}"
+            ToolTip.Tip="{Binding i18n.WebSocketClientMessage.DisableCompressionExplanation, Mode=OneWay}"
             Classes="TipQuestionMark"/>
       </StackPanel>
 
@@ -69,13 +69,13 @@
           SelectedIndex="{Binding MessageTypeSelectedIndex, Mode=TwoWay}">
         <ComboBoxItem
             Name="cbiMessageTypeText"
-            Content="{Binding i18n.WebSocketClientMessage.MessageTypeText}"/>
+            Content="{Binding i18n.WebSocketClientMessage.MessageTypeText, Mode=OneWay}"/>
         <ComboBoxItem
             Name="cbiMessageTypeBinary"
-            Content="{Binding i18n.WebSocketClientMessage.MessageTypeBinary}"/>
+            Content="{Binding i18n.WebSocketClientMessage.MessageTypeBinary, Mode=OneWay}"/>
         <ComboBoxItem
             Name="cbiMessageTypeClose"
-            Content="{Binding i18n.WebSocketClientMessage.MessageTypeClose}"/>
+            Content="{Binding i18n.WebSocketClientMessage.MessageTypeClose, Mode=OneWay}"/>
       </ComboBox>
 
       <StackPanel
@@ -91,10 +91,10 @@
             SelectedIndex="{Binding ContentModeSelectedIndex, Mode=TwoWay}">
           <ComboBoxItem
               x:Name="cbiContentModeRaw"
-              Content="{Binding i18n.WebSocketClientMessage.ContentModeRaw}"/>
+              Content="{Binding i18n.WebSocketClientMessage.ContentModeRaw, Mode=OneWay}"/>
           <ComboBoxItem
               x:Name="cbiContentModeFile"
-              Content="{Binding i18n.WebSocketClientMessage.ContentModeFile}"/>
+              Content="{Binding i18n.WebSocketClientMessage.ContentModeFile, Mode=OneWay}"/>
         </ComboBox>
 
         <ComboBox
@@ -109,10 +109,10 @@
                         ConverterParameter=Raw}">
           <ComboBoxItem
               x:Name="cbiContentRawSyntaxJson"
-              Content="{Binding i18n.WebSocketClientMessage.RawContentJsonSyntax}"/>
+              Content="{Binding i18n.WebSocketClientMessage.RawContentJsonSyntax, Mode=OneWay}"/>
           <ComboBoxItem
               x:Name="cbiContentRawSyntaxOther"
-              Content="{Binding i18n.WebSocketClientMessage.RawContentOtherSyntax}"/>
+              Content="{Binding i18n.WebSocketClientMessage.RawContentOtherSyntax, Mode=OneWay}"/>
         </ComboBox>
 
         <!-- This is for testing syntax colour themes -->
@@ -158,13 +158,13 @@
             Name="tbContentFileSrcPath"
             HorizontalContentAlignment="Left"
             VerticalContentAlignment="Center"
-            Watermark="{Binding i18n.WebSocketClientMessage.ContentFileSrcPathWatermark}"
+            Watermark="{Binding i18n.WebSocketClientMessage.ContentFileSrcPathWatermark, Mode=OneWay}"
             Classes="SingleLine"
             Text="{Binding ContentFileSrcPath, Mode=TwoWay}"/>
 
         <Button
             Margin="0,12,0,0"
-            Content="{Binding i18n.WebSocketClientMessage.ContentFileSearchFile}"
+            Content="{Binding i18n.WebSocketClientMessage.ContentFileSearchFile, Mode=OneWay}"
             Command="{Binding SearchContentFileCmd}"
             Classes="Secondary"/>
 

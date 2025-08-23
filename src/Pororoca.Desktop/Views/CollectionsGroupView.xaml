@@ -24,11 +24,11 @@
       <TreeView.KeyBindings>
         <!-- Commands need to be defined for both keybindings and context menu actions -->
         <!-- Keyboard shortcuts are defined in CollectionsGroupView and MainWindow -->
-        <KeyBinding Command="{Binding HotKeys.CutCmd}" Gesture="Ctrl+X" />
-        <KeyBinding Command="{Binding HotKeys.CopyCmd}" Gesture="Ctrl+C" />
-        <KeyBinding Command="{Binding HotKeys.PasteCmd}" Gesture="Ctrl+V" />
-        <KeyBinding Command="{Binding HotKeys.DeleteCmd}" Gesture="Delete" />
-        <KeyBinding Command="{Binding HotKeys.DuplicateCmd}" Gesture="Ctrl+D" />
+        <KeyBinding Command="{Binding HotKeys.CutCmd, Mode=OneWay}" Gesture="Ctrl+X" />
+        <KeyBinding Command="{Binding HotKeys.CopyCmd, Mode=OneWay}" Gesture="Ctrl+C" />
+        <KeyBinding Command="{Binding HotKeys.PasteCmd, Mode=OneWay}" Gesture="Ctrl+V" />
+        <KeyBinding Command="{Binding HotKeys.DeleteCmd, Mode=OneWay}" Gesture="Delete" />
+        <KeyBinding Command="{Binding HotKeys.DuplicateCmd, Mode=OneWay}" Gesture="Ctrl+D" />
     </TreeView.KeyBindings>
     <TreeView.Styles>
       <!-- Items in the ItemsSource need to have these properties for the binding to work -->
@@ -71,51 +71,51 @@
           <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.NewFolder}"
+                  Header="{Binding i18n.ContextMenu.NewFolder, Mode=OneWay}"
                   Command="{Binding AddNewFolderCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.NewHttpRequest}"
+                  Header="{Binding i18n.ContextMenu.NewHttpRequest, Mode=OneWay}"
                   Command="{Binding AddNewHttpRequestCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.NewWebSocketConnection}"
+                  Header="{Binding i18n.ContextMenu.NewWebSocketConnection, Mode=OneWay}"
                   Command="{Binding AddNewWebSocketConnectionCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.NewHttpRepeater}"
+                  Header="{Binding i18n.ContextMenu.NewHttpRepeater, Mode=OneWay}"
                   Command="{Binding AddNewHttpRepeaterCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Duplicate}"
-                  Command="{Binding HotKeys.DuplicateCmd}"
+                  Header="{Binding i18n.ContextMenu.Duplicate, Mode=OneWay}"
+                  Command="{Binding HotKeys.DuplicateCmd, Mode=OneWay}"
                   InputGesture="Ctrl+D"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Paste}"
-                  Command="{Binding HotKeys.PasteCmd}"
+                  Header="{Binding i18n.ContextMenu.Paste, Mode=OneWay}"
+                  Command="{Binding HotKeys.PasteCmd, Mode=OneWay}"
                   InputGesture="Ctrl+V"
                   IsEnabled="{Binding ClipboardArea.CanPasteCollectionFolderOrRequest}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Rename}"
-                  Command="{Binding HotKeys.RenameCmd}"
+                  Header="{Binding i18n.ContextMenu.Rename, Mode=OneWay}"
+                  Command="{Binding HotKeys.RenameCmd, Mode=OneWay}"
                   InputGesture="F2"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.MoveUp}"
-                  Command="{Binding HotKeys.MoveUpCmd}"
+                  Header="{Binding i18n.ContextMenu.MoveUp, Mode=OneWay}"
+                  Command="{Binding HotKeys.MoveUpCmd, Mode=OneWay}"
                   InputGesture="Alt+Up"
                   IsEnabled="{Binding CanMoveUp}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.MoveDown}"
-                  Command="{Binding HotKeys.MoveDownCmd}"
+                  Header="{Binding i18n.ContextMenu.MoveDown, Mode=OneWay}"
+                  Command="{Binding HotKeys.MoveDownCmd, Mode=OneWay}"
                   InputGesture="Alt+Down"
                   IsEnabled="{Binding CanMoveDown}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Delete}"
-                  Command="{Binding HotKeys.DeleteCmd}"
+                  Header="{Binding i18n.ContextMenu.Delete, Mode=OneWay}"
+                  Command="{Binding HotKeys.DeleteCmd, Mode=OneWay}"
                   InputGesture="Delete"/>
             </ContextMenu>
           </TextBlock.ContextMenu>
@@ -128,54 +128,54 @@
           <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.NewFolder}"
+                  Header="{Binding i18n.ContextMenu.NewFolder, Mode=OneWay}"
                   Command="{Binding AddNewFolderCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.NewHttpRequest}"
+                  Header="{Binding i18n.ContextMenu.NewHttpRequest, Mode=OneWay}"
                   Command="{Binding AddNewHttpRequestCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.NewWebSocketConnection}"
+                  Header="{Binding i18n.ContextMenu.NewWebSocketConnection, Mode=OneWay}"
                   Command="{Binding AddNewWebSocketConnectionCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.NewHttpRepeater}"
+                  Header="{Binding i18n.ContextMenu.NewHttpRepeater, Mode=OneWay}"
                   Command="{Binding AddNewHttpRepeaterCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Cut}"
-                  Command="{Binding HotKeys.CutCmd}"
+                  Header="{Binding i18n.ContextMenu.Cut, Mode=OneWay}"
+                  Command="{Binding HotKeys.CutCmd, Mode=OneWay}"
                   InputGesture="Ctrl+X"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Copy}"
-                  Command="{Binding HotKeys.CopyCmd}"
+                  Header="{Binding i18n.ContextMenu.Copy, Mode=OneWay}"
+                  Command="{Binding HotKeys.CopyCmd, Mode=OneWay}"
                   InputGesture="Ctrl+C"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Paste}"
-                  Command="{Binding HotKeys.PasteCmd}"
+                  Header="{Binding i18n.ContextMenu.Paste, Mode=OneWay}"
+                  Command="{Binding HotKeys.PasteCmd, Mode=OneWay}"
                   InputGesture="Ctrl+V"
                   IsEnabled="{Binding ClipboardArea.CanPasteCollectionFolderOrRequest}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Rename}"
-                  Command="{Binding HotKeys.RenameCmd}"
+                  Header="{Binding i18n.ContextMenu.Rename, Mode=OneWay}"
+                  Command="{Binding HotKeys.RenameCmd, Mode=OneWay}"
                   InputGesture="F2"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.MoveUp}"
-                  Command="{Binding HotKeys.MoveUpCmd}"
+                  Header="{Binding i18n.ContextMenu.MoveUp, Mode=OneWay}"
+                  Command="{Binding HotKeys.MoveUpCmd, Mode=OneWay}"
                   InputGesture="Alt+Up"
                   IsEnabled="{Binding CanMoveUp}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.MoveDown}"
-                  Command="{Binding HotKeys.MoveDownCmd}"
+                  Header="{Binding i18n.ContextMenu.MoveDown, Mode=OneWay}"
+                  Command="{Binding HotKeys.MoveDownCmd, Mode=OneWay}"
                   InputGesture="Alt+Down"
                   IsEnabled="{Binding CanMoveDown}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Delete}"
-                  Command="{Binding HotKeys.DeleteCmd}"
+                  Header="{Binding i18n.ContextMenu.Delete, Mode=OneWay}"
+                  Command="{Binding HotKeys.DeleteCmd, Mode=OneWay}"
                   InputGesture="Delete"/>
             </ContextMenu>
           </TextBlock.ContextMenu>
@@ -188,21 +188,21 @@
           <StackPanel.ContextMenu>
             <ContextMenu>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.NewEnvironment}"
+                  Header="{Binding i18n.ContextMenu.NewEnvironment, Mode=OneWay}"
                   Command="{Binding AddNewEnvironmentCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Paste}"
-                  Command="{Binding HotKeys.PasteCmd}"
+                  Header="{Binding i18n.ContextMenu.Paste, Mode=OneWay}"
+                  Command="{Binding HotKeys.PasteCmd, Mode=OneWay}"
                   InputGesture="Ctrl+V"
                   IsEnabled="{Binding ClipboardArea.CanPasteEnvironment}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.ImportEnvironment}"
+                  Header="{Binding i18n.ContextMenu.ImportEnvironment, Mode=OneWay}"
                   Command="{Binding ImportEnvironmentsCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
             </ContextMenu>
           </StackPanel.ContextMenu>
-          <TextBlock Text="{Binding i18n.CollectionsGroup.Environments}"/>
+          <TextBlock Text="{Binding i18n.CollectionsGroup.Environments, Mode=OneWay}"/>
           <TextBlock
               Foreground="{DynamicResource CurrentEnvironmentLabelColor}"
               Text="{Binding SelectedEnvironmentName}"/>
@@ -213,33 +213,33 @@
           <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Cut}"
-                  Command="{Binding HotKeys.CutCmd}"
+                  Header="{Binding i18n.ContextMenu.Cut, Mode=OneWay}"
+                  Command="{Binding HotKeys.CutCmd, Mode=OneWay}"
                   InputGesture="Ctrl+X"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Copy}"
-                  Command="{Binding HotKeys.CopyCmd}"
+                  Header="{Binding i18n.ContextMenu.Copy, Mode=OneWay}"
+                  Command="{Binding HotKeys.CopyCmd, Mode=OneWay}"
                   InputGesture="Ctrl+C"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Rename}"
-                  Command="{Binding HotKeys.RenameCmd}"
+                  Header="{Binding i18n.ContextMenu.Rename, Mode=OneWay}"
+                  Command="{Binding HotKeys.RenameCmd, Mode=OneWay}"
                   InputGesture="F2"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.MoveUp}"
-                  Command="{Binding HotKeys.MoveUpCmd}"
+                  Header="{Binding i18n.ContextMenu.MoveUp, Mode=OneWay}"
+                  Command="{Binding HotKeys.MoveUpCmd, Mode=OneWay}"
                   InputGesture="Alt+Up"
                   IsEnabled="{Binding CanMoveUp}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.MoveDown}"
-                  Command="{Binding HotKeys.MoveDownCmd}"
+                  Header="{Binding i18n.ContextMenu.MoveDown, Mode=OneWay}"
+                  Command="{Binding HotKeys.MoveDownCmd, Mode=OneWay}"
                   InputGesture="Alt+Down"
                   IsEnabled="{Binding CanMoveDown}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Delete}"
-                  Command="{Binding HotKeys.DeleteCmd}"
+                  Header="{Binding i18n.ContextMenu.Delete, Mode=OneWay}"
+                  Command="{Binding HotKeys.DeleteCmd, Mode=OneWay}"
                   InputGesture="Delete"/>
             </ContextMenu>
           </TextBlock.ContextMenu>
@@ -250,33 +250,33 @@
           <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Cut}"
-                  Command="{Binding HotKeys.CutCmd}"
+                  Header="{Binding i18n.ContextMenu.Cut, Mode=OneWay}"
+                  Command="{Binding HotKeys.CutCmd, Mode=OneWay}"
                   InputGesture="Ctrl+X"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Copy}"
-                  Command="{Binding HotKeys.CopyCmd}"
+                  Header="{Binding i18n.ContextMenu.Copy, Mode=OneWay}"
+                  Command="{Binding HotKeys.CopyCmd, Mode=OneWay}"
                   InputGesture="Ctrl+C"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Rename}"
-                  Command="{Binding HotKeys.RenameCmd}"
+                  Header="{Binding i18n.ContextMenu.Rename, Mode=OneWay}"
+                  Command="{Binding HotKeys.RenameCmd, Mode=OneWay}"
                   InputGesture="F2"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.MoveUp}"
-                  Command="{Binding HotKeys.MoveUpCmd}"
+                  Header="{Binding i18n.ContextMenu.MoveUp, Mode=OneWay}"
+                  Command="{Binding HotKeys.MoveUpCmd, Mode=OneWay}"
                   InputGesture="Alt+Up"
                   IsEnabled="{Binding CanMoveUp}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.MoveDown}"
-                  Command="{Binding HotKeys.MoveDownCmd}"
+                  Header="{Binding i18n.ContextMenu.MoveDown, Mode=OneWay}"
+                  Command="{Binding HotKeys.MoveDownCmd, Mode=OneWay}"
                   InputGesture="Alt+Down"
                   IsEnabled="{Binding CanMoveDown}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Delete}"
-                  Command="{Binding HotKeys.DeleteCmd}"
+                  Header="{Binding i18n.ContextMenu.Delete, Mode=OneWay}"
+                  Command="{Binding HotKeys.DeleteCmd, Mode=OneWay}"
                   InputGesture="Delete"/>
             </ContextMenu>
           </TextBlock.ContextMenu>
@@ -289,42 +289,42 @@
           <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.NewWebSocketClientMessage}"
+                  Header="{Binding i18n.ContextMenu.NewWebSocketClientMessage, Mode=OneWay}"
                   Command="{Binding AddNewWebSocketClientMessageCmd}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Cut}"
-                  Command="{Binding HotKeys.CutCmd}"
+                  Header="{Binding i18n.ContextMenu.Cut, Mode=OneWay}"
+                  Command="{Binding HotKeys.CutCmd, Mode=OneWay}"
                   InputGesture="Ctrl+X"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Copy}"
-                  Command="{Binding HotKeys.CopyCmd}"
+                  Header="{Binding i18n.ContextMenu.Copy, Mode=OneWay}"
+                  Command="{Binding HotKeys.CopyCmd, Mode=OneWay}"
                   InputGesture="Ctrl+C"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Paste}"
-                  Command="{Binding HotKeys.PasteCmd}"
+                  Header="{Binding i18n.ContextMenu.Paste, Mode=OneWay}"
+                  Command="{Binding HotKeys.PasteCmd, Mode=OneWay}"
                   InputGesture="Ctrl+V"
                   IsEnabled="{Binding ClipboardArea.CanPasteWebSocketClientMessage}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Rename}"
-                  Command="{Binding HotKeys.RenameCmd}"
+                  Header="{Binding i18n.ContextMenu.Rename, Mode=OneWay}"
+                  Command="{Binding HotKeys.RenameCmd, Mode=OneWay}"
                   InputGesture="F2"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.MoveUp}"
-                  Command="{Binding HotKeys.MoveUpCmd}"
+                  Header="{Binding i18n.ContextMenu.MoveUp, Mode=OneWay}"
+                  Command="{Binding HotKeys.MoveUpCmd, Mode=OneWay}"
                   InputGesture="Alt+Up"
                   IsEnabled="{Binding CanMoveUp}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.MoveDown}"
-                  Command="{Binding HotKeys.MoveDownCmd}"
+                  Header="{Binding i18n.ContextMenu.MoveDown, Mode=OneWay}"
+                  Command="{Binding HotKeys.MoveDownCmd, Mode=OneWay}"
                   InputGesture="Alt+Down"
                   IsEnabled="{Binding CanMoveDown}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Delete}"
-                  Command="{Binding HotKeys.DeleteCmd}"
+                  Header="{Binding i18n.ContextMenu.Delete, Mode=OneWay}"
+                  Command="{Binding HotKeys.DeleteCmd, Mode=OneWay}"
                   InputGesture="Delete"/>
             </ContextMenu>
           </TextBlock.ContextMenu>
@@ -335,33 +335,33 @@
           <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Cut}"
-                  Command="{Binding HotKeys.CutCmd}"
+                  Header="{Binding i18n.ContextMenu.Cut, Mode=OneWay}"
+                  Command="{Binding HotKeys.CutCmd, Mode=OneWay}"
                   InputGesture="Ctrl+X"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Copy}"
-                  Command="{Binding HotKeys.CopyCmd}"
+                  Header="{Binding i18n.ContextMenu.Copy, Mode=OneWay}"
+                  Command="{Binding HotKeys.CopyCmd, Mode=OneWay}"
                   InputGesture="Ctrl+C"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Rename}"
-                  Command="{Binding HotKeys.RenameCmd}"
+                  Header="{Binding i18n.ContextMenu.Rename, Mode=OneWay}"
+                  Command="{Binding HotKeys.RenameCmd, Mode=OneWay}"
                   InputGesture="F2"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.MoveUp}"
-                  Command="{Binding HotKeys.MoveUpCmd}"
+                  Header="{Binding i18n.ContextMenu.MoveUp, Mode=OneWay}"
+                  Command="{Binding HotKeys.MoveUpCmd, Mode=OneWay}"
                   InputGesture="Alt+Up"
                   IsEnabled="{Binding CanMoveUp}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.MoveDown}"
-                  Command="{Binding HotKeys.MoveDownCmd}"
+                  Header="{Binding i18n.ContextMenu.MoveDown, Mode=OneWay}"
+                  Command="{Binding HotKeys.MoveDownCmd, Mode=OneWay}"
                   InputGesture="Alt+Down"
                   IsEnabled="{Binding CanMoveDown}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Delete}"
-                  Command="{Binding HotKeys.DeleteCmd}"
+                  Header="{Binding i18n.ContextMenu.Delete, Mode=OneWay}"
+                  Command="{Binding HotKeys.DeleteCmd, Mode=OneWay}"
                   InputGesture="Delete"/>
             </ContextMenu>
           </TextBlock.ContextMenu>
@@ -372,39 +372,39 @@
           <StackPanel.ContextMenu>
             <ContextMenu>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.SetAsCurrentEnvironment}"
+                  Header="{Binding i18n.ContextMenu.SetAsCurrentEnvironment, Mode=OneWay}"
                   Command="{Binding ToggleEnabledEnvironmentCmd}"
                   IsEnabled="{Binding !IsCurrentEnvironment}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Cut}"
-                  Command="{Binding HotKeys.CutCmd}"
+                  Header="{Binding i18n.ContextMenu.Cut, Mode=OneWay}"
+                  Command="{Binding HotKeys.CutCmd, Mode=OneWay}"
                   InputGesture="Ctrl+X"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Copy}"
-                  Command="{Binding HotKeys.CopyCmd}"
+                  Header="{Binding i18n.ContextMenu.Copy, Mode=OneWay}"
+                  Command="{Binding HotKeys.CopyCmd, Mode=OneWay}"
                   InputGesture="Ctrl+C"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Rename}"
-                  Command="{Binding HotKeys.RenameCmd}"
+                  Header="{Binding i18n.ContextMenu.Rename, Mode=OneWay}"
+                  Command="{Binding HotKeys.RenameCmd, Mode=OneWay}"
                   InputGesture="F2"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.MoveUp}"
-                  Command="{Binding HotKeys.MoveUpCmd}"
+                  Header="{Binding i18n.ContextMenu.MoveUp, Mode=OneWay}"
+                  Command="{Binding HotKeys.MoveUpCmd, Mode=OneWay}"
                   InputGesture="Alt+Up"
                   IsEnabled="{Binding CanMoveUp}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.MoveDown}"
-                  Command="{Binding HotKeys.MoveDownCmd}"
+                  Header="{Binding i18n.ContextMenu.MoveDown, Mode=OneWay}"
+                  Command="{Binding HotKeys.MoveDownCmd, Mode=OneWay}"
                   InputGesture="Alt+Down"
                   IsEnabled="{Binding CanMoveDown}"
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected}"/>
               <MenuItem
-                  Header="{Binding i18n.ContextMenu.Delete}"
+                  Header="{Binding i18n.ContextMenu.Delete, Mode=OneWay}"
                   InputGesture="Delete"
-                  Command="{Binding HotKeys.DeleteCmd}"/>
+                  Command="{Binding HotKeys.DeleteCmd, Mode=OneWay}"/>
             </ContextMenu>
           </StackPanel.ContextMenu>
           <Image
@@ -422,10 +422,10 @@
         </StackPanel>
       </DataTemplate>
       <DataTemplate DataType="{x:Type vm:CollectionVariablesViewModel}">
-        <TextBlock Text="{Binding i18n.CollectionsGroup.Variables}"/>
+        <TextBlock Text="{Binding i18n.CollectionsGroup.Variables, Mode=OneWay}"/>
       </DataTemplate>
       <DataTemplate DataType="{x:Type vm:CollectionScopedAuthViewModel}">
-        <TextBlock Text="{Binding i18n.CollectionsGroup.CollectionScopedAuth}"/>
+        <TextBlock Text="{Binding i18n.CollectionsGroup.CollectionScopedAuth, Mode=OneWay}"/>
       </DataTemplate>
 
     </TreeView.DataTemplates>

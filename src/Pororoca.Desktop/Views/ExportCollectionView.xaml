@@ -35,7 +35,7 @@
         Height="40"
         Width="40"
         Command="{Binding GoBackCmd}"
-        ToolTip.Tip="{Binding i18n.GoBack.Hint}"
+        ToolTip.Tip="{Binding i18n.GoBack.Hint, Mode=OneWay}"
         HorizontalContentAlignment="Center"
         VerticalContentAlignment="Center"
         HorizontalAlignment="Left"
@@ -57,7 +57,7 @@
         Grid.Row="0"
         Grid.Column="1"
         Margin="24,0,0,0"
-        Text="{Binding i18n.ExportCollection.Title}"
+        Text="{Binding i18n.ExportCollection.Title, Mode=OneWay}"
         HorizontalAlignment="Left"
         VerticalAlignment="Center"
         TextWrapping="Wrap"
@@ -72,7 +72,7 @@
         HorizontalContentAlignment="Center"
         VerticalContentAlignment="Center"
         Command="{Binding ExportCollectionCmd}"
-        Content="{Binding i18n.ExportCollection.Export}"
+        Content="{Binding i18n.ExportCollection.Export, Mode=OneWay}"
         Classes="Primary"/>
     </Grid>
 
@@ -88,7 +88,7 @@
 
     <CheckBox
       x:Name="cbIncludeSecretsWhenExporting"
-      Content="{Binding i18n.ExportCollection.IncludeCollectionVariablesSecrets}"
+      Content="{Binding i18n.ExportCollection.IncludeCollectionVariablesSecrets, Mode=OneWay}"
       IsChecked="{Binding IncludeSecretVariables}"/>
 
     <StackPanel Orientation="Horizontal">
@@ -99,7 +99,7 @@
         HorizontalAlignment="Stretch"
         VerticalAlignment="Center"
         Margin="0,0,6,0"
-        Text="{Binding i18n.ExportCollection.Format}"/>
+        Text="{Binding i18n.ExportCollection.Format, Mode=OneWay}"/>
       <ComboBox
         x:Name="cbExportFormat"
         Height="36"
@@ -137,7 +137,7 @@
           Width="0.25*"
           Binding="{Binding ExportEnvironmentVm.IncludeInCollectionExport}">
           <DataGridCheckBoxColumn.Header>
-            <TextBlock Text="{Binding i18n.ExportCollection.EnvironmentInclude}"/>
+            <TextBlock Text="{Binding i18n.ExportCollection.EnvironmentInclude, Mode=OneWay}"/>
           </DataGridCheckBoxColumn.Header>
         </DataGridCheckBoxColumn>
         <DataGridTextColumn
@@ -145,14 +145,14 @@
           Binding="{Binding Name}"
           IsReadOnly="True">
           <DataGridTextColumn.Header>
-            <TextBlock Text="{Binding i18n.ExportCollection.EnvironmentName}"/>
+            <TextBlock Text="{Binding i18n.ExportCollection.EnvironmentName, Mode=OneWay}"/>
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridCheckBoxColumn
           Width="0.35*"
           Binding="{Binding ExportEnvironmentVm.IncludeSecretVariables}">
           <DataGridCheckBoxColumn.Header>
-            <TextBlock Text="{Binding i18n.ExportCollection.EnvironmentWithSecretVariables}"/>
+            <TextBlock Text="{Binding i18n.ExportCollection.EnvironmentWithSecretVariables, Mode=OneWay}"/>
           </DataGridCheckBoxColumn.Header>
         </DataGridCheckBoxColumn>
       </DataGrid.Columns>

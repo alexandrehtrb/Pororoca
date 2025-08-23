@@ -33,7 +33,7 @@
         VerticalAlignment="Center"
         TextWrapping="Wrap"
         Classes="SectionTitle"
-        Text="{Binding i18n.UITestsPrepare.Title}"/>
+        Text="{Binding i18n.UITestsPrepare.Title, Mode=OneWay}"/>
 
       <TextBlock
         HorizontalAlignment="Left"
@@ -43,7 +43,7 @@
         Classes="SectionTitle"
         FontSize="14"
         Foreground="{DynamicResource WebSocketConnectedBrush}"
-        Text="{Binding i18n.UITestsPrepare.TestFilesFolderNotFound}"
+        Text="{Binding i18n.UITestsPrepare.TestFilesFolderNotFound, Mode=OneWay}"
         IsVisible="{Binding !TestFilesFolderFound}"/>
       
     </StackPanel>
@@ -57,7 +57,7 @@
         HorizontalAlignment="Stretch"
         VerticalAlignment="Center"
         Margin="0,0,6,0"
-        Text="{Binding i18n.UITestsPrepare.WaitingTimeBetweenActions}"/>
+        Text="{Binding i18n.UITestsPrepare.WaitingTimeBetweenActions, Mode=OneWay}"/>
       
       <NumericUpDown
         Margin="6,0,0,0"
@@ -82,7 +82,7 @@
           Width="0.35*"
           Binding="{Binding Include}">
           <DataGridCheckBoxColumn.Header>
-            <TextBlock Text="{Binding i18n.UITestsPrepare.TestInclude}"/>
+            <TextBlock Text="{Binding i18n.UITestsPrepare.TestInclude, Mode=OneWay}"/>
           </DataGridCheckBoxColumn.Header>
         </DataGridCheckBoxColumn>
         <DataGridTextColumn
@@ -90,7 +90,7 @@
           Binding="{Binding Name}"
           IsReadOnly="True">
           <DataGridTextColumn.Header>
-            <TextBlock Text="{Binding i18n.UITestsPrepare.TestName}"/>
+            <TextBlock Text="{Binding i18n.UITestsPrepare.TestName, Mode=OneWay}"/>
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
       </DataGrid.Columns>
@@ -104,7 +104,7 @@
         HorizontalContentAlignment="Center"
         VerticalContentAlignment="Center"
         Click="RunTests"
-        Content="{Binding i18n.UITestsPrepare.RunTests}"
+        Content="{Binding i18n.UITestsPrepare.RunTests, Mode=OneWay}"
         Classes="Primary"/>
 
       <Button
@@ -113,7 +113,7 @@
         HorizontalContentAlignment="Center"
         VerticalContentAlignment="Center"
         Command="{Binding SelectAllTestsCmd}"
-        Content="{Binding i18n.UITestsPrepare.SelectAll}"
+        Content="{Binding i18n.UITestsPrepare.SelectAll, Mode=OneWay}"
         Classes="Secondary"/>
 
       <Button
@@ -122,7 +122,7 @@
         HorizontalContentAlignment="Center"
         VerticalContentAlignment="Center"
         Command="{Binding DeselectAllTestsCmd}"
-        Content="{Binding i18n.UITestsPrepare.DeselectAll}"
+        Content="{Binding i18n.UITestsPrepare.DeselectAll, Mode=OneWay}"
         Classes="Secondary"/>
 
     </StackPanel>

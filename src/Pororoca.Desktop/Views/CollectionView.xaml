@@ -29,49 +29,49 @@
         x:Name="btAddFolder"
         Margin="0,32,0,0"
         Icon="{StaticResource IconAddFolderGeometry}"
-        Text="{Binding i18n.Collection.AddFolder}"
+        Text="{Binding i18n.Collection.AddFolder, Mode=OneWay}"
         Command="{Binding AddNewFolderCmd}"/>
 
     <controls:IconButton
         x:Name="btAddHttpReq"
         Icon="{StaticResource IconAddGeometry}"
-        Text="{Binding i18n.Collection.AddHttpRequest}"
+        Text="{Binding i18n.Collection.AddHttpRequest, Mode=OneWay}"
         Command="{Binding AddNewHttpRequestCmd}"/>
 
     <controls:IconButton
         x:Name="btAddWebSocket"
         Icon="{StaticResource IconWebsocketGeometry}"
-        Text="{Binding i18n.Collection.AddWebSocketConnection}"
+        Text="{Binding i18n.Collection.AddWebSocketConnection, Mode=OneWay}"
         Command="{Binding AddNewWebSocketConnectionCmd}"/>
 
     <controls:IconButton
         x:Name="btAddHttpRep"
         Icon="{StaticResource IconRifleGunGeometry}"
-        Text="{Binding i18n.Collection.AddHttpRepeater}"
+        Text="{Binding i18n.Collection.AddHttpRepeater, Mode=OneWay}"
         Command="{Binding AddNewHttpRepeaterCmd}"/>
 
     <controls:IconButton
         x:Name="btSetColScopedReqHeaders"
         Icon="{StaticResource IconHeadersGeometry}"
-        Text="{Binding i18n.Collection.SetCollectionScopedHeaders}"
+        Text="{Binding i18n.Collection.SetCollectionScopedHeaders, Mode=OneWay}"
         Command="{Binding ShowCollectionScopedHeadersCmd}"/>
 
     <controls:IconButton
         x:Name="btAddEnvironment"
         Icon="{StaticResource IconLeafGeometry}"
-        Text="{Binding i18n.Collection.AddEnvironment}"
+        Text="{Binding i18n.Collection.AddEnvironment, Mode=OneWay}"
         Command="{Binding AddNewEnvironmentCmd}"/>
 
     <controls:IconButton
         x:Name="btImportEnv"
         Icon="{StaticResource IconImportGeometry}"
-        Text="{Binding i18n.Collection.ImportEnvironment}"
+        Text="{Binding i18n.Collection.ImportEnvironment, Mode=OneWay}"
         Command="{Binding ImportEnvironmentsCmd}"/>
 
     <controls:IconButton
         x:Name="btExportCollection"
         Icon="{StaticResource IconExportGeometry}"
-        Text="{Binding i18n.Collection.ExportCollection}"
+        Text="{Binding i18n.Collection.ExportCollection, Mode=OneWay}"
         Command="{Binding ExportCollectionCmd}"/>
 
   </StackPanel>

@@ -29,7 +29,7 @@
           Height="36"
           Width="36"
           Command="{Binding GoBackCmd}"
-          ToolTip.Tip="{Binding i18n.GoBack.Hint}"
+          ToolTip.Tip="{Binding i18n.GoBack.Hint, Mode=OneWay}"
           HorizontalContentAlignment="Center"
           VerticalContentAlignment="Center"
           HorizontalAlignment="Left"
@@ -49,7 +49,7 @@
       </Button>
       <TextBlock
           Margin="24,0,0,0"
-          Text="{Binding i18n.CollectionScopedRequestHeaders.Title}"
+          Text="{Binding i18n.CollectionScopedRequestHeaders.Title, Mode=OneWay}"
           HorizontalAlignment="Left"
           VerticalAlignment="Center"
           TextWrapping="Wrap"
@@ -67,8 +67,8 @@
         Padding="2"
         Margin="12,24,0,0"
         Classes="Secondary"
-        ToolTip.Tip="{Binding i18n.HttpRequest.HeaderAdd}"
-        Command="{Binding RequestHeadersTableVm.AddNewCmd}">
+        ToolTip.Tip="{Binding i18n.HttpRequest.HeaderAdd, Mode=OneWay}"
+        Command="{Binding RequestHeadersTableVm.AddNewCmd, Mode=OneWay}">
       <Button.Content>
         <Image
             VerticalAlignment="Center"

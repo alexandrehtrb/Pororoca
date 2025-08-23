@@ -21,7 +21,7 @@
       Margin="24">
 
     <TextBlock
-        Text="{Binding i18n.Welcome.Title}"
+        Text="{Binding i18n.Welcome.Title, Mode=OneWay}"
         HorizontalAlignment="Left"
         VerticalAlignment="Top"
         TextWrapping="Wrap"
@@ -31,31 +31,31 @@
         x:Name="btAddCollection"
         Margin="0,32,0,0"
         Icon="{StaticResource IconAddGeometry}"
-        Text="{Binding i18n.Welcome.NewCollection}"
+        Text="{Binding i18n.Welcome.NewCollection, Mode=OneWay}"
         Command="{Binding AddNewCollectionCmd}"/>
 
     <controls:IconButton
         x:Name="btImportCollection"
         Icon="{StaticResource IconImportGeometry}"
-        Text="{Binding i18n.Welcome.ImportCollection}"
+        Text="{Binding i18n.Welcome.ImportCollection, Mode=OneWay}"
         Command="{Binding ImportCollectionCmd}"/>
 
     <controls:IconButton
         x:Name="btImportOpenAPI"
         Icon="{StaticResource IconImportGeometry}"
-        Text="{Binding i18n.Welcome.ImportOpenAPI}"
+        Text="{Binding i18n.Welcome.ImportOpenAPI, Mode=OneWay}"
         Command="{Binding ImportOpenAPICmd}"/>
 
     <controls:IconButton
         x:Name="btGoToWebsite"
         Icon="{StaticResource IconHttpGeometry}"
-        Text="{Binding i18n.Welcome.OpenDocsWebsite}"
+        Text="{Binding i18n.Welcome.OpenDocsWebsite, Mode=OneWay}"
         Command="{Binding GoToDocsWebSiteCmd}"/>
 
     <controls:IconButton
         x:Name="btVisitGitHubRepo"
         Icon="{StaticResource IconGitHubGeometry}"
-        Text="{Binding i18n.Welcome.VisitGitHubRepo}"
+        Text="{Binding i18n.Welcome.VisitGitHubRepo, Mode=OneWay}"
         Command="{Binding VisitGitHubRepoCmd}"/>
 
   </StackPanel>
