@@ -81,7 +81,7 @@
               VerticalContentAlignment="Center"
               ToolTip.Tip="{Binding ResolvedRequestUrlToolTip}"
               Classes="SingleLine"
-              Classes.HasValidationProblem="{Binding HasRequestUrlValidationProblem}"
+              Classes.HasValidationProblem="{Binding HasRequestUrlValidationProblem, Mode=OneWay}"
               PointerEntered="OnRequestUrlPointerEnter"/>
 
           <TextBlock
@@ -104,7 +104,7 @@
             VerticalAlignment="Stretch"
             SelectedIndex="{Binding RequestHttpVersionSelectedIndex, Mode=TwoWay}"
             ItemsSource="{Binding RequestHttpVersionSelectionOptions}"
-            Classes.HasValidationProblem="{Binding HasRequestHttpVersionValidationProblem}"/>
+            Classes.HasValidationProblem="{Binding HasRequestHttpVersionValidationProblem, Mode=OneWay}"/>
 
         <!--
           needs Click instead of Command because ReactiveCommand blocks
@@ -122,8 +122,8 @@
             Click="SendOrCancelRequest"
             Content="{Binding SendOrCancelRequestButtonText}"
             ToolTip.Tip="{Binding SendOrCancelRequestButtonToolTip}"
-            Classes.Primary="{Binding !IsRequesting}"
-            Classes.PrimaryInverted="{Binding IsRequesting}"/>
+            Classes.Primary="{Binding !IsRequesting, Mode=OneWay}"
+            Classes.PrimaryInverted="{Binding IsRequesting, Mode=OneWay}"/>
 
       </Grid>
 
@@ -252,7 +252,7 @@
                     ItemsSource="{Binding AllMimeTypes}"
                     SelectedItem="{Binding RequestRawContentType, Mode=TwoWay}"
                     FilterMode="Contains"
-                    Classes.HasValidationProblem="{Binding HasRequestRawContentTypeValidationProblem}"
+                    Classes.HasValidationProblem="{Binding HasRequestRawContentTypeValidationProblem, Mode=OneWay}"
                     IsVisible="{Binding RequestBodyModeSelectedIndex,
                                 Mode=OneWay,
                                 Converter={StaticResource reqBodyModeMatch},
@@ -300,7 +300,7 @@
                     Text="{Binding RequestFileContentType}"
                     ItemsSource="{Binding AllMimeTypes}"
                     FilterMode="Contains"
-                    Classes.HasValidationProblem="{Binding HasRequestFileContentTypeValidationProblem}"/>
+                    Classes.HasValidationProblem="{Binding HasRequestFileContentTypeValidationProblem, Mode=OneWay}"/>
                 <TextBox
                     Name="tbReqBodyFileSrcPath"
                     Watermark="{Binding i18n.HttpRequest.BodyFileSrcPathWatermark, Mode=OneWay}"
@@ -308,7 +308,7 @@
                     HorizontalContentAlignment="Left"
                     VerticalContentAlignment="Center"
                     Classes="SingleLine"
-                    Classes.HasValidationProblem="{Binding HasRequestBodyFileSrcPathValidationProblem}"
+                    Classes.HasValidationProblem="{Binding HasRequestBodyFileSrcPathValidationProblem, Mode=OneWay}"
                     Text="{Binding RequestBodyFileSrcPath}"/>
                 <Button
                     Name="btReqBodyFileSearch"

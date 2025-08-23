@@ -70,7 +70,7 @@
               ToolTip.Tip="{Binding ResolvedUrlToolTip}"
               Classes="SingleLine"
               PointerEntered="OnUrlPointerEnter"
-              Classes.HasValidationProblem="{Binding HasUrlValidationProblem}"/>
+              Classes.HasValidationProblem="{Binding HasUrlValidationProblem, Mode=OneWay}"/>
 
           <TextBlock
               Name="tbErrorMsg"
@@ -100,7 +100,7 @@
             VerticalAlignment="Stretch"
             SelectedIndex="{Binding HttpVersionSelectedIndex, Mode=TwoWay}"
             ItemsSource="{Binding HttpVersionSelectionOptions}"
-            Classes.HasValidationProblem="{Binding HasHttpVersionValidationProblem}"/>
+            Classes.HasValidationProblem="{Binding HasHttpVersionValidationProblem, Mode=OneWay}"/>
 
         <Button
             Name="btConnectDisconnectCancel"
@@ -114,8 +114,8 @@
             Click="ConnectDisconnectCancel"
             Content="{Binding ConnectDisconnectCancelButtonText}"
             ToolTip.Tip="{Binding ConnectDisconnectCancelButtonToolTip}"
-            Classes.Primary="{Binding !IsConnected}"
-            Classes.PrimaryInverted="{Binding IsConnected}"/>
+            Classes.Primary="{Binding !IsConnected, Mode=OneWay}"
+            Classes.PrimaryInverted="{Binding IsConnected, Mode=OneWay}"/>
 
       </Grid>
 
@@ -578,8 +578,8 @@
                 <TextBlock
                     HorizontalAlignment="Left"
                     Text="{Binding OriginDescription, Mode=OneWay}"
-                    Classes.WebSocketMessageFromServerPrimary="{Binding IsFromServer}"
-                    Classes.WebSocketMessageFromClientPrimary="{Binding IsFromClient}"
+                    Classes.WebSocketMessageFromServerPrimary="{Binding IsFromServer, Mode=OneWay}"
+                    Classes.WebSocketMessageFromClientPrimary="{Binding IsFromClient, Mode=OneWay}"
                     FontSize="14"
                     FontWeight="Regular"
                     TextAlignment="Left"
@@ -590,8 +590,8 @@
                     Margin="4,4,4,0"
                     MinWidth="160"
                     Text="{Binding MessageSizeDescription, Mode=OneWay}"
-                    Classes.WebSocketMessageFromServerSecondary="{Binding IsFromServer}"
-                    Classes.WebSocketMessageFromClientSecondary="{Binding IsFromClient}"
+                    Classes.WebSocketMessageFromServerSecondary="{Binding IsFromServer, Mode=OneWay}"
+                    Classes.WebSocketMessageFromClientSecondary="{Binding IsFromClient, Mode=OneWay}"
                     FontFamily="{StaticResource CodeFontFamily}"
                     FontSize="12"
                     FontWeight="Light"
@@ -602,8 +602,8 @@
                     HorizontalAlignment="Stretch"
                     Margin="4,4,4,2"
                     Text="{Binding InstantDescription, Mode=OneWay}"
-                    Classes.WebSocketMessageFromServerSecondary="{Binding IsFromServer}"
-                    Classes.WebSocketMessageFromClientSecondary="{Binding IsFromClient}"
+                    Classes.WebSocketMessageFromServerSecondary="{Binding IsFromServer, Mode=OneWay}"
+                    Classes.WebSocketMessageFromClientSecondary="{Binding IsFromClient, Mode=OneWay}"
                     FontSize="12"
                     FontWeight="Light"
                     TextAlignment="Left"

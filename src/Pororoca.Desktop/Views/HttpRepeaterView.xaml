@@ -67,7 +67,7 @@
               Height="40"
               HorizontalAlignment="Stretch"
               IsEnabled="{Binding !IsRepetitionRunning, Mode=OneWay}"
-              Classes.HasValidationProblem="{Binding HasBaseHttpRequestValidationProblem}"
+              Classes.HasValidationProblem="{Binding HasBaseHttpRequestValidationProblem, Mode=OneWay}"
               PlaceholderText="{Binding i18n.HttpRepeater.SelectBaseRequest, Mode=OneWay}"
               ItemsSource="{Binding CollectionHttpRequestsPaths}"
               SelectedItem="{Binding BaseRequestPath, Mode=TwoWay}"/>
@@ -136,8 +136,8 @@
             Click="StartOrStopRepetition"
             Content="{Binding StartOrStopRepetitionButtonText}"
             ToolTip.Tip="{Binding StartOrStopRepetitionButtonToolTip}"
-            Classes.Primary="{Binding !IsRepetitionRunning}"
-            Classes.PrimaryInverted="{Binding IsRepetitionRunning}"/>
+            Classes.Primary="{Binding !IsRepetitionRunning, Mode=OneWay}"
+            Classes.PrimaryInverted="{Binding IsRepetitionRunning, Mode=OneWay}"/>
 
       </Grid>
 
@@ -234,7 +234,7 @@
                     Minimum="1"
                     Value="{Binding NumberOfRepetitionsToExecute, Mode=TwoWay}"
                     IsEnabled="{Binding !IsRepetitionRunning, Mode=OneWay}"
-                    Classes.HasValidationProblem="{Binding HasNumberOfRepetitionsValidationProblem}"/>
+                    Classes.HasValidationProblem="{Binding HasNumberOfRepetitionsValidationProblem, Mode=OneWay}"/>
               </StackPanel>
 
               <StackPanel
@@ -259,7 +259,7 @@
                     Minimum="1"
                     Value="{Binding MaxDop, Mode=TwoWay}"
                     IsEnabled="{Binding !IsRepetitionRunning, Mode=OneWay}"
-                    Classes.HasValidationProblem="{Binding HasMaxDopValidationProblem}"/>
+                    Classes.HasValidationProblem="{Binding HasMaxDopValidationProblem, Mode=OneWay}"/>
               </StackPanel>
 
               <StackPanel Orientation="Horizontal">
@@ -284,7 +284,7 @@
                     Minimum="0"
                     Value="{Binding DelayInMs, Mode=TwoWay}"
                     IsEnabled="{Binding !IsRepetitionRunning, Mode=OneWay}"
-                    Classes.HasValidationProblem="{Binding HasDelayValidationProblem}"/>
+                    Classes.HasValidationProblem="{Binding HasDelayValidationProblem, Mode=OneWay}"/>
               </StackPanel>
 
               <StackPanel Orientation="Horizontal">
@@ -309,7 +309,7 @@
                   Minimum="0"
                   Value="{Binding MaximumRate, Mode=TwoWay}"
                   IsEnabled="{Binding !IsRepetitionRunning, Mode=OneWay}"
-                  Classes.HasValidationProblem="{Binding HasMaximumRateValidationProblem}"/>
+                  Classes.HasValidationProblem="{Binding HasMaximumRateValidationProblem, Mode=OneWay}"/>
               </StackPanel>
               
             </StackPanel>
@@ -384,7 +384,7 @@
                     HorizontalContentAlignment="Left"
                     VerticalContentAlignment="Center"
                     Classes="SingleLine"
-                    Classes.HasValidationProblem="{Binding HasInputDataFileSrcPathValidationProblem}"
+                    Classes.HasValidationProblem="{Binding HasInputDataFileSrcPathValidationProblem, Mode=OneWay}"
                     Text="{Binding InputDataFileSrcPath}"/>
                 <Button
                     Name="btRepetitionInputDataFileSearch"
@@ -457,7 +457,7 @@
                     Margin="4,6,4,0"
                     MinWidth="160"
                     Text="{Binding ErrorDescriptionOrStatusCode, Mode=OneWay}"
-                    Classes.RepetitionResultError="{Binding !Successful}"
+                    Classes.RepetitionResultError="{Binding !Successful, Mode=OneWay}"
                     FontFamily="{StaticResource CodeFontFamily}"
                     FontSize="12"
                     FontWeight="Light"
