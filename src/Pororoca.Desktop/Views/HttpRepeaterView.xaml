@@ -148,8 +148,8 @@
           Classes="Separator"
           IsIndeterminate="False"
           Minimum="0"
-          Maximum="{Binding NumberOfRepetitionsToExecute}"
-          Value="{Binding NumberOfRepetitionsExecuted}"
+          Maximum="{Binding NumberOfRepetitionsToExecute, Mode=OneWay}"
+          Value="{Binding NumberOfRepetitionsExecuted, Mode=OneWay}"
           VerticalAlignment="Stretch"
           HorizontalAlignment="Stretch"/>
     </StackPanel>

@@ -50,7 +50,7 @@
         <CheckBox
             Name="chkbDisableCompressionForThisMessage"
             Content="{Binding i18n.WebSocketClientMessage.DisableCompressionForThisMessage, Mode=OneWay}"
-            IsChecked="{Binding DisableCompressionForThisMessage, Mode=OneWay}"/>
+            IsChecked="{Binding DisableCompressionForThisMessage}"/>
 
         <TextBlock
             VerticalAlignment="Center"

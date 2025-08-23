@@ -372,7 +372,7 @@
                 <CheckBox
                     x:Name="cbWsConnReqCompressionEnable"
                     Content="{Binding i18n.WebSocketConnection.EnableCompression, Mode=OneWay}"
-                    IsChecked="{Binding EnableCompression, Mode=OneWay}"/>
+                    IsChecked="{Binding EnableCompression}"/>
 
                 <StackPanel
                     x:Name="spWsConnReqCompressionOptions"
@@ -380,7 +380,7 @@
                   <CheckBox
                       Margin="0,12,0,0"
                       Content="{Binding i18n.WebSocketConnection.CompressionClientContextTakeover, Mode=OneWay}"
-                      IsChecked="{Binding CompressionClientContextTakeoverEnabled, Mode=OneWay}"/>
+                      IsChecked="{Binding CompressionClientContextTakeoverEnabled}"/>
 
                   <StackPanel
                       Orientation="Horizontal"
@@ -404,7 +404,7 @@
                   <CheckBox
                       Margin="0,12,0,0"
                       Content="{Binding i18n.WebSocketConnection.CompressionServerContextTakeover, Mode=OneWay}"
-                      IsChecked="{Binding CompressionServerContextTakeoverEnabled, Mode=OneWay}"/>
+                      IsChecked="{Binding CompressionServerContextTakeoverEnabled}"/>
 
                   <StackPanel
                       Orientation="Horizontal"

@@ -85,7 +85,7 @@
     <CheckBox
       x:Name="cbIncludeSecretsWhenExporting"
       Content="{Binding i18n.ExportEnvironment.IncludeVariablesSecrets, Mode=OneWay}"
-      IsChecked="{Binding IncludeSecretVariables, Mode=OneWay}"/>
+      IsChecked="{Binding IncludeSecretVariables}"/>
 
     <StackPanel Orientation="Horizontal">
       <TextBlock
