@@ -23,7 +23,7 @@
     <controls:EditableTextBlock
         x:Name="etbName"
         HorizontalAlignment="Stretch"
-        DataContext="{Binding NameEditableVm}"/>
+        DataContext="{Binding NameEditableVm, Mode=OneWay}"/>
 
     <controls:IconButton
         x:Name="btAddFolder"

@@ -33,7 +33,7 @@
         Grid.Column="0"
         Grid.Row="0"
         HorizontalAlignment="Stretch"
-        DataContext="{Binding NameEditableVm}"/>
+        DataContext="{Binding NameEditableVm, Mode=OneWay}"/>
 
     <Grid
         Margin="4,40,4,0"

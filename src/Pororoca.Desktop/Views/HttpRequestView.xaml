@@ -45,7 +45,7 @@
           x:Name="etbName"
           Margin="24,0,24,0"
           HorizontalAlignment="Stretch"
-          DataContext="{Binding NameEditableVm}"/>
+          DataContext="{Binding NameEditableVm, Mode=OneWay}"/>
 
       <Grid
           ShowGridLines="False"
@@ -197,7 +197,7 @@
                   Grid.Column="0"
                   Grid.Row="1"
                   Margin="0,12,0,0"
-                  DataContext="{Binding RequestHeadersTableVm}"/>
+                  DataContext="{Binding RequestHeadersTableVm, Mode=OneWay}"/>
             </Grid>
           </TabItem>
           <!-- REQUEST BODY -->
@@ -614,7 +614,7 @@
             </TabItem.Header>
             <v:RequestAuthView
                 x:Name="reqAuthView"
-                DataContext="{Binding RequestAuthDataCtx}"/>
+                DataContext="{Binding RequestAuthDataCtx, Mode=OneWay}"/>
           </TabItem>
         </TabControl>
       </Grid>
@@ -655,7 +655,7 @@
             <controls:ResponseHeadersTableView
                 x:Name="rhtvResHeaders"
                 Margin="-12,12,-12,12"
-                DataContext="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm}"/>
+                DataContext="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm, Mode=OneWay}"/>
           </TabItem>
           <!-- RESPONSE BODY -->
           <TabItem Name="tabItemResBody">

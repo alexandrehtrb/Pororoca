@@ -58,7 +58,7 @@
         Grid.Column="0"
         Grid.Row="2"
         Margin="0,12,0,0"
-        DataContext="{Binding VariablesTableVm}"/>
+        DataContext="{Binding VariablesTableVm, Mode=OneWay}"/>
 
     <TextBlock
         Grid.Column="0"

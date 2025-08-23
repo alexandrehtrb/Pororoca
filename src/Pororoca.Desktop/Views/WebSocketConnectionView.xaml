@@ -45,7 +45,7 @@
           x:Name="etbName"
           Margin="24,0,24,0"
           HorizontalAlignment="Stretch"
-          DataContext="{Binding NameEditableVm}"/>
+          DataContext="{Binding NameEditableVm, Mode=OneWay}"/>
 
       <Grid
           ShowGridLines="False"
@@ -241,7 +241,7 @@
                     Grid.Column="0"
                     Grid.Row="1"
                     Margin="0,12,0,0"
-                    DataContext="{Binding RequestHeadersTableVm}"/>
+                    DataContext="{Binding RequestHeadersTableVm, Mode=OneWay}"/>
               </Grid>
               <!-- CONNECTION REQUEST SUBPROTOCOLS -->
               <Grid
@@ -436,7 +436,7 @@
                   Classes="TabItemHeader"
                   Text="{Binding i18n.WebSocketConnection.CustomAuth, Mode=OneWay}"/>
             </TabItem.Header>
-            <v:RequestAuthView DataContext="{Binding RequestAuthDataCtx}"/>
+            <v:RequestAuthView DataContext="{Binding RequestAuthDataCtx, Mode=OneWay}"/>
           </TabItem>
           <!-- CONNECTION RESPONSE -->
           <TabItem Name="tabItemConnectionResponse">
@@ -490,7 +490,7 @@
                     Grid.Column="0"
                     Grid.Row="1"
                     Margin="-12,12,-12,12"
-                    DataContext="{Binding ConnectionResponseHeadersTableVm}"/>
+                    DataContext="{Binding ConnectionResponseHeadersTableVm, Mode=OneWay}"/>
               </Grid>
             </Grid>
           </TabItem>

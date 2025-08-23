@@ -46,7 +46,7 @@
           x:Name="etbName"
           Margin="24,0,24,0"
           HorizontalAlignment="Stretch"
-          DataContext="{Binding NameEditableVm}"/>
+          DataContext="{Binding NameEditableVm, Mode=OneWay}"/>
 
       <Grid
           ShowGridLines="False"
@@ -546,7 +546,7 @@
             <controls:ResponseHeadersTableView
                 x:Name="rhtvResHeaders"
                 Margin="-12,12,-12,12"
-                DataContext="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm}"/>
+                DataContext="{Binding ResponseDataCtx.ResponseHeadersAndTrailersTableVm, Mode=OneWay}"/>
           </TabItem>
           <!-- RESPONSE BODY -->
           <TabItem Name="tabItemResBody">
