@@ -46,9 +46,12 @@ public static class PororocaHttpRequestTranslator
                 };
 
                 var resolvedNonContentHeaders = MakeNonContentHeaders(resolvedReq.CustomAuth, resolvedReq.Headers);
-                foreach (var header in resolvedNonContentHeaders)
+                if (resolvedNonContentHeaders != null)
                 {
-                    reqMsg.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                    foreach (var header in resolvedNonContentHeaders)
+                    {
+                        reqMsg.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                    }
                 }
 
                 IncludeAuthInOptions(resolvedReq.CustomAuth, reqMsg);
@@ -90,7 +93,7 @@ public static class PororocaHttpRequestTranslator
         {
             PororocaHttpRequestBodyMode.Raw => MakeRawContent(ReplaceTemplates(input.RawContent!), input.ContentType!),
             PororocaHttpRequestBodyMode.File => MakeFileContent(ReplaceTemplates(input.FileSrcPath!), input.ContentType!),
-            PororocaHttpRequestBodyMode.UrlEncoded => MakeUrlEncodedContent(ResolveKVParams(effectiveVars, input.UrlEncodedValues!)),
+            PororocaHttpRequestBodyMode.UrlEncoded => MakeUrlEncodedContent(ResolveKVParams(effectiveVars, input.UrlEncodedValues!)!),
             PororocaHttpRequestBodyMode.FormData => MakeFormDataContent(
                                 input.FormDataValues!
                                     .Where(x => x.Enabled)
@@ -116,7 +119,7 @@ public static class PororocaHttpRequestTranslator
 
     #region HTTP BODY
 
-    internal static HttpContent? MakeRequestContent(PororocaHttpRequestBody? resolvedBody, Dictionary<string, string> resolvedContentHeaders)
+    internal static HttpContent? MakeRequestContent(PororocaHttpRequestBody? resolvedBody, Dictionary<string, string>? resolvedContentHeaders)
     {
         // TODO: Fix bug that charset cannot be passed in contentType below
         StringContent MakeRawContent() =>
@@ -192,7 +195,7 @@ public static class PororocaHttpRequestTranslator
             _ => null
         };
 
-        if (content != null)
+        if (content != null && resolvedContentHeaders != null)
         {
             foreach (var header in resolvedContentHeaders)
             {

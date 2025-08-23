@@ -95,7 +95,7 @@ public static class PororocaRequestCommonTranslatorTests
     [Fact]
     public static void Should_resolve_null_key_value_params_correctly() =>
         // GIVEN, WHEN AND THEN
-        Assert.Equal([], ResolveKVParams([], null));
+        Assert.Null(ResolveKVParams([], null));
 
     [Fact]
     public static void Should_resolve_non_null_key_value_params_correctly()
@@ -254,6 +254,19 @@ public static class PororocaRequestCommonTranslatorTests
         Assert.False(IsContentHeader(headerName));
 
     [Fact]
+    public static void Should_make_empty_content_headers_correctly()
+    {
+        // GIVEN
+        PororocaKeyValueParam[] resolvedHeaders = [];
+
+        // WHEN
+        var contentHeaders = MakeContentHeaders(resolvedHeaders);
+
+        // THEN
+        Assert.Null(contentHeaders);
+    }
+
+    [Fact]
     public static void Should_make_content_headers_correctly()
     {
         // GIVEN
@@ -267,11 +280,24 @@ public static class PororocaRequestCommonTranslatorTests
         var contentHeaders = MakeContentHeaders(resolvedHeaders);
 
         // THEN
-        Assert.Equal(2, contentHeaders.Count);
+        Assert.Equal(2, contentHeaders!.Count);
         Assert.True(contentHeaders.ContainsKey("Content-Language"));
         Assert.Equal("pt-BR", contentHeaders["Content-Language"]);
         Assert.True(contentHeaders.ContainsKey("Expires"));
         Assert.Equal("2021-12-02", contentHeaders["Expires"]);
+    }
+
+    [Fact]
+    public static void Should_make_empty_non_content_headers_correctly()
+    {
+        // GIVEN
+        PororocaKeyValueParam[]? resolvedHeaders = null;
+
+        // WHEN
+        var nonContentHeaders = MakeNonContentHeaders(null, resolvedHeaders);
+
+        // THEN
+        Assert.Null(nonContentHeaders);
     }
 
     [Fact]
@@ -288,7 +314,7 @@ public static class PororocaRequestCommonTranslatorTests
         var contentHeaders = MakeNonContentHeaders(null, resolvedHeaders);
 
         // THEN
-        Assert.Equal(2, contentHeaders.Count);
+        Assert.Equal(2, contentHeaders!.Count);
         Assert.True(contentHeaders.ContainsKey("If-Modified-Since"));
         Assert.Equal("2021-10-03", contentHeaders["If-Modified-Since"]);
         Assert.True(contentHeaders.ContainsKey("Cookie"));
@@ -310,7 +336,7 @@ public static class PororocaRequestCommonTranslatorTests
         var contentHeaders = MakeNonContentHeaders(null, resolvedHeaders);
 
         // THEN
-        Assert.Equal(3, contentHeaders.Count);
+        Assert.Equal(3, contentHeaders!.Count);
         Assert.True(contentHeaders.ContainsKey("If-Modified-Since"));
         Assert.Equal("2021-10-03", contentHeaders["If-Modified-Since"]);
         Assert.True(contentHeaders.ContainsKey("Cookie"));
@@ -335,7 +361,7 @@ public static class PororocaRequestCommonTranslatorTests
         var contentHeaders = MakeNonContentHeaders(resolvedAuth, resolvedHeaders);
 
         // THEN
-        Assert.Equal(3, contentHeaders.Count);
+        Assert.Equal(3, contentHeaders!.Count);
         Assert.True(contentHeaders.ContainsKey("If-Modified-Since"));
         Assert.Equal("2021-10-03", contentHeaders["If-Modified-Since"]);
         Assert.True(contentHeaders.ContainsKey("Cookie"));
@@ -360,13 +386,31 @@ public static class PororocaRequestCommonTranslatorTests
         var contentHeaders = MakeNonContentHeaders(resolvedAuth, resolvedHeaders);
 
         // THEN
-        Assert.Equal(3, contentHeaders.Count);
+        Assert.Equal(3, contentHeaders!.Count);
         Assert.True(contentHeaders.ContainsKey("If-Modified-Since"));
         Assert.Equal("2021-10-03", contentHeaders["If-Modified-Since"]);
         Assert.True(contentHeaders.ContainsKey("Cookie"));
         Assert.Equal("cookie2", contentHeaders["Cookie"]);
         Assert.True(contentHeaders.ContainsKey("Authorization"));
         Assert.Equal("Bearer tkn", contentHeaders["Authorization"]);
+    }
+
+    [Fact]
+    public static void Should_make_non_content_headers_with_custom_auth_and_no_other_headers_correctly()
+    {
+        // GIVEN
+        PororocaKeyValueParam[]? resolvedHeaders = null;
+
+        var resolvedAuth = PororocaRequestAuth.MakeBearerAuth("tkn");
+
+        // WHEN
+        var nonContentHeaders = MakeNonContentHeaders(resolvedAuth, resolvedHeaders);
+
+        // THEN
+        Assert.NotNull(nonContentHeaders);
+        var authHeader = Assert.Single(nonContentHeaders);
+        Assert.Equal("Authorization", authHeader.Key);
+        Assert.Equal("Bearer tkn", authHeader.Value);
     }
 
     #endregion

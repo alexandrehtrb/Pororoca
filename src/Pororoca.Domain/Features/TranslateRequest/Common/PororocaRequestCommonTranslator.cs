@@ -21,7 +21,7 @@ internal static class PororocaRequestCommonTranslator
 
     #region RESOLVE KEY VALUE PARAMS
 
-    internal static List<PororocaKeyValueParam> ResolveRequestHeaders(IEnumerable<PororocaVariable> effectiveVars, List<PororocaKeyValueParam>? colScopedReqHeaders, List<PororocaKeyValueParam>? reqHeaders)
+    internal static List<PororocaKeyValueParam>? ResolveRequestHeaders(IEnumerable<PororocaVariable> effectiveVars, List<PororocaKeyValueParam>? colScopedReqHeaders, List<PororocaKeyValueParam>? reqHeaders)
     {
         // request specific headers override collection-scoped request headers
         if (colScopedReqHeaders is null)
@@ -40,13 +40,13 @@ internal static class PororocaRequestCommonTranslator
         }
     }
 
-    internal static List<PororocaKeyValueParam> ResolveKVParams(IEnumerable<PororocaVariable> effectiveVars, IEnumerable<PororocaKeyValueParam>? unresolvedParams) =>
+    internal static List<PororocaKeyValueParam>? ResolveKVParams(IEnumerable<PororocaVariable> effectiveVars, IEnumerable<PororocaKeyValueParam>? unresolvedParams) =>
         unresolvedParams?
            .Where(h => h.Enabled)
            .Select(x => new PororocaKeyValueParam(
                 true,
                 IPororocaVariableResolver.ReplaceTemplates(x.Key, effectiveVars),
-                IPororocaVariableResolver.ReplaceTemplates(x.Value, effectiveVars))).ToList() ?? [];
+                IPororocaVariableResolver.ReplaceTemplates(x.Value, effectiveVars))).ToList();
 
     #endregion
 
@@ -87,16 +87,18 @@ internal static class PororocaRequestCommonTranslator
      || headerName == "Expires"
      || headerName == "Last-Modified";
 
-    internal static Dictionary<string, string> MakeContentHeaders(IReadOnlyList<PororocaKeyValueParam>? resolvedHeaders) =>
+    internal static Dictionary<string, string>? MakeContentHeaders(IReadOnlyList<PororocaKeyValueParam>? resolvedHeaders) =>
         MakeHeaders(resolvedHeaders, IsContentHeader);
 
-    internal static Dictionary<string, string> MakeNonContentHeaders(PororocaRequestAuth? resolvedAuth, IReadOnlyList<PororocaKeyValueParam>? resolvedHeaders)
+    internal static Dictionary<string, string>? MakeNonContentHeaders(PororocaRequestAuth? resolvedAuth, IReadOnlyList<PororocaKeyValueParam>? resolvedHeaders)
     {
         var nonContentHeaders = MakeHeaders(resolvedHeaders, headerName => !IsContentHeader(headerName));
 
         string? customAuthHeaderValue = MakeCustomAuthHeaderValue(resolvedAuth);
         if (customAuthHeaderValue != null)
         {
+            nonContentHeaders ??= new(1);
+
             // Custom auth overrides declared authorization header
             nonContentHeaders["Authorization"] = customAuthHeaderValue;
         }
@@ -104,9 +106,9 @@ internal static class PororocaRequestCommonTranslator
         return nonContentHeaders;
     }
 
-    private static Dictionary<string, string> MakeHeaders(IReadOnlyList<PororocaKeyValueParam>? resolvedHeaders, Func<string, bool> headerNameCriteria) =>
-        resolvedHeaders == null ?
-        new() :
+    private static Dictionary<string, string>? MakeHeaders(IReadOnlyList<PororocaKeyValueParam>? resolvedHeaders, Func<string, bool> headerNameCriteria) =>
+        resolvedHeaders == null || resolvedHeaders.Count == 0 ?
+        null :
         resolvedHeaders!
            .Where(h => h.Key != "Content-Type" && headerNameCriteria(h.Key)) // Content-Type header is set by the content, later
            .ToDictionary(h => h.Key, h => h.Value!);

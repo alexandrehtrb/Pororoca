@@ -74,11 +74,11 @@ public static class PororocaWebSocketConnectionTranslator
 
     #region RESOLUTION / REPLACE VARIABLE TEMPLATES
 
-    private static PororocaKeyValueParam[] ResolveSubprotocols(IEnumerable<PororocaVariable> effectiveVars, PororocaWebSocketConnection wsConn) =>
+    private static PororocaKeyValueParam[]? ResolveSubprotocols(IEnumerable<PororocaVariable> effectiveVars, PororocaWebSocketConnection wsConn) =>
         wsConn.Subprotocols?
               .Where(x => x.Enabled)
               .Select(x => new PororocaKeyValueParam(true, IPororocaVariableResolver.ReplaceTemplates(x.Key, effectiveVars), null))
-              .ToArray() ?? Array.Empty<PororocaKeyValueParam>();
+              .ToArray();
 
     #endregion
 
@@ -88,21 +88,27 @@ public static class PororocaWebSocketConnectionTranslator
         wsCli.Options.HttpVersion = MakeHttpVersion(wsConn.HttpVersion);
     }
 
-    private static void SetConnectionRequestHeaders(PororocaRequestAuth? resolvedAuth, List<PororocaKeyValueParam> resolvedHeaders, ClientWebSocket wsCli)
+    private static void SetConnectionRequestHeaders(PororocaRequestAuth? resolvedAuth, List<PororocaKeyValueParam>? resolvedHeaders, ClientWebSocket wsCli)
     {
         var resolvedNonContentHeaders = MakeNonContentHeaders(resolvedAuth, resolvedHeaders);
-        foreach (var header in resolvedNonContentHeaders)
+        if (resolvedNonContentHeaders != null)
         {
-            wsCli.Options.SetRequestHeader(header.Key, header.Value);
+            foreach (var header in resolvedNonContentHeaders)
+            {
+                wsCli.Options.SetRequestHeader(header.Key, header.Value);
+            }
         }
     }
 
-    private static void SetSubprotocols(PororocaKeyValueParam[] resolvedSubprotocols, ClientWebSocket wsCli)
+    private static void SetSubprotocols(PororocaKeyValueParam[]? resolvedSubprotocols, ClientWebSocket wsCli)
     {
-        var subprotocols = resolvedSubprotocols.Select(kv => kv.Key);
-        foreach (string subprotocol in subprotocols)
+        var subprotocols = resolvedSubprotocols?.Select(kv => kv.Key);
+        if (subprotocols != null)
         {
-            wsCli.Options.AddSubProtocol(subprotocol);
+            foreach (string subprotocol in subprotocols)
+            {
+                wsCli.Options.AddSubProtocol(subprotocol);
+            }
         }
     }
 
