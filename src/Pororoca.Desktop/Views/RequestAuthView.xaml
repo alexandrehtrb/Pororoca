@@ -144,7 +144,7 @@
       <CheckBox
           Name="chkbWindowsAuthUseCurrentUser"
           Content="{Binding i18n.RequestAuth.AuthModeWindowsUseCurrentUser, Mode=OneWay}"
-          IsChecked="{Binding WindowsAuthUseCurrentUser}"/>
+          IsChecked="{Binding WindowsAuthUseCurrentUser, Mode=OneWay}"/>
       <TextBox
           Name="tbWindowsAuthLogin"
           Width="200"
