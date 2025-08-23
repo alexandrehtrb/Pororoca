@@ -87,7 +87,7 @@
                 Command="{Binding SwitchToLightThemeCmd, Mode=OneWay}">
               <MenuItem.Icon>
                 <Image
-                    IsVisible="{Binding IsThemeLight}"
+                    IsVisible="{Binding IsThemeLight, Mode=OneWay}"
                     Classes="MenuItemCheckMark">
                   <Image.Source>
                     <DrawingImage Drawing="{StaticResource IconCheck}"/>
@@ -101,7 +101,7 @@
                 Command="{Binding SwitchToLight2ThemeCmd, Mode=OneWay}">
               <MenuItem.Icon>
                 <Image
-                    IsVisible="{Binding IsThemeLight2}"
+                    IsVisible="{Binding IsThemeLight2, Mode=OneWay}"
                     Classes="MenuItemCheckMark">
                   <Image.Source>
                     <DrawingImage Drawing="{StaticResource IconCheck}"/>
@@ -115,7 +115,7 @@
                 Command="{Binding SwitchToDarkThemeCmd, Mode=OneWay}">
               <MenuItem.Icon>
                 <Image
-                    IsVisible="{Binding IsThemeDark}"
+                    IsVisible="{Binding IsThemeDark, Mode=OneWay}"
                     Classes="MenuItemCheckMark">
                   <Image.Source>
                     <DrawingImage Drawing="{StaticResource IconCheck}"/>
@@ -129,7 +129,7 @@
                 Command="{Binding SwitchToPampaThemeCmd, Mode=OneWay}">
               <MenuItem.Icon>
                 <Image
-                    IsVisible="{Binding IsThemePampa}"
+                    IsVisible="{Binding IsThemePampa, Mode=OneWay}"
                     Classes="MenuItemCheckMark">
                   <Image.Source>
                     <DrawingImage Drawing="{StaticResource IconCheck}"/>
@@ -143,7 +143,7 @@
                 Command="{Binding SwitchToAmazonianNightThemeCmd, Mode=OneWay}">
               <MenuItem.Icon>
                 <Image
-                    IsVisible="{Binding IsThemeAmazonianNight}"
+                    IsVisible="{Binding IsThemeAmazonianNight, Mode=OneWay}"
                     Classes="MenuItemCheckMark">
                   <Image.Source>
                     <DrawingImage Drawing="{StaticResource IconCheck}"/>
@@ -161,7 +161,7 @@
                 Command="{Binding SelectLanguagePortuguesCmd, Mode=OneWay}">
               <MenuItem.Icon>
                 <Image
-                    IsVisible="{Binding IsLanguagePortuguese}"
+                    IsVisible="{Binding IsLanguagePortuguese, Mode=OneWay}"
                     Classes="MenuItemCheckMark">
                   <Image.Source>
                     <DrawingImage Drawing="{StaticResource IconCheck}"/>
@@ -175,7 +175,7 @@
                 Command="{Binding SelectLanguageEnglishCmd, Mode=OneWay}">
               <MenuItem.Icon>
                 <Image
-                    IsVisible="{Binding IsLanguageEnglish}"
+                    IsVisible="{Binding IsLanguageEnglish, Mode=OneWay}"
                     Classes="MenuItemCheckMark">
                   <Image.Source>
                     <DrawingImage Drawing="{StaticResource IconCheck}"/>
@@ -189,7 +189,7 @@
                 Command="{Binding SelectLanguageRussianCmd, Mode=OneWay}">
               <MenuItem.Icon>
                 <Image
-                    IsVisible="{Binding IsLanguageRussian}"
+                    IsVisible="{Binding IsLanguageRussian, Mode=OneWay}"
                     Classes="MenuItemCheckMark">
                   <Image.Source>
                     <DrawingImage Drawing="{StaticResource IconCheck}"/>
@@ -203,7 +203,7 @@
                 Command="{Binding SelectLanguageItalianCmd, Mode=OneWay}">
               <MenuItem.Icon>
                 <Image
-                    IsVisible="{Binding IsLanguageItalian}"
+                    IsVisible="{Binding IsLanguageItalian, Mode=OneWay}"
                     Classes="MenuItemCheckMark">
                   <Image.Source>
                     <DrawingImage Drawing="{StaticResource IconCheck}"/>
@@ -217,7 +217,7 @@
                 Command="{Binding SelectLanguageSimplifiedChineseCmd, Mode=OneWay}">
               <MenuItem.Icon>
                 <Image
-                    IsVisible="{Binding IsLanguageSimplifiedChinese}"
+                    IsVisible="{Binding IsLanguageSimplifiedChinese, Mode=OneWay}"
                     Classes="MenuItemCheckMark">
                   <Image.Source>
                     <DrawingImage Drawing="{StaticResource IconCheck}"/>
@@ -231,7 +231,7 @@
                 Command="{Binding SelectLanguageGermanCmd, Mode=OneWay}">
               <MenuItem.Icon>
                 <Image
-                    IsVisible="{Binding IsLanguageGerman}"
+                    IsVisible="{Binding IsLanguageGerman, Mode=OneWay}"
                     Classes="MenuItemCheckMark">
                   <Image.Source>
                     <DrawingImage Drawing="{StaticResource IconCheck}"/>
@@ -245,7 +245,7 @@
                 Command="{Binding SelectLanguageSpanishCmd, Mode=OneWay}">
               <MenuItem.Icon>
                 <Image
-                    IsVisible="{Binding IsLanguageSpanish}"
+                    IsVisible="{Binding IsLanguageSpanish, Mode=OneWay}"
                     Classes="MenuItemCheckMark">
                   <Image.Source>
                     <DrawingImage Drawing="{StaticResource IconCheck}"/>
@@ -260,7 +260,7 @@
               Command="{Binding ToggleSSLVerificationCmd, Mode=OneWay}">
             <MenuItem.Icon>
               <Image
-                  IsVisible="{Binding !IsSslVerificationDisabled}"
+                  IsVisible="{Binding !IsSslVerificationDisabled, Mode=OneWay}"
                   Classes="MenuItemCheckMark">
                 <Image.Source>
                   <DrawingImage Drawing="{StaticResource IconCheck}"/>
@@ -274,7 +274,7 @@
             Command="{Binding ToggleAutoCheckForUpdatesCmd, Mode=OneWay}">
             <MenuItem.Icon>
               <Image
-                IsVisible="{Binding AutoCheckForUpdatesEnabled}"
+                IsVisible="{Binding AutoCheckForUpdatesEnabled, Mode=OneWay}"
                 Classes="MenuItemCheckMark">
                 <Image.Source>
                   <DrawingImage Drawing="{StaticResource IconCheck}"/>
@@ -298,13 +298,13 @@
             IsEnabled="False"/>
           <MenuItem
             Header="{Binding i18n.TopMenuHelp.RunUITests, Mode=OneWay}"
-            IsVisible="{Binding IsRunUITestsVisible}"
+            IsVisible="{Binding IsRunUITestsVisible, Mode=OneWay}"
             Command="{Binding RunUITestsCmd, Mode=OneWay}"/>
         </MenuItem>
         <MenuItem
             Header="{Binding i18n.TopMenu.Saved, Mode=OneWay}"
             HorizontalAlignment="Right"
-            IsVisible="{Binding IsSavedLabelVisible}"/>
+            IsVisible="{Binding IsSavedLabelVisible, Mode=OneWay}"/>
         <!--MenuItem
         Header="{Binding i18n.TopMenu.Contribute, Mode=OneWay}"/-->
       </Menu>

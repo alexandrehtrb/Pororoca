@@ -154,7 +154,7 @@
           Watermark="{Binding i18n.RequestAuth.AuthModeWindowsLoginWatermark, Mode=OneWay}"
           Classes="SingleLine"
           Classes.HasValidationProblem="{Binding HasWindowsAuthLoginProblem}"
-          IsVisible="{Binding !WindowsAuthUseCurrentUser}"
+          IsVisible="{Binding !WindowsAuthUseCurrentUser, Mode=OneWay}"
           Text="{Binding WindowsAuthLogin}"/>
       <TextBox
           Name="tbWindowsAuthPassword"
@@ -165,7 +165,7 @@
           Watermark="{Binding i18n.RequestAuth.AuthModeWindowsPasswordWatermark, Mode=OneWay}"
           Classes="SingleLine"
           Classes.HasValidationProblem="{Binding HasWindowsAuthPasswordProblem}"
-          IsVisible="{Binding !WindowsAuthUseCurrentUser}"
+          IsVisible="{Binding !WindowsAuthUseCurrentUser, Mode=OneWay}"
           Text="{Binding WindowsAuthPassword}"/>
       <TextBox
           Name="tbWindowsAuthDomain"
@@ -176,7 +176,7 @@
           Watermark="{Binding i18n.RequestAuth.AuthModeWindowsDomainWatermark, Mode=OneWay}"
           Classes="SingleLine"
           Classes.HasValidationProblem="{Binding HasWindowsAuthDomainProblem}"
-          IsVisible="{Binding !WindowsAuthUseCurrentUser}"
+          IsVisible="{Binding !WindowsAuthUseCurrentUser, Mode=OneWay}"
           Text="{Binding WindowsAuthDomain}"/>
     </StackPanel>
     <!-- CLIENT CERTIFICATE AUTH -->

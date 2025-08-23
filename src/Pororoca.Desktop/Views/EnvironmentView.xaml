@@ -36,13 +36,13 @@
       <Button
           Name="btSetAsCurrentEnvironment"
           Content="{Binding i18n.Environment.SetAsCurrentEnvironment, Mode=OneWay}"
-          IsVisible="{Binding !IsCurrentEnvironment}"
+          IsVisible="{Binding !IsCurrentEnvironment, Mode=OneWay}"
           Command="{Binding ToggleEnabledEnvironmentCmd, Mode=OneWay}"
           Classes="Secondary TextButton"/>
       <Button
           Name="btUnsetAsCurrentEnvironment"
           Content="{Binding i18n.Environment.UnsetAsCurrentEnvironment, Mode=OneWay}"
-          IsVisible="{Binding IsCurrentEnvironment}"
+          IsVisible="{Binding IsCurrentEnvironment, Mode=OneWay}"
           Command="{Binding ToggleEnabledEnvironmentCmd, Mode=OneWay}"
           Classes="Secondary TextButton"/>
       <controls:IconButton

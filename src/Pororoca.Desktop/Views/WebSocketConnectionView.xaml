@@ -77,7 +77,7 @@
               Margin="12,6,12,0"
               Classes="ErrorMessage"
               Text="{Binding InvalidConnectionError}"
-              IsVisible="{Binding IsInvalidConnectionErrorVisible}"/>
+              IsVisible="{Binding IsInvalidConnectionErrorVisible, Mode=OneWay}"/>
 
           <TextBlock
               Name="tbIsWsConnected"
@@ -85,7 +85,7 @@
               FontSize="14"
               Foreground="{DynamicResource WebSocketConnectedBrush}"
               Text="{Binding i18n.WebSocketConnection.Connected, Mode=OneWay}"
-              IsVisible="{Binding IsConnected}"/>
+              IsVisible="{Binding IsConnected, Mode=OneWay}"/>
 
         </StackPanel>
 
@@ -129,7 +129,7 @@
             IsIndeterminate="True"
             VerticalAlignment="Stretch"
             HorizontalAlignment="Stretch"
-            IsVisible="{Binding IsConnectingOrDisconnecting}"/>
+            IsVisible="{Binding IsConnectingOrDisconnecting, Mode=OneWay}"/>
       </Grid>
 
       <Separator
@@ -376,7 +376,7 @@
 
                 <StackPanel
                     x:Name="spWsConnReqCompressionOptions"
-                    IsVisible="{Binding EnableCompression}">
+                    IsVisible="{Binding EnableCompression, Mode=OneWay}">
                   <CheckBox
                       Margin="0,12,0,0"
                       Content="{Binding i18n.WebSocketConnection.CompressionClientContextTakeover, Mode=OneWay}"
@@ -448,7 +448,7 @@
             <Grid>
               <Grid
                   RowDefinitions="*, Auto"
-                  IsVisible="{Binding !WasConnectionSuccessful}">
+                  IsVisible="{Binding !WasConnectionSuccessful, Mode=OneWay}">
                 <!-- AcceptsReturn="True" allows for horizontal scrollbar -->
                 <TextBox
                     Name="tbConnectionException"
@@ -467,13 +467,13 @@
                     Grid.Row="1"
                     Content="{Binding i18n.HttpResponse.DisableTlsVerification, Mode=OneWay}"
                     Margin="0,0,0,12"
-                    IsVisible="{Binding IsDisableTlsVerificationVisible}"
+                    IsVisible="{Binding IsDisableTlsVerificationVisible, Mode=OneWay}"
                     Command="{Binding DisableTlsVerificationCmd, Mode=OneWay}"
                     Classes="Primary"/>
               </Grid>
               <Grid
                   RowDefinitions="Auto, *"
-                  IsVisible="{Binding WasConnectionSuccessful}">
+                  IsVisible="{Binding WasConnectionSuccessful, Mode=OneWay}">
                 <TextBlock
                     Name="tbWebsocketResStatusCodeAndTime"
                     Grid.Column="0"
@@ -528,7 +528,7 @@
             Width="36"
             Margin="12,0,0,0"
             Command="{Binding SaveAllExchangedMessagesToFilesCmd, Mode=OneWay}"
-            IsVisible="{Binding IsSaveAllExchangedMessagesToFilesVisible}"
+            IsVisible="{Binding IsSaveAllExchangedMessagesToFilesVisible, Mode=OneWay}"
             ToolTip.Tip="{Binding i18n.WebSocketExchangedMessages.SaveAllToFiles, Mode=OneWay}"
             HorizontalContentAlignment="Center"
             VerticalContentAlignment="Center"
@@ -682,14 +682,14 @@
               IsIndeterminate="True"
               Margin="0,12,0,0"
               HorizontalAlignment="Stretch"
-              IsVisible="{Binding IsSendingAMessage}"/>
+              IsVisible="{Binding IsSendingAMessage, Mode=OneWay}"/>
 
           <TextBlock
               Name="tbMessageToSendError"
               Margin="12,6,12,0"
               Classes="ErrorMessage"
               Text="{Binding InvalidClientMessageError}"
-              IsVisible="{Binding IsInvalidClientMessageErrorVisible}"/>
+              IsVisible="{Binding IsInvalidClientMessageErrorVisible, Mode=OneWay}"/>
         </StackPanel>
       </Grid>
       <Rectangle
@@ -741,7 +741,7 @@
             ToolTip.Tip="{Binding i18n.WebSocketExchangedMessageDetail.SaveToFileToolTip, Mode=OneWay}"
             ToolTip.Placement="Top"
             Margin="12,0,12,24"
-            IsVisible="{Binding IsSaveSelectedExchangedMessageToFileVisible}"
+            IsVisible="{Binding IsSaveSelectedExchangedMessageToFileVisible, Mode=OneWay}"
             Command="{Binding SaveSelectedExchangedMessageToFileCmd, Mode=OneWay}"
             Classes="Secondary"/>
       </Grid>

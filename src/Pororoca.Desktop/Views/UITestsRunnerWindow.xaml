@@ -44,7 +44,7 @@
         FontSize="14"
         Foreground="{DynamicResource WebSocketConnectedBrush}"
         Text="{Binding i18n.UITestsPrepare.TestFilesFolderNotFound, Mode=OneWay}"
-        IsVisible="{Binding !TestFilesFolderFound}"/>
+        IsVisible="{Binding !TestFilesFolderFound, Mode=OneWay}"/>
       
     </StackPanel>
 

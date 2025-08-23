@@ -77,7 +77,7 @@
               Margin="12,8,12,0"
               Classes="ErrorMessage"
               Text="{Binding InvalidRepetitionError}"
-              IsVisible="{Binding IsInvalidRepetitionErrorVisible}"/>
+              IsVisible="{Binding IsInvalidRepetitionErrorVisible, Mode=OneWay}"/>
 
           <StackPanel Orientation="Horizontal" Margin="12,8,12,0">
             
@@ -86,12 +86,12 @@
                 Classes="TipText"
                 FontSize="14"
                 Text="{Binding RepetitionStatusText}"
-                IsVisible="{Binding !IsInvalidRepetitionErrorVisible}"/>
+                IsVisible="{Binding !IsInvalidRepetitionErrorVisible, Mode=OneWay}"/>
 
             <TextBlock
                 Margin="4,0,0,0"
                 ToolTip.Tip="{Binding i18n.HttpRepeater.RepetitionSuccessTip, Mode=OneWay}"
-                IsVisible="{Binding ShowRepetitionSuccessfulTip}"
+                IsVisible="{Binding ShowRepetitionSuccessfulTip, Mode=OneWay}"
                 Classes="TipQuestionMark"/>
 
           </StackPanel>
@@ -476,7 +476,7 @@
             Margin="0,12,0,0"
             HorizontalContentAlignment="Center"
             VerticalContentAlignment="Center"
-            IsVisible="{Binding HasFinishedRepetition}"
+            IsVisible="{Binding HasFinishedRepetition, Mode=OneWay}"
             Command="{Binding ExportReportCmd, Mode=OneWay}"
             Content="{Binding i18n.HttpRepeater.ExportReport, Mode=OneWay}"
             Classes="Secondary"/>
@@ -486,7 +486,7 @@
             Orientation="Horizontal"
             Grid.Column="0"
             Grid.Row="3"
-            IsVisible="{Binding HasFinishedRepetition}">
+            IsVisible="{Binding HasFinishedRepetition, Mode=OneWay}">
 
           <Button
               Name="btSaveAllResponses"
@@ -581,7 +581,7 @@
                     ToolTip.Tip="{Binding i18n.HttpResponse.BodySaveToFileToolTip, Mode=OneWay}"
                     ToolTip.Placement="Top"
                     Margin="0,0,6,12"
-                    IsVisible="{Binding ResponseDataCtx.IsSaveResponseBodyToFileVisible}"
+                    IsVisible="{Binding ResponseDataCtx.IsSaveResponseBodyToFileVisible, Mode=OneWay}"
                     Command="{Binding ResponseDataCtx.SaveResponseBodyToFileCmd, Mode=OneWay}"
                     Classes="Secondary"/>
                 <Button
@@ -590,14 +590,14 @@
                     ToolTip.Tip="{Binding i18n.HttpResponse.ExportLogToolTip, Mode=OneWay}"
                     ToolTip.Placement="Top"
                     Margin="6,0,6,12"
-                    IsVisible="{Binding ResponseDataCtx.IsExportLogFileVisible}"
+                    IsVisible="{Binding ResponseDataCtx.IsExportLogFileVisible, Mode=OneWay}"
                     Command="{Binding ResponseDataCtx.ExportLogFileCmd, Mode=OneWay}"
                     Classes="Secondary"/>
                 <Button
                     Name="btResDisableTlsVerification"
                     Content="{Binding i18n.HttpResponse.DisableTlsVerification, Mode=OneWay}"
                     Margin="6,0,0,12"
-                    IsVisible="{Binding ResponseDataCtx.IsDisableTlsVerificationVisible}"
+                    IsVisible="{Binding ResponseDataCtx.IsDisableTlsVerificationVisible, Mode=OneWay}"
                     Command="{Binding ResponseDataCtx.DisableTlsVerificationCmd, Mode=OneWay}"
                     Classes="Primary"/>
               </StackPanel>

@@ -89,7 +89,7 @@
               Margin="12,6,12,0"
               Classes="ErrorMessage"
               Text="{Binding InvalidRequestMessage}"
-              IsVisible="{Binding IsInvalidRequestMessageVisible}"/>
+              IsVisible="{Binding IsInvalidRequestMessageVisible, Mode=OneWay}"/>
 
         </StackPanel>
 
@@ -690,7 +690,7 @@
                     ToolTip.Tip="{Binding i18n.HttpResponse.BodySaveToFileToolTip, Mode=OneWay}"
                     ToolTip.Placement="Top"
                     Margin="0,0,6,12"
-                    IsVisible="{Binding ResponseDataCtx.IsSaveResponseBodyToFileVisible}"
+                    IsVisible="{Binding ResponseDataCtx.IsSaveResponseBodyToFileVisible, Mode=OneWay}"
                     Command="{Binding ResponseDataCtx.SaveResponseBodyToFileCmd, Mode=OneWay}"
                     Classes="Secondary"/>
                 <Button
@@ -699,14 +699,14 @@
                     ToolTip.Tip="{Binding i18n.HttpResponse.ExportLogToolTip, Mode=OneWay}"
                     ToolTip.Placement="Top"
                     Margin="6,0,6,12"
-                    IsVisible="{Binding ResponseDataCtx.IsExportLogFileVisible}"
+                    IsVisible="{Binding ResponseDataCtx.IsExportLogFileVisible, Mode=OneWay}"
                     Command="{Binding ResponseDataCtx.ExportLogFileCmd, Mode=OneWay}"
                     Classes="Secondary"/>
                 <Button
                     Name="btResDisableTlsVerification"
                     Content="{Binding i18n.HttpResponse.DisableTlsVerification, Mode=OneWay}"
                     Margin="6,0,0,12"
-                    IsVisible="{Binding ResponseDataCtx.IsDisableTlsVerificationVisible}"
+                    IsVisible="{Binding ResponseDataCtx.IsDisableTlsVerificationVisible, Mode=OneWay}"
                     Command="{Binding ResponseDataCtx.DisableTlsVerificationCmd, Mode=OneWay}"
                     Classes="Primary"/>
               </StackPanel>
@@ -864,7 +864,7 @@
             IsIndeterminate="True"
             Margin="12,0,12,24"
             HorizontalAlignment="Stretch"
-            IsVisible="{Binding IsSendRequestProgressBarVisible}"/>
+            IsVisible="{Binding IsSendRequestProgressBarVisible, Mode=OneWay}"/>
       </Grid>
     </Grid>
   </Grid>
