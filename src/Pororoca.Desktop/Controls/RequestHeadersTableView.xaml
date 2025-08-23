@@ -65,7 +65,7 @@
         <DataGridTemplateColumn.CellTemplate>
           <DataTemplate>
             <TextBlock
-                Text="{Binding Key}"
+                Text="{Binding Key, Mode=OneWay}"
                 VerticalAlignment="Center"
                 Padding="12,0,12,0"/>
           </DataTemplate>

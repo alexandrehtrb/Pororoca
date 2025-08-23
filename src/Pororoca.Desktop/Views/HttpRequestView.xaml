@@ -636,7 +636,7 @@
             Grid.Row="0"
             Margin="12,28,12,0"
             Classes="SectionTitle"
-            Text="{Binding ResponseDataCtx.ResponseStatusCodeElapsedTimeTitle}"/>
+            Text="{Binding ResponseDataCtx.ResponseStatusCodeElapsedTimeTitle, Mode=OneWay}"/>
         <TabControl
             Name="tabControlRes"
             Grid.Column="0"

@@ -76,7 +76,7 @@
               Name="tbErrorMsg"
               Margin="12,8,12,0"
               Classes="ErrorMessage"
-              Text="{Binding InvalidRepetitionError}"
+              Text="{Binding InvalidRepetitionError, Mode=OneWay}"
               IsVisible="{Binding IsInvalidRepetitionErrorVisible, Mode=OneWay}"/>
 
           <StackPanel Orientation="Horizontal" Margin="12,8,12,0">
@@ -85,7 +85,7 @@
                 Name="tbRepetitionStatus"                
                 Classes="TipText"
                 FontSize="14"
-                Text="{Binding RepetitionStatusText}"
+                Text="{Binding RepetitionStatusText, Mode=OneWay}"
                 IsVisible="{Binding !IsInvalidRepetitionErrorVisible, Mode=OneWay}"/>
 
             <TextBlock
@@ -446,7 +446,7 @@
                   Height="40">
                 <TextBlock
                     HorizontalAlignment="Left"
-                    Text="{Binding IterationNumber, StringFormat='i = {0}'}"
+                    Text="{Binding IterationNumber, Mode=OneWay, StringFormat='i = {0}'}"
                     FontSize="14"
                     FontWeight="Regular"
                     TextAlignment="Left"
@@ -456,7 +456,7 @@
                     HorizontalAlignment="Left"
                     Margin="4,6,4,0"
                     MinWidth="160"
-                    Text="{Binding ErrorDescriptionOrStatusCode}"
+                    Text="{Binding ErrorDescriptionOrStatusCode, Mode=OneWay}"
                     Classes.RepetitionResultError="{Binding !Successful}"
                     FontFamily="{StaticResource CodeFontFamily}"
                     FontSize="12"
@@ -526,7 +526,7 @@
             Grid.Row="0"
             Margin="12,28,12,0"
             Classes="SectionTitle"
-            Text="{Binding ResponseDataCtx.ResponseStatusCodeElapsedTimeTitle}"/>
+            Text="{Binding ResponseDataCtx.ResponseStatusCodeElapsedTimeTitle, Mode=OneWay}"/>
 
         <TabControl
             Name="tabControlRes"

@@ -49,7 +49,7 @@
         </Image>
         <TextBlock
             x:Name="tbText"
-            Text="{Binding Txt}"
+            Text="{Binding Txt, Mode=OneWay}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
             Classes="PageTitle"/>

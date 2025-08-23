@@ -76,7 +76,7 @@
               Name="tbErrorMsg"
               Margin="12,6,12,0"
               Classes="ErrorMessage"
-              Text="{Binding InvalidConnectionError}"
+              Text="{Binding InvalidConnectionError, Mode=OneWay}"
               IsVisible="{Binding IsInvalidConnectionErrorVisible, Mode=OneWay}"/>
 
           <TextBlock
@@ -484,7 +484,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     TextWrapping="Wrap"
-                    Text="{Binding ResponseStatusCodeElapsedTimeTitle}"/>
+                    Text="{Binding ResponseStatusCodeElapsedTimeTitle, Mode=OneWay}"/>
                 <controls:ResponseHeadersTableView
                     x:Name="rhtvWebsocketResHeaders"
                     Grid.Column="0"
@@ -577,7 +577,7 @@
                   MinHeight="40">
                 <TextBlock
                     HorizontalAlignment="Left"
-                    Text="{Binding OriginDescription}"
+                    Text="{Binding OriginDescription, Mode=OneWay}"
                     Classes.WebSocketMessageFromServerPrimary="{Binding IsFromServer}"
                     Classes.WebSocketMessageFromClientPrimary="{Binding IsFromClient}"
                     FontSize="14"
@@ -589,7 +589,7 @@
                     HorizontalAlignment="Left"
                     Margin="4,4,4,0"
                     MinWidth="160"
-                    Text="{Binding MessageSizeDescription}"
+                    Text="{Binding MessageSizeDescription, Mode=OneWay}"
                     Classes.WebSocketMessageFromServerSecondary="{Binding IsFromServer}"
                     Classes.WebSocketMessageFromClientSecondary="{Binding IsFromClient}"
                     FontFamily="{StaticResource CodeFontFamily}"
@@ -601,7 +601,7 @@
                 <TextBlock
                     HorizontalAlignment="Stretch"
                     Margin="4,4,4,2"
-                    Text="{Binding InstantDescription}"
+                    Text="{Binding InstantDescription, Mode=OneWay}"
                     Classes.WebSocketMessageFromServerSecondary="{Binding IsFromServer}"
                     Classes.WebSocketMessageFromClientSecondary="{Binding IsFromClient}"
                     FontSize="12"
@@ -658,7 +658,7 @@
                 SelectedIndex="{Binding MessageToSendSelectedIndex, Mode=TwoWay}">
               <ComboBox.ItemTemplate>
                 <DataTemplate>
-                  <TextBlock Text="{Binding Name}"/>
+                  <TextBlock Text="{Binding Name, Mode=OneWay}"/>
                 </DataTemplate>
               </ComboBox.ItemTemplate>
             </ComboBox>
@@ -688,7 +688,7 @@
               Name="tbMessageToSendError"
               Margin="12,6,12,0"
               Classes="ErrorMessage"
-              Text="{Binding InvalidClientMessageError}"
+              Text="{Binding InvalidClientMessageError, Mode=OneWay}"
               IsVisible="{Binding IsInvalidClientMessageErrorVisible, Mode=OneWay}"/>
         </StackPanel>
       </Grid>

@@ -84,7 +84,7 @@
       TextWrapping="Wrap"
       Classes="SectionTitle"
       Foreground="{DynamicResource WebSocketConnectedBrush}"
-      Text="{Binding Collection.Name}"/>
+      Text="{Binding Collection.Name, Mode=OneWay}"/>
 
     <CheckBox
       x:Name="cbIncludeSecretsWhenExporting"

@@ -67,7 +67,7 @@
       <TreeDataTemplate
           DataType="{x:Type vm:CollectionViewModel}"
           ItemsSource="{Binding Items}">
-        <TextBlock Text="{Binding Name}">
+        <TextBlock Text="{Binding Name, Mode=OneWay}">
           <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem
@@ -124,7 +124,7 @@
       <TreeDataTemplate
           DataType="{x:Type vm:CollectionFolderViewModel}"
           ItemsSource="{Binding Items}">
-        <TextBlock Text="{Binding Name}">
+        <TextBlock Text="{Binding Name, Mode=OneWay}">
           <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem
@@ -209,7 +209,7 @@
         </StackPanel>
       </TreeDataTemplate>
       <DataTemplate DataType="{x:Type vm:HttpRequestViewModel}">
-        <TextBlock Text="{Binding Name}">
+        <TextBlock Text="{Binding Name, Mode=OneWay}">
           <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem
@@ -246,7 +246,7 @@
         </TextBlock>
       </DataTemplate>
       <DataTemplate DataType="{x:Type vm:HttpRepeaterViewModel}">
-        <TextBlock Text="{Binding Name}">
+        <TextBlock Text="{Binding Name, Mode=OneWay}">
           <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem
@@ -285,7 +285,7 @@
       <TreeDataTemplate
           DataType="{x:Type vm:WebSocketConnectionViewModel}"
           ItemsSource="{Binding Items}">
-        <TextBlock Text="{Binding Name}">
+        <TextBlock Text="{Binding Name, Mode=OneWay}">
           <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem
@@ -331,7 +331,7 @@
         </TextBlock>
       </TreeDataTemplate>
       <DataTemplate DataType="{x:Type vm:WebSocketClientMessageViewModel}">
-        <TextBlock Text="{Binding Name}">
+        <TextBlock Text="{Binding Name, Mode=OneWay}">
           <TextBlock.ContextMenu>
             <ContextMenu>
               <MenuItem
@@ -418,7 +418,7 @@
               <DrawingImage Drawing="{StaticResource IconCheck}"/>
             </Image.Source>
           </Image>
-          <TextBlock Text="{Binding Name}"/>
+          <TextBlock Text="{Binding Name, Mode=OneWay}"/>
         </StackPanel>
       </DataTemplate>
       <DataTemplate DataType="{x:Type vm:CollectionVariablesViewModel}">
