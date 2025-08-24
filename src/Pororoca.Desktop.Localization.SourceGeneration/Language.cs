@@ -8,7 +8,8 @@ public enum Language
     Italian,
     SimplifiedChinese,
     German,
-    Spanish
+    Spanish,
+    Polish
 }
 
 public static class LanguageExtensions
@@ -22,6 +23,7 @@ public static class LanguageExtensions
         Language.German => "de-de",
         Language.SimplifiedChinese => "zh-cn",
         Language.Spanish => "es-mx",
+        Language.Polish => "pl-pl",
         _ => "en-gb",
     };
 
@@ -34,6 +36,7 @@ public static class LanguageExtensions
         "it-it" => Language.Italian,
         "zh-cn" => Language.SimplifiedChinese,
         "es-mx" => Language.Spanish,
+        "pl-pl" => Language.Polish,
         _ => throw new KeyNotFoundException($"No language found for LCID '{lcid}'.")
     };
 }
