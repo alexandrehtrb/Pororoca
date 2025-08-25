@@ -1,6 +1,6 @@
 <h1>Pororoca <img style="margin: 4px 0 0 4px" height="32" src="pororoca.png" alt="Pororoca Logo"/></h1>
 
-Читать на: [english](README.md) | [português](README_pt.md) | [italiano](README_it.md) | [中文](README_zh-cn.md) | [Deutsch](README_de.md) | [español](README_es.md)
+Читать на: [english](README.md) | [português](README_pt.md) | [italiano](README_it.md) | [中文](README_zh-cn.md) | [Deutsch](README_de.md) | [español](README_es.md) | [polski](README_pl.md)
 
 Pororoca - это инструмент тестирования HTTP, вдохновленный Postman, но со многими улучшениями.
 
