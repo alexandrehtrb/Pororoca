@@ -377,6 +377,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         IsLanguageSimplifiedChinese = lang == Language.SimplifiedChinese;
         IsLanguageGerman = lang == Language.German;
         IsLanguageSpanish = lang == Language.Spanish;
+        IsLanguagePolish = lang == Language.Polish;
     }
 
     #endregion
