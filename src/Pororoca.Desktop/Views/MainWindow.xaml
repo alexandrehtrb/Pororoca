@@ -306,6 +306,9 @@
           <MenuItem
             Header="{Binding i18n.TopMenuHelp.OpenDocsWebsite, Mode=OneWay}"
             Command="{Binding OpenDocsInWebBrowserCmd, Mode=OneWay}"/>
+          <MenuItem
+            Header="{Binding i18n.TopMenuHelp.MakeADonation, Mode=OneWay}"
+            Command="{Binding OpenDonationsPageInWebBrowserCmd, Mode=OneWay}"/>
           <Separator/>
           <MenuItem
             Header="{Binding VersionName}"

@@ -269,6 +269,7 @@
   "TopMenuFile/NewCollection": "新集合",
   "TopMenuFile/SaveAll": "保存全部",
   "TopMenuHelp/OpenDocsWebsite": "转到文档",
+  "TopMenuHelp/MakeADonation": "请捐赠！",
   "TopMenuHelp/RunUITests": "运行UI测试 (Alt +F12)",
   "TopMenuHelp/ViewKeyboardShortcuts": "查看键盘快捷键",
   "TopMenuLanguage/English": "English",
@@ -363,6 +364,7 @@
   "Welcome/ImportOpenAPI": "导入 OpenAPI…",
   "Welcome/NewCollection": "新集合",
   "Welcome/OpenDocsWebsite": "转到文档",
+  "Welcome/SupportUs": "支持我们！",
   "Welcome/Title": "欢迎!",
   "Welcome/VisitGitHubRepo": "访问 GitHub 仓库"
 }

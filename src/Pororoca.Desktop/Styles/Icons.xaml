@@ -16,6 +16,9 @@
     <!-- IconCheck, CC Attribution License, author: Font Awesome, taken from: https://www.svgrepo.com/svg/351857/check -->
     <PathGeometry x:Key="IconCheckGeometry">m173.898 439.404-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z</PathGeometry>
 
+    <!-- IconDonate, CC Attribution License, author: boxicons, taken from: https://www.svgrepo.com/svg/334622/donate-heart -->
+    <PathGeometry x:Key="IconDonateGeometry">M17.726 13.02 14 16H9v-1h4.065a.5.5 0 0 0 .416-.777l-.888-1.332A1.995 1.995 0 0 0 10.93 12H3a1 1 0 0 0-1 1v6a2 2 0 0 0 2 2h9.639a3 3 0 0 0 2.258-1.024L22 13l-1.452-.484a2.998 2.998 0 0 0-2.822.504zm1.532-5.63c.451-.465.73-1.108.73-1.818s-.279-1.353-.73-1.818A2.447 2.447 0 0 0 17.494 3S16.25 2.997 15 4.286C13.75 2.997 12.506 3 12.506 3a2.45 2.45 0 0 0-1.764.753c-.451.466-.73 1.108-.73 1.818s.279 1.354.73 1.818L15 12l4.258-4.61z</PathGeometry>
+
     <!-- IconEdit, Mozilla Public License, author: Yandex, taken from: https://www.svgrepo.com/svg/503019/edit -->
     <PathGeometry x:Key="IconEditGeometry">m3.99 16.854-1.314 3.504a.75.75 0 0 0 .966.965l3.503-1.314a3 3 0 0 0 1.068-.687L18.36 9.175s-.354-1.061-1.414-2.122c-1.06-1.06-2.122-1.414-2.122-1.414L4.677 15.786a3 3 0 0 0-.687 1.068zm12.249-12.63 1.383-1.383c.248-.248.579-.406.925-.348.487.08 1.232.322 1.934 1.025.703.703.945 1.447 1.025 1.934.058.346-.1.677-.348.925L19.774 7.76s-.353-1.06-1.414-2.12c-1.06-1.062-2.121-1.415-2.121-1.415z</PathGeometry>
 
@@ -69,6 +72,7 @@
     <GeometryDrawing x:Key="IconAddFolder" Brush="{DynamicResource DefaultIconsBrush}" Geometry="{StaticResource IconAddFolderGeometry}" />
     <GeometryDrawing x:Key="IconArrowBack" Brush="{DynamicResource DefaultIconsBrush}" Geometry="{StaticResource IconArrowBackGeometry}" />
     <GeometryDrawing x:Key="IconCheck" Brush="{DynamicResource DefaultIconsBrush}" Geometry="{StaticResource IconCheckGeometry}" />
+    <GeometryDrawing x:Key="IconDonate" Brush="{DynamicResource DefaultIconsBrush}" Geometry="{StaticResource IconDonateGeometry}" />
     <GeometryDrawing x:Key="IconEdit" Brush="{DynamicResource DefaultIconsBrush}" Geometry="{StaticResource IconEditGeometry}" />
     <GeometryDrawing x:Key="IconExport" Brush="{DynamicResource DefaultIconsBrush}" Geometry="{StaticResource IconExportGeometry}" />
     <GeometryDrawing x:Key="IconFolder" Brush="{DynamicResource DefaultIconsBrush}" Geometry="{StaticResource IconFolderGeometry}" />

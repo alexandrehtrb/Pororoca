@@ -269,6 +269,7 @@
   "TopMenuFile/NewCollection": "Nueva colección",
   "TopMenuFile/SaveAll": "Guardar todo",
   "TopMenuHelp/OpenDocsWebsite": "Ir a la documentación",
+  "TopMenuHelp/MakeADonation": "¡Hacer una donación!",
   "TopMenuHelp/RunUITests": "Ejecutar pruebas UI (Ctrl+F12)",
   "TopMenuHelp/ViewKeyboardShortcuts": "Ver atajos de teclado",
   "TopMenuLanguage/English": "Inglés",
@@ -363,6 +364,7 @@
   "Welcome/ImportOpenAPI": "Importar OpenAPI…",
   "Welcome/NewCollection": "Nueva colección",
   "Welcome/OpenDocsWebsite": "Ir a la documentación",
+  "Welcome/SupportUs": "¡Apóyanos!",
   "Welcome/Title": "¡Bienvenido!",
   "Welcome/VisitGitHubRepo": "Visitar repositorio GitHub"
 }

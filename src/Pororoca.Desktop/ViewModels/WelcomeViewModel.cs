@@ -22,6 +22,9 @@ public sealed class WelcomeViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> VisitGitHubRepoCmd =>
         MainWindowVm.OpenGitHubRepoInWebBrowserCmd;
 
+    public ReactiveCommand<Unit, Unit> OpenDonationsPageCmd =>
+        MainWindowVm.OpenDonationsPageInWebBrowserCmd;
+
     private WelcomeViewModel() =>
         ImportOpenAPICmd = ReactiveCommand.CreateFromTask(ImportOpenAPIAsync);
 

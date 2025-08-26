@@ -58,6 +58,12 @@
         Text="{Binding i18n.Welcome.VisitGitHubRepo, Mode=OneWay}"
         Command="{Binding VisitGitHubRepoCmd, Mode=OneWay}"/>
 
+    <controls:IconButton
+        x:Name="btSupportUs"
+        Icon="{StaticResource IconDonateGeometry}"
+        Text="{Binding i18n.Welcome.SupportUs, Mode=OneWay}"
+        Command="{Binding OpenDonationsPageCmd, Mode=OneWay}"/>
+
   </StackPanel>
 
 </UserControl>

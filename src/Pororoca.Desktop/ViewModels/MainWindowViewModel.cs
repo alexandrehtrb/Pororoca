@@ -192,10 +192,13 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     private const string GitHubRepoUrl = "https://github.com/alexandrehtrb/Pororoca";
     private const string DocsWebSiteUrl = "https://pororoca.io/docs";
+    private const string DonationsPageUrl = "https://github.com/alexandrehtrb/Pororoca/discussions/159";
 
     public ReactiveCommand<Unit, Unit> OpenDocsInWebBrowserCmd { get; }
 
     public ReactiveCommand<Unit, Unit> OpenGitHubRepoInWebBrowserCmd { get; }
+
+    public ReactiveCommand<Unit, Unit> OpenDonationsPageInWebBrowserCmd { get; }
 
     #endregion
 
@@ -267,6 +270,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         #region WEBSITES
         OpenDocsInWebBrowserCmd = ReactiveCommand.Create(() => OpenWebBrowser(DocsWebSiteUrl));
         OpenGitHubRepoInWebBrowserCmd = ReactiveCommand.Create(() => OpenWebBrowser(GitHubRepoUrl));
+        OpenDonationsPageInWebBrowserCmd = ReactiveCommand.Create(() => OpenWebBrowser(DonationsPageUrl));
         #endregion
     }
 

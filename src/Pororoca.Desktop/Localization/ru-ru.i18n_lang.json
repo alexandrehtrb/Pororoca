@@ -269,6 +269,7 @@
     "TopMenuFile/NewCollection": "Новая коллекция",
     "TopMenuFile/SaveAll": "Сохранить все",
     "TopMenuHelp/OpenDocsWebsite": "Перейти к докс",
+	"TopMenuHelp/MakeADonation": "Сделайте пожертвование!",
     "TopMenuHelp/RunUITests": "Выполнение UI тестов (Ctrl+F12)",
     "TopMenuHelp/ViewKeyboardShortcuts": "Просмотр сочетаний клавиш",
     "TopMenuLanguage/English": "Английский",
@@ -363,6 +364,7 @@
     "Welcome/ImportOpenAPI": "Импорт OpenAPI…",
     "Welcome/NewCollection": "Новая коллекция",
     "Welcome/OpenDocsWebsite": "Перейти к докс",
+	"Welcome/SupportUs": "Поддержите нас!",
     "Welcome/Title": "Добро пожаловать!",
     "Welcome/VisitGitHubRepo": "Перейти на GitHub"
 }
