@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Pororoca.Desktop.Localization.SourceGeneration/Pororoca.Desktop.Localization.SourceGeneration.csproj" />
+    <Project Path="src/Pororoca.Desktop/Pororoca.Desktop.csproj" />
+    <Project Path="src/Pororoca.Domain.OpenAPI/Pororoca.Domain.OpenAPI.csproj" />
+    <Project Path="src/Pororoca.Domain/Pororoca.Domain.csproj" />
+    <Project Path="src/Pororoca.Infrastructure/Pororoca.Infrastructure.csproj" />
+    <Project Path="src/Pororoca.Test/Pororoca.Test.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Pororoca.Domain.Tests/Pororoca.Domain.Tests.csproj" />
+    <Project Path="tests/Pororoca.Test.Tests/Pororoca.Test.Tests.csproj" />
+    <Project Path="tests/Pororoca.TestServer/Pororoca.TestServer.csproj" />
+  </Folder>
+</Solution>

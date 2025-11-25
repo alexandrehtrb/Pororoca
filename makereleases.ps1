@@ -295,7 +295,7 @@ function Publish-PororocaDesktop
 	if ($dotnetRid -like "*win*")
 	{
 		# let's copy the msquic.dll file next to the generated .exe
-		Copy-Item -Path "./src/Pororoca.Desktop/bin/Release/net8.0/${dotnetRid}/msquic.dll" `
+		Copy-Item -Path "./src/Pororoca.Desktop/bin/Release/net10.0/${dotnetRid}/msquic.dll" `
 			  	  -Destination $outputFolder
 	}
 }

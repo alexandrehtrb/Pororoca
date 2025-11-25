@@ -40,11 +40,11 @@ public static partial class CurlRequestImporter
             ReadOnlySpan<char> value = ParseValueOfCmdLineArgument(singleLinedAsSpan, key, valueStartIndex, out int valueEndIndex);
             string? valueStr;
             // after reading the part to remove, we can now clean and unescape strings
-            if (value != null && value.Length >= 2 && value[0] == '\'' && value[^1] == '\'')
+            if (value != Span<char>.Empty && value.Length >= 2 && value[0] == '\'' && value[^1] == '\'')
             {
                 valueStr = value[1..^1].ToString().Replace("\\'", "'");
             }
-            else if (value != null && value.Length >= 2 && value[0] == '"' && value[^1] == '"')
+            else if (value != Span<char>.Empty && value.Length >= 2 && value[0] == '"' && value[^1] == '"')
             {
                 valueStr = value[1..^1].ToString().Replace("\\\"", "\"");
             }

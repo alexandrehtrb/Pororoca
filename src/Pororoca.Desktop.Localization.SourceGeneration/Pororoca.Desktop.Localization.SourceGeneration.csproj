@@ -3,8 +3,6 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <IncludeBuildOutput>false</IncludeBuildOutput>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>true</ImplicitUsings>
     <LangVersion>Latest</LangVersion>
     <EnforceExtendedAnalyzerRules>True</EnforceExtendedAnalyzerRules>
     <IncludeBuildOutput>false</IncludeBuildOutput>

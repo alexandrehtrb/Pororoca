@@ -1,0 +1,10 @@
+<Project>
+  <!-- See https://aka.ms/dotnet/msbuild/customize for more details on customizing your build -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<!-- allows warnings only on Pororoca.Desktop Release configuration, to forgive trimming warns on publishing -->
+    <TreatWarningsAsErrors Condition="'$(MSBuildProjectName)'!='Pororoca.Desktop' And '$(Configuration)'!='Debug'">True</TreatWarningsAsErrors>
+  </PropertyGroup>
+</Project>
