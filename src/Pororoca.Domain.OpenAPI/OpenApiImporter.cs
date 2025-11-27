@@ -1,9 +1,8 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Models;
-using Microsoft.OpenApi.Readers;
+using Microsoft.OpenApi;
+using Microsoft.OpenApi.Reader;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
@@ -26,49 +25,54 @@ public static class OpenApiImporter
     {
         try
         {
-            OpenApiStringReader reader = new();
-            var doc = reader.Read(openApiFileContent, out var diag);
+            var settings = new OpenApiReaderSettings();
+            settings.AddYamlReader();
 
-            var collectionScopedAuth = ReadAuth(doc.Components.SecuritySchemes);
+            var doc = OpenApiDocument.Load(new MemoryStream(Encoding.UTF8.GetBytes(openApiFileContent)), settings: settings).Document!;
+
+            var collectionScopedAuth = ReadAuth(doc.Components?.SecuritySchemes);
             bool hasCollectionScopedAuth = collectionScopedAuth is not null;
 
-            PororocaCollection col = new(doc.Info.Title)
+            PororocaCollection col = new(doc.Info.Title ?? "OpenAPI collection")
             {
                 CollectionScopedAuth = collectionScopedAuth,
                 CollectionScopedRequestHeaders = new()
             };
             ReadEnvironments(doc, col);
-            AddOAuth2ToCollectionIfSpecified(col, doc.Components.SecuritySchemes);
+            AddOAuth2ToCollectionIfSpecified(col, doc.Components?.SecuritySchemes);
             AddCollectionScopedAuthVariables(col);
 
-            var colScopedSecHeaders = ReadCollectionScopedSecurityHeaders(doc.Components.SecuritySchemes);
+            var colScopedSecHeaders = ReadCollectionScopedSecurityHeaders(doc.Components?.SecuritySchemes);
             AddCollectionScopedSecurityHeaders(col, colScopedSecHeaders);
             // not bothering with collection-scoped api key query parameters
 
             foreach (var (path, pathItem) in doc.Paths)
             {
                 string reqPath = path.ToPororocaTemplateStyle();
-                foreach (var (operationType, operation) in pathItem.Operations)
+                if (pathItem.Operations != null)
                 {
-                    string reqName = operation.Summary ?? operation.Description ?? "req";
-                    string httpMethod = operationType.ToString().ToUpper();
-                    var headers = ReadRequestHeaders(operation.Parameters, colScopedSecHeaders, operation.Security);
-                    string queryParameters = ReadQueryParameters(operation.Parameters, operation.Security);
-                    // TODO: get cookies
-                    var reqBody = ReadRequestBody(operation.RequestBody);
-                    var reqAuth = ReadRequestAuth(hasCollectionScopedAuth, operation.Security, doc.Components.SecuritySchemes);
+                    foreach (var (operationType, operation) in pathItem.Operations)
+                    {
+                        string reqName = operation.Summary ?? operation.Description ?? "req";
+                        string httpMethod = operationType.ToString().ToUpper();
+                        var headers = ReadRequestHeaders(operation.Parameters, colScopedSecHeaders, operation.Security);
+                        string queryParameters = ReadQueryParameters(operation.Parameters, operation.Security);
+                        // TODO: get cookies
+                        var reqBody = ReadRequestBody(operation.RequestBody);
+                        var reqAuth = ReadRequestAuth(hasCollectionScopedAuth, operation.Security, doc.Components?.SecuritySchemes);
 
-                    PororocaHttpRequest req = new(
-                        Name: reqName,
-                        HttpVersion: 1.1m,
-                        HttpMethod: httpMethod,
-                        Url: "{{BaseUrl}}" + reqPath + queryParameters,
-                        CustomAuth: reqAuth,
-                        Headers: headers,
-                        Body: reqBody,
-                        ResponseCaptures: null);
+                        PororocaHttpRequest req = new(
+                            Name: reqName,
+                            HttpVersion: 1.1m,
+                            HttpMethod: httpMethod,
+                            Url: "{{BaseUrl}}" + reqPath + queryParameters,
+                            CustomAuth: reqAuth,
+                            Headers: headers,
+                            Body: reqBody,
+                            ResponseCaptures: null);
 
-                    PlaceRequestInCollection(col, operation, req);
+                        PlaceRequestInCollection(col, operation, req);
+                    }
                 }
             }
 
@@ -85,25 +89,34 @@ public static class OpenApiImporter
 
     private static void ReadEnvironments(OpenApiDocument doc, PororocaCollection col)
     {
-        for (int i = 0; i < doc.Servers.Count; i++)
+        if (doc.Servers != null)
         {
-            var server = doc.Servers[i];
-            PororocaEnvironment env = new(server.Description ?? ("env" + (i + 1)));
-            env.Variables.Add(new(true, "BaseUrl", server.Url.ToPororocaTemplateStyle().TrimEnd('/'), false));
-            foreach (var (serverVarName, serverVar) in server.Variables)
+            for (int i = 0; i < doc.Servers.Count; i++)
             {
-                foreach (string serverVarEnumValue in serverVar.Enum)
+                var server = doc.Servers[i];
+                PororocaEnvironment env = new(server.Description ?? ("env" + (i + 1)));
+                env.Variables.Add(new(true, "BaseUrl", server.Url?.ToPororocaTemplateStyle().TrimEnd('/'), false));
+                if (server.Variables != null)
                 {
-                    env.Variables.Add(new(true, serverVarName, serverVarEnumValue, false));
+                    foreach (var (serverVarName, serverVar) in server.Variables)
+                    {
+                        if (serverVar.Enum != null)
+                        {
+                            foreach (string serverVarEnumValue in serverVar.Enum)
+                            {
+                                env.Variables.Add(new(true, serverVarName, serverVarEnumValue, false));
+                            }
+                        }
+                    }
                 }
+                col.Environments.Add(env);
             }
-            col.Environments.Add(env);
         }
     }
 
     private static void PlaceRequestInCollection(PororocaCollection col, OpenApiOperation operation, PororocaHttpRequest req)
     {
-        string? folderName = operation.Tags.FirstOrDefault()?.Name;
+        string? folderName = operation.Tags?.FirstOrDefault()?.Name;
         if (folderName is null)
         {
             col.Requests.Add(req);
@@ -123,11 +136,11 @@ public static class OpenApiImporter
         }
     }
 
-    private static List<PororocaKeyValueParam> ReadRequestHeaders(IList<OpenApiParameter> reqParams, IDictionary<string, string>? colScopedSecHeaders, IList<OpenApiSecurityRequirement> reqSecurity)
+    private static List<PororocaKeyValueParam> ReadRequestHeaders(IList<IOpenApiParameter>? reqParams, IDictionary<string, string>? colScopedSecHeaders, IList<OpenApiSecurityRequirement>? reqSecurity)
     {
-        var reqHeaders = reqParams.Where(p => p.In == ParameterLocation.Header)
-                                  .Select(p => new PororocaKeyValueParam(true, p.Name, ConvertOpenApiSchemaToObject(p.Schema, 1)?.ToString()))
-                                  .ToList();
+        var reqHeaders = reqParams?.Where(p => p.In == ParameterLocation.Header)
+                                  .Select(p => new PororocaKeyValueParam(true, p.Name ?? string.Empty, ConvertOpenApiSchemaToObject(p.Schema, 1)?.ToString()))
+                                  .ToList() ?? new();
 
         var reqSecHeaders = ReadRequestScopedSecurity(reqSecurity, ParameterLocation.Header);
         if (reqSecHeaders is not null)
@@ -144,12 +157,12 @@ public static class OpenApiImporter
         return reqHeaders;
     }
 
-    private static string ReadQueryParameters(IList<OpenApiParameter> parameters, IList<OpenApiSecurityRequirement> reqSecurity)
+    private static string ReadQueryParameters(IList<IOpenApiParameter>? parameters, IList<OpenApiSecurityRequirement>? reqSecurity)
     {
         List<(string name, string? defaultValue)> qryParams =
-            parameters.Where(p => p.In == ParameterLocation.Query)
-                      .Select(p => (p.Name, ConvertOpenApiSchemaToObject(p.Schema, 1)?.ToString()))
-                      .ToList();
+            parameters?.Where(p => p.In == ParameterLocation.Query)
+                      .Select(p => (p.Name ?? string.Empty, ConvertOpenApiSchemaToObject(p.Schema, 1)?.ToString()))
+                      .ToList() ?? new();
 
         var reqApiKeyQueryParams = ReadRequestScopedSecurity(reqSecurity, ParameterLocation.Query);
         if (reqApiKeyQueryParams is not null)
@@ -177,7 +190,7 @@ public static class OpenApiImporter
 
     #region REQUEST BODY
 
-    private static PororocaHttpRequestBody? ReadRequestBody(OpenApiRequestBody? reqBody)
+    private static PororocaHttpRequestBody? ReadRequestBody(IOpenApiRequestBody? reqBody)
     {
         // 1) Prefer content that has example;
         // 2) Prefer content that is application/json;
@@ -185,14 +198,14 @@ public static class OpenApiImporter
         // 4) Handle content-types XML and URL encoded
         // 5) If content has no example, then generate example from component schema
 
-        if (reqBody is null)
+        if (reqBody is null || reqBody.Content is null)
             return null;
 
         try
         {
-            var reqBodiesWithExample = reqBody.Content.Where(x => x.Value.Examples.Any() || x.Value.Example is not null);
+            var reqBodiesWithExample = reqBody.Content.Where(x => (x.Value.Examples != null && x.Value.Examples.Any()) || x.Value.Example is not null);
 
-            KeyValuePair<string?, OpenApiMediaType?>? x;
+            KeyValuePair<string, IOpenApiMediaType>? x;
 
             x = reqBodiesWithExample.FirstOrDefault(kv => kv.Key.Contains("json"));
             if (x.Value.Value is not null)
@@ -219,13 +232,13 @@ public static class OpenApiImporter
         }
     }
 
-    private static PororocaHttpRequestBody? ReadRequestBodyFromExample(string? contentType, OpenApiMediaType content)
+    private static PororocaHttpRequestBody? ReadRequestBodyFromExample(string? contentType, IOpenApiMediaType content)
     {
         var openApiExample = content.Example ?? content.Examples?.FirstOrDefault().Value.Value;
         return ReadRequestBodyFromInput(contentType, openApiExample);
     }
 
-    private static PororocaHttpRequestBody? ReadRequestBodyFromSchema(string? contentType, OpenApiMediaType content)
+    private static PororocaHttpRequestBody? ReadRequestBodyFromSchema(string? contentType, IOpenApiMediaType content)
     {
         var schema = content.Schema;
         return ReadRequestBodyFromInput(contentType, schema);
@@ -238,9 +251,9 @@ public static class OpenApiImporter
         {
             node = ConvertOpenApiSchemaToObject(schema, 1);
         }
-        else if (input is IOpenApiAny any)
+        else if (input is JsonNode jsonNode)
         {
-            node = ConvertOpenApiAnyToObject(any, 1);
+            node = jsonNode;
         }
 
         if (contentType?.Contains("json") == true)
@@ -309,16 +322,16 @@ public static class OpenApiImporter
             collectionScopedSecurityHeaders.Select(x => new PororocaKeyValueParam(true, x.Key, x.Value)));
     }
 
-    private static PororocaRequestAuth? ReadRequestAuth(bool hasCollectionScopedAuth, IList<OpenApiSecurityRequirement> securityRequirements, IDictionary<string, OpenApiSecurityScheme> securitySchemes)
+    private static PororocaRequestAuth? ReadRequestAuth(bool hasCollectionScopedAuth, IList<OpenApiSecurityRequirement>? securityRequirements, IDictionary<string, IOpenApiSecurityScheme>? securitySchemes)
     {
-        var reqPrimarySecRequirement = securityRequirements.FirstOrDefault();
+        var reqPrimarySecRequirement = securityRequirements?.FirstOrDefault();
         if (reqPrimarySecRequirement is null)
         {
             return null;
         }
         else
         {
-            var colScopedAuthScheme = securitySchemes.Values.FirstOrDefault();
+            var colScopedAuthScheme = securitySchemes?.Values.FirstOrDefault();
             var reqPrimaryAuthScheme = reqPrimarySecRequirement.Keys.FirstOrDefault();
 
             if (hasCollectionScopedAuth && reqPrimaryAuthScheme?.Name == colScopedAuthScheme!.Name)
@@ -327,14 +340,17 @@ public static class OpenApiImporter
             }
             else
             {
-                var dict = securitySchemes.Where(x => x.Key == reqPrimaryAuthScheme?.Name).ToDictionary();
+                var dict = securitySchemes?.Where(x => x.Key == reqPrimaryAuthScheme?.Name).ToDictionary();
                 return ReadAuth(dict);
             }
         }
     }
 
-    private static void AddOAuth2ToCollectionIfSpecified(PororocaCollection col, IDictionary<string, OpenApiSecurityScheme> securitySchemes)
+    private static void AddOAuth2ToCollectionIfSpecified(PororocaCollection col, IDictionary<string, IOpenApiSecurityScheme>? securitySchemes)
     {
+        if (securitySchemes is null || securitySchemes.Count == 0)
+            return;
+
         var oauth2Schemes = securitySchemes.Where(x => x.Value.Type == SecuritySchemeType.OAuth2);
         if (oauth2Schemes.Any() == false)
         {
@@ -351,11 +367,11 @@ public static class OpenApiImporter
             foreach (var (schemeName, scheme) in oauth2Schemes)
             {
                 PororocaCollectionFolder authFolder = new(schemeName);
-                if (scheme.Flows.AuthorizationCode is not null)
+                if (scheme.Flows?.AuthorizationCode is not null)
                 {
                     authFolder.Folders.Add(GenerateOAuth2AuthorizationCodeRequestsFolder(scheme.Flows.AuthorizationCode));
                 }
-                if (scheme.Flows.ClientCredentials is not null)
+                if (scheme.Flows?.ClientCredentials is not null)
                 {
                     authFolder.Folders.Add(GenerateOAuth2ClientCredentialsRequestsFolder(scheme.Flows.ClientCredentials));
                 }
@@ -364,7 +380,7 @@ public static class OpenApiImporter
         }
     }
 
-    private static PororocaRequestAuth? ReadAuth(IDictionary<string, OpenApiSecurityScheme> securitySchemes)
+    private static PororocaRequestAuth? ReadAuth(IDictionary<string, IOpenApiSecurityScheme>? securitySchemes)
     {
         if (securitySchemes is null || securitySchemes.Count == 0)
             return null;
@@ -395,7 +411,7 @@ public static class OpenApiImporter
         }
     }
 
-    private static Dictionary<string, string>? ReadCollectionScopedSecurityHeaders(IDictionary<string, OpenApiSecurityScheme> securitySchemes)
+    private static Dictionary<string, string>? ReadCollectionScopedSecurityHeaders(IDictionary<string, IOpenApiSecurityScheme>? securitySchemes)
     {
         if (securitySchemes is null || securitySchemes.Count == 0)
             return null;
@@ -404,7 +420,7 @@ public static class OpenApiImporter
         return securitySchemes
                .Where((s, _) => (s.Value.Type == SecuritySchemeType.ApiKey || s.Value.Type == SecuritySchemeType.Http) && s.Value.In == ParameterLocation.Header)
                .Select((s, _) => s.Value.Name)
-               .ToDictionary(s => s, s => "{{" + s + "}}");
+               .ToDictionary(s => s ?? string.Empty, s => "{{" + s + "}}");
     }
 
     private static Dictionary<string, string>? ReadRequestScopedSecurity(IList<OpenApiSecurityRequirement>? security, ParameterLocation location)
@@ -416,12 +432,12 @@ public static class OpenApiImporter
         return security[0]
                .Where((s, _) => (s.Key.Type == SecuritySchemeType.ApiKey || s.Key.Type == SecuritySchemeType.Http) && s.Key.In == location)
                .Select((s, _) => s.Key.Name)
-               .ToDictionary(s => s, s => "{{" + s + "}}");
+               .ToDictionary(s => s ?? string.Empty, s => "{{" + s + "}}");
     }
 
     private static PororocaCollectionFolder GenerateOAuth2AuthorizationCodeRequestsFolder(OpenApiOAuthFlow flow)
     {
-        StringBuilder sbUrl = new(flow.AuthorizationUrl.ToString());
+        StringBuilder sbUrl = new(flow.AuthorizationUrl?.ToString());
         sbUrl.Append("?client_id={{oauth2_client_id}}");
         sbUrl.Append("&redirect_uri={{oauth2_redirect_uri}}");
         sbUrl.Append("&response_type=code");
@@ -435,13 +451,13 @@ public static class OpenApiImporter
         PororocaHttpRequest getAccessTokenReq = new(
             Name: "Get access token",
             HttpMethod: "POST",
-            Url: flow.TokenUrl.ToString(),
+            Url: flow.TokenUrl?.ToString() ?? string.Empty,
             Body: MakeUrlEncodedContent(
             [
                 new(true, "grant_type", "authorization_code"),
                 new(true, "client_id", "{{oauth2_client_id}}"),
                 new(true, "client_secret", "{{oauth2_client_secret}}"),
-                new(true, "scope", string.Join(' ', flow.Scopes.Select(s => s.Key))),
+                new(true, "scope", string.Join(' ', flow.Scopes?.Select(s => s.Key) ?? [])),
                 new(true, "redirect_uri", "{{oauth2_redirect_uri}}")
             ]),
             ResponseCaptures:
@@ -454,13 +470,13 @@ public static class OpenApiImporter
         PororocaHttpRequest renewAccessTokenReq = new(
             Name: "Renew access token",
             HttpMethod: "POST",
-            Url: flow.TokenUrl.ToString(),
+            Url: flow.TokenUrl?.ToString() ?? string.Empty,
             Body: MakeUrlEncodedContent(
             [
                 new(true, "grant_type", "refresh_token"),
                 new(true, "client_id", "{{oauth2_client_id}}"),
                 new(true, "client_secret", "{{oauth2_client_secret}}"),
-                new(true, "scope", string.Join(' ', flow.Scopes.Select(s => s.Key))),
+                new(true, "scope", string.Join(' ', flow.Scopes?.Select(s => s.Key) ?? [])),
                 new(true, "refresh_token", "{{oauth2_refresh_token}}")
             ]),
             ResponseCaptures:
@@ -481,13 +497,13 @@ public static class OpenApiImporter
         PororocaHttpRequest getAccessTokenReq = new(
             Name: "Get access token",
             HttpMethod: "POST",
-            Url: flow.TokenUrl.ToString(),
+            Url: flow.TokenUrl?.ToString() ?? string.Empty,
             Body: MakeUrlEncodedContent(
             [
                 new(true, "grant_type", "client_credentials"),
                 new(true, "client_id", "{{oauth2_client_id}}"),
                 new(true, "client_secret", "{{oauth2_client_secret}}"),
-                new(true, "scope", string.Join(' ', flow.Scopes.Select(s => s.Key)))
+                new(true, "scope", string.Join(' ', flow.Scopes?.Select(s => s.Key) ?? []))
             ]),
             ResponseCaptures:
             [
@@ -512,86 +528,34 @@ public static class OpenApiImporter
         else return JsonSerializer.Serialize(node, PrettifyJsonCtx.JsonNode);
     }
 
-    private static JsonNode? ConvertOpenApiAnyToObject(IOpenApiAny? val, int depth)
+    private static JsonNode? ConvertOpenApiSchemaToObject(IOpenApiSchema? schema, int depth)
     {
         // The condition below protects against stack overflow 
         // in case of infinite recursive schemas
         if (depth >= maxSchemaResolutionDepth)
             return null;
 
-        if (val is OpenApiObject o)
-        {
-            JsonObject obj = [];
-            foreach (var (k, v) in o)
-            {
-                obj.Add(k, ConvertOpenApiAnyToObject(v, (depth+1)));
-            }
-            return obj;
-        }
-        if (val is OpenApiArray a)
-        {
-            return new JsonArray(a.Select(ConvertOpenApiAnyToObject).ToArray());
-        }
-        if (val is OpenApiBoolean b)
-        {
-            return b.Value;
-        }
-        if (val is OpenApiString s)
-        {
-            return s.Value;
-        }
-        if (val is OpenApiInteger i)
-        {
-            return i.Value;
-        }
-        if (val is OpenApiDate d)
-        {
-            return d.Value;
-        }
-        if (val is OpenApiDateTime dt)
-        {
-            return dt.Value;
-        }
-        if (val is OpenApiDouble db)
-        {
-            return db.Value;
-        }
-        if (val is OpenApiFloat f)
-        {
-            return f.Value;
-        }
-        if (val is OpenApiLong l)
-        {
-            return l.Value;
-        }
-        return null;
-    }
-
-    private static JsonNode? ConvertOpenApiSchemaToObject(OpenApiSchema schema, int depth)
-    {
-        // The condition below protects against stack overflow 
-        // in case of infinite recursive schemas
-        if (depth >= maxSchemaResolutionDepth)
+        if (schema is null)
             return null;
 
         if (schema.Example is not null)
         {
-            return ConvertOpenApiAnyToObject(schema.Example, depth);
+            return schema.Example.DeepClone();
         }
         else if (schema.Default is not null)
         {
-            return ConvertOpenApiAnyToObject(schema.Default, depth);
+            return schema.Default.DeepClone();
         }
         else if (schema.Enum?.Any() == true)
         {
             var firstEnumExample = schema.Enum.First();
-            return ConvertOpenApiAnyToObject(firstEnumExample, depth);
+            return firstEnumExample.DeepClone();
         }
-        else if (schema.Type == "integer")
+        else if (schema.Type == JsonSchemaType.Integer)
         {
             return 0;
         }
-        else if (schema.Type == "string")
+        else if (schema.Type == JsonSchemaType.String)
         {
             if (schema.Format == "date-time")
             {
@@ -602,21 +566,25 @@ public static class OpenApiImporter
                 return string.Empty;
             }
         }
-        else if (schema.Type == "boolean")
+        else if (schema.Type == JsonSchemaType.Boolean)
         {
             return false;
         }
-        else if (schema.Type == "array")
+        else if (schema.Type == JsonSchemaType.Array)
         {
             var innerObj = ConvertOpenApiSchemaToObject(schema.Items, depth);
             return innerObj is not null ? new JsonArray(innerObj) : [];
         }
-        else if (schema.Type == "object")
+        else if (schema.Type == JsonSchemaType.Object)
         {
             JsonObject obj = [];
-            foreach (var (k, v) in schema.Properties)
+            if (schema.Properties != null)
             {
-                obj.Add(k, ConvertOpenApiSchemaToObject(v, (depth+1)));
+                foreach (var (k, v) in schema.Properties)
+                {
+                    var val = ConvertOpenApiSchemaToObject(v, (depth + 1));
+                    obj.Add(k, val);
+                }
             }
             return obj;
         }
