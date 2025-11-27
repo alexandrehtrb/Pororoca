@@ -225,6 +225,7 @@ jobs:
           --verbosity quiet `
           --nologo `
           --configuration Release `
+          -p:TreatWarningsAsErrors=False `
           -p:PublishSingleFile=$PUBLISH_SINGLE_FILE `
           -p:PublishForInstallOnWindows=$WINDOWS_INSTALLER_RELEASE `
           -p:PublishForInstallOnDebian=$DEBIAN_INSTALLER_RELEASE `

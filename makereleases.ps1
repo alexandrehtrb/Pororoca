@@ -284,6 +284,7 @@ function Publish-PororocaDesktop
 		--verbosity quiet `
 		--nologo `
 		--configuration Release `
+		-p:TreatWarningsAsErrors=False `
 		-p:PublishSingleFile=${publishSingleFileArg} `
 		-p:PublishForInstallOnWindows=${isInstallOnWindowsReleaseArg} `
 		-p:PublishForInstallOnDebian=${isInstallOnDebianReleaseArg} `
