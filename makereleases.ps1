@@ -383,7 +383,7 @@ function Copy-LogoIfLinux
 	if ($runtime -like "*linux*")
 	{
 		# Copy logo for users to create launchers
-		Copy-Item -Path "./pororoca.png" `
+		Copy-Item -Path "./misc/pororoca.png" `
 			  -Destination $outputFolder
 	}
 }

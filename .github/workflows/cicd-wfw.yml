@@ -292,7 +292,7 @@ jobs:
       shell: pwsh
       run: |
         $OUTPUT_FOLDER = "./out/linux-x64"
-        Copy-Item -Path "./pororoca.png" -Destination $OUTPUT_FOLDER
+        Copy-Item -Path "./misc/pororoca.png" -Destination $OUTPUT_FOLDER
       env:
         LINUX_X64: ${{ inputs.produceDesktopLinuxX64 }}
 
