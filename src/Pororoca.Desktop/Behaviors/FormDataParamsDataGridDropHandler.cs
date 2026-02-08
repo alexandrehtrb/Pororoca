@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
+using Avalonia.Xaml.Interactions.DragAndDrop;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.ViewModels.DataGrids;
 

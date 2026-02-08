@@ -2,6 +2,7 @@ using System.Collections;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
+using Avalonia.Xaml.Interactions.DragAndDrop;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.ViewModels;
 
@@ -28,50 +29,6 @@ public sealed class CollectionOrganizationItemTreeViewDropHandler : BaseTreeView
         {
             return (false, false);
         }
-
-        /*var sourceItems = targetItem switch
-        {
-            // can receive reqsanddirsparentvms, reqsvms, envsvms
-            CollectionViewModel _ => SelectedTreeItems.Where(x =>
-                                                   x is CollectionFolderViewModel ||
-                                                   x is HttpRequestViewModel ||
-                                                   x is WebSocketConnectionViewModel ||
-                                                   x is HttpRepeaterViewModel ||
-                                                   x is EnvironmentViewModel),
-            // can receive envsvms
-            EnvironmentsGroupViewModel _ => SelectedTreeItems.Where(x => x is EnvironmentViewModel),
-            // can receive reqsanddirsparentvms, reqsvms
-            CollectionFolderViewModel _ => SelectedTreeItems.Where(x =>
-                                                   x is CollectionFolderViewModel ||
-                                                   x is HttpRequestViewModel ||
-                                                   x is WebSocketConnectionViewModel ||
-                                                   x is HttpRepeaterViewModel),
-            // parent can receive envsvms
-            EnvironmentViewModel _ => SelectedTreeItems.Where(x => x is EnvironmentViewModel),
-            // parent can receive reqsanddirsparentvms, reqsvms
-            HttpRequestViewModel _ => SelectedTreeItems.Where(x =>
-                                                   x is CollectionFolderViewModel ||
-                                                   x is HttpRequestViewModel ||
-                                                   x is WebSocketConnectionViewModel ||
-                                                   x is HttpRepeaterViewModel),
-            // can receive wsclimsgsvms
-            // parent can receive reqsanddirsparentvms, reqsvms
-            WebSocketConnectionViewModel _ => SelectedTreeItems.Where(x =>
-                                                   x is CollectionFolderViewModel ||
-                                                   x is HttpRequestViewModel ||
-                                                   x is WebSocketConnectionViewModel ||
-                                                   x is HttpRepeaterViewModel ||
-                                                   x is WebSocketClientMessageViewModel),
-            // parent can receive wsclimsgsvms
-            WebSocketClientMessageViewModel _ => SelectedTreeItems.Where(x => x is WebSocketClientMessageViewModel),
-            // parent can receive reqsanddirsparentvms, reqsvms
-            HttpRepeaterViewModel _ => SelectedTreeItems.Where(x =>
-                                                   x is CollectionFolderViewModel ||
-                                                   x is HttpRequestViewModel ||
-                                                   x is WebSocketConnectionViewModel ||
-                                                   x is HttpRepeaterViewModel),
-            _ => [],
-        };*/
         return RunDropActions(e, bExecute, sourceItem, targetItem);
     }
 

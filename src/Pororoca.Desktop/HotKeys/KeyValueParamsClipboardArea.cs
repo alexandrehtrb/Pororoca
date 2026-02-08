@@ -20,7 +20,7 @@ public sealed class KeyValueParamsClipboardArea : SimpleClipboardArea<PororocaKe
         {
             try
             {
-                string? systemClipboardAreaText = await systemClipboard.GetTextAsync();
+                string? systemClipboardAreaText = await ClipboardExtensions.TryGetTextAsync(systemClipboard);
                 if (systemClipboardAreaText is null) return [];
                 return systemClipboardAreaText
                     .Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)

@@ -1,9 +1,9 @@
 <Styles
   xmlns="https://github.com/avaloniaui"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
-  xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
-  xmlns:idd="clr-namespace:Avalonia.Xaml.Interactions.DragAndDrop;assembly=Avalonia.Xaml.Interactions.DragAndDrop"
+  xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Xaml.Behaviors.Interactivity"
+  xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Xaml.Behaviors.Interactions.Custom"
+  xmlns:idd="clr-namespace:Avalonia.Xaml.Interactions.DragAndDrop;assembly=Xaml.Behaviors.Interactions.DragAndDrop"
   xmlns:b="using:Pororoca.Desktop.Behaviors">
 
   <!-- TreeView drag and drop -->
@@ -30,7 +30,7 @@
     <Setter Property="(i:Interaction.Behaviors)">
       <i:BehaviorCollectionTemplate>
         <i:BehaviorCollection>
-          <b:ContextDragWithDirectionBehavior
+          <idd:ContextDragWithDirectionBehavior
             HorizontalDragThreshold="3"
             VerticalDragThreshold="3" />
         </i:BehaviorCollection>
@@ -92,7 +92,7 @@
     <Setter Property="(i:Interaction.Behaviors)">
       <i:BehaviorCollectionTemplate>
         <i:BehaviorCollection>
-          <b:ContextDragWithDirectionBehavior HorizontalDragThreshold="3" VerticalDragThreshold="3" />
+          <idd:ContextDragWithDirectionBehavior HorizontalDragThreshold="3" VerticalDragThreshold="3" />
         </i:BehaviorCollection>
       </i:BehaviorCollectionTemplate>
     </Setter>

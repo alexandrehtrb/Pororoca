@@ -75,10 +75,16 @@
     <PackageReference Include="Avalonia.ReactiveUI"/>
     <PackageReference Include="Avalonia.Themes.Fluent"/>
     <PackageReference Include="Avalonia.Controls.DataGrid"/>
-    <PackageReference Include="Avalonia.Xaml.Behaviors"/>
+    <PackageReference Include="Xaml.Behaviors.Interactions.DragAndDrop.DataGrid"/>
+    <PackageReference Include="Xaml.Behaviors.Interactions.DragAndDrop"/>
+    <PackageReference Include="Xaml.Behaviors.Interactions.Draggable"/>
+    <PackageReference Include="Xaml.Behaviors.Interactions.Custom"/>
+    <PackageReference Include="Xaml.Behaviors.Avalonia"/>
+    <PackageReference Include="Xaml.Behaviors.Interactivity"/>
+    <PackageReference Include="Xaml.Behaviors.Interactions"/>
     <PackageReference Include="AlexandreHtrb.AvaloniaUITest" Condition="'$(Configuration)'=='Debug' Or '$(UITestsEnabled)' == 'true'"/>
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics"/>
+    <PackageReference Include="Avalonia.Diagnostics" Condition="'$(Configuration)' == 'Debug'"/>
     <PackageReference Include="Avalonia.AvaloniaEdit"/>
     <PackageReference Include="AvaloniaEdit.TextMate"/>
     <PackageReference Include="TextMateSharp.Grammars"/>

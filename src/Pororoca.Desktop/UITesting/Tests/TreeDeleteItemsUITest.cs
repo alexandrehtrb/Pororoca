@@ -24,7 +24,9 @@ public sealed class TreeDeleteItemsUITest : PororocaUITest
 
         // when deleting a collection, all its sub-items should be deleted
         await TreeRobot.Select("COL2");
+        await Wait(1);
         await TreeRobot.Delete();
+        await Wait(2);
 
         CollectionsGroup.AssertTreeItemExists("COL1");
         CollectionsGroup.AssertTreeItemExists("COL1/ENVS/ENV1");
@@ -59,7 +61,9 @@ public sealed class TreeDeleteItemsUITest : PororocaUITest
 
         // when deleting a single item, only it should be deleted
         await TreeRobot.Select("COL1/WS0/WS1_MSG1");
+        await Wait(1);
         await TreeRobot.Delete();
+        await Wait(2);
 
         CollectionsGroup.AssertTreeItemExists("COL1");
         CollectionsGroup.AssertTreeItemExists("COL1/ENVS/ENV1");
@@ -81,7 +85,9 @@ public sealed class TreeDeleteItemsUITest : PororocaUITest
 
         // when deleting a parent, recursively remove all sub-items
         await TreeRobot.Select("COL1/DIR2");
+        await Wait(1);
         await TreeRobot.Delete();
+        await Wait(2);
 
         CollectionsGroup.AssertTreeItemExists("COL1");
         CollectionsGroup.AssertTreeItemExists("COL1/ENVS/ENV1");
@@ -105,7 +111,9 @@ public sealed class TreeDeleteItemsUITest : PororocaUITest
 
         // when deleting a parent and a child selected, siblings should be removed too
         await TreeRobot.SelectMultiple("COL1/WS1", "COL1/WS1/WS1_MSG1");
+        await Wait(1);
         await TreeRobot.Delete();
+        await Wait(2);
 
         CollectionsGroup.AssertTreeItemExists("COL1");
         CollectionsGroup.AssertTreeItemExists("COL1/ENVS/ENV1");
@@ -127,7 +135,9 @@ public sealed class TreeDeleteItemsUITest : PororocaUITest
 
         // delete everything else with a multiple selection
         await TreeRobot.SelectMultiple("COL1", "COL1/ENVS/ENVS1", "COL1/DIR1", "COL1/HTTP0", "COL1/WS0", "COL1/WS0/WS2_MSG1", "COL1/HTTP1", "COL1/REP1");
+        await Wait(1);
         await TreeRobot.Delete();
+        await Wait(2);
 
         CollectionsGroup.AssertTreeItemNotExists("COL1");
         CollectionsGroup.AssertTreeItemNotExists("COL1/ENVS/ENV1");
