@@ -8,8 +8,8 @@
     <NoWarn>AD0001</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.0.0" />
+    <PackageReference Include="Serilog.AspNetCore"/>
+    <PackageReference Include="Swashbuckle.AspNetCore"/>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\src\Pororoca.Infrastructure\Features\WebSockets\*.cs" />

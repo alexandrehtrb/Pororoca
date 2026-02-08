@@ -7,8 +7,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Pororoca.Domain\Pororoca.Domain.csproj"/>
-    <PackageReference Include="Microsoft.OpenApi" Version="3.0.1" />
-    <PackageReference Include="Microsoft.OpenApi.YamlReader" Version="3.0.1" />
+    <PackageReference Include="Microsoft.OpenApi"/>
+    <PackageReference Include="Microsoft.OpenApi.YamlReader"/>
   </ItemGroup>
 
 </Project>
