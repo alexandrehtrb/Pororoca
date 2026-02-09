@@ -13,7 +13,8 @@
     <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
     <PublishReadyToRun>True</PublishReadyToRun>
     <!-- trimming properties begin -->
-    <PublishTrimmed>true</PublishTrimmed>
+    <!-- TODO: Remember to reenable trimming !!! -->
+    <PublishTrimmed>false</PublishTrimmed>
     <TrimMode>partial</TrimMode>
     <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
     <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport>
