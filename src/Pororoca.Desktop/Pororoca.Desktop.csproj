@@ -13,9 +13,10 @@
     <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
     <PublishReadyToRun>True</PublishReadyToRun>
     <!-- trimming properties begin -->
-    <!-- TODO: Remember to reenable trimming !!! -->
-    <PublishTrimmed>false</PublishTrimmed>
+    <PublishTrimmed>true</PublishTrimmed>
     <TrimMode>partial</TrimMode>
+    <!-- below required for trimming on .NET 10 -->
+    <Http3Support>true</Http3Support>
     <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
     <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport>
     <!-- disabling below because some Spanish-speaking countries use ',' decimal separator (Spain and most LATAM) and some use '.' (MX and Central America) -->
