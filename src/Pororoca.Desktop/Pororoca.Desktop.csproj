@@ -38,6 +38,13 @@
     <TrimmableAssembly Include="ColorTextBlock.Avalonia" />
     <TrimmableAssembly Include="Markdown.Avalonia.Tight" />
     <TrimmableAssembly Include="AlexandreHtrb.AvaloniaUITest" />
+    <TrimmableAssembly Include="Xaml.Behaviors.Interactions.DragAndDrop.DataGrid"/>
+    <TrimmableAssembly Include="Xaml.Behaviors.Interactions.DragAndDrop"/>
+    <TrimmableAssembly Include="Xaml.Behaviors.Interactions.Draggable"/>
+    <TrimmableAssembly Include="Xaml.Behaviors.Interactions.Custom"/>
+    <TrimmableAssembly Include="Xaml.Behaviors.Avalonia"/>
+    <TrimmableAssembly Include="Xaml.Behaviors.Interactivity"/>
+    <TrimmableAssembly Include="Xaml.Behaviors.Interactions"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Pororoca.Domain\Pororoca.Domain.csproj" />
