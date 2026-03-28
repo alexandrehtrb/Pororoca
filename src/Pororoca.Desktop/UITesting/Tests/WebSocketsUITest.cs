@@ -65,6 +65,7 @@ public sealed partial class WebSocketsUITest : PororocaUITest
         await WsRobot.AddClientMessage.ClickOn();
         await WsMsgRobot.Name.Edit("HOMEM_ARANHA");
         await WsMsgRobot.SetFileBinaryContent("{{TestFilesDir}}/homem_aranha.jpg");
+        await Wait(10);
         await TreeRobot.Select("COL1/WS");
 
         if (OperatingSystem.IsLinux())
