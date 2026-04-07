@@ -39,16 +39,16 @@ public static class PororocaWebSocketClientMessageTranslatorTests
         PororocaWebSocketClientMessage msg = new(msgType, string.Empty, PororocaWebSocketClientMessageContentMode.Raw, "Hello {{Name}}", null, null, disableCompressionForMsg);
 
         // WHEN
-        bool valid = TryTranslateClientMessage(varResolver.GetEffectiveVariables(), msg, out var resolvedStream, out string? errorCode);
+        bool valid = TryTranslateClientMessage(varResolver.GetEffectiveVariables(), msg, out byte[]? resolvedMsgBytes, out FileStream? resolvedStream, out string? errorCode);
 
         // THEN
         Assert.True(valid);
         Assert.Null(errorCode);
 
-        Assert.NotNull(resolvedStream);
-        var ms = Assert.IsAssignableFrom<MemoryStream>(resolvedStream!);
-        Assert.Equal(13, ms.Length);
-        Assert.Equal("Hello brother", Encoding.UTF8.GetString(ms.ToArray()));
+        Assert.NotNull(resolvedMsgBytes);
+        Assert.Null(resolvedStream);
+        Assert.Equal(13, resolvedMsgBytes.Length);
+        Assert.Equal("Hello brother", Encoding.UTF8.GetString(resolvedMsgBytes));
     }
 
     [Theory]
@@ -68,14 +68,15 @@ public static class PororocaWebSocketClientMessageTranslatorTests
         PororocaWebSocketClientMessage msg = new(msgType, string.Empty, PororocaWebSocketClientMessageContentMode.File, null, null, "{{FilePath}}", disableCompressionForMsg);
 
         // WHEN
-        bool valid = TryTranslateClientMessage(varResolver.GetEffectiveVariables(), msg, out var resolvedStream, out string? errorCode);
+        bool valid = TryTranslateClientMessage(varResolver.GetEffectiveVariables(), msg, out byte[]? resolvedMsgBytes, out FileStream? resolvedStream, out string? errorCode);
 
         // THEN
         Assert.True(valid);
         Assert.Null(errorCode);
 
+        Assert.Null(resolvedMsgBytes);
         Assert.NotNull(resolvedStream);
-        var fs = Assert.IsAssignableFrom<FileStream>(resolvedStream!);
+        var fs = Assert.IsType<FileStream>(resolvedStream);
         Assert.Equal(8, fs.Length);
         Assert.Equal("{\"id\":1}", new StreamReader(fs).ReadToEnd());
     }
@@ -97,11 +98,12 @@ public static class PororocaWebSocketClientMessageTranslatorTests
         PororocaWebSocketClientMessage msg = new(msgType, string.Empty, PororocaWebSocketClientMessageContentMode.File, null, null, "{{FilePath}}", disableCompressionForMsg);
 
         // WHEN
-        bool valid = TryTranslateClientMessage(varResolver.GetEffectiveVariables(), msg, out var resolvedStream, out string? errorCode);
+        bool valid = TryTranslateClientMessage(varResolver.GetEffectiveVariables(), msg, out byte[]? resolvedMsgBytes, out FileStream? resolvedStream, out string? errorCode);
 
         // THEN
         Assert.False(valid);
         Assert.Equal(TranslateRequestErrors.WebSocketUnknownClientMessageTranslationError, errorCode);
+        Assert.Null(resolvedMsgBytes);
         Assert.Null(resolvedStream);
     }
 }

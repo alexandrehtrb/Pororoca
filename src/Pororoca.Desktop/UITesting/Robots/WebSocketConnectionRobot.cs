@@ -59,7 +59,7 @@ public sealed class WebSocketConnectionRobot : BaseNamedRobot
             // because the first request causes a little lag in the screen
             await Task.Delay(1500);
         }
-        while (!cts.IsCancellationRequested && vm.ConnectionState == WebSocketConnectorState.Connecting);
+        while (!cts.IsCancellationRequested && vm.ConnectionState == WebSocketConnectionState.Connecting);
     }
 
     internal async Task ClickOnDisconnectAndWaitForDisconnection()
@@ -73,6 +73,6 @@ public sealed class WebSocketConnectionRobot : BaseNamedRobot
             // because the first request causes a little lag in the screen
             await Task.Delay(750);
         }
-        while (!cts.IsCancellationRequested && vm.ConnectionState == WebSocketConnectorState.Disconnecting);
+        while (!cts.IsCancellationRequested && vm.ConnectionState == WebSocketConnectionState.Disconnecting);
     }
 }

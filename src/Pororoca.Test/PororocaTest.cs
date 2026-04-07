@@ -157,13 +157,15 @@ public sealed class PororocaTest
     }
 
     public Task<PororocaTestWebSocketConnector> ConnectWebSocketAsync(string wsName,
-                                                                      Action<WebSocketConnectorState, Exception?>? onConnectionChanged = null,
+                                                                      bool collectOnlyServerSideMessages = false,
+                                                                      int bufferSize = WebSocketConnector.DefaultBufferSize,
+                                                                      Action<WebSocketConnectionState, Exception?>? onConnectionChanged = null,
                                                                       CancellationToken cancellationToken = default)
     {
         var ws = FindWebSocketInCollection(x => x.Name == wsName);
         if (ws != null)
         {
-            return ConnectWebSocketAsync(ws, onConnectionChanged, cancellationToken);
+            return ConnectWebSocketAsync(ws, collectOnlyServerSideMessages, bufferSize, onConnectionChanged, cancellationToken);
         }
         else
         {
@@ -172,7 +174,9 @@ public sealed class PororocaTest
     }
 
     public async Task<PororocaTestWebSocketConnector> ConnectWebSocketAsync(PororocaWebSocketConnection ws,
-                                                                            Action<WebSocketConnectorState, Exception?>? onConnectionChanged = null,
+                                                                            bool collectOnlyServerSideMessages = false,
+                                                                            int bufferSize = WebSocketConnector.DefaultBufferSize,
+                                                                            Action<WebSocketConnectionState, Exception?>? onConnectionChanged = null,
                                                                             CancellationToken cancellationToken = default)
     {
         var effectiveVars = ((IPororocaVariableResolver)Collection).GetEffectiveVariables();
@@ -187,7 +191,7 @@ public sealed class PororocaTest
         }
         else
         {
-            PororocaTestWebSocketConnector connector = new(Collection, ws, onConnectionChanged);
+            PororocaTestWebSocketConnector connector = new(Collection, ws, collectOnlyServerSideMessages, bufferSize, onConnectionChanged);
             await connector.ConnectAsync(wsAndHttpCli.wsCli!, wsAndHttpCli.httpCli!, resolvedUri!, cancellationToken);
             if (connector.ConnectionException is not null)
             {

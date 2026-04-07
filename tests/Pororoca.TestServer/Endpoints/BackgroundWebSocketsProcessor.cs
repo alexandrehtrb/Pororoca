@@ -10,7 +10,7 @@ public static class BackgroundWebSocketsProcessor
 
     public static async Task RegisterAndProcessAsync(ILogger<WebSocketServerSideConnector> logger, WebSocket ws, string? subprotocol, TaskCompletionSource<object> socketFinishedTcs)
     {
-        WebSocketServerSideConnector wsc = new(ws);
+        WebSocketServerSideConnector wsc = new(ws, collectOnlyClientSideMessages: false);
 
         // periodic ping whenever client goes quiet
         PeriodicTimer pingTimer = new(waitForClientPeriod);
@@ -18,7 +18,7 @@ public static class BackgroundWebSocketsProcessor
         {
             while (await pingTimer.WaitForNextTickAsync())
             {
-                if (wsc.ConnectionState == WebSocketConnectorState.Connected)
+                if (wsc.ConnectionState == WebSocketConnectionState.Connected)
                 {
                     await wsc.SendMessageAsync(WebSocketMessageType.Text, GetPingText(subprotocol), false);
                 }
@@ -35,13 +35,8 @@ public static class BackgroundWebSocketsProcessor
         int msgCount = 0;
         await foreach (var msg in wsc.ExchangedMessagesCollector!.ReadAllAsync())
         {
-            msgCount++;
-            string msgText = msg.Type switch
-            {
-                WebSocketMessageType.Binary => $"(binary, {msg.BytesLength} bytes)",
-                _ => msg.ReadAsUtf8Text()!
-            };
-            logger.LogInformation("Message {msgCount}, {direction}: {msgText}", msgCount, msg.Direction, msgText);
+            string msgText = msg.FormatForLogging();
+            logger.LogInformation("Message {msgCount}, {direction}: {msgText}", ++msgCount, msg.Direction, msgText);
 
             if (msg.Direction == WebSocketMessageDirection.FromServer)
             {
@@ -71,14 +66,14 @@ public static class BackgroundWebSocketsProcessor
         {
             string receivedStr = receivedMsg.ReadAsUtf8Text()!;
             return subprotocol == "json" ?
-                $"{{\"bytesReceived\":{receivedMsg.BytesLength},\"messageType\":\"text\",\"text\":\"{receivedStr}\"}}" :
-                $"received text ({receivedMsg.BytesLength} bytes): {receivedStr}";
+                $"{{\"bytesReceived\":{receivedMsg.ReadBytes().Length},\"messageType\":\"text\",\"text\":\"{receivedStr}\"}}" :
+                $"received text ({receivedMsg.ReadBytes().Length} bytes): {receivedStr}";
         }
         else if (receivedMsg.Type == WebSocketMessageType.Binary)
         {
             return subprotocol == "json" ?
-                $"{{\"bytesReceived\":{receivedMsg.BytesLength},\"messageType\":\"binary\"}}" :
-                $"received binary {receivedMsg.BytesLength} bytes";
+                $"{{\"bytesReceived\":{receivedMsg.ReadBytes().Length},\"messageType\":\"binary\"}}" :
+                $"received binary {receivedMsg.ReadBytes().Length} bytes";
         }
         else
         {

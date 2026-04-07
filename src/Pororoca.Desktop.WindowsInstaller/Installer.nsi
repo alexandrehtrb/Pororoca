@@ -53,7 +53,7 @@
 
 ; ----------------------------------------  INSTALLER ATTRIBUTES
 Name "${PRODUCT_NAME} ${SHORT_VERSION}"
-BrandingText "©2025 ${COMPANY_NAME}"
+BrandingText "©2026 ${COMPANY_NAME}"
 Icon "${INPUT_FILES_DIR}\pororoca_icon.ico"
 VIProductVersion "${PRODUCT_VERSION}"
 VIFileVersion "${VERSION}"

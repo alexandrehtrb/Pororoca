@@ -470,7 +470,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
             Dispatcher.UIThread.Post(async () => await mwvm.HttpRepeaterView.VM.StartRepetitionAsync());
         }
         else if (mwvm.WebSocketConnectionView.Visible
-              && mwvm.WebSocketConnectionView.VM?.ConnectionState == WebSocketConnectorState.Disconnected)
+              && mwvm.WebSocketConnectionView.VM?.ConnectionState == WebSocketConnectionState.Disconnected)
         {
             Dispatcher.UIThread.Post(async () => await mwvm.WebSocketConnectionView.VM.ConnectAsync());
         }
@@ -493,11 +493,11 @@ public sealed class KeyboardShortcuts : ViewModelBase
         }
         else if (mwvm.WebSocketConnectionView.Visible)
         {
-            if (mwvm.WebSocketConnectionView.VM?.ConnectionState == WebSocketConnectorState.Connected)
+            if (mwvm.WebSocketConnectionView.VM?.ConnectionState == WebSocketConnectionState.Connected)
             {
                 Dispatcher.UIThread.Post(async () => await mwvm.WebSocketConnectionView.VM.DisconnectAsync());
             }
-            else if (mwvm.WebSocketConnectionView.VM?.ConnectionState == WebSocketConnectorState.Connecting)
+            else if (mwvm.WebSocketConnectionView.VM?.ConnectionState == WebSocketConnectionState.Connecting)
             {
                 mwvm.WebSocketConnectionView.VM.CancelConnect();
             }

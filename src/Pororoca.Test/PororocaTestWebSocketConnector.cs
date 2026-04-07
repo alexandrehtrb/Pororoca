@@ -11,11 +11,14 @@ public sealed class PororocaTestWebSocketConnector : WebSocketClientSideConnecto
     private readonly IPororocaVariableResolver varResolver;
     private readonly PororocaWebSocketConnection connection;
 
-    public WebSocketConnectorState State => ConnectionState;
+    public WebSocketConnectionState State => ConnectionState;
 
     public PororocaTestWebSocketConnector(IPororocaVariableResolver varResolver,
                                           PororocaWebSocketConnection connection,
-                                          Action<WebSocketConnectorState, Exception?>? onConnectionChanged = null)
+                                          bool collectOnlyServerSideMessages = false,
+                                          int bufferSize = WebSocketConnector.DefaultBufferSize,
+                                          Action<WebSocketConnectionState, Exception?>? onConnectionChanged = null) :
+        base(collectOnlyServerSideMessages, bufferSize)
     {
         this.varResolver = varResolver;
         this.connection = connection;
@@ -44,13 +47,17 @@ public sealed class PororocaTestWebSocketConnector : WebSocketClientSideConnecto
         {
             throw new Exception($"Error: Could not send WebSocket client message. Cause: '{validationErrorCode}'.");
         }
-        else if (!TryTranslateClientMessage(effectiveVars, msg, out var resolvedStreamToSend, out string? translationErrorCode))
+        else if (!TryTranslateClientMessage(effectiveVars, msg, out byte[]? resolvedMsgBytes, out FileStream? resolvedStreamToSend, out string? translationErrorCode))
         {
             throw new Exception($"Error: Could not send WebSocket client message. Cause: '{translationErrorCode}'.");
         }
-        else
+        else if (resolvedMsgBytes != null)
         {
-            await SendMessageAsync(msg.MessageType.ToWebSocketMessageType(), resolvedStreamToSend!, msg.DisableCompressionForThis);
+            await SendMessageAsync(msg.MessageType.ToWebSocketMessageType(), resolvedMsgBytes, msg.DisableCompressionForThis);
+        }
+        else if (resolvedStreamToSend != null)
+        {
+            await SendMessageAsync(msg.MessageType.ToWebSocketMessageType(), resolvedStreamToSend, msg.DisableCompressionForThis);
         }
     }
 }

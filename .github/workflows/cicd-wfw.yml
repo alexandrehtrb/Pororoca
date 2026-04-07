@@ -77,7 +77,7 @@ jobs:
     - name: Install .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 10.0.100
+        dotnet-version: 10.0.201
 
     # GitHub Actions Windows Runners come with NSIS pre-installed
     # https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md
@@ -167,7 +167,7 @@ jobs:
     - name: Generate Pororoca.Test SBOM file
       if: ${{ inputs.runCD && inputs.producePororocaTestNuget }}
       shell: pwsh
-      run: dotnet CycloneDX ./src/Pororoca.Test/Pororoca.Test.csproj -o ./out/ -f sbom_pororoca_test.json -sv $env:NUGET_VERSION_NAME --json
+      run: dotnet CycloneDX ./src/Pororoca.Test/Pororoca.Test.csproj -o ./out/ -fn sbom_pororoca_test.json -sv $env:NUGET_VERSION_NAME -F UnsafeJson
 
     - name: Pack NuGet
       if: ${{ inputs.runCD && inputs.producePororocaTestNuget }}
@@ -192,7 +192,7 @@ jobs:
     - name: Generate Pororoca.Desktop SBOM file
       if: ${{ inputs.runCD && (inputs.produceDesktopLinuxX64 || inputs.produceDesktopDebianX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
       shell: pwsh
-      run: dotnet CycloneDX ./src/Pororoca.Desktop/Pororoca.Desktop.csproj -o ./out/ -f sbom_pororoca_desktop.json -sv $env:VERSION_NAME --json
+      run: dotnet CycloneDX ./src/Pororoca.Desktop/Pororoca.Desktop.csproj -o ./out/ -fn sbom_pororoca_desktop.json -sv $env:VERSION_NAME -F UnsafeJson
 
     - name: Generate Pororoca Desktop dlls
       if: ${{ inputs.runCD && (inputs.produceDesktopLinuxX64 || inputs.produceDesktopDebianX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}

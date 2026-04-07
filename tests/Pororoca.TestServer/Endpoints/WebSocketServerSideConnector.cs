@@ -5,14 +5,12 @@ namespace Pororoca.TestServer.Endpoints;
 
 public sealed class WebSocketServerSideConnector : WebSocketConnector
 {
-    protected override WebSocketMessageDirection DirectionFromThis =>
-        WebSocketMessageDirection.FromServer;
+    protected override WebSocketMessageDirection DirectionFromThis => WebSocketMessageDirection.FromServer;
 
-    public WebSocketServerSideConnector(WebSocket ws)
+    public WebSocketServerSideConnector(WebSocket ws, bool collectOnlyClientSideMessages, int bufferSize = DefaultBufferSize) : base(collectOnlyClientSideMessages, bufferSize)
     {
         // when this connector gets created, the connection is already established
-        this.ws = ws;
         SetIsConnected();
-        base.SetupAfterConnected();
+        base.SetupAfterConnected(ws);
     }
 }

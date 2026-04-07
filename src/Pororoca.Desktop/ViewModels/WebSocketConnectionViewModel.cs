@@ -52,8 +52,8 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     [Reactive]
     public string ConnectDisconnectCancelButtonToolTip { get; set; }
 
-    private WebSocketConnectorState connectionStateField;
-    public WebSocketConnectorState ConnectionState
+    private WebSocketConnectionState connectionStateField;
+    public WebSocketConnectionState ConnectionState
     {
         // At the beginning, this.connectionStateField will be 0,
         // which corresponds to Disconnected in the enum.
@@ -62,36 +62,36 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         {
             NameEditableVm.Icon = value switch
             {
-                WebSocketConnectorState.Connected or
-                WebSocketConnectorState.Disconnecting => EditableTextBlockIcon.ConnectedWebSocket,
+                WebSocketConnectionState.Connected or
+                WebSocketConnectionState.Disconnecting => EditableTextBlockIcon.ConnectedWebSocket,
                 _ => EditableTextBlockIcon.DisconnectedWebSocket
             };
             IsConnected = value switch
             {
-                WebSocketConnectorState.Connected or
-                WebSocketConnectorState.Disconnecting => true,
+                WebSocketConnectionState.Connected or
+                WebSocketConnectionState.Disconnecting => true,
                 _ => false
             };
             IsConnectingOrDisconnecting = value switch
             {
-                WebSocketConnectorState.Connecting or
-                WebSocketConnectorState.Disconnecting => true,
+                WebSocketConnectionState.Connecting or
+                WebSocketConnectionState.Disconnecting => true,
                 _ => false
             };
             ConnectDisconnectCancelButtonText = value switch
             {
-                WebSocketConnectorState.Disconnected => Localizer.Instance.WebSocketConnection.Connect,
-                WebSocketConnectorState.Connecting => Localizer.Instance.WebSocketConnection.CancelConnect,
-                WebSocketConnectorState.Connected => Localizer.Instance.WebSocketConnection.Disconnect,
-                WebSocketConnectorState.Disconnecting => Localizer.Instance.WebSocketConnection.CancelDisconnect,
+                WebSocketConnectionState.Disconnected => Localizer.Instance.WebSocketConnection.Connect,
+                WebSocketConnectionState.Connecting => Localizer.Instance.WebSocketConnection.CancelConnect,
+                WebSocketConnectionState.Connected => Localizer.Instance.WebSocketConnection.Disconnect,
+                WebSocketConnectionState.Disconnecting => Localizer.Instance.WebSocketConnection.CancelDisconnect,
                 _ => string.Empty
             };
             ConnectDisconnectCancelButtonToolTip = value switch
             {
-                WebSocketConnectorState.Disconnected => Localizer.Instance.WebSocketConnection.ConnectToolTip,
-                WebSocketConnectorState.Connecting => Localizer.Instance.WebSocketConnection.CancelConnectToolTip,
-                WebSocketConnectorState.Connected => Localizer.Instance.WebSocketConnection.DisconnectToolTip,
-                WebSocketConnectorState.Disconnecting => Localizer.Instance.WebSocketConnection.CancelDisconnect,
+                WebSocketConnectionState.Disconnected => Localizer.Instance.WebSocketConnection.ConnectToolTip,
+                WebSocketConnectionState.Connecting => Localizer.Instance.WebSocketConnection.CancelConnectToolTip,
+                WebSocketConnectionState.Connected => Localizer.Instance.WebSocketConnection.DisconnectToolTip,
+                WebSocketConnectionState.Disconnecting => Localizer.Instance.WebSocketConnection.CancelDisconnect,
                 _ => string.Empty
             };
             this.connectionStateField = value;
@@ -367,7 +367,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
         this.col = col;
         this.httpClientProvider = PororocaHttpClientProvider.Singleton;
-        this.connector = new();
+        this.connector = new(collectOnlyServerSideMessages: false, bufferSize: 65_536);
         this.connector.OnConnectionChanged = OnWebSocketConnectionChanged;
 
         if (ws.ClientMessages is not null)
@@ -550,11 +550,11 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         RequestAuthDataCtx.ClearRequestAuthValidationWarnings();
     }
 
-    private void OnWebSocketConnectionChanged(WebSocketConnectorState state, Exception? ex)
+    private void OnWebSocketConnectionChanged(WebSocketConnectionState state, Exception? ex)
     {
         ConnectionState = state;
         ConnectionExceptionContent = ex?.ToString();
-        if (state == WebSocketConnectorState.Connected || ex is not null)
+        if (state == WebSocketConnectionState.Connected || ex is not null)
         {
             // TODO: do not use fixed integers here, find a better way
             SelectedConnectionTabIndex = 2;
@@ -570,14 +570,14 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     {
         switch (ConnectionState)
         {
-            case WebSocketConnectorState.Disconnected:
+            case WebSocketConnectionState.Disconnected:
                 return ConnectAsync();
-            case WebSocketConnectorState.Connecting:
+            case WebSocketConnectionState.Connecting:
                 CancelConnect();
                 return Task.CompletedTask;
-            case WebSocketConnectorState.Connected:
+            case WebSocketConnectionState.Connected:
                 return DisconnectAsync();
-            case WebSocketConnectorState.Disconnecting:
+            case WebSocketConnectionState.Disconnecting:
                 CancelDisconnect();
                 return Task.CompletedTask;
             default:
@@ -662,7 +662,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     private async Task SendMessageAsync()
     {
-        if (ConnectionState != WebSocketConnectorState.Connected)
+        if (ConnectionState != WebSocketConnectionState.Connected)
         {
             InvalidClientMessageErrorCode = TranslateRequestErrors.WebSocketNotConnected;
         }
@@ -674,14 +674,22 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
             {
                 InvalidClientMessageErrorCode = validationErrorCode;
             }
-            else if (!TryTranslateClientMessage(effectiveVars, msg, out var resolvedStreamToSend, out string? translationErrorCode))
+            else if (!TryTranslateClientMessage(effectiveVars, msg, out byte[]? resolvedMsgBytes, out FileStream? resolvedStreamToSend, out string? translationErrorCode))
             {
                 InvalidClientMessageErrorCode = translationErrorCode;
             }
             else
             {
                 InvalidClientMessageErrorCode = null;
-                await this.connector.SendMessageAsync(msg.MessageType.ToWebSocketMessageType(), resolvedStreamToSend!, msg.DisableCompressionForThis);
+
+                if (resolvedMsgBytes is not null)
+                {
+                    await this.connector.SendMessageAsync(msg.MessageType.ToWebSocketMessageType(), resolvedMsgBytes, msg.DisableCompressionForThis);
+                }
+                else if (resolvedStreamToSend is not null)
+                {
+                    await this.connector.SendMessageAsync(msg.MessageType.ToWebSocketMessageType(), resolvedStreamToSend, msg.DisableCompressionForThis);
+                }
             }
         }
     }

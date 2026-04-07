@@ -1,10 +1,36 @@
 using System.Buffers;
-using System.Threading.Channels;
 using System.Net.WebSockets;
+using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
+using System.Threading.Channels;
 
 namespace Pororoca.Infrastructure.Features.WebSockets;
 
-public enum WebSocketConnectorState
+// Source code taken from:
+// https://github.com/alexandrehtrb/AlexandreHtrb.WebSocketExtensions
+// 
+// The MIT License(MIT)
+// Copyright(c) 2026 Alexandre H.T.R. Bonfitto
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+public enum WebSocketConnectionState
 {
     Disconnected = 0,
     Connecting = 1,
@@ -14,7 +40,10 @@ public enum WebSocketConnectorState
 
 public abstract class WebSocketConnector
 {
-    private const int bufferSize = 1440; // because Ethernet's MTU is around 1500 bytes
+    // because Ethernet's MTU is around 1500 bytes
+    public const int DefaultBufferSize = 1440;
+
+    // 20 messages waiting to be send should be enough for most applications.
     private const int messagesToSendChannelCapacity = 20;
 
     protected abstract WebSocketMessageDirection DirectionFromThis { get; }
@@ -24,7 +53,7 @@ public abstract class WebSocketConnector
         WebSocketMessageDirection.FromServer :
         WebSocketMessageDirection.FromClient;
 
-    public WebSocketConnectorState ConnectionState { get; protected set; }
+    public WebSocketConnectionState ConnectionState { get; protected set; }
 
     public Exception? ConnectionException { get; private set; }
 
@@ -36,25 +65,35 @@ public abstract class WebSocketConnector
 
     private CancellationTokenSource? cancelSendingAndReceivingTokenSource;
 
-    public Action<WebSocketConnectorState, Exception?>? OnConnectionChanged { get; set; }
+    public Action<WebSocketConnectionState, Exception?>? OnConnectionChanged { get; set; }
 
     protected WebSocket? ws;
+
+    private readonly bool collectOnlyReceivedMessages;
+    private readonly int bufferSize;
+
+    public WebSocketConnector(bool collectOnlyReceivedMessages, int bufferSize = DefaultBufferSize)
+    {
+        this.collectOnlyReceivedMessages = collectOnlyReceivedMessages;
+        this.bufferSize = bufferSize;
+        this.ConnectionState = WebSocketConnectionState.Disconnected;
+    }
 
     #region STATE SETTERS
 
     protected void SetIsConnecting() =>
-        SetChangedState(WebSocketConnectorState.Connecting, null);
+        SetChangedState(WebSocketConnectionState.Connecting, null);
 
     protected void SetIsConnected() =>
-        SetChangedState(WebSocketConnectorState.Connected, null);
+        SetChangedState(WebSocketConnectionState.Connected, null);
 
     protected void SetIsDisconnecting() =>
-        SetChangedState(WebSocketConnectorState.Disconnecting, null);
+        SetChangedState(WebSocketConnectionState.Disconnecting, null);
 
     protected void SetIsDisconnected(Exception? ex) =>
-        SetChangedState(WebSocketConnectorState.Disconnected, ex);
+        SetChangedState(WebSocketConnectionState.Disconnected, ex);
 
-    private void SetChangedState(WebSocketConnectorState state, Exception? connectionException)
+    private void SetChangedState(WebSocketConnectionState state, Exception? connectionException)
     {
         ConnectionState = state;
         ConnectionException = connectionException;
@@ -65,8 +104,9 @@ public abstract class WebSocketConnector
 
     #region CONNECTION
 
-    protected void SetupAfterConnected()
+    protected virtual void SetupAfterConnected(WebSocket ws)
     {
+        this.ws = ws;
         ClearAfterConnect();
         MessagesToSendChannel = BuildMessagesToSendChannel();
         SetupExchangedMessagesCollectorChannel();
@@ -83,7 +123,7 @@ public abstract class WebSocketConnector
     }
 
     public Task DisconnectAsync(CancellationToken cancellationToken = default) =>
-        ConnectionState == WebSocketConnectorState.Connected ?
+        ConnectionState == WebSocketConnectionState.Connected ?
         CloseStartingByLocalAsync(null, cancellationToken) :
         Task.CompletedTask;  // Not throwing exception if user tried to disconnect whilst WebSocket is not connected
 
@@ -146,46 +186,11 @@ public abstract class WebSocketConnector
         // We are using a channel as a queue here because two different messages
         // should not be sent at the same time through a WebSocket,
         // as the other party cannot distinguish which message part corresponds to which message.
-        Task HasMessageToSendAsync()
-        {
-            try
-            {
-                return MessagesToSendChannel!.Reader.WaitToReadAsync(disconnectToken).AsTask();
-            }
-            catch (OperationCanceledException)
-            {
-                return Task.CompletedTask;
-            }
-        }
+        Task HasMessageToSendAsync() =>
+            MessagesToSendChannel!.Reader.WaitToReadAsync(disconnectToken).AsTask();
 
-        Task<ValueWebSocketReceiveResult> HasMessageToReceiveAsync()
-        {
-            try
-            {
-                return this.ws!.ReceiveAsync(Memory<byte>.Empty, disconnectToken).AsTask();
-            }
-            catch (OperationCanceledException)
-            {
-                return Task.FromResult(default(ValueWebSocketReceiveResult));
-            }
-        }
-
-        async Task HasRemoteDisconnectingAsync()
-        {
-            try
-            {
-                while (!IsRemoteClosingConnection())
-                {
-                    // 200ms interval check
-                    await Task.Delay(200, disconnectToken);
-                }
-            }
-            catch (OperationCanceledException)
-            {
-            }
-        }
-
-        // The null checks below are needed.
+        Task HasMessageToReceiveAsync() =>
+            this.ws!.ReceiveAsync(Memory<byte>.Empty, disconnectToken).AsTask();
 
         bool IsRemoteClosingConnection() =>
             this.ws?.State == WebSocketState.Aborted || this.ws?.State == WebSocketState.CloseReceived;
@@ -204,13 +209,11 @@ public abstract class WebSocketConnector
         {
             var beganSending = HasMessageToSendAsync();
             var beganReceiving = HasMessageToReceiveAsync();
-            var beganRemoteDisconnecting = HasRemoteDisconnectingAsync();
-
-            var firstOperation = await Task.WhenAny(beganSending, beganReceiving, beganRemoteDisconnecting);
+            var firstOperation = await Task.WhenAny(beganSending, beganReceiving);
 
             if (disconnectToken.IsCancellationRequested)
             {
-                // Here means ClearAfterClosure() has
+                // This means ClearAfterClosure() has
                 // been called, after CloseByLocal().
                 return; // exits the reception thread
             }
@@ -252,12 +255,46 @@ public abstract class WebSocketConnector
     public ValueTask SendMessageAsync(WebSocketMessageType type, string text, bool disableCompression) =>
         EnqueueMessageToSendAsync(new(DirectionFromThis, type, text, disableCompression));
 
-    private ValueTask EnqueueMessageToSendAsync(WebSocketMessage msg) =>
-        ConnectionState == WebSocketConnectorState.Connected && MessagesToSendChannel is not null ?
-        MessagesToSendChannel!.Writer.WriteAsync(msg) :
-        ValueTask.CompletedTask; // Not throwing exception if user tried to send message whilst WebSocket is not connected
+    public ValueTask SendMessageAsync<T>(WebSocketMessageType type, T tObj, JsonTypeInfo<T> jsonTypeInfo, bool disableCompression) =>
+        EnqueueMessageToSendAsync(new(DirectionFromThis, type, JsonSerializer.SerializeToUtf8Bytes(tObj, jsonTypeInfo), disableCompression));
 
-    private async Task SendMessageAsync(WebSocketMessage msg, CancellationToken cancellationToken = default)
+    private ValueTask EnqueueMessageToSendAsync(WebSocketMessage msg) =>
+        // Not throwing exception if user tried to send message whilst WebSocket is not connected
+        ConnectionState == WebSocketConnectionState.Connected && MessagesToSendChannel is not null ?
+        MessagesToSendChannel!.Writer.WriteAsync(msg) :
+        ValueTask.CompletedTask;
+
+    private Task SendMessageAsync(WebSocketMessage msg, CancellationToken cancellationToken = default) =>
+        msg.IsStreamBased ?
+        SendStreamedMessageAsync(msg, cancellationToken) :
+        SendByteArrayMessageAsync(msg, cancellationToken);
+
+    private async Task SendByteArrayMessageAsync(WebSocketMessage msg, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            if (msg.Type == WebSocketMessageType.Close)
+            {
+                await CloseStartingByLocalAsync(msg, cancellationToken);
+                return;
+            }
+            else
+            {
+                await this.ws!.SendAsync(msg.Bytes.AsMemory(), msg.Type, msg.DetermineFlags(), cancellationToken);
+            }
+
+            if (!this.collectOnlyReceivedMessages)
+            {
+                this.exchangedMessagesCollectorWriter?.TryWrite(msg);
+            }
+        }
+        catch
+        {
+            // We will not attempt to close connection if an exception happens
+        }
+    }
+
+    private async Task SendStreamedMessageAsync(WebSocketMessage msg, CancellationToken cancellationToken = default)
     {
         byte[]? buffer = null;
         try
@@ -270,17 +307,17 @@ public abstract class WebSocketConnector
             else
             {
                 buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
-                Array.Clear(buffer);
-                msg.BytesStream.Seek(0, SeekOrigin.Begin);
-#pragma warning disable CA1835
-                while (!cancellationToken.IsCancellationRequested
-                    && await msg.BytesStream.ReadAsync(buffer, 0, buffer.Length, cancellationToken) > 0)
+                msg.BytesStream!.Seek(0, SeekOrigin.Begin);
+
+                while (!cancellationToken.IsCancellationRequested)
                 {
-#pragma warning restore CA1835
-                    var trimmedBuffer = buffer.AsMemory().TrimEnd((byte)0);
-                    var flags = msg.DetermineFlags();
-                    await this.ws!.SendAsync(trimmedBuffer, msg.Type, flags, cancellationToken);
-                    Array.Clear(buffer);
+                    int bufferBytesRead = await msg.BytesStream.ReadAsync(buffer.AsMemory(), cancellationToken);
+                    if (bufferBytesRead == 0)
+                    {
+                        break;
+                    }
+
+                    await this.ws!.SendAsync(buffer.AsMemory(0, bufferBytesRead), msg.Type, msg.DetermineFlags(), cancellationToken);
                 }
                 ArrayPool<byte>.Shared.Return(buffer);
                 buffer = null;
@@ -289,7 +326,7 @@ public abstract class WebSocketConnector
                 msg.BytesStream.Dispose();
             }
 
-            if (!cancellationToken.IsCancellationRequested && msg.ReachedEndOfStream())
+            if (!this.collectOnlyReceivedMessages && !cancellationToken.IsCancellationRequested && msg.ReachedEndOfStream())
             {
                 this.exchangedMessagesCollectorWriter?.TryWrite(msg);
             }
@@ -310,20 +347,17 @@ public abstract class WebSocketConnector
 
     private async Task<WebSocketMessage?> ReceiveMessageAsync(CancellationToken disconnectToken)
     {
-        using MemoryStream accumulator = new();
+        MemoryStream accumulator = new();
         byte[]? buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
-        Array.Clear(buffer);
+        var bufferAsMemory = buffer.AsMemory();
         ValueWebSocketReceiveResult receivalResult;
 
         try
         {
             do
             {
-                var mem = buffer.AsMemory();
-                receivalResult = await this.ws!.ReceiveAsync(mem, disconnectToken);
-                var trimmedBuffer = mem.TrimEnd((byte)0);
-                await accumulator.WriteAsync(trimmedBuffer, disconnectToken);
-                Array.Clear(buffer);
+                receivalResult = await this.ws!.ReceiveAsync(bufferAsMemory, disconnectToken);
+                await accumulator.WriteAsync(bufferAsMemory.Slice(0, receivalResult.Count), disconnectToken);
             }
             while (IsReceivingMessage(receivalResult) && !disconnectToken.IsCancellationRequested);
 
@@ -331,12 +365,18 @@ public abstract class WebSocketConnector
             buffer = null;
 
             var msgType = receivalResult.MessageType;
-            WebSocketMessage? msg =
-                (msgType == WebSocketMessageType.Close && !string.IsNullOrWhiteSpace(this.ws.CloseStatusDescription)) ?
-                new(OppositeDirection, msgType, this.ws.CloseStatusDescription!, false) :
-                accumulator.Length > 0 ?
-                new(OppositeDirection, msgType, accumulator.ToArray(), false) :
-                null;
+
+            WebSocketMessage? msg = null;
+
+            if (msgType == WebSocketMessageType.Close && !string.IsNullOrWhiteSpace(this.ws.CloseStatusDescription))
+            {
+                msg = new(OppositeDirection, msgType, this.ws.CloseStatusDescription!, false);
+            }
+            else if (accumulator.Length > 0)
+            {
+                accumulator.Seek(0, SeekOrigin.Begin);
+                msg = new(OppositeDirection, msgType, accumulator, false);
+            }
 
             if (msg is not null)
             {
@@ -359,6 +399,25 @@ public abstract class WebSocketConnector
         vwsrr.MessageType != WebSocketMessageType.Close
         && vwsrr.EndOfMessage == false;
 
+    /*
+     From GitHub dotnet/runtime repo issue
+     https://github.com/dotnet/runtime/issues/81762#issuecomment-1421047699
+
+     Difference between ws.CloseAsync() and ws.CloseOutputAsync():
+
+     CloseOutputAsync
+      - Send a close frame
+      - If a close frame has already been received, transition to a closed state and clean up / dispose.
+     
+     CloseAsync
+      - Send a close frame if we haven't already sent one
+      - Read all incoming messages until a close frame is received
+      - Transition to a closed state and clean up / dispose
+
+     In our WebSocketConnector, let's always use CloseOutputAsync(), 
+     so the connector doesn't waste time waiting for remote's close response frame.
+     */
+
     private async Task FinishClosureStartedByRemoteAsync()
     {
         Exception? closingException = null;
@@ -366,13 +425,15 @@ public abstract class WebSocketConnector
         {
             SetIsDisconnecting();
 
-            if (!string.IsNullOrWhiteSpace(this.ws!.CloseStatusDescription))
+            if (!string.IsNullOrWhiteSpace(this.ws?.CloseStatusDescription))
             {
-                WebSocketMessage closingMsg = new(OppositeDirection, WebSocketMessageType.Close, this.ws.CloseStatusDescription, false);
+                WebSocketMessage closingMsg = new(OppositeDirection, WebSocketMessageType.Close, this.ws!.CloseStatusDescription, false);
                 this.exchangedMessagesCollectorWriter?.TryWrite(closingMsg);
             }
 
             // These are the valid states for calling client.CloseOutputAsync()
+            // If the ws state is WebSocketState.CloseSent,
+            // it means CloseStartingByLocalAsync() already has been called.
             if (this.ws?.State == WebSocketState.Open || this.ws?.State == WebSocketState.CloseReceived)
             {
                 await this.ws!.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, null, default);
@@ -395,17 +456,22 @@ public abstract class WebSocketConnector
         try
         {
             SetIsDisconnecting();
-            // These are the valid states for calling client.CloseAsync()
-            if (this.ws?.State == WebSocketState.Open || this.ws?.State == WebSocketState.CloseReceived || this.ws?.State == WebSocketState.CloseSent)
+            // These are the valid states for calling client.CloseOutputAsync()
+            // If the ws state is WebSocketState.CloseSent,
+            // it means CloseStartingByLocalAsync() already has been called.
+            if (this.ws?.State == WebSocketState.Open || this.ws?.State == WebSocketState.CloseReceived)
             {
                 if (closingMsg is null)
                 {
-                    await this.ws!.CloseAsync(WebSocketCloseStatus.NormalClosure, null, cancellationToken);
+                    await this.ws!.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, null, cancellationToken);
                 }
                 else
                 {
                     await this.ws!.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, closingMsg.ReadAsUtf8Text(), cancellationToken);
-                    this.exchangedMessagesCollectorWriter?.TryWrite(closingMsg);
+                    if (!this.collectOnlyReceivedMessages)
+                    {
+                        this.exchangedMessagesCollectorWriter?.TryWrite(closingMsg);
+                    }
                 }
             }
         }

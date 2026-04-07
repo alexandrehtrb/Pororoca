@@ -40,7 +40,7 @@ public sealed class WebSocketExchangedMessageViewModel : ViewModelBase
         {
             if (CanBeSavedToFile)
             {
-                return ((MemoryStream)this.wsMsg.BytesStream).ToArray();
+                return this.wsMsg.ReadBytes();
             }
             else
             {
@@ -50,7 +50,7 @@ public sealed class WebSocketExchangedMessageViewModel : ViewModelBase
     }
 
     public bool CanBeSavedToFile =>
-        this.wsMsg.BytesStream is MemoryStream;
+        this.wsMsg.CanBeSavedToFile;
 
     private readonly WebSocketMessage wsMsg;
     private readonly DateTimeOffset exchangedAt;
@@ -99,7 +99,7 @@ public sealed class WebSocketExchangedMessageViewModel : ViewModelBase
             TypeDescription = Localizer.Instance.WebSocketClientMessage.MessageTypeText;
         }
 
-        MessageSizeDescription = string.Format(format, this.wsMsg.BytesLength);
+        MessageSizeDescription = string.Format(format, this.wsMsg.Length);
 
         string? txtContent = (this.wsMsg.Type == System.Net.WebSockets.WebSocketMessageType.Text
                            || this.wsMsg.Type == System.Net.WebSockets.WebSocketMessageType.Close) ?

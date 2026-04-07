@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.9.1](#391-2026-03-28)
 * [3.9.0](#390-2025-11-03)
 * [3.8.3](#383-2025-09-10)
 * [3.8.2](#382-2025-08-11)
@@ -44,6 +45,27 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.9.1](https://github.com/alexandrehtrb/Pororoca/tree/3.9.1) (2026-03-28)
+
+### Features
+
+- Added support for `libicu78` and `libicu76` on Debian.
+- Above fixes installation on Ubuntu 25 and 26. (issue #188, thanks @diegoleme!)
+- Overhauled WebSocket implementation with substantial performance improvements.
+
+### Others
+
+- Raised .NET SDK version to 8.0.419.
+- Updated badssl.com client certificates for tests.
+- If you use `Pororoca.Test` NuGet package:
+  - `WebSocketConnectorState` renamed to `WebSocketConnectionState`
+  - `ReadAsJson` renamed to `ReadAsUtf8Json`
+  - You can now define if the WebSocket will collect only server-side messages.
+
+### New Contributors
+
+* @diegoleme made his first contribution in PR #189
 
 ## [3.9.0](https://github.com/alexandrehtrb/Pororoca/tree/3.9.0) (2025-11-03)
 
