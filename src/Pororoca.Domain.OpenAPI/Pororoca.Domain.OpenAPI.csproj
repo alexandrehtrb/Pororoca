@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <RootNamespace>Pororoca.Domain</RootNamespace>
+    <IsTrimmable>True</IsTrimmable>
+    <IsAotCompatible>True</IsAotCompatible>
     <!-- Licence also available at https://github.com/alexandrehtrb/Pororoca/LICENCE.md -->
   </PropertyGroup>
 

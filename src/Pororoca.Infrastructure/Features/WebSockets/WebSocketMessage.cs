@@ -126,13 +126,6 @@ public sealed class WebSocketMessage
         JsonSerializer.Deserialize(ms.ToArray(), jsonTypeInfo)! :
         throw new NotSupportedException("Parsing available only for MemoryStreams.");
 
-    public T ReadAsUtf8Json<T>(JsonSerializerOptions opts) =>
-        Bytes is not null ?
-        JsonSerializer.Deserialize<T>(Bytes.AsSpan(), opts)! :
-        BytesStream is MemoryStream ms ?
-        JsonSerializer.Deserialize<T>(ms.ToArray(), opts)! :
-        throw new NotSupportedException("Parsing available only for MemoryStreams.");
-
     public string FormatForLogging() => Type switch
     {
         WebSocketMessageType.Text or WebSocketMessageType.Close when Bytes is not null || BytesStream is MemoryStream => ReadAsUtf8Text()!,

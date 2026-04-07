@@ -15,32 +15,14 @@ namespace Pororoca.Domain.Features.Common;
 internal static class JsonConfiguration
 {
     internal static readonly PororocaJsonSrcGenContext MainJsonCtxWithConverters =
-        MakePororocaJsonContext(true);
+        PororocaJsonSrcGenContext.WithConverters;
 
     internal static readonly PororocaJsonSrcGenContext MainJsonCtx =
-        MakePororocaJsonContext(false);
+        PororocaJsonSrcGenContext.WithoutConverters;
 
     internal static readonly MinifyJsonSrcGenContext MinifyingJsonCtx = MakeMinifyJsonContext();
 
     internal static readonly PrettifyJsonSrcGenContext PrettifyJsonCtx = MakePrettifyJsonContext();
-
-    private static PororocaJsonSrcGenContext MakePororocaJsonContext(bool includeCustomConverters)
-    {
-        JsonSerializerOptions options = new();
-        options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
-        options.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
-        options.WriteIndented = true;
-        options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-        options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-
-        if (includeCustomConverters)
-        {
-            options.Converters.Add(new PororocaRequestJsonConverter());
-            options.Converters.Add(new InsomniaResourceJsonConverter());
-        }
-
-        return new(options);
-    }
 
     private static MinifyJsonSrcGenContext MakeMinifyJsonContext()
     {
@@ -87,8 +69,40 @@ internal static class JsonConfiguration
 [JsonSerializable(typeof(InsomniaCollectionV4RequestGroup))]
 [JsonSerializable(typeof(InsomniaCollectionV4Request))]
 [JsonSerializable(typeof(InsomniaCollectionV4WebSocket))]
+[JsonSourceGenerationOptions(
+    WriteIndented = true,
+    PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
+    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+    UseStringEnumConverter = true,
+    AllowTrailingCommas = true,
+    ReadCommentHandling = JsonCommentHandling.Skip,
+    GenerationMode = JsonSourceGenerationMode.Default)]
 internal partial class PororocaJsonSrcGenContext : JsonSerializerContext
 {
+    internal static readonly PororocaJsonSrcGenContext WithConverters;
+    internal static readonly PororocaJsonSrcGenContext WithoutConverters;
+
+    static PororocaJsonSrcGenContext()
+    {
+        WithConverters = new PororocaJsonSrcGenContext(CreateJsonSerializerOptions(includeCustomConverters: true));
+        WithoutConverters = new PororocaJsonSrcGenContext(CreateJsonSerializerOptions(includeCustomConverters: false));
+    }
+
+    private static JsonSerializerOptions CreateJsonSerializerOptions(bool includeCustomConverters)
+    {
+        var options = new JsonSerializerOptions(Default.GeneratedSerializerOptions!)
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+        };
+
+        if (includeCustomConverters)
+        {
+            options.Converters.Add(new PororocaRequestJsonConverter());
+            options.Converters.Add(new InsomniaResourceJsonConverter());
+        }
+
+        return options;
+    }
 }
 
 [JsonSerializable(typeof(JsonDocument))]

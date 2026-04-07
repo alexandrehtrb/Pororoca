@@ -1,4 +1,6 @@
 using System.Net.WebSockets;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Pororoca.Infrastructure.Features.WebSockets;
 using Xunit;
 
@@ -198,7 +200,7 @@ public sealed class PororocaTestLibraryWebSocketsTests
                 Assert.Equal(WebSocketMessageDirection.FromServer, msg.Direction);
                 Assert.Equal(WebSocketMessageType.Text, msg.Type);
                 Assert.Equal($"{{\"bytesReceived\":5,\"messageType\":\"text\",\"text\":\"Hello\"}}", msg.ReadAsUtf8Text());
-                var msg2Json = msg.ReadAsUtf8Json<TestServerWebSocketMessage>(PororocaTestJsonExtensions.MinifyJsonOptions)!;
+                var msg2Json = msg.ReadAsUtf8Json(TestsJsonSrcGenContext.Default.TestServerWebSocketMessage)!;
                 Assert.Equal(5, msg2Json.BytesReceived);
                 Assert.Equal("text", msg2Json.MessageType);
                 Assert.Equal("Hello", msg2Json.Text);
