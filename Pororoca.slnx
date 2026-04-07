@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/sln/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/Pororoca.Desktop.Localization.SourceGeneration/Pororoca.Desktop.Localization.SourceGeneration.csproj" />
     <Project Path="src/Pororoca.Desktop/Pororoca.Desktop.csproj" />
