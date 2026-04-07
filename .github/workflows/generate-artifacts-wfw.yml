@@ -63,7 +63,7 @@ jobs:
     if: ${{ inputs.win_x64_installer || inputs.win_x86_installer }}
     uses: ./.github/workflows/cicd-wfw.yml
     with:
-      os: windows-2022 # running on Windows because we need NSIS. TODO: 'windows-2025' and later does not contain NSIS, we need to install manually
+      os: windows-latest
       runCD: true
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
       produceDesktopWinX64Installer: ${{ inputs.win_x64_installer }}
