@@ -69,6 +69,10 @@ on:
         required: false
         default: '3.11'
         type: string
+      cyclonedxDotnetVersion:
+        required: false
+        default: '6.1.0'
+        type: string
 
 jobs:
   cicd:
@@ -78,12 +82,12 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         fetch-depth: 1
 
     - name: Install .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: ${{ inputs.dotnetVersion }}
     
@@ -153,7 +157,7 @@ jobs:
 
     - name: Report unit tests coverage
       if: ${{ inputs.postUnitTestsCoverageInPR }}
-      uses: danielpalme/ReportGenerator-GitHub-Action@5.4.8
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.5.4
       with:
         reports: TestResults/**/coverage.cobertura.xml
         targetdir: TestResults
@@ -187,9 +191,11 @@ jobs:
     # finished CI steps
 
     # CD
-    - name: Install CycloneDX SBOM tool
+    - name: Install Dotnet CycloneDX SBOM tool
       if: ${{ inputs.runCD }}
-      run: dotnet tool install --global CycloneDX
+      run: dotnet tool install --global CycloneDX --version $env:CYCLONEDX_DOTNET_VERSION
+      env:
+        CYCLONEDX_DOTNET_VERSION: ${{ inputs.cyclonedxDotnetVersion }}
 
     # start CD steps - NuGet
 
@@ -496,7 +502,7 @@ jobs:
     # start upload CD artifacts
 
     - name: Upload artifacts to release
-      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == true) }}
+      if: ${{ inputs.runCD && inputs.uploadArtifactsToRelease }}
       shell: pwsh
       run: |
         $outputFiles = $(Get-ChildItem ./out/ | Select FullName)
@@ -507,10 +513,13 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    # actions/upload-artifact@v7 allows uploading zip without double-zip,
+    # but only one file at a time
+    # https://github.com/actions/upload-artifact/issues/766
     - name: Upload artifacts to workflow results (Windows machine)
       # no need if uploading to release
-      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) && (inputs.os == 'windows-2022') }} # TODO: Switch to windows-latest and install NSIS
-      uses: actions/upload-artifact@v4
+      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) && (inputs.os == 'windows-latest') }}
+      uses: actions/upload-artifact@v7
       with:
         compression-level: 0 # artifacts already compressed
         name: 'produced_artifacts_win.zip'
@@ -520,7 +529,7 @@ jobs:
     - name: Upload artifacts to workflow results (Linux machine)
       # no need if uploading to release
       if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) && (inputs.os == 'ubuntu-latest') }}
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         compression-level: 0 # artifacts already compressed
         name: 'produced_artifacts_linux.zip'

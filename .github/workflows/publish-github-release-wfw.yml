@@ -24,7 +24,7 @@ jobs:
     # TODO: add steps to publish (undraft) release on GitHub
 
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         fetch-depth: 1
 
