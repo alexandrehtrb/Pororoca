@@ -21,7 +21,7 @@ public static class HttpRepetitionValidatorTests
         var rep = MakeExampleRep() with { BaseRequestPath = baseReqPath! };
 
         // WHEN
-        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
+        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, TestContext.Current.CancellationToken);
 
         // THEN
         Assert.False(valid);
@@ -38,7 +38,7 @@ public static class HttpRepetitionValidatorTests
         var rep = MakeExampleRep();
 
         // WHEN
-        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
+        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, TestContext.Current.CancellationToken);
 
         // THEN
         Assert.False(valid);
@@ -55,7 +55,7 @@ public static class HttpRepetitionValidatorTests
         var rep = MakeExampleRep() with { DelayInMs = -11 };
 
         // WHEN
-        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
+        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, TestContext.Current.CancellationToken);
 
         // THEN
         Assert.False(valid);
@@ -72,7 +72,7 @@ public static class HttpRepetitionValidatorTests
         var rep = MakeExampleRep() with { MaxRatePerSecond = -11 };
 
         // WHEN
-        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
+        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, TestContext.Current.CancellationToken);
 
         // THEN
         Assert.False(valid);
@@ -91,7 +91,7 @@ public static class HttpRepetitionValidatorTests
         var rep = MakeExampleRep() with { NumberOfRepetitions = numReps };
 
         // WHEN
-        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
+        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, TestContext.Current.CancellationToken);
 
         // THEN
         Assert.False(valid);
@@ -110,7 +110,7 @@ public static class HttpRepetitionValidatorTests
         var rep = MakeExampleRep() with { MaxDop = maxDop };
 
         // WHEN
-        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
+        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, TestContext.Current.CancellationToken);
 
         // THEN
         Assert.False(valid);
@@ -133,7 +133,7 @@ public static class HttpRepetitionValidatorTests
         };
 
         // WHEN
-        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
+        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, TestContext.Current.CancellationToken);
 
         // THEN
         Assert.False(valid);
@@ -154,7 +154,7 @@ public static class HttpRepetitionValidatorTests
         var rep = MakeExampleRep() with { InputData = new(PororocaRepetitionInputDataType.File, null, inputDataFilePath) };
 
         // WHEN
-        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
+        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, TestContext.Current.CancellationToken);
 
         // THEN
         Assert.False(valid);
@@ -171,7 +171,7 @@ public static class HttpRepetitionValidatorTests
         var rep = MakeExampleRep() with { InputData = new(PororocaRepetitionInputDataType.RawJsonArray, "[]", null) };
 
         // WHEN
-        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
+        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, TestContext.Current.CancellationToken);
 
         // THEN
         Assert.False(valid);
@@ -194,7 +194,7 @@ public static class HttpRepetitionValidatorTests
         var rep = MakeExampleRep() with { InputData = new(PororocaRepetitionInputDataType.RawJsonArray, rawJsonArray, null) };
 
         // WHEN
-        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
+        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, TestContext.Current.CancellationToken);
 
         // THEN
         Assert.False(valid);
@@ -215,7 +215,7 @@ public static class HttpRepetitionValidatorTests
         };
 
         // WHEN
-        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
+        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, TestContext.Current.CancellationToken);
 
         // THEN
         Assert.True(valid);
@@ -245,7 +245,7 @@ public static class HttpRepetitionValidatorTests
         };
 
         // WHEN
-        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, default);
+        var (valid, errorCode, resolvedInputData) = await IsValidRepetitionAsync(effVars, baseReq, rep, TestContext.Current.CancellationToken);
 
         // THEN
         Assert.True(valid);

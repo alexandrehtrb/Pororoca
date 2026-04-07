@@ -1,7 +1,6 @@
 using System.Net.WebSockets;
 using Pororoca.Infrastructure.Features.WebSockets;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Pororoca.Test.Tests;
 
@@ -25,18 +24,18 @@ public sealed class PororocaTestLibraryWebSocketsTests
     public async Task Should_connect_and_disconnect_successfully(string wsConnName)
     {
         // GIVEN AND WHEN
-        var ws = await this.pororocaTest.ConnectWebSocketAsync(wsConnName);
+        var ws = await this.pororocaTest.ConnectWebSocketAsync(wsConnName, cancellationToken: TestContext.Current.CancellationToken);
         // THEN
         Assert.NotNull(ws);
         Assert.Null(ws.ConnectionException);
         Assert.Equal(WebSocketConnectionState.Connected, ws.State);
         // WHEN
-        await ws.DisconnectAsync();
-        await Task.Delay(500);
+        await ws.DisconnectAsync(TestContext.Current.CancellationToken);
+        await Task.Delay(500, TestContext.Current.CancellationToken);
         // THEN
         Assert.Equal(WebSocketConnectionState.Disconnected, ws.State);
         int msgCount = 0;
-        await foreach (var msg in ws.ExchangedMessagesCollector!.ReadAllAsync())
+        await foreach (var msg in ws.ExchangedMessagesCollector!.ReadAllAsync(TestContext.Current.CancellationToken))
         {
             msgCount++;
         }
@@ -49,7 +48,7 @@ public sealed class PororocaTestLibraryWebSocketsTests
     public async Task Should_connect_and_disconnect_with_client_closing_message_successfully(string wsConnName)
     {
         // GIVEN AND WHEN
-        var ws = await this.pororocaTest.ConnectWebSocketAsync(wsConnName);
+        var ws = await this.pororocaTest.ConnectWebSocketAsync(wsConnName, cancellationToken: TestContext.Current.CancellationToken);
         // THEN
         Assert.NotNull(ws);
         Assert.Null(ws.ConnectionException);
@@ -57,12 +56,12 @@ public sealed class PororocaTestLibraryWebSocketsTests
 
         // WHEN
         await ws.SendMessageAsync("Bye");
-        await Task.Delay(TimeSpan.FromSeconds(2));
+        await Task.Delay(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
         // THEN
         Assert.Equal(WebSocketConnectionState.Disconnected, ws.State);
         // THEN
         int msgCount = 0;
-        await foreach (var msg in ws.ExchangedMessagesCollector!.ReadAllAsync())
+        await foreach (var msg in ws.ExchangedMessagesCollector!.ReadAllAsync(TestContext.Current.CancellationToken))
         {
             msgCount++;
             Assert.Equal(WebSocketMessageDirection.FromClient, msg.Direction);
@@ -78,14 +77,14 @@ public sealed class PororocaTestLibraryWebSocketsTests
     public async Task Should_send_and_receive_text_messages_successfully(string wsConnName)
     {
         // GIVEN
-        var ws = await this.pororocaTest.ConnectWebSocketAsync(wsConnName);
+        var ws = await this.pororocaTest.ConnectWebSocketAsync(wsConnName, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(WebSocketConnectionState.Connected, ws.State);
         // WHEN
         await ws.SendMessageAsync("Hello");
         // THEN
         // The server should reply with a text message
         int msgCount = 0;
-        await foreach (var msg in ws.ExchangedMessagesCollector!.ReadAllAsync())
+        await foreach (var msg in ws.ExchangedMessagesCollector!.ReadAllAsync(TestContext.Current.CancellationToken))
         {
             msgCount++;
             if (msgCount == 1)
@@ -101,7 +100,7 @@ public sealed class PororocaTestLibraryWebSocketsTests
                 Assert.Equal("received text (5 bytes): Hello", msg.ReadAsUtf8Text());
 
                 // Teardown
-                await ws.DisconnectAsync();
+                await ws.DisconnectAsync(TestContext.Current.CancellationToken);
             }
         }
         Assert.Equal(2, msgCount);
@@ -113,14 +112,14 @@ public sealed class PororocaTestLibraryWebSocketsTests
     public async Task Should_optionally_collect_only_server_side_messages(string wsConnName)
     {
         // GIVEN
-        var ws = await this.pororocaTest.ConnectWebSocketAsync(wsConnName, collectOnlyServerSideMessages: true);
+        var ws = await this.pororocaTest.ConnectWebSocketAsync(wsConnName, collectOnlyServerSideMessages: true, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(WebSocketConnectionState.Connected, ws.State);
         // WHEN
         await ws.SendMessageAsync("Hello");
         // THEN
         // The server should reply with a text message
         int msgCount = 0;
-        await foreach (var msg in ws.ExchangedMessagesCollector!.ReadAllAsync())
+        await foreach (var msg in ws.ExchangedMessagesCollector!.ReadAllAsync(TestContext.Current.CancellationToken))
         {
             msgCount++;
             if (msgCount == 1)
@@ -130,7 +129,7 @@ public sealed class PororocaTestLibraryWebSocketsTests
                 Assert.Equal("received text (5 bytes): Hello", msg.ReadAsUtf8Text());
 
                 // Teardown
-                await ws.DisconnectAsync();
+                await ws.DisconnectAsync(TestContext.Current.CancellationToken);
             }
         }
         Assert.Equal(1, msgCount);
@@ -143,14 +142,14 @@ public sealed class PororocaTestLibraryWebSocketsTests
     {
         // GIVEN
         this.pororocaTest.SetEnvironmentVariable("Local", "TestFilesDir", GetTestFilesDir());
-        var ws = await this.pororocaTest.ConnectWebSocketAsync(wsConnName);
+        var ws = await this.pororocaTest.ConnectWebSocketAsync(wsConnName, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(WebSocketConnectionState.Connected, ws.State);
         // WHEN
         await ws.SendMessageAsync("SpiderMan");
         // THEN
         // The server should reply with a text message
         int msgCount = 0;
-        await foreach (var msg in ws.ExchangedMessagesCollector!.ReadAllAsync())
+        await foreach (var msg in ws.ExchangedMessagesCollector!.ReadAllAsync(TestContext.Current.CancellationToken))
         {
             msgCount++;
             if (msgCount == 1)
@@ -166,7 +165,7 @@ public sealed class PororocaTestLibraryWebSocketsTests
                 Assert.Equal("received binary 9784 bytes", msg.ReadAsUtf8Text());
 
                 // Teardown
-                await ws.DisconnectAsync();
+                await ws.DisconnectAsync(TestContext.Current.CancellationToken);
             }
         }
         Assert.Equal(2, msgCount);
@@ -178,14 +177,14 @@ public sealed class PororocaTestLibraryWebSocketsTests
     public async Task Should_use_subprotocol_and_parse_JSON_successfully(string wsConnName)
     {
         // GIVEN
-        var ws = await this.pororocaTest.ConnectWebSocketAsync(wsConnName);
+        var ws = await this.pororocaTest.ConnectWebSocketAsync(wsConnName, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(WebSocketConnectionState.Connected, ws.State);
         // WHEN
         await ws.SendMessageAsync("Hello");
         // THEN
         // The server should reply with a JSON text message
         int msgCount = 0;
-        await foreach (var msg in ws.ExchangedMessagesCollector!.ReadAllAsync())
+        await foreach (var msg in ws.ExchangedMessagesCollector!.ReadAllAsync(TestContext.Current.CancellationToken))
         {
             msgCount++;
             if (msgCount == 1)
@@ -205,7 +204,7 @@ public sealed class PororocaTestLibraryWebSocketsTests
                 Assert.Equal("Hello", msg2Json.Text);
 
                 // Teardown
-                await ws.DisconnectAsync();
+                await ws.DisconnectAsync(TestContext.Current.CancellationToken);
             }
         }
         Assert.Equal(WebSocketConnectionState.Disconnected, ws.State);

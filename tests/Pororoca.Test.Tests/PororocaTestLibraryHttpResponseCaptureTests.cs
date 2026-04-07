@@ -20,7 +20,7 @@ public sealed class PororocaTestLibraryHttpResponseCaptureTests
         Assert.Null(this.pororocaTest.GetCollectionVariable("CapturedHeaderValue"));
         Assert.Null(this.pororocaTest.GetEnvironmentVariable("Local", "CapturedHeaderValue"));
 
-        var res = await this.pororocaTest.SendHttpRequestAsync("Capture header value");
+        var res = await this.pororocaTest.SendHttpRequestAsync("Capture header value", TestContext.Current.CancellationToken);
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.NoContent, res.StatusCode);
@@ -35,7 +35,7 @@ public sealed class PororocaTestLibraryHttpResponseCaptureTests
         Assert.Null(this.pororocaTest.GetCollectionVariable("CapturedJSONValue"));
         Assert.Null(this.pororocaTest.GetEnvironmentVariable("Local", "CapturedJSONValue"));
 
-        var res = await this.pororocaTest.SendHttpRequestAsync("Capture JSON value");
+        var res = await this.pororocaTest.SendHttpRequestAsync("Capture JSON value", TestContext.Current.CancellationToken);
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
@@ -50,7 +50,7 @@ public sealed class PororocaTestLibraryHttpResponseCaptureTests
         Assert.Null(this.pororocaTest.GetCollectionVariable("CapturedHeaderValue"));
         Assert.Null(this.pororocaTest.GetEnvironmentVariable("Local", "CapturedXMLValue"));
 
-        var res = await this.pororocaTest.SendHttpRequestAsync("Capture XML value");
+        var res = await this.pororocaTest.SendHttpRequestAsync("Capture XML value", TestContext.Current.CancellationToken);
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
@@ -65,7 +65,7 @@ public sealed class PororocaTestLibraryHttpResponseCaptureTests
         Assert.Null(this.pororocaTest.GetCollectionVariable("CapturedHeaderValue"));
         Assert.Null(this.pororocaTest.GetEnvironmentVariable("Local", "CapturedHeaderValue"));
 
-        var res = await this.pororocaTest.SendHttpRequestAsync("Capture header value");
+        var res = await this.pororocaTest.SendHttpRequestAsync("Capture header value", TestContext.Current.CancellationToken);
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.NoContent, res.StatusCode);
@@ -80,7 +80,7 @@ public sealed class PororocaTestLibraryHttpResponseCaptureTests
         Assert.Null(this.pororocaTest.GetCollectionVariable("CapturedHeaderValue"));
         Assert.Null(this.pororocaTest.GetEnvironmentVariable("Local", "CapturedJSONValue"));
 
-        var res = await this.pororocaTest.SendHttpRequestAsync("Capture JSON value");
+        var res = await this.pororocaTest.SendHttpRequestAsync("Capture JSON value", TestContext.Current.CancellationToken);
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
@@ -95,7 +95,7 @@ public sealed class PororocaTestLibraryHttpResponseCaptureTests
         Assert.Null(this.pororocaTest.GetCollectionVariable("CapturedHeaderValue"));
         Assert.Null(this.pororocaTest.GetEnvironmentVariable("Local", "CapturedXMLValue"));
 
-        var res = await this.pororocaTest.SendHttpRequestAsync("Capture XML value");
+        var res = await this.pororocaTest.SendHttpRequestAsync("Capture XML value", TestContext.Current.CancellationToken);
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);

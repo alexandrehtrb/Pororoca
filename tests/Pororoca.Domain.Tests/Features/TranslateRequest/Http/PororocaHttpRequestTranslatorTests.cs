@@ -85,7 +85,7 @@ public static class PororocaHttpRequestTranslatorTests
         Assert.NotNull(reqMsg.Content.Headers.ContentType);
         Assert.Equal("application/json", reqMsg.Content.Headers.ContentType!.MediaType);
         Assert.Equal("utf-8", reqMsg.Content.Headers.ContentType!.CharSet);
-        string? contentText = await reqMsg.Content.ReadAsStringAsync();
+        string? contentText = await reqMsg.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
         Assert.Equal("{\"id\":17}", contentText);
     }
 
@@ -309,7 +309,7 @@ public static class PororocaHttpRequestTranslatorTests
         Assert.Equal("utf-8", resolvedReqContent.Headers.ContentType!.CharSet);
         Assert.Contains("pt-BR", resolvedReqContent!.Headers.ContentLanguage);
 
-        string? contentText = await resolvedReqContent.ReadAsStringAsync();
+        string? contentText = await resolvedReqContent.ReadAsStringAsync(TestContext.Current.CancellationToken);
         Assert.Equal("{\"id\":3162}", contentText);
     }
 
@@ -334,7 +334,7 @@ public static class PororocaHttpRequestTranslatorTests
         Assert.Equal("application/json", resolvedReqContent.Headers.ContentType!.MediaType);
         Assert.Contains("pt-BR", resolvedReqContent!.Headers.ContentLanguage);
 
-        string? contentText = await resolvedReqContent.ReadAsStringAsync();
+        string? contentText = await resolvedReqContent.ReadAsStringAsync(TestContext.Current.CancellationToken);
         Assert.Equal("{\"id\":1}", contentText);
     }
 
@@ -363,7 +363,7 @@ public static class PororocaHttpRequestTranslatorTests
         Assert.Equal("application/x-www-form-urlencoded", resolvedReqContent.Headers.ContentType!.MediaType);
         Assert.Contains("pt-BR", resolvedReqContent!.Headers.ContentLanguage);
 
-        string? contentText = await resolvedReqContent.ReadAsStringAsync();
+        string? contentText = await resolvedReqContent.ReadAsStringAsync(TestContext.Current.CancellationToken);
         Assert.Equal("key1=abc&key3=value3", contentText);
     }
 
@@ -399,7 +399,7 @@ public static class PororocaHttpRequestTranslatorTests
         Assert.Equal(4, castedContent.Count());
 
         var p1Content = (StringContent)castedContent.ElementAt(0);
-        string? p1ContentText = await p1Content.ReadAsStringAsync();
+        string? p1ContentText = await p1Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
         Assert.Equal("oi", p1ContentText);
         Assert.NotNull(p1Content.Headers.ContentDisposition);
         Assert.Equal("form-data", p1Content.Headers.ContentDisposition!.DispositionType);
@@ -409,7 +409,7 @@ public static class PororocaHttpRequestTranslatorTests
         Assert.Equal("utf-8", p1Content.Headers.ContentType!.CharSet);
 
         var p2Content = (StringContent)castedContent.ElementAt(1);
-        string? p2ContentText = await p2Content.ReadAsStringAsync();
+        string? p2ContentText = await p2Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
         Assert.Equal("oi2", p2ContentText);
         Assert.NotNull(p2Content.Headers.ContentDisposition);
         Assert.Equal("form-data", p2Content.Headers.ContentDisposition!.DispositionType);
@@ -419,7 +419,7 @@ public static class PororocaHttpRequestTranslatorTests
         Assert.Equal("utf-8", p2Content.Headers.ContentType!.CharSet);
 
         var p3Content = (StringContent)castedContent.ElementAt(2);
-        string? p3ContentText = await p3Content.ReadAsStringAsync();
+        string? p3ContentText = await p3Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
         Assert.Equal("value3", p3ContentText);
         Assert.NotNull(p3Content.Headers.ContentDisposition);
         Assert.Equal("form-data", p3Content.Headers.ContentDisposition!.DispositionType);
@@ -429,7 +429,7 @@ public static class PororocaHttpRequestTranslatorTests
         Assert.Equal("utf-8", p3Content.Headers.ContentType!.CharSet);
 
         var p4Content = (StreamContent)castedContent.ElementAt(3);
-        string? p4ContentText = await p4Content.ReadAsStringAsync();
+        string? p4ContentText = await p4Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
         Assert.Equal("{\"id\":2}", p4ContentText);
         Assert.NotNull(p4Content.Headers.ContentDisposition);
         Assert.Equal("form-data", p4Content.Headers.ContentDisposition!.DispositionType);
@@ -458,7 +458,7 @@ public static class PororocaHttpRequestTranslatorTests
         Assert.Equal("application/json", resolvedReqContent.Headers.ContentType!.MediaType);
         Assert.Contains("pt-BR", resolvedReqContent!.Headers.ContentLanguage);
 
-        string? contentText = await resolvedReqContent.ReadAsStringAsync();
+        string? contentText = await resolvedReqContent.ReadAsStringAsync(TestContext.Current.CancellationToken);
         Assert.Equal("{\"query\":\"myGraphQlQuery\",\"variables\":null}", contentText);
     }
 
@@ -482,7 +482,7 @@ public static class PororocaHttpRequestTranslatorTests
         Assert.Equal("application/json", resolvedReqContent.Headers.ContentType!.MediaType);
         Assert.Contains("pt-BR", resolvedReqContent!.Headers.ContentLanguage);
 
-        string? contentText = await resolvedReqContent.ReadAsStringAsync();
+        string? contentText = await resolvedReqContent.ReadAsStringAsync(TestContext.Current.CancellationToken);
         Assert.Equal("{\"query\":\"myGraphQlQuery\",\"variables\":{\"id\":19}}", contentText);
     }
 

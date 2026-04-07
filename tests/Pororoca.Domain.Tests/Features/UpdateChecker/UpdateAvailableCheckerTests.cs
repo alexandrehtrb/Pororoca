@@ -50,7 +50,7 @@ public sealed class UpdateAvailableCheckerTests
 
         // THEN
         Assert.Null(callbackBody);
-        await this.requester.ReceivedWithAnyArgs().RequestAsync(null!, null, null, null!, default);
+        await this.requester.ReceivedWithAnyArgs().RequestAsync(null!, null, null, null!, TestContext.Current.CancellationToken);
     }
 
     [Theory]
@@ -71,7 +71,7 @@ public sealed class UpdateAvailableCheckerTests
 
         // THEN
         Assert.Null(callbackBody);
-        await this.requester.ReceivedWithAnyArgs().RequestAsync(null!, null, null, null!, default);
+        await this.requester.ReceivedWithAnyArgs().RequestAsync(null!, null, null, null!, TestContext.Current.CancellationToken);
     }
 
     [Theory]
@@ -96,7 +96,7 @@ public sealed class UpdateAvailableCheckerTests
         Assert.Equal("https://github.com/alexandrehtrb/Pororoca/releases/tag/" + latestVersion, callbackBody.HtmlUrl);
         Assert.Equal(latestVersion, callbackBody.VersionName);
         Assert.Equal("markdown description here", callbackBody.Description);
-        await this.requester.ReceivedWithAnyArgs().RequestAsync(null!, null, null, null!, default);
+        await this.requester.ReceivedWithAnyArgs().RequestAsync(null!, null, null, null!, TestContext.Current.CancellationToken);
     }
 
     private static PororocaHttpResponse MockGetLatestReleaseResponseSuccess(string version)

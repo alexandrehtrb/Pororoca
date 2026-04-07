@@ -37,11 +37,11 @@ public static class HttpRepeaterTests
                  .Returns(Task.FromResult(response1), Task.FromResult(response2), Task.FromResult(response3));
 
         // WHEN
-        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, default);
+        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, TestContext.Current.CancellationToken);
 
         // THEN
         List<PororocaHttpRepetitionResult> results = new();
-        await foreach (var result in channelReader.ReadAllAsync())
+        await foreach (var result in channelReader.ReadAllAsync(TestContext.Current.CancellationToken))
         {
             results.Add(result);
         }
@@ -97,11 +97,11 @@ public static class HttpRepeaterTests
                  .Returns(Task.FromResult(response3));
 
         // WHEN
-        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, default);
+        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, TestContext.Current.CancellationToken);
 
         // THEN
         List<PororocaHttpRepetitionResult> results = new();
-        await foreach (var result in channelReader.ReadAllAsync())
+        await foreach (var result in channelReader.ReadAllAsync(TestContext.Current.CancellationToken))
         {
             results.Add(result);
         }
@@ -155,11 +155,11 @@ public static class HttpRepeaterTests
                  .Returns(Task.FromResult(response3));
 
         // WHEN
-        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, default);
+        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, TestContext.Current.CancellationToken);
 
         // THEN
         List<PororocaHttpRepetitionResult> results = new();
-        await foreach (var result in channelReader.ReadAllAsync())
+        await foreach (var result in channelReader.ReadAllAsync(TestContext.Current.CancellationToken))
         {
             results.Add(result);
         }
@@ -214,11 +214,11 @@ public static class HttpRepeaterTests
                  .ReturnsForAnyArgs(false);
 
         // WHEN
-        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, default);
+        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, TestContext.Current.CancellationToken);
 
         // THEN
         List<PororocaHttpRepetitionResult> results = new();
-        await foreach (var result in channelReader.ReadAllAsync())
+        await foreach (var result in channelReader.ReadAllAsync(TestContext.Current.CancellationToken))
         {
             results.Add(result);
         }
@@ -256,11 +256,11 @@ public static class HttpRepeaterTests
         // WHEN
         Stopwatch sw = new();
         sw.Start();
-        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, default);
+        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, TestContext.Current.CancellationToken);
 
         // THEN
         List<PororocaHttpRepetitionResult> results = new();
-        await foreach (var result in channelReader.ReadAllAsync())
+        await foreach (var result in channelReader.ReadAllAsync(TestContext.Current.CancellationToken))
         {
             results.Add(result);
         }
@@ -303,11 +303,11 @@ public static class HttpRepeaterTests
         // WHEN
         Stopwatch sw = new();
         sw.Start();
-        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, default);
+        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, TestContext.Current.CancellationToken);
 
         // THEN
         List<PororocaHttpRepetitionResult> results = new();
-        await foreach (var result in channelReader.ReadAllAsync())
+        await foreach (var result in channelReader.ReadAllAsync(TestContext.Current.CancellationToken))
         {
             results.Add(result);
         }
@@ -339,11 +339,11 @@ public static class HttpRepeaterTests
                  .ThrowsForAnyArgs(new JsonException());
 
         // WHEN
-        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, default);
+        var channelReader = StartRepetition(requester, colEffVars, resolvedInputData, colScopedAuth, colScopedReqHeaders, rep, baseReq, TestContext.Current.CancellationToken);
 
         // THEN
         List<PororocaHttpRepetitionResult> results = new();
-        await foreach (var result in channelReader.ReadAllAsync())
+        await foreach (var result in channelReader.ReadAllAsync(TestContext.Current.CancellationToken))
         {
             results.Add(result);
         }
