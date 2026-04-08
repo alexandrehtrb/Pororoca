@@ -138,7 +138,7 @@
         Grid.Row="1"
         Margin="12,0,12,0"
         VerticalAlignment="Stretch"
-        ColumnDefinitions="*,2,*">
+        ColumnDefinitions="*,Auto,*">
 
       <!-- REQUEST -->
       <Grid
