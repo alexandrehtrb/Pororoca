@@ -4,6 +4,9 @@ using Avalonia.Markup.Xaml;
 using Pororoca.Desktop.UserData;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.Views;
+#if DEBUG
+using AvaloniaUI.DiagnosticsSupport;
+#endif
 
 namespace Pororoca.Desktop;
 
@@ -23,6 +26,10 @@ public sealed class App : Application
                 DataContext = new MainWindowViewModel(),
             };
         }
+
+#if DEBUG
+        this.AttachDeveloperTools();
+#endif
 
         base.OnFrameworkInitializationCompleted();
     }

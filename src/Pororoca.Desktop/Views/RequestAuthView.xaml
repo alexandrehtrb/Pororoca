@@ -99,7 +99,7 @@
           Width="200"
           HorizontalAlignment="Left"
           VerticalContentAlignment="Center"
-          Watermark="{Binding i18n.RequestAuth.AuthModeBasicLoginWatermark, Mode=OneWay}"
+          PlaceholderText="{Binding i18n.RequestAuth.AuthModeBasicLoginWatermark, Mode=OneWay}"
           Classes="SingleLine"
           Text="{Binding BasicAuthLogin}"/>
       <TextBox
@@ -108,7 +108,7 @@
           Margin="0,12,0,0"
           HorizontalAlignment="Left"
           VerticalContentAlignment="Center"
-          Watermark="{Binding i18n.RequestAuth.AuthModeBasicPasswordWatermark, Mode=OneWay}"
+          PlaceholderText="{Binding i18n.RequestAuth.AuthModeBasicPasswordWatermark, Mode=OneWay}"
           Classes="SingleLine"
           Text="{Binding BasicAuthPassword}"/>
     </StackPanel>
@@ -127,7 +127,7 @@
           Width="200"
           HorizontalAlignment="Left"
           VerticalContentAlignment="Center"
-          Watermark="{Binding i18n.RequestAuth.AuthModeBearerTokenWatermark, Mode=OneWay}"
+          PlaceholderText="{Binding i18n.RequestAuth.AuthModeBearerTokenWatermark, Mode=OneWay}"
           Classes="SingleLine"
           Text="{Binding BearerAuthToken}"/>
     </StackPanel>
@@ -151,7 +151,7 @@
           Margin="0,12,0,0"
           HorizontalAlignment="Left"
           VerticalContentAlignment="Center"
-          Watermark="{Binding i18n.RequestAuth.AuthModeWindowsLoginWatermark, Mode=OneWay}"
+          PlaceholderText="{Binding i18n.RequestAuth.AuthModeWindowsLoginWatermark, Mode=OneWay}"
           Classes="SingleLine"
           Classes.HasValidationProblem="{Binding HasWindowsAuthLoginProblem, Mode=OneWay}"
           IsVisible="{Binding !WindowsAuthUseCurrentUser, Mode=OneWay}"
@@ -162,7 +162,7 @@
           Margin="0,12,0,0"
           HorizontalAlignment="Left"
           VerticalContentAlignment="Center"
-          Watermark="{Binding i18n.RequestAuth.AuthModeWindowsPasswordWatermark, Mode=OneWay}"
+          PlaceholderText="{Binding i18n.RequestAuth.AuthModeWindowsPasswordWatermark, Mode=OneWay}"
           Classes="SingleLine"
           Classes.HasValidationProblem="{Binding HasWindowsAuthPasswordProblem, Mode=OneWay}"
           IsVisible="{Binding !WindowsAuthUseCurrentUser, Mode=OneWay}"
@@ -173,7 +173,7 @@
           Margin="0,12,0,0"
           HorizontalAlignment="Left"
           VerticalContentAlignment="Center"
-          Watermark="{Binding i18n.RequestAuth.AuthModeWindowsDomainWatermark, Mode=OneWay}"
+          PlaceholderText="{Binding i18n.RequestAuth.AuthModeWindowsDomainWatermark, Mode=OneWay}"
           Classes="SingleLine"
           Classes.HasValidationProblem="{Binding HasWindowsAuthDomainProblem, Mode=OneWay}"
           IsVisible="{Binding !WindowsAuthUseCurrentUser, Mode=OneWay}"
@@ -208,7 +208,7 @@
         <TextBox
             Name="tbClientCertificatePkcs12FilePath"
             Width="240"
-            Watermark="{Binding i18n.RequestAuth.CertificateFilePathWatermark, Mode=OneWay}"
+            PlaceholderText="{Binding i18n.RequestAuth.CertificateFilePathWatermark, Mode=OneWay}"
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
             Classes="SingleLine"
@@ -218,7 +218,7 @@
             Name="tbClientCertificatePkcs12FilePassword"
             Width="240"
             Margin="0,12,0,0"
-            Watermark="{Binding i18n.RequestAuth.FilePasswordWatermark, Mode=OneWay}"
+            PlaceholderText="{Binding i18n.RequestAuth.FilePasswordWatermark, Mode=OneWay}"
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
             Classes="SingleLine"
@@ -242,7 +242,7 @@
         <TextBox
             Name="tbClientCertificatePemCertificateFilePath"
             Width="240"
-            Watermark="{Binding i18n.RequestAuth.CertificateFilePathWatermark, Mode=OneWay}"
+            PlaceholderText="{Binding i18n.RequestAuth.CertificateFilePathWatermark, Mode=OneWay}"
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
             Classes="SingleLine"
@@ -252,7 +252,7 @@
             Name="tbClientCertificatePemPrivateKeyFilePath"
             Width="240"
             Margin="0,12,0,0"
-            Watermark="{Binding i18n.RequestAuth.PrivateKeyFilePathWatermark, Mode=OneWay}"
+            PlaceholderText="{Binding i18n.RequestAuth.PrivateKeyFilePathWatermark, Mode=OneWay}"
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
             Classes="SingleLine"
@@ -262,7 +262,7 @@
             Name="tbClientCertificatePemPrivateKeyPassword"
             Width="240"
             Margin="0,12,0,0"
-            Watermark="{Binding i18n.RequestAuth.FilePasswordWatermark, Mode=OneWay}"
+            PlaceholderText="{Binding i18n.RequestAuth.FilePasswordWatermark, Mode=OneWay}"
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
             Classes="SingleLine"

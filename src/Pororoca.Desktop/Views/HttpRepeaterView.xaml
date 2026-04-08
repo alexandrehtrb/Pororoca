@@ -379,7 +379,7 @@
                               ConverterParameter=File}">
                 <TextBox
                     Name="tbRepetitionInputDataFileSrcPath"
-                    Watermark="{Binding i18n.HttpRepeater.InputDataFileSrcPathWatermark, Mode=OneWay}"
+                    PlaceholderText="{Binding i18n.HttpRepeater.InputDataFileSrcPathWatermark, Mode=OneWay}"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Left"
                     VerticalContentAlignment="Center"

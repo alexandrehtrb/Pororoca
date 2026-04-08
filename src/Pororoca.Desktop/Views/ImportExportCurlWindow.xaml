@@ -35,7 +35,7 @@
 
     <TextBox
       Name="tbCurlCommandLine"
-      Watermark="{Binding i18n.ImportExportCurlCommandLineDialog.InputWatermark, Mode=OneWay}"
+      PlaceholderText="{Binding i18n.ImportExportCurlCommandLineDialog.InputWatermark, Mode=OneWay}"
       HorizontalAlignment="Stretch"
       Height="320"
       IsReadOnly="{Binding IsExporting, Mode=OneWay}"
