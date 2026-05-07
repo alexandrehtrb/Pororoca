@@ -75,7 +75,7 @@ public class SaveAndRestoreCollectionUITest : PororocaUITest
         RepeaterRobot = new(RootView.FindControl<HttpRepeaterView>("httpRepView")!);
     }
 
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
         await CreateCollectionWithDifferentItems();
 

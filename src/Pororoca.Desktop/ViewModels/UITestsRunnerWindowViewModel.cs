@@ -66,6 +66,7 @@ public sealed class UITestsRunnerWindowViewModel : ViewModelBase
             new(nameof(TreeDeleteItemsUITest), new TreeDeleteItemsUITest()),
             new(nameof(HttpRequestValidationsUITest), new HttpRequestValidationsUITest()),
             new(nameof(HttpRequestsUITest), new HttpRequestsUITest()),
+            new(nameof(BadSslUITest), new BadSslUITest()),
             new(nameof(VariablesCutCopyPasteDeleteUITest), new VariablesCutCopyPasteDeleteUITest()),
             new(nameof(HeadersCutCopyPasteDeleteUITest), new HeadersCutCopyPasteDeleteUITest()),
             new(nameof(UrlEncodedParamsCutCopyPasteDeleteUITest), new UrlEncodedParamsCutCopyPasteDeleteUITest()),
@@ -141,7 +142,7 @@ public sealed class UITestsRunnerWindowViewModel : ViewModelBase
         var waitingTimeBetweenActions = TimeSpan.FromMilliseconds(ActionsWaitingTimeInMs);
         var tests = Tests.Where(t => t.Include).Select(t => t.Test).ToArray();
 
-        string resultsLog = await UITestsRunner.RunTestsAsync(waitingTimeBetweenActions, tests);
+        string resultsLog = await UITestsRunner.RunTestsAsync(waitingTimeBetweenActions, default, tests);
 
         // restoring the items' tree after the tests
         foreach (var item in bkupedItems)

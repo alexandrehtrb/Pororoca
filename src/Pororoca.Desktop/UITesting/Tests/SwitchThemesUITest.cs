@@ -16,7 +16,7 @@ public sealed class SwitchThemesUITest : PororocaUITest
         MainWindowPanel = content.FindControl<Panel>("mainWindowPanel")!;
     }
 
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
         // light
 

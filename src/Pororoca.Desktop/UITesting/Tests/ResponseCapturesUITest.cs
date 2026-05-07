@@ -42,7 +42,7 @@ public sealed partial class ResponseCapturesUITest : PororocaUITest
         }
     }
 
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
         await TopMenuRobot.CreateNewCollection();
         await ColRobot.Name.Edit("COL1");

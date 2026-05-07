@@ -14,7 +14,7 @@ public sealed class SwitchLanguagesUITest : PororocaUITest
         Robot = new(content);
     }
 
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
         // english
 

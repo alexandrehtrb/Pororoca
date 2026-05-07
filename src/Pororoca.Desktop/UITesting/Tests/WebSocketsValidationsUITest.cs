@@ -32,7 +32,7 @@ public sealed partial class WebSocketsValidationsUITest : PororocaUITest
         WsRobot = new(RootView.FindControl<WebSocketConnectionView>("wsConnView")!);
     }
 
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
         //validate http version
 

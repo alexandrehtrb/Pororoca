@@ -14,7 +14,7 @@ public sealed class TopMenuUITest : PororocaUITest
         Robot = new((Control)content!);
     }
 
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
         Robot.File.AssertIsVisible();
         Robot.Options.AssertIsVisible();

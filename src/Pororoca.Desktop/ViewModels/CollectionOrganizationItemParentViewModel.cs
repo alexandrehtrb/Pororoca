@@ -5,6 +5,7 @@ namespace Pororoca.Desktop.ViewModels;
 
 public interface ICollectionOrganizationItemParentViewModel
 {
+    bool IsExpanded { get; set; }
     void MoveSubItemUp(CollectionOrganizationItemViewModel colItemVm);
     void MoveSubItemDown(CollectionOrganizationItemViewModel colItemVm);
     void DeleteSubItem(CollectionOrganizationItemViewModel item);

@@ -4,7 +4,7 @@ namespace Pororoca.Desktop.UITesting.Tests;
 
 public sealed class TimeTextFormattingUITest : PororocaUITest
 {
-    public override Task RunAsync()
+    public override Task RunAsync(CancellationToken cancellationToken)
     {
         TimeSpan ts;
         string expectedTimeText;

@@ -17,9 +17,9 @@ public sealed class TreeDeleteItemsUITest : PororocaUITest
         TreeRobot = new(CollectionsGroup);
     }
 
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
-        await new TreeCopyAndPasteItemsUITest().RunAsync();
+        await new TreeCopyAndPasteItemsUITest().RunAsync(cancellationToken);
         await Wait(2);
 
         // when deleting a collection, all its sub-items should be deleted

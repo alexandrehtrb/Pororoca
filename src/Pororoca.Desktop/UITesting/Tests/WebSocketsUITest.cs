@@ -42,7 +42,7 @@ public sealed partial class WebSocketsUITest : PororocaUITest
         }
     }
 
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
         await TopMenuRobot.CreateNewCollection();
         await ColRobot.Name.Edit("COL1");
@@ -65,8 +65,15 @@ public sealed partial class WebSocketsUITest : PororocaUITest
         await WsRobot.AddClientMessage.ClickOn();
         await WsMsgRobot.Name.Edit("HOMEM_ARANHA");
         await WsMsgRobot.SetFileBinaryContent("{{TestFilesDir}}/homem_aranha.jpg");
-        await Wait(10);
+        // For some VERY strange reason, the delete many items operation in TreeDeleteItemsUITest
+        // causes an exception on CollectionsGroupViewModel.CollectionGroupSelectedItem,
+        // which makes the two-way binding for SelectedItem to not work when selecting COL1/WS directly.
+        // Weirdly, if we select COL1/WS/JSON first and then COL1/WS, the test works correctly.
+        // Manual tests indicate that this is not a pervasive bug.
+        // TODO: investigate this further.
+        await TreeRobot.Select("COL1/WS/JSON"); // do not remove this line
         await TreeRobot.Select("COL1/WS");
+        await Wait(1);
 
         if (OperatingSystem.IsLinux())
         {

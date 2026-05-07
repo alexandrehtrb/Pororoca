@@ -35,28 +35,7 @@
       <!-- Because we are used CompiledBindings now, we need to declare x:DataType for each expandable vm -->
       <Style
           Selector="TreeViewItem"
-          x:DataType="vm:CollectionViewModel">
-        <Setter
-            Property="IsExpanded"
-            Value="{Binding IsExpanded, Mode=TwoWay}"/>
-      </Style>
-      <Style
-          Selector="TreeViewItem"
-          x:DataType="vm:CollectionFolderViewModel">
-        <Setter
-            Property="IsExpanded"
-            Value="{Binding IsExpanded, Mode=TwoWay}"/>
-      </Style>
-      <Style
-          Selector="TreeViewItem"
-          x:DataType="vm:EnvironmentsGroupViewModel">
-        <Setter
-            Property="IsExpanded"
-            Value="{Binding IsExpanded, Mode=TwoWay}"/>
-      </Style>
-      <Style
-          Selector="TreeViewItem"
-          x:DataType="vm:WebSocketConnectionViewModel">
+          x:DataType="vm:ICollectionOrganizationItemParentViewModel">
         <Setter
             Property="IsExpanded"
             Value="{Binding IsExpanded, Mode=TwoWay}"/>

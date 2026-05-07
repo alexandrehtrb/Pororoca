@@ -45,7 +45,7 @@ public sealed partial class HttpRequestsUITest : PororocaUITest
         }
     }
 
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
         await TopMenuRobot.CreateNewCollection();
         await ColRobot.Name.Edit("COL1");
@@ -91,31 +91,6 @@ public sealed partial class HttpRequestsUITest : PororocaUITest
             await TestPostFormDataBody();
             await TestBasicAuth();
             await TestBearerAuth();
-        }
-
-        if (OperatingSystem.IsLinux())
-        {
-            // reenable TLS verification for BadSSL requests
-            await TopMenuRobot.SwitchTlsVerification(true);
-        }
-
-        // badssl.com uses only HTTP/1.1
-        await HttpRobot.SetHttpVersion(1.1m);
-        try
-        {
-            AppendToLog("Running self-signed and client certificates tests (HTTP/1.1 only).");
-            await TestSelfSigned();
-            await TestClientCertificatePkcs12Auth();
-            await TestClientCertificatePemConjoinedUnencryptedAuth();
-            await TestClientCertificatePemConjoinedEncryptedAuth();
-            await TestClientCertificatePemSeparateUnencryptedAuth();
-            await TestClientCertificatePemSeparateEncryptedAuth();
-        }
-        catch (Exception ex)
-        {
-            // badssl.com sometimes is unstable, that is why we are wrapping with a try-catch
-            AppendToLog("Bad SSL test failed.");
-            AppendToLog(ex.ToString());
         }
     }
 

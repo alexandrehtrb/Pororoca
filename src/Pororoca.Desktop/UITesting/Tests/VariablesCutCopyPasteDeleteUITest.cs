@@ -24,7 +24,7 @@ public sealed partial class VariablesCutCopyPasteDeleteUITest : PororocaUITest
         EnvRobot = new(RootView.FindControl<EnvironmentView>("environmentView")!);
     }
 
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
         PororocaVariable[] colVars, envVars;
         await TopMenuRobot.CreateNewCollection();

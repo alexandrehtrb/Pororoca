@@ -22,7 +22,7 @@ public sealed partial class UrlEncodedParamsCutCopyPasteDeleteUITest : PororocaU
         HttpRobot = new(RootView.FindControl<HttpRequestView>("httpReqView")!);
     }
 
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
         PororocaKeyValueParam[] ueps;
         await TopMenuRobot.CreateNewCollection();

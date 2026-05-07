@@ -11,7 +11,7 @@ namespace Pororoca.Desktop.UITesting.Tests;
 
 public sealed class ExportEnvironmentsUITest : SaveAndRestoreCollectionUITest
 {
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
         await TestExportAsPororocaEnvWithoutSecrets();
         await TestExportAsPororocaEnvWithSecrets();

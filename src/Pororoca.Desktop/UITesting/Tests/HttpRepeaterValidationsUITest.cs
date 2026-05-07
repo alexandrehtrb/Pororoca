@@ -32,7 +32,7 @@ public sealed partial class HttpRepeaterValidationsUITest : PororocaUITest
         RepeaterRobot = new(RootView.FindControl<HttpRepeaterView>("httpRepView")!);
     }
 
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
         await TopMenuRobot.CreateNewCollection();
         await ColRobot.Name.Edit("COL1");

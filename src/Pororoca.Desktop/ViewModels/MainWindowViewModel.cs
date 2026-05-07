@@ -20,6 +20,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 {
     #region COLLECTIONS ORGANIZATION
 
+    public bool IsExpanded { get; set; }
+
     private volatile Task? loadUserCollectionsTask;
 
     [Reactive]

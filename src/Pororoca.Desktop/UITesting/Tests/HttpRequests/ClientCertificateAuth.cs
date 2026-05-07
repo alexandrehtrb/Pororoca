@@ -1,6 +1,6 @@
 namespace Pororoca.Desktop.UITesting.Tests;
 
-public sealed partial class HttpRequestsUITest : PororocaUITest
+public sealed partial class BadSslUITest : PororocaUITest
 {
     private async Task TestClientCertificatePkcs12Auth()
     {
