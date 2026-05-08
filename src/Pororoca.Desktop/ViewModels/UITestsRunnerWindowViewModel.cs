@@ -37,6 +37,11 @@ public sealed class UITestsRunnerWindowViewModel : ViewModelBase
 {
     public static readonly UITestsRunnerWindowViewModel Instance = new();
 
+    private CancellationTokenSource? cancellationTokenSource;
+
+    [Reactive]
+    public bool IsRunningTests { get; set; }
+
     [Reactive]
     public int ActionsWaitingTimeInMs { get; set; }
 
@@ -120,6 +125,8 @@ public sealed class UITestsRunnerWindowViewModel : ViewModelBase
 
     internal void RunTests() => Dispatcher.UIThread.Post(async () => await RunTestsAsync());
 
+    internal void StopTests() => this.cancellationTokenSource?.Cancel();
+
 #if DEBUG || UI_TESTS_ENABLED
     private async Task RunTestsAsync()
     {
@@ -141,8 +148,11 @@ public sealed class UITestsRunnerWindowViewModel : ViewModelBase
 
         var waitingTimeBetweenActions = TimeSpan.FromMilliseconds(ActionsWaitingTimeInMs);
         var tests = Tests.Where(t => t.Include).Select(t => t.Test).ToArray();
+        this.cancellationTokenSource = new();
 
-        string resultsLog = await UITestsRunner.RunTestsAsync(waitingTimeBetweenActions, default, tests);
+        IsRunningTests = true;
+        string resultsLog = await UITestsRunner.RunTestsAsync(waitingTimeBetweenActions, this.cancellationTokenSource.Token, tests);
+        IsRunningTests = false;
 
         // restoring the items' tree after the tests
         foreach (var item in bkupedItems)

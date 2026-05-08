@@ -2,8 +2,11 @@ namespace Pororoca.Desktop.UITesting.Tests;
 
 public sealed partial class HttpRequestsUITest : PororocaUITest
 {
-    private async Task TestPostRawJsonBody()
+    private async Task TestPostRawJsonBody(CancellationToken cancellationToken)
     {
+        if (cancellationToken.IsCancellationRequested)
+            return;
+
         await HttpRobot.HttpMethod.Select("POST");
         await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/post/json");
         await HttpRobot.SetRawBody("application/json", "{\"myValue\":\"{{SpecialValue1}}\"}");

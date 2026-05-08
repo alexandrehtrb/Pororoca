@@ -4,8 +4,11 @@ namespace Pororoca.Desktop.UITesting.Tests;
 
 public sealed partial class BadSslUITest : PororocaUITest
 {
-    private async Task TestSelfSigned()
+    private async Task TestSelfSigned(CancellationToken cancellationToken)
     {
+        if (cancellationToken.IsCancellationRequested)
+            return;
+
         await TopMenuRobot.SwitchTlsVerification(true);
         await AssertTopMenuTlsVerification(true);
 

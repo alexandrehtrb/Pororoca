@@ -2,8 +2,11 @@ namespace Pororoca.Desktop.UITesting.Tests;
 
 public sealed partial class HttpRequestsUITest : PororocaUITest
 {
-    private async Task TestBearerAuth()
+    private async Task TestBearerAuth(CancellationToken cancellationToken)
     {
+        if (cancellationToken.IsCancellationRequested)
+            return;
+
         await HttpRobot.HttpMethod.Select("GET");
         await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/auth");
         await HttpRobot.SetEmptyBody();

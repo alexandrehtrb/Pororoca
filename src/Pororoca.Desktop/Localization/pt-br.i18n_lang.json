@@ -282,6 +282,7 @@
   "TopMenuHelp/OpenDocsWebsite": "Ir à documentação",
   "TopMenuHelp/MakeADonation": "Fazer uma doação!",
   "TopMenuHelp/RunUITests": "Rodar testes de UI (Ctrl+F12)",
+  "TopMenuHelp/StopUITests": "Parar testes de UI (Ctrl+Shift+F12)",
   "TopMenuHelp/ViewKeyboardShortcuts": "Ver atalhos do teclado",
   "TopMenuLanguage/English": "Inglês",
   "TopMenuLanguage/Italian": "Italiano",

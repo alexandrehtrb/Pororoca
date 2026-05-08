@@ -2,8 +2,11 @@ namespace Pororoca.Desktop.UITesting.Tests;
 
 public sealed partial class BadSslUITest : PororocaUITest
 {
-    private async Task TestClientCertificatePkcs12Auth()
+    private async Task TestClientCertificatePkcs12Auth(CancellationToken cancellationToken)
     {
+        if (cancellationToken.IsCancellationRequested)
+            return;
+
         await HttpRobot.HttpMethod.Select("GET");
         await HttpRobot.Url.ClearAndTypeText("{{BadSslClientCertTestsUrl}}");
         await HttpRobot.SetEmptyBody();
@@ -19,28 +22,35 @@ public sealed partial class BadSslUITest : PororocaUITest
         HttpRobot.ResBodySaveToFile.AssertIsVisible();
     }
 
-    private Task TestClientCertificatePemConjoinedUnencryptedAuth() =>
+    private Task TestClientCertificatePemConjoinedUnencryptedAuth(CancellationToken cancellationToken) =>
         TestClientCertificatePem("{{ClientCertificatesDir}}/badssl.com-client-certificate-with-unencrypted-private-key.pem",
                                  string.Empty,
-                                 string.Empty);
+                                 string.Empty,
+                                 cancellationToken);
 
-    private Task TestClientCertificatePemConjoinedEncryptedAuth() =>
+    private Task TestClientCertificatePemConjoinedEncryptedAuth(CancellationToken cancellationToken) =>
         TestClientCertificatePem("{{ClientCertificatesDir}}/badssl.com-client-certificate-with-encrypted-private-key.pem",
                                  string.Empty,
-                                 "{{BadSslClientCertFilePassword}}");
+                                 "{{BadSslClientCertFilePassword}}",
+                                 cancellationToken);
 
-    private Task TestClientCertificatePemSeparateUnencryptedAuth() =>
+    private Task TestClientCertificatePemSeparateUnencryptedAuth(CancellationToken cancellationToken) =>
         TestClientCertificatePem("{{ClientCertificatesDir}}/badssl.com-client-certificate-without-private-key.pem",
                                  "{{ClientCertificatesDir}}/badssl.com-client-unencrypted-private-key.key",
-                                 string.Empty);
+                                 string.Empty,
+                                 cancellationToken);
 
-    private Task TestClientCertificatePemSeparateEncryptedAuth() =>
+    private Task TestClientCertificatePemSeparateEncryptedAuth(CancellationToken cancellationToken) =>
         TestClientCertificatePem("{{ClientCertificatesDir}}/badssl.com-client-certificate-without-private-key.pem",
                                  "{{ClientCertificatesDir}}/badssl.com-client-encrypted-private-key.key",
-                                 "{{BadSslClientCertFilePassword}}");
+                                 "{{BadSslClientCertFilePassword}}",
+                                 cancellationToken);
 
-    private async Task TestClientCertificatePem(string certFilePath, string privateKeyFilePath, string privateKeyPassword)
+    private async Task TestClientCertificatePem(string certFilePath, string privateKeyFilePath, string privateKeyPassword, CancellationToken cancellationToken)
     {
+        if (cancellationToken.IsCancellationRequested)
+            return;
+
         await HttpRobot.HttpMethod.Select("GET");
         await HttpRobot.Url.ClearAndTypeText("{{BadSslClientCertTestsUrl}}");
         await HttpRobot.SetEmptyBody();

@@ -282,6 +282,7 @@
   "TopMenuHelp/OpenDocsWebsite": "Gehen Sie zu Docs",
   "TopMenuHelp/MakeADonation": "Mach eine Spende!",
   "TopMenuHelp/RunUITests": "Führen Sie UI-Tests aus (Strg+F12)",
+  "TopMenuHelp/StopUITests": "UI-Tests beenden (Strg+Umschalt+F12)",
   "TopMenuHelp/ViewKeyboardShortcuts": "Tastaturverknüpfungen anzeigen",
   "TopMenuLanguage/English": "Englisch",
   "TopMenuLanguage/German": "Deutsch",

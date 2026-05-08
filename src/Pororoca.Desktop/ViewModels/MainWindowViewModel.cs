@@ -186,7 +186,11 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         false;
 #endif
 
+    public UITestsRunnerWindowViewModel UITestsVm => UITestsRunnerWindowViewModel.Instance;
+
     public ReactiveCommand<Unit, Unit> RunUITestsCmd { get; }
+
+    public ReactiveCommand<Unit, Unit> StopUITestsCmd { get; }
 
     #endregion
 
@@ -271,7 +275,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         #endregion
 
         #region UI TESTS
-        RunUITestsCmd = ReactiveCommand.CreateFromTask(RunUITestsAsync);
+        RunUITestsCmd = ReactiveCommand.CreateFromTask(OpenUITestsDialogAsync);
+        StopUITestsCmd = ReactiveCommand.Create(UITestsVm.StopTests);
         #endregion
 
         #region VERSION NAME
@@ -578,14 +583,17 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     #region UI TESTS
 
 #if DEBUG || UI_TESTS_ENABLED
-    private Task RunUITestsAsync()
+    private Task OpenUITestsDialogAsync()
     {
         Pororoca.Desktop.Views.UITestsRunnerWindow uiTestsRunnerWindow = new();
         uiTestsRunnerWindow.Show(Pororoca.Desktop.Views.MainWindow.Instance!);
         return Task.CompletedTask;
     }
+
+    private void StopUITests() => UITestsRunnerWindowViewModel.Instance.StopTests();
+
 #else
-    private Task RunUITestsAsync() => Task.CompletedTask;
+    private Task OpenUITestsDialogAsync() => Task.CompletedTask;
 #endif
 
     #endregion

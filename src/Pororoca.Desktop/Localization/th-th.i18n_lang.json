@@ -282,6 +282,7 @@
   "TopMenuHelp/OpenDocsWebsite": "ไปที่เอกสาร",
   "TopMenuHelp/MakeADonation": "บริจาค!",
   "TopMenuHelp/RunUITests": "เรียกใช้การทดสอบ UI (Ctrl+F12)",
+  "TopMenuHelp/StopUITests": "หยุดการทดสอบ UI (Ctrl+Shift+F12)",
   "TopMenuHelp/ViewKeyboardShortcuts": "ดูแป้นพิมพ์ลัด",
   "TopMenuLanguage/English": "ภาษาอังกฤษ",
   "TopMenuLanguage/Italian": "ภาษาอิตาลี",

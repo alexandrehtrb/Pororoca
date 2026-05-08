@@ -78,19 +78,19 @@ public sealed partial class HttpRequestsUITest : PororocaUITest
             AppendToLog($"Selecting HTTP version {version}.");
             await HttpRobot.SetHttpVersion(version);
 
-            await TestGetTextResponse();
-            await TestGetJsonResponse();
-            await TestGetBinaryResponse();
-            await TestHeaders();
-            await TestTrailers();
-            await TestPostEmptyBody();
-            await TestPostRawJsonBody();
-            await TestPostRawTextBody();
-            await TestPostFileBody();
-            await TestPostUrlEncodedBody();
-            await TestPostFormDataBody();
-            await TestBasicAuth();
-            await TestBearerAuth();
+            await TestGetTextResponse(cancellationToken);
+            await TestGetJsonResponse(cancellationToken);
+            await TestGetBinaryResponse(cancellationToken);
+            await TestHeaders(cancellationToken);
+            await TestTrailers(cancellationToken);
+            await TestPostEmptyBody(cancellationToken);
+            await TestPostRawJsonBody(cancellationToken);
+            await TestPostRawTextBody(cancellationToken);
+            await TestPostFileBody(cancellationToken);
+            await TestPostUrlEncodedBody(cancellationToken);
+            await TestPostFormDataBody(cancellationToken);
+            await TestBasicAuth(cancellationToken);
+            await TestBearerAuth(cancellationToken);
         }
     }
 

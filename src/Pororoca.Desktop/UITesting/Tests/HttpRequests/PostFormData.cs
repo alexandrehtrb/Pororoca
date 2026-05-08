@@ -4,8 +4,11 @@ namespace Pororoca.Desktop.UITesting.Tests;
 
 public sealed partial class HttpRequestsUITest : PororocaUITest
 {
-    private async Task TestPostFormDataBody()
+    private async Task TestPostFormDataBody(CancellationToken cancellationToken)
     {
+        if (cancellationToken.IsCancellationRequested)
+            return;
+
         await HttpRobot.HttpMethod.Select("POST");
         await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/post/multipartformdata");
         await HttpRobot.SetFormDataBody(

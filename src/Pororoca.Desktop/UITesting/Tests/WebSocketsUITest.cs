@@ -84,6 +84,9 @@ public sealed partial class WebSocketsUITest : PororocaUITest
 
         foreach (decimal version in this.httpVersionsToTest)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return;
+
             AppendToLog($"Selecting HTTP version {version}.");
             await WsRobot.SetHttpVersion(version);
             if (version == 1.1m)

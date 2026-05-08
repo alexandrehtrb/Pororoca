@@ -58,12 +58,12 @@ public sealed partial class BadSslUITest : PororocaUITest
         try
         {
             AppendToLog("Running self-signed and client certificates tests (HTTP/1.1 only).");
-            await TestSelfSigned();
-            await TestClientCertificatePkcs12Auth();
-            await TestClientCertificatePemConjoinedUnencryptedAuth();
-            await TestClientCertificatePemConjoinedEncryptedAuth();
-            await TestClientCertificatePemSeparateUnencryptedAuth();
-            await TestClientCertificatePemSeparateEncryptedAuth();
+            await TestSelfSigned(cancellationToken);
+            await TestClientCertificatePkcs12Auth(cancellationToken);
+            await TestClientCertificatePemConjoinedUnencryptedAuth(cancellationToken);
+            await TestClientCertificatePemConjoinedEncryptedAuth(cancellationToken);
+            await TestClientCertificatePemSeparateUnencryptedAuth(cancellationToken);
+            await TestClientCertificatePemSeparateEncryptedAuth(cancellationToken);
         }
         catch (Exception ex)
         {

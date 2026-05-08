@@ -2,6 +2,7 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="using:Pororoca.Desktop.ViewModels"
+    xmlns:converters="using:Pororoca.Desktop.Converters"
     xmlns:v="using:Pororoca.Desktop.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -36,6 +37,7 @@
     <KeyBinding Command="{Binding HotKeys.SwitchToPreviousItemCmd, Mode=OneWay}" Gesture="Ctrl+PageUp"/>
     <KeyBinding Command="{Binding HotKeys.SwitchToNextItemCmd, Mode=OneWay}" Gesture="Ctrl+PageDown"/>
     <KeyBinding Command="{Binding RunUITestsCmd, Mode=OneWay}" Gesture="Ctrl+F12"/>
+    <KeyBinding Command="{Binding StopUITestsCmd, Mode=OneWay}" Gesture="Ctrl+Shift+F12"/>
     <KeyBinding Command="{Binding SaveAllCmd, Mode=OneWay}" Gesture="Ctrl+Shift+S"/>
   </Window.KeyBindings>
 
@@ -329,8 +331,25 @@
             IsEnabled="False"/>
           <MenuItem
             Header="{Binding i18n.TopMenuHelp.RunUITests, Mode=OneWay}"
+            Command="{Binding RunUITestsCmd, Mode=OneWay}">
+            <MenuItem.IsVisible>
+              <MultiBinding Converter="{x:Static converters:AndLogicConverter.Instance}">
+                <Binding Path="IsRunUITestsVisible" />
+                <Binding Path="!UITestsVm.IsRunningTests" />
+              </MultiBinding>
+            </MenuItem.IsVisible>
+          </MenuItem>
+          <MenuItem
+            Header="{Binding i18n.TopMenuHelp.StopUITests, Mode=OneWay}"
             IsVisible="{Binding IsRunUITestsVisible, Mode=OneWay}"
-            Command="{Binding RunUITestsCmd, Mode=OneWay}"/>
+            Command="{Binding StopUITestsCmd, Mode=OneWay}">
+            <MenuItem.IsVisible>
+              <MultiBinding Converter="{x:Static converters:AndLogicConverter.Instance}">
+                <Binding Path="IsRunUITestsVisible" />
+                <Binding Path="UITestsVm.IsRunningTests" />
+              </MultiBinding>
+            </MenuItem.IsVisible>
+          </MenuItem>
         </MenuItem>
         <MenuItem
             Header="{Binding TopRightLabelText, Mode=OneWay}"

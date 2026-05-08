@@ -282,6 +282,7 @@
   "TopMenuHelp/OpenDocsWebsite": "Перейти к докс",
   "TopMenuHelp/MakeADonation": "Сделайте пожертвование!",
   "TopMenuHelp/RunUITests": "Выполнение UI тестов (Ctrl+F12)",
+  "TopMenuHelp/StopUITests": "Остановить UI тестов (Ctrl+Shift+F12)",
   "TopMenuHelp/ViewKeyboardShortcuts": "Просмотр сочетаний клавиш",
   "TopMenuLanguage/English": "Английский",
   "TopMenuLanguage/Italian": "Итальяно",

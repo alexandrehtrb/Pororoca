@@ -282,6 +282,7 @@
   "TopMenuHelp/OpenDocsWebsite",
   "TopMenuHelp/MakeADonation",
   "TopMenuHelp/RunUITests",
+  "TopMenuHelp/StopUITests",
   "TopMenuHelp/ViewKeyboardShortcuts",
   "TopMenuLanguage/English",
   "TopMenuLanguage/German",
