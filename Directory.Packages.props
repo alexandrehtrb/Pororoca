@@ -5,48 +5,48 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- for desktop project -->
-    <PackageVersion Include="Avalonia" Version="12.0.0" />
-    <PackageVersion Include="Avalonia.Desktop" Version="12.0.0" />
+    <PackageVersion Include="Avalonia" Version="12.0.2" />
+    <PackageVersion Include="Avalonia.Desktop" Version="12.0.2" />
     <PackageVersion Include="Avalonia.ReactiveUI" Version="11.3.8" />
-    <PackageVersion Include="Avalonia.Themes.Fluent" Version="12.0.0" />
+    <PackageVersion Include="Avalonia.Themes.Fluent" Version="12.0.2" />
     <PackageVersion Include="Avalonia.Controls.DataGrid" Version="12.0.0" />
     <!-- TODO: stop using Avalonia.Xaml.Behaviors -->
-    <PackageVersion Include="Xaml.Behaviors.Interactions.DragAndDrop.DataGrid" Version="12.0.0-rc1" />
-    <PackageVersion Include="Xaml.Behaviors.Interactions.DragAndDrop" Version="12.0.0-rc1" />
-    <PackageVersion Include="Xaml.Behaviors.Interactions.Draggable" Version="12.0.0-rc1" />
-    <PackageVersion Include="Xaml.Behaviors.Interactions.Custom" Version="12.0.0-rc1" />
-    <PackageVersion Include="Xaml.Behaviors.Avalonia" Version="12.0.0-rc1" />
-    <PackageVersion Include="Xaml.Behaviors.Interactivity" Version="12.0.0-rc1" />
-    <PackageVersion Include="Xaml.Behaviors.Interactions" Version="12.0.0-rc1" />
-    <PackageVersion Include="AlexandreHtrb.AvaloniaUITest" Version="11.3.0.3" />
+    <PackageVersion Include="Xaml.Behaviors.Interactions.DragAndDrop.DataGrid" Version="12.0.0" />
+    <PackageVersion Include="Xaml.Behaviors.Interactions.DragAndDrop" Version="12.0.0" />
+    <PackageVersion Include="Xaml.Behaviors.Interactions.Draggable" Version="12.0.0" />
+    <PackageVersion Include="Xaml.Behaviors.Interactions.Custom" Version="12.0.0" />
+    <PackageVersion Include="Xaml.Behaviors.Avalonia" Version="12.0.0" />
+    <PackageVersion Include="Xaml.Behaviors.Interactivity" Version="12.0.0" />
+    <PackageVersion Include="Xaml.Behaviors.Interactions" Version="12.0.0" />
+    <PackageVersion Include="AlexandreHtrb.AvaloniaUITest" Version="12.0.0" />
     <PackageVersion Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.0" />
     <PackageVersion Include="Avalonia.AvaloniaEdit" Version="12.0.0" />
     <PackageVersion Include="AvaloniaEdit.TextMate" Version="12.0.0" />
     <PackageVersion Include="TextMateSharp.Grammars" Version="2.0.3" />
     <!-- TODO: stop using ReactiveUI.Fody and replace for ReactiveUI.SourceGenerators -->
     <PackageVersion Include="ReactiveUI.Fody" Version="19.5.41" />
-    <PackageVersion Include="MessageBox.Avalonia" Version="3.3.1.1" />
+    <PackageVersion Include="MessageBox.Avalonia" Version="12.0.0" />
 
     <!-- for i18n src gen project -->
-    <PackageVersion Include="System.Text.Json" Version="10.0.5" />
-    <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.5" />
-    <PackageVersion Include="System.Text.Encodings.Web" Version="10.0.5" />
+    <PackageVersion Include="System.Text.Json" Version="10.0.7" />
+    <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.7" />
+    <PackageVersion Include="System.Text.Encodings.Web" Version="10.0.7" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="5.3.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.3.0" />
 
     <!-- for OpenAPI project -->
-    <PackageVersion Include="Microsoft.OpenApi" Version="3.5.1" />
-    <PackageVersion Include="Microsoft.OpenApi.YamlReader" Version="3.5.1" />
+    <PackageVersion Include="Microsoft.OpenApi" Version="3.5.3" />
+    <PackageVersion Include="Microsoft.OpenApi.YamlReader" Version="3.5.3" />
 
     <!-- for test projects -->
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.5.1" />
     <PackageVersion Include="xunit.v3" Version="3.2.2" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5"/>
-    <PackageVersion Include="coverlet.collector" Version="8.0.1" />
+    <PackageVersion Include="coverlet.collector" Version="10.0.0" />
 
     <!-- for test server -->
     <PackageVersion Include="Serilog.AspNetCore" Version="10.0.0" />
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="10.1.2" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="10.1.7" />
   </ItemGroup>
 </Project>
