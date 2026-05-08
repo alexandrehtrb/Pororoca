@@ -38,7 +38,13 @@ internal static class PororocaClientCertificatesProvider
         // work around for Windows (WinApi) problems with PEMS, still in .NET 5
         if (OperatingSystem.IsWindows())
         {
-            return X509CertificateLoader.LoadCertificate(pemCert.Export(X509ContentType.Pkcs12));
+            // Don't use X509CertificateLoader.LoadCertificate() here,
+            // as it causes a CryptographicException and doesn't load the certificate correctly.
+            // https://github.com/dotnet/runtime/issues/112258
+            // Ignore the deprecation warning.
+#pragma warning disable SYSLIB0057
+            return new(pemCert.Export(X509ContentType.Pkcs12));
+#pragma warning restore SYSLIB0057
         }
         else
         {
