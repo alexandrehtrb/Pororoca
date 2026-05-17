@@ -24,9 +24,3 @@ internal static class ExportEnvironmentFormatMapping
             _ => 0
         };
 }
-
-public sealed class ExportEnvironmentFormatMatchConverter : EnumMatchConverter<ExportEnvironmentFormat>
-{
-    protected override ExportEnvironmentFormat? MapIndexToEnum(int index) =>
-        ExportEnvironmentFormatMapping.MapIndexToEnum(index);
-}

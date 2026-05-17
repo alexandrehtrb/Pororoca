@@ -18,6 +18,8 @@ public enum EditableTextBlockIcon
 
 public sealed class EditableTextBlockIconConverter : IValueConverter
 {
+    public static readonly EditableTextBlockIconConverter Instance = new();
+
     private static readonly Lazy<GeometryDrawing> FolderIcon =
         new(() => LoadGeometryDrawing("IconFolder"), true);
 
@@ -35,6 +37,8 @@ public sealed class EditableTextBlockIconConverter : IValueConverter
 
     private static readonly Lazy<GeometryDrawing> HttpMinigunIcon =
         new(() => LoadGeometryDrawing("IconMinigun"), true);
+
+    private EditableTextBlockIconConverter() { }
 
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {

@@ -30,6 +30,10 @@ internal static class HttpRequestBodyModeMapping
 
 public sealed class HttpRequestBodyModeMatchConverter : EnumMatchConverter<PororocaHttpRequestBodyMode>
 {
+    public static readonly HttpRequestBodyModeMatchConverter Instance = new();
+
+    private HttpRequestBodyModeMatchConverter() { }
+
     protected override PororocaHttpRequestBodyMode? MapIndexToEnum(int index) =>
         HttpRequestBodyModeMapping.MapIndexToEnum(index);
 }

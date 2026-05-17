@@ -565,7 +565,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
         var mwvm = MainWindowVm;
         if (mwvm.HttpRequestView.Visible)
         {
-            var colScopedAuth = mwvm.HttpRequestView.VM!.col.CollectionScopedAuth;
+            var colScopedAuth = mwvm.HttpRequestView.VM!.Collection.CollectionScopedAuth;
             var req = mwvm.HttpRequestView.VM!.ToHttpRequest();
             string curlCmd = CurlRequestExporter.ExportAsCurlRequest(req, colScopedAuth);
 

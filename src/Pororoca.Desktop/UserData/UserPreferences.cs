@@ -8,12 +8,16 @@ namespace Pororoca.Desktop.UserData;
 public sealed class UserPreferences
 {
     private static readonly TimeSpan checkForUpdatesPeriod = TimeSpan.FromDays(8);
+    private static readonly TimeSpan askForDonationsPeriod = TimeSpan.FromDays(150); // 5 months
 
 #nullable disable warnings
     public string Lang { get; set; }
     public PororocaTheme? Theme { get; set; }
     public bool? AutoCheckForUpdates { get; set; }
     public string? LastCheckedForUpdatesAt { get; set; }
+    private DateTime? LastCheckedForUpdatesDate => ParseDateTimeFromString(LastCheckedForUpdatesAt);
+    public string? LastAskedForDonationsAt { get; set; }
+    private DateTime? LastAskedForDonationsDate => ParseDateTimeFromString(LastAskedForDonationsAt);
 
     public UserPreferences()
     {
@@ -35,24 +39,7 @@ public sealed class UserPreferences
     public void SetLanguage(Language lang) =>
         Lang = lang.ToLCID();
 
-    private DateTime? LastCheckedForUpdatesDate
-    {
-        get
-        {
-            if (LastCheckedForUpdatesAt is null)
-            {
-                return null;
-            }
-            else if (DateTime.TryParseExact(LastCheckedForUpdatesAt, "yyyy-MM-dd", null, DateTimeStyles.AssumeLocal, out var parsedDate))
-            {
-                return parsedDate;
-            }
-            else
-            {
-                return null;
-            }
-        }
-    }
+    #region UPDATES
 
     public bool NeedsToCheckForUpdates() =>
         AutoCheckForUpdates == true &&
@@ -64,6 +51,38 @@ public sealed class UserPreferences
 
     public void SetLastUpdateCheckDateAsToday() =>
         LastCheckedForUpdatesAt = DateTime.Now.ToString("yyyy-MM-dd");
+
+    #endregion
+
+    #region DONATIONS
+
+    public bool NeedsToAskForDonations() =>
+        LastAskedForDonationsDate is not null &&
+        (DateTime.Now - LastAskedForDonationsDate) > askForDonationsPeriod;
+
+    public bool HasLastAskedForDonationsDate() =>
+        LastAskedForDonationsDate is not null;
+
+    public void SetLastAskedForDonationsDateAsToday() =>
+        LastAskedForDonationsAt = DateTime.Now.ToString("yyyy-MM-dd");
+
+    #endregion
+
+    private static DateTime? ParseDateTimeFromString(string? field)
+    {
+        if (field is null)
+        {
+            return null;
+        }
+        else if (DateTime.TryParseExact(field, "yyyy-MM-dd", null, DateTimeStyles.AssumeLocal, out var parsedDate))
+        {
+            return parsedDate;
+        }
+        else
+        {
+            return null;
+        }
+    }
 }
 
 [JsonSourceGenerationOptions(

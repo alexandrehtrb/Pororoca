@@ -8,7 +8,7 @@ dotnet publish "./src/Pororoca.Desktop/Pororoca.Desktop.csproj" \
   --verbosity quiet \
   --nologo \
   --configuration Release \
-  -p:PublishForInstallOnDebian=true \
+  -p:PublishForInstallOnLinux=true \
   --self-contained true \
   --runtime linux-x64 \
   --output "./out/linux-x64"
@@ -16,11 +16,11 @@ dotnet publish "./src/Pororoca.Desktop/Pororoca.Desktop.csproj" \
 mkdir staging_folder
 # Debian control file
 mkdir ./staging_folder/DEBIAN
-cp ./src/Pororoca.Desktop.Debian/control ./staging_folder/DEBIAN
+cp ./src/Pororoca.Desktop.LinuxDesktop/control ./staging_folder/DEBIAN
 # Executable file and script
 mkdir ./staging_folder/usr
 mkdir ./staging_folder/usr/bin
-cp ./src/Pororoca.Desktop.Debian/pororoca.sh ./staging_folder/usr/bin/pororoca
+cp ./src/Pororoca.Desktop.LinuxDesktop/pororoca.sh ./staging_folder/usr/bin/pororoca
 chmod +x ./staging_folder/usr/bin/pororoca # set executable permissions to starter script
 # Shared libraries and other files
 mkdir ./staging_folder/usr/lib
@@ -31,11 +31,11 @@ chmod +x ./staging_folder/usr/lib/pororoca/Pororoca # set executable permissions
 # Desktop shortcut
 mkdir ./staging_folder/usr/share
 mkdir ./staging_folder/usr/share/applications
-cp ./src/Pororoca.Desktop.Debian/Pororoca.desktop ./staging_folder/usr/share/applications/Pororoca.desktop
+cp ./src/Pororoca.Desktop.LinuxDesktop/Pororoca.desktop ./staging_folder/usr/share/applications/Pororoca.desktop
 # Desktop icon
 # A 1024px x 1024px PNG, like VS Code uses for its icon
 mkdir ./staging_folder/usr/share/pixmaps
-cp ./src/Pororoca.Desktop.Debian/pororoca_icon_1024px.png ./staging_folder/usr/share/pixmaps/pororoca.png
+cp ./src/Pororoca.Desktop.LinuxDesktop/pororoca_icon_1024px.png ./staging_folder/usr/share/pixmaps/pororoca.png
 # Hicolor icons
 mkdir ./staging_folder/usr/share/icons
 mkdir ./staging_folder/usr/share/icons/hicolor

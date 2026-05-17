@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using AvaloniaEdit;
+using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.UITesting.Robots;
@@ -19,7 +20,7 @@ public sealed class WebSocketClientMessageRobot : BaseNamedRobot
     internal ComboBox ContentMode => GetChildView<ComboBox>("cbContentMode")!;
     internal ComboBox ContentRawSyntax => GetChildView<ComboBox>("cbContentRawSyntax")!;
     internal CheckBox DisableCompressionForThisMessage => GetChildView<CheckBox>("chkbDisableCompressionForThisMessage")!;
-    internal TextBox ContentFileSrcPath => GetChildView<TextBox>("tbContentFileSrcPath")!;
+    internal SyntaxHighlightingTextBox ContentFileSrcPath => GetChildView<SyntaxHighlightingTextBox>("tbContentFileSrcPath")!;
     internal TextEditor ContentRaw => GetChildView<TextEditor>("teContentRaw")!;
 
     internal async Task SetRawJsonContent(string content)

@@ -229,11 +229,11 @@ public static class UserDataManager
 
             - For a release executable, the PororocaUserData folder location depends on the OS:
 
-            - For Linux, it should be on the same level as the executable.
+            - For Linux portable release, it should be on the same level as the executable.
                 Example Linux executable directory: /home/myuser/Programs/MyPororocaDir/
                 Then, user data directory will be:  /home/myuser/Programs/MyPororocaDir/PororocaUserData/
 
-            - For installed on Debian-related distros:
+            - For installation on Linux distros:
                 /home/myuser/.config/Pororoca/PororocaUserData
 
             - For MacOS, it should be inside the Application Support directory:
@@ -247,8 +247,8 @@ public static class UserDataManager
         */
 #if INSTALLED_ON_WINDOWS
         GetUserDataFolderForInstalledOnWindows(); // installed on windows
-#elif INSTALLED_ON_DEBIAN
-        GetUserDataFolderForInstalledOnDebian(); // installed on debian / ubuntu
+#elif INSTALLED_ON_LINUX
+        GetUserDataFolderForInstalledOnLinux(); // installed on linux
 #elif DEBUG
         GetUserDataFolderForDebug(); // debug, for any OS
 #else
@@ -301,7 +301,7 @@ public static class UserDataManager
         return new(userDataDirPath);
     }
 
-    private static DirectoryInfo GetUserDataFolderForInstalledOnDebian()
+    private static DirectoryInfo GetUserDataFolderForInstalledOnLinux()
     {
         // we are using "/home/myuser/.config/" path here, to preserve user data
         // when user logs in on another machine of the same corporate network

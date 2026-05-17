@@ -23,6 +23,10 @@ internal static class RepetitionInputDataTypeMapping
 
 public sealed class RepetitionInputDataTypeMatchConverter : EnumMatchConverter<PororocaRepetitionInputDataType>
 {
+    public static readonly RepetitionInputDataTypeMatchConverter Instance = new();
+
+    private RepetitionInputDataTypeMatchConverter() { }
+
     protected override PororocaRepetitionInputDataType? MapIndexToEnum(int index) =>
         RepetitionInputDataTypeMapping.MapIndexToEnum(index);
 }

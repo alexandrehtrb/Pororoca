@@ -7,15 +7,19 @@ on:
         required: true
         default: true
         type: boolean
+      testserver_linux_x64:
+        required: true
+        default: false
+        type: boolean
       enableDesktopUITesting:
         required: true
         default: false
         type: boolean
-      linux_x64:
+      linux_x64_portable:
         required: true
         default: true
         type: boolean
-      linux_x64_debian:
+      linux_x64_installers:
         required: true
         default: true
         type: boolean
@@ -45,26 +49,29 @@ on:
         type: boolean
 
 jobs:
-  nuget_linux_osx_win_portable:
-    if: ${{ inputs.nuget || inputs.linux_x64 || inputs.linux_x64_debian || inputs.osx || inputs.win_x64_portable || inputs.win_x86_portable }}
+  nuget_linux_osx:
+    if: ${{ inputs.nuget || inputs.linux_x64_portable || inputs.linux_x64_installers || inputs.osx }}
     uses: ./.github/workflows/cicd-wfw.yml
+    secrets: inherit
     with:
       os: ubuntu-latest
       runCD: true
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
       producePororocaTestNuget: ${{ inputs.nuget }}
-      produceDesktopLinuxX64: ${{ inputs.linux_x64 }}
-      produceDesktopDebianX64: ${{ inputs.linux_x64_debian }}
+      produceTestServerLinuxX64: ${{ inputs.testServer_linux_x64 }}
+      produceDesktopLinuxPortableX64: ${{ inputs.linux_x64_portable }}
+      produceDesktopLinuxInstallersX64: ${{ inputs.linux_x64_installers }}
       produceDesktopMacOSX: ${{ inputs.osx }}
-      produceDesktopWinX64Portable: ${{ inputs.win_x64_portable }}
-      produceDesktopWinX86Portable: ${{ inputs.win_x86_portable }}
 
-  win_installer:
-    if: ${{ inputs.win_x64_installer || inputs.win_x86_installer }}
+  win_installer_portable:
+    if: ${{ inputs.win_x64_installer || inputs.win_x86_installer || inputs.win_x64_portable || inputs.win_x86_portable }}
     uses: ./.github/workflows/cicd-wfw.yml
+    secrets: inherit
     with:
       os: windows-latest
       runCD: true
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
       produceDesktopWinX64Installer: ${{ inputs.win_x64_installer }}
       produceDesktopWinX86Installer: ${{ inputs.win_x86_installer }}
+      produceDesktopWinX64Portable: ${{ inputs.win_x64_portable }}
+      produceDesktopWinX86Portable: ${{ inputs.win_x86_portable }}

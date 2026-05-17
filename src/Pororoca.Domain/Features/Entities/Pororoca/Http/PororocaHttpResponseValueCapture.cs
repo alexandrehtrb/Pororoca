@@ -16,4 +16,9 @@ public sealed record PororocaHttpResponseValueCapture(
     public PororocaHttpResponseValueCapture() : this(PororocaHttpResponseValueCaptureType.Body, string.Empty, null, null) { }
 
     public PororocaHttpResponseValueCapture Copy() => this with { };
+
+#if DEBUG
+    public override string ToString() =>
+        $"'{TargetVariable}' 🡸 {(Type == PororocaHttpResponseValueCaptureType.Header ? $"Header '{HeaderName}'" : $"Body '{Path}'")}";
+#endif
 }

@@ -91,13 +91,15 @@
     <SolidColorBrush x:Key="DefaultIconsBrush" Color="{DynamicResource DefaultIconsColor}"/>
     <SolidColorBrush x:Key="TextEditorBackgroundBrush" Color="{DynamicResource TextEditorBackgroundColor}"/>
     <SolidColorBrush x:Key="TextEditorForegroundBrush" Color="{DynamicResource TextEditorForegroundColor}"/>
-    <SolidColorBrush x:Key="RegularVariablePopupForegroundBrush" Color="{DynamicResource TextEditorRegularVariablePopupForegroundColor}"/>
-    <SolidColorBrush x:Key="NoMatchingVariablePopupForegroundBrush" Color="{DynamicResource TextEditorNoMatchingVariablePopupForegroundColor}"/>
-    <SolidColorBrush x:Key="PredefinedVariablePopupForegroundBrush" Color="{DynamicResource TextEditorPredefinedVariablePopupForegroundColor}"/>
+    <SolidColorBrush x:Key="TextEditorHyperlinkForegroundBrush" Color="{DynamicResource TextEditorHyperlinkForegroundColor}"/>
     <SolidColorBrush x:Key="InputBackgroundValidationProblemBrush" Color="{DynamicResource InputBackgroundValidationProblemColor}"/>
     <SolidColorBrush x:Key="ResponseCapturedValueTextBrush" Color="{DynamicResource ResponseCapturedValueTextColor}"/>
-    <!-- TODO: Configurar tema do editor de texto e cor de variável Pororoca através de styles -->
-    <!--Color x:Key="TextEditorPororocaVariableHighlightForeground">Gold</Color-->
-    <!--clr:String x:Key="TextEditorTheme">DarkPlus</clr:String-->
+    <SolidColorBrush x:Key="RegularVariableForegroundBrush" Color="{DynamicResource RegularVariableForegroundColor}"/>
+    <SolidColorBrush x:Key="RegularVariablePopupForegroundBrush" Color="{DynamicResource RegularVariablePopupForegroundColor}"/>
+    <SolidColorBrush x:Key="PredefinedVariableForegroundBrush" Color="{DynamicResource PredefinedVariableForegroundColor}"/>
+    <SolidColorBrush x:Key="PredefinedVariablePopupForegroundBrush" Color="{DynamicResource PredefinedVariablePopupForegroundColor}"/>
+    <SolidColorBrush x:Key="NoMatchingVariableForegroundBrush" Color="{DynamicResource NoMatchingVariableForegroundColor}"/>
+    <SolidColorBrush x:Key="NoMatchingVariablePopupForegroundBrush" Color="{DynamicResource NoMatchingVariablePopupForegroundColor}"/>
+    <SolidColorBrush x:Key="PVSHTextBlockDefaultForegroundBrush" Color="{DynamicResource PVSHTextBlockDefaultForegroundColor}"/>
   </Styles.Resources>
 </Styles>

@@ -1,5 +1,4 @@
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
@@ -39,12 +38,6 @@ public sealed class WebSocketConnectionView : UserControl
     public void OnSelectedSubprotocolsChanged(object sender, SelectionChangedEventArgs e) =>
         ((WebSocketConnectionViewModel)DataContext!).SubprotocolsTableVm.UpdateSelectedItems(e);
 
-    public void OnUrlPointerEnter(object sender, PointerEventArgs e)
-    {
-        var vm = (WebSocketConnectionViewModel)DataContext!;
-        vm.UpdateResolvedUrlToolTip();
-    }
-
     private void OnSelectedExchangedMessageChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (e.AddedItems is not null
@@ -64,6 +57,12 @@ public sealed class WebSocketConnectionView : UserControl
         string? contentType = isJson ? MimeTypesDetector.DefaultMimeTypeForJson : null;
         this.selectedExchangedMessageEditorTextMateInstallation.SetEditorSyntax(ref this.currentSelectedMsgSyntaxLangId, contentType);
     }
+
+    // IMPORTANTE: este método deve retornar um CollectionViewModel,
+    // e não simplesmente uma coleção, pois senão não vai atualizar
+    // as variáveis de coleção e de ambiente.
+    public CollectionViewModel ProvideVariableResolver() =>
+        ((WebSocketConnectionViewModel)DataContext!).Collection;
 
     #endregion
 }

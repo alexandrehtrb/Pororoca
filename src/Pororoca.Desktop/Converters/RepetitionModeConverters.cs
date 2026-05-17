@@ -25,6 +25,10 @@ internal static class RepetitionModeMapping
 
 public sealed class RepetitionModeMatchConverter : EnumMatchConverter<PororocaRepetitionMode>
 {
+    public static readonly RepetitionModeMatchConverter Instance = new();
+
+    private RepetitionModeMatchConverter() { }
+
     protected override PororocaRepetitionMode? MapIndexToEnum(int index) =>
         RepetitionModeMapping.MapIndexToEnum(index);
 }

@@ -3,9 +3,11 @@ using System.Reactive;
 using System.Reflection;
 using Avalonia.Threading;
 using MsBox.Avalonia.Enums;
+using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
+using Pororoca.Desktop.TextEditorConfig;
 using Pororoca.Desktop.UserData;
 using Pororoca.Domain.Features.Entities.GitHub;
 using Pororoca.Domain.Features.Entities.Pororoca;
@@ -37,6 +39,13 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     public string TopRightLabelText { get; set; }
 
     public ReactiveCommand<Unit, Unit> SaveAllCmd { get; }
+
+    // This property exists to cause an update on PVSHTextBlocks inside DataGrids
+    // and ToolTips (URL, input file paths).
+    // It's an int, but it could be anything.
+    // DON'T REMOVE.
+    [Reactive]
+    public int EffectiveVariablesMayHaveChanged { get; set; } = 0;
 
     #endregion
 
@@ -307,6 +316,22 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
             if (currentPage is not null)
             {
                 currentPage.Visible = false;
+
+                // GAMBIARRA!!!
+                // Se o usuário estiver saindo da tela de variáveis de coleção ou de ambiente, 
+                // significa que talvez uma variável tenha mudado,
+                // de modo que ela deva ficar colorida ou descolorida nos TextEditors e SyntaxHighlighterTextBoxes,
+                // por exemplo, na URL, no corpo de requisição HTTP, mensagem de cliente WebSocket
+                // ou dados de entrada de repetidora.
+                // Isso também pode afetar as tooltips de URL e caminho de arquivos,
+                // por isso EffectiveVariablesMayHaveChanged é incrementada (para forçar uma atualização).
+                if (currentPage.PageType == typeof(CollectionVariablesViewModel)
+                 || currentPage.PageType == typeof(EnvironmentViewModel))
+                {
+                    TextEditorConfiguration.InvalidateTextEditorsAreas();
+                    SyntaxHighlighter.InvalidateSyntaxHighlighterTextBoxesTexts();
+                    MainWindowVm.EffectiveVariablesMayHaveChanged++;
+                }
             }
             nextPage.Visible = true;
         }
@@ -480,6 +505,16 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
             UserPrefs.SetLastUpdateCheckDateAsToday();
         }
 
+        if (UserPrefs.NeedsToAskForDonations())
+        {
+            UserPrefs!.SetLastAskedForDonationsDateAsToday();
+            ShowAskForDonationsDialog();
+        }
+        else if (UserPrefs.HasLastAskedForDonationsDate() == false)
+        {
+            UserPrefs.SetLastAskedForDonationsDateAsToday();
+        }
+
         if (UserDataManager.NeedsMacOSXUserDataFolderMigrationToV3())
         {
             // this is a silent migration.
@@ -553,6 +588,13 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
             message: message,
             buttons: ButtonEnum.Ok);
     }
+
+    private void ShowAskForDonationsDialog() =>
+        Dialogs.ShowDialog(
+            title: Localizer.Instance.DonationsDialog.Title,
+            message: Localizer.Instance.DonationsDialog.Message,
+            buttons: ButtonEnum.OkCancel,
+            onButtonOkClicked: () => OpenWebBrowser(DonationsPageUrl));
 
     private static void OpenWebBrowser(string url)
     {

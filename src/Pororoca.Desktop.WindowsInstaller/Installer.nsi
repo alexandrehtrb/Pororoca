@@ -535,3 +535,12 @@ FunctionEnd
 ; ---------------------------------------- UNINSTALLER INCLUDE
 ; remove next line if you're using signing after the uninstaller is extracted from the initially compiled setup
 !include Uninstaller.nsh
+
+; ---------------------------------------- WINDOWS CODE SIGNING
+; %1 is replaced by the installer / uninstaller exe to be signed.
+; the '= 0' at the end is necessary to block those commands from running in parallel,
+; as SignTool.exe cannot run in parallel or it will crash.
+; https://stackoverflow.com/questions/55677829/how-can-i-sign-the-files-using-nsis
+
+!finalize 'signtool sign /f "${CODE_SIGNING_CERTIFICATE_FILE_PATH}" /fd SHA256 /p "${CODE_SIGNING_CERTIFICATE_FILE_PASSWORD}" /t http://timestamp.digicert.com %1' = 0
+!uninstfinalize 'signtool sign /f "${CODE_SIGNING_CERTIFICATE_FILE_PATH}" /fd SHA256 /p "${CODE_SIGNING_CERTIFICATE_FILE_PASSWORD}" /t http://timestamp.digicert.com %1' = 0

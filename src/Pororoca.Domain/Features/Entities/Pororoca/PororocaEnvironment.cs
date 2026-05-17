@@ -1,10 +1,9 @@
-using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca;
 
 #if DEBUG
-[DebuggerDisplay("{Name,nq}")]
+[System.Diagnostics.DebuggerDisplay("{Name,nq}")]
 #endif
 public sealed record PororocaEnvironment
 (

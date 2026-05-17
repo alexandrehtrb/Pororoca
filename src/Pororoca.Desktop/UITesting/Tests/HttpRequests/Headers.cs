@@ -14,7 +14,7 @@ public sealed partial class HttpRequestsUITest : PororocaUITest
         await HttpRobot.SetRequestHeaders([
             new(false, "Header1", "ValueHeader1"),
             new(true, "Header1", "Header1Value"),
-            new(true, "oi_{{SpecialHeaderKey}}", "oi-{{SpecialHeaderValue}}"),
+            new(true, "oi_Header3", "oi-{{SpecialHeaderValue}}"),
         ]);
         await HttpRobot.ClickOnSendAndWaitForResponse();
 
@@ -26,7 +26,7 @@ public sealed partial class HttpRequestsUITest : PororocaUITest
         AssertContainsResponseHeader("MIRRORED-Host", "localhost:5001");
         AssertContainsResponseHeader("MIRRORED-Accept-Encoding", "gzip, deflate, br");
         AssertContainsResponseHeader("MIRRORED-Header1", "Header1Value");
-        AssertContainsResponseHeader("MIRRORED-oi_Header2", "oi-ciao");
+        AssertContainsResponseHeader("MIRRORED-oi_Header3", "oi-ciao");
         await HttpRobot.TabControlRes.Select(HttpRobot.TabResBody);
         HttpRobot.ResBodyRawContent.AssertHasText(string.Empty);
         HttpRobot.ResBodySaveToFile.AssertIsHidden();

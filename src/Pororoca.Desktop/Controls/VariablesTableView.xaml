@@ -1,15 +1,18 @@
 <UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels.DataGrids;assembly=Pororoca.Desktop"
+    xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop"
+    xmlns:vmdg="clr-namespace:Pororoca.Desktop.ViewModels.DataGrids;assembly=Pororoca.Desktop"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="clr-namespace:Pororoca.Desktop.Converters;assembly=Pororoca.Desktop"
     mc:Ignorable="d"
     d:DesignWidth="1350"
     d:DesignHeight="700"
     x:Class="Pororoca.Desktop.Controls.VariablesTableView"
     x:CompileBindings="True"
-    x:DataType="vm:VariablesDataGridViewModel">
+    x:DataType="vmdg:VariablesDataGridViewModel"
+    Name="variablesTableView">
 
   <DataGrid
       Name="datagrid"
@@ -64,13 +67,40 @@
           <TextBlock Text="{Binding i18n.Variables.Name, Mode=OneWay}"/>
         </DataGridTextColumn.Header>
       </DataGridTextColumn>
-      <DataGridTextColumn
-          Width="2*"
-          Binding="{Binding Value}">
-        <DataGridTextColumn.Header>
+      <DataGridTemplateColumn Width="2*">
+        <DataGridTemplateColumn.Header>
           <TextBlock Text="{Binding i18n.Variables.Value, Mode=OneWay}"/>
-        </DataGridTextColumn.Header>
-      </DataGridTextColumn>
+        </DataGridTemplateColumn.Header>
+        <DataGridTemplateColumn.CellTemplate>
+          <DataTemplate>
+            <TextBlock
+              Text=""
+              VerticalAlignment="Center"
+              Padding="12,0,0,0">
+              <TextBlock.Inlines>
+                <MultiBinding Converter="{x:Static converters:PororocaVariableSyntaxHighlightingInlinesConverter.Instance}">
+                  <Binding Path="Value"/>
+                  <Binding Path="#variablesTableView.((vmdg:VariablesDataGridViewModel)DataContext).Collection"/>
+                  <Binding Path="#variablesTableView.((vmdg:VariablesDataGridViewModel)DataContext).MainWindowVm.EffectiveVariablesMayHaveChanged"/>
+                </MultiBinding>                
+              </TextBlock.Inlines>
+            </TextBlock>
+          </DataTemplate>
+        </DataGridTemplateColumn.CellTemplate>
+        <DataGridTemplateColumn.CellEditingTemplate>
+          <DataTemplate>
+            <TextBox Text="{Binding Value}"/>
+            <!--
+            TODO: Infelizmente não dá para usar o SyntaxHighlightingTextBox ainda
+            porque ele crasha a aplicação quando se pressiona Ctrl + SetaParaEsquerda / SetaParaDireita ou Ctrl + Del.
+            Vamos tentar usá-lo quando migrar para o Avalonia 12.0.
+            -->
+            <!--controls:SyntaxHighlightingTextBox
+              DefinitionSet="{Binding #variablesTableView.((vmdg:VariablesDataGridViewModel)DataContext).PororocaVarSyntaxHighlightingDefinitionSet, Mode=OneWay}"
+              Text="{Binding Value}"/-->
+          </DataTemplate>
+        </DataGridTemplateColumn.CellEditingTemplate>
+      </DataGridTemplateColumn>
       <DataGridCheckBoxColumn
           Width="*"
           Binding="{Binding IsSecret}">

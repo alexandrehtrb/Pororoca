@@ -27,6 +27,10 @@ internal static class ExportCollectionFormatMapping
 
 public sealed class ExportCollectionFormatMatchConverter : EnumMatchConverter<ExportCollectionFormat>
 {
+    public static readonly ExportCollectionFormatMatchConverter Instance = new();
+
+    private ExportCollectionFormatMatchConverter() { }
+
     protected override ExportCollectionFormat? MapIndexToEnum(int index) =>
         ExportCollectionFormatMapping.MapIndexToEnum(index);
 }

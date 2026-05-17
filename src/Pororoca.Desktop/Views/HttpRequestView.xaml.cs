@@ -1,5 +1,4 @@
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
@@ -25,12 +24,10 @@ public sealed class HttpRequestView : UserControl
     {
         InitializeComponent();
 
-        var varResolverObtainer = () => ((HttpRequestViewModel)DataContext!).col;
-
         var httpReqRawBodyEditor = this.FindControl<TextEditor>("teReqBodyRawContent")!;
-        this.httpReqRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(httpReqRawBodyEditor, true, varResolverObtainer);
+        this.httpReqRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(httpReqRawBodyEditor, true, ProvideVariableResolver);
         httpReqRawBodyEditor.TextArea.TextEntering += (sender, e) => TextEditorConfiguration.OnTextEnteringInEditorWithVariables(httpReqRawBodyEditor, e, ref this.httpReqRawBodyCompletionWindow);
-        httpReqRawBodyEditor.TextArea.TextEntered += (sender, e) => TextEditorConfiguration.OnTextEnteredInEditorWithVariables(httpReqRawBodyEditor, e, varResolverObtainer, ref this.httpReqRawBodyCompletionWindow, (sender, e) => this.httpReqRawBodyCompletionWindow = null);
+        httpReqRawBodyEditor.TextArea.TextEntered += (sender, e) => TextEditorConfiguration.OnTextEnteredInEditorWithVariables(httpReqRawBodyEditor, e, ProvideVariableResolver, ref this.httpReqRawBodyCompletionWindow, (sender, e) => this.httpReqRawBodyCompletionWindow = null);
 
         var httpReqRawContentTypeSelector = this.FindControl<AutoCompleteBox>("acbReqBodyRawContentType")!;
         httpReqRawContentTypeSelector.SelectionChanged += OnRequestBodyRawContentTypeChanged;
@@ -79,12 +76,6 @@ public sealed class HttpRequestView : UserControl
     public void OnSelectedResponseCapturesChanged(object sender, SelectionChangedEventArgs e) =>
         ((HttpRequestViewModel)DataContext!).ResCapturesTableVm.UpdateSelectedItems(e);
 
-    public void OnRequestUrlPointerEnter(object sender, PointerEventArgs e)
-    {
-        var vm = (HttpRequestViewModel)DataContext!;
-        vm.UpdateResolvedRequestUrlToolTip();
-    }
-
     private void OnRequestBodyRawContentTypeChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (e.AddedItems is not null
@@ -108,6 +99,12 @@ public sealed class HttpRequestView : UserControl
 
     private void ApplySelectedRequestRawContentSyntax(string? requestRawContentType) =>
         this.httpReqRawBodyEditorTextMateInstallation.SetEditorSyntax(ref this.currentHttpReqRawBodySyntaxLangId, requestRawContentType);
+
+    // IMPORTANTE: este método deve retornar um CollectionViewModel,
+    // e não simplesmente uma coleção, pois senão não vai atualizar
+    // as variáveis de coleção e de ambiente.
+    public CollectionViewModel ProvideVariableResolver() =>
+        ((HttpRequestViewModel)DataContext!).Collection;
 
     #endregion
 }

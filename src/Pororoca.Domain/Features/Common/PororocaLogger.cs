@@ -43,8 +43,8 @@ public sealed class PororocaLogger
 #if INSTALLED_ON_WINDOWS
             sb.AppendLine($"Installed on Windows? Yes");
 #endif
-#if INSTALLED_ON_DEBIAN
-            sb.AppendLine($"Installed on Debian? Yes");
+#if INSTALLED_ON_LINUX
+            sb.AppendLine($"Installed on Linux? Yes");
 #endif
             sb.AppendLine($"Program version: {this.appVersion}");
             sb.AppendLine($"Time: {now:HH:mm:ss}");

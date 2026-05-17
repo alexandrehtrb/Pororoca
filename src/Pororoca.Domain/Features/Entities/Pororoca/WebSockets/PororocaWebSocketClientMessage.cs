@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 
 public enum PororocaWebSocketClientMessageContentMode
@@ -9,7 +7,7 @@ public enum PororocaWebSocketClientMessageContentMode
 }
 
 #if DEBUG
-[DebuggerDisplay("{Name,nq}")]
+[System.Diagnostics.DebuggerDisplay("{Name,nq}")]
 #endif
 public sealed record PororocaWebSocketClientMessage
 (

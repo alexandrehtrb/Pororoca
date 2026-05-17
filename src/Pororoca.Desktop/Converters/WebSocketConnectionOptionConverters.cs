@@ -30,6 +30,10 @@ internal static class WebSocketConnectionOptionMapping
 
 public sealed class WebSocketConnectionOptionMatchConverter : EnumMatchConverter<WebSocketConnectionOption>
 {
+    public static readonly WebSocketConnectionOptionMatchConverter Instance = new();
+
+    private WebSocketConnectionOptionMatchConverter() { }
+
     protected override WebSocketConnectionOption? MapIndexToEnum(int index) =>
         WebSocketConnectionOptionMapping.MapIndexToEnum(index);
 }

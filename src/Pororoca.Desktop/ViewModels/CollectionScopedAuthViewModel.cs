@@ -8,7 +8,7 @@ public sealed class CollectionScopedAuthViewModel : CollectionOrganizationItemVi
     [Reactive]
     public RequestAuthViewModel AuthVm { get; set; } // TODO: Remove InheritedFromCollection option
 
-    public CollectionScopedAuthViewModel(ICollectionOrganizationItemParentViewModel parentVm,
+    public CollectionScopedAuthViewModel(CollectionViewModel parentVm,
                                          PororocaCollection col) : base(parentVm, string.Empty) =>
-        AuthVm = new(col.CollectionScopedAuth, false, () => { });
+        AuthVm = new(parentVm, col.CollectionScopedAuth, false, () => { });
 }

@@ -29,15 +29,19 @@ on:
         required: false
         default: false
         type: boolean
+      produceTestServerLinuxX64:
+        required: false
+        default: false
+        type: boolean
       pushPackageToNuGetServer:
         required: false
         default: false
         type: boolean
-      produceDesktopLinuxX64:
+      produceDesktopLinuxPortableX64:
         required: false
         default: false
         type: boolean
-      produceDesktopDebianX64:
+      produceDesktopLinuxInstallersX64:
         required: false
         default: false
         type: boolean
@@ -222,10 +226,126 @@ jobs:
 
     # finished CD steps - NuGet
 
+    # start CD steps - TestServer
+
+    - name: Publish TestServer Linux x64
+      if: ${{ inputs.runCD && inputs.produceTestServerLinuxX64 }}
+      shell: pwsh
+      run: |
+        $OUTPUT_FOLDER = "./out/testserver-linux-x64"
+        [void](New-Item $OUTPUT_FOLDER -ItemType Directory -ErrorAction Ignore);
+          dotnet publish ./tests/Pororoca.TestServer/Pororoca.TestServer.csproj `
+          --verbosity quiet `
+          --nologo `
+          --configuration Release `
+          --self-contained true `
+          --runtime linux-x64 `
+          --output $OUTPUT_FOLDER;
+        chmod +x "$OUTPUT_FOLDER/PororocaTestServer"
+        [void](New-Item "$OUTPUT_FOLDER/TestFiles" -ItemType Directory -ErrorAction Ignore);
+        Copy-Item -Path "./tests/Pororoca.TestServer/TestFiles/*" -Destination "$OUTPUT_FOLDER/TestFiles" -Recurse -Force
+
+    # end CD steps - TestServer
+
     # start CD steps - desktop
 
+    - name: Fetch PFX certificate and add Windows SignTool to PATH
+      if: ${{ inputs.runCD && (inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
+      shell: pwsh
+      run: |
+        # Create certs directory
+        $certsDir = Join-Path (Get-Location) "certs"
+        [void](New-Item $certsDir -ItemType Directory -ErrorAction Ignore);
+
+        # Fetch PFX certificate from GitHub Actions secrets
+        $pfxFilePath = Join-Path (Get-Location) "certs" "cert.pfx"
+        # Below needs absolute path (relative path doesn't work)
+        [System.IO.File]::WriteAllBytes($pfxFilePath, [Convert]::FromBase64String(($env:ALEXANDREHTRB_PFX_FILE_CONTENT_BASE64)))
+
+        # Verify certificate integrity
+        Write-Host "PFX file size: $((Get-Item ./certs/cert.pfx).Length)"
+        certutil -p "${env:ALEXANDREHTRB_PFX_FILE_PASSWORD}" -dump $pfxFilePath
+
+        # Add SignTool.exe directory to PATH
+        echo "C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64" | Out-File -FilePath "$env:GITHUB_PATH" -Append
+      env:
+        ALEXANDREHTRB_PFX_FILE_CONTENT_BASE64: ${{ secrets.ALEXANDREHTRB_PFX_FILE_CONTENT_BASE64 }}
+        ALEXANDREHTRB_PFX_FILE_PASSWORD: ${{ secrets.ALEXANDREHTRB_PFX_FILE_PASSWORD }}
+
+    - name: Import GPG public and private keys
+      if: ${{ inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
+      shell: pwsh
+      run: |
+        # Create certs directory
+        $certsDir = Join-Path (Get-Location) "certs"
+        [void](New-Item $certsDir -ItemType Directory -ErrorAction Ignore);
+
+        # Import keys without prompting user input (for CI / CD)
+        # https://d.sb/2016/11/gpg-inappropriate-ioctl-for-device-errors
+        #   use-agent, pinentry-mode --> no ask for user input
+        #   allow-loopback-pinentry --> use TTY terminal, no ask for user input
+        #   allow-preset-passphrase --> set fixed passphrase, no ask for user input
+        
+        $gpgDir = Join-Path $env:HOME ".gnupg"
+        [void](New-Item $gpgDir -ItemType Directory -ErrorAction Ignore);
+        chmod 700 $gpgDir
+
+        $gpgConfFilePath = Join-Path $env:HOME ".gnupg" "gpg.conf"
+        $gpgConfFileContent = @"
+        use-agent
+        pinentry-mode loopback
+        "@
+        echo $gpgConfFileContent >> $gpgConfFilePath
+        chmod 600 $gpgConfFilePath
+
+        $gpgAgentConfFilePath = Join-Path $env:HOME ".gnupg" "gpg-agent.conf"
+        $gpgAgentConfFileContent = @"
+        allow-loopback-pinentry
+        allow-preset-passphrase
+        "@
+        echo $gpgAgentConfFileContent >> $gpgAgentConfFilePath
+        chmod 600 $gpgAgentConfFilePath
+
+        # Fix ~/.gnupg directory permissions
+        chown -R $(whoami) $gpgDir
+
+        # Restart GPG agent
+        Write-Host "Restarting GPG agent..."
+        gpg-connect-agent RELOADAGENT /bye
+
+        # Set default passphrase for private key
+        Write-Host "Setting default preset passphrase for GPG..."
+        echo "${env:ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD}" | /usr/lib/gnupg2/gpg-preset-passphrase --preset "${env:ALEXANDREHTRB_GPG_KEYGRIP}"
+
+        # Import public and private keys
+        $publicKeyFilePath = Join-Path $certsDir "public-key.gpg"
+        $privateKeyFilePath = Join-Path $certsDir "private-key.gpg"
+        echo "${env:ALEXANDREHTRB_GPG_PRIVATE_KEY}" > $privateKeyFilePath
+        echo "${env:ALEXANDREHTRB_GPG_PUBLIC_KEY}" > $publicKeyFilePath
+        Write-Host "Public key file size: $((Get-Item $publicKeyFilePath).Length)"
+        Write-Host "Private key file size: $((Get-Item $privateKeyFilePath).Length)"
+        Write-Host "Importing private key..."
+        gpg --batch --no-tty --import $privateKeyFilePath
+        Write-Host "Importing public key..."
+        gpg --batch --no-tty --import $publicKeyFilePath
+        Write-Host "Listing private keys..."
+        gpg --list-secret-keys --with-keygrip
+        Write-Host "Listing public keys..."
+        gpg --list-keys --with-keygrip
+
+        # Import public key to RPM
+        Write-Host "Importing public key to RPM..."
+        rpm --import $publicKeyFilePath
+
+      env:
+        ALEXANDREHTRB_GPG_PUBLIC_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PUBLIC_KEY }}
+        ALEXANDREHTRB_GPG_PRIVATE_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PRIVATE_KEY }}
+        ALEXANDREHTRB_GPG_KEY_FINGERPRINT: ${{ secrets.ALEXANDREHTRB_GPG_KEY_FINGERPRINT }}
+        ALEXANDREHTRB_GPG_KEYGRIP: ${{ secrets.ALEXANDREHTRB_GPG_KEYGRIP }}
+        ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD: ${{ secrets.ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD }}
+
     - name: Read desktop program version
-      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxX64 || inputs.produceDesktopDebianX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxPortableX64 || inputs.produceDesktopLinuxInstallersX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
       shell: pwsh
       run: |
         ([XML]$desktopCsprojXml = Get-Content ./src/Pororoca.Desktop/Pororoca.Desktop.csproj)
@@ -233,35 +353,35 @@ jobs:
         echo "VERSION_NAME=${versionName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Generate Pororoca.Desktop SBOM file
-      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxX64 || inputs.produceDesktopDebianX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxPortableX64 || inputs.produceDesktopLinuxInstallersX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
       shell: pwsh
       run: dotnet CycloneDX ./src/Pororoca.Desktop/Pororoca.Desktop.csproj -o ./out/ -fn sbom_pororoca_desktop.json -sv $env:VERSION_NAME -F UnsafeJson
 
     - name: Generate Pororoca Desktop dlls
-      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxX64 || inputs.produceDesktopDebianX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxPortableX64 || inputs.produceDesktopLinuxInstallersX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
       shell: pwsh
       run: |
         $arr = @()
-        if ($env:LINUX_X64 -eq 'true')         { $arr += @{ rid="linux-x64"; outputFolder="./out/linux-x64"         ; packaging=$null   } };
-        if ($env:DEBIAN_X64 -eq 'true')        { $arr += @{ rid="linux-x64"; outputFolder="./out/debian-x64"        ; packaging="debian"   } };
-        if ($env:OSX -eq 'true')               { $arr += @{   rid="osx-x64"; outputFolder="./out/osx-x64"           ; packaging=$null   } };
-        if ($env:WIN_X64_INSTALLER -eq 'true') { $arr += @{   rid="win-x64"; outputFolder="./out/win-x64-installer" ; packaging="nsis"   } };
-        if ($env:WIN_X64_PORTABLE -eq 'true')  { $arr += @{   rid="win-x64"; outputFolder="./out/win-x64-portable"  ; packaging=$null   } };
-        if ($env:WIN_X86_INSTALLER -eq 'true') { $arr += @{   rid="win-x86"; outputFolder="./out/win-x86-installer" ; packaging="nsis"   } };
-        if ($env:WIN_X86_PORTABLE -eq 'true')  { $arr += @{   rid="win-x86"; outputFolder="./out/win-x86-portable"  ; packaging=$null   } };
+        if ($env:LINUX_X64_PORTABLE -eq 'true') { $arr += @{ rid="linux-x64"; outputFolder="./out/linux-x64-portable"  ; packaging="portable"   } };
+        if ($env:LINUX_X64_INSTALLER -eq 'true'){ $arr += @{ rid="linux-x64"; outputFolder="./out/linux-x64-installer" ; packaging="linux-installers"   } };
+        if ($env:OSX -eq 'true')                { $arr += @{   rid="osx-x64"; outputFolder="./out/osx-x64"             ; packaging="osx-app"   } };
+        if ($env:WIN_X64_INSTALLER -eq 'true')  { $arr += @{   rid="win-x64"; outputFolder="./out/win-x64-installer"   ; packaging="nsis"   } };
+        if ($env:WIN_X64_PORTABLE -eq 'true')   { $arr += @{   rid="win-x64"; outputFolder="./out/win-x64-portable"    ; packaging="portable"   } };
+        if ($env:WIN_X86_INSTALLER -eq 'true')  { $arr += @{   rid="win-x86"; outputFolder="./out/win-x86-installer"   ; packaging="nsis"   } };
+        if ($env:WIN_X86_PORTABLE -eq 'true')   { $arr += @{   rid="win-x86"; outputFolder="./out/win-x86-portable"    ; packaging="portable"   } };
 
         foreach ($artifact in $arr)
         {
           $OUTPUT_FOLDER = $artifact.outputFolder
-          $PUBLISH_SINGLE_FILE = (($artifact.rid -ne $null) -and ((($artifact.rid -like "win*") -and ($artifact.packaging -eq $null)) -or ($artifact.rid -like "linux*")));
+          $PUBLISH_SINGLE_FILE = $artifact.packaging -eq "portable";
           $WINDOWS_INSTALLER_RELEASE = $artifact.packaging -eq "nsis";
-          $DEBIAN_INSTALLER_RELEASE = $artifact.packaging -eq "debian";
+          $LINUX_INSTALLER_RELEASE = $artifact.packaging -eq "linux-installers";
 
           Write-Host "Generating Pororoca.Desktop DLLs for $($artifact.rid)."
           Write-Host "Output folder: $OUTPUT_FOLDER"
           Write-Host "Publish single file: $PUBLISH_SINGLE_FILE"
           Write-Host "Win installer release: $WINDOWS_INSTALLER_RELEASE"
-          Write-Host "Debian installer release: $DEBIAN_INSTALLER_RELEASE"
+          Write-Host "Linux installer release: $LINUX_INSTALLER_RELEASE"
 
           [void](New-Item $OUTPUT_FOLDER -ItemType Directory -ErrorAction Ignore);
           dotnet publish ./src/Pororoca.Desktop/Pororoca.Desktop.csproj `
@@ -271,7 +391,7 @@ jobs:
           -p:TreatWarningsAsErrors=False `
           -p:PublishSingleFile=$PUBLISH_SINGLE_FILE `
           -p:PublishForInstallOnWindows=$WINDOWS_INSTALLER_RELEASE `
-          -p:PublishForInstallOnDebian=$DEBIAN_INSTALLER_RELEASE `
+          -p:PublishForInstallOnLinux=$LINUX_INSTALLER_RELEASE `
           -p:UITestsEnabled=${env:ENABLE_UI_TESTING} `
           --self-contained true `
           --runtime $artifact.rid `
@@ -301,9 +421,32 @@ jobs:
         }
       env:
         ENABLE_UI_TESTING: ${{ inputs.enableUITesting }}
-        LINUX_X64: ${{ inputs.produceDesktopLinuxX64 }}
-        DEBIAN_X64: ${{ inputs.produceDesktopDebianX64 }}
+        LINUX_X64_PORTABLE: ${{ inputs.produceDesktopLinuxPortableX64 }}
+        LINUX_X64_INSTALLER: ${{ inputs.produceDesktopLinuxInstallersX64 }}
         OSX: ${{ inputs.produceDesktopMacOSX }}
+        WIN_X64_PORTABLE: ${{ inputs.produceDesktopWinX64Portable }}
+        WIN_X64_INSTALLER: ${{ inputs.produceDesktopWinX64Installer }}
+        WIN_X86_PORTABLE: ${{ inputs.produceDesktopWinX86Portable }}
+        WIN_X86_INSTALLER: ${{ inputs.produceDesktopWinX86Installer }}
+
+    - name: Sign Pororoca executable files for Windows
+      if: ${{ inputs.runCD && (inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
+      shell: pwsh
+      run: |
+        $arr = @()
+        if ($env:WIN_X64_INSTALLER -eq 'true') { $arr += "./out/win-x64-installer/Pororoca.exe"; };
+        if ($env:WIN_X64_PORTABLE -eq 'true')  { $arr += "./out/win-x64-portable/Pororoca.exe" ; };
+        if ($env:WIN_X86_INSTALLER -eq 'true') { $arr += "./out/win-x86-installer/Pororoca.exe"; };
+        if ($env:WIN_X86_PORTABLE -eq 'true')  { $arr += "./out/win-x86-portable/Pororoca.exe" ; };
+
+        $pfxFilePath = Join-Path (Get-Location) "certs" "cert.pfx"
+
+        foreach ($exeFilePath in $arr)
+        {
+          signtool sign /f $pfxFilePath /fd SHA256 /p $env:ALEXANDREHTRB_PFX_FILE_PASSWORD /t http://timestamp.digicert.com $exeFilePath
+        }
+      env:
+        ALEXANDREHTRB_PFX_FILE_PASSWORD: ${{ secrets.ALEXANDREHTRB_PFX_FILE_PASSWORD }}
         WIN_X64_PORTABLE: ${{ inputs.produceDesktopWinX64Portable }}
         WIN_X64_INSTALLER: ${{ inputs.produceDesktopWinX64Installer }}
         WIN_X86_PORTABLE: ${{ inputs.produceDesktopWinX86Portable }}
@@ -331,13 +474,11 @@ jobs:
 
     # so Linux users can create desktop launchers
     - name: Copy logo (Linux portable only)
-      if: ${{ inputs.runCD && inputs.produceDesktopLinuxX64 }}
+      if: ${{ inputs.runCD && inputs.produceDesktopLinuxPortableX64 }}
       shell: pwsh
       run: |
-        $OUTPUT_FOLDER = "./out/linux-x64"
-        Copy-Item -Path "./misc/pororoca.png" -Destination $OUTPUT_FOLDER
-      env:
-        LINUX_X64: ${{ inputs.produceDesktopLinuxX64 }}
+        $OUTPUT_FOLDER = "./out/linux-x64-portable"
+        Copy-Item -Path "./pororoca.png" -Destination $OUTPUT_FOLDER
 
     - name: Copy icon for Windows installer
       if: ${{ inputs.runCD && (inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Installer) }}
@@ -356,7 +497,7 @@ jobs:
         WIN_X86_INSTALLER: ${{ inputs.produceDesktopWinX86Installer }}
 
     - name: Copy licence
-      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxX64 || inputs.produceDesktopDebianX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxPortableX64 || inputs.produceDesktopLinuxInstallersX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
       shell: pwsh
       run: |
         $arr = @(Get-ChildItem "./out/" -Directory | Select FullName)
@@ -366,22 +507,24 @@ jobs:
         }
 
     - name: Compress package
-      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX86Portable) }}
+      if: ${{ inputs.runCD && (inputs.produceTestServerLinuxX64 || inputs.produceDesktopLinuxPortableX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX86Portable) }}
       shell: pwsh
       run: |
         $arr = @()
-        if ($env:LINUX_X64 -eq 'true')         { $arr += @{ rid="linux-x64"; outputFolder="./out/linux-x64"         } };
-        if ($env:OSX -eq 'true')               { $arr += @{   rid="osx-x64"; outputFolder="./out/osx-x64"           } };
-        if ($env:WIN_X64_PORTABLE -eq 'true')  { $arr += @{   rid="win-x64"; outputFolder="./out/win-x64-portable"  } };
-        if ($env:WIN_X86_PORTABLE -eq 'true')  { $arr += @{   rid="win-x86"; outputFolder="./out/win-x86-portable"  } };
+        if ($env:TESTSERVER_LINUX_X64 -eq 'true'){ $arr += @{ rid="testserver-linux-x64"; outputFolder="./out/testserver-linux-x64"} };
+        if ($env:LINUX_X64_PORTABLE -eq 'true')  { $arr += @{ rid="linux-x64"; outputFolder="./out/linux-x64-portable"} };
+        if ($env:OSX -eq 'true')                 { $arr += @{ rid="osx-x64"; outputFolder="./out/osx-x64"           } };
+        if ($env:WIN_X64_PORTABLE -eq 'true')    { $arr += @{ rid="win-x64"; outputFolder="./out/win-x64-portable"  } };
+        if ($env:WIN_X86_PORTABLE -eq 'true')    { $arr += @{ rid="win-x86"; outputFolder="./out/win-x86-portable"  } };
 
         foreach ($artifact in $arr)
         {
           $OUTPUT_FOLDER = $artifact.outputFolder
 
-          $zipName = if ($artifact.rid -like "win*")     { "Pororoca_${env:VERSION_NAME}_$($artifact.rid)_portable.zip" }
-                     elseif ($artifact.rid -like "osx*") { "Pororoca_${env:VERSION_NAME}_osx.zip" }
-                     else                                { "Pororoca_${env:VERSION_NAME}_$($artifact.rid).zip" }
+          $zipName = if ($artifact.rid -like "win*")            { "Pororoca_${env:VERSION_NAME}_$($artifact.rid)_portable.zip" }
+                     elseif ($artifact.rid -like "osx*")        { "Pororoca_${env:VERSION_NAME}_osx.zip" }
+                     elseif ($artifact.rid -like "testserver*") { "PororocaTestServer_${env:VERSION_NAME}_linux-x64.zip" }
+                     else                                       { "Pororoca_${env:VERSION_NAME}_$($artifact.rid).zip" }
 
           if ($IsWindows) {
             Compress-Archive -CompressionLevel Optimal -Path "${OUTPUT_FOLDER}/*" -DestinationPath "./out/${zipName}"
@@ -394,7 +537,8 @@ jobs:
           Remove-Item $OUTPUT_FOLDER -Force -Recurse -ErrorAction Ignore
         }
       env:
-        LINUX_X64: ${{ inputs.produceDesktopLinuxX64 }}
+        TESTSERVER_LINUX_X64: ${{ inputs.produceTestServerLinuxX64 }}
+        LINUX_X64_PORTABLE: ${{ inputs.produceDesktopLinuxPortableX64 }}
         OSX: ${{ inputs.produceDesktopMacOSX }}
         WIN_X64_PORTABLE: ${{ inputs.produceDesktopWinX64Portable }}
         WIN_X86_PORTABLE: ${{ inputs.produceDesktopWinX86Portable }}
@@ -406,6 +550,8 @@ jobs:
         $arr = @()
         if ($env:WIN_X64_INSTALLER -eq 'true') { $arr += @{ rid="win-x64"; outputFolder="./out/win-x64-installer" } };
         if ($env:WIN_X86_INSTALLER -eq 'true') { $arr += @{ rid="win-x86"; outputFolder="./out/win-x86-installer" } };
+
+        $pfxAbsoluteFilePath = Join-Path (Get-Location) "certs" "cert.pfx"
 
         foreach ($artifact in $arr)
         {
@@ -420,28 +566,34 @@ jobs:
           makensis -WX -V2 "/XOutFile ${installerOutFileAbsolutePath}" `
             "/DSHORT_VERSION=${env:VERSION_NAME}" `
             "/DINPUT_FILES_DIR=${installerFilesDirAbsolutePath}" `
+            "/DCODE_SIGNING_CERTIFICATE_FILE_PATH=${pfxAbsoluteFilePath}" `
+            "/DCODE_SIGNING_CERTIFICATE_FILE_PASSWORD=${env:ALEXANDREHTRB_PFX_FILE_PASSWORD}" `
             .\src\Pororoca.Desktop.WindowsInstaller\Installer.nsi
 
           Remove-Item $OUTPUT_FOLDER -Force -Recurse -ErrorAction Ignore
         }
+
+        # let's delete the certificate file now, won't be used afterwards
+        Remove-Item $pfxAbsoluteFilePath -Force -Recurse -ErrorAction Ignore
       env:
+        ALEXANDREHTRB_PFX_FILE_PASSWORD: ${{ secrets.ALEXANDREHTRB_PFX_FILE_PASSWORD }}
         WIN_X64_INSTALLER: ${{ inputs.produceDesktopWinX64Installer }}
         WIN_X86_INSTALLER: ${{ inputs.produceDesktopWinX86Installer }}
 
-    - name: Make Debian .deb package
-      if: ${{ inputs.runCD && inputs.produceDesktopDebianX64 }}
+    - name: Make Debian / Ubuntu package
+      if: ${{ inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
       shell: pwsh
       run: |
-        $OUTPUT_FOLDER = "./out/debian-x64";
+        $OUTPUT_FOLDER = "./out/linux-x64-installer";
         $debPackageName = "Pororoca_${env:VERSION_NAME}_amd64.deb";
         [void](mkdir "./out/deb")
         # Debian control file
         [void](mkdir "./out/deb/DEBIAN")
-        Copy-Item -Path "./src/Pororoca.Desktop.Debian/control" -Destination "./out/deb/DEBIAN"
+        Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/control" -Destination "./out/deb/DEBIAN"
         # Starter script
         [void](mkdir "./out/deb/usr")
         [void](mkdir "./out/deb/usr/bin")
-        Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca.sh" -Destination "./out/deb/usr/bin/pororoca"
+        Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/pororoca.sh" -Destination "./out/deb/usr/bin/pororoca"
         chmod +x "./out/deb/usr/bin/pororoca" # set executable permissions to starter script
         # Other files
         [void](mkdir "./out/deb/usr/lib")
@@ -452,42 +604,21 @@ jobs:
         # Desktop shortcut
         [void](mkdir "./out/deb/usr/share")
         [void](mkdir "./out/deb/usr/share/applications")
-        Copy-Item -Path "./src/Pororoca.Desktop.Debian/Pororoca.desktop" -Destination "./out/deb/usr/share/applications/Pororoca.desktop"
+        Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/Pororoca.desktop" -Destination "./out/deb/usr/share/applications/Pororoca.desktop"
         # Desktop icon
         # A 32x32 px XPM file in /usr/share/pixmaps/ (using 1024x1024 px PNG instead, like VS Code uses for its icon)
         [void](mkdir "./out/deb/usr/share/pixmaps")
-        Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_1024px.png" -Destination "./out/deb/usr/share/pixmaps/pororoca.png"
+        Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/pororoca_icon_1024px.png" -Destination "./out/deb/usr/share/pixmaps/pororoca.png"
         # Hicolor icons
         [void](mkdir "./out/deb/usr/share/icons")
         [void](mkdir "./out/deb/usr/share/icons/hicolor")
-        # A 16x16 px PNG file in /usr/share/icons/hicolor/16x16/apps/
-        [void](mkdir "./out/deb/usr/share/icons/hicolor/16x16")
-        [void](mkdir "./out/deb/usr/share/icons/hicolor/16x16/apps")
-        Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_16px.png" -Destination "./out/deb/usr/share/icons/hicolor/16x16/apps/pororoca.png"
-        # A 32x32 px PNG file in /usr/share/icons/hicolor/32x32/apps/
-        [void](mkdir "./out/deb/usr/share/icons/hicolor/32x32")
-        [void](mkdir "./out/deb/usr/share/icons/hicolor/32x32/apps")
-        Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_32px.png" -Destination "./out/deb/usr/share/icons/hicolor/32x32/apps/pororoca.png"
-        # A 48x48 px PNG file in /usr/share/icons/hicolor/48x48/apps/
-        [void](mkdir "./out/deb/usr/share/icons/hicolor/48x48")
-        [void](mkdir "./out/deb/usr/share/icons/hicolor/48x48/apps")
-        Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_48px.png" -Destination "./out/deb/usr/share/icons/hicolor/48x48/apps/pororoca.png"
-        # A 64x64 px PNG file in /usr/share/icons/hicolor/64x64/apps/
-        [void](mkdir "./out/deb/usr/share/icons/hicolor/64x64")
-        [void](mkdir "./out/deb/usr/share/icons/hicolor/64x64/apps")
-        Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_64px.png" -Destination "./out/deb/usr/share/icons/hicolor/64x64/apps/pororoca.png"
-        # A 128x128 px PNG file in /usr/share/icons/hicolor/128x128/apps/
-        [void](mkdir "./out/deb/usr/share/icons/hicolor/128x128")
-        [void](mkdir "./out/deb/usr/share/icons/hicolor/128x128/apps")
-        Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_128px.png" -Destination "./out/deb/usr/share/icons/hicolor/128x128/apps/pororoca.png"
-        # A 256x256 px PNG file in /usr/share/icons/hicolor/256x256/apps/
-        [void](mkdir "./out/deb/usr/share/icons/hicolor/256x256")
-        [void](mkdir "./out/deb/usr/share/icons/hicolor/256x256/apps")
-        Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_256px.png" -Destination "./out/deb/usr/share/icons/hicolor/256x256/apps/pororoca.png"
-        # A 512x512 px PNG file in /usr/share/icons/hicolor/512x512/apps/
-        [void](mkdir "./out/deb/usr/share/icons/hicolor/512x512")
-        [void](mkdir "./out/deb/usr/share/icons/hicolor/512x512/apps")
-        Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_512px.png" -Destination "./out/deb/usr/share/icons/hicolor/512x512/apps/pororoca.png"
+        foreach ($imgSize in @(16, 32, 48, 64, 128, 256, 512))
+        {
+          # A square ZxZ px PNG file in /usr/share/icons/hicolor/ZxZ/apps/
+          [void](mkdir "./out/deb/usr/share/icons/hicolor/${imgSize}x${imgSize}")
+          [void](mkdir "./out/deb/usr/share/icons/hicolor/${imgSize}x${imgSize}/apps")
+          Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/pororoca_icon_${imgSize}px.png" -Destination "./out/deb/usr/share/icons/hicolor/${imgSize}x${imgSize}/apps/pororoca.png"
+        }
         # Optionally, an SVG file in /usr/share/icons/hicolor/scalable/apps/
         [void](mkdir "./out/deb/usr/share/icons/hicolor/scalable")
         [void](mkdir "./out/deb/usr/share/icons/hicolor/scalable/apps")
@@ -495,7 +626,177 @@ jobs:
         # Make .deb file
         dpkg-deb --root-owner-group --build "./out/deb/" "./out/${debPackageName}"
         Remove-Item "./out/deb" -Force -Recurse -ErrorAction Ignore
+        # Don't delete the output folder, it will be reused for RPM packages
+    
+    # code below taken from:
+    # https://github.com/git-ecosystem/git-credential-manager/blob/6847fba88b5adfd631e6a1163c91c2b316f52701/.github/workflows/release.yml
+    - name: Sign Debian / Ubuntu package
+      if: ${{ inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
+      shell: bash # !!!
+      run: |
+        # Install debsigs
+        sudo apt install debsigs
+
+        # Stop using SHA-1 for the signature. For details, see
+        # https://gitlab.com/debsigs/debsigs/-/commit/75c6c8f96e6cdc33bca9c5f32195b68ff35bc32f
+        # which seems to have made it to have made it into debsigs v0.2.1, but Ubuntu 24.04 is
+        # stuck with v1.19.
+        mkdir -p patched-debsigs &&
+        sed 's/, "--openpgp"//' </usr/bin/debsigs >patched-debsigs/debsigs &&
+        chmod a+x patched-debsigs/debsigs &&
+        echo "$PWD/patched-debsigs" >>$GITHUB_PATH
+
+        # Sign .deb file
+        keyId="$(echo -n $ALEXANDREHTRB_GPG_KEY_FINGERPRINT | tail -c 16)"
+        debFilePath="./out/Pororoca_${VERSION_NAME}_amd64.deb"
+        echo "Signing deb package..."
+        debsigs --sign=origin --default-key=$keyId $debFilePath
+      env:
+        ALEXANDREHTRB_GPG_KEY_FINGERPRINT: ${{ secrets.ALEXANDREHTRB_GPG_KEY_FINGERPRINT }}
+
+    # code below taken from:
+    # https://blog.packagecloud.io/how-to-gpg-sign-and-verify-deb-packages-and-apt-repositories/
+    # https://purplefloyd.wordpress.com/2009/02/05/signing-deb-packages/
+    # TODO: Fix this, it's not working, error: 'gpg: no valid OpenPGP data found.'
+    - name: Verify Debian / Ubuntu package signature (NOT WORKING)
+      if: ${{ false && inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
+      shell: pwsh # !!!
+      run: |
+        # Install debsig-verify
+
+        sudo apt install debsig-verify
+
+        # Import public key
+        $keyId = "${env:ALEXANDREHTRB_GPG_KEY_FINGERPRINT}"
+        $keyringDirPath = "/usr/share/debsig/keyrings/${keyId}"
+        [void](mkdir $keyringDirPath)
+        $publicKeyFilePath = Join-Path (Get-Location) "certs" "public-key.gpg"
+
+        sudo gpg --no-default-keyring `
+            --keyring "/usr/share/debsig/keyrings/${keyId}/debsig.gpg" `
+            --import $publicKeyFilePath
+
+        # Create debsig-verify policy for public key
+
+        sudo mkdir "/etc/debsig/policies/${keyId}/"
+
+        $policyXml = @"
+        <?xml version="1.0"?>
+        <!DOCTYPE Policy SYSTEM "https://www.debian.org/debsig/1.0/policy.dtd">
+        <Policy xmlns="https://www.debian.org/debsig/1.0/">
+          <Origin Name="test" id="${keyId}" Description="Test package"/>
+          <Selection>
+            <Required Type="origin" File="debsig.gpg" id="${keyId}"/>
+          </Selection>
+          <Verification MinOptional="0">
+            <Required Type="origin" File="debsig.gpg" id="${keyId}"/>
+          </Verification>
+        </Policy>
+        "@
+        $tempPolicyFilePath = Join-Path (Get-Location) "certs" "policy.pol"
+        echo $policyXml >> $tempPolicyFilePath
+        $policyXmlFilePath = "/etc/debsig/policies/${keyId}/policy.pol"
+        sudo cp $tempPolicyFilePath $policyXmlFilePath
+
+        Write-Host "XML policy file path: ${policyXmlFilePath}" 
+        Write-Host "XML policy:`n$(Get-Content $policyXmlFilePath)" 
+
+        # Verify package signature
+        Write-Host "Verifying deb package signature..."
+        $debFilePath = "./out/Pororoca_${env:VERSION_NAME}_amd64.deb"
+        debsig-verify $debFilePath
+      env:
+        ALEXANDREHTRB_GPG_PUBLIC_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PUBLIC_KEY }}
+        ALEXANDREHTRB_GPG_KEY_FINGERPRINT: ${{ secrets.ALEXANDREHTRB_GPG_KEY_FINGERPRINT }}
+
+    # code below taken from:
+    # https://github.com/PowerShell/PowerShell/pull/26337
+    # https://github.com/PowerShell/PowerShell/blob/master/tools/packaging/packaging.psm1
+    # https://janikvonrotz.ch/2019/03/20/the-final-rpm-packaging-guide/
+    - name: Make RHEL and openSUSE packages
+      if: ${{ inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
+      shell: pwsh
+      run: |
+        # rpmbuild comes pre-installed on Ubuntu runners
+        rpmbuild --version
+        $OUTPUT_FOLDER = "./out/linux-x64-installer";
+        $rpmbuildMainDir = Join-Path $env:HOME "rpmbuild"
+        $rpmbuildSpecsDir = Join-Path $rpmbuildMainDir "SPECS"
+        $rpmbuildBuildRootDir = Join-Path $rpmbuildMainDir "BUILDROOT"
+        $rpmbuildRpmsDir = Join-Path $rpmbuildMainDir "RPMS"
+        [void](mkdir $rpmbuildMainDir $rpmbuildSpecsDir $rpmbuildBuildRootDir $rpmbuildRpmsDir)
+        $rpmStagingDir = Join-Path $env:HOME "rpmstaging"
+        $rpmStagingBinariesDir = Join-Path $rpmStagingDir "binaries"
+        $rpmStagingOthersDir = Join-Path $rpmStagingDir "others"
+        [void](mkdir $rpmStagingDir $rpmStagingBinariesDir $rpmStagingOthersDir)
+        Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/*" -Destination $rpmStagingOthersDir -Recurse -Force
+        Copy-Item -Path "./misc/pororoca_logo.svg" -Destination "${rpmStagingOthersDir}/pororoca_logo.svg"
+        Copy-Item -Path "$OUTPUT_FOLDER/*" -Destination $rpmStagingBinariesDir -Recurse -Force
+        
+        $distros = @("openSUSE", "RHEL")
+        foreach ($distro in $distros)
+        {
+          $rpmbuildSpecFilePath = Join-Path $rpmbuildSpecsDir "${distro}.spec"
+          Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/${distro}.spec" -Destination $rpmbuildSpecFilePath
+          rpmbuild -bb -v --define "_topdir ${rpmbuildMainDir}" --buildroot "${rpmbuildMainDir}/BUILDROOT" $rpmbuildSpecFilePath
+          Copy-Item -Path "${rpmbuildRpmsDir}/x86_64/Pororoca-${env:VERSION_NAME}-1.x86_64.rpm" -Destination "./out/Pororoca-${env:VERSION_NAME}-1.${distro}.x86_64.rpm"
+        }
         Remove-Item $OUTPUT_FOLDER -Force -Recurse -ErrorAction Ignore
+
+    # code below taken from:
+    # https://oneuptime.com/blog/post/2026-03-04-sign-verify-rpm-packages-gpg-rhel-9/view
+    - name: Sign RHEL and openSUSE packages
+      if: ${{ inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
+      shell: pwsh
+      run: |
+        # Create .rpmmacros file
+        $rpmMacrosFilePath = Join-Path $env:HOME ".rpmmacros"
+        $rpmMacrosContent = @"
+        # GPG signing configuration
+        %_signature gpg
+        %_gpg_path ~/.gnupg
+        %_gpg_name ${env:ALEXANDREHTRB_GPG_KEY_NAME}
+        %_gpgbin /usr/bin/gpg2
+        %__gpg_sign_cmd %{__gpg} gpg --force-v3-sigs --batch --no-tty --verbose --no-armor --no-secmem-warning -u "%{_gpg_name}" -sbo %{__signature_filename} --digest-algo sha256 %{__plaintext_filename}'
+        "@
+        echo $rpmMacrosContent >> $rpmMacrosFilePath
+
+        $distros = @("openSUSE", "RHEL")
+        foreach ($distro in $distros)
+        {
+          Write-Host "Signing ${distro} RPM package..."
+
+          $rpmFilePath = "./out/Pororoca-${env:VERSION_NAME}-1.${distro}.x86_64.rpm"
+          
+          # Sign with passphrase from a file
+          echo "${env:ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD}" | rpm --addsign $rpmFilePath
+        }
+      env:
+        ALEXANDREHTRB_GPG_KEY_NAME: ${{ secrets.ALEXANDREHTRB_GPG_KEY_NAME }}
+        ALEXANDREHTRB_GPG_PRIVATE_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PRIVATE_KEY }}
+        ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD: ${{ secrets.ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD }}
+
+    - name: Verify RHEL and openSUSE packages signatures
+      if: ${{ inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
+      shell: pwsh
+      run: |
+        Write-Host "Listing RPM imported public keys..."
+        rpm -qa gpg-pubkey*
+
+        # Check signatures
+        $distros = @("openSUSE", "RHEL")
+        foreach ($distro in $distros)
+        {
+          Write-Host "Verifying ${distro} RPM package signature..."
+          $rpmFilePath = "./out/Pororoca-${env:VERSION_NAME}-1.${distro}.x86_64.rpm"
+          
+          # Sign with passphrase from a file
+          rpm -K --verbose $rpmFilePath         
+        }
+
+        Remove-Item "./certs/" -Force -Recurse -ErrorAction Ignore
+      env:
+        ALEXANDREHTRB_GPG_PUBLIC_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PUBLIC_KEY }}
 
     # finished CD steps - desktop
 

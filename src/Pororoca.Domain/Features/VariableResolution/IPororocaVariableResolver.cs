@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using static Pororoca.Domain.Features.VariableResolution.PororocaPredefinedVariableEvaluator;
@@ -26,6 +27,10 @@ public partial interface IPororocaVariableResolver
         // Environment variable overrides collection variable
         return effectiveEnvVars.Concat(effectiveColVarsNotInEnv);
     }
+
+    [ExcludeFromCodeCoverage(Justification = "Method is too simple.")]
+    public bool IsEffectiveVariable(string keyName) =>
+        GetEffectiveVariables().Any(v => v.Key == keyName);
 
     public static Dictionary<string, string> ResolveKeyValueParams(IEnumerable<PororocaKeyValueParam>? kvParams, IEnumerable<PororocaVariable> effectiveVars) =>
         kvParams == null ?
@@ -63,7 +68,7 @@ public partial interface IPororocaVariableResolver
             return PororocaVariableRegex.Replace(strToReplaceTemplatedVariables, match =>
             {
                 string keyName = match.Groups["k"].Value;
-                if (IsPredefinedVariable(keyName, out string? predefinedVarValue))
+                if (IsPredefinedVariable(keyName, resolveValue: true, out string? predefinedVarValue))
                 {
                     return predefinedVarValue!;
                 }
@@ -95,7 +100,7 @@ public partial interface IPororocaVariableResolver
         if (pointerIndex == lineText.Length)
         {
             return null; // ponteiro sobre o final da linha ('\n')
-        }     
+        }
 
         if (pointerIndex <= (lineText.Length - 2) && lineText[pointerIndex] == '{' && lineText[pointerIndex + 1] == '{')
         {
@@ -158,6 +163,6 @@ public partial interface IPororocaVariableResolver
         string hoveringVar = lineText[startIndex..(endIndex + 1)];
 
         var regexMatch = PororocaVariableRegex.Match(hoveringVar);
-        return regexMatch.Success ? hoveringVar : null;
+        return regexMatch.Success ? regexMatch.Groups["k"].Value : null;
     }
 }

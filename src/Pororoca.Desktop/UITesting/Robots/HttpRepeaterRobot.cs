@@ -38,7 +38,7 @@ public sealed class HttpRepeaterRobot : BaseNamedRobot
     internal TabItem TabItemResultDetailHeaders => GetChildView<TabItem>("tabItemResHeaders")!;
     internal TabItem TabItemResultDetailInputLine => GetChildView<TabItem>("tabItemResInputLine")!;
     internal TextBlock ErrorMessage => GetChildView<TextBlock>("tbErrorMsg")!;
-    internal TextBox InputDataFileSrcPath => GetChildView<TextBox>("tbRepetitionInputDataFileSrcPath")!;
+    internal SyntaxHighlightingTextBox InputDataFileSrcPath => GetChildView<SyntaxHighlightingTextBox>("tbRepetitionInputDataFileSrcPath")!;
     internal TextBlock RepetitionStatusMessage => GetChildView<TextBlock>("tbRepetitionStatus")!;
     internal TextBlock ResultDetailTitle => GetChildView<TextBlock>("tbResTitle")!;
     internal TextEditor InputDataRawEditor => GetChildView<TextEditor>("teRepetitionInputDataRaw")!;

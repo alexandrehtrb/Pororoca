@@ -34,10 +34,10 @@ function Get-RuntimesToPublishFor
 	# osx-arm64 is now supported (2022-11-30), thanks to AvaloniaEdit version 11.0.0-preview2
 
 	# osx-arm64 doesn't work for some reason,
-	# but osx-x64 works on Mac OSes with Apple Silicon (arm64)
+	# but osx-x64 works on macOS with Apple Silicon (arm64)
 	$unixRuntimes = @(`
-		'linux-x64' `
-		,'debian-x64' `
+		'linux-x64_portable' `
+		,'linux-x64_installers' `
 		#,'linux-arm64' `
 		,'osx-x64' `
 		#,'osx-arm64' `
@@ -46,20 +46,22 @@ function Get-RuntimesToPublishFor
 		#'win7-x64' `
 		#,'win7-x86' `
 		'win-x64_portable' `
-		,'win-x86_portable' `
+		#,'win-x86_portable' `
 		#,'win-arm_portable' `
 		#,'win-arm64_portable' `
 
 		,'win-x64_installer' `
-		,'win-x86_installer' `
+		#,'win-x86_installer' `
 		#,'win-arm_installer' `
 		#,'win-arm64_installer' `
 	)
 
-	# Windows releases should be built on a Windows machine, because of dotnet
-	# Linux and Mac OS releases should be built on one of those OSs, because of chmod and zip
-	#return $IsWindows ? $windowsRuntimes : $unixRuntimes
-	return @("win-x64_portable")
+	# Windows installer releases should be built on a Windows machine, because of NSIS
+	# Windows portable releases can be built on either Windows or Linux,
+	# since .NET 8: https://github.com/dotnet/core/issues/8439#issuecomment-1688474268
+	# Linux and macOS releases should be built on one of those OSs, because of chmod and zip
+	#return @("win-x64_portable")
+	return $IsWindows ? $windowsRuntimes : $unixRuntimes
 }
 
 #################### Pre-release build and tests ####################
@@ -211,17 +213,18 @@ function Generate-PororocaDesktopRelease {
 	$fullAppReleaseName = "Pororoca_${versionName}_${runtime}"
 	$outputFolder = "./out/${fullAppReleaseName}"
 	$zipName = "${fullAppReleaseName}.zip"
-	$isInstallOnWindowsRelease = ($runtime -like "*_installer")
-	$isDebianDpkgRelease = ($runtime -like "debian*")
-	$dotnetRid = $runtime.Replace("_installer","").Replace("_portable","").Replace("debian","linux")
+	$isInstallOnWindowsRelease = ($runtime -like "win**_installer")
+	$isInstallOnLinuxRelease = $runtime -eq "linux-x64_installers"
+	$dotnetRid = $runtime.Replace("_installer","").Replace("_portable","")
 
 	Write-Host "Publishing Pororoca.Desktop for ${runtime}..." -ForegroundColor DarkYellow
 
 	$stopwatch.Restart()
 
-	Publish-PororocaDesktop -DotnetRid $dotnetRid -IsInstallOnWindowsRelease $isInstallOnWindowsRelease -IsInstallOnDebianRelease $isDebianDpkgRelease -OutputFolder $outputFolder
+	Publish-PororocaDesktop -DotnetRid $dotnetRid -IsInstallOnWindowsRelease $isInstallOnWindowsRelease -IsInstallOnLinuxRelease $isInstallOnLinuxRelease -OutputFolder $outputFolder
 	Rename-Executable -Runtime $runtime -OutputFolder $outputFolder
 	Set-ExecutableAttributesIfUnix -Runtime $runtime -OutputFolder $outputFolder
+	Sign-WindowsExecutableIfWindows -Runtime $runtime -OutputFolder $outputFolder
 	Make-AppFolderIfMacOS -Runtime $runtime -OutputFolder $outputFolder
 	Copy-LogoIfLinux -Runtime $runtime -OutputFolder $outputFolder
 	Copy-Licence -OutputFolder $outputFolder
@@ -232,14 +235,23 @@ function Generate-PororocaDesktopRelease {
 		Write-Host "Generating Windows installer for ${runtime}..." -ForegroundColor DarkYellow
 		Pack-ReleaseInWindowsInstaller -GeneralOutFolder ".\out" -InstallerFilesFolder $outputFolder -InstallerFileName "${fullAppReleaseName}.exe" -VersionName $versionName
 		$stopwatch.Stop()
-		Write-Host "Windows installer for ${dotnetRid} created: ./out/${fullAppReleaseName}.exe ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
+		Write-Host "Windows installer created: ./out/${fullAppReleaseName}.exe ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
 	}
-	elseif ($isDebianDpkgRelease)
+	elseif ($isInstallOnLinuxRelease)
 	{
+		# comment blocks below for only Debian or only RPM
+		
+		# Debian / Ubuntu
 		Write-Host "Generating Debian package for ${runtime}..." -ForegroundColor DarkYellow
-		Pack-ReleaseInDebianDpkg -GeneralOutFolder "./out" -InstallerFilesFolder $outputFolder -InstallerFileName "${fullAppReleaseName}.dpkg" -VersionName $versionName
+		Pack-ReleaseInDebianDpkg -GeneralOutFolder "./out" -InstallerFilesFolder $outputFolder -VersionName $versionName
 		$stopwatch.Stop()
-		Write-Host "Debian package for ${dotnetRid} created: ./out/${fullAppReleaseName}.deb ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
+		Write-Host "Debian package created: ./out/${fullAppReleaseName}.deb ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
+		
+		# RHEL and openSUSE
+		Write-Host "Generating RHEL and openSUSE packages for ${runtime}..." -ForegroundColor DarkYellow
+		Pack-ReleaseInRpms -GeneralOutFolder "./out" -InstallerFilesFolder $outputFolder -VersionName $versionName
+		$stopwatch.Stop()
+		Write-Host "RHEL and openSUSE packages created: ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
 	}
 	else
 	{
@@ -256,7 +268,7 @@ function Publish-PororocaDesktop
 		[string]$dotnetRid,
 		[string]$outputFolder,
 		[bool]$isInstallOnWindowsRelease = $false,
-		[bool]$isInstallOnDebianRelease = $false
+		[bool]$IsInstallOnLinuxRelease = $false
     )
 
 	if ((($dotnetRid -like "win*") -and ($isInstallOnWindowsRelease -eq $false)) -or ($dotnetRid -like "linux*"))
@@ -277,7 +289,7 @@ function Publish-PororocaDesktop
 
 	$publishSingleFileArg = $(${publishSingleFile}.ToString().ToLower())
 	$isInstallOnWindowsReleaseArg = $(${isInstallOnWindowsRelease}.ToString().ToLower())
-	$isInstallOnDebianReleaseArg = $(${isInstallOnDebianRelease}.ToString().ToLower())
+	$IsInstallOnLinuxReleaseArg = $(${IsInstallOnLinuxRelease}.ToString().ToLower())
 
 	# set UITestsEnabled to false to hide 'Run UI tests'
 	dotnet publish ./src/Pororoca.Desktop/Pororoca.Desktop.csproj `
@@ -287,7 +299,7 @@ function Publish-PororocaDesktop
 		-p:TreatWarningsAsErrors=False `
 		-p:PublishSingleFile=${publishSingleFileArg} `
 		-p:PublishForInstallOnWindows=${isInstallOnWindowsReleaseArg} `
-		-p:PublishForInstallOnDebian=${isInstallOnDebianReleaseArg} `
+		-p:PublishForInstallOnLinux=${IsInstallOnLinuxReleaseArg} `
 		-p:UITestsEnabled=false `
 		--self-contained true `
 		--runtime $dotnetRid `
@@ -318,6 +330,19 @@ function Rename-Executable
 	}
 }
 
+function Sign-WindowsExecutableIfWindows
+{
+	param (
+		[string]$runtime,
+		[string]$outputFolder
+    )
+
+	$pfxFilePath = Join-Path (Get-Location) "certs" "cert.pfx"
+	$exeFilePath = "${outputFolder}/Pororoca.exe"
+
+	Write-Host "Signing Pororoca.exe for ${runtime}..." -ForegroundColor DarkYellow
+	signtool sign /f $pfxFilePath /fd SHA256 /p $env:ALEXANDREHTRB_PFX_FILE_PASSWORD /t http://timestamp.digicert.com $exeFilePath
+}
 
 function Set-ExecutableAttributesIfUnix
 {
@@ -458,6 +483,7 @@ function Pack-ReleaseInWindowsInstaller
 
 	$installerOutFileAbsolutePath = $((Resolve-Path $generalOutFolder).ToString()) + "\" + $installerFileName
 	$installerFilesDirAbsolutePath = $((Resolve-Path $installerFilesFolder).ToString())
+	$pfxAbsoluteFilePath = Join-Path (Get-Location) "certs" "cert.pfx"
 
 	# makensis must be added to PATH
 	# -WX ` # treat warnings as errors
@@ -465,6 +491,8 @@ function Pack-ReleaseInWindowsInstaller
 	makensis -WX -V2 "/XOutFile ${installerOutFileAbsolutePath}" `
 		"/DSHORT_VERSION=${versionName}" `
 		"/DINPUT_FILES_DIR=${installerFilesDirAbsolutePath}" `
+		"/DCODE_SIGNING_CERTIFICATE_FILE_PATH=${pfxAbsoluteFilePath}" `
+		"/DCODE_SIGNING_CERTIFICATE_FILE_PASSWORD=${env:ALEXANDREHTRB_PFX_FILE_PASSWORD}" `
 		.\src\Pororoca.Desktop.WindowsInstaller\Installer.nsi
 
 	Remove-Item $installerFilesFolder -Force -Recurse -ErrorAction Ignore
@@ -475,7 +503,6 @@ function Pack-ReleaseInDebianDpkg
 	param (
 		[string]$generalOutFolder, # the "./out" folder
 		[string]$installerFilesFolder, # the "./out/Pororoca_x.y.z_debian-x64/" folder
-		[string]$installerFileName,
 		[string]$versionName
     )
 	# https://wiki.freepascal.org/Debian_package_structure
@@ -484,11 +511,11 @@ function Pack-ReleaseInDebianDpkg
 	[void](mkdir "${generalOutFolder}/deb")
 	# Debian control file
 	[void](mkdir "${generalOutFolder}/deb/DEBIAN")
-	Copy-Item -Path "./src/Pororoca.Desktop.Debian/control" -Destination "${generalOutFolder}/deb/DEBIAN"
+	Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/control" -Destination "${generalOutFolder}/deb/DEBIAN"
 	# Starter script
 	[void](mkdir "${generalOutFolder}/deb/usr")
 	[void](mkdir "${generalOutFolder}/deb/usr/bin")
-	Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca.sh" -Destination "${generalOutFolder}/deb/usr/bin/pororoca"
+	Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/pororoca.sh" -Destination "${generalOutFolder}/deb/usr/bin/pororoca"
 	chmod +x "${generalOutFolder}/deb/usr/bin/pororoca" # set executable permissions to starter script
 	# Other files
 	[void](mkdir "${generalOutFolder}/deb/usr/lib")
@@ -499,52 +526,32 @@ function Pack-ReleaseInDebianDpkg
 	# Desktop shortcut
 	[void](mkdir "${generalOutFolder}/deb/usr/share")
 	[void](mkdir "${generalOutFolder}/deb/usr/share/applications")
-	Copy-Item -Path "./src/Pororoca.Desktop.Debian/Pororoca.desktop" -Destination "${generalOutFolder}/deb/usr/share/applications/Pororoca.desktop"
+	Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/Pororoca.desktop" -Destination "${generalOutFolder}/deb/usr/share/applications/Pororoca.desktop"
 	# Desktop icon
 	# A 32x32 px XPM file in /usr/share/pixmaps/ (using 1024x1024 px PNG instead, like VS Code uses for its icon)
 	[void](mkdir "${generalOutFolder}/deb/usr/share/pixmaps")
-	Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_1024px.png" -Destination "${generalOutFolder}/deb/usr/share/pixmaps/pororoca.png"
+	Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/pororoca_icon_1024px.png" -Destination "${generalOutFolder}/deb/usr/share/pixmaps/pororoca.png"
 	# Hicolor icons
 	[void](mkdir "${generalOutFolder}/deb/usr/share/icons")
 	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor")
-	# A 16x16 px PNG file in /usr/share/icons/hicolor/16x16/apps/
-	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/16x16")
-	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/16x16/apps")
-	Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_16px.png" -Destination "${generalOutFolder}/deb/usr/share/icons/hicolor/16x16/apps/pororoca.png"
-	# A 32x32 px PNG file in /usr/share/icons/hicolor/32x32/apps/
-	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/32x32")
-	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/32x32/apps")
-	Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_32px.png" -Destination "${generalOutFolder}/deb/usr/share/icons/hicolor/32x32/apps/pororoca.png"
-	# A 48x48 px PNG file in /usr/share/icons/hicolor/48x48/apps/
-	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/48x48")
-	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/48x48/apps")
-	Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_48px.png" -Destination "${generalOutFolder}/deb/usr/share/icons/hicolor/48x48/apps/pororoca.png"
-	# A 64x64 px PNG file in /usr/share/icons/hicolor/64x64/apps/
-	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/64x64")
-	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/64x64/apps")
-	Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_64px.png" -Destination "${generalOutFolder}/deb/usr/share/icons/hicolor/64x64/apps/pororoca.png"
-	# A 128x128 px PNG file in /usr/share/icons/hicolor/128x128/apps/
-	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/128x128")
-	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/128x128/apps")
-	Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_128px.png" -Destination "${generalOutFolder}/deb/usr/share/icons/hicolor/128x128/apps/pororoca.png"
-	# A 256x256 px PNG file in /usr/share/icons/hicolor/256x256/apps/
-	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/256x256")
-	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/256x256/apps")
-	Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_256px.png" -Destination "${generalOutFolder}/deb/usr/share/icons/hicolor/256x256/apps/pororoca.png"
-	# A 512x512 px PNG file in /usr/share/icons/hicolor/512x512/apps/
-	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/512x512")
-	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/512x512/apps")
-	Copy-Item -Path "./src/Pororoca.Desktop.Debian/pororoca_icon_512px.png" -Destination "${generalOutFolder}/deb/usr/share/icons/hicolor/512x512/apps/pororoca.png"
+	foreach ($imgSize in @(16, 32, 48, 64, 128, 256, 512))
+	{
+		# A square ZxZ px PNG file in /usr/share/icons/hicolor/ZxZ/apps/
+		[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/${imgSize}x${imgSize}")
+		[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/${imgSize}x${imgSize}/apps")
+		Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/pororoca_icon_${imgSize}px.png" -Destination "${generalOutFolder}/deb/usr/share/icons/hicolor/${imgSize}x${imgSize}/apps/pororoca.png"
+	}
 	# Optionally, an SVG file in /usr/share/icons/hicolor/scalable/apps/
 	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/scalable")
 	[void](mkdir "${generalOutFolder}/deb/usr/share/icons/hicolor/scalable/apps")
 	Copy-Item -Path "./misc/pororoca_logo.svg" -Destination "${generalOutFolder}/deb/usr/share/icons/hicolor/scalable/apps/pororoca.svg"
 
 	# Make .deb file
+	# dpkg-deb is necessary.
 	dpkg-deb --root-owner-group --build "./out/deb/" "./out/Pororoca_${versionName}_amd64.deb"
 
 	# To run Pororoca from the Terminal, on Debian-installed version:
-	# LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/pororoca pororoca
+	# pororoca
 
 	# To install Pororoca .deb package:
 	# sudo apt install ./out/pororoca_version_amd64.deb
@@ -552,8 +559,42 @@ function Pack-ReleaseInDebianDpkg
 	# To uninstall Pororoca:
 	# sudo apt remove pororoca
 
-	Remove-Item $installerFilesFolder -Force -Recurse -ErrorAction Ignore
+    Remove-Item $installerFilesFolder -Force -Recurse -ErrorAction Ignore
 	Remove-Item "./out/deb" -Force -Recurse -ErrorAction Ignore
+}
+
+function Pack-ReleaseInRpms
+{
+	param (
+		[string]$generalOutFolder, # the "./out" folder
+		[string]$installerFilesFolder, # the "./out/Pororoca_x.y.z_linux-x64-installers/" folder
+		[string]$versionName
+    )
+
+	# rpmbuild is necessary. Can be installed and run on Ubuntu
+	rpmbuild --version
+	$rpmbuildMainDir = Join-Path $env:HOME "rpmbuild"
+	$rpmbuildSpecsDir = Join-Path $rpmbuildMainDir "SPECS"
+	$rpmbuildBuildRootDir = Join-Path $rpmbuildMainDir "BUILDROOT"
+	$rpmbuildRpmsDir = Join-Path $rpmbuildMainDir "RPMS"
+	[void](mkdir $rpmbuildMainDir $rpmbuildSpecsDir $rpmbuildBuildRootDir $rpmbuildRpmsDir)
+	$rpmStagingDir = Join-Path $env:HOME "rpmstaging"
+	$rpmStagingBinariesDir = Join-Path $rpmStagingDir "binaries"
+	$rpmStagingOthersDir = Join-Path $rpmStagingDir "others"
+	[void](mkdir $rpmStagingDir $rpmStagingBinariesDir $rpmStagingOthersDir)
+	Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/*" -Destination $rpmStagingOthersDir -Recurse -Force
+	Copy-Item -Path "./misc/pororoca_logo.svg" -Destination "${rpmStagingOthersDir}/pororoca_logo.svg"
+	Copy-Item -Path "$installerFilesFolder/*" -Destination $rpmStagingBinariesDir -Recurse -Force
+	
+	$distros = @("openSUSE", "RHEL")
+	foreach ($distro in $distros)
+	{
+		$rpmbuildSpecFilePath = Join-Path $rpmbuildSpecsDir "${distro}.spec"
+		Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/${distro}.spec" -Destination $rpmbuildSpecFilePath
+		rpmbuild -bb -v --define "_topdir ${rpmbuildMainDir}" --buildroot "${rpmbuildMainDir}/BUILDROOT" $rpmbuildSpecFilePath
+		Copy-Item -Path "${rpmbuildRpmsDir}/x86_64/Pororoca-${versionName}-1.x86_64.rpm" -Destination "./${generalOutFolder}/Pororoca-${env:VERSION_NAME}-1.${distro}.x86_64.rpm"
+	}
+	Remove-Item $installerFilesFolder -Force -Recurse -ErrorAction Ignore
 }
 
 ########################## Execute #############################

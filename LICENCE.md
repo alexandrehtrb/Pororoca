@@ -1,7 +1,7 @@
 # Licence
 
 Pororoca
-Copyright (C) 2025 Alexandre H. T. R. Bonfitto
+Copyright (C) 2026 Alexandre H. T. R. Bonfitto
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ You must also include proper identification of the origin of this software and t
 people who created and contributed to it, 
 if the source code of this software was the basis for your modified version.
 
-* *It is prohibited to make a derivative work that has server-syncing capabilities.* (updated 2023-10-08)
+* *It is prohibited to make a derivative work for commercial purposes that has server-syncing capabilities.* (updated 2023-10-08)
 
 We at Pororoca intend to make a paid, closed-source version that allows server-syncing, 
 such that users can save and manage their collections remotely. This paid version will 
@@ -42,8 +42,7 @@ made by third-parties, that includes this kind of features.
 
 You are allowed to develop your own derivative version of Pororoca that has server-syncing 
 capabilities, with the restrictions of being closed-source, not shared with the community, 
-and not for commercial purposes. You can make this derivative version for your own private use, 
-for example, for yourself or for your company.
+and not for direct money-making purposes, e.g., selling or providing it as a SaaS. You can make this derivative version for your own private use, for example, for yourself or for your company.
 
 GNU General Public License
 ==========================

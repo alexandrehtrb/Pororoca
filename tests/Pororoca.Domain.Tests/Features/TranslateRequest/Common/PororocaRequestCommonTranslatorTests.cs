@@ -120,7 +120,7 @@ public static class PororocaRequestCommonTranslatorTests
         Assert.Equal([
             new(true, "P1", "V1"),
             new(true, "P2", "V2"),
-            new(true, "P3", "+V3+"),
+            new(true, "{{K3}}", "+V3+"),
             new(true, "P4", "V4")],
             ResolveKVParams(effectiveVars, unresolvedParams));
     }

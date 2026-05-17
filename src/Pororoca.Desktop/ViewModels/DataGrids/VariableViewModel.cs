@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
+using Pororoca.Desktop.Controls;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -11,11 +12,35 @@ public sealed class VariableViewModel : ViewModelBase
 {
     private readonly ObservableCollection<VariableViewModel> parentCollection;
 
-    [Reactive]
-    public bool Enabled { get; set; }
+    private bool enabledField;
+    public bool Enabled
+    {
+        get => this.enabledField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.enabledField, value);
+            // GAMBIARRA!!!
+            // Precisamos invalidar a renderização dos textos sempre que uma variável muda 
+            // de estado (ativa / inativa) ou de chave, pois essas mudanças podem alterar
+            // o syntax highlighting de outras variáveis que dependem desta.
+            MainWindowVm.EffectiveVariablesMayHaveChanged++;
+        }
+    }
 
-    [Reactive]
-    public string Key { get; set; }
+    private string keyField;
+    public string Key
+    {
+        get => this.keyField;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref this.keyField, value);
+            // GAMBIARRA!!!
+            // Precisamos invalidar a renderização dos textos sempre que uma variável muda 
+            // de estado (ativa / inativa) ou de chave, pois essas mudanças podem alterar
+            // o syntax highlighting de outras variáveis que dependem desta.
+            MainWindowVm.EffectiveVariablesMayHaveChanged++;
+        }
+    }
 
     private string valueField;
     public string Value
@@ -23,7 +48,7 @@ public sealed class VariableViewModel : ViewModelBase
         get => this.valueField;
         set
         {
-            if (value is not null && IsPredefinedVariable(value, out string? resolvedPredefValue))
+            if (value is not null && IsPredefinedVariable(value, resolveValue: true, out string? resolvedPredefValue))
             {
                 this.RaiseAndSetIfChanged(ref this.valueField, resolvedPredefValue!);
             }
@@ -53,7 +78,7 @@ public sealed class VariableViewModel : ViewModelBase
     {
         this.parentCollection = parentCollection;
         Enabled = enabled;
-        Key = key;
+        this.keyField = key;
         this.valueField = value;
         IsSecret = isSecret;
         RemoveVariableCmd = ReactiveCommand.Create(RemoveVariable);

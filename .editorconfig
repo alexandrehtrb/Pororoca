@@ -16,6 +16,11 @@ end_of_line = crlf
 [*.sh]
 end_of_line = lf
 
+[*.json]
+indent_style = space
+indent_size = 2
+tab_width = 2
+
 [*.yml]
 indent_size = 2
 quote_type = single

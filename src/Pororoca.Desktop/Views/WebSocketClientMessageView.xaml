@@ -16,12 +16,6 @@
     x:DataType="vm:WebSocketClientMessageViewModel"
     FontSize="14">
 
-  <UserControl.Resources>
-    <!--conv:WebSocketMessageTypeMatchConverter x:Key="messageTypeMatch"/-->
-    <conv:WebSocketClientMessageContentModeMatchConverter x:Key="contentModeMatch"/>
-    <!--conv:WebSocketMessageRawContentSyntaxMatchConverter x:Key="rawContentSyntaxMatch"/-->
-  </UserControl.Resources>
-
   <Grid
       HorizontalAlignment="Stretch"
       VerticalAlignment="Stretch"
@@ -105,7 +99,7 @@
             SelectedIndex="{Binding RawContentSyntaxSelectedIndex, Mode=TwoWay}"
             IsVisible="{Binding ContentModeSelectedIndex,
                         Mode=OneWay,
-                        Converter={StaticResource contentModeMatch},
+                        Converter={x:Static conv:WebSocketClientMessageContentModeMatchConverter.Instance},
                         ConverterParameter=Raw}">
           <ComboBoxItem
               x:Name="cbiContentRawSyntaxJson"
@@ -131,7 +125,7 @@
           Document="{Binding RawContentTextDocument}"
           IsVisible="{Binding ContentModeSelectedIndex,
                       Mode=OneWay,
-                      Converter={StaticResource contentModeMatch},
+                      Converter={x:Static conv:WebSocketClientMessageContentModeMatchConverter.Instance},
                       ConverterParameter=Raw}">
         <FlyoutBase.AttachedFlyout>
           <Flyout ShowMode="TransientWithDismissOnPointerMoveAway">
@@ -151,16 +145,25 @@
           Orientation="Vertical"
           IsVisible="{Binding ContentModeSelectedIndex,
                       Mode=OneWay,
-                      Converter={StaticResource contentModeMatch},
+                      Converter={x:Static conv:WebSocketClientMessageContentModeMatchConverter.Instance},
                       ConverterParameter=File}">
 
-        <TextBox
+        <controls:SyntaxHighlightingTextBox
             Name="tbContentFileSrcPath"
             HorizontalContentAlignment="Left"
             VerticalContentAlignment="Center"
             PlaceholderText="{Binding i18n.WebSocketClientMessage.ContentFileSrcPathWatermark, Mode=OneWay}"
             Classes="SingleLine"
-            Text="{Binding ContentFileSrcPath, Mode=TwoWay}"/>
+            DefinitionSet="{Binding PororocaVarSyntaxHighlightingDefinitionSet, Mode=OneWay}"
+            Text="{Binding ContentFileSrcPath, Mode=TwoWay}">
+          <ToolTip.Tip>
+            <MultiBinding Converter="{x:Static conv:PororocaVariableToolTipConverter.Instance}">
+              <Binding Path="ContentFileSrcPath"/>
+              <Binding Path="Collection"/>
+              <Binding Path="MainWindowVm.EffectiveVariablesMayHaveChanged"/>
+            </MultiBinding>
+          </ToolTip.Tip>
+        </controls:SyntaxHighlightingTextBox>
 
         <Button
             Margin="0,12,0,0"

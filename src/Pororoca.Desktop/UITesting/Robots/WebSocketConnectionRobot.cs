@@ -37,7 +37,7 @@ public sealed class WebSocketConnectionRobot : BaseNamedRobot
     internal TabItem TabConnectionRequestOptions => GetChildView<TabItem>("tabItemConnectionRequestOptions")!;
     internal TextBox ConnectionRequestException => GetChildView<TextBox>("tbConnectionException")!;
     internal TextBox MessageDetailType => GetChildView<TextBox>("tbMessageDetailType")!;
-    internal TextBox Url => GetChildView<TextBox>("tbUrl")!;
+    internal SyntaxHighlightingTextBox Url => GetChildView<SyntaxHighlightingTextBox>("tbUrl")!;
     internal TextBlock ErrorMsg => GetChildView<TextBlock>("tbErrorMsg")!;
     internal TextBlock IsWsConnected => GetChildView<TextBlock>("tbIsWsConnected")!;
     internal TextBlock MessageToSendError => GetChildView<TextBlock>("tbMessageToSendError")!;

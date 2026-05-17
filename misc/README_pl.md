@@ -60,9 +60,9 @@ Nasze kanały darowizn to:
 - [OpenCollective](https://opencollective.com/pororoca)
 - [GitHub Sponsors](https://github.com/sponsors/alexandrehtrb)
 - [Wise](https://wise.com/pay/me/alexandrehenriquet2) (tag: **@alexandrehenriquet2**)
-- PIX 🇧🇷 (chave: alexandrehtrb@outlook.com)
+- PIX 🇧🇷 (chave: <b>alexandrehtrb@<span/>outlook.com</b>)
 
 ## Kontakt
 
 * Twórca: Alexandre H. T. R. Bonfitto
-* E-mail: alexandrehtrb@outlook.com
+* E-mail: <a href="mailto:%61%6C%65%78%61%6E%64%72%65%68%74%72%62%40%6F%75%74%6C%6F%6F%6B%2E%63%6F%6D" target="_blank" rel="noreferrer">alexandrehtrb@<span/>outlook.com</a>

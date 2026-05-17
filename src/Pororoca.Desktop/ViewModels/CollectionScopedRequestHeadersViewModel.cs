@@ -11,11 +11,11 @@ public sealed class CollectionScopedRequestHeadersViewModel : CollectionOrganiza
 
     public RequestHeadersDataGridViewModel RequestHeadersTableVm { get; }
 
-    public CollectionScopedRequestHeadersViewModel(ICollectionOrganizationItemParentViewModel parentVm,
+    public CollectionScopedRequestHeadersViewModel(CollectionViewModel parentVm,
                                                    PororocaCollection col) : base(parentVm, string.Empty)
     {
         GoBackCmd = ReactiveCommand.Create(GoBack);
-        RequestHeadersTableVm = new(col.CollectionScopedRequestHeaders);
+        RequestHeadersTableVm = new(parentVm, col.CollectionScopedRequestHeaders);
     }
 
     #region COLLECTION ORGANIZATION

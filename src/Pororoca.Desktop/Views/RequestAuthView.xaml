@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:conv="clr-namespace:Pororoca.Desktop.Converters;assembly=Pororoca.Desktop"
+    xmlns:controls="clr-namespace:Pororoca.Desktop.Controls;assembly=Pororoca.Desktop"
     mc:Ignorable="d"
     d:DesignWidth="1350"
     d:DesignHeight="700"
@@ -12,11 +13,6 @@
     x:CompileBindings="True"
     x:DataType="vm:RequestAuthViewModel"
     FontSize="14">
-
-  <UserControl.Resources>
-      <conv:AuthModeMatchConverter x:Key="authModeMatch"/>
-      <conv:ClientCertificateTypeMatchConverter x:Key="clientCertificateTypeMatch"/>
-  </UserControl.Resources>
 
   <Grid Margin="0,12,0,0">
     <Grid.ColumnDefinitions>
@@ -70,7 +66,7 @@
           SelectedIndex="{Binding ClientCertificateTypeSelectedIndex}"
           IsVisible="{Binding AuthModeSelectedIndex, 
                       Mode=OneWay,
-                      Converter={StaticResource authModeMatch}, 
+                      Converter={x:Static conv:AuthModeMatchConverter.Instance}, 
                       ConverterParameter=ClientCertificate}">
         <ComboBoxItem
             x:Name="cbiReqAuthClientCertificateNone"
@@ -92,17 +88,18 @@
         Margin="0,12,0,0"
         IsVisible="{Binding AuthModeSelectedIndex, 
                     Mode=OneWay,
-                    Converter={StaticResource authModeMatch}, 
+                    Converter={x:Static conv:AuthModeMatchConverter.Instance}, 
                     ConverterParameter=Basic}">
-      <TextBox
+      <controls:SyntaxHighlightingTextBox
           Name="tbBasicAuthLogin"
           Width="200"
           HorizontalAlignment="Left"
           VerticalContentAlignment="Center"
           PlaceholderText="{Binding i18n.RequestAuth.AuthModeBasicLoginWatermark, Mode=OneWay}"
           Classes="SingleLine"
+          DefinitionSet="{Binding PororocaVarSyntaxHighlightingDefinitionSet, Mode=OneWay}"
           Text="{Binding BasicAuthLogin}"/>
-      <TextBox
+      <controls:SyntaxHighlightingTextBox
           Name="tbBasicAuthPassword"
           Width="200"
           Margin="0,12,0,0"
@@ -110,6 +107,7 @@
           VerticalContentAlignment="Center"
           PlaceholderText="{Binding i18n.RequestAuth.AuthModeBasicPasswordWatermark, Mode=OneWay}"
           Classes="SingleLine"
+          DefinitionSet="{Binding PororocaVarSyntaxHighlightingDefinitionSet, Mode=OneWay}"
           Text="{Binding BasicAuthPassword}"/>
     </StackPanel>
     <!-- BEARER AUTH -->
@@ -120,15 +118,16 @@
         Margin="0,12,0,0"
         IsVisible="{Binding AuthModeSelectedIndex, 
                     Mode=OneWay,
-                    Converter={StaticResource authModeMatch}, 
+                    Converter={x:Static conv:AuthModeMatchConverter.Instance}, 
                     ConverterParameter=Bearer}">
-      <TextBox
+      <controls:SyntaxHighlightingTextBox
           Name="tbBearerAuthToken"
           Width="200"
           HorizontalAlignment="Left"
           VerticalContentAlignment="Center"
           PlaceholderText="{Binding i18n.RequestAuth.AuthModeBearerTokenWatermark, Mode=OneWay}"
           Classes="SingleLine"
+          DefinitionSet="{Binding PororocaVarSyntaxHighlightingDefinitionSet, Mode=OneWay}"
           Text="{Binding BearerAuthToken}"/>
     </StackPanel>
     <!-- WINDOWS AUTH-->
@@ -139,13 +138,13 @@
         Margin="0,12,0,0"
         IsVisible="{Binding AuthModeSelectedIndex, 
                     Mode=OneWay,
-                    Converter={StaticResource authModeMatch}, 
+                    Converter={x:Static conv:AuthModeMatchConverter.Instance}, 
                     ConverterParameter=Windows}">
       <CheckBox
           Name="chkbWindowsAuthUseCurrentUser"
           Content="{Binding i18n.RequestAuth.AuthModeWindowsUseCurrentUser, Mode=OneWay}"
           IsChecked="{Binding WindowsAuthUseCurrentUser}"/>
-      <TextBox
+      <controls:SyntaxHighlightingTextBox
           Name="tbWindowsAuthLogin"
           Width="200"
           Margin="0,12,0,0"
@@ -155,8 +154,9 @@
           Classes="SingleLine"
           Classes.HasValidationProblem="{Binding HasWindowsAuthLoginProblem, Mode=OneWay}"
           IsVisible="{Binding !WindowsAuthUseCurrentUser, Mode=OneWay}"
+          DefinitionSet="{Binding PororocaVarSyntaxHighlightingDefinitionSet, Mode=OneWay}"
           Text="{Binding WindowsAuthLogin}"/>
-      <TextBox
+      <controls:SyntaxHighlightingTextBox
           Name="tbWindowsAuthPassword"
           Width="200"
           Margin="0,12,0,0"
@@ -166,8 +166,9 @@
           Classes="SingleLine"
           Classes.HasValidationProblem="{Binding HasWindowsAuthPasswordProblem, Mode=OneWay}"
           IsVisible="{Binding !WindowsAuthUseCurrentUser, Mode=OneWay}"
+          DefinitionSet="{Binding PororocaVarSyntaxHighlightingDefinitionSet, Mode=OneWay}"
           Text="{Binding WindowsAuthPassword}"/>
-      <TextBox
+      <controls:SyntaxHighlightingTextBox
           Name="tbWindowsAuthDomain"
           Width="200"
           Margin="0,12,0,0"
@@ -177,6 +178,7 @@
           Classes="SingleLine"
           Classes.HasValidationProblem="{Binding HasWindowsAuthDomainProblem, Mode=OneWay}"
           IsVisible="{Binding !WindowsAuthUseCurrentUser, Mode=OneWay}"
+          DefinitionSet="{Binding PororocaVarSyntaxHighlightingDefinitionSet, Mode=OneWay}"
           Text="{Binding WindowsAuthDomain}"/>
     </StackPanel>
     <!-- CLIENT CERTIFICATE AUTH -->
@@ -187,7 +189,7 @@
         Margin="0,12,0,0"
         IsVisible="{Binding AuthModeSelectedIndex, 
                     Mode=OneWay,
-                    Converter={StaticResource authModeMatch}, 
+                    Converter={x:Static conv:AuthModeMatchConverter.Instance}, 
                     ConverterParameter=ClientCertificate}">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
@@ -203,9 +205,9 @@
           Grid.Row="0"
           IsVisible="{Binding ClientCertificateTypeSelectedIndex, 
                       Mode=OneWay,
-                      Converter={StaticResource clientCertificateTypeMatch}, 
+                      Converter={x:Static conv:ClientCertificateTypeMatchConverter.Instance}, 
                       ConverterParameter=Pkcs12}">
-        <TextBox
+        <controls:SyntaxHighlightingTextBox
             Name="tbClientCertificatePkcs12FilePath"
             Width="240"
             PlaceholderText="{Binding i18n.RequestAuth.CertificateFilePathWatermark, Mode=OneWay}"
@@ -213,8 +215,17 @@
             VerticalContentAlignment="Center"
             Classes="SingleLine"
             Classes.HasValidationProblem="{Binding HasClientCertificateAuthPkcs12CertificateFilePathProblem, Mode=OneWay}"
-            Text="{Binding ClientCertificateAuthPkcs12CertificateFilePath}"/>
-        <TextBox
+            DefinitionSet="{Binding PororocaVarSyntaxHighlightingDefinitionSet, Mode=OneWay}"
+            Text="{Binding ClientCertificateAuthPkcs12CertificateFilePath}">
+          <ToolTip.Tip>
+            <MultiBinding Converter="{x:Static conv:PororocaVariableToolTipConverter.Instance}">
+              <Binding Path="ClientCertificateAuthPkcs12CertificateFilePath"/>
+              <Binding Path="Collection"/>
+              <Binding Path="MainWindowVm.EffectiveVariablesMayHaveChanged"/>
+            </MultiBinding>
+          </ToolTip.Tip>
+        </controls:SyntaxHighlightingTextBox>
+        <controls:SyntaxHighlightingTextBox
             Name="tbClientCertificatePkcs12FilePassword"
             Width="240"
             Margin="0,12,0,0"
@@ -223,6 +234,7 @@
             VerticalContentAlignment="Center"
             Classes="SingleLine"
             Classes.HasValidationProblem="{Binding HasClientCertificateAuthPkcs12FilePasswordProblem, Mode=OneWay}"
+            DefinitionSet="{Binding PororocaVarSyntaxHighlightingDefinitionSet, Mode=OneWay}"
             Text="{Binding ClientCertificateAuthPkcs12FilePassword}"/>
         <Button
             Margin="0,12,0,0"
@@ -237,9 +249,9 @@
           Grid.Row="0"
           IsVisible="{Binding ClientCertificateTypeSelectedIndex, 
                       Mode=OneWay,
-                      Converter={StaticResource clientCertificateTypeMatch}, 
+                      Converter={x:Static conv:ClientCertificateTypeMatchConverter.Instance}, 
                       ConverterParameter=Pem}">
-        <TextBox
+        <controls:SyntaxHighlightingTextBox
             Name="tbClientCertificatePemCertificateFilePath"
             Width="240"
             PlaceholderText="{Binding i18n.RequestAuth.CertificateFilePathWatermark, Mode=OneWay}"
@@ -247,8 +259,17 @@
             VerticalContentAlignment="Center"
             Classes="SingleLine"
             Classes.HasValidationProblem="{Binding HasClientCertificateAuthPemCertificateFilePathProblem, Mode=OneWay}"
-            Text="{Binding ClientCertificateAuthPemCertificateFilePath}"/>
-        <TextBox
+            DefinitionSet="{Binding PororocaVarSyntaxHighlightingDefinitionSet, Mode=OneWay}"
+            Text="{Binding ClientCertificateAuthPemCertificateFilePath}">
+          <ToolTip.Tip>
+            <MultiBinding Converter="{x:Static conv:PororocaVariableToolTipConverter.Instance}">
+              <Binding Path="ClientCertificateAuthPemCertificateFilePath"/>
+              <Binding Path="Collection"/>
+              <Binding Path="MainWindowVm.EffectiveVariablesMayHaveChanged"/>
+            </MultiBinding>
+          </ToolTip.Tip>
+        </controls:SyntaxHighlightingTextBox>
+        <controls:SyntaxHighlightingTextBox
             Name="tbClientCertificatePemPrivateKeyFilePath"
             Width="240"
             Margin="0,12,0,0"
@@ -257,8 +278,9 @@
             VerticalContentAlignment="Center"
             Classes="SingleLine"
             Classes.HasValidationProblem="{Binding HasClientCertificateAuthPemPrivateKeyFilePathProblem, Mode=OneWay}"
+            DefinitionSet="{Binding PororocaVarSyntaxHighlightingDefinitionSet, Mode=OneWay}"
             Text="{Binding ClientCertificateAuthPemPrivateKeyFilePath}"/>
-        <TextBox
+        <controls:SyntaxHighlightingTextBox
             Name="tbClientCertificatePemPrivateKeyPassword"
             Width="240"
             Margin="0,12,0,0"
@@ -266,6 +288,7 @@
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
             Classes="SingleLine"
+            DefinitionSet="{Binding PororocaVarSyntaxHighlightingDefinitionSet, Mode=OneWay}"
             Text="{Binding ClientCertificateAuthPemFilePassword}"/>
         <StackPanel
             Orientation="Horizontal"

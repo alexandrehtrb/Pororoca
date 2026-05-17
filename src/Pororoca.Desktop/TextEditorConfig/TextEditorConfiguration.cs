@@ -3,12 +3,14 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 using AvaloniaEdit;
 using AvaloniaEdit.CodeCompletion;
 using AvaloniaEdit.TextMate;
 using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.VariableResolution;
+using static Pororoca.Domain.Features.VariableResolution.PororocaPredefinedVariableEvaluator;
 
 namespace Pororoca.Desktop.TextEditorConfig;
 
@@ -16,7 +18,7 @@ internal static class TextEditorConfiguration
 {
     public static readonly Lazy<CustomTextMateRegistryOptions> DefaultRegistryOptions = new(LoadDefaultRegistryOptions);
     public static readonly List<(TextEditor, TextMate.Installation)> TextMateInstallations = new();
-    public static readonly List<PororocaVariableColorizingTransformer> PororocaVariableHighlightingTransformers = new();
+    private static readonly List<Action> invalidateTextEditorsAreasCallbacks = new();
 
     private static CustomTextMateRegistryOptions LoadDefaultRegistryOptions() =>
         new(PororocaThemeManager.TextEditorThemeName);
@@ -41,16 +43,17 @@ internal static class TextEditorConfiguration
         editor.TextArea.IndentationStrategy = new AvaloniaEdit.Indentation.DefaultIndentationStrategy();
         editor.GetObservable(Visual.BoundsProperty).Subscribe(bounds => editor.TextArea.Width = bounds.Width);
         editor.TextArea.RightClickMovesCaret = true;
-        editor.TextArea.TextView.LinkTextForegroundBrush = PororocaThemeManager.HyperlinkForegroundBrush;
+        editor.TextArea.TextView.LinkTextForegroundBrush = PororocaThemeManager.TextEditorHyperlinkForegroundBrush;
 
         var textMateInstallation = editor.InstallTextMate(DefaultRegistryOptions.Value!, false);
         // the line below must be added only after the TextMate installation above
         // otherwise, the pororoca variable highlighting may be bugged
         if (applyPororocaVariableHighlighting)
         {
-            PororocaVariableColorizingTransformer transformer = new(PororocaThemeManager.RegularVariableForegroundBrush, PororocaThemeManager.PredefinedVariableForegroundBrush);
-            PororocaVariableHighlightingTransformers.Add(transformer);
-            editor.TextArea.TextView.LineTransformers.Add(transformer);
+            ArgumentNullException.ThrowIfNull(varResolverObtainer, nameof(varResolverObtainer));
+            PororocaVariableColorizingTransformer pororocaVarLineTransformer = new(varResolverObtainer);
+            invalidateTextEditorsAreasCallbacks.Add(editor.TextArea.TextView.Redraw);
+            editor.TextArea.TextView.LineTransformers.Add(pororocaVarLineTransformer);
             editor.TextArea.SelectionBrush = PororocaThemeManager.TextEditorSelectionHighlightBrush;
             editor.PointerHover += (sender, e) => OnTextEditorPointerHover(sender, e, varResolverObtainer!);
             editor.PointerHoverStopped += OnTextEditorPointerHoverStopped;
@@ -72,6 +75,9 @@ internal static class TextEditorConfiguration
         return textMateInstallation;
     }
 
+    internal static void InvalidateTextEditorsAreas() =>
+        Dispatcher.UIThread.Post(() => invalidateTextEditorsAreasCallbacks.ForEach(c => c()));
+
     #region HOVER VARIABLE POPUP
 
     private static void OnTextEditorPointerHover(object? sender, PointerEventArgs e, Func<IPororocaVariableResolver> varResolverObtainer)
@@ -86,35 +92,35 @@ internal static class TextEditorConfiguration
                 string lineText = te.Document.GetText(line.Offset, line.Length);
                 int pointerIndex = pos.Value.Column - 1;
 
-                string? hoveringWord = IPororocaVariableResolver.GetPointerHoverVariable(lineText, pointerIndex);
+                string? hoveringVar = IPororocaVariableResolver.GetPointerHoverVariable(lineText, pointerIndex);
 
-                if (hoveringWord != null)
+                if (hoveringVar != null)
                 {
                     var flyout = (Flyout)(FlyoutBase.GetAttachedFlyout(te)!);
                     var flyoutStb = te.FindControl<SelectableTextBlock>("stbPopupText")!;
                     flyoutStb.Classes.RemoveAll(["NoMatchingVariable", "PredefinedVariable"]);
 
-                    if (hoveringWord.Contains('$'))
+                    if (IsPredefinedVariable(hoveringVar))
                     {
-                        // predef var
+                        // predefined var
                         flyoutStb.Classes.Add("PredefinedVariable");
                         flyoutStb.Text = Localizer.Instance.HoverVariableInEditor.PredefinedVariable;
                     }
                     else
                     {
                         var varResolver = varResolverObtainer();
-                        var effectiveVars = varResolver.GetEffectiveVariables();
-                        string resolvedVar = IPororocaVariableResolver.ReplaceTemplates(hoveringWord, effectiveVars);
-                        if (resolvedVar == hoveringWord)
+                        if (varResolver.IsEffectiveVariable(hoveringVar))
+                        {
+                            // regular var
+                            var effectiveVars = varResolver.GetEffectiveVariables();
+                            string resolvedVar = effectiveVars.FirstOrDefault(v => v.Key == hoveringVar)?.Value ?? string.Empty;
+                            flyoutStb.Text = resolvedVar;
+                        }
+                        else
                         {
                             // undefined
                             flyoutStb.Classes.Add("NoMatchingVariable");
                             flyoutStb.Text = Localizer.Instance.HoverVariableInEditor.NoMatchingVariable;
-                        }
-                        else
-                        {
-                            // regular var
-                            flyoutStb.Text = resolvedVar;
                         }
                     }
 

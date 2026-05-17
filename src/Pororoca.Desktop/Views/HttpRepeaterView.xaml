@@ -16,11 +16,6 @@
     d:DesignHeight="700"
     FontSize="14">
 
-  <UserControl.Resources>
-    <conv:RepetitionModeMatchConverter x:Key="repetitionModeMatch"/>
-    <conv:RepetitionInputDataTypeMatchConverter x:Key="repetitionInputDataTypeMatch"/>
-  </UserControl.Resources>
-
   <UserControl.Styles>
     <Style Selector="TabItem">
       <Setter
@@ -216,7 +211,7 @@
                   Orientation="Horizontal"
                   IsVisible="{Binding RepetitionModeSelectedIndex,
                               Mode=OneWay,
-                              Converter={StaticResource repetitionModeMatch},
+                              Converter={x:Static conv:RepetitionModeMatchConverter.Instance},
                               ConverterParameter='Simple,Random'}">
                 <TextBlock
                     TextWrapping="Wrap"
@@ -241,7 +236,7 @@
                   Orientation="Horizontal"
                   IsVisible="{Binding RepetitionModeSelectedIndex,
                               Mode=OneWay,
-                              Converter={StaticResource repetitionModeMatch},
+                              Converter={x:Static conv:RepetitionModeMatchConverter.Instance},
                               ConverterParameter='Simple,Random'}">
                 <TextBlock
                     TextWrapping="Wrap"
@@ -319,7 +314,7 @@
               Name="tabItemRepetitionInputData"
               IsVisible="{Binding RepetitionModeSelectedIndex,
                           Mode=OneWay,
-                          Converter={StaticResource repetitionModeMatch},
+                          Converter={x:Static conv:RepetitionModeMatchConverter.Instance},
                           ConverterParameter='Sequential,Random'}">
             <TabItem.Header>
               <TextBlock
@@ -361,7 +356,7 @@
                   Document="{Binding InputDataRawTextDocument, Mode=TwoWay}"
                   IsVisible="{Binding InputDataTypeSelectedIndex,
                               Mode=OneWay,
-                              Converter={StaticResource repetitionInputDataTypeMatch},
+                              Converter={x:Static conv:RepetitionInputDataTypeMatchConverter.Instance},
                               ConverterParameter=RawJsonArray}">
                 <FlyoutBase.AttachedFlyout>
                   <Flyout ShowMode="TransientWithDismissOnPointerMoveAway">
@@ -375,9 +370,9 @@
                   Orientation="Vertical"
                   IsVisible="{Binding InputDataTypeSelectedIndex,
                               Mode=OneWay,
-                              Converter={StaticResource repetitionInputDataTypeMatch},
+                              Converter={x:Static conv:RepetitionInputDataTypeMatchConverter.Instance},
                               ConverterParameter=File}">
-                <TextBox
+                <controls:SyntaxHighlightingTextBox
                     Name="tbRepetitionInputDataFileSrcPath"
                     PlaceholderText="{Binding i18n.HttpRepeater.InputDataFileSrcPathWatermark, Mode=OneWay}"
                     HorizontalAlignment="Stretch"
@@ -385,7 +380,16 @@
                     VerticalContentAlignment="Center"
                     Classes="SingleLine"
                     Classes.HasValidationProblem="{Binding HasInputDataFileSrcPathValidationProblem, Mode=OneWay}"
-                    Text="{Binding InputDataFileSrcPath}"/>
+                    DefinitionSet="{Binding PororocaVarSyntaxHighlightingDefinitionSet, Mode=OneWay}"
+                    Text="{Binding InputDataFileSrcPath}">
+                  <ToolTip.Tip>
+                    <MultiBinding Converter="{x:Static conv:PororocaVariableToolTipConverter.Instance}">
+                      <Binding Path="InputDataFileSrcPath"/>
+                      <Binding Path="Collection"/>
+                      <Binding Path="MainWindowVm.EffectiveVariablesMayHaveChanged"/>
+                    </MultiBinding>
+                  </ToolTip.Tip>
+                </controls:SyntaxHighlightingTextBox>
                 <Button
                     Name="btRepetitionInputDataFileSearch"
                     Content="{Binding i18n.HttpRepeater.InputDataFileSearch, Mode=OneWay}"

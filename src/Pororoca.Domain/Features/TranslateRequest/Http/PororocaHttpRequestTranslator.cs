@@ -97,7 +97,7 @@ public static class PororocaHttpRequestTranslator
             PororocaHttpRequestBodyMode.FormData => MakeFormDataContent(
                                 input.FormDataValues!
                                     .Where(x => x.Enabled)
-                                    .Select(x => new PororocaHttpRequestFormDataParam(true, x.Type, ReplaceTemplates(x.Key), ReplaceTemplates(x.TextValue), x.ContentType, ReplaceTemplates(x.FileSrcPath)))),
+                                    .Select(x => new PororocaHttpRequestFormDataParam(true, x.Type, x.Key, ReplaceTemplates(x.TextValue), x.ContentType, ReplaceTemplates(x.FileSrcPath)))),
             PororocaHttpRequestBodyMode.GraphQl => MakeGraphQlContent(input.GraphQlValues!.Query, ReplaceTemplates(input.GraphQlValues!.Variables)),
             _ => null,
         };

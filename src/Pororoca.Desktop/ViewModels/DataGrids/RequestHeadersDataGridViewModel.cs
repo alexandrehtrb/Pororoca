@@ -6,11 +6,14 @@ namespace Pororoca.Desktop.ViewModels.DataGrids;
 
 public sealed class RequestHeadersDataGridViewModel : BaseDataGridWithOperationsViewModel<RequestHeaderViewModel, PororocaKeyValueParam>
 {
+    internal CollectionViewModel Collection { get; }
+
     public override SimpleClipboardArea<PororocaKeyValueParam> InnerClipboardArea =>
         KeyValueParamsClipboardArea.Instance;
 
-    public RequestHeadersDataGridViewModel(List<PororocaKeyValueParam>? initialValues = null) : base(initialValues)
+    public RequestHeadersDataGridViewModel(CollectionViewModel col, List<PororocaKeyValueParam>? initialValues = null) : base(initialValues)
     {
+        Collection = col;
     }
 
     protected override RequestHeaderViewModel ToVm(PororocaKeyValueParam domainObj) =>

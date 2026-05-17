@@ -22,6 +22,7 @@ public static class AvailablePororocaRequestSelectionOptions
         HttpMethod.Delete,
         HttpMethod.Head,
         HttpMethod.Options,
+        new HttpMethod("QUERY"),
         HttpMethod.Connect,
         HttpMethod.Trace
     ];

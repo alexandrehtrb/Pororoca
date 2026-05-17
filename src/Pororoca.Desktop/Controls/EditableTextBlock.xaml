@@ -13,10 +13,6 @@
     x:DataType="vm:EditableTextBlockViewModel"
     FontSize="14">
 
-  <UserControl.Resources>
-    <conv:EditableTextBlockIconConverter x:Key="etbIconConverter"/>
-  </UserControl.Resources>
-
   <Grid ShowGridLines="False">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*"></ColumnDefinition>
@@ -44,7 +40,7 @@
             VerticalAlignment="Center"
             HorizontalAlignment="Center">
           <Image.Source>
-            <DrawingImage Drawing="{Binding Icon, Mode=OneWay, Converter={StaticResource etbIconConverter}}"/>
+            <DrawingImage Drawing="{Binding Icon, Mode=OneWay, Converter={x:Static conv:EditableTextBlockIconConverter.Instance}}"/>
           </Image.Source>
         </Image>
         <TextBlock

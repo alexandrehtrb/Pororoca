@@ -15,10 +15,6 @@
   x:DataType="vm:ExportCollectionViewModel"
   FontSize="16">
 
-  <UserControl.Resources>
-    <conv:ExportCollectionFormatMatchConverter x:Key="exportFormatMatch"/>
-  </UserControl.Resources>
-
   <StackPanel
     HorizontalAlignment="Stretch"
     VerticalAlignment="Stretch"
@@ -110,10 +106,10 @@
         SelectedIndex="{Binding ExportFormatSelectedIndex}">
         <ComboBoxItem
           x:Name="cbiExportFormatPororoca"
-          Content="Pororoca"/>
+          Content="{Binding i18n.ExportCollection.FormatPororoca, Mode=OneWay}"/>
         <ComboBoxItem
           x:Name="cbiExportFormatPostman"
-          Content="Postman"/>
+          Content="{Binding i18n.ExportCollection.FormatPostman, Mode=OneWay}"/>
       </ComboBox>
 
     </StackPanel>
@@ -130,7 +126,7 @@
       HeadersVisibility="All"
       IsVisible="{Binding ExportFormatSelectedIndex, 
                   Mode=OneWay,
-                  Converter={StaticResource exportFormatMatch}, 
+                  Converter={x:Static conv:ExportCollectionFormatMatchConverter.Instance}, 
                   ConverterParameter='Pororoca'}">
       <DataGrid.Columns>
         <DataGridCheckBoxColumn

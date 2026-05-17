@@ -23,6 +23,10 @@ internal static class WebSocketClientMessageContentModeMapping
 
 public sealed class WebSocketClientMessageContentModeMatchConverter : EnumMatchConverter<PororocaWebSocketClientMessageContentMode>
 {
+    public static readonly WebSocketClientMessageContentModeMatchConverter Instance = new();
+
+    private WebSocketClientMessageContentModeMatchConverter() { }
+
     protected override PororocaWebSocketClientMessageContentMode? MapIndexToEnum(int index) =>
         WebSocketClientMessageContentModeMapping.MapIndexToEnum(index);
 }

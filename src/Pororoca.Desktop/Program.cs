@@ -2,6 +2,7 @@ using System.Reflection;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Media;
 using Avalonia.ReactiveUI;
 using Pororoca.Desktop.UserData;
 using Pororoca.Desktop.ViewModels;
@@ -38,6 +39,11 @@ public static class Program
             .UsePlatformDetect()
             .LogToTrace()
             .UseReactiveUI()
+            .With(new FontManagerOptions
+            {
+                // https://github.com/AvaloniaUI/Avalonia/issues/4427#issuecomment-1303697872
+                DefaultFamilyName = "avares://Pororoca.Desktop/Assets/Fonts#Cabin"
+            })
             .AfterSetup(ab =>
             {
                 var appLifetime = ab.Instance!.ApplicationLifetime!;

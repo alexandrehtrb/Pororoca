@@ -215,7 +215,7 @@ public static class PororocaHttpRequestTranslatorTests
         Assert.Null(resolvedBody.ContentType);
         Assert.Equal([
             new(true, "key1", "4577"),
-            new(true, "4354", "value3")],
+            new(true, "{{K3}}", "value3")],
             resolvedBody.UrlEncodedValues);
     }
 
@@ -247,7 +247,7 @@ public static class PororocaHttpRequestTranslatorTests
         Assert.Equal([
             new(true, PororocaHttpRequestFormDataParamType.Text, "key1", "oi4577", "text/plain", string.Empty),
             new(true, PororocaHttpRequestFormDataParamType.Text, "key2", "oi2", "text/plain", string.Empty),
-            new(true, PororocaHttpRequestFormDataParamType.Text, "key4354", "[4577]", "application/json", string.Empty),
+            new(true, PororocaHttpRequestFormDataParamType.Text, "key{{K3}}", "[4577]", "application/json", string.Empty),
             new(true, PororocaHttpRequestFormDataParamType.File, "key4", string.Empty, "text/xml", "C:\\MYFILES\\file.xml")],
             resolvedBody.FormDataValues);
     }

@@ -6,7 +6,10 @@ namespace Pororoca.Domain.Features.VariableResolution;
 [ExcludeFromCodeCoverage(Justification = "Most methods return random values. Cannot be tested.")]
 public static partial class PororocaPredefinedVariableEvaluator
 {
-    public static bool IsPredefinedVariable(string variableKey, out string? resolvedValue)
+    public static bool IsPredefinedVariable(string variableKey) =>
+        IsPredefinedVariable(variableKey, resolveValue: false, out _);
+
+    public static bool IsPredefinedVariable(string variableKey, bool resolveValue, out string? resolvedValue)
     {
         if (!variableKey.StartsWith('$'))
         {
@@ -16,25 +19,25 @@ public static partial class PororocaPredefinedVariableEvaluator
 
         resolvedValue = variableKey.ToLowerInvariant() switch
         {
-            "$guid" => GetRandomGuid(),
-            "$now" => GetNow(),
-            "$today" => GetToday(),
-            "$timestamp" => GetNowTimestamp(),
-            "$randombirthdate" => GetRandomBirthDate(atLeast18YearsOld: false),
-            "$randombirthdateover18" => GetRandomBirthDate(atLeast18YearsOld: true),
-            "$randomint" => GetRandomInt(),
-            "$randomquantity" => GetRandomQuantity(),
-            "$randomfullname" => GetRandomFullName(),
-            "$randommanfullname" => GetRandomManFullName(),
-            "$randomwomanfullname" => GetRandomWomanFullName(),
-            "$randomfirstname" => GetRandomFirstName(),
-            "$randommanfirstname" => GetRandomManFirstName(),
-            "$randomwomanfirstname" => GetRandomWomanFirstName(),
-            "$randomlastname" => GetRandomSurname(),
-            "$randomcpf" => GetRandomCPF(includeSeparators: true),
-            "$randomcpfdigitsonly" => GetRandomCPF(includeSeparators: false),
-            "$randomcnpj" => GetRandomCNPJ(includeSeparators: true),
-            "$randomcnpjdigitsonly" => GetRandomCNPJ(includeSeparators: false),
+            "$guid" => resolveValue ? GetRandomGuid() : string.Empty,
+            "$now" => resolveValue ? GetNow() : string.Empty,
+            "$today" => resolveValue ? GetToday() : string.Empty,
+            "$timestamp" => resolveValue ? GetNowTimestamp() : string.Empty,
+            "$randombirthdate" => resolveValue ? GetRandomBirthDate(atLeast18YearsOld: false) : string.Empty,
+            "$randombirthdateover18" => resolveValue ? GetRandomBirthDate(atLeast18YearsOld: true) : string.Empty,
+            "$randomint" => resolveValue ? GetRandomInt() : string.Empty,
+            "$randomquantity" => resolveValue ? GetRandomQuantity() : string.Empty,
+            "$randomfullname" => resolveValue ? GetRandomFullName() : string.Empty,
+            "$randommanfullname" => resolveValue ? GetRandomManFullName() : string.Empty,
+            "$randomwomanfullname" => resolveValue ? GetRandomWomanFullName() : string.Empty,
+            "$randomfirstname" => resolveValue ? GetRandomFirstName() : string.Empty,
+            "$randommanfirstname" => resolveValue ? GetRandomManFirstName() : string.Empty,
+            "$randomwomanfirstname" => resolveValue ? GetRandomWomanFirstName() : string.Empty,
+            "$randomlastname" => resolveValue ? GetRandomSurname() : string.Empty,
+            "$randomcpf" => resolveValue ? GetRandomCPF(includeSeparators: true) : string.Empty,
+            "$randomcpfdigitsonly" => resolveValue ? GetRandomCPF(includeSeparators: false) : string.Empty,
+            "$randomcnpj" => resolveValue ? GetRandomCNPJ(includeSeparators: true) : string.Empty,
+            "$randomcnpjdigitsonly" => resolveValue ? GetRandomCNPJ(includeSeparators: false) : string.Empty,
             _ => null
         };
 

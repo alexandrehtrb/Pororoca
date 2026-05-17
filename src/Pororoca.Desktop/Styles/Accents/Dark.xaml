@@ -42,16 +42,18 @@
       <x:String x:Key="TextEditorTheme">DarkPlus</x:String>
       <Color x:Key="TextEditorBackgroundColor">#181818</Color>
       <Color x:Key="TextEditorForegroundColor">#D4D4D4</Color>
-      <SolidColorBrush x:Key="TextEditorHyperlinkForegroundBrush" Color="LightBlue"/>
-      <SolidColorBrush x:Key="TextEditorRegularVariableForegroundBrush" Color="SandyBrown"/>
-      <SolidColorBrush x:Key="TextEditorPredefinedVariableForegroundBrush" Color="PeachPuff"/>
+      <Color x:Key="TextEditorHyperlinkForegroundColor">LightBlue</Color>
+      <Color x:Key="RegularVariableForegroundColor">SandyBrown</Color>
+      <Color x:Key="RegularVariablePopupForegroundColor">SandyBrown</Color>
+      <Color x:Key="PredefinedVariableForegroundColor">PeachPuff</Color>
+      <Color x:Key="PredefinedVariablePopupForegroundColor">PeachPuff</Color>
+      <Color x:Key="NoMatchingVariableForegroundColor">Red</Color>
+      <Color x:Key="NoMatchingVariablePopupForegroundColor">Red</Color>
+      <Color x:Key="PVSHTextBlockDefaultForegroundColor">White</Color>
       <!-- don't rename key below -->
       <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="#814718"/>
       <!-- value below sets hover variable popup max width -->
       <x:Double x:Key="FlyoutThemeMaxWidth">720</x:Double>
-      <Color x:Key="TextEditorRegularVariablePopupForegroundColor">SandyBrown</Color>
-      <Color x:Key="TextEditorPredefinedVariablePopupForegroundColor">PeachPuff</Color>
-      <Color x:Key="TextEditorNoMatchingVariablePopupForegroundColor">LightSalmon</Color>
       <Color x:Key="ResponseCapturedValueTextColor">#99E3D5</Color>
       <!--Color x:Key="TreeViewItemTargetMovementHighlightColor">LawnGreen</Color-->
     </ResourceDictionary>

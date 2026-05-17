@@ -23,6 +23,10 @@ internal static class ClientCertificateTypeMapping
 
 public sealed class ClientCertificateTypeMatchConverter : EnumMatchConverter<PororocaRequestAuthClientCertificateType>
 {
+    public static readonly ClientCertificateTypeMatchConverter Instance = new();
+
+    private ClientCertificateTypeMatchConverter() { }
+
     protected override PororocaRequestAuthClientCertificateType? MapIndexToEnum(int index) =>
         ClientCertificateTypeMapping.MapIndexToEnum(index);
 }

@@ -106,10 +106,10 @@
         SelectedIndex="{Binding ExportFormatSelectedIndex}">
         <ComboBoxItem
           x:Name="cbiExportFormatPororoca"
-          Content="Pororoca"/>
+          Content="{Binding i18n.ExportEnvironment.FormatPororoca, Mode=OneWay}"/>
         <ComboBoxItem
           x:Name="cbiExportFormatPostman"
-          Content="Postman"/>
+          Content="{Binding i18n.ExportEnvironment.FormatPostman, Mode=OneWay}"/>
       </ComboBox>
 
     </StackPanel>

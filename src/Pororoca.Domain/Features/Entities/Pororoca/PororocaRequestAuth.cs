@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca;
@@ -13,7 +12,7 @@ public enum PororocaRequestAuthMode
 }
 
 #if DEBUG
-[DebuggerDisplay("{Mode,nq}")]
+[System.Diagnostics.DebuggerDisplay("{Mode,nq}")]
 #endif
 public sealed record PororocaRequestAuth
 (

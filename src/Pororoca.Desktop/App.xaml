@@ -23,5 +23,6 @@
     <StyleInclude Source="/Styles/BrushesDefinitions.xaml"/>
     <StyleInclude Source="/Styles/ComponentsCustomStyling.xaml"/>
     <StyleInclude Source="/Styles/SideBar.xaml"/>
+    <StyleInclude Source="/Styles/TextBoxSyntaxHighlighting.xaml"/>
   </Application.Styles>
 </Application>

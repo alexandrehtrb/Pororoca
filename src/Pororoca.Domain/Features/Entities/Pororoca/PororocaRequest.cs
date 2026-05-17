@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace Pororoca.Domain.Features.Entities.Pororoca;
@@ -11,7 +10,7 @@ public enum PororocaRequestType
 }
 
 #if DEBUG
-[DebuggerDisplay("{Name,nq}")]
+[System.Diagnostics.DebuggerDisplay("{Name,nq}")]
 #endif
 public abstract record PororocaRequest
 (

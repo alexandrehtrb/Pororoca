@@ -35,4 +35,9 @@ public sealed record PororocaHttpRequestFormDataParam(
         null,
         contentType,
         fileSrcPath);
+
+#if DEBUG
+    public override string ToString() =>
+        $"{(Enabled ? "✔️" : "⛔")}{(Type == PororocaHttpRequestFormDataParamType.Text ? "⌨️" : "📄")} {Key}: \"{(Type == PororocaHttpRequestFormDataParamType.Text ? TextValue : FileSrcPath)}\"";
+#endif
 }

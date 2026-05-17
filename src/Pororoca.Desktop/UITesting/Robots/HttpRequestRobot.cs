@@ -20,7 +20,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal TabControl TabControlReq => GetChildView<TabControl>("tabControlReq")!;
     internal TabControl TabControlRes => GetChildView<TabControl>("tabControlRes")!;
     internal ComboBox HttpMethod => GetChildView<ComboBox>("cbHttpMethod")!;
-    internal TextBox Url => GetChildView<TextBox>("tbUrl")!;
+    internal SyntaxHighlightingTextBox Url => GetChildView<SyntaxHighlightingTextBox>("tbUrl")!;
     internal TextBlock ErrorMsg => GetChildView<TextBlock>("tbErrorMsg")!;
     internal ComboBox HttpVersion => GetChildView<ComboBox>("cbHttpVersion")!;
     internal Button SendOrCancel => GetChildView<Button>("btSendOrCancelRequest")!;
@@ -38,7 +38,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal AutoCompleteBox ReqBodyRawContentType => GetChildView<AutoCompleteBox>("acbReqBodyRawContentType")!;
     internal TextEditor ReqBodyRawContent => GetChildView<TextEditor>("teReqBodyRawContent")!;
     internal AutoCompleteBox ReqBodyFileContentType => GetChildView<AutoCompleteBox>("acbReqBodyFileContentType")!;
-    internal TextBox ReqBodyFileSrcPath => GetChildView<TextBox>("tbReqBodyFileSrcPath")!;
+    internal SyntaxHighlightingTextBox ReqBodyFileSrcPath => GetChildView<SyntaxHighlightingTextBox>("tbReqBodyFileSrcPath")!;
     internal Button ReqBodyFileSearch => GetChildView<Button>("btReqBodyFileSearch")!;
     internal Button ReqBodyUrlEncodedAddParam => GetChildView<Button>("btReqBodyUrlEncodedAddParam")!;
     internal DataGrid ReqBodyUrlEncodedParams => GetChildView<DataGrid>("dgReqBodyUrlEncodedParams")!;
@@ -46,7 +46,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal Button ReqBodyFormDataAddFileParam => GetChildView<Button>("btReqBodyFormDataAddFileParam")!;
     internal DataGrid ReqBodyFormDataParams => GetChildView<DataGrid>("dgReqBodyFormDataParams")!;
     internal TextBox ReqBodyGraphQlQuery => GetChildView<TextBox>("tbReqBodyGraphQlQuery")!;
-    internal TextBox ReqBodyGraphQlVariables => GetChildView<TextBox>("tbReqBodyGraphQlVariables")!;
+    internal SyntaxHighlightingTextBox ReqBodyGraphQlVariables => GetChildView<SyntaxHighlightingTextBox>("tbReqBodyGraphQlVariables")!;
     internal TabItem TabReqAuth => GetChildView<TabItem>("tabItemReqAuth")!;
     internal TextBlock ResTitle => GetChildView<TextBlock>("tbResTitle")!;
     internal TabItem TabResHeaders => GetChildView<TabItem>("tabItemResHeaders")!;

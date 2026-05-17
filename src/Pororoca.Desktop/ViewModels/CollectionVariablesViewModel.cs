@@ -9,7 +9,7 @@ public sealed class CollectionVariablesViewModel : CollectionOrganizationItemVie
     [Reactive]
     public VariablesDataGridViewModel VariablesTableVm { get; set; }
 
-    public CollectionVariablesViewModel(ICollectionOrganizationItemParentViewModel parentVm,
+    public CollectionVariablesViewModel(CollectionViewModel parentVm,
                                         PororocaCollection col) : base(parentVm, col.Name) =>
-        VariablesTableVm = new(col.Variables);
+        VariablesTableVm = new(parentVm, col.Variables);
 }

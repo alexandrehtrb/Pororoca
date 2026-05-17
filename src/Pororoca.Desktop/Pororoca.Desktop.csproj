@@ -8,7 +8,7 @@
       when "-p:PublishForInstallOnWindows" is specified in dotnet build, run or publish
     -->
     <DefineConstants Condition=" '$(PublishForInstallOnWindows)' == 'true' ">$(DefineConstants);INSTALLED_ON_WINDOWS</DefineConstants>
-    <DefineConstants Condition=" '$(PublishForInstallOnDebian)' == 'true' ">$(DefineConstants);INSTALLED_ON_DEBIAN</DefineConstants>
+    <DefineConstants Condition=" '$(PublishForInstallOnLinux)' == 'true' ">$(DefineConstants);INSTALLED_ON_LINUX</DefineConstants>
     <DefineConstants Condition=" '$(UITestsEnabled)' == 'true' ">$(DefineConstants);UI_TESTS_ENABLED</DefineConstants>
     <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
     <PublishReadyToRun>True</PublishReadyToRun>
@@ -25,7 +25,7 @@
     <EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
     <!-- trimming properties end -->
     <ApplicationIcon>Assets/pororoca_icon.ico</ApplicationIcon>
-    <Version>3.9.1</Version>
+    <Version>3.10.0</Version>
     <FileVersion>$(Version)</FileVersion>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <Copyright>AlexandreHTRB</Copyright>
@@ -102,7 +102,6 @@
     <PackageReference Include="Avalonia.AvaloniaEdit"/>
     <PackageReference Include="AvaloniaEdit.TextMate"/>
     <PackageReference Include="TextMateSharp.Grammars"/>
-
     <PackageReference Include="ReactiveUI.Fody"/>
     <PackageReference Include="MessageBox.Avalonia"/>
   </ItemGroup>

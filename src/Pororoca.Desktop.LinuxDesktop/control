@@ -1,5 +1,5 @@
 Package: pororoca
-Version: 3.9.1
+Version: 3.10.0
 Section: devel
 Priority: optional
 Architecture: amd64
@@ -7,5 +7,5 @@ Installed-Size: 68279
 Depends: libx11-6, libice6, libsm6, libfontconfig1, ca-certificates, tzdata, libc6, libgcc1 | libgcc-s1, libgssapi-krb5-2, libstdc++6, zlib1g, libssl1.0.0 | libssl1.0.2 | libssl1.1 | libssl3, libicu | libicu78 | libicu76 | libicu74 | libicu72 | libicu71 | libicu70 | libicu69 | libicu68 | libicu67 | libicu66 | libicu65 | libicu63 | libicu60 | libicu57 | libicu55 | libicu52
 Maintainer: Alexandre H. T. R. Bonfitto <alexandrehtrb@outlook.com>
 Homepage: https://pororoca.io
-Description: This is Pororoca, a HTTP inspection tool.
+Description: This is Pororoca, an HTTP testing tool.
 Copyright: 2022-2026 Alexandre H. T. R. Bonfitto <alexandrehtrb@outlook.com>

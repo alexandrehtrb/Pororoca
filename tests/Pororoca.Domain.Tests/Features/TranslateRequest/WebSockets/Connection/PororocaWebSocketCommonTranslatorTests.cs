@@ -253,7 +253,9 @@ public static class PororocaWebSocketCommonTranslatorTests
             Subprotocols: [
                 new(true, "sub1", null),
                 new(false, "sub2", null),
-                new(true, "{{K3Value}}", null)
+                new(true, "K3Value", null)
+                // ATENÇÃO: os subprotocolos WebSockets não aceitam caracteres especiais,
+                // como '{', '}', '[', ')', etc.
             ]);
 
         // WHEN

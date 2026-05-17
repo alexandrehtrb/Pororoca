@@ -1,5 +1,6 @@
 using System.Reactive;
 using AvaloniaEdit.Document;
+using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
@@ -10,6 +11,10 @@ namespace Pororoca.Desktop.ViewModels;
 
 public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItemViewModel
 {
+    internal PororocaVariableSyntaxHighlightingDefinitionSet PororocaVarSyntaxHighlightingDefinitionSet { get; }
+
+    internal CollectionViewModel Collection { get; }
+
     #region WEBSOCKET REQUEST MESSAGE
 
     [Reactive]
@@ -57,11 +62,12 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
 
     #endregion
 
-    public WebSocketClientMessageViewModel(ICollectionOrganizationItemParentViewModel parentVm,
+    public WebSocketClientMessageViewModel(WebSocketConnectionViewModel parentVm,
                                            PororocaWebSocketClientMessage msg) : base(parentVm, msg.Name)
     {
         #region WEBSOCKET REQUEST MESSAGE
-
+        PororocaVarSyntaxHighlightingDefinitionSet = new(parentVm.Collection);
+        Collection = parentVm.Collection;
         DisableCompressionForThisMessage = msg.DisableCompressionForThis;
         MessageTypeSelectedIndex = WebSocketMessageTypeMapping.MapEnumToIndex(msg.MessageType);
         ContentModeSelectedIndex = WebSocketClientMessageContentModeMapping.MapEnumToIndex(msg.ContentMode);

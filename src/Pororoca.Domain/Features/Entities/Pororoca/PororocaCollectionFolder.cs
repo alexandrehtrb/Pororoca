@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Text.Json.Serialization;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
@@ -6,7 +5,7 @@ using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 namespace Pororoca.Domain.Features.Entities.Pororoca;
 
 #if DEBUG
-[DebuggerDisplay("{Name,nq}")]
+[System.Diagnostics.DebuggerDisplay("{Name,nq}")]
 #endif
 public sealed record PororocaCollectionFolder
 (
@@ -16,7 +15,7 @@ public sealed record PororocaCollectionFolder
 )
 {
 #if DEBUG
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
 #endif
     [JsonIgnore] // JSON IGNORE
     public IReadOnlyList<PororocaHttpRequest> HttpRequests =>
@@ -25,7 +24,7 @@ public sealed record PororocaCollectionFolder
                 .AsReadOnly();
 
 #if DEBUG
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
 #endif
     [JsonIgnore] // JSON IGNORE
     public IReadOnlyList<PororocaWebSocketConnection> WebSocketConnections =>

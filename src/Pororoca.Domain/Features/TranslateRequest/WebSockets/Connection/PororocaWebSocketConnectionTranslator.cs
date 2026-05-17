@@ -50,7 +50,7 @@ public static class PororocaWebSocketConnectionTranslator
             {
                 var resolvedAuth = ResolveRequestAuth(effectiveVars, collectionScopedAuth, wsConn.CustomAuth);
                 var resolvedHeaders = ResolveRequestHeaders(effectiveVars, collectionScopedReqHeaders, wsConn.Headers);
-                var resolvedSubprotocols = ResolveSubprotocols(effectiveVars, wsConn);
+                var resolvedSubprotocols = ResolveSubprotocols(wsConn);
                 var httpCli = httpClientProvider.Provide(disableTlsVerification, resolvedAuth);
 
                 var wsCli = new ClientWebSocket();
@@ -74,10 +74,9 @@ public static class PororocaWebSocketConnectionTranslator
 
     #region RESOLUTION / REPLACE VARIABLE TEMPLATES
 
-    private static PororocaKeyValueParam[]? ResolveSubprotocols(IEnumerable<PororocaVariable> effectiveVars, PororocaWebSocketConnection wsConn) =>
+    private static PororocaKeyValueParam[]? ResolveSubprotocols(PororocaWebSocketConnection wsConn) =>
         wsConn.Subprotocols?
               .Where(x => x.Enabled)
-              .Select(x => new PororocaKeyValueParam(true, IPororocaVariableResolver.ReplaceTemplates(x.Key, effectiveVars), null))
               .ToArray();
 
     #endregion

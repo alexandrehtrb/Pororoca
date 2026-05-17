@@ -32,7 +32,7 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
     #endregion
 
 
-    public EnvironmentViewModel(ICollectionOrganizationItemParentViewModel parentVm,
+    public EnvironmentViewModel(EnvironmentsGroupViewModel parentVm,
                                 PororocaEnvironment env,
                                 Action<EnvironmentViewModel> onToggleEnabledEnvironment) : base(parentVm, env.Name)
     {
@@ -46,7 +46,7 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
 
         this.envId = env.Id;
         this.envCreatedAt = env.CreatedAt;
-        VariablesTableVm = new(env.Variables);
+        VariablesTableVm = new((CollectionViewModel)parentVm.Parent, env.Variables);
         IsCurrentEnvironment = env.IsCurrent;
         ToggleEnabledEnvironmentCmd = ReactiveCommand.Create(() => onToggleEnabledEnvironment(this));
         ExportEnvironmentVm = new(this);

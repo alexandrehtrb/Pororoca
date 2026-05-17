@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.UITesting.Robots;
@@ -19,18 +20,18 @@ public sealed class RequestAuthRobot : BaseRobot
     internal ComboBoxItem ClientCertificateTypeOptionPkcs12 => GetChildView<ComboBoxItem>("cbiReqAuthClientCertificatePkcs12")!;
     internal ComboBoxItem ClientCertificateTypeOptionPem => GetChildView<ComboBoxItem>("cbiReqAuthClientCertificatePem")!;
 
-    internal TextBox BasicAuthLogin => GetChildView<TextBox>("tbBasicAuthLogin")!;
-    internal TextBox BasicAuthPassword => GetChildView<TextBox>("tbBasicAuthPassword")!;
-    internal TextBox BearerAuthToken => GetChildView<TextBox>("tbBearerAuthToken")!;
+    internal SyntaxHighlightingTextBox BasicAuthLogin => GetChildView<SyntaxHighlightingTextBox>("tbBasicAuthLogin")!;
+    internal SyntaxHighlightingTextBox BasicAuthPassword => GetChildView<SyntaxHighlightingTextBox>("tbBasicAuthPassword")!;
+    internal SyntaxHighlightingTextBox BearerAuthToken => GetChildView<SyntaxHighlightingTextBox>("tbBearerAuthToken")!;
     internal CheckBox WindowsAuthUseCurrentUser => GetChildView<CheckBox>("chkbWindowsAuthUseCurrentUser")!;
-    internal TextBox WindowsAuthLogin => GetChildView<TextBox>("tbWindowsAuthLogin")!;
-    internal TextBox WindowsAuthPassword => GetChildView<TextBox>("tbWindowsAuthPassword")!;
-    internal TextBox WindowsAuthDomain => GetChildView<TextBox>("tbWindowsAuthDomain")!;
-    internal TextBox ClientCertificatePkcs12FilePath => GetChildView<TextBox>("tbClientCertificatePkcs12FilePath")!;
-    internal TextBox ClientCertificatePkcs12FilePassword => GetChildView<TextBox>("tbClientCertificatePkcs12FilePassword")!;
-    internal TextBox ClientCertificatePemCertificateFilePath => GetChildView<TextBox>("tbClientCertificatePemCertificateFilePath")!;
-    internal TextBox ClientCertificatePemPrivateKeyFilePath => GetChildView<TextBox>("tbClientCertificatePemPrivateKeyFilePath")!;
-    internal TextBox ClientCertificatePemPrivateKeyPassword => GetChildView<TextBox>("tbClientCertificatePemPrivateKeyPassword")!;
+    internal SyntaxHighlightingTextBox WindowsAuthLogin => GetChildView<SyntaxHighlightingTextBox>("tbWindowsAuthLogin")!;
+    internal SyntaxHighlightingTextBox WindowsAuthPassword => GetChildView<SyntaxHighlightingTextBox>("tbWindowsAuthPassword")!;
+    internal SyntaxHighlightingTextBox WindowsAuthDomain => GetChildView<SyntaxHighlightingTextBox>("tbWindowsAuthDomain")!;
+    internal SyntaxHighlightingTextBox ClientCertificatePkcs12FilePath => GetChildView<SyntaxHighlightingTextBox>("tbClientCertificatePkcs12FilePath")!;
+    internal SyntaxHighlightingTextBox ClientCertificatePkcs12FilePassword => GetChildView<SyntaxHighlightingTextBox>("tbClientCertificatePkcs12FilePassword")!;
+    internal SyntaxHighlightingTextBox ClientCertificatePemCertificateFilePath => GetChildView<SyntaxHighlightingTextBox>("tbClientCertificatePemCertificateFilePath")!;
+    internal SyntaxHighlightingTextBox ClientCertificatePemPrivateKeyFilePath => GetChildView<SyntaxHighlightingTextBox>("tbClientCertificatePemPrivateKeyFilePath")!;
+    internal SyntaxHighlightingTextBox ClientCertificatePemPrivateKeyPassword => GetChildView<SyntaxHighlightingTextBox>("tbClientCertificatePemPrivateKeyPassword")!;
 
     internal async Task SetNoAuth() =>
         await AuthType.Select(AuthTypeOptionNone);

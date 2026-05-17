@@ -45,7 +45,7 @@ internal static class PororocaRequestCommonTranslator
            .Where(h => h.Enabled)
            .Select(x => new PororocaKeyValueParam(
                 true,
-                IPororocaVariableResolver.ReplaceTemplates(x.Key, effectiveVars),
+                x.Key,
                 IPororocaVariableResolver.ReplaceTemplates(x.Value, effectiveVars))).ToList();
 
     #endregion
