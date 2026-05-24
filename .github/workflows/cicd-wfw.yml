@@ -560,6 +560,12 @@ jobs:
         chmod a+x patched-debsigs/debsigs &&
         echo "$PWD/patched-debsigs" >>$GITHUB_PATH
 
+        # Using gpg-agent with a pre-cached passphrase
+        # First, cache the passphrase
+        # Then sign the RPM (gpg-agent will use the cached passphrase)
+        echo "${env:ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD}" | gpg --batch --passphrase-fd 0 --pinentry-mode loopback --sign --armor /dev/null 2>/dev/null
+        $env:GPG_TTY="$(tty)"
+
         # Sign .deb file
         keyId="$(echo -n $ALEXANDREHTRB_GPG_KEY_FINGERPRINT | tail -c 16)"
         debFilePath="./out/Pororoca_${VERSION_NAME}_amd64.deb"
@@ -567,6 +573,7 @@ jobs:
         debsigs --sign=origin --default-key=$keyId $debFilePath
       env:
         ALEXANDREHTRB_GPG_KEY_FINGERPRINT: ${{ secrets.ALEXANDREHTRB_GPG_KEY_FINGERPRINT }}
+        ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD: ${{ secrets.ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD }}
 
     # code below taken from:
     # https://blog.packagecloud.io/how-to-gpg-sign-and-verify-deb-packages-and-apt-repositories/
