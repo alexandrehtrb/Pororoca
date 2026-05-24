@@ -544,8 +544,8 @@ jobs:
     
     # code below taken from:
     # https://github.com/git-ecosystem/git-credential-manager/blob/6847fba88b5adfd631e6a1163c91c2b316f52701/.github/workflows/release.yml
-    - name: Sign Debian / Ubuntu package
-      if: ${{ inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
+    - name: Sign Debian / Ubuntu package (DISABLED)
+      if: ${{ false && inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
       shell: bash # !!!
       run: |
         # Install debsigs
