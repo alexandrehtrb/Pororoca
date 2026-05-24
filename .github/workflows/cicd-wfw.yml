@@ -236,44 +236,7 @@ jobs:
         # Create certs directory
         $certsDir = Join-Path (Get-Location) "certs"
         [void](New-Item $certsDir -ItemType Directory -ErrorAction Ignore);
-
-        # Import keys without prompting user input (for CI / CD)
-        # https://d.sb/2016/11/gpg-inappropriate-ioctl-for-device-errors
-        #   use-agent, pinentry-mode --> no ask for user input
-        #   allow-loopback-pinentry --> use TTY terminal, no ask for user input
-        #   allow-preset-passphrase --> set fixed passphrase, no ask for user input
         
-        $gpgDir = Join-Path $env:HOME ".gnupg"
-        [void](New-Item $gpgDir -ItemType Directory -ErrorAction Ignore);
-        chmod 700 $gpgDir
-
-        $gpgConfFilePath = Join-Path $env:HOME ".gnupg" "gpg.conf"
-        $gpgConfFileContent = @"
-        use-agent
-        pinentry-mode loopback
-        "@
-        echo $gpgConfFileContent >> $gpgConfFilePath
-        chmod 600 $gpgConfFilePath
-
-        $gpgAgentConfFilePath = Join-Path $env:HOME ".gnupg" "gpg-agent.conf"
-        $gpgAgentConfFileContent = @"
-        allow-loopback-pinentry
-        allow-preset-passphrase
-        "@
-        echo $gpgAgentConfFileContent >> $gpgAgentConfFilePath
-        chmod 600 $gpgAgentConfFilePath
-
-        # Fix ~/.gnupg directory permissions
-        chown -R $(whoami) $gpgDir
-
-        # Restart GPG agent
-        Write-Host "Restarting GPG agent..."
-        gpg-connect-agent RELOADAGENT /bye
-
-        # Set default passphrase for private key
-        Write-Host "Setting default preset passphrase for GPG..."
-        echo "${env:ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD}" | /usr/lib/gnupg2/gpg-preset-passphrase --preset "${env:ALEXANDREHTRB_GPG_KEYGRIP}"
-
         # Import public and private keys
         $publicKeyFilePath = Join-Path $certsDir "public-key.gpg"
         $privateKeyFilePath = Join-Path $certsDir "private-key.gpg"
