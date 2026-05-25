@@ -337,7 +337,7 @@ jobs:
 
           [void](New-Item $OUTPUT_FOLDER -ItemType Directory -ErrorAction Ignore);
           dotnet publish ./src/Pororoca.Desktop/Pororoca.Desktop.csproj `
-          --verbosity quiet `
+          --verbosity diagnostic `
           --nologo `
           --configuration Release `
           -p:PublishSingleFile=$PUBLISH_SINGLE_FILE `
