@@ -314,8 +314,8 @@ jobs:
       shell: pwsh
       run: |
         $arr = @()
-        if ($env:LINUX_X64_INSTALLER -eq 'true'){ $arr += @{ rid="linux-x64"; outputFolder="./out/linux-x64-installer" ; packaging="linux-installers"   } };
         if ($env:LINUX_X64_PORTABLE -eq 'true') { $arr += @{ rid="linux-x64"; outputFolder="./out/linux-x64-portable"  ; packaging="portable"   } };
+        if ($env:LINUX_X64_INSTALLER -eq 'true'){ $arr += @{ rid="linux-x64"; outputFolder="./out/linux-x64-installer" ; packaging="linux-installers"   } };
         if ($env:OSX -eq 'true')                { $arr += @{   rid="osx-x64"; outputFolder="./out/osx-x64"             ; packaging="osx-app"   } };
         if ($env:WIN_X64_INSTALLER -eq 'true')  { $arr += @{   rid="win-x64"; outputFolder="./out/win-x64-installer"   ; packaging="nsis"   } };
         if ($env:WIN_X64_PORTABLE -eq 'true')   { $arr += @{   rid="win-x64"; outputFolder="./out/win-x64-portable"    ; packaging="portable"   } };
