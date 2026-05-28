@@ -104,15 +104,9 @@
         </DataGridTemplateColumn.CellTemplate>
         <DataGridTemplateColumn.CellEditingTemplate>
           <DataTemplate>
-            <TextBox Text="{Binding Value}"/>
-            <!--
-            TODO: Infelizmente não dá para usar o SyntaxHighlightingTextBox ainda
-            porque ele crasha a aplicação quando se pressiona Ctrl + SetaParaEsquerda / SetaParaDireita ou Ctrl + Del.
-            Vamos tentar usá-lo quando migrar para o Avalonia 12.0.
-            -->
-            <!--controls:SyntaxHighlightingTextBox
-              DefinitionSet="{Binding #variablesTableView.((vmdg:VariablesDataGridViewModel)DataContext).PororocaVarSyntaxHighlightingDefinitionSet, Mode=OneWay}"
-              Text="{Binding Value}"/-->
+            <controls:SyntaxHighlightingTextBox
+              DefinitionSet="{Binding #reqHeadersTableView.((vmdg:RequestHeadersDataGridViewModel)DataContext).Collection.PororocaVarSyntaxHighlightingDefinitionSet, Mode=OneWay}"
+              Text="{Binding Value}"/>
           </DataTemplate>
         </DataGridTemplateColumn.CellEditingTemplate>
       </DataGridTemplateColumn>

@@ -223,7 +223,7 @@ public sealed class RequestAuthViewModel : ViewModelBase
     public RequestAuthViewModel(CollectionViewModel col, PororocaRequestAuth? customAuth, bool isInheritFromCollectionOptionEnabled, Action clearInvalidWarningsCallback)
     {
         Collection = col;
-        PororocaVarSyntaxHighlightingDefinitionSet = new(Collection);
+        PororocaVarSyntaxHighlightingDefinitionSet = Collection.PororocaVarSyntaxHighlightingDefinitionSet;
         this.clearInvalidWarningsCallback = clearInvalidWarningsCallback;
         AuthModeSelectedIndex = AuthModeMapping.MapEnumToIndex(customAuth?.Mode);
         IsInheritFromCollectionOptionEnabled = isInheritFromCollectionOptionEnabled;

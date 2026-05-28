@@ -158,7 +158,7 @@ public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParen
         // por exemplo, na URL, no corpo de requisição HTTP, mensagem de cliente WebSocket,
         // dados de entrada de repetidora, valores de headers, URL-encoded params e form data params.
         TextEditorConfiguration.InvalidateTextEditorsAreas();
-        SyntaxHighlighter.InvalidateSyntaxHighlighterTextBoxesTexts();
+        SyntaxHighlightingTextPresenter.InvalidateSyntaxHighlighterTextBoxesTexts();
         MainWindowVm.EffectiveVariablesMayHaveChanged++;
     }
 

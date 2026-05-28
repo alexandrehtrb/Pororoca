@@ -321,7 +321,7 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
         #region COLLECTION ORGANIZATION
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
         Collection = col;
-        PororocaVarSyntaxHighlightingDefinitionSet = new(Collection);
+        PororocaVarSyntaxHighlightingDefinitionSet = Collection.PororocaVarSyntaxHighlightingDefinitionSet;
         #endregion
 
         #region REPETITION CONFIG

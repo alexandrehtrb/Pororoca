@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
+using Pororoca.Desktop.Controls;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.VariableResolution;
 using ReactiveUI;
@@ -22,6 +23,8 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
     private readonly Guid colId;
 
     private readonly DateTimeOffset colCreatedAt;
+
+    internal PororocaVariableSyntaxHighlightingDefinitionSet PororocaVarSyntaxHighlightingDefinitionSet { get; }
 
     public ObservableCollection<string> HttpRequestsPaths { get; }
 
@@ -70,6 +73,9 @@ public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPo
 
         this.colId = col.Id;
         this.colCreatedAt = col.CreatedAt;
+
+        // IMPORTANT: this needs to be done before instantiating VMs that need the DefinitionSet
+        PororocaVarSyntaxHighlightingDefinitionSet = new(this);
 
         // IMPORTANT: this needs to be done before instantiating HttpRepeaterViewModels
         HttpRequestsPaths = new(col.ListHttpRequestsPathsInCollection());

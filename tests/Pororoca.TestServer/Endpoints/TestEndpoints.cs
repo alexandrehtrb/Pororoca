@@ -1,5 +1,8 @@
+using System.Globalization;
 using System.Net;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
 
@@ -18,6 +21,7 @@ public static class TestEndpoints
         app.MapGet("test/get/trailers", TestGetTrailers);
         app.MapGet("test/get/multipartformdata", TestGetMultipartFormData);
         app.MapGet("test/get/multiparttextonly", TestGetMultipartTextOnly);
+        app.MapQuery("test/query/fruits", TestQueryFruits);
         app.MapGet("test/auth", TestAuthHeader);
         app.MapGet("test/http1websocket", (Delegate)TestHttp1WebSocket);
         app.MapConnect("test/http2websocket", (Delegate)TestHttp2WebSocket);
@@ -205,6 +209,59 @@ public static class TestEndpoints
     }
 
     #endregion
+
+    public record Fruta(int Id, string Nome, string Familia, int Calorias);
+
+    private static readonly Fruta[] todasAsFrutas =
+    [
+        new(1, "Côco", "Arecaceae", 354),
+        new(2, "Tâmara", "Arecaceae", 282),
+        new(3, "Morango", "Rosaceae", 32),
+        new(4, "Melancia", "Cucurbitaceae", 30),
+        new(5, "Maracujá", "Passifloraceae", 97),
+        new(6, "Cereja", "Rosaceae", 64),
+        new(7, "Abacaxi", "Bromeliaceae", 48),
+        new(8, "Maçã", "Rosaceae", 52),
+        new(9, "Cacau", "Malvaceae", 73),
+        new(10, "Cupuaçu", "Malvaceae", 53),
+    ];
+
+    // https://gigi.nullneuron.net/gigilabs/diacritic-insensitive-search-in-c/
+    private static bool ContainsIgnoreCaseAndDiacritics(this string main, string partToSearch) =>
+        CultureInfo.CurrentCulture.CompareInfo.IndexOf(
+            main,
+            partToSearch,
+            CompareOptions.IgnoreNonSpace | CompareOptions.IgnoreCase) >= 0;
+
+    private static async Task<IResult> TestQueryFruits(HttpRequest httpReq)
+    {
+        using StreamReader sr = new(httpReq.Body, Encoding.UTF8);
+        string jsonStr = await sr.ReadToEndAsync();
+
+        JsonObject? json = null;
+        if (jsonStr != null && jsonStr.Length > 0)
+            json = JsonSerializer.Deserialize<JsonObject>(jsonStr);
+
+        int? id = json?[nameof(id)]?.GetValue<int>();
+        string? nome = json?[nameof(nome)]?.GetValue<string>();
+        string? familia = json?[nameof(familia)]?.GetValue<string>();
+
+        if (httpReq.Headers.TryGetValue("Id", out var idHeader))
+            id = Convert.ToInt32(idHeader.ToString());
+        if (httpReq.Headers.TryGetValue("Nome", out var nomeHeader))
+            nome = nomeHeader.ToString();
+        if (httpReq.Headers.TryGetValue("Familia", out var familiaHeader))
+            familia = familiaHeader.ToString();
+
+        var stringComparer = StringComparer.Create(CultureInfo.CurrentCulture, CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace);
+
+        var frutas = todasAsFrutas.Where(f =>
+            (id == null || f.Id == id)
+         && (nome == null || f.Nome.ContainsIgnoreCaseAndDiacritics(nome))
+         && (familia == null || f.Familia.ContainsIgnoreCaseAndDiacritics(familia))
+        );
+        return Results.Ok(frutas);
+    }
 
     #region AUTH
 

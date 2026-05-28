@@ -22,8 +22,8 @@ Przeczytaj [instrukcje](https://pororoca.io/docs/installation) i pobierz program
 * Pełna kompatybilność eksportu i importu z Postmanem.
 * Znacznie niższe zużycie pamięci - dwa do trzech razy mniej niż Postman.
 * Wsparcie wielojęzyczne.
+* WebSockets w HTTP/1.1 i HTTP/2.
 * Automatyczne testowanie.
-* WebSockets.
 * Szybki czas uruchamiania.
 * Darmowe i open-source.
 
@@ -53,7 +53,7 @@ Skontaktuj się z nami, jeśli szukasz bardziej zaawansowanego wsparcia, specjal
 
 ## Darowizny
 
-Darowizny pieniężne są bardzo ważne i pomagają nam pokryć nasze wydatki. Przeczytaj więcej w naszym [ogłoszeniu](https://github.com/alexandrehtrb/Pororoca/discussions/159)!
+Darowizny pieniężne pomagają nam kontynuować rozwój projektu i pokrywać nasze wydatki. Przeczytaj więcej w naszym [ogłoszeniu](https://github.com/alexandrehtrb/Pororoca/discussions/159)!
 
 Nasze kanały darowizn to:
 

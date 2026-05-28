@@ -1,6 +1,6 @@
 # Changelog
 
-* [3.10.0](#3100-2026-05-17)
+* [3.10.0](#3100-2026-05-27)
 * [3.9.1](#391-2026-03-28)
 * [3.9.0](#390-2025-11-03)
 * [3.8.3](#383-2025-09-10)
@@ -47,19 +47,20 @@
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
 
-## [3.10.0](https://github.com/alexandrehtrb/Pororoca/tree/3.10.0) (2026-05-17)
+## [3.10.0](https://github.com/alexandrehtrb/Pororoca/tree/3.10.0) (2026-05-27)
 
 ### Features
 
 - Variable highlight colours on:
   - URLs
   - All file input paths
+  - Authentication fields
   - GraphQL variables
   - Request headers
   - Recursive variables values
 - Mouse hover to preview on all file input paths.
-- RPM packaging for RHEL-family and openSUSE distros.
-- Code signing for Windows and Linux packages.
+- RPM packaging for RHEL and SUSE distros.
+- Code signing for Windows executables and Linux packages.
 - Add HTTP `QUERY` method.
 - Special thanks to @hamster620 for providing the SyntaxHighlightingTextBox from the ULogViewer project!
 
@@ -75,11 +76,11 @@
 
 - Smooth edges on Pororoca Windows icon. (may need to restart the O.S. after installation to take effect)
 - Generate TestServer for Linux-x64 on GitHub Actions.
+- Upgraded various GitHub Actions steps versions.
 - Clarified personal use conditions on license.
 - Add to repo licences of other projects used in Pororoca.
 - Windows portable releases generated on Windows runners.
 - Raised .NET SDK version to 8.0.421.
-- Raised Tmds.DBus.Protocol version to 0.21.3, to fix vulnerability.
 - Rewrote some Russian text phrasings.
 - Fixed mouse hover preview over invalid predefined variables on text editors.
 

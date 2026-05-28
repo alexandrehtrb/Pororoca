@@ -1,6 +1,7 @@
-# This spec file is for openSUSE.
+# This spec file is for SUSE (openSUSE, SLES and SLED).
 
 # .NET Linux required packages: https://github.com/dotnet/core/blob/main/release-notes/8.0/os-packages.md
+# Specifically for SUSE: https://learn.microsoft.com/en-us/dotnet/core/install/linux-sles?tabs=dotnet8#dependencies
 # Avalonia required packages: https://docs.avaloniaui.net/tools/parcel/packaging-for-linux#avalonia-specific-dependencies
 
 # package compression algorithm and level
@@ -10,7 +11,7 @@
 %define _binary_payload w7T16.xzdio
 
 # The line below removes liblttng-ust.so.0()(64bit) requirement from .NET 8.0,
-# which cannot be provided for openSUSE, but it's also not needed for execution.
+# which cannot be provided for SUSE, but it's also not needed for execution.
 # https://github.com/dotnet/runtime/issues/57784#issuecomment-3868191774
 %global __requires_exclude liblttng-ust.so.
 
@@ -29,6 +30,7 @@ Requires: libstdc++6
 Requires: libicu
 Requires: libopenssl3
 Requires: timezone
+Requires: libz1
 Requires: libICE6
 Requires: libSM6
 Requires: libfontconfig1

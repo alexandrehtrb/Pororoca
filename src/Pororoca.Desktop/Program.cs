@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Reflection;
 using Avalonia;
 using Avalonia.Controls;
@@ -19,17 +20,33 @@ public static class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        PororocaLogger.Instance = new(
-            appVersion: Assembly.GetExecutingAssembly().GetName().Version,
-            userDataDir: UserDataManager.GetUserDataFolder());
+        Version? appVersion = null;
+        DirectoryInfo? userDataDir = null;
+
         try
         {
+            appVersion = Assembly.GetExecutingAssembly().GetName().Version;
+            userDataDir = UserDataManager.GetUserDataFolder();
+
+            PororocaLogger.Instance = new(appVersion: appVersion, userDataDir: userDataDir);
+
             BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
         }
         catch (Exception ex)
         {
             PororocaLogger.Instance?.Log(PororocaLogLevel.Fatal, "Program crashed!", ex);
+            // Line below doesn't throw exceptions, however,
+            // if there's an error whilst logging,
+            // let's print an error on the Console and Debug.
+            var logMsg = PororocaLogger.BuildExceptionMessage(DateTime.Now,
+                appVersion?.ToString(3),
+                PororocaLogLevel.Fatal,
+                "Program crashed!",
+                ex,
+                $"User data dir: {userDataDir?.FullName}");
+            Console.WriteLine(logMsg);
+            Debug.WriteLine(logMsg);
         }
     }
 

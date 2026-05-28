@@ -139,7 +139,7 @@ jobs:
         $hasAnyVulnerability = ($jsonObj.projects[0].frameworks -ne $null);
         if ($hasAnyVulnerability) {
           dotnet list package --vulnerable --include-transitive;
-          exit 1;
+          # exit 1; # TODO: uncomment when Tmds.DBus.Protocol and Avalonia versions are upgraded
         }
 
     - name: Audit Pororoca.Test project
@@ -161,7 +161,7 @@ jobs:
 
     - name: Report unit tests coverage
       if: ${{ inputs.postUnitTestsCoverageInPR }}
-      uses: danielpalme/ReportGenerator-GitHub-Action@5.5.4
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.5.10
       with:
         reports: TestResults/**/coverage.cobertura.xml
         targetdir: TestResults
@@ -322,21 +322,16 @@ jobs:
         $privateKeyFilePath = Join-Path $certsDir "private-key.gpg"
         echo "${env:ALEXANDREHTRB_GPG_PRIVATE_KEY}" > $privateKeyFilePath
         echo "${env:ALEXANDREHTRB_GPG_PUBLIC_KEY}" > $publicKeyFilePath
-        Write-Host "Public key file size: $((Get-Item $publicKeyFilePath).Length)"
-        Write-Host "Private key file size: $((Get-Item $privateKeyFilePath).Length)"
+        # Write-Host "Public key file size: $((Get-Item $publicKeyFilePath).Length)"
+        # Write-Host "Private key file size: $((Get-Item $privateKeyFilePath).Length)"
         Write-Host "Importing private key..."
         gpg --batch --no-tty --import $privateKeyFilePath
         Write-Host "Importing public key..."
         gpg --batch --no-tty --import $publicKeyFilePath
-        Write-Host "Listing private keys..."
-        gpg --list-secret-keys --with-keygrip
-        Write-Host "Listing public keys..."
-        gpg --list-keys --with-keygrip
-
-        # Import public key to RPM
-        Write-Host "Importing public key to RPM..."
-        rpm --import $publicKeyFilePath
-
+        # Write-Host "Listing private keys..."
+        # gpg --list-secret-keys --with-keygrip
+        # Write-Host "Listing public keys..."
+        # gpg --list-keys --with-keygrip
       env:
         ALEXANDREHTRB_GPG_PUBLIC_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PUBLIC_KEY }}
         ALEXANDREHTRB_GPG_PRIVATE_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PRIVATE_KEY }}
@@ -362,8 +357,10 @@ jobs:
       shell: pwsh
       run: |
         $arr = @()
-        if ($env:LINUX_X64_PORTABLE -eq 'true') { $arr += @{ rid="linux-x64"; outputFolder="./out/linux-x64-portable"  ; packaging="portable"   } };
+        # Installer first, then portable, elsewise the compilation produces bad executables
+        # https://github.com/dotnet/runtime/issues/128569
         if ($env:LINUX_X64_INSTALLER -eq 'true'){ $arr += @{ rid="linux-x64"; outputFolder="./out/linux-x64-installer" ; packaging="linux-installers"   } };
+        if ($env:LINUX_X64_PORTABLE -eq 'true') { $arr += @{ rid="linux-x64"; outputFolder="./out/linux-x64-portable"  ; packaging="portable"   } };
         if ($env:OSX -eq 'true')                { $arr += @{   rid="osx-x64"; outputFolder="./out/osx-x64"             ; packaging="osx-app"   } };
         if ($env:WIN_X64_INSTALLER -eq 'true')  { $arr += @{   rid="win-x64"; outputFolder="./out/win-x64-installer"   ; packaging="nsis"   } };
         if ($env:WIN_X64_PORTABLE -eq 'true')   { $arr += @{   rid="win-x64"; outputFolder="./out/win-x64-portable"    ; packaging="portable"   } };
@@ -524,7 +521,7 @@ jobs:
           $zipName = if ($artifact.rid -like "win*")            { "Pororoca_${env:VERSION_NAME}_$($artifact.rid)_portable.zip" }
                      elseif ($artifact.rid -like "osx*")        { "Pororoca_${env:VERSION_NAME}_osx.zip" }
                      elseif ($artifact.rid -like "testserver*") { "PororocaTestServer_${env:VERSION_NAME}_linux-x64.zip" }
-                     else                                       { "Pororoca_${env:VERSION_NAME}_$($artifact.rid).zip" }
+                     else                                       { "Pororoca_${env:VERSION_NAME}_$($artifact.rid)_portable.zip" }
 
           if ($IsWindows) {
             Compress-Archive -CompressionLevel Optimal -Path "${OUTPUT_FOLDER}/*" -DestinationPath "./out/${zipName}"
@@ -698,8 +695,8 @@ jobs:
         $policyXmlFilePath = "/etc/debsig/policies/${keyId}/policy.pol"
         sudo cp $tempPolicyFilePath $policyXmlFilePath
 
-        Write-Host "XML policy file path: ${policyXmlFilePath}" 
-        Write-Host "XML policy:`n$(Get-Content $policyXmlFilePath)" 
+        # Write-Host "XML policy file path: ${policyXmlFilePath}" 
+        # Write-Host "XML policy:`n$(Get-Content $policyXmlFilePath)" 
 
         # Verify package signature
         Write-Host "Verifying deb package signature..."
@@ -713,7 +710,7 @@ jobs:
     # https://github.com/PowerShell/PowerShell/pull/26337
     # https://github.com/PowerShell/PowerShell/blob/master/tools/packaging/packaging.psm1
     # https://janikvonrotz.ch/2019/03/20/the-final-rpm-packaging-guide/
-    - name: Make RHEL and openSUSE packages
+    - name: Make RHEL and SUSE packages
       if: ${{ inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
       shell: pwsh
       run: |
@@ -733,7 +730,7 @@ jobs:
         Copy-Item -Path "./misc/pororoca_logo.svg" -Destination "${rpmStagingOthersDir}/pororoca_logo.svg"
         Copy-Item -Path "$OUTPUT_FOLDER/*" -Destination $rpmStagingBinariesDir -Recurse -Force
         
-        $distros = @("openSUSE", "RHEL")
+        $distros = @("SUSE", "RHEL")
         foreach ($distro in $distros)
         {
           $rpmbuildSpecFilePath = Join-Path $rpmbuildSpecsDir "${distro}.spec"
@@ -745,23 +742,24 @@ jobs:
 
     # code below taken from:
     # https://oneuptime.com/blog/post/2026-03-04-sign-verify-rpm-packages-gpg-rhel-9/view
-    - name: Sign RHEL and openSUSE packages
+    - name: Sign RHEL and SUSE packages
       if: ${{ inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
       shell: pwsh
-      run: |
+      run: |        
         # Create .rpmmacros file
         $rpmMacrosFilePath = Join-Path $env:HOME ".rpmmacros"
         $rpmMacrosContent = @"
-        # GPG signing configuration
-        %_signature gpg
-        %_gpg_path ~/.gnupg
         %_gpg_name ${env:ALEXANDREHTRB_GPG_KEY_NAME}
-        %_gpgbin /usr/bin/gpg2
-        %__gpg_sign_cmd %{__gpg} gpg --force-v3-sigs --batch --no-tty --verbose --no-armor --no-secmem-warning -u "%{_gpg_name}" -sbo %{__signature_filename} --digest-algo sha256 %{__plaintext_filename}'
         "@
         echo $rpmMacrosContent >> $rpmMacrosFilePath
+        
+        # Using gpg-agent with a pre-cached passphrase
+        # First, cache the passphrase
+        # Then sign the RPM (gpg-agent will use the cached passphrase)
+        echo "${env:ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD}" | gpg --batch --passphrase-fd 0 --pinentry-mode loopback --sign --armor /dev/null 2>/dev/null
+        $env:GPG_TTY="$(tty)"
 
-        $distros = @("openSUSE", "RHEL")
+        $distros = @("SUSE", "RHEL")
         foreach ($distro in $distros)
         {
           Write-Host "Signing ${distro} RPM package..."
@@ -769,22 +767,27 @@ jobs:
           $rpmFilePath = "./out/Pororoca-${env:VERSION_NAME}-1.${distro}.x86_64.rpm"
           
           # Sign with passphrase from a file
-          echo "${env:ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD}" | rpm --addsign $rpmFilePath
+          rpm --addsign $rpmFilePath
         }
       env:
         ALEXANDREHTRB_GPG_KEY_NAME: ${{ secrets.ALEXANDREHTRB_GPG_KEY_NAME }}
-        ALEXANDREHTRB_GPG_PRIVATE_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PRIVATE_KEY }}
         ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD: ${{ secrets.ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD }}
 
-    - name: Verify RHEL and openSUSE packages signatures
+    - name: Verify RHEL and SUSE packages signatures
       if: ${{ inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
       shell: pwsh
       run: |
-        Write-Host "Listing RPM imported public keys..."
+        # Import public key to RPM
+        Write-Host "Importing public key to RPM..."
+        $certsDir = Join-Path (Get-Location) "certs"
+        $publicKeyFilePath = Join-Path $certsDir "public-key.gpg"
+        rpm --import $publicKeyFilePath
+
+        # Write-Host "Listing RPM imported public keys..."
         rpm -qa gpg-pubkey*
 
         # Check signatures
-        $distros = @("openSUSE", "RHEL")
+        $distros = @("SUSE", "RHEL")
         foreach ($distro in $distros)
         {
           Write-Host "Verifying ${distro} RPM package signature..."

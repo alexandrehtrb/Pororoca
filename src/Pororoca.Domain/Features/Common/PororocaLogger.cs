@@ -35,32 +35,45 @@ public sealed class PororocaLogger
             DateTime now = DateTime.Now;
             string fileName = $"{now:yyyy-MM-dd}.log";
             string filePath = Path.Combine(this.baseDirPath, fileName);
-            StringBuilder sb = new();
-            sb.Append('#', 20);
-            sb.AppendLine();
-            sb.AppendLine($"Operating system: {RuntimeInformation.OSDescription}");
-            sb.AppendLine($"Architecture: {RuntimeInformation.OSArchitecture}");
-#if INSTALLED_ON_WINDOWS
-            sb.AppendLine($"Installed on Windows? Yes");
-#endif
-#if INSTALLED_ON_LINUX
-            sb.AppendLine($"Installed on Linux? Yes");
-#endif
-            sb.AppendLine($"Program version: {this.appVersion}");
-            sb.AppendLine($"Time: {now:HH:mm:ss}");
-            sb.AppendLine($"Severity: {level}");
-            sb.AppendLine($"Message: {message}");
-            if (ex is not null)
-            {
-                sb.AppendLine($"Exception: {ex.ToString()}");
-            }
-            sb.Append('#', 20);
-            sb.AppendLine();
+            StringBuilder sb = BuildExceptionMessage(now, this.appVersion, level, message, ex);
             File.AppendAllText(filePath, sb.ToString());
         }
         catch
         {
             // Who logs the logger's errors?
         }
+    }
+
+    public static StringBuilder BuildExceptionMessage(DateTime now, string? appVersion, PororocaLogLevel level, string message, Exception? ex, params string[] extrasKvs)
+    {
+        StringBuilder sb = new();
+        sb.Append('#', 20);
+        sb.AppendLine();
+        sb.AppendLine($"Operating system: {RuntimeInformation.OSDescription}");
+        sb.AppendLine($"Architecture: {RuntimeInformation.OSArchitecture}");
+#if INSTALLED_ON_WINDOWS
+            sb.AppendLine($"Installed on Windows? Yes");
+#endif
+#if INSTALLED_ON_LINUX
+            sb.AppendLine($"Installed on Linux? Yes");
+#endif
+        if (extrasKvs != null)
+        {
+            foreach (string extraKv in extrasKvs)
+            {
+                sb.AppendLine(extraKv);
+            }
+        }
+        sb.AppendLine($"Program version: {appVersion}");
+        sb.AppendLine($"Time: {now:HH:mm:ss}");
+        sb.AppendLine($"Severity: {level}");
+        sb.AppendLine($"Message: {message}");
+        if (ex is not null)
+        {
+            sb.AppendLine($"Exception: {ex.ToString()}");
+        }
+        sb.Append('#', 20);
+        sb.AppendLine();
+        return sb;
     }
 }

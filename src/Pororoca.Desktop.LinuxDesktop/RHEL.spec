@@ -1,6 +1,7 @@
 # This spec file is for Red Hat Enterprise Linux (RHEL), Fedora, CentOS, Rocky Linux and Alma Linux.
 
 # .NET Linux required packages: https://github.com/dotnet/core/blob/main/release-notes/8.0/os-packages.md
+# Specifically for RHEL: https://learn.microsoft.com/en-us/dotnet/core/install/linux-fedora?tabs=dotnet8#dependencies
 # Avalonia required packages: https://docs.avaloniaui.net/tools/parcel/packaging-for-linux#avalonia-specific-dependencies
 
 # package compression algorithm and level
@@ -29,6 +30,7 @@ Requires: libstdc++
 Requires: libicu
 Requires: openssl-libs
 Requires: tzdata
+Requires: zlib
 Requires: libICE
 Requires: libSM
 Requires: fontconfig

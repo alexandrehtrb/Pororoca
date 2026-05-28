@@ -183,6 +183,45 @@ public sealed class PororocaTestLibraryHttp1Tests
     }
 
     [Fact]
+    public async Task Should_query_via_headers_with_http_1_1_successfully()
+    {
+        var res = await this.pororocaTest.SendHttpRequestAsync("Query fruits via headers");
+
+        Assert.NotNull(res);
+        Assert.Equal(HttpStatusCode.OK, res.StatusCode);
+        Assert.NotNull(res.GetBodyAsBinary());
+        Assert.NotEmpty(res.GetBodyAsBinary()!);
+
+        var frutas = res.GetJsonBodyAs<Fruta[]>();
+        Assert.NotNull(frutas);
+        Assert.NotEmpty(frutas);
+        var tamara = Assert.Single(frutas);
+        Assert.NotNull(tamara);
+        Assert.Equal(2, tamara.Id);
+        Assert.Equal("Tâmara", tamara.Nome);
+        Assert.Equal("Arecaceae", tamara.Familia);
+        Assert.Equal(282, tamara.Calorias);
+    }
+
+    [Fact]
+    public async Task Should_query_via_body_with_http_1_1_successfully()
+    {
+        var res = await this.pororocaTest.SendHttpRequestAsync("Query fruits via body");
+
+        Assert.NotNull(res);
+        Assert.Equal(HttpStatusCode.OK, res.StatusCode);
+        Assert.NotNull(res.GetBodyAsBinary());
+        Assert.NotEmpty(res.GetBodyAsBinary()!);
+
+        var frutas = res.GetJsonBodyAs<Fruta[]>();
+        Assert.NotNull(frutas);
+        Assert.NotEmpty(frutas);
+        Assert.Equal(2, frutas.Length);
+        Assert.Equal(new(9, "Cacau", "Malvaceae", 73), frutas[0]);
+        Assert.Equal(new(10, "Cupuaçu", "Malvaceae", 53), frutas[1]);
+    }
+
+    [Fact]
     public async Task Should_send_basic_auth_header_with_http_1_1_successfully()
     {
         var res = await this.pororocaTest.SendHttpRequestAsync("BASIC", TestContext.Current.CancellationToken);
@@ -225,3 +264,5 @@ public sealed class PororocaTestLibraryHttp1Tests
         Assert.Contains("Bearer token_development", bodyText);
     }
 }
+
+public record Fruta(int Id, string Nome, string Familia, int Calorias);

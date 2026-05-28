@@ -78,6 +78,8 @@ public sealed partial class HttpRequestsUITest : PororocaUITest
             AppendToLog($"Selecting HTTP version {version}.");
             await HttpRobot.SetHttpVersion(version);
 
+            await TestQueryByHeaders(cancellationToken);
+            await TestQueryByBody(cancellationToken);
             await TestGetTextResponse(cancellationToken);
             await TestGetJsonResponse(cancellationToken);
             await TestGetBinaryResponse(cancellationToken);
@@ -91,6 +93,12 @@ public sealed partial class HttpRequestsUITest : PororocaUITest
             await TestPostFormDataBody(cancellationToken);
             await TestBasicAuth(cancellationToken);
             await TestBearerAuth(cancellationToken);
+        }
+
+        if (OperatingSystem.IsLinux())
+        {
+            // reenable TLS verification
+            await TopMenuRobot.SwitchTlsVerification(true);
         }
     }
 

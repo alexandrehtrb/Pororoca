@@ -329,7 +329,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
                  || currentPage.PageType == typeof(EnvironmentViewModel))
                 {
                     TextEditorConfiguration.InvalidateTextEditorsAreas();
-                    SyntaxHighlighter.InvalidateSyntaxHighlighterTextBoxesTexts();
+                    SyntaxHighlightingTextPresenter.InvalidateSyntaxHighlighterTextBoxesTexts();
                     MainWindowVm.EffectiveVariablesMayHaveChanged++;
                 }
             }

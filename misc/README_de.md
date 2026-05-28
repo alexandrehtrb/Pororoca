@@ -22,8 +22,8 @@ Folge der [Installationsanleitung](https://pororoca.io/docs/installation) und la
 * Vollständige Import-/Export-Kompatibilität zu Postman
 * Deutlich geringerer Speicherverbrauch – zwei- bis dreimal weniger als Postman
 * Mehrsprachige Benutzeroberfläche
+* WebSockets in HTTP/1.1 und HTTP/2
 * Automatisierte Tests
-* WebSockets-Unterstützung
 * Schnelle Startzeit
 * Frei und Open Source
 
@@ -53,7 +53,7 @@ Kontaktiere uns für erweiterten Support, individuelle Anpassungen oder Schulung
 
 ## Spenden
 
-Geldspenden sind sehr wichtig und helfen uns, unsere Kosten zu decken. Mehr dazu in unserer [Ankündigung](https://github.com/alexandrehtrb/Pororoca/discussions/159)!
+Geldspenden helfen uns, die Entwicklung des Projekts fortzusetzen und unsere Ausgaben zu decken. Mehr dazu in unserer [Ankündigung](https://github.com/alexandrehtrb/Pororoca/discussions/159)!
 
 Unsere Spendenkanäle sind:
 

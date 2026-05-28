@@ -883,6 +883,42 @@
           "path": "/env:Envelope/env:Body/xsi:response/xsi:Value/wsa:MyVal2"
         }
       ]
+    },
+    {
+      "requestType": "http",
+      "name": "Query fruits via headers",
+      "httpVersion": 1.1,
+      "httpMethod": "QUERY",
+      "url": "{{BaseUrl}}/test/query/fruits",
+      "headers": [
+        {
+          "enabled": false,
+          "key": "Id",
+          "value": "3"
+        },
+        {
+          "enabled": true,
+          "key": "Nome",
+          "value": "tam"
+        },
+        {
+          "enabled": false,
+          "key": "Familia",
+          "value": "M"
+        }
+      ]
+    },
+    {
+      "requestType": "http",
+      "name": "Query fruits via body",
+      "httpVersion": 1.1,
+      "httpMethod": "QUERY",
+      "url": "{{BaseUrl}}/test/query/fruits",
+      "body": {
+        "mode": "raw",
+        "contentType": "application/json",
+        "rawContent": "{\r\n  \"familia\": \"malva\"\r\n}"
+      }
     }
   ]
 }

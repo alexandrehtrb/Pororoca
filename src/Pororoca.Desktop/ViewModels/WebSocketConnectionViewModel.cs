@@ -361,7 +361,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         NameEditableVm.Icon = EditableTextBlockIcon.DisconnectedWebSocket;
         AddNewWebSocketClientMessageCmd = ReactiveCommand.Create(AddNewWebSocketClientMessage);
         Collection = col;
-        PororocaVarSyntaxHighlightingDefinitionSet = new(Collection);
+        PororocaVarSyntaxHighlightingDefinitionSet = Collection.PororocaVarSyntaxHighlightingDefinitionSet;
         #endregion
 
         #region CONNECTION

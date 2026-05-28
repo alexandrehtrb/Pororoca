@@ -239,7 +239,7 @@ function Generate-PororocaDesktopRelease {
 	}
 	elseif ($isInstallOnLinuxRelease)
 	{
-		# comment blocks below for only Debian or only RPM
+		# comment blocks below for only DEB or only RPM
 		
 		# Debian / Ubuntu
 		Write-Host "Generating Debian package for ${runtime}..." -ForegroundColor DarkYellow
@@ -247,11 +247,11 @@ function Generate-PororocaDesktopRelease {
 		$stopwatch.Stop()
 		Write-Host "Debian package created: ./out/${fullAppReleaseName}.deb ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
 		
-		# RHEL and openSUSE
-		Write-Host "Generating RHEL and openSUSE packages for ${runtime}..." -ForegroundColor DarkYellow
+		# RHEL and SUSE
+		Write-Host "Generating RHEL and SUSE packages for ${runtime}..." -ForegroundColor DarkYellow
 		Pack-ReleaseInRpms -GeneralOutFolder "./out" -InstallerFilesFolder $outputFolder -VersionName $versionName
 		$stopwatch.Stop()
-		Write-Host "RHEL and openSUSE packages created: ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
+		Write-Host "RHEL and SUSE packages created: ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
 	}
 	else
 	{

@@ -5,6 +5,7 @@
     xmlns:vmdg="clr-namespace:Pororoca.Desktop.ViewModels.DataGrids;assembly=Pororoca.Desktop"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="clr-namespace:Pororoca.Desktop.Controls;assembly=Pororoca.Desktop"
     xmlns:converters="clr-namespace:Pororoca.Desktop.Converters;assembly=Pororoca.Desktop"
     mc:Ignorable="d"
     d:DesignWidth="1350"
@@ -89,15 +90,9 @@
         </DataGridTemplateColumn.CellTemplate>
         <DataGridTemplateColumn.CellEditingTemplate>
           <DataTemplate>
-            <TextBox Text="{Binding Value}"/>
-            <!--
-            TODO: Infelizmente não dá para usar o SyntaxHighlightingTextBox ainda
-            porque ele crasha a aplicação quando se pressiona Ctrl + SetaParaEsquerda / SetaParaDireita ou Ctrl + Del.
-            Vamos tentar usá-lo quando migrar para o Avalonia 12.0.
-            -->
-            <!--controls:SyntaxHighlightingTextBox
-              DefinitionSet="{Binding #variablesTableView.((vmdg:VariablesDataGridViewModel)DataContext).PororocaVarSyntaxHighlightingDefinitionSet, Mode=OneWay}"
-              Text="{Binding Value}"/-->
+            <controls:SyntaxHighlightingTextBox
+              DefinitionSet="{Binding #variablesTableView.((vmdg:VariablesDataGridViewModel)DataContext).Collection.PororocaVarSyntaxHighlightingDefinitionSet, Mode=OneWay}"
+              Text="{Binding Value}"/>
           </DataTemplate>
         </DataGridTemplateColumn.CellEditingTemplate>
       </DataGridTemplateColumn>

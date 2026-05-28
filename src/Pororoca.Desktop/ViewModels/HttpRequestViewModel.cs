@@ -268,7 +268,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
         NameEditableVm.Icon = EditableTextBlockIcon.HttpRequest;
         Collection = col;
-        PororocaVarSyntaxHighlightingDefinitionSet = new(Collection);
+        PororocaVarSyntaxHighlightingDefinitionSet = Collection.PororocaVarSyntaxHighlightingDefinitionSet;
         #endregion
 
         #region REQUEST
