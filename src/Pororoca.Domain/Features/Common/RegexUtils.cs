@@ -15,7 +15,7 @@ public static class RegexUtils
     public static List<(T? Pattern, int Start, int Length, Match? Match)> DelimitTextPartsOverRegexes<T>(IEnumerable<T> patternDefinitions, string? input)
         where T : class, IRegexDefiner
     {
-        if (String.IsNullOrEmpty(input))
+        if (string.IsNullOrEmpty(input))
         {
             return [];
         }

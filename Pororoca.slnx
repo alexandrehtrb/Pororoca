@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/sln/">
+    <File Path=".editorconfig" />
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
   </Folder>

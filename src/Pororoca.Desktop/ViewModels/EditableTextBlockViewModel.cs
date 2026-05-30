@@ -12,13 +12,12 @@ public sealed class EditableTextBlockViewModel : ViewModelBase
     [Reactive]
     public bool HasIcon { get; private set; }
 
-    private EditableTextBlockIcon? iconField;
     public EditableTextBlockIcon? Icon
     {
-        get => this.iconField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.iconField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             HasIcon = value is not null;
         }
     }
@@ -26,13 +25,12 @@ public sealed class EditableTextBlockViewModel : ViewModelBase
     [Reactive]
     public string Txt { get; set; }
 
-    private bool isEditingField;
     public bool IsEditing
     {
-        get => this.isEditingField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.isEditingField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             OnIsEditingChanged?.Invoke(value);
         }
     }

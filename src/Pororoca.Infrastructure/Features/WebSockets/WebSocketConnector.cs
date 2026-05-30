@@ -76,7 +76,7 @@ public abstract class WebSocketConnector
     {
         this.collectOnlyReceivedMessages = collectOnlyReceivedMessages;
         this.bufferSize = bufferSize;
-        this.ConnectionState = WebSocketConnectionState.Disconnected;
+        ConnectionState = WebSocketConnectionState.Disconnected;
     }
 
     #region STATE SETTERS
@@ -306,7 +306,7 @@ public abstract class WebSocketConnector
             }
             else
             {
-                buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
+                buffer = ArrayPool<byte>.Shared.Rent(this.bufferSize);
                 msg.BytesStream!.Seek(0, SeekOrigin.Begin);
 
                 while (!cancellationToken.IsCancellationRequested)
@@ -348,7 +348,7 @@ public abstract class WebSocketConnector
     private async Task<WebSocketMessage?> ReceiveMessageAsync(CancellationToken disconnectToken)
     {
         MemoryStream accumulator = new();
-        byte[]? buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
+        byte[]? buffer = ArrayPool<byte>.Shared.Rent(this.bufferSize);
         var bufferAsMemory = buffer.AsMemory();
         ValueWebSocketReceiveResult receivalResult;
 

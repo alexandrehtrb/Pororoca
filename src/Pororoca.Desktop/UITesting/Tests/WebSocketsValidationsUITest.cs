@@ -122,7 +122,7 @@ public sealed partial class WebSocketsValidationsUITest : PororocaUITest
         await WsRobot.ClickOnConnectAndWaitForConnection();
         WsRobot.DisableTlsVerification.AssertIsHidden();
         WsRobot.ConnectionRequestException.AssertIsVisible();
-        WsRobot.ConnectionRequestException.AssertContainsText( "'101' was expected");
+        WsRobot.ConnectionRequestException.AssertContainsText("'101' was expected");
 
         await TopMenuRobot.SwitchTlsVerification(true);
     }

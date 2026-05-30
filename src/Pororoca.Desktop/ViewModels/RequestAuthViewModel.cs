@@ -18,13 +18,12 @@ public sealed class RequestAuthViewModel : ViewModelBase
 
     private readonly Action clearInvalidWarningsCallback;
 
-    private int authModeSelectedIndexField;
     public int AuthModeSelectedIndex
     {
-        get => this.authModeSelectedIndexField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.authModeSelectedIndexField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasValidationProblem)
                 this.clearInvalidWarningsCallback();
@@ -63,26 +62,24 @@ public sealed class RequestAuthViewModel : ViewModelBase
 
     #region REQUEST AUTH CLIENT CERTIFICATE PKCS12
 
-    private string? clientCertificateAuthPkcs12CertificateFilePathField;
     public string? ClientCertificateAuthPkcs12CertificateFilePath
     {
-        get => this.clientCertificateAuthPkcs12CertificateFilePathField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.clientCertificateAuthPkcs12CertificateFilePathField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasClientCertificateAuthPkcs12CertificateFilePathProblem)
                 this.clearInvalidWarningsCallback();
         }
     }
 
-    private string? clientCertificateAuthPkcs12FilePasswordField;
     public string? ClientCertificateAuthPkcs12FilePassword
     {
-        get => this.clientCertificateAuthPkcs12FilePasswordField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.clientCertificateAuthPkcs12FilePasswordField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasClientCertificateAuthPkcs12FilePasswordProblem)
                 this.clearInvalidWarningsCallback();
@@ -101,26 +98,24 @@ public sealed class RequestAuthViewModel : ViewModelBase
 
     #region REQUEST AUTH CLIENT CERTIFICATE PEM
 
-    private string? clientCertificateAuthPemCertificateFilePathField;
     public string? ClientCertificateAuthPemCertificateFilePath
     {
-        get => this.clientCertificateAuthPemCertificateFilePathField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.clientCertificateAuthPemCertificateFilePathField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasClientCertificateAuthPemCertificateFilePathProblem)
                 this.clearInvalidWarningsCallback();
         }
     }
 
-    private string? clientCertificateAuthPemPrivateKeyFilePathField;
     public string? ClientCertificateAuthPemPrivateKeyFilePath
     {
-        get => this.clientCertificateAuthPemPrivateKeyFilePathField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.clientCertificateAuthPemPrivateKeyFilePathField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasClientCertificateAuthPemPrivateKeyFilePathProblem)
                 this.clearInvalidWarningsCallback();
@@ -146,52 +141,48 @@ public sealed class RequestAuthViewModel : ViewModelBase
 
     #region REQUEST AUTH WINDOWS
 
-    private bool windowsAuthUseCurrentUserField;
     public bool WindowsAuthUseCurrentUser
     {
-        get => this.windowsAuthUseCurrentUserField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.windowsAuthUseCurrentUserField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasWindowsAuthLoginProblem || HasWindowsAuthPasswordProblem || HasWindowsAuthDomainProblem)
                 this.clearInvalidWarningsCallback();
         }
     }
 
-    private string? windowsAuthLoginField;
     public string? WindowsAuthLogin
     {
-        get => this.windowsAuthLoginField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.windowsAuthLoginField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasWindowsAuthLoginProblem)
                 this.clearInvalidWarningsCallback();
         }
     }
 
-    private string? windowsAuthPasswordField;
     public string? WindowsAuthPassword
     {
-        get => this.windowsAuthPasswordField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.windowsAuthPasswordField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasWindowsAuthPasswordProblem)
                 this.clearInvalidWarningsCallback();
         }
     }
 
-    private string? windowsAuthDomainField;
     public string? WindowsAuthDomain
     {
-        get => this.windowsAuthDomainField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.windowsAuthDomainField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasWindowsAuthDomainProblem)
                 this.clearInvalidWarningsCallback();

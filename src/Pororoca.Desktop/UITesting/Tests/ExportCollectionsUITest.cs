@@ -220,7 +220,7 @@ public sealed class ExportCollectionsUITest : SaveAndRestoreCollectionUITest
         else
         {
             return string.Empty;
-        };
+        }
     }
 
     private void ClearAllCollections()

@@ -56,11 +56,11 @@ public static class PororocaCollectionExporterTests
         folder1.Requests.Add(req2);
         col.Requests.Add(req1);
         col.Folders.Add(folder1);
-        col.Variables.AddRange(new PororocaVariable[]
-        {
+        col.Variables.AddRange(
+        [
             new(true, "Key1", "Value1", false),
             new(false, "Key2", "Value2", true)
-        });
+        ]);
         var env1 = new PororocaEnvironment("MyEnvironment") with
         {
             IsCurrent = true,

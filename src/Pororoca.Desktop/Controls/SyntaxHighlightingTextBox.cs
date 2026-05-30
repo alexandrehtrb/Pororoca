@@ -46,23 +46,16 @@ public class SyntaxHighlightingTextBox : TextBox
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlightingTextBox, SyntaxHighlightingDefinitionSet?> DefinitionSetProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlightingTextBox, SyntaxHighlightingDefinitionSet?>(nameof(DefinitionSet), t => t.DefinitionSet, (t, ds) => t.DefinitionSet = ds);
 
-    /// <summary>
-    /// Get or set syntax highlighting definition set.
-    /// </summary>
-    private SyntaxHighlightingDefinitionSet? definitionSetField;
     public SyntaxHighlightingDefinitionSet? DefinitionSet
     {
-        get => this.definitionSetField;
+        get;
         set
         {
             VerifyAccess();
-            if (this.definitionSetField == value)
+            if (field == value)
                 return;
-            SetAndRaise(DefinitionSetProperty, ref this.definitionSetField, value);
-            if (this.textPresenter != null)
-            {
-                this.textPresenter.DefinitionSet = this.definitionSetField;
-            }
+            SetAndRaise(DefinitionSetProperty, ref field, value);
+            this.textPresenter?.DefinitionSet = field;
         }
     }
 
@@ -91,10 +84,7 @@ public class SyntaxHighlightingTextBox : TextBox
     {
         base.OnApplyTemplate(e);
         this.textPresenter = e.NameScope.Find<SyntaxHighlightingTextPresenter>("PART_TextPresenter");
-        if (this.textPresenter != null)
-        {
-            this.textPresenter.DefinitionSet = DefinitionSet;
-        }
+        this.textPresenter?.DefinitionSet = DefinitionSet;
     }
 
     /// <summary>
@@ -111,5 +101,5 @@ public class SyntaxHighlightingTextBox : TextBox
 
     private static string RemoveLineBreaks(string s) =>
         s.Replace("\\r\\n", string.Empty)
-         .Replace("\\n", string.Empty);    
+         .Replace("\\n", string.Empty);
 }

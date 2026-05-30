@@ -13,15 +13,14 @@ public sealed class CollectionsGroupViewModel : CollectionOrganizationItemParent
 
     public ObservableCollection<CollectionOrganizationItemViewModel> CollectionGroupSelectedItems { get; }
 
-    private CollectionOrganizationItemViewModel? collectionGroupSelectedItemField;
     public CollectionOrganizationItemViewModel? CollectionGroupSelectedItem
     {
-        get => this.collectionGroupSelectedItemField;
+        get;
         set
         {
             try
             {
-                this.RaiseAndSetIfChanged(ref this.collectionGroupSelectedItemField, value);
+                this.RaiseAndSetIfChanged(ref field, value);
             }
             catch (InvalidOperationException)
             {
@@ -31,7 +30,7 @@ public sealed class CollectionsGroupViewModel : CollectionOrganizationItemParent
                 // The operation still works correctly, nevertheless.
                 // This bug does not happen on Avalonia 11.0.5.
             }
-            this.onCollectionsGroupItemSelected(this.collectionGroupSelectedItemField);
+            this.onCollectionsGroupItemSelected(field);
         }
     }
 

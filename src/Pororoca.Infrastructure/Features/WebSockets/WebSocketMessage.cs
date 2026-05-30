@@ -49,7 +49,7 @@ public sealed class WebSocketMessage
     public WebSocketMessageDirection Direction { get; }
     public WebSocketMessageType Type { get; }
     internal bool DisableCompression { get; }
-    public bool CanBeSavedToFile => this.Bytes != null || this.BytesStream is MemoryStream;
+    public bool CanBeSavedToFile => Bytes != null || BytesStream is MemoryStream;
     public long Length { get; }
 
 #if DEBUG

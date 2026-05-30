@@ -67,13 +67,12 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     public ObservableCollection<string> RequestHttpVersionSelectionOptions { get; }
 
-    private int requestHttpVersionSelectedIndexField;
     public int RequestHttpVersionSelectedIndex
     {
-        get => this.requestHttpVersionSelectedIndexField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.requestHttpVersionSelectedIndexField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasRequestHttpVersionValidationProblem)
                 ClearInvalidRequestWarnings();
@@ -118,13 +117,12 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST BODY RAW
 
-    private string? requestRawContentTypeField;
     public string? RequestRawContentType
     {
-        get => this.requestRawContentTypeField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.requestRawContentTypeField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasRequestRawContentTypeValidationProblem)
                 ClearInvalidRequestWarnings();
@@ -147,13 +145,12 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST BODY FILE
 
-    private string? requestFileContentTypeField;
     public string? RequestFileContentType
     {
-        get => this.requestFileContentTypeField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.requestFileContentTypeField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasRequestFileContentTypeValidationProblem)
                 ClearInvalidRequestWarnings();
@@ -163,13 +160,12 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     [Reactive]
     public bool HasRequestFileContentTypeValidationProblem { get; set; }
 
-    private string? requestBodyFileSrcPathField;
     public string? RequestBodyFileSrcPath
     {
-        get => this.requestBodyFileSrcPathField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.requestBodyFileSrcPathField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasRequestBodyFileSrcPathValidationProblem)
                 ClearInvalidRequestWarnings();
@@ -284,7 +280,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         int reqHttpVersionSelectionIndex = RequestHttpVersionSelectionOptions.IndexOf(FormatHttpVersion(req.HttpVersion));
         RequestHttpVersionSelectedIndex = reqHttpVersionSelectionIndex >= 0 ? reqHttpVersionSelectionIndex : 0;
 
-        RequestHeadersTableVm = new(this.Collection, req.Headers);
+        RequestHeadersTableVm = new(Collection, req.Headers);
         #endregion
 
         #region REQUEST BODY
@@ -318,7 +314,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         #endregion
 
         #region RESPONSE
-        ResponseDataCtx = new(this.Collection);
+        ResponseDataCtx = new(Collection);
         #region RESPONSE CAPTURES
         ResCapturesTableVm = new(req.ResponseCaptures);
         #endregion
@@ -342,16 +338,16 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     protected override void OnNameUpdated(string newName)
     {
         // IMPORTANT: always update list of http reqs paths after renaming HTTP request
-        this.Collection.RemoveHttpRequestPathFromList(GetRequestPathInCollection());
+        Collection.RemoveHttpRequestPathFromList(GetRequestPathInCollection());
         base.OnNameUpdated(newName);
-        this.Collection.AddHttpRequestPathToList(GetRequestPathInCollection());
+        Collection.AddHttpRequestPathToList(GetRequestPathInCollection());
     }
 
     public override void DeleteThis()
     {
         base.DeleteThis();
         // IMPORTANT: always update list of http reqs paths after renaming HTTP request
-        this.Collection.RemoveHttpRequestPathFromList(GetRequestPathInCollection());
+        Collection.RemoveHttpRequestPathFromList(GetRequestPathInCollection());
     }
 
     public string GetRequestPathInCollection()
@@ -445,8 +441,8 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     {
         ClearInvalidRequestWarnings();
         var generatedReq = ToHttpRequest();
-        var effectiveVars = ((IPororocaVariableResolver)this.Collection).GetEffectiveVariables();
-        if (!this.requester.IsValidRequest(effectiveVars, this.Collection.CollectionScopedAuth, generatedReq, out string? errorCode))
+        var effectiveVars = ((IPororocaVariableResolver)Collection).GetEffectiveVariables();
+        if (!this.requester.IsValidRequest(effectiveVars, Collection.CollectionScopedAuth, generatedReq, out string? errorCode))
         {
             this.invalidRequestMessageErrorCode = errorCode;
             ShowInvalidRequestWarnings();
@@ -548,7 +544,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         // Awaiting the request.RequestAsync() here, or simply returning its Task,
         // causes the UI to freeze for a few seconds, especially when performing the first request to a server.
         // That is why we are invoking the code to run in a new thread, like below.
-        return Task.Run(async () => await this.requester.RequestAsync(effectiveVars, this.Collection.CollectionScopedAuth, this.Collection.CollectionScopedRequestHeaders, generatedReq, this.sendRequestCancellationTokenSourceField.Token));
+        return Task.Run(async () => await this.requester.RequestAsync(effectiveVars, Collection.CollectionScopedAuth, Collection.CollectionScopedRequestHeaders, generatedReq, this.sendRequestCancellationTokenSourceField.Token));
     }
 
     #endregion

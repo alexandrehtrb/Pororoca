@@ -6,7 +6,7 @@ public sealed partial class HttpRequestsUITest : PororocaUITest
     {
         if (cancellationToken.IsCancellationRequested)
             return;
-            
+
         await HttpRobot.HttpMethod.Select("QUERY");
         await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/query/fruits");
         await HttpRobot.SetEmptyBody();

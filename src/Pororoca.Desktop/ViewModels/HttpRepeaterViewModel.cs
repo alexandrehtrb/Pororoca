@@ -39,13 +39,12 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
 
     public ObservableCollection<string> CollectionHttpRequestsPaths { get; }
 
-    private string? baseRequestPathField;
     public string? BaseRequestPath
     {
-        get => this.baseRequestPathField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.baseRequestPathField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             InvalidRepetitionErrorCode = null;
         }
     }
@@ -95,13 +94,12 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
     [Reactive]
     public bool HasInputDataFileSrcPathValidationProblem { get; set; }
 
-    private string? invalidRepetitionErrorCodeField;
     private string? InvalidRepetitionErrorCode
     {
-        get => this.invalidRepetitionErrorCodeField;
+        get;
         set
         {
-            this.invalidRepetitionErrorCodeField = value;
+            field = value;
             IsInvalidRepetitionErrorVisible = value is not null;
             InvalidRepetitionError = value switch
             {
@@ -145,13 +143,12 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
 
     #endregion
 
-    private int numberOfRepetitionsToExecuteField;
     public int NumberOfRepetitionsToExecute
     {
-        get => this.numberOfRepetitionsToExecuteField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.numberOfRepetitionsToExecuteField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             InvalidRepetitionErrorCode = null;
             const int minigunThreshold = 600;
             NameEditableVm.Icon = value switch
@@ -162,35 +159,32 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
         }
     }
 
-    private int maximumRateField;
     public int MaximumRate
     {
-        get => this.maximumRateField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.maximumRateField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             InvalidRepetitionErrorCode = null;
         }
     }
 
-    private int maxDopField;
     public int MaxDop
     {
-        get => this.maxDopField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.maxDopField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             InvalidRepetitionErrorCode = null;
         }
     }
 
-    private int delayInMsField;
     public int DelayInMs
     {
-        get => this.delayInMsField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.delayInMsField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             InvalidRepetitionErrorCode = null;
         }
     }
@@ -213,14 +207,12 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
         set => InputDataRawTextDocument = new(value ?? string.Empty);
     }
 
-
-    private string? inputDataFileSrcPathField;
     public string? InputDataFileSrcPath
     {
-        get => this.inputDataFileSrcPathField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.inputDataFileSrcPathField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             InvalidRepetitionErrorCode = null;
         }
     }
@@ -274,13 +266,12 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
 
     private int NumberOfRepetitionsSuccessful { get; set; }
 
-    private HttpRepetitionResultViewModel? selectedRepetitionResultField;
     public HttpRepetitionResultViewModel? SelectedRepetitionResult
     {
-        get => this.selectedRepetitionResultField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.selectedRepetitionResultField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             ResponseDataCtx.UpdateWithResponse(this.nameOfBaseHttpRequestUsed ?? "MyReq", value?.Result?.Response, null);
             InputLineTableVm.Items.Clear();
             if (value?.Result.InputLine is not null)

@@ -16,7 +16,7 @@ public static class PororocaWebSocketClientMessageTranslator
         try
         {
             switch (wsCliMsg.ContentMode)
-            {                
+            {
                 case PororocaWebSocketClientMessageContentMode.Raw:
                     resolvedMsgBytes = GetBytesToSendFromRawContent(effectiveVars, wsCliMsg);
                     resolvedMsgStream = null;

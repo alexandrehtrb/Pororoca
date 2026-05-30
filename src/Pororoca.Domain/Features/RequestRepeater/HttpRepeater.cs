@@ -1,9 +1,9 @@
 using System.Threading.Channels;
+using System.Threading.RateLimiting;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Requester;
-using System.Threading.RateLimiting;
 
 namespace Pororoca.Domain.Features.RequestRepeater;
 
@@ -196,8 +196,8 @@ public static class HttpRepeater
             Window = TimeSpan.FromSeconds(1),
             SegmentsPerWindow = 40, // 25ms each
             AutoReplenishment = true,
-            PermitLimit = (int) rep.MaxRatePerSecond,
-            QueueLimit = (int) rep.MaxDop!
+            PermitLimit = (int)rep.MaxRatePerSecond,
+            QueueLimit = (int)rep.MaxDop!
         });
 
     public static TimeSpan EstimateRemainingTime(int total, int numberExecuted, TimeSpan elapsedSoFar) =>

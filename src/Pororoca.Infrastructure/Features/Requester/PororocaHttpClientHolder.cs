@@ -25,7 +25,7 @@ internal sealed record ClientCertificateUniqueness(
             using var sha512 = SHA512.Create();
             using var fileStream = File.OpenRead(filePath);
 
-            return BitConverter.ToString(sha512.ComputeHash(fileStream)).Replace("-", string.Empty).ToLowerInvariant();
+            return Convert.ToHexStringLower(sha512.ComputeHash(fileStream));
         }
     }
 }

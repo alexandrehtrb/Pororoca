@@ -73,5 +73,5 @@ public class WebSocketClientSideConnector : WebSocketConnector
         ElapsedConnectionTimeSpan = elapsedConnectionTimeSpan;
     }
 
-#endregion
+    #endregion
 }

@@ -22,7 +22,7 @@ public static class PostmanCollectionV21ExporterTests
         PororocaKeyValueParam p2 = new(false, "Key2", "Value2");
 
         // WHEN
-        var hdrs = ConvertToPostmanHeaders(new[] { p1, p2 });
+        var hdrs = ConvertToPostmanHeaders([p1, p2]);
 
         // THEN
         Assert.NotNull(hdrs);

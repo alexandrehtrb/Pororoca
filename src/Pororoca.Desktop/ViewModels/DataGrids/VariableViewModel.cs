@@ -12,13 +12,12 @@ public sealed class VariableViewModel : ViewModelBase
 {
     private readonly ObservableCollection<VariableViewModel> parentCollection;
 
-    private bool enabledField;
     public bool Enabled
     {
-        get => this.enabledField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.enabledField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // GAMBIARRA!!!
             // Precisamos invalidar a renderização dos textos sempre que uma variável muda 
             // de estado (ativa / inativa) ou de chave, pois essas mudanças podem alterar

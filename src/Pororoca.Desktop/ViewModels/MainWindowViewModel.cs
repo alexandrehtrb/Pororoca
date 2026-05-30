@@ -147,13 +147,12 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     #region GLOBAL OPTIONS
 
-    private bool isSslVerificationDisabledField;
     public bool IsSslVerificationDisabled
     {
-        get => this.isSslVerificationDisabledField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.isSslVerificationDisabledField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             PororocaRequester.Singleton.DisableSslVerification = value;
         }
     }
@@ -166,18 +165,13 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     private UserPreferences? UserPrefs { get; set; }
 
-
-    private bool autoCheckForUpdatesEnabledField;
     public bool AutoCheckForUpdatesEnabled
     {
-        get => this.autoCheckForUpdatesEnabledField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.autoCheckForUpdatesEnabledField, value);
-            if (UserPrefs != null)
-            {
-                UserPrefs.AutoCheckForUpdates = value;
-            }
+            this.RaiseAndSetIfChanged(ref field, value);
+            UserPrefs?.AutoCheckForUpdates = value;
         }
     }
 
@@ -409,7 +403,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
             IsTopRightLabelVisible = true;
             await Task.Delay(3000);
             IsTopRightLabelVisible = false;
-        }        
+        }
     }
 
     #endregion

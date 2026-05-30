@@ -144,13 +144,12 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     public ObservableCollection<string> HttpVersionSelectionOptions { get; }
 
-    private int httpVersionSelectedIndexField;
     public int HttpVersionSelectedIndex
     {
-        get => this.httpVersionSelectedIndexField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.httpVersionSelectedIndexField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasHttpVersionValidationProblem)
                 ClearInvalidConnectionWarnings();
@@ -277,13 +276,12 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
     #region EXCHANGED MESSAGES
 
-    private string? invalidClientMessageErrorCodeField;
     private string? InvalidClientMessageErrorCode
     {
-        get => this.invalidClientMessageErrorCodeField;
+        get;
         set
         {
-            this.invalidClientMessageErrorCodeField = value;
+            field = value;
             IsInvalidClientMessageErrorVisible = value is not null;
             InvalidClientMessageError = value switch
             {
@@ -326,13 +324,12 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         set => SelectedExchangedMessageContentTextDocument = new(value ?? string.Empty);
     }
 
-    private WebSocketExchangedMessageViewModel? selectedExchangedMessageField;
     public WebSocketExchangedMessageViewModel? SelectedExchangedMessage
     {
-        get => this.selectedExchangedMessageField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.selectedExchangedMessageField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             OnSelectedExchangedMessageChanged(value);
         }
     }
@@ -402,7 +399,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
 
         #region CONNECTION OPTION HEADERS
 
-        RequestHeadersTableVm = new(this.Collection, ws.Headers);
+        RequestHeadersTableVm = new(Collection, ws.Headers);
 
         #endregion
 
@@ -585,14 +582,14 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
     public async Task ConnectAsync()
     {
         var wsConn = ToWebSocketConnection();
-        var effectiveVars = ((IPororocaVariableResolver)this.Collection).GetEffectiveVariables();
+        var effectiveVars = ((IPororocaVariableResolver)Collection).GetEffectiveVariables();
         bool disableTlsVerification = MainWindowVm.IsSslVerificationDisabled;
 
-        if (!IsValidConnection(effectiveVars, this.Collection.CollectionScopedAuth, wsConn, out var resolvedUri, out string? translateUriErrorCode))
+        if (!IsValidConnection(effectiveVars, Collection.CollectionScopedAuth, wsConn, out var resolvedUri, out string? translateUriErrorCode))
         {
             InvalidConnectionErrorCode = translateUriErrorCode;
         }
-        else if (!TryTranslateConnection(effectiveVars, this.Collection.CollectionScopedAuth, this.Collection.CollectionScopedRequestHeaders, this.httpClientProvider, wsConn, disableTlsVerification,
+        else if (!TryTranslateConnection(effectiveVars, Collection.CollectionScopedAuth, Collection.CollectionScopedRequestHeaders, this.httpClientProvider, wsConn, disableTlsVerification,
                                          out var resolvedClients, out string? translateConnErrorCode))
         {
             InvalidConnectionErrorCode = translateConnErrorCode;
@@ -666,7 +663,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
         else
         {
             var msg = Items[MessageToSendSelectedIndex].ToWebSocketClientMessage();
-            var effectiveVars = ((IPororocaVariableResolver)this.Collection).GetEffectiveVariables();
+            var effectiveVars = ((IPororocaVariableResolver)Collection).GetEffectiveVariables();
             if (!IsValidClientMessage(effectiveVars, msg, out string? validationErrorCode))
             {
                 InvalidClientMessageErrorCode = validationErrorCode;
@@ -781,7 +778,7 @@ public sealed class WebSocketConnectionViewModel : CollectionOrganizationItemPar
                 title: Localizer.Instance.WebSocketExchangedMessages.CouldNotSaveAllToFilesDialogTitle,
                 message: Localizer.Instance.WebSocketExchangedMessages.CouldNotSaveAllToFilesDialogMessage,
                 buttons: ButtonEnum.Ok,
-                onButtonOkClicked: () => {});
+                onButtonOkClicked: () => { });
         }
     }
 

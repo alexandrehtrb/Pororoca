@@ -1,8 +1,8 @@
-using Xunit;
-using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using System.Net;
-using Pororoca.Domain.Tests.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
+using Pororoca.Domain.Tests.Features.Entities.Pororoca.Http;
+using Xunit;
 
 namespace Pororoca.Domain.Tests.Features.Entities.Pororoca.Repetition;
 

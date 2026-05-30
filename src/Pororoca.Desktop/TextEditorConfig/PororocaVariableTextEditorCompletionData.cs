@@ -22,7 +22,7 @@ internal sealed class PororocaVariableTextEditorCompletionData : ICompletionData
 
     // Use this property if you want to show a fancy UIElement in the list.
     private Control? _contentControl;
-    public object Content => _contentControl ??= BuildContentControl();
+    public object Content => this._contentControl ??= BuildContentControl();
 
     // reconsider Description text in the future;
     // just draw a TextBlock like Content above
@@ -30,10 +30,8 @@ internal sealed class PororocaVariableTextEditorCompletionData : ICompletionData
 
     public double Priority { get; } = 0;
 
-    public void Complete(TextArea textArea, ISegment completionSegment, EventArgs insertionRequestEventArgs)
-    {
+    public void Complete(TextArea textArea, ISegment completionSegment, EventArgs insertionRequestEventArgs) =>
         textArea.Document.Replace(completionSegment, Text);
-    }
 
     private Control BuildContentControl()
     {
