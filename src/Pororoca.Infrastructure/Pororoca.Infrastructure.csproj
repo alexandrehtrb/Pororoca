@@ -3,7 +3,7 @@
   <PropertyGroup>
     <RootNamespace>Pororoca.Infrastructure</RootNamespace>
     <IsTrimmable>True</IsTrimmable>
-    <IsAotCompatible>True</IsAotCompatible>
+    <IsAotCompatible>False</IsAotCompatible>
     <!-- Licence also available at https://github.com/alexandrehtrb/Pororoca/LICENCE.md -->
   </PropertyGroup>
 

@@ -73,7 +73,7 @@ internal static class JsonConfiguration
     WriteIndented = true,
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-    UseStringEnumConverter = true,
+    //UseStringEnumConverter = true,
     AllowTrailingCommas = true,
     ReadCommentHandling = JsonCommentHandling.Skip,
     GenerationMode = JsonSourceGenerationMode.Default)]
@@ -94,6 +94,12 @@ internal partial class PororocaJsonSrcGenContext : JsonSerializerContext
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
         };
+
+        // We need to use a custom JsonStringEnumConverter with JsonNamingPolicy.CamelCase.
+        // The default UseStringEnumConverter property serializes as PascalCase.
+        // Unfortunately, this blocks the adoption of NativeAOT, for now.
+        // An alternative is JsonStringEnumConverter<TEnum> for each enum type.
+        options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
 
         if (includeCustomConverters)
         {

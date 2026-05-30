@@ -185,14 +185,14 @@ public sealed class PororocaTestLibraryHttp1Tests
     [Fact]
     public async Task Should_query_via_headers_with_http_1_1_successfully()
     {
-        var res = await this.pororocaTest.SendHttpRequestAsync("Query fruits via headers");
+        var res = await this.pororocaTest.SendHttpRequestAsync("Query fruits via headers", TestContext.Current.CancellationToken);
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
         Assert.NotNull(res.GetBodyAsBinary());
         Assert.NotEmpty(res.GetBodyAsBinary()!);
 
-        var frutas = res.GetJsonBodyAs<Fruta[]>();
+        var frutas = res.GetJsonBodyAs(TestsJsonSrcGenContext.Default.FrutaArray);
         Assert.NotNull(frutas);
         Assert.NotEmpty(frutas);
         var tamara = Assert.Single(frutas);
@@ -206,14 +206,14 @@ public sealed class PororocaTestLibraryHttp1Tests
     [Fact]
     public async Task Should_query_via_body_with_http_1_1_successfully()
     {
-        var res = await this.pororocaTest.SendHttpRequestAsync("Query fruits via body");
+        var res = await this.pororocaTest.SendHttpRequestAsync("Query fruits via body", TestContext.Current.CancellationToken);
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
         Assert.NotNull(res.GetBodyAsBinary());
         Assert.NotEmpty(res.GetBodyAsBinary()!);
 
-        var frutas = res.GetJsonBodyAs<Fruta[]>();
+        var frutas = res.GetJsonBodyAs(TestsJsonSrcGenContext.Default.FrutaArray);
         Assert.NotNull(frutas);
         Assert.NotEmpty(frutas);
         Assert.Equal(2, frutas.Length);
