@@ -1,6 +1,6 @@
 <h1>Pororoca <img style="margin: 4px 0 0 4px" height="32" src="misc/pororoca.png" alt="Pororoca Logo"/></h1>
 
-Read in: [português](README_pt.md) | [русском](README_ru.md) | [italiano](README_it.md) | [中文](README_zh-cn.md) | [Deutsch](README_de.md) | [español](README_es.md) | [polski](README_pl.md) | [ไทย](README_th.md)
+Read in: [português](README_pt.md) | [русском](README_ru.md) | [italiano](README_it.md) | [中文](README_zh-cn.md) | [Deutsch](README_de.md) | [español](README_es.md) | [polski](README_pl.md) | [ไทย](README_th.md) | [Türkçe](README_tr.md)
 
 Pororoca is an HTTP testing tool, inspired by Postman, but with many improvements.
 
@@ -38,6 +38,8 @@ Do you want to learn more about HTTP/2 and HTTP/3? Check this [article](https://
 ## Data protection policy
 
 Pororoca does not sync user data, such as preferences, collections, environments, machine info or telemetry, to any remote server. User preferences and collections are saved as files in the user machine.
+
+Our app is [HIPAA-compliant](https://www.stedi.com/blog/postman-is-probably-not-hipaa-compliant).
 
 ## Design
 

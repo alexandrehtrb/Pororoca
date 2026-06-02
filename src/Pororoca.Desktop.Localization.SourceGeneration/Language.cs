@@ -10,7 +10,8 @@ public enum Language
     German,
     Spanish,
     Polish,
-    Thai
+    Thai,
+    Turkish
 }
 
 public static class LanguageExtensions
@@ -26,6 +27,7 @@ public static class LanguageExtensions
         Language.Spanish => "es-mx",
         Language.Polish => "pl-pl",
         Language.Thai => "th-th",
+        Language.Turkish => "tr-tr",
         _ => "en-gb",
     };
 
@@ -40,6 +42,7 @@ public static class LanguageExtensions
         "es-mx" => Language.Spanish,
         "pl-pl" => Language.Polish,
         "th-th" => Language.Thai,
+        "tr-tr" => Language.Turkish,
         _ => throw new KeyNotFoundException($"No language found for LCID '{lcid}'.")
     };
 }
