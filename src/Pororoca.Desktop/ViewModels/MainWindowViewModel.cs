@@ -117,6 +117,10 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     public bool IsLanguageThai { get; set; }
     public ReactiveCommand<Unit, Unit> SelectLanguageThaiCmd { get; }
 
+    [Reactive]
+    public bool IsLanguageTurkish { get; set; }
+    public ReactiveCommand<Unit, Unit> SelectLanguageTurkishCmd { get; }
+
     #endregion
 
     #region THEMES
@@ -256,6 +260,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         SelectLanguageSpanishCmd = ReactiveCommand.Create(() => SelectLanguage(Language.Spanish));
         SelectLanguagePolishCmd = ReactiveCommand.Create(() => SelectLanguage(Language.Polish));
         SelectLanguageThaiCmd = ReactiveCommand.Create(() => SelectLanguage(Language.Thai));
+        SelectLanguageTurkishCmd = ReactiveCommand.Create(() => SelectLanguage(Language.Turkish));
         #endregion
 
         #region THEMES
@@ -421,6 +426,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         IsLanguageSpanish = lang == Language.Spanish;
         IsLanguagePolish = lang == Language.Polish;
         IsLanguageThai = lang == Language.Thai;
+        IsLanguageTurkish = lang == Language.Turkish;
     }
 
     #endregion

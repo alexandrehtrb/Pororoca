@@ -16,7 +16,7 @@
 %global __requires_exclude liblttng-ust.so.
 
 Name:       Pororoca
-Version:    3.10.0
+Version:    3.10.1
 Release:    1%{?dist}
 Summary:    This is Pororoca, an HTTP testing tool.
 License:    GPLv3+

@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Width="1064"
-    Height="619"
+    Height="632"
     x:Class="Pororoca.Desktop.Views.MainWindow"
     x:CompileBindings="True"
     x:DataType="vm:MainWindowViewModel"
@@ -274,6 +274,20 @@
               <MenuItem.Icon>
                 <Image
                     IsVisible="{Binding IsLanguageThai, Mode=OneWay}"
+                    Classes="MenuItemCheckMark">
+                  <Image.Source>
+                    <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                  </Image.Source>
+                </Image>
+              </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem
+                x:Name="topMenuItemOptionsLanguageTurkish"
+                Header="{Binding i18n.TopMenuLanguage.Turkish, Mode=OneWay}"
+                Command="{Binding SelectLanguageTurkishCmd, Mode=OneWay}">
+              <MenuItem.Icon>
+                <Image
+                    IsVisible="{Binding IsLanguageTurkish, Mode=OneWay}"
                     Classes="MenuItemCheckMark">
                   <Image.Source>
                     <DrawingImage Drawing="{StaticResource IconCheck}"/>

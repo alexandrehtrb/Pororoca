@@ -39,6 +39,8 @@ Quer entender mais sobre HTTP/2 e HTTP/3? Confira este [artigo](https://alexandr
 
 O Pororoca não sincroniza dados de usuário, como preferências, coleções, ambientes, informações da máquina ou telemetria, a qualquer servidor remoto. Preferências de usuário e coleções são salvas em arquivo na máquina local.
 
+O aplicativo atende às exigências de segurança da [HIPAA](https://www.stedi.com/blog/postman-is-probably-not-hipaa-compliant).
+
 ## Design
 
 Logo e arte criados por [Anderson Martins](https://www.behance.net/am-dsgn).
