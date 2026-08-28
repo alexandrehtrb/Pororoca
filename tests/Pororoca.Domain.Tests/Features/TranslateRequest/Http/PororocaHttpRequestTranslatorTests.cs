@@ -486,5 +486,33 @@ public static class PororocaHttpRequestTranslatorTests
         Assert.Equal("{\"query\":\"myGraphQlQuery\",\"variables\":{\"id\":19}}", contentText);
     }
 
+    [Fact]
+    public static async Task Should_resolve_graphql_content_escaping_line_terminators_correctly()
+    {
+        // GIVEN
+        var resolvedBody = MakeGraphQlContent(
+            "query allFruits\r\n{\r\n  fruits\r\n  {\n    id\n    scientific_name\r\n    fruit_name\r\n    family\n  }\r\n}",
+            "{\"id\":\n// some comment inside GraphQL variables\n19}");
+        Dictionary<string, string> resolvedContentHeaders = new(1)
+        {
+            { "Content-Language", "pt-BR" }
+        };
+
+        // WHEN
+        var resolvedReqContent = MakeRequestContent(resolvedBody, resolvedContentHeaders);
+
+        // THEN
+        Assert.NotNull(resolvedReqContent);
+        Assert.True(resolvedReqContent is StringContent);
+        Assert.NotNull(resolvedReqContent!.Headers.ContentType);
+        Assert.Equal("application/json", resolvedReqContent.Headers.ContentType!.MediaType);
+        Assert.Contains("pt-BR", resolvedReqContent!.Headers.ContentLanguage);
+
+        string? contentText = await resolvedReqContent.ReadAsStringAsync();
+        // line terminators should be escaped and explicit
+        string escapedQuery = "query allFruits\\r\\n{\\r\\n  fruits\\r\\n  {\\n    id\\n    scientific_name\\r\\n    fruit_name\\r\\n    family\\n  }\\r\\n}";
+        Assert.Equal("{\"query\":\"" + escapedQuery + "\",\"variables\":{\"id\":19}}", contentText);
+    }
+
     #endregion
 }

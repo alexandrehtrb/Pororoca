@@ -577,6 +577,26 @@
               "variables": "{\r\n    \"id\": {{CocoId}}\r\n}"
             }
           }
+        },
+        {
+          "requestType": "http",
+          "name": "Get Barcelona bike stations",
+          "httpVersion": 2.0,
+          "httpMethod": "POST",
+          "url": "https://barcelona-urban-mobility-graphql-api.netlify.app/graphql",
+          "headers": [
+            {
+              "enabled": true,
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "body": {
+            "mode": "graphQl",
+            "graphQlValues": {
+              "query": "# Welcome to the Barcelona urban mobility GraphQL API\r\n#\r\n# Here is an example query to get you started, \r\n# which gets the closest bike station from the design museum of BCN,\r\n# and the first three metro stations from the L4,\r\n# simply press play to fetch the information, or refer to the docs tab on the left\r\n# to create your own queries ✨\r\n\r\n{\r\n  station: bikeStation(\r\n    findBy: { closest: { latitude: 41.402451, longitude: 2.1880918 } }\r\n  ) {\r\n    ...on BikeStation {\r\n      name\r\n      coordinates {\r\n        longitude\r\n        latitude\r\n      }\r\n      available {\r\n        bikes {\r\n          electrical\r\n          mechanical\r\n        }\r\n      }\r\n    }\r\n  }\r\n  stations: metroStations(\r\n    filterBy: { lineId: 4 }\r\n    first: 3\r\n  ) {\r\n    edges {\r\n      node {\r\n        id\r\n        name\r\n      }\r\n    }\r\n  }\r\n}\r\n"
+            }
+          }
         }
       ]
     },
