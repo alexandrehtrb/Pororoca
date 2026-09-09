@@ -44,7 +44,7 @@ namespace Pororoca.Desktop.Controls;
 /// - in our case, to apply syntax highlighting. 
 /// Private fields and methods are accessed via UnsafeAccessor attributes, available from .NET 8 onwards.
 /// https://www.meziantou.net/accessing-private-members-without-reflection-in-csharp.htm
-/// https://github.com/AvaloniaUI/Avalonia/blob/release/11.0.5/src/Avalonia.Controls/Presenters/TextPresenter.cs
+/// https://github.com/AvaloniaUI/Avalonia/blob/release/12.1.2/src/Avalonia.Controls/Presenters/TextPresenter.cs
 /// TODO: Update this code when migrating to newer versions of Avalonia.
 /// </summary>
 public class SyntaxHighlightingTextPresenter : TextPresenter
@@ -135,9 +135,12 @@ public class SyntaxHighlightingTextPresenter : TextPresenter
         if (!string.IsNullOrEmpty(preeditText))
         {
             var preeditHighlight = new ValueSpan<TextRunProperties>(caretIndex, preeditText.Length,
-                    new GenericTextRunProperties(typeface, FontSize,
-                    foregroundBrush: foreground,
-                    textDecorations: TextDecorations.Underline));
+                    new GenericTextRunProperties(
+                        typeface,
+                        FontSize,
+                        TextDecorations.Underline,
+                        foreground,
+                        fontFeatures: FontFeatures));
 
             if (textStyleOverrides == null)
             {
@@ -150,11 +153,14 @@ public class SyntaxHighlightingTextPresenter : TextPresenter
         }
         else
         {
-            if (length > 0 && SelectionForegroundBrush != null)
+            if (ShowSelectionHighlight && length > 0 && SelectionForegroundBrush != null)
             {
                 var selectionHighlight = new ValueSpan<TextRunProperties>(start, length,
-                    new GenericTextRunProperties(typeface, FontSize,
-                        foregroundBrush: SelectionForegroundBrush));
+                    new GenericTextRunProperties(
+                        typeface,
+                        FontSize,
+                        foregroundBrush: SelectionForegroundBrush,
+                        fontFeatures: FontFeatures));
 
                 if (textStyleOverrides == null)
                 {

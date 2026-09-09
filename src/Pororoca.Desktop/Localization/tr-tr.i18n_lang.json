@@ -288,6 +288,7 @@
   "TopMenuHelp/OpenDocsWebsite": "Belgeleri aç",
   "TopMenuHelp/MakeADonation": "Bağış yap!",
   "TopMenuHelp/RunUITests": "UI testlerini çalıştır (Ctrl+F12)",
+  "TopMenuHelp/StopUITests": "UI testlerini durdur (Ctrl+Shift+F12)",
   "TopMenuHelp/ViewKeyboardShortcuts": "Klavye kısayollarını görüntüle",
   "TopMenuLanguage/English": "İngilizce",
   "TopMenuLanguage/Italian": "İtalyanca",

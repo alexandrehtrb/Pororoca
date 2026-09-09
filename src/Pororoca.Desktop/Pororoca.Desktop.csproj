@@ -99,7 +99,6 @@
     <PackageReference Include="Xaml.Behaviors.Interactions"/>
     <PackageReference Include="AlexandreHtrb.AvaloniaUITest" Condition="'$(Configuration)'=='Debug' Or '$(UITestsEnabled)' == 'true'"/>
     <!--Condition below is needed to remove AvaloniaUI.DiagnosticsSupport package from build output in Release configuration.-->
-    <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Condition="'$(Configuration)' == 'Debug'"/>
     <PackageReference Include="Avalonia.AvaloniaEdit"/>
     <PackageReference Include="AvaloniaEdit.TextMate"/>
     <PackageReference Include="TextMateSharp.Grammars"/>

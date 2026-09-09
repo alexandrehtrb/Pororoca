@@ -508,7 +508,7 @@ public static class PororocaHttpRequestTranslatorTests
         Assert.Equal("application/json", resolvedReqContent.Headers.ContentType!.MediaType);
         Assert.Contains("pt-BR", resolvedReqContent!.Headers.ContentLanguage);
 
-        string? contentText = await resolvedReqContent.ReadAsStringAsync();
+        string? contentText = await resolvedReqContent.ReadAsStringAsync(TestContext.Current.CancellationToken);
         // line terminators should be escaped and explicit
         string escapedQuery = "query allFruits\\r\\n{\\r\\n  fruits\\r\\n  {\\n    id\\n    scientific_name\\r\\n    fruit_name\\r\\n    family\\n  }\\r\\n}";
         Assert.Equal("{\"query\":\"" + escapedQuery + "\",\"variables\":{\"id\":19}}", contentText);

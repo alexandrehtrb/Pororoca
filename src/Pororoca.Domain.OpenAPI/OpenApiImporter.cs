@@ -538,9 +538,9 @@ public static class OpenApiImporter
         if (schema is null)
             return null;
 
-        if (schema.Example is not null)
+        if (schema.Examples is not null && schema.Examples.FirstOrDefault() is JsonNode example)
         {
-            return schema.Example.DeepClone();
+            return example.DeepClone();
         }
         else if (schema.Default is not null)
         {
