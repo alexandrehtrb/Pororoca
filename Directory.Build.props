@@ -1,6 +1,10 @@
 <Project>
   <!-- See https://aka.ms/dotnet/msbuild/customize for more details on customizing your build -->
   <PropertyGroup>
+    <!--
+    don't update to .NET 11 because it breaks support for older hardware 
+    https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-11/runtime
+    -->
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
