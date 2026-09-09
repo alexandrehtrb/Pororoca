@@ -90,6 +90,7 @@
     <PackageReference Include="Avalonia.ReactiveUI"/>
     <PackageReference Include="Avalonia.Themes.Fluent"/>
     <PackageReference Include="Avalonia.Controls.DataGrid"/>
+    <PackageReference Include="Avalonia.Wayland"/>
     <PackageReference Include="Xaml.Behaviors.Interactions.DragAndDrop.DataGrid"/>
     <PackageReference Include="Xaml.Behaviors.Interactions.DragAndDrop"/>
     <PackageReference Include="Xaml.Behaviors.Interactions.Draggable"/>

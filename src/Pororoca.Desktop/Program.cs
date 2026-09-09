@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media;
 using Avalonia.ReactiveUI;
+using Avalonia.Wayland;
 using Pororoca.Desktop.UserData;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.Views;
@@ -52,7 +53,16 @@ public static class Program
 
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
+    {
+        var builder = AppBuilder.Configure<App>().UsePlatformDetect();
+
+        // https://docs.avaloniaui.net/docs/platform-specific-guides/linux#enabling-the-wayland-backend
+        if (OperatingSystem.IsLinux() && Environment.GetEnvironmentVariable("WAYLAND_DISPLAY") is not null)
+        {
+            builder = builder.UseWayland();
+        }
+
+        AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .LogToTrace()
             .UseReactiveUI()
@@ -70,6 +80,9 @@ public static class Program
                     classicDesktopAppLifetime.Exit += SaveUserData;
                 }
             });
+
+        return builder;
+    }
 
     private static void SaveUserData(object? sender, ControlledApplicationLifetimeExitEventArgs e) =>
         ((MainWindowViewModel)MainWindow.Instance!.DataContext!).SaveUserData();

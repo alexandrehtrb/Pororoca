@@ -10,6 +10,7 @@
     <PackageVersion Include="Avalonia.ReactiveUI" Version="11.3.8" />
     <PackageVersion Include="Avalonia.Themes.Fluent" Version="12.1.2" />
     <PackageVersion Include="Avalonia.Controls.DataGrid" Version="12.1.2" />
+    <PackageVersion Include="Avalonia.Wayland" Version="12.1.2" />
     <!-- TODO: stop using Avalonia.Xaml.Behaviors -->
     <PackageVersion Include="Xaml.Behaviors.Interactions.DragAndDrop.DataGrid" Version="12.0.7" />
     <PackageVersion Include="Xaml.Behaviors.Interactions.DragAndDrop" Version="12.0.7" />
