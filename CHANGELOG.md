@@ -1,5 +1,7 @@
 # Changelog
 
+* [3.10.2](#3102-2026-08-28)
+* [3.10.1](#3101-2026-06-03)
 * [3.10.0](#3100-2026-05-27)
 * [3.9.1](#391-2026-03-28)
 * [3.9.0](#390-2025-11-03)
@@ -46,6 +48,28 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.10.2](https://github.com/alexandrehtrb/Pororoca/tree/3.10.2) (2026-08-28)
+
+### Bug Fixes
+
+- Escape line breaks on GraphQL queries. (issue #204)
+
+### Others
+
+- Raised .NET SDK version to 8.0.424.
+
+## [3.10.1](https://github.com/alexandrehtrb/Pororoca/tree/3.10.1) (2026-06-03)
+
+### Features
+
+- Turkish translation. (issue #174, thanks @Wezylnia!)
+- Shorter texts on HTTP repeater buttons for Spanish, German and Polish.
+- Increase initial window size.
+
+### New Contributors
+
+* @Wezylnia made his first contribution in PR #202
 
 ## [3.10.0](https://github.com/alexandrehtrb/Pororoca/tree/3.10.0) (2026-05-27)
 

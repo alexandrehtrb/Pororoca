@@ -207,7 +207,10 @@ public static class PororocaHttpRequestTranslator
             variablesJsonDoc is null ?
             "null" :
             JsonSerializer.Serialize(variablesJsonDoc.RootElement, MinifyingJsonCtx.JsonElement);
-        return "{\"query\":\"" + gqlValues.Query! + "\",\"variables\":" + variablesJsonStr + "}";
+        // The '.Replace("\r", "\\r").Replace("\n", "\\n")' below is important
+        // because line terminators (\r\n and \n) are not allowed in JSONs,
+        // and they need to be escaped and explicit.
+        return "{\"query\":\"" + gqlValues.Query!.Replace("\r", "\\r").Replace("\n", "\\n") + "\",\"variables\":" + variablesJsonStr + "}";
     }
 
     #endregion
