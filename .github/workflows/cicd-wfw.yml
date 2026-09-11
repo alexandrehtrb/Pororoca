@@ -97,7 +97,7 @@ jobs:
     
     - name: Add global.json file dynamically
       shell: pwsh
-      run: ('{"sdk":{"version":"' + ${env:DOTNET_VERSION} + '"}}') >> global.json
+      run: ('{"sdk":{"version":"' + ${env:DOTNET_VERSION} + '"},"test":{"runner":"Microsoft.Testing.Platform"}}') >> global.json
       env:
         DOTNET_VERSION: ${{ inputs.dotnetVersion }}
     
