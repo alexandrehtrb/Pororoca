@@ -37,7 +37,9 @@ public sealed class UITestsRunnerWindowViewModel : ViewModelBase
 {
     public static readonly UITestsRunnerWindowViewModel Instance = new();
 
+#if DEBUG || UI_TESTS_ENABLED
     private CancellationTokenSource? cancellationTokenSource;
+#endif
 
     [Reactive]
     public bool IsRunningTests { get; set; }
@@ -125,9 +127,9 @@ public sealed class UITestsRunnerWindowViewModel : ViewModelBase
 
     internal void RunTests() => Dispatcher.UIThread.Post(async () => await RunTestsAsync());
 
+#if DEBUG || UI_TESTS_ENABLED
     internal void StopTests() => this.cancellationTokenSource?.Cancel();
 
-#if DEBUG || UI_TESTS_ENABLED
     private async Task RunTestsAsync()
     {
         /*
@@ -168,6 +170,8 @@ public sealed class UITestsRunnerWindowViewModel : ViewModelBase
             buttons: ButtonEnum.Ok);
     }
 #else
+    internal void StopTests(){}
+
     private Task RunTestsAsync() => Task.CompletedTask;
 #endif
 }
