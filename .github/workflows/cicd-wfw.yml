@@ -157,13 +157,13 @@ jobs:
       run: dotnet build --no-restore --configuration Release --nologo --verbosity quiet
 
     - name: Execute unit tests
-      run: dotnet test --no-build --configuration Release --nologo --verbosity quiet --filter FullyQualifiedName!~Pororoca.Test.Tests --collect:"XPlat Code Coverage" --results-directory ./TestResults/
+      run: dotnet run --no-build --configuration Release --project ".\tests\Pororoca.Domain.Tests\Pororoca.Domain.Tests.csproj" -- --coverage --coverage-output-format cobertura --results-directory "./TestResults/" --progress off
 
     - name: Report unit tests coverage
       if: ${{ inputs.postUnitTestsCoverageInPR }}
-      uses: danielpalme/ReportGenerator-GitHub-Action@5.5.10
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.5.11
       with:
-        reports: TestResults/**/coverage.cobertura.xml
+        reports: TestResults/*.cobertura.xml
         targetdir: TestResults
         reporttypes: JsonSummary
         assemblyfilters: +Pororoca.Domain;+Pororoca.Domain.OpenAPI        
