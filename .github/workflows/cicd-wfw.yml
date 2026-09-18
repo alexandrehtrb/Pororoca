@@ -75,7 +75,7 @@ on:
         type: string
       cyclonedxDotnetVersion:
         required: false
-        default: '6.1.0'
+        default: '6.2.0'
         type: string
 
 jobs:
@@ -214,7 +214,7 @@ jobs:
     - name: Generate Pororoca.Test SBOM file
       if: ${{ inputs.runCD && inputs.producePororocaTestNuget }}
       shell: pwsh
-      run: dotnet CycloneDX ./src/Pororoca.Test/Pororoca.Test.csproj -o ./out/ -fn sbom_pororoca_test.json -sv $env:NUGET_VERSION_NAME -F UnsafeJson
+      run: dotnet CycloneDX ./src/Pororoca.Test/Pororoca.Test.csproj --configuration Release -o ./out/ -fn sbom_pororoca_test.json -sv $env:NUGET_VERSION_NAME -F UnsafeJson
 
     - name: Pack NuGet
       if: ${{ inputs.runCD && inputs.producePororocaTestNuget }}
@@ -350,7 +350,7 @@ jobs:
     - name: Generate Pororoca.Desktop SBOM file
       if: ${{ inputs.runCD && (inputs.produceDesktopLinuxPortableX64 || inputs.produceDesktopLinuxInstallersX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
       shell: pwsh
-      run: dotnet CycloneDX ./src/Pororoca.Desktop/Pororoca.Desktop.csproj -o ./out/ -fn sbom_pororoca_desktop.json -sv $env:VERSION_NAME -F UnsafeJson
+      run: dotnet CycloneDX ./src/Pororoca.Desktop/Pororoca.Desktop.csproj --configuration Release -o ./out/ -fn sbom_pororoca_desktop.json -sv $env:VERSION_NAME -F UnsafeJson
 
     - name: Generate Pororoca Desktop dlls
       if: ${{ inputs.runCD && (inputs.produceDesktopLinuxPortableX64 || inputs.produceDesktopLinuxInstallersX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
