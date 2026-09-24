@@ -1,15 +1,15 @@
-using System.Reactive;
+using ReactiveUI.Primitives;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItemViewModel
+public sealed partial class WebSocketClientMessageViewModel : CollectionOrganizationItemViewModel
 {
     internal PororocaVariableSyntaxHighlightingDefinitionSet PororocaVarSyntaxHighlightingDefinitionSet { get; }
 
@@ -18,12 +18,12 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
     #region WEBSOCKET REQUEST MESSAGE
 
     [Reactive]
-    public bool DisableCompressionForThisMessage { get; set; }
+    public partial bool DisableCompressionForThisMessage { get; set; }
 
     #region MESSAGE TYPE
 
     [Reactive]
-    public int MessageTypeSelectedIndex { get; set; }
+    public partial int MessageTypeSelectedIndex { get; set; }
 
     public PororocaWebSocketMessageType MessageType =>
         WebSocketMessageTypeMapping.MapIndexToEnum(MessageTypeSelectedIndex);
@@ -33,13 +33,13 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
     #region CONTENT
 
     [Reactive]
-    public int ContentModeSelectedIndex { get; set; }
+    public partial int ContentModeSelectedIndex { get; set; }
 
     public PororocaWebSocketClientMessageContentMode ContentMode =>
         WebSocketClientMessageContentModeMapping.MapIndexToEnum(ContentModeSelectedIndex);
 
     [Reactive]
-    public TextDocument? RawContentTextDocument { get; set; }
+    public partial TextDocument? RawContentTextDocument { get; set; }
 
     public string? RawContent
     {
@@ -48,15 +48,15 @@ public sealed class WebSocketClientMessageViewModel : CollectionOrganizationItem
     }
 
     [Reactive]
-    public int RawContentSyntaxSelectedIndex { get; set; }
+    public partial int RawContentSyntaxSelectedIndex { get; set; }
 
     public PororocaWebSocketMessageRawContentSyntax? RawContentSyntax =>
         WebSocketMessageRawContentSyntaxMapping.MapIndexToEnum(RawContentSyntaxSelectedIndex);
 
     [Reactive]
-    public string? ContentFileSrcPath { get; set; }
+    public partial string? ContentFileSrcPath { get; set; }
 
-    public ReactiveCommand<Unit, Unit> SearchContentFileCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> SearchContentFileCmd { get; }
 
     #endregion
 

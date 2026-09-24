@@ -1,5 +1,5 @@
 using System.Collections.ObjectModel;
-using System.Reactive;
+using ReactiveUI.Primitives;
 using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
@@ -7,25 +7,25 @@ using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.TextEditorConfig;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class EnvironmentsGroupViewModel : CollectionOrganizationItemParentViewModel<EnvironmentViewModel>
+public sealed partial class EnvironmentsGroupViewModel : CollectionOrganizationItemParentViewModel<EnvironmentViewModel>
 {
     #region COLLECTION ORGANIZATION
 
-    public ReactiveCommand<Unit, Unit> AddNewEnvironmentCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> AddNewEnvironmentCmd { get; }
 
     #endregion
 
     #region ENVIRONMENTS GROUP
 
     [Reactive]
-    public string? SelectedEnvironmentName { get; set; }
+    public partial string? SelectedEnvironmentName { get; set; }
 
     public override ObservableCollection<EnvironmentViewModel> Items { get; }
-    public ReactiveCommand<Unit, Unit> ImportEnvironmentsCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> ImportEnvironmentsCmd { get; }
 
     #endregion
 

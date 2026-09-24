@@ -1,15 +1,15 @@
-using System.Reactive;
+using ReactiveUI.Primitives;
 using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.TranslateRequest;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class RequestAuthViewModel : ViewModelBase
+public sealed partial class RequestAuthViewModel : ViewModelBase
 {
     internal CollectionViewModel Collection { get; }
     internal PororocaVariableSyntaxHighlightingDefinitionSet PororocaVarSyntaxHighlightingDefinitionSet { get; }
@@ -38,24 +38,24 @@ public sealed class RequestAuthViewModel : ViewModelBase
     #region REQUEST AUTH BASIC
 
     [Reactive]
-    public string? BasicAuthLogin { get; set; }
+    public partial string? BasicAuthLogin { get; set; }
 
     [Reactive]
-    public string? BasicAuthPassword { get; set; }
+    public partial string? BasicAuthPassword { get; set; }
 
     #endregion
 
     #region REQUEST AUTH BEARER
 
     [Reactive]
-    public string? BearerAuthToken { get; set; }
+    public partial string? BearerAuthToken { get; set; }
 
     #endregion
 
     #region REQUEST AUTH CLIENT CERTIFICATE
 
     [Reactive]
-    public int ClientCertificateTypeSelectedIndex { get; set; }
+    public partial int ClientCertificateTypeSelectedIndex { get; set; }
 
     private PororocaRequestAuthClientCertificateType? ClientCertificateType =>
         ClientCertificateTypeMapping.MapIndexToEnum(ClientCertificateTypeSelectedIndex);
@@ -87,12 +87,12 @@ public sealed class RequestAuthViewModel : ViewModelBase
     }
 
     [Reactive]
-    public bool HasClientCertificateAuthPkcs12CertificateFilePathProblem { get; set; }
+    public partial bool HasClientCertificateAuthPkcs12CertificateFilePathProblem { get; set; }
 
     [Reactive]
-    public bool HasClientCertificateAuthPkcs12FilePasswordProblem { get; set; }
+    public partial bool HasClientCertificateAuthPkcs12FilePasswordProblem { get; set; }
 
-    public ReactiveCommand<Unit, Unit> SearchClientCertificatePkcs12FileCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> SearchClientCertificatePkcs12FileCmd { get; }
 
     #endregion
 
@@ -123,17 +123,17 @@ public sealed class RequestAuthViewModel : ViewModelBase
     }
 
     [Reactive]
-    public bool HasClientCertificateAuthPemCertificateFilePathProblem { get; set; }
+    public partial bool HasClientCertificateAuthPemCertificateFilePathProblem { get; set; }
 
     [Reactive]
-    public bool HasClientCertificateAuthPemPrivateKeyFilePathProblem { get; set; }
+    public partial bool HasClientCertificateAuthPemPrivateKeyFilePathProblem { get; set; }
 
     [Reactive]
-    public string? ClientCertificateAuthPemFilePassword { get; set; }
+    public partial string? ClientCertificateAuthPemFilePassword { get; set; }
 
-    public ReactiveCommand<Unit, Unit> SearchClientCertificatePemCertFileCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> SearchClientCertificatePemCertFileCmd { get; }
 
-    public ReactiveCommand<Unit, Unit> SearchClientCertificatePemPrivateKeyFileCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> SearchClientCertificatePemPrivateKeyFileCmd { get; }
 
     #endregion
 
@@ -190,13 +190,13 @@ public sealed class RequestAuthViewModel : ViewModelBase
     }
 
     [Reactive]
-    public bool HasWindowsAuthLoginProblem { get; set; }
+    public partial bool HasWindowsAuthLoginProblem { get; set; }
 
     [Reactive]
-    public bool HasWindowsAuthPasswordProblem { get; set; }
+    public partial bool HasWindowsAuthPasswordProblem { get; set; }
 
     [Reactive]
-    public bool HasWindowsAuthDomainProblem { get; set; }
+    public partial bool HasWindowsAuthDomainProblem { get; set; }
 
     #endregion
 

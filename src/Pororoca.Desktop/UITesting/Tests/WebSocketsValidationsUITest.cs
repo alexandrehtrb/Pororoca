@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml.MarkupExtensions;
 using Pororoca.Desktop.UITesting.Robots;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;

@@ -1,16 +1,16 @@
-using System.Reactive;
+using ReactiveUI.Primitives;
 using Pororoca.Desktop.Converters;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class EditableTextBlockViewModel : ViewModelBase
+public sealed partial class EditableTextBlockViewModel : ViewModelBase
 {
     private readonly Action<string> onNameUpdated;
 
     [Reactive]
-    public bool HasIcon { get; private set; }
+    public partial bool HasIcon { get; private set; }
 
     public EditableTextBlockIcon? Icon
     {
@@ -23,7 +23,7 @@ public sealed class EditableTextBlockViewModel : ViewModelBase
     }
 
     [Reactive]
-    public string Txt { get; set; }
+    public partial string Txt { get; set; }
 
     public bool IsEditing
     {
@@ -37,7 +37,7 @@ public sealed class EditableTextBlockViewModel : ViewModelBase
 
     public Action<bool>? OnIsEditingChanged { get; set; }
 
-    public ReactiveCommand<Unit, Unit> EditOrApplyTxtChangeCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> EditOrApplyTxtChangeCmd { get; }
 
     public EditableTextBlockViewModel(string name, Action<string> onNameUpdated)
     {

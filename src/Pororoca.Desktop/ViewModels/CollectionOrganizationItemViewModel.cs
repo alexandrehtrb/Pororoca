@@ -1,8 +1,8 @@
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public abstract class CollectionOrganizationItemViewModel : ViewModelBase
+public abstract partial class CollectionOrganizationItemViewModel : ViewModelBase
 {
     // Needs to be object variable, not static
     // TODO: Should it receive this via injection?
@@ -12,16 +12,16 @@ public abstract class CollectionOrganizationItemViewModel : ViewModelBase
     public ICollectionOrganizationItemParentViewModel Parent { get; set; }
 
     [Reactive]
-    public bool CanMoveUp { get; set; }
+    public partial bool CanMoveUp { get; set; }
 
     [Reactive]
-    public bool CanMoveDown { get; set; }
+    public partial bool CanMoveDown { get; set; }
 
     [Reactive]
-    public EditableTextBlockViewModel NameEditableVm { get; set; }
+    public partial EditableTextBlockViewModel NameEditableVm { get; set; }
 
     [Reactive]
-    public string Name { get; set; }
+    public partial string Name { get; set; }
 
     public void MoveThisUp() =>
         Parent.MoveSubItemUp(this);

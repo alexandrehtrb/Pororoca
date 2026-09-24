@@ -5,7 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media;
 using Avalonia.ReactiveUI;
-using Avalonia.Wayland;
+using ReactiveUI.Avalonia; // UseReactiveUI, RegisterReactiveUIViews* (core)
 using Pororoca.Desktop.UserData;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.Views;

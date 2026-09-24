@@ -1,11 +1,11 @@
 using System.Collections.ObjectModel;
-using System.Reactive;
+using ReactiveUI.Primitives;
 using Avalonia.Threading;
 using MsBox.Avalonia.Enums;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 #if DEBUG || UI_TESTS_ENABLED
 using Pororoca.Desktop.UITesting;
 using Pororoca.Desktop.UITesting.Tests;
@@ -13,13 +13,13 @@ using Pororoca.Desktop.UITesting.Tests;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class UITestViewModel : ViewModelBase
+public sealed partial class UITestViewModel : ViewModelBase
 {
     [Reactive]
-    public bool Include { get; set; }
+    public partial bool Include { get; set; }
 
     [Reactive]
-    public string? Name { get; set; }
+    public partial string? Name { get; set; }
 
 #if DEBUG || UI_TESTS_ENABLED
     public UITest Test { get; }
@@ -33,7 +33,7 @@ public sealed class UITestViewModel : ViewModelBase
 #endif
 }
 
-public sealed class UITestsRunnerWindowViewModel : ViewModelBase
+public sealed partial class UITestsRunnerWindowViewModel : ViewModelBase
 {
     public static readonly UITestsRunnerWindowViewModel Instance = new();
 
@@ -42,19 +42,19 @@ public sealed class UITestsRunnerWindowViewModel : ViewModelBase
 #endif
 
     [Reactive]
-    public bool IsRunningTests { get; set; }
+    public partial bool IsRunningTests { get; set; }
 
     [Reactive]
-    public int ActionsWaitingTimeInMs { get; set; }
+    public partial int ActionsWaitingTimeInMs { get; set; }
 
     [Reactive]
-    public bool TestFilesFolderFound { get; set; }
+    public partial bool TestFilesFolderFound { get; set; }
 
     public ObservableCollection<UITestViewModel> Tests { get; }
 
-    public ReactiveCommand<Unit, Unit> SelectAllTestsCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> SelectAllTestsCmd { get; }
 
-    public ReactiveCommand<Unit, Unit> DeselectAllTestsCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> DeselectAllTestsCmd { get; }
 
     private UITestsRunnerWindowViewModel()
     {

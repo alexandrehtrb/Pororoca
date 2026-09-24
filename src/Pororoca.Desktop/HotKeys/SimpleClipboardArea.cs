@@ -1,14 +1,14 @@
 using Pororoca.Desktop.ViewModels;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Pororoca.Desktop.HotKeys;
 
-public abstract class SimpleClipboardArea<T> : ViewModelBase
+public abstract partial class SimpleClipboardArea<T> : ViewModelBase
 {
     protected readonly List<T> copied = new();
 
     [Reactive]
-    public virtual bool CanPaste { get; private set; }
+    public virtual partial bool CanPaste { get; private set; }
 
     public void Clear()
     {

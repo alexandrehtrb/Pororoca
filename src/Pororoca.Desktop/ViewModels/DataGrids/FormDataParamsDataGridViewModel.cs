@@ -1,4 +1,4 @@
-using System.Reactive;
+using ReactiveUI.Primitives;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Domain.Features.Common;
@@ -12,8 +12,8 @@ public sealed class FormDataParamsDataGridViewModel : BaseDataGridWithOperations
     public override SimpleClipboardArea<PororocaHttpRequestFormDataParam> InnerClipboardArea =>
         FormDataParamsClipboardArea.Instance;
 
-    public ReactiveCommand<Unit, Unit> AddNewFormDataTextParamCmd { get; }
-    public ReactiveCommand<Unit, Unit> AddNewFormDataFileParamCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> AddNewFormDataTextParamCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> AddNewFormDataFileParamCmd { get; }
 
     public FormDataParamsDataGridViewModel(List<PororocaHttpRequestFormDataParam>? initialValues = null) : base(initialValues)
     {

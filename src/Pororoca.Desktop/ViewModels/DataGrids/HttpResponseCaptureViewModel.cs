@@ -1,31 +1,31 @@
 using System.Collections.ObjectModel;
-using System.Reactive;
+using ReactiveUI.Primitives;
 using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Pororoca.Desktop.ViewModels.DataGrids;
 
-public sealed class HttpResponseCaptureViewModel : ViewModelBase
+public sealed partial class HttpResponseCaptureViewModel : ViewModelBase
 {
     private readonly ObservableCollection<HttpResponseCaptureViewModel> parentCollection;
 
     public PororocaHttpResponseValueCaptureType CaptureType { get; init; }
 
     [Reactive]
-    public string TargetVariable { get; set; }
+    public partial string TargetVariable { get; set; }
 
     [Reactive]
-    public string Type { get; set; }
+    public partial string Type { get; set; }
 
     [Reactive]
-    public string HeaderNameOrBodyPath { get; set; }
+    public partial string HeaderNameOrBodyPath { get; set; }
 
     [Reactive]
-    public string? CapturedValue { get; set; }
+    public partial string? CapturedValue { get; set; }
 
-    public ReactiveCommand<Unit, Unit> RemoveCaptureCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> RemoveCaptureCmd { get; }
 
     public HttpResponseCaptureViewModel(ObservableCollection<HttpResponseCaptureViewModel> parentCollection, PororocaHttpResponseValueCapture c)
     {

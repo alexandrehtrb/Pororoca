@@ -1,5 +1,5 @@
 using System.Collections.ObjectModel;
-using System.Reactive;
+using ReactiveUI.Primitives;
 using Pororoca.Desktop.Controls;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.VariableResolution;
@@ -7,14 +7,14 @@ using ReactiveUI;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class CollectionViewModel : RequestsAndFoldersParentViewModel, IPororocaVariableResolver
+public sealed partial class CollectionViewModel : RequestsAndFoldersParentViewModel, IPororocaVariableResolver
 {
     #region COLLECTION ORGANIZATION
 
-    public ReactiveCommand<Unit, Unit> ShowCollectionScopedHeadersCmd { get; }
-    public ReactiveCommand<Unit, Unit> AddNewEnvironmentCmd { get; }
-    public ReactiveCommand<Unit, Unit> ImportEnvironmentsCmd { get; }
-    public ReactiveCommand<Unit, Unit> ExportCollectionCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> ShowCollectionScopedHeadersCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> AddNewEnvironmentCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> ImportEnvironmentsCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> ExportCollectionCmd { get; }
 
     #endregion
 

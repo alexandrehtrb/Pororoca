@@ -103,7 +103,11 @@
     <PackageReference Include="Avalonia.AvaloniaEdit"/>
     <PackageReference Include="AvaloniaEdit.TextMate"/>
     <PackageReference Include="TextMateSharp.Grammars"/>
-    <PackageReference Include="ReactiveUI.Fody"/>
+    <PackageReference Include="ReactiveUI.Avalonia"/>
+    <PackageReference Include="ReactiveUI.SourceGenerators">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="MessageBox.Avalonia"/>
   </ItemGroup>
 </Project>

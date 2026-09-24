@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Reactive;
+using ReactiveUI.Primitives;
 using System.Threading.Channels;
 using Avalonia.Threading;
 using AvaloniaEdit.Document;
@@ -16,7 +16,7 @@ using Pororoca.Domain.Features.RequestRepeater;
 using Pororoca.Domain.Features.VariableResolution;
 using Pororoca.Infrastructure.Features.Requester;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using static Pororoca.Desktop.Localization.TimeTextFormatter;
 using static Pororoca.Domain.Features.Common.MimeTypesDetector;
 using static Pororoca.Domain.Features.RequestRepeater.HttpRepeater;
@@ -25,7 +25,7 @@ using static Pororoca.Domain.Features.RequestRepeater.HttpRepetitionValidator;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
+public sealed partial class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
 {
     #region COLLECTION ORGANIZATION
 
@@ -49,7 +49,7 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
         }
     }
 
-    public ReactiveCommand<Unit, Unit> RefreshBaseRequestsListCmd { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> RefreshBaseRequestsListCmd { get; set; }
 
     // TODO: Don't materialize PororocaCollection, instead, extract BaseRequest
     // by searching ViewModels
@@ -57,13 +57,13 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
         Collection.ToCollection().GetHttpRequestByPath(BaseRequestPath);
 
     [Reactive]
-    public string? RepetitionStatusText { get; set; }
+    public partial string? RepetitionStatusText { get; set; }
 
     [Reactive]
-    public int RepetitionTabSelectedIndex { get; set; }
+    public partial int RepetitionTabSelectedIndex { get; set; }
 
     [Reactive]
-    public int RepetitionModeSelectedIndex { get; set; }
+    public partial int RepetitionModeSelectedIndex { get; set; }
 
     public PororocaRepetitionMode RepetitionMode =>
         RepetitionModeMapping.MapIndexToEnum(RepetitionModeSelectedIndex);
@@ -71,28 +71,28 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
     #region REQUEST VALIDATION MESSAGE
 
     [Reactive]
-    public bool IsInvalidRepetitionErrorVisible { get; set; }
+    public partial bool IsInvalidRepetitionErrorVisible { get; set; }
 
     [Reactive]
-    public string? InvalidRepetitionError { get; set; }
+    public partial string? InvalidRepetitionError { get; set; }
 
     [Reactive]
-    public bool HasBaseHttpRequestValidationProblem { get; set; }
+    public partial bool HasBaseHttpRequestValidationProblem { get; set; }
 
     [Reactive]
-    public bool HasDelayValidationProblem { get; set; }
+    public partial bool HasDelayValidationProblem { get; set; }
 
     [Reactive]
-    public bool HasNumberOfRepetitionsValidationProblem { get; set; }
+    public partial bool HasNumberOfRepetitionsValidationProblem { get; set; }
 
     [Reactive]
-    public bool HasMaximumRateValidationProblem { get; set; }
+    public partial bool HasMaximumRateValidationProblem { get; set; }
 
     [Reactive]
-    public bool HasMaxDopValidationProblem { get; set; }
+    public partial bool HasMaxDopValidationProblem { get; set; }
 
     [Reactive]
-    public bool HasInputDataFileSrcPathValidationProblem { get; set; }
+    public partial bool HasInputDataFileSrcPathValidationProblem { get; set; }
 
     private string? InvalidRepetitionErrorCode
     {
@@ -190,16 +190,16 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
     }
 
     [Reactive]
-    public bool RunInBackground { get; set; }
+    public partial bool RunInBackground { get; set; }
 
     [Reactive]
-    public int InputDataTypeSelectedIndex { get; set; }
+    public partial int InputDataTypeSelectedIndex { get; set; }
 
     public PororocaRepetitionInputDataType? InputDataType =>
         RepetitionInputDataTypeMapping.MapIndexToEnum(InputDataTypeSelectedIndex);
 
     [Reactive]
-    public TextDocument? InputDataRawTextDocument { get; set; }
+    public partial TextDocument? InputDataRawTextDocument { get; set; }
 
     public string? InputDataRawText
     {
@@ -218,7 +218,7 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
     }
 
 
-    public ReactiveCommand<Unit, Unit> SearchInputDataFileCmd { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SearchInputDataFileCmd { get; set; }
 
     #endregion
 
@@ -231,10 +231,10 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
     private CancellationTokenSource? cancellationTokenSource;
 
     [Reactive]
-    public string StartOrStopRepetitionButtonText { get; set; }
+    public partial string StartOrStopRepetitionButtonText { get; set; }
 
     [Reactive]
-    public string StartOrStopRepetitionButtonToolTip { get; set; }
+    public partial string StartOrStopRepetitionButtonToolTip { get; set; }
 
     private bool isRepetitionRunningField;
     public bool IsRepetitionRunning
@@ -253,16 +253,16 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
     }
 
     [Reactive]
-    public bool HasFinishedRepetition { get; set; }
+    public partial bool HasFinishedRepetition { get; set; }
 
     [Reactive]
-    public bool ShowRepetitionSuccessfulTip { get; set; }
+    public partial bool ShowRepetitionSuccessfulTip { get; set; }
 
     [Reactive]
-    public ObservableCollection<HttpRepetitionResultViewModel> RepetitionResults { get; set; }
+    public partial ObservableCollection<HttpRepetitionResultViewModel> RepetitionResults { get; set; }
 
     [Reactive]
-    public int NumberOfRepetitionsExecuted { get; set; }
+    public partial int NumberOfRepetitionsExecuted { get; set; }
 
     private int NumberOfRepetitionsSuccessful { get; set; }
 
@@ -285,23 +285,23 @@ public sealed class HttpRepeaterViewModel : CollectionOrganizationItemViewModel
     }
 
     [Reactive]
-    public ReactiveCommand<Unit, Unit> ExportReportCmd { get; set; }
+    public partial ReactiveCommand<RxVoid, RxVoid> ExportReportCmd { get; set; }
 
     [Reactive]
-    public ReactiveCommand<Unit, Unit> SaveAllResponsesCmd { get; set; }
+    public partial ReactiveCommand<RxVoid, RxVoid> SaveAllResponsesCmd { get; set; }
 
     [Reactive]
-    public ReactiveCommand<Unit, Unit> ExportAllLogsCmd { get; set; }
+    public partial ReactiveCommand<RxVoid, RxVoid> ExportAllLogsCmd { get; set; }
 
     #endregion
 
     #region REPETITION RESULT DETAILS
 
     [Reactive]
-    public HttpResponseViewModel ResponseDataCtx { get; set; }
+    public partial HttpResponseViewModel ResponseDataCtx { get; set; }
 
     [Reactive]
-    public VariablesDataGridViewModel InputLineTableVm { get; set; }
+    public partial VariablesDataGridViewModel InputLineTableVm { get; set; }
 
     #endregion
 

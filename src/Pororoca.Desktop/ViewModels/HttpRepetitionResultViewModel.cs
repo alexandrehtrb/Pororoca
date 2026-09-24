@@ -1,21 +1,21 @@
 using System.Net;
 using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using static Pororoca.Domain.Features.Common.HttpStatusCodeFormatter;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class HttpRepetitionResultViewModel : ViewModelBase
+public sealed partial class HttpRepetitionResultViewModel : ViewModelBase
 {
     [Reactive]
-    public int IterationNumber { get; set; }
+    public partial int IterationNumber { get; set; }
 
     [Reactive]
-    public string ErrorDescriptionOrStatusCode { get; set; }
+    public partial string ErrorDescriptionOrStatusCode { get; set; }
 
     [Reactive]
-    public bool Successful { get; set; }
+    public partial bool Successful { get; set; }
 
     public PororocaHttpRepetitionResult Result { get; }
 

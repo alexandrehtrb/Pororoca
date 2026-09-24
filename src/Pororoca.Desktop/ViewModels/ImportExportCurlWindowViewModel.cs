@@ -1,22 +1,22 @@
 using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.ImportRequest;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public abstract class ImportExportCurlWindowViewModel : ViewModelBase
+public abstract partial class ImportExportCurlWindowViewModel : ViewModelBase
 {
     [Reactive]
-    public string? Title { get; set; }
+    public partial string? Title { get; set; }
 
     [Reactive]
-    public bool IsErrorMessageVisible { get; set; }
+    public partial bool IsErrorMessageVisible { get; set; }
 
     [Reactive]
-    public bool IsExporting { get; set; }
+    public partial bool IsExporting { get; set; }
 
     [Reactive]
-    public string? CurlCommandLine { get; set; }
+    public partial string? CurlCommandLine { get; set; }
 
     internal abstract bool RunOkClicked();
 }

@@ -1,18 +1,18 @@
 using System.Collections.ObjectModel;
-using System.Reactive;
+using ReactiveUI.Primitives;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
 
 namespace Pororoca.Desktop.ViewModels.DataGrids;
 
-public sealed class RequestHeaderViewModel : ViewModelBase
+public sealed partial class RequestHeaderViewModel : ViewModelBase
 {
     private readonly ObservableCollection<RequestHeaderViewModel> parentCollection;
 
     [Reactive]
-    public bool Enabled { get; set; }
+    public partial bool Enabled { get; set; }
 
     private string keyField;
     public string Key
@@ -30,9 +30,9 @@ public sealed class RequestHeaderViewModel : ViewModelBase
     }
 
     [Reactive]
-    public string Value { get; set; }
+    public partial string Value { get; set; }
 
-    public ReactiveCommand<Unit, Unit> RemoveParamCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> RemoveParamCmd { get; }
 
     public RequestHeaderViewModel(ObservableCollection<RequestHeaderViewModel> parentCollection, PororocaKeyValueParam p)
         : this(parentCollection, p.Enabled, p.Key, p.Value ?? string.Empty)

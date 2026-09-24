@@ -8,7 +8,6 @@ using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.Entities.Pororoca;
-using Pororoca.Domain.Features.ExportCollection;
 using static Pororoca.Domain.Features.ExportCollection.PororocaCollectionExporter;
 using static Pororoca.Domain.Features.ExportCollection.PostmanCollectionV21Exporter;
 using static Pororoca.Domain.Features.ExportEnvironment.PororocaEnvironmentExporter;

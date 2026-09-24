@@ -1,4 +1,4 @@
-using System.Reactive;
+using ReactiveUI.Primitives;
 using Pororoca.Desktop.ExportImport;
 using ReactiveUI;
 
@@ -8,21 +8,21 @@ public sealed class WelcomeViewModel : ViewModelBase
 {
     public static readonly WelcomeViewModel Instance = new();
 
-    public ReactiveCommand<Unit, Unit> AddNewCollectionCmd =>
+    public ReactiveCommand<RxVoid, RxVoid> AddNewCollectionCmd =>
         MainWindowVm.AddNewCollectionCmd;
 
-    public ReactiveCommand<Unit, Unit> ImportCollectionCmd =>
+    public ReactiveCommand<RxVoid, RxVoid> ImportCollectionCmd =>
         MainWindowVm.ImportCollectionsFromFileCmd;
 
-    public ReactiveCommand<Unit, Unit> ImportOpenAPICmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> ImportOpenAPICmd { get; }
 
-    public ReactiveCommand<Unit, Unit> GoToDocsWebSiteCmd =>
+    public ReactiveCommand<RxVoid, RxVoid> GoToDocsWebSiteCmd =>
         MainWindowVm.OpenDocsInWebBrowserCmd;
 
-    public ReactiveCommand<Unit, Unit> VisitGitHubRepoCmd =>
+    public ReactiveCommand<RxVoid, RxVoid> VisitGitHubRepoCmd =>
         MainWindowVm.OpenGitHubRepoInWebBrowserCmd;
 
-    public ReactiveCommand<Unit, Unit> OpenDonationsPageCmd =>
+    public ReactiveCommand<RxVoid, RxVoid> OpenDonationsPageCmd =>
         MainWindowVm.OpenDonationsPageInWebBrowserCmd;
 
     private WelcomeViewModel() =>

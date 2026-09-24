@@ -1,12 +1,12 @@
 using System.Net;
-using System.Reactive;
+using ReactiveUI.Primitives;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using static Pororoca.Desktop.Localization.TimeTextFormatter;
 using static Pororoca.Domain.Features.Common.HttpStatusCodeFormatter;
 using static Pororoca.Domain.Features.Common.MimeTypesDetector;
@@ -14,7 +14,7 @@ using static Pororoca.Domain.Features.ExportLog.HttpLogExporter;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class HttpResponseViewModel : ViewModelBase
+public sealed partial class HttpResponseViewModel : ViewModelBase
 {
     private PororocaHttpResponse? res;
     private string? environmentUsedForRequest;
@@ -23,16 +23,16 @@ public sealed class HttpResponseViewModel : ViewModelBase
     private IEnumerable<HttpResponseCaptureViewModel>? responseCaptures;
 
     [Reactive]
-    public string? ResponseStatusCodeElapsedTimeTitle { get; set; }
+    public partial string? ResponseStatusCodeElapsedTimeTitle { get; set; }
 
     // To preserve the state of the last shown response tab
     [Reactive]
-    public int ResponseTabsSelectedIndex { get; set; }
+    public partial int ResponseTabsSelectedIndex { get; set; }
 
     public KeyValueParamsDataGridViewModel ResponseHeadersAndTrailersTableVm { get; }
 
     [Reactive]
-    public TextDocument? ResponseRawContentTextDocument { get; set; }
+    public partial TextDocument? ResponseRawContentTextDocument { get; set; }
 
     public string? ResponseRawContent
     {
@@ -41,24 +41,24 @@ public sealed class HttpResponseViewModel : ViewModelBase
     }
 
     [Reactive]
-    public string? ResponseRawContentType { get; set; }
+    public partial string? ResponseRawContentType { get; set; }
 
     [Reactive]
-    public bool IsSaveResponseBodyToFileVisible { get; set; }
+    public partial bool IsSaveResponseBodyToFileVisible { get; set; }
 
     [Reactive]
-    public bool IsExportLogFileVisible { get; set; }
+    public partial bool IsExportLogFileVisible { get; set; }
 
-    public ReactiveCommand<Unit, Unit> SaveResponseBodyToFileCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> SaveResponseBodyToFileCmd { get; }
 
-    public ReactiveCommand<Unit, Unit> ExportLogFileCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> ExportLogFileCmd { get; }
 
     [Reactive]
-    public bool IsDisableTlsVerificationVisible { get; set; }
+    public partial bool IsDisableTlsVerificationVisible { get; set; }
 
-    public ReactiveCommand<Unit, Unit> DisableTlsVerificationCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> DisableTlsVerificationCmd { get; }
 
-    public ReactiveCommand<Unit, Unit> ExecuteCapturesCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> ExecuteCapturesCmd { get; }
 
     public HttpResponseViewModel(CollectionViewModel colVm)
     {

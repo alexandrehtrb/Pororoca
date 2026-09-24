@@ -1,13 +1,13 @@
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Domain.Features.Entities.Pororoca;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class CollectionVariablesViewModel : CollectionOrganizationItemViewModel
+public sealed partial class CollectionVariablesViewModel : CollectionOrganizationItemViewModel
 {
     [Reactive]
-    public VariablesDataGridViewModel VariablesTableVm { get; set; }
+    public partial VariablesDataGridViewModel VariablesTableVm { get; set; }
 
     public CollectionVariablesViewModel(CollectionViewModel parentVm,
                                         PororocaCollection col) : base(parentVm, col.Name) =>

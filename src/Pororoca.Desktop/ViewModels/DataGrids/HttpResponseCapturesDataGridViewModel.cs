@@ -1,4 +1,4 @@
-using System.Reactive;
+using ReactiveUI.Primitives;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using ReactiveUI;
@@ -10,8 +10,8 @@ public sealed class HttpResponseCapturesDataGridViewModel : BaseDataGridWithOper
     public override SimpleClipboardArea<PororocaHttpResponseValueCapture> InnerClipboardArea =>
         HttpResponseCapturesClipboardArea.Instance;
 
-    public ReactiveCommand<Unit, Unit> AddNewHeaderCaptureCmd { get; }
-    public ReactiveCommand<Unit, Unit> AddNewBodyCaptureCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> AddNewHeaderCaptureCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> AddNewBodyCaptureCmd { get; }
 
     public HttpResponseCapturesDataGridViewModel(List<PororocaHttpResponseValueCapture>? initialValues) : base(initialValues)
     {

@@ -1,4 +1,3 @@
-using AlexandreHtrb.AvaloniaUITest;
 using Pororoca.Desktop.UserData;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.Views;

@@ -8,7 +8,7 @@ public sealed class CollectionFolderViewModel : RequestsAndFoldersParentViewMode
     public CollectionFolderViewModel(ICollectionOrganizationItemParentViewModel parentVm,
                                      PororocaCollectionFolder folder) : base(parentVm, folder.Name)
     {
-        NameEditableVm.Icon = EditableTextBlockIcon.Folder;
+        NameEditableVm!.Icon = EditableTextBlockIcon.Folder;
         AddInitialFoldersAndRequests(folder.Folders, folder.Requests);
     }
 

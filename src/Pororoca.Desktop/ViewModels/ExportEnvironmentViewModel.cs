@@ -1,31 +1,31 @@
-using System.Reactive;
+using ReactiveUI.Primitives;
 using Pororoca.Desktop.Converters;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using static Pororoca.Desktop.ExportImport.FileExporterImporter;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class ExportEnvironmentViewModel : ViewModelBase
+public sealed partial class ExportEnvironmentViewModel : ViewModelBase
 {
     public EnvironmentViewModel Environment { get; }
 
     // this property is used only in export collection
     [Reactive]
-    public bool IncludeInCollectionExport { get; set; }
+    public partial bool IncludeInCollectionExport { get; set; }
 
     [Reactive]
-    public bool IncludeSecretVariables { get; set; }
+    public partial bool IncludeSecretVariables { get; set; }
 
     [Reactive]
-    public int ExportFormatSelectedIndex { get; set; }
+    public partial int ExportFormatSelectedIndex { get; set; }
 
     public ExportEnvironmentFormat ExportFormat =>
         ExportEnvironmentFormatMapping.MapIndexToEnum(ExportFormatSelectedIndex);
 
-    public ReactiveCommand<Unit, Unit> GoBackCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> GoBackCmd { get; }
 
-    public ReactiveCommand<Unit, Unit> ExportEnvironmentCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> ExportEnvironmentCmd { get; }
 
     public ExportEnvironmentViewModel(EnvironmentViewModel env)
     {

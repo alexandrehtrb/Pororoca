@@ -1,5 +1,5 @@
 using System.Collections.ObjectModel;
-using System.Reactive;
+using ReactiveUI.Primitives;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using MsBox.Avalonia.Enums;
@@ -7,39 +7,38 @@ using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.Views;
 using Pororoca.Domain.Features.ExportRequest;
-using Pororoca.Infrastructure.Features.Requester;
 using Pororoca.Infrastructure.Features.WebSockets;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Pororoca.Desktop.HotKeys;
 
-public sealed class KeyboardShortcuts : ViewModelBase
+public sealed partial class KeyboardShortcuts : ViewModelBase
 {
     internal static readonly KeyboardShortcuts Instance = new();
 
     [Reactive]
-    public bool HasMultipleItemsSelected { get; set; }
+    public partial bool HasMultipleItemsSelected { get; set; }
 
-    public ReactiveCommand<Unit, Unit> CutCmd { get; }
-    public ReactiveCommand<Unit, Unit> CopyCmd { get; }
-    public ReactiveCommand<Unit, Unit> PasteCmd { get; }
-    public ReactiveCommand<Unit, Unit> DeleteCmd { get; }
-    public ReactiveCommand<Unit, Unit> DuplicateCmd { get; }
-    public ReactiveCommand<Unit, Unit> MoveUpCmd { get; }
-    public ReactiveCommand<Unit, Unit> MoveDownCmd { get; }
-    public ReactiveCommand<Unit, Unit> SwitchToPreviousItemCmd { get; }
-    public ReactiveCommand<Unit, Unit> SwitchToNextItemCmd { get; }
-    public ReactiveCommand<Unit, Unit> ShowHelpCmd { get; }
-    public ReactiveCommand<Unit, Unit> RenameCmd { get; }
-    public ReactiveCommand<Unit, Unit> SendRequestOrConnectWebSocketCmd { get; }
-    public ReactiveCommand<Unit, Unit> CancelRequestOrDisconnectWebSocketCmd { get; }
-    public ReactiveCommand<Unit, Unit> CyclePreviousEnvironmentToActiveCmd { get; }
-    public ReactiveCommand<Unit, Unit> CycleNextEnvironmentToActiveCmd { get; }
-    public ReactiveCommand<Unit, Unit> SaveResponseToFileCmd { get; }
-    public ReactiveCommand<Unit, Unit> ExportHttpLogToFileCmd { get; }
-    public ReactiveCommand<Unit, Unit> FocusOnUrlCmd { get; }
-    public ReactiveCommand<Unit, Unit> ExportAsCurlCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> CutCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> CopyCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> PasteCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> DeleteCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> DuplicateCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> MoveUpCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> MoveDownCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> SwitchToPreviousItemCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> SwitchToNextItemCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> ShowHelpCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> RenameCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> SendRequestOrConnectWebSocketCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> CancelRequestOrDisconnectWebSocketCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> CyclePreviousEnvironmentToActiveCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> CycleNextEnvironmentToActiveCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> SaveResponseToFileCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> ExportHttpLogToFileCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> FocusOnUrlCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> ExportAsCurlCmd { get; }
 
     #region HELPER PROPERTIES
 

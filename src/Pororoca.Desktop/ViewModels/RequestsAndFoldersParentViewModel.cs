@@ -1,5 +1,5 @@
 using System.Collections.ObjectModel;
-using System.Reactive;
+using ReactiveUI.Primitives;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.Views;
@@ -15,11 +15,11 @@ public abstract class RequestsAndFoldersParentViewModel : CollectionOrganization
 {
     #region COLLECTION ORGANIZATION
 
-    public ReactiveCommand<Unit, Unit> AddNewFolderCmd { get; }
-    public ReactiveCommand<Unit, Unit> AddNewHttpRequestCmd { get; }
-    public ReactiveCommand<Unit, Unit> AddNewWebSocketConnectionCmd { get; }
-    public ReactiveCommand<Unit, Unit> AddNewHttpRepeaterCmd { get; }
-    public ReactiveCommand<Unit, Unit> ImportCurlCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> AddNewFolderCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> AddNewHttpRequestCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> AddNewWebSocketConnectionCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> AddNewHttpRepeaterCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> ImportCurlCmd { get; }
 
     #endregion
 

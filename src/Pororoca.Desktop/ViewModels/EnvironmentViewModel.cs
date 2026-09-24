@@ -1,16 +1,16 @@
-using System.Reactive;
+using ReactiveUI.Primitives;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
+public sealed partial class EnvironmentViewModel : CollectionOrganizationItemViewModel
 {
     #region COLLECTION ORGANIZATION
 
-    public ReactiveCommand<Unit, Unit> ExportEnvironmentCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> ExportEnvironmentCmd { get; }
 
     #endregion
 
@@ -20,12 +20,12 @@ public sealed class EnvironmentViewModel : CollectionOrganizationItemViewModel
     private readonly DateTimeOffset envCreatedAt;
 
     [Reactive]
-    public VariablesDataGridViewModel VariablesTableVm { get; set; }
+    public partial VariablesDataGridViewModel VariablesTableVm { get; set; }
 
     [Reactive]
-    public bool IsCurrentEnvironment { get; set; }
+    public partial bool IsCurrentEnvironment { get; set; }
 
-    public ReactiveCommand<Unit, Unit> ToggleEnabledEnvironmentCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> ToggleEnabledEnvironmentCmd { get; }
 
     public ExportEnvironmentViewModel ExportEnvironmentVm { get; }
 

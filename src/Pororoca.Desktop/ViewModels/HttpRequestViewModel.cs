@@ -1,5 +1,5 @@
 using System.Collections.ObjectModel;
-using System.Reactive;
+using ReactiveUI.Primitives;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.Converters;
@@ -13,14 +13,14 @@ using Pororoca.Domain.Features.TranslateRequest;
 using Pororoca.Domain.Features.VariableResolution;
 using Pororoca.Infrastructure.Features.Requester;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
 using static Pororoca.Domain.Features.Common.HttpVersionFormatter;
 using static Pororoca.Domain.Features.Entities.Pororoca.Http.PororocaHttpRequestBody;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
+public sealed partial class HttpRequestViewModel : CollectionOrganizationItemViewModel
 {
     #region REQUEST
 
@@ -30,13 +30,13 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     // To preserve the state of the last shown request tab
     [Reactive]
-    public int RequestTabsSelectedIndex { get; set; }
+    public partial int RequestTabsSelectedIndex { get; set; }
 
     #region REQUEST HTTP METHOD
     public ObservableCollection<string> RequestMethodSelectionOptions { get; }
 
     [Reactive]
-    public int RequestMethodSelectedIndex { get; set; }
+    public partial int RequestMethodSelectedIndex { get; set; }
 
     private HttpMethod RequestMethod =>
         AvailableHttpMethods[RequestMethodSelectedIndex];
@@ -59,7 +59,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     }
 
     [Reactive]
-    public bool HasRequestUrlValidationProblem { get; set; }
+    public partial bool HasRequestUrlValidationProblem { get; set; }
 
     #endregion
 
@@ -83,7 +83,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         AvailableHttpVersionsForHttp[RequestHttpVersionSelectedIndex];
 
     [Reactive]
-    public bool HasRequestHttpVersionValidationProblem { get; set; }
+    public partial bool HasRequestHttpVersionValidationProblem { get; set; }
 
     #endregion
 
@@ -92,10 +92,10 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     private string? invalidRequestMessageErrorCode;
 
     [Reactive]
-    public bool IsInvalidRequestMessageVisible { get; set; }
+    public partial bool IsInvalidRequestMessageVisible { get; set; }
 
     [Reactive]
-    public string? InvalidRequestMessage { get; set; }
+    public partial string? InvalidRequestMessage { get; set; }
 
     #endregion
 
@@ -108,7 +108,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #region REQUEST BODY
 
     [Reactive]
-    public int RequestBodyModeSelectedIndex { get; set; }
+    public partial int RequestBodyModeSelectedIndex { get; set; }
 
     public PororocaHttpRequestBodyMode? RequestBodyMode =>
         HttpRequestBodyModeMapping.MapIndexToEnum(RequestBodyModeSelectedIndex);
@@ -130,10 +130,10 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     }
 
     [Reactive]
-    public bool HasRequestRawContentTypeValidationProblem { get; set; }
+    public partial bool HasRequestRawContentTypeValidationProblem { get; set; }
 
     [Reactive]
-    public TextDocument? RequestRawContentTextDocument { get; set; }
+    public partial TextDocument? RequestRawContentTextDocument { get; set; }
 
     public string? RequestRawContent
     {
@@ -158,7 +158,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     }
 
     [Reactive]
-    public bool HasRequestFileContentTypeValidationProblem { get; set; }
+    public partial bool HasRequestFileContentTypeValidationProblem { get; set; }
 
     public string? RequestBodyFileSrcPath
     {
@@ -173,9 +173,9 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     }
 
     [Reactive]
-    public bool HasRequestBodyFileSrcPathValidationProblem { get; set; }
+    public partial bool HasRequestBodyFileSrcPathValidationProblem { get; set; }
 
-    public ReactiveCommand<Unit, Unit> SearchRequestBodyRawFileCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> SearchRequestBodyRawFileCmd { get; }
 
     #endregion
 
@@ -194,10 +194,10 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #region REQUEST BODY GRAPHQL
 
     [Reactive]
-    public string? RequestBodyGraphQlQuery { get; set; }
+    public partial string? RequestBodyGraphQlQuery { get; set; }
 
     [Reactive]
-    public string? RequestBodyGraphQlVariables { get; set; }
+    public partial string? RequestBodyGraphQlVariables { get; set; }
 
     #endregion
 
@@ -206,7 +206,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #region REQUEST AUTH
 
     [Reactive]
-    public RequestAuthViewModel RequestAuthDataCtx { get; set; }
+    public partial RequestAuthViewModel RequestAuthDataCtx { get; set; }
 
     #endregion
 
@@ -215,10 +215,10 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #region SEND OR CANCEL REQUEST
 
     [Reactive]
-    public string SendOrCancelRequestButtonText { get; set; }
+    public partial string SendOrCancelRequestButtonText { get; set; }
 
     [Reactive]
-    public string SendOrCancelRequestButtonToolTip { get; set; }
+    public partial string SendOrCancelRequestButtonToolTip { get; set; }
 
     private bool isRequestingField;
     public bool IsRequesting
@@ -239,14 +239,14 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     private CancellationTokenSource? sendRequestCancellationTokenSourceField;
 
     [Reactive]
-    public bool IsSendRequestProgressBarVisible { get; set; }
+    public partial bool IsSendRequestProgressBarVisible { get; set; }
 
     #endregion
 
     #region RESPONSE
 
     [Reactive]
-    public HttpResponseViewModel ResponseDataCtx { get; set; }
+    public partial HttpResponseViewModel ResponseDataCtx { get; set; }
 
     #region RESPONSE CAPTURES
 
@@ -262,7 +262,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     {
         #region COLLECTION ORGANIZATION
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
-        NameEditableVm.Icon = EditableTextBlockIcon.HttpRequest;
+        NameEditableVm!.Icon = EditableTextBlockIcon.HttpRequest;
         Collection = col;
         PororocaVarSyntaxHighlightingDefinitionSet = Collection.PororocaVarSyntaxHighlightingDefinitionSet;
         #endregion
