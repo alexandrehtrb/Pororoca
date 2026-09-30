@@ -348,7 +348,7 @@ public static class OpenApiImporterTests
         Assert.Equal(PororocaHttpRequestBodyMode.Raw, req.Body.Mode);
         Assert.Equal("application/json", req.Body.ContentType);
         Assert.Equal(
-            "{\"calendario\":{\"dataDeVencimento\":\"2020-12-31\",\"validadeAposVencimento\":\"30\"},\"loc\":{\"id\":\"789\"},\"devedor\":{\"logradouro\":\"Alameda Souza, Numero 80, Bairro Braz\",\"cidade\":\"Recife\",\"uf\":\"PE\",\"cep\":\"70011750\",\"cpf\":\"12345678909\",\"nome\":\"Francisco da Silva\"},\"valor\":{\"original\":\"123.45\",\"multa\":{\"modalidade\":\"2\",\"valorPerc\":\"15.00\"},\"juros\":{\"modalidade\":\"2\",\"valorPerc\":\"2.00\"},\"desconto\":{\"modalidade\":\"1\",\"descontoDataFixa\":[{\"data\":\"2020-11-30\",\"valorPerc\":\"30.00\"}]}},\"chave\":\"5f84a4c5-c5cb-4599-9f13-7eb4d419dacc\",\"solicitacaoPagador\":\"Cobrança dos serviços prestados.\"}",
+            "{\"calendario\":{\"dataDeVencimento\":\"2020-12-31\",\"validadeAposVencimento\":30},\"loc\":{\"id\":789},\"devedor\":{\"logradouro\":\"Alameda Souza, Numero 80, Bairro Braz\",\"cidade\":\"Recife\",\"uf\":\"PE\",\"cep\":\"70011750\",\"cpf\":\"12345678909\",\"nome\":\"Francisco da Silva\"},\"valor\":{\"original\":\"123.45\",\"multa\":{\"modalidade\":\"2\",\"valorPerc\":\"15.00\"},\"juros\":{\"modalidade\":\"2\",\"valorPerc\":\"2.00\"},\"desconto\":{\"modalidade\":\"1\",\"descontoDataFixa\":[{\"data\":\"2020-11-30\",\"valorPerc\":\"30.00\"}]}},\"chave\":\"5f84a4c5-c5cb-4599-9f13-7eb4d419dacc\",\"solicitacaoPagador\":\"Cobrança dos serviços prestados.\"}",
             MinifyJsonString(req.Body.RawContent!));
 
         #endregion
@@ -496,9 +496,73 @@ public static class OpenApiImporterTests
         Assert.Equal("Search Methods", folder.Name);
         var req = Assert.Single(folder.HttpRequests);
 
-        Assert.Equal("req", req.Name);
+        Assert.Equal("GET", req.Name);
         Assert.Equal("GET", req.HttpMethod);
         Assert.Equal("{{BaseUrl}}/shodan/host/{{ip}}?history=false&minify=false", req.Url);
+        Assert.NotNull(req.Headers);
+        Assert.Empty(req.Headers);
+        Assert.Null(req.Body);
+    }
+
+    [Fact]
+    public static void Should_read_request_from_OpenApi32_with_HTTP_QUERY_method_correctly()
+    {
+        // GIVEN
+        // the original document had API keys in query params,
+        // changed to headers for this test
+        string fileContent = ReadTestFileText("OpenAPI", "openapi_flights.json");
+
+        // WHEN AND THEN
+        Assert.True(TryImportOpenApi(fileContent, out var col));
+
+        // THEN
+        Assert.NotNull(col);
+        Assert.Equal("Flight API", col.Name);
+
+        Assert.NotNull(col.CollectionScopedRequestHeaders);
+        Assert.Empty(col.CollectionScopedRequestHeaders);
+        Assert.Empty(col.Environments);
+        Assert.Empty(col.Folders);
+
+        Assert.IsType<PororocaHttpRequest>(Assert.Single(col.Requests));
+        var req = col.HttpRequests[0];
+
+        Assert.Equal("Search flights with complex criteria", req.Name);
+        Assert.Equal("QUERY", req.HttpMethod);
+        Assert.Equal("{{BaseUrl}}/flights/search", req.Url);
+        Assert.NotNull(req.Headers);
+        Assert.Empty(req.Headers);
+        Assert.NotNull(req.Body);
+        Assert.Equal(PororocaHttpRequestBodyMode.Raw, req.Body.Mode);
+        Assert.Equal("application/json", req.Body.ContentType);
+        Assert.Equal(
+            "{\"origin\":\"ATL\",\"destination\":\"LHR\",\"departureDate\":\"2026-06-15\",\"returnDate\":\"2026-06-25\",\"passengers\":2,\"cabinClass\":\"business\",\"nonStopOnly\":true}",
+            MinifyJsonString(req.Body.RawContent!));
+    }
+
+    [Fact]
+    public static void Should_read_request_with_bare_minimum_correctly()
+    {
+        // GIVEN
+        string fileContent = ReadTestFileText("OpenAPI", "openapi_minimal.json");
+
+        // WHEN AND THEN
+        Assert.True(TryImportOpenApi(fileContent, out var col));
+
+        Assert.NotNull(col);
+        Assert.Equal("Minimal import reproducer", col.Name);
+
+        Assert.NotNull(col.CollectionScopedRequestHeaders);
+        Assert.Empty(col.CollectionScopedRequestHeaders);
+        Assert.Empty(col.Environments);
+        Assert.Empty(col.Folders);
+
+        Assert.IsType<PororocaHttpRequest>(Assert.Single(col.Requests));
+        var req = col.HttpRequests[0];
+
+        Assert.Equal("GET", req.Name);
+        Assert.Equal("GET", req.HttpMethod);
+        Assert.Equal("{{BaseUrl}}/items", req.Url);
         Assert.NotNull(req.Headers);
         Assert.Empty(req.Headers);
         Assert.Null(req.Body);
