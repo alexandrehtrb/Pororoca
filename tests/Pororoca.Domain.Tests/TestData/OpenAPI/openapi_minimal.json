@@ -1,0 +1,18 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Minimal import reproducer",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/items": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  }
+}
