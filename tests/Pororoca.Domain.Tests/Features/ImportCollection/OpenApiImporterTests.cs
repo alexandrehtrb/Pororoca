@@ -1,3 +1,4 @@
+using System.Text.Json.Nodes;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Xunit;
@@ -7,6 +8,148 @@ namespace Pororoca.Domain.Tests.Features.ImportCollection;
 
 public static class OpenApiImporterTests
 {
+    [Theory]
+    [InlineData("3.0.0")]
+    [InlineData("3.1.0")]
+    [InlineData("3.1.1")]
+    public static void Should_import_json_without_components(string version)
+    {
+        string fileContent = $$"""
+            {
+              "openapi": "{{version}}",
+              "info": { "title": "API without components", "version": "1.0" },
+              "servers": [{ "url": "https://example.com/api" }],
+              "paths": {
+                "/items": {
+                  "get": { "summary": "List items", "responses": { "200": { "description": "OK" } } }
+                }
+              }
+            }
+            """;
+
+        Assert.True(TryImportOpenApi(fileContent, out var col));
+        Assert.NotNull(col);
+        Assert.Equal("API without components", col.Name);
+        Assert.Null(col.CollectionScopedAuth);
+        Assert.Empty(col.CollectionScopedRequestHeaders!);
+        Assert.Equal("https://example.com/api", Assert.Single(Assert.Single(col.Environments).Variables).Value);
+        var req = Assert.Single(col.HttpRequests);
+        Assert.Equal("List items", req.Name);
+        Assert.Equal("GET", req.HttpMethod);
+        Assert.Equal("{{BaseUrl}}/items", req.Url);
+        Assert.Empty(req.Headers!);
+        Assert.Null(req.Body);
+    }
+
+    [Fact]
+    public static void Should_import_openapi_31_yaml_without_optional_collections()
+    {
+        string fileContent = """
+            openapi: 3.1.1
+            info:
+              title: Minimal YAML API
+              version: '1.0'
+            paths:
+              /items:
+                get:
+                  responses:
+                    '200':
+                      description: OK
+            """;
+
+        Assert.True(TryImportOpenApi(fileContent, out var col));
+        Assert.NotNull(col);
+        Assert.Empty(col.Environments);
+        Assert.Equal("{{BaseUrl}}/items", Assert.Single(col.HttpRequests).Url);
+    }
+
+    [Fact]
+    public static void Should_generate_body_from_openapi_31_schema()
+    {
+        string fileContent = """
+            {
+              "openapi": "3.1.1",
+              "info": { "title": "Schema API", "version": "1.0" },
+              "paths": {
+                "/items": {
+                  "post": {
+                    "requestBody": {
+                      "content": {
+                        "application/json": {
+                          "schema": {
+                            "type": "object",
+                            "properties": {
+                              "kind": { "const": "item" },
+                              "nullableName": { "type": ["string", "null"] },
+                              "value": { "anyOf": [{ "type": "number" }, { "type": "null" }] },
+                              "state": { "enum": ["active", "inactive"] },
+                              "flags": { "type": "array", "items": { "type": "boolean" } },
+                              "untypedItems": { "type": "array" }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "responses": { "200": { "description": "OK" } }
+                  }
+                }
+              }
+            }
+            """;
+
+        Assert.True(TryImportOpenApi(fileContent, out var col));
+        Assert.NotNull(col);
+        var body = Assert.Single(col.HttpRequests).Body;
+        Assert.NotNull(body);
+        Assert.Equal(PororocaHttpRequestBodyMode.Raw, body.Mode);
+        Assert.Equal("application/json", body.ContentType);
+        Assert.True(JsonNode.DeepEquals(
+            JsonNode.Parse("""{"kind":"item","nullableName":"","value":0,"state":"active","flags":[false],"untypedItems":[]}"""),
+            JsonNode.Parse(body.RawContent!)));
+    }
+
+    [Fact]
+    public static void Should_limit_recursive_array_schema_depth()
+    {
+        string fileContent = """
+            {
+              "openapi": "3.1.1",
+              "info": { "title": "Recursive array API", "version": "1.0" },
+              "components": {
+                "schemas": {
+                  "NestedArray": { "type": "array", "items": { "$ref": "#/components/schemas/NestedArray" } }
+                }
+              },
+              "paths": {
+                "/items": {
+                  "post": {
+                    "requestBody": {
+                      "content": { "application/json": { "schema": { "$ref": "#/components/schemas/NestedArray" } } }
+                    },
+                    "responses": { "200": { "description": "OK" } }
+                  }
+                }
+              }
+            }
+            """;
+
+        Assert.True(TryImportOpenApi(fileContent, out var col));
+        Assert.NotNull(col);
+        var body = Assert.Single(col.HttpRequests).Body;
+        Assert.NotNull(body);
+        Assert.Equal("[[[[[]]]]]", MinifyJsonString(body.RawContent!));
+    }
+
+    [Theory]
+    [InlineData("not an OpenAPI document")]
+    [InlineData("{}")]
+    [InlineData("{\"openapi\":\"9.0.0\",\"info\":{\"title\":\"Unsupported\",\"version\":\"1.0\"}}")]
+    public static void Should_reject_invalid_or_unsupported_documents(string fileContent)
+    {
+        Assert.False(TryImportOpenApi(fileContent, out var col));
+        Assert.Null(col);
+    }
+
     [Fact]
     public static void Should_import_all_requests_from_valid_openapi_without_tags_correctly()
     {
@@ -348,7 +491,7 @@ public static class OpenApiImporterTests
         Assert.Equal(PororocaHttpRequestBodyMode.Raw, req.Body.Mode);
         Assert.Equal("application/json", req.Body.ContentType);
         Assert.Equal(
-            "{\"calendario\":{\"dataDeVencimento\":\"2020-12-31\",\"validadeAposVencimento\":\"30\"},\"loc\":{\"id\":\"789\"},\"devedor\":{\"logradouro\":\"Alameda Souza, Numero 80, Bairro Braz\",\"cidade\":\"Recife\",\"uf\":\"PE\",\"cep\":\"70011750\",\"cpf\":\"12345678909\",\"nome\":\"Francisco da Silva\"},\"valor\":{\"original\":\"123.45\",\"multa\":{\"modalidade\":\"2\",\"valorPerc\":\"15.00\"},\"juros\":{\"modalidade\":\"2\",\"valorPerc\":\"2.00\"},\"desconto\":{\"modalidade\":\"1\",\"descontoDataFixa\":[{\"data\":\"2020-11-30\",\"valorPerc\":\"30.00\"}]}},\"chave\":\"5f84a4c5-c5cb-4599-9f13-7eb4d419dacc\",\"solicitacaoPagador\":\"Cobrança dos serviços prestados.\"}",
+            "{\"calendario\":{\"dataDeVencimento\":\"2020-12-31\",\"validadeAposVencimento\":30},\"loc\":{\"id\":789},\"devedor\":{\"logradouro\":\"Alameda Souza, Numero 80, Bairro Braz\",\"cidade\":\"Recife\",\"uf\":\"PE\",\"cep\":\"70011750\",\"cpf\":\"12345678909\",\"nome\":\"Francisco da Silva\"},\"valor\":{\"original\":\"123.45\",\"multa\":{\"modalidade\":\"2\",\"valorPerc\":\"15.00\"},\"juros\":{\"modalidade\":\"2\",\"valorPerc\":\"2.00\"},\"desconto\":{\"modalidade\":\"1\",\"descontoDataFixa\":[{\"data\":\"2020-11-30\",\"valorPerc\":\"30.00\"}]}},\"chave\":\"5f84a4c5-c5cb-4599-9f13-7eb4d419dacc\",\"solicitacaoPagador\":\"Cobrança dos serviços prestados.\"}",
             MinifyJsonString(req.Body.RawContent!));
 
         #endregion

@@ -1,0 +1,34 @@
+# Files to track with Grouped Timeline extension for VS Code
+# https://marketplace.visualstudio.com/items?itemName=Ignire.grouped-timeline
+
+# Add patterns for files you want included in the Grouped Timeline
+# Use ! to exclude files/folders (anti-patterns)
+# After changing this file, refresh the Grouped Timeline view to see the updates
+
+# Track all files
+*
+*/**
+
+# Common exclusions
+!node_modules/**
+!dist/**
+!out/**
+!build/**
+!.git/**
+!coverage/**
+!.next/**
+!.cache/**
+!tmp/**
+!temp/**
+
+# Exclude common large/binary files
+!*/**.exe
+!*/**.dll
+!*/**.zip
+!*/**.tar
+!*/**.gz
+!*/**.rar
+!*/**.7z
+!*/**.iso
+!*/**.bin
+!*/**.log
