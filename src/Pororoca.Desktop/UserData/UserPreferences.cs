@@ -8,7 +8,7 @@ namespace Pororoca.Desktop.UserData;
 public sealed class UserPreferences
 {
     private static readonly TimeSpan checkForUpdatesPeriod = TimeSpan.FromDays(8);
-    private static readonly TimeSpan askForDonationsPeriod = TimeSpan.FromDays(150); // 5 months
+    private static readonly TimeSpan askForDonationsPeriod = TimeSpan.FromDays(120); // 4 months
 
 #nullable disable warnings
     public string Lang { get; set; }
