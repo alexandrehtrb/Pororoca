@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.10.3](#3103-2026-09-30)
 * [3.10.2](#3102-2026-08-28)
 * [3.10.1](#3101-2026-06-03)
 * [3.10.0](#3100-2026-05-27)
@@ -48,6 +49,18 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.10.3](https://github.com/alexandrehtrb/Pororoca/tree/3.10.3) (2026-09-30)
+
+### Bug Fixes
+
+- Add support for OpenAPI versions 3.1.1 and 3.2.0. (issue #206)
+- Covers more OpenAPI request examples.
+
+### Others
+
+- Raised Microsoft.OpenApi version to 3.10.2.
+- Raised .NET SDK version to 8.0.425.
 
 ## [3.10.2](https://github.com/alexandrehtrb/Pororoca/tree/3.10.2) (2026-08-28)
 
