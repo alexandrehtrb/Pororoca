@@ -53,8 +53,8 @@ public static class OpenApiImporter
                 {
                     foreach (var (operationType, operation) in pathItem.Operations)
                     {
-                        string reqName = operation.Summary ?? operation.Description ?? "req";
                         string httpMethod = operationType.ToString().ToUpper();
+                        string reqName = operation.Summary ?? operation.Description ?? httpMethod;
                         var headers = ReadRequestHeaders(operation.Parameters, colScopedSecHeaders, operation.Security);
                         string queryParameters = ReadQueryParameters(operation.Parameters, operation.Security);
                         // TODO: get cookies
@@ -247,7 +247,7 @@ public static class OpenApiImporter
     private static PororocaHttpRequestBody? ReadRequestBodyFromInput(string? contentType, object? input)
     {
         JsonNode? node = null;
-        if (input is OpenApiSchema schema)
+        if (input is IOpenApiSchema schema)
         {
             node = ConvertOpenApiSchemaToObject(schema, 1);
         }
@@ -524,34 +524,48 @@ public static class OpenApiImporter
 
     private static string PrettySerializeJson(JsonNode? node)
     {
-        if (node is null) return string.Empty;
-        else return JsonSerializer.Serialize(node, PrettifyJsonCtx.JsonNode);
+        if (node is null)
+            return string.Empty;
+        else
+            return JsonSerializer.Serialize(node, PrettifyJsonCtx.JsonNode);
     }
 
     private static JsonNode? ConvertOpenApiSchemaToObject(IOpenApiSchema? schema, int depth)
     {
         // The condition below protects against stack overflow 
         // in case of infinite recursive schemas
-        if (depth >= maxSchemaResolutionDepth)
+        if (schema is null || depth >= maxSchemaResolutionDepth)
             return null;
 
-        if (schema is null)
-            return null;
-
-        if (schema.Examples is not null && schema.Examples.FirstOrDefault() is JsonNode example)
+#pragma warning disable CS0618
+        if (schema.Example is JsonNode example)
+#pragma warning restore CS0618
         {
+            // this is just a protection, in case for some weird reason
+            // the example lies here instead of in schema.Examples below
             return example.DeepClone();
+        }
+        else if (schema.Examples is not null && schema.Examples.FirstOrDefault() is JsonNode example1)
+        {
+            return example1.DeepClone();
         }
         else if (schema.Default is not null)
         {
             return schema.Default.DeepClone();
+        }
+        else if (schema.Const is not null)
+        {
+            // OpenAPI.NET exposes const as text, including unquoted string constants.
+            return schema.Type is null || schema.Type.Value.HasFlag(JsonSchemaType.String) ?
+                JsonValue.Create(schema.Const) :
+                JsonNode.Parse(schema.Const);
         }
         else if (schema.Enum?.Any() == true)
         {
             var firstEnumExample = schema.Enum.First();
             return firstEnumExample.DeepClone();
         }
-        else if (schema.Type == JsonSchemaType.Integer)
+        else if (schema.Type == JsonSchemaType.Integer || schema.Type == JsonSchemaType.Number)
         {
             return 0;
         }
@@ -575,7 +589,7 @@ public static class OpenApiImporter
             var innerObj = ConvertOpenApiSchemaToObject(schema.Items, depth);
             return innerObj is not null ? new JsonArray(innerObj) : [];
         }
-        else if (schema.Type == JsonSchemaType.Object)
+        else if (schema.Type == JsonSchemaType.Object || schema.Properties?.Any() == true)
         {
             JsonObject obj = [];
             if (schema.Properties != null)
@@ -587,6 +601,11 @@ public static class OpenApiImporter
                 }
             }
             return obj;
+        }
+        else if (schema.AnyOf != null || schema.OneOf != null)
+        {
+            var firstAlternative = (schema.AnyOf ?? schema.OneOf)!.FirstOrDefault();
+            return ConvertOpenApiSchemaToObject(firstAlternative, depth + 1);
         }
 
         return null;
