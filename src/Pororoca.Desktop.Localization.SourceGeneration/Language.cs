@@ -11,9 +11,10 @@ public enum Language
     Spanish,
     Polish,
     Thai,
-    Turkish
+    Turkish,
+    Ukrainian
 }
-
+            
 public static class LanguageExtensions
 {
     public static string ToLCID(this Language lang) => lang switch
@@ -28,6 +29,7 @@ public static class LanguageExtensions
         Language.Polish => "pl-pl",
         Language.Thai => "th-th",
         Language.Turkish => "tr-tr",
+        Language.Ukrainian => "uk-ua",
         _ => "en-gb",
     };
 
@@ -43,6 +45,7 @@ public static class LanguageExtensions
         "pl-pl" => Language.Polish,
         "th-th" => Language.Thai,
         "tr-tr" => Language.Turkish,
+        "uk-ua" => Language.Ukrainian,
         _ => throw new KeyNotFoundException($"No language found for LCID '{lcid}'.")
     };
 }
