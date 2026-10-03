@@ -538,6 +538,94 @@ public static class OpenApiImporterTests
         Assert.Equal(
             "{\"origin\":\"ATL\",\"destination\":\"LHR\",\"departureDate\":\"2026-06-15\",\"returnDate\":\"2026-06-25\",\"passengers\":2,\"cabinClass\":\"business\",\"nonStopOnly\":true}",
             MinifyJsonString(req.Body.RawContent!));
+        Assert.Equal([
+            new(PororocaHttpResponseValueCaptureType.Body, "flights", null, "$.flights"),
+        ], req.ResponseCaptures);
+    }
+
+    [Fact]
+    public static void Should_not_add_response_captures_without_successful_response_example()
+    {
+        // GIVEN
+        const string fileContent = """
+            {
+              "openapi": "3.0.0",
+              "info": { "title": "No response example" },
+              "paths": {
+                "/items": {
+                  "get": {
+                    "responses": {
+                      "200": {
+                        "description": "Success",
+                        "content": {
+                          "application/json": {
+                            "schema": {
+                              "type": "object",
+                              "properties": { "id": { "type": "integer" } }
+                            }
+                          }
+                        }
+                      },
+                      "400": {
+                        "description": "Error",
+                        "content": {
+                          "application/json": {
+                            "example": { "message": "bad request" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            """;
+
+        // WHEN
+        Assert.True(TryImportOpenApi(fileContent, out var col));
+
+        // THEN
+        Assert.Null(Assert.Single(col!.HttpRequests).ResponseCaptures);
+    }
+
+    [Fact]
+    public static void Should_add_response_captures_from_successful_response_example()
+    {
+        // GIVEN
+        const string fileContent = """
+            {
+              "openapi": "3.0.0",
+              "info": { "title": "Response example" },
+              "paths": {
+                "/items": {
+                  "get": {
+                    "responses": {
+                      "200": {
+                        "description": "Success",
+                        "content": {
+                          "application/json": {
+                            "example": {
+                              "id": 42,
+                              "name": "item"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            """;
+
+        // WHEN
+        Assert.True(TryImportOpenApi(fileContent, out var col));
+
+        // THEN
+        Assert.Equal([
+            new(PororocaHttpResponseValueCaptureType.Body, "id", null, "$.id"),
+            new(PororocaHttpResponseValueCaptureType.Body, "name", null, "$.name"),
+        ], Assert.Single(col!.HttpRequests).ResponseCaptures);
     }
 
     [Fact]
