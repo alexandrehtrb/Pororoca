@@ -60,6 +60,7 @@ public static class OpenApiImporter
                         // TODO: get cookies
                         var reqBody = ReadRequestBody(operation.RequestBody);
                         var reqAuth = ReadRequestAuth(hasCollectionScopedAuth, operation.Security, doc.Components?.SecuritySchemes);
+                        var responseCaptures = ReadResponseCaptures(operation.Responses);
 
                         PororocaHttpRequest req = new(
                             Name: reqName,
@@ -69,7 +70,7 @@ public static class OpenApiImporter
                             CustomAuth: reqAuth,
                             Headers: headers,
                             Body: reqBody,
-                            ResponseCaptures: null);
+                            ResponseCaptures: responseCaptures);
 
                         PlaceRequestInCollection(col, operation, req);
                     }
@@ -516,6 +517,72 @@ public static class OpenApiImporter
             Name: "Client credentials",
             Folders: [],
             Requests: [getAccessTokenReq]);
+    }
+
+    #endregion
+
+    #region RESPONSE CAPTURES
+
+    private static List<PororocaHttpResponseValueCapture>? ReadResponseCaptures(
+        IDictionary<string, IOpenApiResponse>? responses)
+    {
+        if (responses is null)
+            return null;
+
+        foreach (var (statusCode, response) in responses)
+        {
+            if (!int.TryParse(statusCode, out int status) || status < 200 || status >= 300 || response.Content is null)
+                continue;
+
+            var jsonContent = response.Content.FirstOrDefault(x => x.Key.Contains("json", StringComparison.OrdinalIgnoreCase));
+            if (jsonContent.Value is null)
+                continue;
+
+            JsonNode? example = ReadResponseExample(jsonContent.Value);
+            if (example is JsonObject obj && obj.Count > 0)
+            {
+                return obj.Select(kv => new PororocaHttpResponseValueCapture(
+                    PororocaHttpResponseValueCaptureType.Body,
+                    kv.Key,
+                    null,
+                    "$." + kv.Key)).ToList();
+            }
+        }
+
+        return null;
+    }
+
+    private static JsonNode? ReadResponseExample(IOpenApiMediaType content)
+    {
+        var openApiExample = content.Example ?? content.Examples?.FirstOrDefault().Value.Value;
+        if (openApiExample is JsonNode jsonNode)
+            return jsonNode;
+
+        if (content.Schema is not null && SchemaHasExample(content.Schema, 1))
+            return ConvertOpenApiSchemaToObject(content.Schema, 1);
+
+        return null;
+    }
+
+    private static bool SchemaHasExample(IOpenApiSchema? schema, int depth)
+    {
+        if (schema is null || depth >= maxSchemaResolutionDepth)
+            return false;
+
+#pragma warning disable CS0618
+        if (schema.Example is not null)
+#pragma warning restore CS0618
+        {
+            return true;
+        }
+
+        if (schema.Examples?.Any() == true)
+            return true;
+
+        return schema.Properties?.Values.Any(s => SchemaHasExample(s, depth + 1)) == true
+            || SchemaHasExample(schema.Items, depth + 1)
+            || schema.AnyOf?.Any(s => SchemaHasExample(s, depth + 1)) == true
+            || schema.OneOf?.Any(s => SchemaHasExample(s, depth + 1)) == true;
     }
 
     #endregion
