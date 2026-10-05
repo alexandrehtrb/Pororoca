@@ -91,7 +91,7 @@
   "ExportEnvironment/Title": "Export environment…",
   "Folder/NewFolder": "New folder",
   "GoBack/Hint": "Go back",
-  "HelpDialog/Content": "Keyboard shortcuts\\n\\nF1 - Show help\\nF2 - Rename\\nF4 - Focus on URL\\nF5 - Send request / connect WebSocket\\nF6 - Cancel request / disconnect WebSocket\\nF7 - Set previous environment as active\\nF8 - Set next environment as active\\nF9 - Save response body to file\\nF10 - Export HTTP log to file\\nCtrl+PageUp - Switch to item above in tree\\nCtrl+PageDown - Switch to item below in tree\\nCtrl+Shift+S - Save all\\n\\nFull documentation on site: https://pororoca.io",
+  "HelpDialog/Content": "Keyboard shortcuts\\n\\nF1 - Show help\\nF2 - Rename\\nF4 - Focus on URL\\nF5 - Send request / connect WebSocket\\nF6 - Cancel request / disconnect WebSocket\\nF7 - Set previous environment as active\\nF8 - Set next environment as active\\nF9 - Save response body to file\\nF10 - Export HTTP log to file\\nCtrl+PageUp - Switch to item above in tree\\nCtrl+PageDown - Switch to item below in tree\\nCtrl+X - Cut\\nCtrl+C - Copy\\nCtrl+V - Paste\\nCtrl+D - Duplicate collection\\nDelete - Delete\\nAlt+Up / Alt+Down - Move item up / down\\nCtrl+Shift+S - Save all\\n\\nFull documentation on site: https://pororoca.io",
   "HelpDialog/Title": "Help",
   "HoverVariableInEditor/NoMatchingVariable": "(no matching variable)",
   "HoverVariableInEditor/PredefinedVariable": "(predefined variable)",

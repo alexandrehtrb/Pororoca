@@ -91,7 +91,7 @@
   "ExportEnvironment/Title": "ส่งออกสภาพแวดล้อม…",
   "Folder/NewFolder": "โฟลเดอร์ใหม่",
   "GoBack/Hint": "กลับ",
-  "HelpDialog/Content": "แป้นพิมพ์ลัด\\n\\nF1 - แสดงความช่วยเหลือ\\nF2 - เปลี่ยนชื่อ\\nF4 - โฟกัสที่ URL\\nF5 - ส่งคำขอ / เชื่อมต่อ WebSocket\\nF6 - ยกเลิกคำขอ / ตัดการเชื่อมต่อ WebSocket\\nF7 - ตั้งสภาพแวดล้อมก่อนหน้าเป็นแอคทีฟ\\nF8 - ตั้งสภาพแวดล้อมถัดไปเป็นแอคทีฟ\\nF9 - บันทึก response body เป็นไฟล์\\nF10 - ส่งออก HTTP log เป็นไฟล์\\nCtrl+PageUp - สลับไปรายการข้างบนในต้นไม้\\nCtrl+PageDown - สลับไปรายการข้างล่างในต้นไม้\\nCtrl+Shift+S - บันทึกทั้งหมด\\n\\nเอกสารเต็มที่เว็บไซต์: https://pororoca.io",
+  "HelpDialog/Content": "แป้นพิมพ์ลัด\\n\\nF1 - แสดงความช่วยเหลือ\\nF2 - เปลี่ยนชื่อ\\nF4 - โฟกัสที่ URL\\nF5 - ส่งคำขอ / เชื่อมต่อ WebSocket\\nF6 - ยกเลิกคำขอ / ตัดการเชื่อมต่อ WebSocket\\nF7 - ตั้งสภาพแวดล้อมก่อนหน้าเป็นแอคทีฟ\\nF8 - ตั้งสภาพแวดล้อมถัดไปเป็นแอคทีฟ\\nF9 - บันทึก response body เป็นไฟล์\\nF10 - ส่งออก HTTP log เป็นไฟล์\\nCtrl+PageUp - สลับไปรายการข้างบนในต้นไม้\\nCtrl+PageDown - สลับไปรายการข้างล่างในต้นไม้\\nCtrl+X - ตัด\\nCtrl+C - คัดลอก\\nCtrl+V - วาง\\nCtrl+D - ทำสำเนาคอลเลกชัน\\nDelete - ลบ\\nAlt+Up / Alt+Down - ย้ายรายการขึ้น / ลง\\nCtrl+Shift+S - บันทึกทั้งหมด\\n\\nเอกสารเต็มที่เว็บไซต์: https://pororoca.io",
   "HelpDialog/Title": "ความช่วยเหลือ",
   "HoverVariableInEditor/NoMatchingVariable": "(ไม่มีตัวแปรที่ตรงกัน)",
   "HoverVariableInEditor/PredefinedVariable": "(ตัวแปรที่กำหนดไว้ล่วงหน้า)",

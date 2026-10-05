@@ -91,7 +91,7 @@
   "ExportEnvironment/Title": "Exportar ambiente…",
   "Folder/NewFolder": "Nova pasta",
   "GoBack/Hint": "Voltar",
-  "HelpDialog/Content": "Atalhos do teclado\\n\\nF1 - Mostrar a ajuda\\nF2 - Renomear\\nF4 - Focar na URL\\nF5 - Enviar requisição / conectar WebSocket\\nF6 - Cancelar requisição / desconectar WebSocket\\nF7 - Ativar ambiente anterior\\nF8 - Ativar próximo ambiente\\nF9 - Salvar corpo da resposta a arquivo\\nF10 - Exportar log HTTP a arquivo\\nCtrl+PageUp - Alternar para item acima na árvore\\nCtrl+PageDown - Alternar para item abaixo na árvore\\nCtrl+Shift+S - Salvar tudo\\n\\nDocumentação completa em: https://pororoca.io",
+  "HelpDialog/Content": "Atalhos do teclado\\n\\nF1 - Mostrar a ajuda\\nF2 - Renomear\\nF4 - Focar na URL\\nF5 - Enviar requisição / conectar WebSocket\\nF6 - Cancelar requisição / desconectar WebSocket\\nF7 - Ativar ambiente anterior\\nF8 - Ativar próximo ambiente\\nF9 - Salvar corpo da resposta a arquivo\\nF10 - Exportar log HTTP a arquivo\\nCtrl+PageUp - Alternar para item acima na árvore\\nCtrl+PageDown - Alternar para item abaixo na árvore\\nCtrl+X - Recortar\\nCtrl+C - Copiar\\nCtrl+V - Colar\\nCtrl+D - Duplicar coleção\\nDelete - Excluir\\nAlt+Up / Alt+Down - Mover item para cima / baixo\\nCtrl+Shift+S - Salvar tudo\\n\\nDocumentação completa em: https://pororoca.io",
   "HelpDialog/Title": "Ajuda",
   "HoverVariableInEditor/NoMatchingVariable": "(variável não encontrada)",
   "HoverVariableInEditor/PredefinedVariable": "(variável pré-definida)",
