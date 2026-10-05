@@ -309,6 +309,48 @@
                 </Image>
               </MenuItem.Icon>
             </MenuItem>
+            <MenuItem
+                x:Name="topMenuItemOptionsLanguageFrench"
+                Header="{Binding i18n.TopMenuLanguage.French, Mode=OneWay}"
+                Command="{Binding SelectLanguageFrenchCmd, Mode=OneWay}">
+              <MenuItem.Icon>
+                <Image
+                    IsVisible="{Binding IsLanguageFrench, Mode=OneWay}"
+                    Classes="MenuItemCheckMark">
+                  <Image.Source>
+                    <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                  </Image.Source>
+                </Image>
+              </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem
+                x:Name="topMenuItemOptionsLanguageDutch"
+                Header="{Binding i18n.TopMenuLanguage.Dutch, Mode=OneWay}"
+                Command="{Binding SelectLanguageDutchCmd, Mode=OneWay}">
+              <MenuItem.Icon>
+                <Image
+                    IsVisible="{Binding IsLanguageDutch, Mode=OneWay}"
+                    Classes="MenuItemCheckMark">
+                  <Image.Source>
+                    <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                  </Image.Source>
+                </Image>
+              </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem
+                x:Name="topMenuItemOptionsLanguageSwedish"
+                Header="{Binding i18n.TopMenuLanguage.Swedish, Mode=OneWay}"
+                Command="{Binding SelectLanguageSwedishCmd, Mode=OneWay}">
+              <MenuItem.Icon>
+                <Image
+                    IsVisible="{Binding IsLanguageSwedish, Mode=OneWay}"
+                    Classes="MenuItemCheckMark">
+                  <Image.Source>
+                    <DrawingImage Drawing="{StaticResource IconCheck}"/>
+                  </Image.Source>
+                </Image>
+              </MenuItem.Icon>
+            </MenuItem>
           </MenuItem>
           <MenuItem
               x:Name="topMenuItemOptionsEnableTlsVerification"

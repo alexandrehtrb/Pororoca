@@ -67,6 +67,9 @@
     <AdditionalFiles Include="./Localization/th-th.i18n_lang.json" />
     <AdditionalFiles Include="./Localization/tr-tr.i18n_lang.json" />
     <AdditionalFiles Include="./Localization/uk-ua.i18n_lang.json" />
+    <AdditionalFiles Include="./Localization/fr-fr.i18n_lang.json" />
+    <AdditionalFiles Include="./Localization/nl-nl.i18n_lang.json" />
+    <AdditionalFiles Include="./Localization/sv-se.i18n_lang.json" />
   </ItemGroup>
   <!-- Removes UI tests code in release versions that are not flagged for UI tests -->
   <ItemGroup Condition="'$(Configuration)' == 'Release' And '$(UITestsEnabled)' != 'true'">

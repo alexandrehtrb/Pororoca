@@ -12,7 +12,10 @@ public enum Language
     Polish,
     Thai,
     Turkish,
-    Ukrainian
+    Ukrainian,
+    French,
+    Dutch,
+    Swedish
 }
             
 public static class LanguageExtensions
@@ -30,6 +33,9 @@ public static class LanguageExtensions
         Language.Thai => "th-th",
         Language.Turkish => "tr-tr",
         Language.Ukrainian => "uk-ua",
+        Language.French => "fr-fr",
+        Language.Dutch => "nl-nl",
+        Language.Swedish => "sv-se",
         _ => "en-gb",
     };
 
@@ -46,6 +52,9 @@ public static class LanguageExtensions
         "th-th" => Language.Thai,
         "tr-tr" => Language.Turkish,
         "uk-ua" => Language.Ukrainian,
+        "fr-fr" => Language.French,
+        "nl-nl" => Language.Dutch,
+        "sv-se" => Language.Swedish,
         _ => throw new KeyNotFoundException($"No language found for LCID '{lcid}'.")
     };
 }
