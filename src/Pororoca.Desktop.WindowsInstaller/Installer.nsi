@@ -108,6 +108,7 @@ LoadLanguageFile "${NSISDIR}\Contrib\Language files\Russian.nlf"
 LoadLanguageFile "${NSISDIR}\Contrib\Language files\Spanish.nlf"
 LoadLanguageFile "${NSISDIR}\Contrib\Language files\Polish.nlf"
 LoadLanguageFile "${NSISDIR}\Contrib\Language files\Thai.nlf"
+LoadLanguageFile "${NSISDIR}\Contrib\Language files\SimpChinese.nlf"
 
 LicenseLangString langLicenseData ${LANG_ENGLISH} "${INPUT_FILES_DIR}\LICENCE.md"
 LicenseLangString langLicenseData ${LANG_PORTUGUESEBR} "${INPUT_FILES_DIR}\LICENCE.md"
@@ -116,6 +117,7 @@ LicenseLangString langLicenseData ${LANG_RUSSIAN} "${INPUT_FILES_DIR}\LICENCE.md
 LicenseLangString langLicenseData ${LANG_SPANISH} "${INPUT_FILES_DIR}\LICENCE.md"
 LicenseLangString langLicenseData ${LANG_POLISH} "${INPUT_FILES_DIR}\LICENCE.md"
 LicenseLangString langLicenseData ${LANG_THAI} "${INPUT_FILES_DIR}\LICENCE.md"
+LicenseLangString langLicenseData ${LANG_SIMPCHINESE} "${INPUT_FILES_DIR}\LICENCE.md"
 
 LangString InstallationTypical ${LANG_ENGLISH} "Typical"
 LangString InstallationTypical ${LANG_PORTUGUESEBR} "Típica"
@@ -124,6 +126,7 @@ LangString InstallationTypical ${LANG_RUSSIAN} "Типичный"
 LangString InstallationTypical ${LANG_SPANISH} "Típica"
 LangString InstallationTypical ${LANG_POLISH} "Typowa"
 LangString InstallationTypical ${LANG_THAI} "ปกติ"
+LangString InstallationTypical ${LANG_SIMPCHINESE} "典型"
 
 LangString InstallationMinimal ${LANG_ENGLISH} "Minimal"
 LangString InstallationMinimal ${LANG_PORTUGUESEBR} "Mínima"
@@ -132,6 +135,7 @@ LangString InstallationMinimal ${LANG_RUSSIAN} "Минимальный"
 LangString InstallationMinimal ${LANG_SPANISH} "Mínima"
 LangString InstallationMinimal ${LANG_POLISH} "Minimalna"
 LangString InstallationMinimal ${LANG_THAI} "น้อยที่สุด"
+LangString InstallationMinimal ${LANG_SIMPCHINESE} "最小"
 
 LangString InstallationFull ${LANG_ENGLISH} "Full"
 LangString InstallationFull ${LANG_PORTUGUESEBR} "Completa"
@@ -140,6 +144,7 @@ LangString InstallationFull ${LANG_RUSSIAN} "Полный"
 LangString InstallationFull ${LANG_SPANISH} "Completa"
 LangString InstallationFull ${LANG_POLISH} "Pełna"
 LangString InstallationFull ${LANG_THAI} "เต็ม"
+LangString InstallationFull ${LANG_SIMPCHINESE} "完整"
 
 LangString SectionProgramFiles ${LANG_ENGLISH} "Program files"
 LangString SectionProgramFiles ${LANG_PORTUGUESEBR} "Arquivos do programa"
@@ -148,6 +153,7 @@ LangString SectionProgramFiles ${LANG_RUSSIAN} "Программные файл�
 LangString SectionProgramFiles ${LANG_SPANISH} "Archivos del programa"
 LangString SectionProgramFiles ${LANG_POLISH} "Pliki programu"
 LangString SectionProgramFiles ${LANG_THAI} "ไฟล์โปรแกรม"
+LangString SectionProgramFiles ${LANG_SIMPCHINESE} "程序文件"
 
 LangString SectionDocumentation ${LANG_ENGLISH} "Documentation"
 LangString SectionDocumentation ${LANG_PORTUGUESEBR} "Documentação"
@@ -156,6 +162,7 @@ LangString SectionDocumentation ${LANG_RUSSIAN} "Документация"
 LangString SectionDocumentation ${LANG_SPANISH} "Documentación"
 LangString SectionDocumentation ${LANG_POLISH} "Dokumentacja"
 LangString SectionDocumentation ${LANG_THAI} "เอกสาร"
+LangString SectionDocumentation ${LANG_SIMPCHINESE} "文档"
 
 LangString SectionGroupShortcuts ${LANG_ENGLISH} "Shortcuts"
 LangString SectionGroupShortcuts ${LANG_PORTUGUESEBR} "Atalhos"
@@ -164,6 +171,7 @@ LangString SectionGroupShortcuts ${LANG_RUSSIAN} "Ярлыки"
 LangString SectionGroupShortcuts ${LANG_SPANISH} "Accesos directos"
 LangString SectionGroupShortcuts ${LANG_POLISH} "Skróty"
 LangString SectionGroupShortcuts ${LANG_THAI} "ทางลัด"
+LangString SectionGroupShortcuts ${LANG_SIMPCHINESE} "快捷方式"
 
 LangString SectionStartMenuGroup ${LANG_ENGLISH} "Start Menu group"
 LangString SectionStartMenuGroup ${LANG_PORTUGUESEBR} "Grupo no Menu Iniciar"
@@ -172,6 +180,7 @@ LangString SectionStartMenuGroup ${LANG_RUSSIAN} "Группа меню «Пус
 LangString SectionStartMenuGroup ${LANG_SPANISH} "Grupo del Menú Inicio"
 LangString SectionStartMenuGroup ${LANG_POLISH} "Grupa w Menu Start"
 LangString SectionStartMenuGroup ${LANG_THAI} "กลุ่มเมนูเริ่ม"
+LangString SectionStartMenuGroup ${LANG_SIMPCHINESE} "开始菜单组"
 
 LangString SectionStartMenuHighlight ${LANG_ENGLISH} "Start Menu highlight"
 LangString SectionStartMenuHighlight ${LANG_PORTUGUESEBR} "Destaque no Menu Iniciar"
@@ -180,6 +189,7 @@ LangString SectionStartMenuHighlight ${LANG_RUSSIAN} "Выделение мен�
 LangString SectionStartMenuHighlight ${LANG_SPANISH} "Destacado en el Menú Inicio"
 LangString SectionStartMenuHighlight ${LANG_POLISH} "Wyróżnienie w Menu Start"
 LangString SectionStartMenuHighlight ${LANG_THAI} "ไฮไลท์เมนูเริ่ม"
+LangString SectionStartMenuHighlight ${LANG_SIMPCHINESE} "开始菜单突出显示"
 
 LangString SectionQuickLaunchShortcut ${LANG_ENGLISH} "Quick Launch icon"
 LangString SectionQuickLaunchShortcut ${LANG_PORTUGUESEBR} "Inicialização Rápida"
@@ -188,6 +198,7 @@ LangString SectionQuickLaunchShortcut ${LANG_RUSSIAN} "Значок быстро
 LangString SectionQuickLaunchShortcut ${LANG_SPANISH} "Icono de Inicio rápido"
 LangString SectionQuickLaunchShortcut ${LANG_POLISH} "Ikona szybkiego uruchamiania"
 LangString SectionQuickLaunchShortcut ${LANG_THAI} "ไอคอนเปิดใช้งานด่วน"
+LangString SectionQuickLaunchShortcut ${LANG_SIMPCHINESE} "快速启动图标"
 
 LangString SectionDesktopShortcut ${LANG_ENGLISH} "Desktop icon"
 LangString SectionDesktopShortcut ${LANG_PORTUGUESEBR} "Ícone na Área de Trabalho"
@@ -196,6 +207,7 @@ LangString SectionDesktopShortcut ${LANG_RUSSIAN} "Значок на рабоч�
 LangString SectionDesktopShortcut ${LANG_SPANISH} "Icono en el Escritorio"
 LangString SectionDesktopShortcut ${LANG_POLISH} "Ikona na pulpicie"
 LangString SectionDesktopShortcut ${LANG_THAI} "ไอคอนเดสก์ท็อป"
+LangString SectionDesktopShortcut ${LANG_SIMPCHINESE} "桌面图标"
 
 LangString CurrentUserOnly ${LANG_ENGLISH} "(current user only)"
 LangString CurrentUserOnly ${LANG_PORTUGUESEBR} "(apenas para o usuário atual)"
@@ -204,6 +216,7 @@ LangString CurrentUserOnly ${LANG_RUSSIAN} "(только для текущег�
 LangString CurrentUserOnly ${LANG_SPANISH} "(solo el usuario actual)"
 LangString CurrentUserOnly ${LANG_POLISH} "(tylko dla bieżącego użytkownika)"
 LangString CurrentUserOnly ${LANG_THAI} "(ผู้ใช้ปัจจุบันเท่านั้น)"
+LangString CurrentUserOnly ${LANG_SIMPCHINESE} "(仅限当前用户)"
 
 LangString ExitSetupQuestion ${LANG_ENGLISH} "Are you sure you want to quit the installation?"
 LangString ExitSetupQuestion ${LANG_PORTUGUESEBR} "Tem certeza de que quer sair da instalação?"
@@ -212,6 +225,7 @@ LangString ExitSetupQuestion ${LANG_RUSSIAN} "Вы уверены, что хот
 LangString ExitSetupQuestion ${LANG_SPANISH} "¿Seguro que deseas salir de la instalación?"
 LangString ExitSetupQuestion ${LANG_POLISH} "Czy na pewno chcesz zakończyć instalację?"
 LangString ExitSetupQuestion ${LANG_THAI} "คุณแน่ใจหรือไม่ว่าต้องการออกจากการติดตั้ง?"
+LangString ExitSetupQuestion ${LANG_SIMPCHINESE} "您确定要退出安装吗？"
 
 LangString ExitUninstallQuestion ${LANG_ENGLISH} "Are you sure you want to quit the uninstall?"
 LangString ExitUninstallQuestion ${LANG_PORTUGUESEBR} "Tem certeza de que quer sair da desinstalação?"
@@ -220,6 +234,7 @@ LangString ExitUninstallQuestion ${LANG_RUSSIAN} "Вы уверены, что х
 LangString ExitUninstallQuestion ${LANG_SPANISH} "¿Seguro que deseas salir de la desinstalación?"
 LangString ExitUninstallQuestion ${LANG_POLISH} "Czy na pewno chcesz zakończyć odinstalowanie?"
 LangString ExitUninstallQuestion ${LANG_THAI} "คุณแน่ใจหรือไม่ว่าต้องการออกจากการถอนการติดตั้ง?"
+LangString ExitUninstallQuestion ${LANG_SIMPCHINESE} "您确定要退出卸载吗？"
 
 LangString CouldNotBeInstalledPleaseRestart ${LANG_ENGLISH} "could not be fully installed.$\r$\nPlease, restart Windows and run the setup program again."
 LangString CouldNotBeInstalledPleaseRestart ${LANG_PORTUGUESEBR} "não pôde ser completamente instalado.$\r$\nPor favor, reinicie o Windows e execute o instalador novamente."
@@ -228,6 +243,7 @@ LangString CouldNotBeInstalledPleaseRestart ${LANG_RUSSIAN} "не удалось
 LangString CouldNotBeInstalledPleaseRestart ${LANG_SPANISH} "no se pudo completar la instalación.$\r$\nPor favor, reinicia Windows y vuelve a ejecutar el programa de instalación."
 LangString CouldNotBeInstalledPleaseRestart ${LANG_POLISH} "nie można było całkowicie zainstalować.$\r$\nUruchom ponownie Windows i uruchom program instalacyjny ponownie."
 LangString CouldNotBeInstalledPleaseRestart ${LANG_THAI} "ไม่สามารถติดตั้งได้อย่างสมบูรณ์$\r$\nกรุณาเริ่มระบบ Windows ใหม่และรันโปรแกรมติดตั้งอีกครั้ง"
+LangString CouldNotBeInstalledPleaseRestart ${LANG_SIMPCHINESE} "未能完全安装。$\r$\n请重新启动 Windows 并再次运行安装程序。"
 
 LangString CouldNotBeUninstalledPleaseRestart ${LANG_ENGLISH} "could not be fully uninstalled.$\r$\nPlease, restart Windows and run the uninstaller again."
 LangString CouldNotBeUninstalledPleaseRestart ${LANG_PORTUGUESEBR} "não pôde ser completamente desinstalado.$\r$\nPor favor, reinicie o Windows e execute o desisntalador novamente."
@@ -236,6 +252,7 @@ LangString CouldNotBeUninstalledPleaseRestart ${LANG_RUSSIAN} "не удалос
 LangString CouldNotBeUninstalledPleaseRestart ${LANG_SPANISH} "no se pudo completar la desinstalación.$\r$\nPor favor, reinicia Windows y vuelve a ejecutar el desinstalador."
 LangString CouldNotBeUninstalledPleaseRestart ${LANG_POLISH} "nie można było całkowicie odinstalować.$\r$\nUruchom ponownie Windows i uruchom program odinstalowujący ponownie."
 LangString CouldNotBeUninstalledPleaseRestart ${LANG_THAI} "ไม่สามารถถอนการติดตั้งได้อย่างสมบูรณ์$\r$\nกรุณาเริ่มระบบ Windows ใหม่และรันโปรแกรมถอนการติดตั้งอีกครั้ง"
+LangString CouldNotBeUninstalledPleaseRestart ${LANG_SIMPCHINESE} "未能完全卸载。$\r$\n请重新启动 Windows 并再次运行卸载程序。"
 
 LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_ENGLISH} "Your collections and preferences will not be deleted. They are located at: 'Users\you\AppData\Roaming\Pororoca\PororocaUserData\'."
 LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_PORTUGUESEBR} "Suas coleções e preferências não serão excluídas. Elas estão em: 'Users\você\AppData\Roaming\Pororoca\PororocaUserData\'."
@@ -244,6 +261,7 @@ LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_RUSSIAN} "Ваши
 LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_SPANISH} "Tus colecciones y preferencias no se eliminarán. Se encuentran en: 'Users\tu\AppData\Roaming\Pororoca\PororocaUserData\'."
 LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_POLISH} "Twoje kolekcje i preferencje nie zostaną usunięte. Znajdują się w: 'Users\ty\AppData\Roaming\Pororoca\PororocaUserData\'.'"
 LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_THAI} "คอลเล็กชันและการตั้งค่าของคุณจะไม่ถูกลบ ตั้งอยู่ที่: 'Users\คุณ\AppData\Roaming\Pororoca\PororocaUserData\'"
+LangString UserCollectionsAndPreferencesWereNotDeleted ${LANG_SIMPCHINESE} "您的集合和首选项不会被删除。它们位于：'Users\您\AppData\Roaming\Pororoca\PororocaUserData\'。"
 
 LangString InstallationCompleted ${LANG_ENGLISH} "Installation successful!"
 LangString InstallationCompleted ${LANG_PORTUGUESEBR} "Instalação concluída com sucesso!"
@@ -252,6 +270,7 @@ LangString InstallationCompleted ${LANG_RUSSIAN} "Установка прошл�
 LangString InstallationCompleted ${LANG_SPANISH} "¡Instalación completada con éxito!"
 LangString InstallationCompleted ${LANG_POLISH} "Instalacja zakończona pomyślnie!"
 LangString InstallationCompleted ${LANG_THAI} "ติดตั้งสำเร็จ!"
+LangString InstallationCompleted ${LANG_SIMPCHINESE} "安装成功！"
 CompletedText $(InstallationCompleted)
 
 
@@ -277,6 +296,8 @@ CompletedText $(InstallationCompleted)
 			Push "Polski"
 			Push ${LANG_THAI}
 			Push "ไทย"
+			Push ${LANG_SIMPCHINESE}
+			Push "简体中文"
 			Push "A" ; A means auto count languages; for the auto count to work the first empty push (Push "") must remain
 			LangDLL::LangDialog "Installer Language" "Please select the language of the installer"
 
