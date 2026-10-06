@@ -91,7 +91,7 @@
   "ExportEnvironment/Title": "Ortamı dışa aktar…",
   "Folder/NewFolder": "Yeni klasör",
   "GoBack/Hint": "Geri git",
-  "HelpDialog/Content": "Klavye kısayolları\\n\\nF1 - Yardımı göster\\nF2 - Yeniden adlandır\\nF4 - URL'ye odaklan\\nF5 - İstek gönder / WebSocket'e bağlan\\nF6 - İsteği iptal et / WebSocket bağlantısını kes\\nF7 - Önceki ortamı geçerli ortam olarak ayarla\\nF8 - Sonraki ortamı geçerli ortam olarak ayarla\\nF9 - Yanıt gövdesini dosyaya kaydet\\nF10 - HTTP günlüğünü dosyaya aktar\\nCtrl+PageUp - Ağaçta yukarıdaki öğeye geç\\nCtrl+PageDown - Ağaçta aşağıdaki öğeye geç\\nCtrl+Shift+S - Tümünü kaydet\\n\\nTüm belgeler sitede: https://pororoca.io",
+  "HelpDialog/Content": "Klavye kısayolları\\n\\nF1 - Yardımı göster\\nF2 - Yeniden adlandır\\nF4 - URL'ye odaklan\\nF5 - İstek gönder / WebSocket'e bağlan\\nF6 - İsteği iptal et / WebSocket bağlantısını kes\\nF7 - Önceki ortamı geçerli ortam olarak ayarla\\nF8 - Sonraki ortamı geçerli ortam olarak ayarla\\nF9 - Yanıt gövdesini dosyaya kaydet\\nF10 - HTTP günlüğünü dosyaya aktar\\nCtrl+Shift+S - Tümünü kaydet\\n\\nKoleksiyon ağacı kısayolları:\\n\\nCtrl+PageUp - Ağaçta yukarıdaki öğeye geç\\nCtrl+PageDown - Ağaçta aşağıdaki öğeye geç\\nAlt+Up / Alt+Down - Öğeyi yukarı / aşağı taşı\\nCtrl+C - Kopyala\\nCtrl+V - Yapıştır\\nCtrl+X - Kes\\nCtrl+D - Koleksiyonu çoğalt\\nDelete - Sil\\n\\nTüm belgeler sitede: https://pororoca.io",
   "HelpDialog/Title": "Yardım",
   "HoverVariableInEditor/NoMatchingVariable": "(eşleşen değişken yok)",
   "HoverVariableInEditor/PredefinedVariable": "(ön tanımlı değişken)",

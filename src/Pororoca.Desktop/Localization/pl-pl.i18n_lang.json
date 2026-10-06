@@ -91,7 +91,7 @@
   "ExportEnvironment/Title": "Eksportuj środowisko…",
   "Folder/NewFolder": "Nowy folder",
   "GoBack/Hint": "Wróć",
-  "HelpDialog/Content": "Skróty klawiszowe\\n\\nF1 - Pokaż pomoc\\nF2 - Zmień nazwę\\nF4 - Fokus na URL\\nF5 - Wyślij żądanie / połącz WebSocket\\nF6 - Anuluj żądanie / rozłącz WebSocket\\nF7 - Ustaw poprzednie środowisko jako aktywne\\nF8 - Ustaw następne środowisko jako aktywne\\nF9 - Zapisz treść odpowiedzi do pliku\\nF10 - Eksportuj dziennik HTTP do pliku\\nCtrl+PageUp - Przełącz na element powyżej w drzewie\\nCtrl+PageDown - Przełącz na element poniżej w drzewie\\nCtrl+Shift+S - Zapisz wszystko\\n\\nPełna dokumentacja na stronie: https://pororoca.io",
+  "HelpDialog/Content": "Skróty klawiszowe\\n\\nF1 - Pokaż pomoc\\nF2 - Zmień nazwę\\nF4 - Fokus na URL\\nF5 - Wyślij żądanie / połącz WebSocket\\nF6 - Anuluj żądanie / rozłącz WebSocket\\nF7 - Ustaw poprzednie środowisko jako aktywne\\nF8 - Ustaw następne środowisko jako aktywne\\nF9 - Zapisz treść odpowiedzi do pliku\\nF10 - Eksportuj dziennik HTTP do pliku\\nCtrl+Shift+S - Zapisz wszystko\\n\\nSkróty drzewa kolekcji:\\n\\nCtrl+PageUp - Przełącz na element powyżej w drzewie\\nCtrl+PageDown - Przełącz na element poniżej w drzewie\\nAlt+Up / Alt+Down - Przesuń element w górę / w dół\\nCtrl+C - Kopiuj\\nCtrl+V - Wklej\\nCtrl+X - Wytnij\\nCtrl+D - Duplikuj kolekcję\\nDelete - Usuń\\n\\nPełna dokumentacja na stronie: https://pororoca.io",
   "HelpDialog/Title": "Pomoc",
   "HoverVariableInEditor/NoMatchingVariable": "(brak pasującej zmiennej)",
   "HoverVariableInEditor/PredefinedVariable": "(zmienna predefiniowana)",
