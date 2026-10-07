@@ -123,6 +123,11 @@ public sealed partial class MainWindowViewModel : ViewModelBase, ICollectionOrga
     public partial bool IsLanguageTurkish { get; set; }
     public ReactiveCommand<RxVoid, RxVoid> SelectLanguageTurkishCmd { get; }
 
+    [Reactive]
+    public bool IsLanguageUkrainian { get; set; }
+    public ReactiveCommand<Unit, Unit> SelectLanguageUkrainianCmd { get; }
+
+
     #endregion
 
     #region THEMES
@@ -261,6 +266,7 @@ public sealed partial class MainWindowViewModel : ViewModelBase, ICollectionOrga
         SelectLanguagePolishCmd = ReactiveCommand.Create(() => SelectLanguage(Language.Polish));
         SelectLanguageThaiCmd = ReactiveCommand.Create(() => SelectLanguage(Language.Thai));
         SelectLanguageTurkishCmd = ReactiveCommand.Create(() => SelectLanguage(Language.Turkish));
+        SelectLanguageUkrainianCmd = ReactiveCommand.Create(() => SelectLanguage(Language.Ukrainian));
         #endregion
 
         #region THEMES
@@ -428,6 +434,7 @@ public sealed partial class MainWindowViewModel : ViewModelBase, ICollectionOrga
         IsLanguagePolish = lang == Language.Polish;
         IsLanguageThai = lang == Language.Thai;
         IsLanguageTurkish = lang == Language.Turkish;
+        IsLanguageUkrainian = lang == Language.Ukrainian;
     }
 
     #endregion
