@@ -16,7 +16,7 @@ public static class OpenApiImporter
     private const int maxSchemaResolutionDepth = 6;
 
     private static string ToPororocaTemplateStyle(this string input) =>
-        input.Replace("{", "{{").Replace("}", "}}");
+        input.Replace("{", "{{").Replace("}", "}}").Replace("\r",string.Empty).Replace("\n", string.Empty);
 
     private static string Untemplatize(this string s) =>
         s.Replace("{{", string.Empty).Replace("}}", string.Empty);
@@ -539,13 +539,40 @@ public static class OpenApiImporter
                 continue;
 
             JsonNode? example = ReadResponseExample(jsonContent.Value);
+
             if (example is JsonObject obj && obj.Count > 0)
             {
-                return obj.Select(kv => new PororocaHttpResponseValueCapture(
+                if (obj.Count == 1)
+                {
+                    KeyValuePair<string, JsonNode?> onlyProp = obj.FirstOrDefault();
+                    if (onlyProp.Value is JsonArray ja && ja[0] is JsonObject jaObj)
+                    {
+                        // response example is a JSON object with only one property that is a JSON array of objects
+                        return jaObj.Select(kv => new PororocaHttpResponseValueCapture(
+                            PororocaHttpResponseValueCaptureType.Body,
+                            kv.Key,
+                            null,
+                            "$." + onlyProp.Key + "[0]." + kv.Key)).ToList();
+                    }
+                }
+                else
+                {
+                    // response example is a regular JSON object
+                    return obj.Select(kv => new PororocaHttpResponseValueCapture(
+                        PororocaHttpResponseValueCaptureType.Body,
+                        kv.Key,
+                        null,
+                        "$." + kv.Key)).ToList();
+                }
+            }
+            else if (example is JsonArray arr && arr.Count > 0 && arr[0] is JsonObject arrObj && arrObj.Count > 0)
+            {
+                // response example is a JSON array of objects
+                return arrObj.Select(kv => new PororocaHttpResponseValueCapture(
                     PororocaHttpResponseValueCaptureType.Body,
                     kv.Key,
                     null,
-                    "$." + kv.Key)).ToList();
+                    "$[0]." + kv.Key)).ToList();
             }
         }
 
