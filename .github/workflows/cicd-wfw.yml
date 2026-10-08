@@ -71,7 +71,7 @@ on:
         type: string
       nsisVersion:
         required: false
-        default: '3.11'
+        default: '3.13'
         type: string
       cyclonedxDotnetVersion:
         required: false
@@ -114,7 +114,9 @@ jobs:
       if: ${{ inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Installer }}
       shell: pwsh
       run: |
-        Invoke-WebRequest "https://sourceforge.net/projects/nsis/files/NSIS%203/${{ env.NSIS_VERSION }}/nsis-${{ env.NSIS_VERSION }}-setup.exe/download" -OutFile "C:\WINDOWS\Temp\nsis-${{ env.NSIS_VERSION }}-setup.exe"
+        # UserAgent "Wget/1.21.1 (linux-gnu)" is required to avoid SourceForge thinking it's an automated browser
+        # https://stackoverflow.com/a/69552948
+        Invoke-WebRequest -UserAgent "Wget/1.21.1 (linux-gnu)" "https://sourceforge.net/projects/nsis/files/NSIS%203/${{ env.NSIS_VERSION }}/nsis-${{ env.NSIS_VERSION }}-setup.exe/download" -OutFile "C:\WINDOWS\Temp\nsis-${{ env.NSIS_VERSION }}-setup.exe"
         $process = Start-Process "C:\WINDOWS\Temp\nsis-${{ env.NSIS_VERSION }}-setup.exe" -ArgumentList "/S" -Wait -PassThru
         $exitCode = $process.ExitCode
           if ($exitCode -eq 0) {
