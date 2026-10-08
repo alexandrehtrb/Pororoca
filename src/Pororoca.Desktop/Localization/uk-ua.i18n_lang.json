@@ -288,6 +288,7 @@
   "TopMenuHelp/OpenDocsWebsite": "Перейти до документації",
   "TopMenuHelp/MakeADonation": "Зробити пожертву!",
   "TopMenuHelp/RunUITests": "Запустити UI-тести (Ctrl+F12)",
+  "TopMenuHelp/StopUITests": "Зупинити UI-тести (Ctrl+Shift+F12)",
   "TopMenuHelp/ViewKeyboardShortcuts": "Переглянути комбінації клавіш",
   "TopMenuLanguage/English": "Англійська",
   "TopMenuLanguage/Italian": "Італійська",

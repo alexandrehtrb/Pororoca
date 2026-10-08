@@ -124,8 +124,8 @@ public sealed partial class MainWindowViewModel : ViewModelBase, ICollectionOrga
     public ReactiveCommand<RxVoid, RxVoid> SelectLanguageTurkishCmd { get; }
 
     [Reactive]
-    public bool IsLanguageUkrainian { get; set; }
-    public ReactiveCommand<Unit, Unit> SelectLanguageUkrainianCmd { get; }
+    public partial bool IsLanguageUkrainian { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SelectLanguageUkrainianCmd { get; }
 
 
     #endregion
