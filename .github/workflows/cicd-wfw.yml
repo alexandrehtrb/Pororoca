@@ -114,7 +114,7 @@ jobs:
       if: ${{ inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Installer }}
       shell: pwsh
       run: |
-        Invoke-WebRequest https://sinalbr.dl.sourceforge.net/project/nsis/NSIS%203/${{ env.NSIS_VERSION }}/nsis-${{ env.NSIS_VERSION }}-setup.exe?viasf=1 -OutFile C:\WINDOWS\Temp\nsis-${{ env.NSIS_VERSION }}-setup.exe
+        Invoke-WebRequest "https://sourceforge.net/projects/nsis/files/NSIS%203/${{ env.NSIS_VERSION }}/nsis-${{ env.NSIS_VERSION }}-setup.exe/download" -OutFile "C:\WINDOWS\Temp\nsis-${{ env.NSIS_VERSION }}-setup.exe"
         $process = Start-Process "C:\WINDOWS\Temp\nsis-${{ env.NSIS_VERSION }}-setup.exe" -ArgumentList "/S" -Wait -PassThru
         $exitCode = $process.ExitCode
           if ($exitCode -eq 0) {
