@@ -67,9 +67,9 @@ public sealed partial class ResponseCapturesUITest : PororocaUITest
             await HttpRobot.SetHttpVersion(version);
 
             await TestCaptureResponseHeader(false, cancellationToken);
-            await TestCaptureResponseJsonBody(false, cancellationToken);
+            await TestCaptureResponseJsonBody(hasActiveEnvironment: false, discard: false, cancellationToken);
+            await TestCaptureResponseJsonBody(hasActiveEnvironment: false, discard: true, cancellationToken);
             await TestCaptureResponseXmlBody(false, cancellationToken);
-            await TestCaptureAndDiscardResponseJsonBody(false, cancellationToken);
         }
 
         await TreeRobot.Select("COL1");
@@ -86,9 +86,9 @@ public sealed partial class ResponseCapturesUITest : PororocaUITest
             await HttpRobot.SetHttpVersion(version);
 
             await TestCaptureResponseHeader(true, cancellationToken);
-            await TestCaptureResponseJsonBody(true, cancellationToken);
+            await TestCaptureResponseJsonBody(hasActiveEnvironment: true, discard: false, cancellationToken);
+            await TestCaptureResponseJsonBody(hasActiveEnvironment: true, discard: true, cancellationToken);
             await TestCaptureResponseXmlBody(true, cancellationToken);
-            await TestCaptureAndDiscardResponseJsonBody(true, cancellationToken);
         }
 
         if (OperatingSystem.IsLinux())
