@@ -31,6 +31,9 @@ public static class Program
 
             PororocaLogger.Instance = new(appVersion: appVersion, userDataDir: userDataDir);
 
+            // Bug NullReferenceException Avalonia.Rendering.Composition.Compositor.RequestCompositionUpdate
+            // https://github.com/AvaloniaUI/Avalonia/issues/15226
+            // This is fixed on Avalonia 11.2.0
             BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
         }

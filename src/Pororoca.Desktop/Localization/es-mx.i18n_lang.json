@@ -187,7 +187,7 @@
   "HttpResponse/CaptureCapturedValue": "VALOR",
   "HttpResponse/CaptureHeaderNameOrBodyPath": "NOMBRE DE ENCABEZADO / RUTA DE CUERPO",
   "HttpResponse/CaptureTargetVariable": "VARIABLE DESTINO",
-  "HttpResponse/CaptureTip": "Consejo: Para capturar valores JSON: $.miProp[0].miProp2 ($ es raíz, [0] es elemento de arreglo). Para XML, usa sintaxis XPath 1.0.\\n\\nLos valores capturados se guardan en variables del entorno actual. Si no hay entorno activo, en variables de colección.",
+  "HttpResponse/CaptureTip": "Consejo: Para capturar valores JSON: $.miProp[0].miProp2 ($ es raíz, [0] es elemento de arreglo). Para XML, usa sintaxis XPath 1.0.\\n\\nLos valores capturados se guardan en variables del entorno actual. Si no hay entorno activo, en variables de colección.\\n\\nSi el nombre de la variable destino comienza con un guion bajo, la captura será descartada.",
   "HttpResponse/CaptureType": "TIPO",
   "HttpResponse/CaptureTypeBody": "Cuerpo",
   "HttpResponse/CaptureTypeHeader": "Encabezado",

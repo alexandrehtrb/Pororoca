@@ -886,6 +886,20 @@
     },
     {
       "requestType": "http",
+      "name": "Capture and discard JSON value",
+      "httpVersion": 1.1,
+      "httpMethod": "GET",
+      "url": "{{BaseUrl}}/test/get/json",
+      "responseCaptures": [
+        {
+          "type": "body",
+          "targetVariable": "_CapturedJSONValue",
+          "path": "$.id"
+        }
+      ]
+    },
+    {
+      "requestType": "http",
       "name": "Query fruits via headers",
       "httpVersion": 1.1,
       "httpMethod": "QUERY",

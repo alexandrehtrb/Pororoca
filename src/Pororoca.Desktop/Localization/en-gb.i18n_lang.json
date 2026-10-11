@@ -187,7 +187,7 @@
   "HttpResponse/CaptureCapturedValue": "VALUE",
   "HttpResponse/CaptureHeaderNameOrBodyPath": "HEADER NAME / BODY PATH",
   "HttpResponse/CaptureTargetVariable": "TARGET VARIABLE",
-  "HttpResponse/CaptureTip": "Tip: For JSON value capture: $.myProp[0].myProp2 ($ means root, [0] means array element). For XML value capture, use XPath 1.0 syntax.\\n\\nCaptured values are saved into current environment variables. If no environment is active, then into collection variables.",
+  "HttpResponse/CaptureTip": "Tip: For JSON value capture: $.myProp[0].myProp2 ($ means root, [0] means array element). For XML value capture, use XPath 1.0 syntax.\\n\\nCaptured values are saved into current environment variables. If no environment is active, then into collection variables.\\n\\nIf the target variable's name begins with an underscore, the capture will be discarded.",
   "HttpResponse/CaptureType": "TYPE",
   "HttpResponse/CaptureTypeBody": "Body",
   "HttpResponse/CaptureTypeHeader": "Header",

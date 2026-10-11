@@ -187,7 +187,7 @@
   "HttpResponse/CaptureCapturedValue": "VALUE",
   "HttpResponse/CaptureHeaderNameOrBodyPath": "HEADER NAME / BODY PATH",
   "HttpResponse/CaptureTargetVariable": "TARGET VARIABLE",
-  "HttpResponse/CaptureTip": "提示：对于JSON值捕获：$.myProp[0].myProp2 ($表示根，[0]表示数组元素)。对于 XML 值捕获，请使用 XPath 1.0 语法。\\n\\n捕获的值保存到当前环境变量中。如果没有活动的环境，则进入集合变量。",
+  "HttpResponse/CaptureTip": "提示：对于JSON值捕获：$.myProp[0].myProp2 ($表示根，[0]表示数组元素)。对于 XML 值捕获，请使用 XPath 1.0 语法。\\n\\n捕获的值保存到当前环境变量中。如果没有活动的环境，则进入集合变量。\\n\\n如果目标变量的名称以下划线开头，捕获的值将被丢弃。",
   "HttpResponse/CaptureType": "TYPE",
   "HttpResponse/CaptureTypeBody": "主体",
   "HttpResponse/CaptureTypeHeader": "报头",

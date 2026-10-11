@@ -158,17 +158,17 @@ public static class OpenApiImporterTests
         Assert.Equal(PororocaRequestAuth.InheritedFromCollection, r.CustomAuth);
         // checking only some of the response captures.
         Assert.Equal([
-            new(PororocaHttpResponseValueCaptureType.Body, "calendario", null, "$.calendario"),
-            new(PororocaHttpResponseValueCaptureType.Body, "txid", null, "$.txid"),
-            new(PororocaHttpResponseValueCaptureType.Body, "revisao", null, "$.revisao"),
-            new(PororocaHttpResponseValueCaptureType.Body, "loc", null, "$.loc"),
-            new(PororocaHttpResponseValueCaptureType.Body, "location", null, "$.location"),
-            new(PororocaHttpResponseValueCaptureType.Body, "status", null, "$.status"),
-            new(PororocaHttpResponseValueCaptureType.Body, "devedor", null, "$.devedor"),
-            new(PororocaHttpResponseValueCaptureType.Body, "valor", null, "$.valor"),
-            new(PororocaHttpResponseValueCaptureType.Body, "chave", null, "$.chave"),
-            new(PororocaHttpResponseValueCaptureType.Body, "solicitacaoPagador", null, "$.solicitacaoPagador"),
-            new(PororocaHttpResponseValueCaptureType.Body, "infoAdicionais", null, "$.infoAdicionais"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_calendario", null, "$.calendario"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_txid", null, "$.txid"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_revisao", null, "$.revisao"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_loc", null, "$.loc"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_location", null, "$.location"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_status", null, "$.status"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_devedor", null, "$.devedor"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_valor", null, "$.valor"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_chave", null, "$.chave"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_solicitacaoPagador", null, "$.solicitacaoPagador"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_infoAdicionais", null, "$.infoAdicionais"),
         ], r.ResponseCaptures);
 
         r = col.Folders[1].HttpRequests[1];
@@ -293,11 +293,11 @@ public static class OpenApiImporterTests
         Assert.Equal("{{BaseUrl}}/pix/{{e2eid}}/devolucao/{{id}}", r.Url);
         Assert.Equal(PororocaRequestAuth.InheritedFromCollection, r.CustomAuth);
         Assert.Equal([
-            new(PororocaHttpResponseValueCaptureType.Body, "id", null, "$.id"),
-            new(PororocaHttpResponseValueCaptureType.Body, "rtrId", null, "$.rtrId"),
-            new(PororocaHttpResponseValueCaptureType.Body, "valor", null, "$.valor"),
-            new(PororocaHttpResponseValueCaptureType.Body, "horario", null, "$.horario"),
-            new(PororocaHttpResponseValueCaptureType.Body, "status", null, "$.status")
+            new(PororocaHttpResponseValueCaptureType.Body, "_id", null, "$.id"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_rtrId", null, "$.rtrId"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_valor", null, "$.valor"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_horario", null, "$.horario"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_status", null, "$.status")
         ], r.ResponseCaptures);
 
         r = col.Folders[5].HttpRequests[3];
@@ -462,12 +462,12 @@ public static class OpenApiImporterTests
         Assert.Equal("{{BaseUrl}}/pet/findByStatus?status=available", req.Url);
         Assert.Null(req.Body);
         Assert.Equal([
-            new(PororocaHttpResponseValueCaptureType.Body, "id", null, "$[0].id"),
-            new(PororocaHttpResponseValueCaptureType.Body, "name", null, "$[0].name"),
-            new(PororocaHttpResponseValueCaptureType.Body, "category", null, "$[0].category"),
-            new(PororocaHttpResponseValueCaptureType.Body, "photoUrls", null, "$[0].photoUrls"),
-            new(PororocaHttpResponseValueCaptureType.Body, "tags", null, "$[0].tags"),
-            new(PororocaHttpResponseValueCaptureType.Body, "status", null, "$[0].status")
+            new(PororocaHttpResponseValueCaptureType.Body, "_id", null, "$[0].id"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_name", null, "$[0].name"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_category", null, "$[0].category"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_photoUrls", null, "$[0].photoUrls"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_tags", null, "$[0].tags"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_status", null, "$[0].status")
         ], req.ResponseCaptures);
 
         #endregion
@@ -599,12 +599,12 @@ public static class OpenApiImporterTests
             "{\"origin\":\"ATL\",\"destination\":\"LHR\",\"departureDate\":\"2026-06-15\",\"returnDate\":\"2026-06-25\",\"passengers\":2,\"cabinClass\":\"business\",\"nonStopOnly\":true}",
             MinifyJsonString(req.Body.RawContent!));
         Assert.Equal([
-            new(PororocaHttpResponseValueCaptureType.Body, "flightNumber", null, "$.flights[0].flightNumber"),
-            new(PororocaHttpResponseValueCaptureType.Body, "origin", null, "$.flights[0].origin"),
-            new(PororocaHttpResponseValueCaptureType.Body, "destination", null, "$.flights[0].destination"),
-            new(PororocaHttpResponseValueCaptureType.Body, "departureTime", null, "$.flights[0].departureTime"),
-            new(PororocaHttpResponseValueCaptureType.Body, "arrivalTime", null, "$.flights[0].arrivalTime"),
-            new(PororocaHttpResponseValueCaptureType.Body, "price", null, "$.flights[0].price"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_flightNumber", null, "$.flights[0].flightNumber"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_origin", null, "$.flights[0].origin"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_destination", null, "$.flights[0].destination"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_departureTime", null, "$.flights[0].departureTime"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_arrivalTime", null, "$.flights[0].arrivalTime"),
+            new(PororocaHttpResponseValueCaptureType.Body, "_price", null, "$.flights[0].price"),
         ], req.ResponseCaptures);
     }
 

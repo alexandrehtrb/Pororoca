@@ -187,7 +187,7 @@
   "HttpResponse/CaptureCapturedValue": "VALORE",
   "HttpResponse/CaptureHeaderNameOrBodyPath": "NOME INTESTAZIONE / PERCORSO CORPO",
   "HttpResponse/CaptureTargetVariable": "VARIABILE DI DESTINAZIONE",
-  "HttpResponse/CaptureTip": "Suggerimento: Per l'acquisizione del valore JSON: $.myProp[0].myProp2 ($ significa radice, [0] significa elemento dell'array). Per l'acquisizione del valore XML, utilizzare la sintassi XPath 1.0.\\n\\nI valori acquisiti vengono salvati nelle variabili di ambiente correnti. Se non è attivo alcun ambiente, verranno nelle variabili di collezione.",
+  "HttpResponse/CaptureTip": "Suggerimento: Per l'acquisizione del valore JSON: $.myProp[0].myProp2 ($ significa radice, [0] significa elemento dell'array). Per l'acquisizione del valore XML, utilizzare la sintassi XPath 1.0.\\n\\nI valori acquisiti vengono salvati nelle variabili di ambiente correnti. Se non è attivo alcun ambiente, verranno nelle variabili di collezione.\\n\\nSe il nome della variabile di destinazione inizia con un trattino basso, la cattura verrà scartata.",
   "HttpResponse/CaptureType": "TIPO",
   "HttpResponse/CaptureTypeBody": "corpo",
   "HttpResponse/CaptureTypeHeader": "intestazione",

@@ -102,4 +102,23 @@ public sealed class PororocaTestLibraryHttpResponseCaptureTests
         Assert.Null(this.pororocaTest.GetCollectionVariable("CapturedHeaderValue"));
         Assert.Equal("123987456", this.pororocaTest.GetEnvironmentVariable("Local", "CapturedXMLValue"));
     }
+
+    [Fact]
+    public async Task Should_capture_and_discard_JSON_value_when_target_variable_begins_with_underscore_successfully()
+    {
+        this.pororocaTest.SetCollectionVariable("BaseUrl", "http://localhost:5000");
+        Assert.Null(this.pororocaTest.GetCollectionVariable("CapturedJSONValue"));
+        Assert.Null(this.pororocaTest.GetCollectionVariable("_CapturedJSONValue"));
+        Assert.Null(this.pororocaTest.GetEnvironmentVariable("Local", "CapturedJSONValue"));
+        Assert.Null(this.pororocaTest.GetEnvironmentVariable("Local", "_CapturedJSONValue"));
+
+        var res = await this.pororocaTest.SendHttpRequestAsync("Capture and discard JSON value");
+
+        Assert.NotNull(res);
+        Assert.Equal(HttpStatusCode.OK, res.StatusCode);
+        Assert.Null(this.pororocaTest.GetCollectionVariable("CapturedJSONValue"));
+        Assert.Null(this.pororocaTest.GetCollectionVariable("_CapturedJSONValue"));
+        Assert.Null(this.pororocaTest.GetEnvironmentVariable("Local", "CapturedJSONValue"));
+        Assert.Null(this.pororocaTest.GetEnvironmentVariable("Local", "_CapturedJSONValue"));
+    }
 }

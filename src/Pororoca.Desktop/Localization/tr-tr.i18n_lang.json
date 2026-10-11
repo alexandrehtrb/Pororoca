@@ -187,7 +187,7 @@
   "HttpResponse/CaptureCapturedValue": "DEĞER",
   "HttpResponse/CaptureHeaderNameOrBodyPath": "BAŞLIK ADI / GÖVDE YOLU",
   "HttpResponse/CaptureTargetVariable": "HEDEF DEĞİŞKEN",
-  "HttpResponse/CaptureTip": "İpucu: JSON değer yakalama için: $.myProp[0].myProp2 ($ kök anlamına gelir, [0] dizi elemanı). XML değer yakalama için XPath 1.0 sözdizimini kullanın.\\n\\nYakalanan değerler geçerli ortam değişkenlerine kaydedilir. Hiçbir ortam geçerli değilse koleksiyon değişkenlerine kaydedilir.",
+  "HttpResponse/CaptureTip": "İpucu: JSON değer yakalama için: $.myProp[0].myProp2 ($ kök anlamına gelir, [0] dizi elemanı). XML değer yakalama için XPath 1.0 sözdizimini kullanın.\\n\\nYakalanan değerler geçerli ortam değişkenlerine kaydedilir. Hiçbir ortam geçerli değilse koleksiyon değişkenlerine kaydedilir.\\n\\nHedef değişkenin adı bir alt çizgi ile başlıyorsa, yakalama iptal edilecek.",
   "HttpResponse/CaptureType": "TÜR",
   "HttpResponse/CaptureTypeBody": "Gövde",
   "HttpResponse/CaptureTypeHeader": "Başlık",
