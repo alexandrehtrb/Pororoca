@@ -5,7 +5,6 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <LangVersion>Latest</LangVersion>
     <EnforceExtendedAnalyzerRules>True</EnforceExtendedAnalyzerRules>
-    <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>
 
   <ItemGroup>
