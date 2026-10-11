@@ -187,7 +187,7 @@
   "HttpResponse/CaptureCapturedValue": "ЗНАЧЕНИЕ",
   "HttpResponse/CaptureHeaderNameOrBodyPath": "HEADER NAME / BODY PATH",
   "HttpResponse/CaptureTargetVariable": "ЦЕЛЕВАЯ ПЕРЕМЕННАЯ",
-  "HttpResponse/CaptureTip": "Совет: для захвата значений JSON: $.myProp[0].myProp2 ($ означает корень, [0] означает array element). Для захвата значений XML используйте синтаксис XPath 1.0.\\n\\nПерехваченные значения сохраняются в переменных активного окружения. Если активное окружение отсутствует, они сохраняются в переменных коллекции.",
+  "HttpResponse/CaptureTip": "Совет: для захвата значений JSON: $.myProp[0].myProp2 ($ означает корень, [0] означает array element). Для захвата значений XML используйте синтаксис XPath 1.0.\\n\\nПерехваченные значения сохраняются в переменных активного окружения. Если активное окружение отсутствует, они сохраняются в переменных коллекции.\\n\\nЕсли имя целевой переменной начинается с подчеркивания, результат захвата будет отброшен.",
   "HttpResponse/CaptureType": "ТИП",
   "HttpResponse/CaptureTypeBody": "Body",
   "HttpResponse/CaptureTypeHeader": "Header",

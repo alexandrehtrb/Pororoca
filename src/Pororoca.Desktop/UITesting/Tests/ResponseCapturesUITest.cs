@@ -69,6 +69,7 @@ public sealed partial class ResponseCapturesUITest : PororocaUITest
             await TestCaptureResponseHeader(false);
             await TestCaptureResponseJsonBody(false);
             await TestCaptureResponseXmlBody(false);
+            await TestCaptureAndDiscardResponseJsonBody(false);
         }
 
         await TreeRobot.Select("COL1");
@@ -87,6 +88,7 @@ public sealed partial class ResponseCapturesUITest : PororocaUITest
             await TestCaptureResponseHeader(true);
             await TestCaptureResponseJsonBody(true);
             await TestCaptureResponseXmlBody(true);
+            await TestCaptureAndDiscardResponseJsonBody(true);
         }
 
         if (OperatingSystem.IsLinux())

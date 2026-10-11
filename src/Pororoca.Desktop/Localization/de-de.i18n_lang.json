@@ -187,7 +187,7 @@
   "HttpResponse/CaptureCapturedValue": "WERT",
   "HttpResponse/CaptureHeaderNameOrBodyPath": "HEADERNAME / KÖRPERPFAD",
   "HttpResponse/CaptureTargetVariable": "ZIELVARIABLE",
-  "HttpResponse/CaptureTip": "Tipp: Für JSON Value Capture: $.myProp[0].myProp2 ($ bedeutet Wurzel, [0] bedeutet Array-Element). Verwenden Sie zur XML-Werterfassung die XPath 1.0-Syntax.\\n\\nErfasste Werte werden in den aktuellen Umgebungsvariablen gespeichert. Wenn keine Umgebung aktiv ist, werden sie in Sammlungsvariablen gespeichert.",
+  "HttpResponse/CaptureTip": "Tipp: Für JSON Value Capture: $.myProp[0].myProp2 ($ bedeutet Wurzel, [0] bedeutet Array-Element). Verwenden Sie zur XML-Werterfassung die XPath 1.0-Syntax.\\n\\nErfasste Werte werden in den aktuellen Umgebungsvariablen gespeichert. Wenn keine Umgebung aktiv ist, werden sie in Sammlungsvariablen gespeichert.\\n\\nWenn der Name der Zielvariablen mit einem Unterstrich beginnt, wird die Erfassung verworfen.",
   "HttpResponse/CaptureType": "TYP",
   "HttpResponse/CaptureTypeBody": "Körper",
   "HttpResponse/CaptureTypeHeader": "Kopfball",

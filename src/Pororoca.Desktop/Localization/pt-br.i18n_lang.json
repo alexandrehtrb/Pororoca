@@ -187,7 +187,7 @@
   "HttpResponse/CaptureCapturedValue": "VALOR",
   "HttpResponse/CaptureHeaderNameOrBodyPath": "CABEÇALHO / CAMINHO NO CORPO",
   "HttpResponse/CaptureTargetVariable": "VARIÁVEL-ALVO",
-  "HttpResponse/CaptureTip": "Dica: Para captura de valor JSON: $.myProp[0].myProp2 ($ significa raíz, [0] significa elemento de lista). Para captura de valor XML, use a sintaxe XPath 1.0.\\n\\nOs valores capturados são salvos como variáveis do ambiente atual. Se não houver um ambiente ativo, então serão salvos em variáveis da coleção.",
+  "HttpResponse/CaptureTip": "Dica: Para captura de valor JSON: $.myProp[0].myProp2 ($ significa raíz, [0] significa elemento de lista). Para captura de valor XML, use a sintaxe XPath 1.0.\\n\\nOs valores capturados são salvos como variáveis do ambiente atual. Se não houver um ambiente ativo, então serão salvos em variáveis da coleção.\\n\\nSe o nome da variável-alvo começar com underline, a captura será descartada.",
   "HttpResponse/CaptureType": "TIPO",
   "HttpResponse/CaptureTypeBody": "Corpo",
   "HttpResponse/CaptureTypeHeader": "Cabeçalho",

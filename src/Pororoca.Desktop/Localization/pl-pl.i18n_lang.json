@@ -187,7 +187,7 @@
   "HttpResponse/CaptureCapturedValue": "WARTOŚĆ",
   "HttpResponse/CaptureHeaderNameOrBodyPath": "NAZWA NAGŁÓWKA / ŚCIEŻKA TREŚCI",
   "HttpResponse/CaptureTargetVariable": "ZMIENNA DOCELOWA",
-  "HttpResponse/CaptureTip": "Wskazówka: Dla przechwytywania wartości JSON: $.myProp[0].myProp2 ($ oznacza root, [0] oznacza element tablicy). Dla przechwytywania wartości XML użyj składni XPath 1.0.\\n\\nPrzechwycone wartości są zapisywane do zmiennych bieżącego środowiska. Jeśli żadne środowisko nie jest aktywne, to do zmiennych kolekcji.",
+  "HttpResponse/CaptureTip": "Wskazówka: Dla przechwytywania wartości JSON: $.myProp[0].myProp2 ($ oznacza root, [0] oznacza element tablicy). Dla przechwytywania wartości XML użyj składni XPath 1.0.\\n\\nPrzechwycone wartości są zapisywane do zmiennych bieżącego środowiska. Jeśli żadne środowisko nie jest aktywne, to do zmiennych kolekcji.\\n\\nJeśli nazwa zmiennej docelowej zaczyna się od podkreślenia, przechwytywanie zostanie odrzucone.",
   "HttpResponse/CaptureType": "TYP",
   "HttpResponse/CaptureTypeBody": "Treść",
   "HttpResponse/CaptureTypeHeader": "Nagłówek",

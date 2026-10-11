@@ -550,7 +550,7 @@ public static class OpenApiImporter
                         // response example is a JSON object with only one property that is a JSON array of objects
                         return jaObj.Select(kv => new PororocaHttpResponseValueCapture(
                             PororocaHttpResponseValueCaptureType.Body,
-                            kv.Key,
+                            "_" + kv.Key,
                             null,
                             "$." + onlyProp.Key + "[0]." + kv.Key)).ToList();
                     }
@@ -560,7 +560,7 @@ public static class OpenApiImporter
                     // response example is a regular JSON object
                     return obj.Select(kv => new PororocaHttpResponseValueCapture(
                         PororocaHttpResponseValueCaptureType.Body,
-                        kv.Key,
+                        "_" + kv.Key,
                         null,
                         "$." + kv.Key)).ToList();
                 }
@@ -570,7 +570,7 @@ public static class OpenApiImporter
                 // response example is a JSON array of objects
                 return arrObj.Select(kv => new PororocaHttpResponseValueCapture(
                     PororocaHttpResponseValueCaptureType.Body,
-                    kv.Key,
+                    "_" + kv.Key,
                     null,
                     "$[0]." + kv.Key)).ToList();
             }

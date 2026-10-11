@@ -187,7 +187,7 @@
   "HttpResponse/CaptureCapturedValue": "ค่า",
   "HttpResponse/CaptureHeaderNameOrBodyPath": "ชื่อส่วนหัว / เส้นทางเนื้อหา",
   "HttpResponse/CaptureTargetVariable": "ตัวแปรเป้าหมาย",
-  "HttpResponse/CaptureTip": "เคล็ดลับ: สำหรับการจับค่า JSON: $.myProp[0].myProp2 ($ หมายถึง root, [0] หมายถึงองค์ประกอบอาร์เรย์) สำหรับการจับค่า XML ใช้ไวยากรณ์ XPath 1.0\\n\\nค่าที่จับได้จะถูกบันทึกลงในตัวแปรสภาพแวดล้อมปัจจุบัน หากไม่มีสภาพแวดล้อมที่ใช้งาน จะบันทึกลงในตัวแปรคอลเล็กชัน",
+  "HttpResponse/CaptureTip": "เคล็ดลับ: สำหรับการจับค่า JSON: $.myProp[0].myProp2 ($ หมายถึง root, [0] หมายถึงองค์ประกอบอาร์เรย์) สำหรับการจับค่า XML ใช้ไวยากรณ์ XPath 1.0\\n\\nค่าที่จับได้จะถูกบันทึกลงในตัวแปรสภาพแวดล้อมปัจจุบัน หากไม่มีสภาพแวดล้อมที่ใช้งาน จะบันทึกลงในตัวแปรคอลเล็กชัน\\n\\nถ้าชื่อตัวแปรเป้าหมายเริ่มด้วยเครื่องหมายขีดล่าง การจับค่าจะถูกทิ้ง",
   "HttpResponse/CaptureType": "ประเภท",
   "HttpResponse/CaptureTypeBody": "เนื้อหา",
   "HttpResponse/CaptureTypeHeader": "ส่วนหัว",
