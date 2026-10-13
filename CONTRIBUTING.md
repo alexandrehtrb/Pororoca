@@ -30,6 +30,8 @@ To generate the Windows Installer, you will need [NSIS](https://nsis.sourceforge
 
 ## I want to translate Pororoca to my language
 
+> **IMPORTANT**: translate only to languages that you are fluent in. This is because AI and translation tools may make mistakes or construct sentences that sound unnatural for native speakers, so a human review is always required.
+
 Pororoca uses JSON files for internationalization. 
 
 The [WebTranslateIt](https://converter.webtranslateit.com/) online tool allows you to convert those JSON files into other formats that you might feel more comfortable working on. After finishing your translations, you can convert again to JSON. There are several tools that can help you, just search online `"automate translation json"`. Another good tool is [ResX Resource Manager](https://github.com/dotnet/ResXResourceManager).
