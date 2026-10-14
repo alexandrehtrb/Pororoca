@@ -64,6 +64,7 @@
 
 - Raised .NET SDK version to 8.0.426.
 - Added paragraph into license about contributors rights.
+- Improve performance of JSON captures in case of missing fields.
 
 ### New Contributors
 
