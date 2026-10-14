@@ -239,14 +239,22 @@ public sealed class HttpResponseViewModel : ViewModelBase
         // otherwise, save captures into collection variables
         var targetVars = (envVm?.VariablesTableVm ?? colVarsVm.VariablesTableVm).Items;
 
-        foreach (var capture in this.responseCaptures!)
+        foreach (var capture in this.responseCaptures)
         {
+            bool shouldNotSaveAsVariable =
+                string.IsNullOrWhiteSpace(capture.TargetVariable) ||
+                (capture.TargetVariable.Length > 0 && capture.TargetVariable[0] == '_');
+
             var targetVar = targetVars.FirstOrDefault(v => v.Key == capture.TargetVariable);
             string? capturedValue = this.res?.CaptureValue(capture.ToResponseCapture());
             if (capturedValue is not null)
             {
                 capture.CapturedValue = capturedValue;
-                if (targetVar is null)
+                if (shouldNotSaveAsVariable)
+                {
+                    continue;
+                }
+                else if (targetVar is null)
                 {
                     targetVar = new(targetVars, new(true, capture.TargetVariable, capturedValue, true));
                     targetVars.Add(targetVar);

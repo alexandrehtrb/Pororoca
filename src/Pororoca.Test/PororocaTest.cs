@@ -245,6 +245,13 @@ public sealed class PororocaTest
         var captures = req.ResponseCaptures ?? new();
         foreach (var capture in captures)
         {
+            bool shouldNotSaveAsVariable =
+                string.IsNullOrWhiteSpace(capture.TargetVariable) ||
+                (capture.TargetVariable.Length > 0 && capture.TargetVariable[0] == '_');
+
+            if (shouldNotSaveAsVariable)
+                continue;
+
             var targetVar = targetVars.FirstOrDefault(v => v.Key == capture.TargetVariable);
             string? capturedValue = res.CaptureValue(capture);
             if (capturedValue is not null)

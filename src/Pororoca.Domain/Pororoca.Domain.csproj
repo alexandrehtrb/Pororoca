@@ -8,7 +8,7 @@
     <DebugType>embedded</DebugType>
     <EnablePreviewFeatures>True</EnablePreviewFeatures>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-    <!-- Licence also available at https://github.com/alexandrehtrb/Pororoca/LICENCE.md -->
+    <!-- Licence also available at https://github.com/alexandrehtrb/Pororoca/LICENCE.md -->    
   </PropertyGroup>
 
 </Project>

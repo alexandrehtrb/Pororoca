@@ -44,6 +44,14 @@ You are allowed to develop your own derivative version of Pororoca that has serv
 capabilities, with the restrictions of being closed-source, not shared with the community, 
 and not for direct money-making purposes, e.g., selling or providing it as a SaaS. You can make this derivative version for your own private use, for example, for yourself or for your company.
 
+* *On external contributors rights.* (updated 2026-10-13)
+
+External contributors (that are not the original creator, AlexandreHTRB) have the following rights.
+
+Their names and contributions will be kept in our Git history, releases and changelog. This will be kept publicly.
+
+They are not entitled to any financial compensation or legal copyright ownership. This includes code written by them with AI assistance. Their AI coding robots, and companies that own them, do not have any legal entitlement to this code.
+
 GNU General Public License
 ==========================
 

@@ -48,16 +48,22 @@ public static partial class PororocaResponseValueCapturer
                 {
                     if (elementName?.Equals("$", StringComparison.InvariantCultureIgnoreCase) == true)
                     {
-                        jsonNode = jsonNode?.AsArray()[(int)index1!];
+                        if (jsonNode is JsonArray arr && arr.Count > (int)index1!)
+                            jsonNode = arr[(int)index1!];
+                        else
+                            return null; // avoiding exceptions above, faster execution
                     }
                     else
                     {
-                        jsonNode = jsonNode?[elementName!]?.AsArray()[(int)index1!];
+                        if (jsonNode?[elementName!]?.AsArray() is JsonArray arr && arr.Count > (int)index1!)
+                            jsonNode = arr[(int)index1!];
+                        else
+                            return null; // avoiding exceptions above, faster execution
                     }
 
-                    if (index2 is int i2)
+                    if (jsonNode is JsonArray arr2 && index2 is int i2)
                     {
-                        jsonNode = jsonNode?.AsArray()[i2];
+                        jsonNode = arr2[i2];
                     }
                 }
                 else if (subpath.Equals("$", StringComparison.InvariantCultureIgnoreCase))
@@ -66,7 +72,10 @@ public static partial class PororocaResponseValueCapturer
                 }
                 else
                 {
-                    jsonNode = jsonNode?[subpath];
+                    if (jsonNode is JsonObject obj && obj.ContainsKey(subpath))
+                        jsonNode = obj[subpath];
+                    else
+                        return null; // avoiding exceptions above, faster execution
                 }
             }
 

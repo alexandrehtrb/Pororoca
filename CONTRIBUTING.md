@@ -11,6 +11,7 @@ Remember to fork this repo and develop your code starting from the `develop` bra
 * [I want a custom keyboard shortcut](#i-want-a-custom-keyboard-shortcut)
 * [I want a predefined or random variable](#i-want-a-predefined-or-random-variable)
 * [Is there anything else I can contribute with?](#is-there-anything-else-i-can-contribute-with)
+* [What are my rights as a contributor?](#what-are-my-rights-as-a-contributor)
 
 ## Bug and crash reports
 
@@ -28,6 +29,8 @@ The `makereleases.ps1` and `rununittests.ps1` scripts require [PowerShell](https
 To generate the Windows Installer, you will need [NSIS](https://nsis.sourceforge.io/Main_Page) installed with `makensis` added to PATH.
 
 ## I want to translate Pororoca to my language
+
+> **IMPORTANT**: translate only to languages that you are fluent in. This is because AI and translation tools may make mistakes or construct sentences that sound unnatural for native speakers, so a human review is always required.
 
 Pororoca uses JSON files for internationalization. 
 
@@ -74,3 +77,9 @@ Add logic in [`PororocaPredefinedVariableEvaluator`](https://github.com/alexandr
 ## Is there anything else I can contribute with?
 
 Yes! Check the GitHub issues track.
+
+## What are my rights as a contributor?
+
+Your name and contributions will be kept in our Git history, releases and changelog. You can tell other people that you have contributed to our project!
+
+You are not entitled to any financial compensation or legal copyright ownership. This includes code written by you with AI assistance. Your AI coding robots, and companies that own them, do not have any legal entitlement to this code.

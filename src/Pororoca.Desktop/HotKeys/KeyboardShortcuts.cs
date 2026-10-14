@@ -410,7 +410,7 @@ public sealed class KeyboardShortcuts : ViewModelBase
 
     #endregion
 
-    #region DELETE
+    #region HELP
 
     private void ShowHelpDialog() =>
         Dialogs.ShowDialog(
