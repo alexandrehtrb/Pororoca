@@ -4,7 +4,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media;
-using Avalonia.ReactiveUI;
 using ReactiveUI.Avalonia; // UseReactiveUI, RegisterReactiveUIViews* (core)
 using Pororoca.Desktop.UserData;
 using Pororoca.Desktop.ViewModels;
@@ -68,7 +67,7 @@ public static class Program
         AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .LogToTrace()
-            .UseReactiveUI()
+            .UseReactiveUI(static _ => { })
             .With(new FontManagerOptions
             {
                 // https://github.com/AvaloniaUI/Avalonia/issues/4427#issuecomment-1303697872

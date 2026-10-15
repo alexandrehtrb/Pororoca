@@ -10,6 +10,7 @@ using AvaloniaEdit.TextMate;
 using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.VariableResolution;
+using ReactiveUI.Primitives;
 using static Pororoca.Domain.Features.VariableResolution.PororocaPredefinedVariableEvaluator;
 
 namespace Pororoca.Desktop.TextEditorConfig;
@@ -41,7 +42,7 @@ internal static class TextEditorConfiguration
         editor.Options.EnableEmailHyperlinks = true;
         editor.Options.EnableHyperlinks = true;
         editor.TextArea.IndentationStrategy = new AvaloniaEdit.Indentation.DefaultIndentationStrategy();
-        editor.GetObservable(Visual.BoundsProperty).Subscribe(bounds => editor.TextArea.Width = bounds.Width);
+        SubscribeExtensions.Subscribe(editor.GetObservable(Visual.BoundsProperty), bounds => editor.TextArea.Width = bounds.Width);
         editor.TextArea.RightClickMovesCaret = true;
         editor.TextArea.TextView.LinkTextForegroundBrush = PororocaThemeManager.TextEditorHyperlinkForegroundBrush;
 

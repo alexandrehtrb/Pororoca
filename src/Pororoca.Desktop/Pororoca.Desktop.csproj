@@ -88,7 +88,6 @@
   <ItemGroup>
     <PackageReference Include="Avalonia"/>
     <PackageReference Include="Avalonia.Desktop"/>
-    <PackageReference Include="Avalonia.ReactiveUI"/>
     <PackageReference Include="Avalonia.Themes.Fluent"/>
     <PackageReference Include="Avalonia.Controls.DataGrid"/>
     <PackageReference Include="Avalonia.Wayland"/>
@@ -105,10 +104,7 @@
     <PackageReference Include="AvaloniaEdit.TextMate"/>
     <PackageReference Include="TextMateSharp.Grammars"/>
     <PackageReference Include="ReactiveUI.Avalonia"/>
-    <PackageReference Include="ReactiveUI.SourceGenerators">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="ReactiveUI.SourceGenerators" PrivateAssets="all"/>
     <PackageReference Include="MessageBox.Avalonia"/>
   </ItemGroup>
 </Project>
