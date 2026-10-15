@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.11.0](#3110-2026-10-14)
 * [3.10.3](#3103-2026-09-30)
 * [3.10.2](#3102-2026-08-28)
 * [3.10.1](#3101-2026-06-03)
@@ -49,6 +50,27 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.11.0](https://github.com/alexandrehtrb/Pororoca/tree/3.11.0) (2026-10-14)
+
+### Features
+
+- Ukrainian translation. (issue #201, thanks @Shadow16Ua!)
+- Autogenerate captures when OpenAPI has response examples. (issue #208, thanks @AtharvRG!)
+- Mention collections' sidebar keyboard shortcuts on help dialog. (thanks @Miabeyefendi!)
+- Discard operator (underscore '_') for response captures.
+
+### Others
+
+- Raised .NET SDK version to 8.0.426.
+- Added paragraph into license about contributors rights.
+- Improve performance of JSON captures in case of missing fields.
+
+### New Contributors
+
+* @Shadow16Ua made his first contribution in PR #210
+* @AtharvRG made his first contribution in PR #211
+* @Miabeyefendi made his first contribution in PR #212
 
 ## [3.10.3](https://github.com/alexandrehtrb/Pororoca/tree/3.10.3) (2026-09-30)
 

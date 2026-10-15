@@ -548,31 +548,69 @@ public static class OpenApiImporter
                     if (onlyProp.Value is JsonArray ja && ja[0] is JsonObject jaObj)
                     {
                         // response example is a JSON object with only one property that is a JSON array of objects
-                        return jaObj.Select(kv => new PororocaHttpResponseValueCapture(
+                        var list = jaObj.Select(kv => new PororocaHttpResponseValueCapture(
                             PororocaHttpResponseValueCaptureType.Body,
                             "_" + kv.Key,
                             null,
                             "$." + onlyProp.Key + "[0]." + kv.Key)).ToList();
+
+                        list.Insert(0, new PororocaHttpResponseValueCapture(
+                            PororocaHttpResponseValueCaptureType.Body,
+                            "__COUNT",
+                            null,
+                            "$." + onlyProp.Key + ".count()"));
+
+                        return list;
                     }
                 }
                 else
                 {
                     // response example is a regular JSON object
-                    return obj.Select(kv => new PororocaHttpResponseValueCapture(
-                        PororocaHttpResponseValueCaptureType.Body,
-                        "_" + kv.Key,
-                        null,
-                        "$." + kv.Key)).ToList();
+                    // let's dive into a maximum depth of 2 ($.prop1.prop2)
+                    List<PororocaHttpResponseValueCapture> props = new();
+                    foreach (var kv in obj)
+                    {
+                        if (kv.Value is JsonObject innerObj)
+                        {
+                            // property is an inner object,
+                            // let's add its inner properties too
+                            props.AddRange(innerObj.Select(kvi =>
+                                new PororocaHttpResponseValueCapture(
+                                    PororocaHttpResponseValueCaptureType.Body,
+                                    "_" + kvi.Key,
+                                    null,
+                                    "$." + kv.Key + "." + kvi.Key)));
+                        }
+                        else
+                        {
+                            // property is a common value or array
+                            props.Add(new PororocaHttpResponseValueCapture(
+                                PororocaHttpResponseValueCaptureType.Body,
+                                "_" + kv.Key,
+                                null,
+                                "$." + kv.Key));
+                        }
+                    }
+                    return props;
                 }
             }
             else if (example is JsonArray arr && arr.Count > 0 && arr[0] is JsonObject arrObj && arrObj.Count > 0)
             {
                 // response example is a JSON array of objects
-                return arrObj.Select(kv => new PororocaHttpResponseValueCapture(
+                // let's dive into a maximum depth of 1 ($[i].prop1)
+                var list = arrObj.Select(kv => new PororocaHttpResponseValueCapture(
                     PororocaHttpResponseValueCaptureType.Body,
                     "_" + kv.Key,
                     null,
                     "$[0]." + kv.Key)).ToList();
+
+                list.Insert(0, new PororocaHttpResponseValueCapture(
+                            PororocaHttpResponseValueCaptureType.Body,
+                            "__COUNT",
+                            null,
+                            "$.count()"));
+
+                return list;
             }
         }
 

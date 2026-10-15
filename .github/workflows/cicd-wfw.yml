@@ -67,7 +67,7 @@ on:
         type: boolean
       dotnetVersion:
         required: false
-        default: '10.0.201'
+        default: '10.0.402'
         type: string
       nsisVersion:
         required: false
