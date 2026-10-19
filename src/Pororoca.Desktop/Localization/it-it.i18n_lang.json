@@ -104,7 +104,7 @@
   "HttpRepeater/InputDataFileSrcPathWatermark": "(percorso del file)",
   "HttpRepeater/InputDataTypeFile": "File",
   "HttpRepeater/InputDataTypeRaw": "JSON array in testo",
-  "HttpRepeater/InputDataTypeRawComment": "commenti sono consentiti",
+  "HttpRepeater/InputDataTypeRawComment": "commenti sono permessi",
   "HttpRepeater/InputLine": "Linea di input",
   "HttpRepeater/InputLineKey": "NOME VARIABILE",
   "HttpRepeater/InputLineValue": "VALORE",
