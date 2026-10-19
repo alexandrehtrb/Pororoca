@@ -12,7 +12,6 @@
     x:Class="Pororoca.Desktop.Views.ImportExportCurlWindow"
     x:CompileBindings="True"
     x:DataType="vm:ImportExportCurlWindowViewModel"
-    FontFamily="{StaticResource DefaultFontFamily}"
     Icon="/Assets/pororoca_icon.ico"
     Title="{Binding Title, Mode=OneWay}">
 

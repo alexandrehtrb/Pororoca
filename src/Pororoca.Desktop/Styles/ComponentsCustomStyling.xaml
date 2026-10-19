@@ -143,7 +143,7 @@
         Value="32"/>
     <Setter
         Property="FontWeight"
-        Value="Light"/>
+        Value="Regular"/>
     <Setter
         Property="Foreground"
         Value="{DynamicResource DefaultTextForegroundColor}"/>
@@ -456,9 +456,6 @@
   </Style>
 
   <Style Selector="TextBlock.AutoCompleteListOption">
-    <Setter
-        Property="FontFamily"
-        Value="{StaticResource DefaultFontFamily}"/>
     <Setter
         Property="FontSize"
         Value="14"/>

@@ -4,7 +4,14 @@
     xmlns:clr="clr-namespace:System;assembly=mscorlib"
     xmlns:vm="clr-namespace:Pororoca.Desktop.ViewModels;assembly=Pororoca.Desktop">
   <Styles.Resources>
-    <FontFamily x:Key="DefaultFontFamily">avares://Pororoca.Desktop/Assets/Fonts#Cabin</FontFamily>
     <FontFamily x:Key="CodeFontFamily">Cascadia Mono,Consolas,Comic Mono,Monaco,Noto Sans Mono,Liberation Mono,Courier New,DejaVu Sans Mono,Menlo,monospace</FontFamily>
   </Styles.Resources>
+
+  <!--
+    default font family for the application
+    https://github.com/AvaloniaUI/Avalonia/discussions/14466#discussioncomment-8359712
+  -->
+  <Style Selector=":is(TopLevel)">
+    <Setter Property="FontFamily" Value="avares://Pororoca.Desktop/Assets/Fonts#Cabin, avares://Pororoca.Desktop/Assets/Fonts#Andika, Segoe UI, Liberation Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji"/>
+  </Style>
 </Styles>

@@ -12,7 +12,6 @@
     x:Class="Pororoca.Desktop.Views.UITestsRunnerWindow"
     x:CompileBindings="True"
     x:DataType="vm:UITestsRunnerWindowViewModel"
-    FontFamily="{StaticResource DefaultFontFamily}"
     Icon="/Assets/pororoca_icon.ico"
     Title="Pororoca UI Tests">
 
