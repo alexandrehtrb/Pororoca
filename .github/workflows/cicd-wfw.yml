@@ -478,7 +478,7 @@ jobs:
       shell: pwsh
       run: |
         $OUTPUT_FOLDER = "./out/linux-x64-portable"
-        Copy-Item -Path "./pororoca.png" -Destination $OUTPUT_FOLDER
+        Copy-Item -Path "./misc/pororoca.png" -Destination $OUTPUT_FOLDER
 
     - name: Copy icon for Windows installer
       if: ${{ inputs.runCD && (inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Installer) }}
