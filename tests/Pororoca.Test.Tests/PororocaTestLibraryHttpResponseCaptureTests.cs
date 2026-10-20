@@ -112,7 +112,7 @@ public sealed class PororocaTestLibraryHttpResponseCaptureTests
         Assert.Null(this.pororocaTest.GetEnvironmentVariable("Local", "CapturedJSONValue"));
         Assert.Null(this.pororocaTest.GetEnvironmentVariable("Local", "_CapturedJSONValue"));
 
-        var res = await this.pororocaTest.SendHttpRequestAsync("Capture and discard JSON value");
+        var res = await this.pororocaTest.SendHttpRequestAsync("Capture and discard JSON value", TestContext.Current.CancellationToken);
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
