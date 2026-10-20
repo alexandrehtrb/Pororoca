@@ -75,7 +75,7 @@ on:
         type: string
       cyclonedxDotnetVersion:
         required: false
-        default: '6.2.0'
+        default: '6.3.1'
         type: string
 
 jobs:
@@ -86,12 +86,12 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         fetch-depth: 1
 
     - name: Install .NET
-      uses: actions/setup-dotnet@v5
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: ${{ inputs.dotnetVersion }}
     
