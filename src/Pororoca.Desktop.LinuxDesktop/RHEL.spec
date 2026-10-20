@@ -50,7 +50,8 @@ mkdir -p %{buildroot}/usr/bin
 cp ~/rpmstaging/others/pororoca.sh %{buildroot}/usr/bin/pororoca
 chmod 755 %{buildroot}/usr/bin/pororoca
 mkdir -p %{buildroot}/usr/lib/pororoca
-install -m 666 -D ~/rpmstaging/binaries/* -t %{buildroot}/usr/lib/pororoca/
+cp -r ~/rpmstaging/binaries/* %{buildroot}/usr/lib/pororoca/
+chmod -R 666 %{buildroot}/usr/lib/pororoca/
 chmod +x %{buildroot}/usr/lib/pororoca/Pororoca
 mkdir -p %{buildroot}/usr/share/applications
 install -m 666 ~/rpmstaging/others/Pororoca.desktop %{buildroot}/usr/share/applications/Pororoca.desktop
