@@ -199,7 +199,7 @@ jobs:
     # CD
     - name: Install Dotnet CycloneDX SBOM tool
       if: ${{ inputs.runCD }}
-      run: dotnet tool install --global CycloneDX --version $env:CYCLONEDX_DOTNET_VERSION
+      run: dotnet tool install --global CycloneDX --version $CYCLONEDX_DOTNET_VERSION
       env:
         CYCLONEDX_DOTNET_VERSION: ${{ inputs.cyclonedxDotnetVersion }}
 
