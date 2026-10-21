@@ -8,6 +8,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <DebugType Condition="'$(Configuration)'=='Release'">embedded</DebugType>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
   </PropertyGroup>
