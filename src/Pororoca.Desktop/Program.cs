@@ -56,15 +56,7 @@ public static class Program
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
     {
-        var builder = AppBuilder.Configure<App>().UsePlatformDetect();
-
-        // https://docs.avaloniaui.net/docs/platform-specific-guides/linux#enabling-the-wayland-backend
-        if (OperatingSystem.IsLinux() && Environment.GetEnvironmentVariable("WAYLAND_DISPLAY") is not null)
-        {
-            builder = builder.UseWayland();
-        }
-
-        AppBuilder.Configure<App>()
+        var builder = AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .LogToTrace()
             .UseReactiveUI(static _ => { })
@@ -82,6 +74,12 @@ public static class Program
                     classicDesktopAppLifetime.Exit += SaveUserData;
                 }
             });
+
+        // https://docs.avaloniaui.net/docs/platform-specific-guides/linux#enabling-the-wayland-backend
+        if (OperatingSystem.IsLinux() && Environment.GetEnvironmentVariable("WAYLAND_DISPLAY") is not null)
+        {
+            builder = builder.UseWayland();
+        }
 
         return builder;
     }
