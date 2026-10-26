@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Avalonia.Themes.Fluent;
 using Pororoca.Desktop.TextEditorConfig;
 using TextMateSharp.Grammars;
 
@@ -56,7 +57,7 @@ public static class PororocaThemeManager
 
     private static void ApplyTheme(PororocaTheme theme)
     {
-        Application.Current!.RequestedThemeVariant = theme switch
+        var themeVariant = theme switch
         {
             PororocaTheme.Light => Light,
             PororocaTheme.Light2 => Light2,
@@ -65,6 +66,26 @@ public static class PororocaThemeManager
             PororocaTheme.AmazonianNight => AmazonianNight,
             _ => AmazonianNight
         };
+
+        Application.Current!.RequestedThemeVariant = themeVariant;
+
+        // GAMBIARRA to fix SystemAccentColor not being updated from Avalonia 12 onwards
+        // due to new color palette system
+        // https://docs.avaloniaui.net/docs/styling/themes#creating-custom-color-palettes
+        // https://github.com/Mbucari/AvaloniaThemeColorChanger/blob/master/AvaloniaThemeColorChanger/AvaloniaTheme.cs
+        var fluentTheme = Application.Current!.Styles.OfType<FluentTheme>().Single();
+        var baseThemeVariant = themeVariant == ThemeVariant.Light || themeVariant == ThemeVariant.Dark ?
+                               themeVariant : themeVariant.InheritVariant!;
+        if (fluentTheme.Palettes.TryGetValue(baseThemeVariant, out var colorPaletteResources))
+        {
+            colorPaletteResources.Accent = GetResource<Color>("SystemAccentColor");
+        }
+        else
+        {
+            colorPaletteResources = new();
+            colorPaletteResources.Accent = GetResource<Color>("SystemAccentColor");
+            fluentTheme.Palettes.Add(baseThemeVariant, colorPaletteResources);
+        }
 
         // Only setting text editors' theme if the TextEditors were already setup,
         // otherwise, a wrong text editor theme will be loaded before the corresponding user saved theme
