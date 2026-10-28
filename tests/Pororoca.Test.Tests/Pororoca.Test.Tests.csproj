@@ -9,7 +9,7 @@
     <ProjectReference Include="..\..\src\Pororoca.Domain\Pororoca.Domain.csproj"/>
     <ProjectReference Include="..\..\src\Pororoca.Infrastructure\Pororoca.Infrastructure.csproj"/>
     <ProjectReference Include="..\..\src\Pororoca.Test\Pororoca.Test.csproj"/>
-    <!--PackageReference Include="Pororoca.Test" Version="3.10.3" /-->
+    <!--PackageReference Include="Pororoca.Test" Version="4.0.0" /-->
     <PackageReference Include="Microsoft.NET.Test.Sdk"/>
     <PackageReference Include="xunit.v3"/>
     <PackageReference Include="xunit.runner.visualstudio">
@@ -21,5 +21,4 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-
 </Project>
