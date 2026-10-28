@@ -1,5 +1,6 @@
 # Changelog
 
+* [3.11.1](#3111-2026-10-28)
 * [3.11.0](#3110-2026-10-14)
 * [3.10.3](#3103-2026-09-30)
 * [3.10.2](#3102-2026-08-28)
@@ -50,6 +51,13 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [3.11.1](https://github.com/alexandrehtrb/Pororoca/tree/3.11.1) (2026-10-28)
+
+### Security Update
+
+- Raised .NET SDK version to 8.0.427.
+- This protects against the HTTP2Shell vulnerability (CVE-2026-111497).
 
 ## [3.11.0](https://github.com/alexandrehtrb/Pororoca/tree/3.11.0) (2026-10-14)
 
