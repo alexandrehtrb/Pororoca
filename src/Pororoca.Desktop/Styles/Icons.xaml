@@ -75,6 +75,7 @@
     <GeometryDrawing x:Key="IconAddFolder" Brush="{DynamicResource DefaultIconsBrush}" Geometry="{StaticResource IconAddFolderGeometry}" />
     <GeometryDrawing x:Key="IconArrowBack" Brush="{DynamicResource DefaultIconsBrush}" Geometry="{StaticResource IconArrowBackGeometry}" />
     <GeometryDrawing x:Key="IconCheck" Brush="{DynamicResource DefaultIconsBrush}" Geometry="{StaticResource IconCheckGeometry}" />
+    <GeometryDrawing x:Key="IconCheckOnMenuItem" Brush="{DynamicResource MenuFlyoutItemForeground}" Geometry="{StaticResource IconCheckGeometry}" />
     <GeometryDrawing x:Key="IconCurl" Brush="{DynamicResource DefaultIconsBrush}" Geometry="{StaticResource IconCurlGeometry}" />
     <GeometryDrawing x:Key="IconDonate" Brush="{DynamicResource DefaultIconsBrush}" Geometry="{StaticResource IconDonateGeometry}" />
     <GeometryDrawing x:Key="IconEdit" Brush="{DynamicResource DefaultIconsBrush}" Geometry="{StaticResource IconEditGeometry}" />
