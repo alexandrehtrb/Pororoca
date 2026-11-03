@@ -121,7 +121,7 @@
 			"scope": "string",
 			"settings": {
 				"fontStyle": "",
-				"foreground": "#cd8d8dff"
+				"foreground": "#FFB2D9ff"
 			}
 		},
 		{
@@ -168,7 +168,7 @@
 			],
 			"settings": {
 				"fontStyle": "",
-				"foreground": "#CD8D8Dff"
+				"foreground": "#FFB2D9ff"
 			}
 		},
 		{
@@ -268,7 +268,7 @@
 			],
 			"settings": {
 				"fontStyle": "italic",
-				"foreground": "#CD8D8Dff"
+				"foreground": "#FFB2D9ff"
 			}
 		},
 		{
@@ -279,7 +279,7 @@
 			],
 			"settings": {
 				"fontStyle": "",
-				"foreground": "#CD8D8Dff"
+				"foreground": "#FFB2D9ff"
 			}
 		},
 		{
@@ -378,7 +378,7 @@
 			"scope": "markup.inline.raw",
 			"settings": {
 				"fontStyle": "",
-				"foreground": "#cd8d8dff"
+				"foreground": "#FFB2D9ff"
 			}
 		},
 		{

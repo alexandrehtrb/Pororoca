@@ -1,0 +1,115 @@
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Pororoca.Desktop">
+  <ResourceDictionary.ThemeDictionaries>
+    <!-- inspired on: https://vscodethemes.com/e/dlandman27.tailwind-themes/tailwind-cyan-light -->
+    <ResourceDictionary x:Key="{x:Static local:PororocaThemeManager.Ocean}">
+      <!-- System colours overrides below -->
+      <Color x:Key="SystemAccentColorDark3">#022831</Color>
+      <Color x:Key="SystemAccentColorDark2">#045163</Color>
+      <Color x:Key="SystemAccentColorDark1">#077994</Color>
+      <Color x:Key="SystemAccentColor">#0891B2</Color>
+      <Color x:Key="SystemAccentColorLight1">#2ba0bd</Color>
+      <Color x:Key="SystemAccentColorLight2">#3ea9c3</Color>
+      <Color x:Key="SystemAccentColorLight3">#65bacf</Color>
+      <Color x:Key="SystemErrorTextColor">Red</Color>
+      <SolidColorBrush x:Key="ButtonPrimaryTextBrush" Color="#EEEEEE"/>
+      <SolidColorBrush x:Key="ButtonPrimaryHighlightTextBrush" Color="#FFFFFF"/>
+      <!-- Custom colours below -->
+      <Color x:Key="InputBackgroundValidationProblemColor">#99fecada</Color>
+      <Color x:Key="SystemInvertedAccentColor">#EA580C</Color>
+      <Color x:Key="SystemInvertedAccentColorLight1">#ed6e2d</Color>
+      <Color x:Key="SystemInvertedAccentColorLight2">#f18f5b</Color>
+      <Color x:Key="MainWindowMenuColor">#0891B2</Color>
+      <!-- the brushes below are to make a "dark" top menu on a light theme -->
+      <SolidColorBrush x:Key="MenuFlyoutItemBackground" Color="#0891B2"/>
+      <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver" Color="#077994"/>
+      <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPressed" Color="#045163"/>
+      <SolidColorBrush x:Key="MenuFlyoutItemBackgroundDisabled" Color="#0891B2"/>
+      <SolidColorBrush x:Key="MenuFlyoutPresenterBackground" Color="#0891B2"/>
+      <SolidColorBrush x:Key="MenuFlyoutItemForeground" Color="#ECFEFF"/>
+      <SolidColorBrush x:Key="MenuFlyoutItemForegroundPointerOver" Color="#FFFFFF"/>
+      <SolidColorBrush x:Key="MenuFlyoutItemForegroundPressed" Color="#FFFFFF"/>
+      <SolidColorBrush x:Key="MenuFlyoutItemForegroundDisabled" Color="#CCCCCC"/>
+      <SolidColorBrush x:Key="MenuFlyoutItemKeyboardAcceleratorTextForeground" Color="#CADEDD"/>
+      <SolidColorBrush x:Key="MenuFlyoutSubItemChevron" Color="#ECFEFF"/>
+      <SolidColorBrush x:Key="MenuFlyoutSubItemChevronPointerOver" Color="#FFFFFF"/>
+      <SolidColorBrush x:Key="MenuFlyoutSubItemChevronPressed" Color="#FFFFFF"/>
+      <SolidColorBrush x:Key="MenuFlyoutSubItemChevronDisabled" Color="#CCCCCC"/>
+      <SolidColorBrush x:Key="MenuFlyoutSubItemChevronSubMenuOpened" Color="#FFFFFF"/>
+      <Color x:Key="MainWindowBackgroundColor">#ECFEFF</Color>
+      <Color x:Key="MainWindowDarkerBackgroundColor">#CFFAFE</Color>
+      <Color x:Key="MainWindowSidebarColor">#CFFAFE</Color>
+      <Color x:Key="MainWindowSeparatorsColor">#CFFAFE</Color>
+      <Color x:Key="CurrentEnvironmentLabelColor">#000000</Color>
+      <Color x:Key="ListBoxBackgroundColor">#CFFAFE</Color>
+      <Color x:Key="ListBoxItemSelectedBackgroundColor">#3ea9c3</Color>
+      <Color x:Key="ResultsListBoxItemSelectedBackgroundColor">#fcfcfc</Color>
+      <Color x:Key="DragAndDropItemDraggingColor">Black</Color>
+
+      <Thickness x:Key="ButtonSecondaryBorderThickness">0</Thickness>
+      <Color x:Key="ButtonSecondaryBorderBrush">Transparent</Color>
+      <Color x:Key="ButtonSecondaryHighlightBorderBrush">Transparent</Color>
+      <Color x:Key="ButtonSecondaryBackgroundColor">#CFFAFE</Color>
+      <Color x:Key="ButtonSecondaryHighlightBackgroundColor">#b8dee2</Color>
+
+      <Color x:Key="WebSocketConnectedColor">#EA580C</Color>
+      <Color x:Key="WebSocketMessageFromClientPrimaryColor">#4BB976</Color>
+      <Color x:Key="WebSocketMessageFromServerPrimaryColor">#EA580C</Color>
+      <Color x:Key="DefaultIconsColor">#000000</Color>
+      <Color x:Key="DefaultTextForegroundColor">#333333</Color>
+      <x:String x:Key="TextEditorTheme">Light</x:String>
+      <Color x:Key="TextEditorBackgroundColor">White</Color>
+      <Color x:Key="TextEditorForegroundColor">Black</Color>
+      <Color x:Key="TextEditorHyperlinkForegroundColor">Blue</Color>
+      <Color x:Key="RegularVariableForegroundColor">#EA580C</Color>
+      <Color x:Key="RegularVariablePopupForegroundColor">#EA580C</Color>
+      <Color x:Key="PredefinedVariableForegroundColor">Orchid</Color>
+      <Color x:Key="PredefinedVariablePopupForegroundColor">Orchid</Color>
+      <Color x:Key="NoMatchingVariableForegroundColor">Red</Color>
+      <Color x:Key="NoMatchingVariablePopupForegroundColor">#cc0000</Color>
+      <Color x:Key="PVSHTextBlockDefaultForegroundColor">Black</Color>
+      <Color x:Key="ResponseCapturedValueTextColor">Black</Color>
+      <!-- don't rename key below -->
+      <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="#c4ecf0"/>
+      <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="#EA580C"/>
+      
+      <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPointerOver" Color="White"/>
+      <SolidColorBrush x:Key="CheckBoxBorderBrushUnchecked" Color="White"/>
+      <SolidColorBrush x:Key="CheckBoxBorderBrushUncheckedPointerOver" Color="White"/>
+      <SolidColorBrush x:Key="CheckBoxBorderBrushUncheckedPressed" Color="White"/>
+      <SolidColorBrush x:Key="CheckBoxBorderBrushCheckedPointerOver" Color="White"/>
+      <SolidColorBrush x:Key="CheckBoxBorderBrushCheckedPressed" Color="White"/>
+      <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked" Color="White"/>
+      <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPointerOver" Color="White"/>
+      <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPressed" Color="White"/>
+      
+      <SolidColorBrush x:Key="ComboBoxItemBackgroundPressed" Color="#95b4b8"/>
+      <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="#0891B2"/>
+      <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#077994"/>
+      <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPressed" Color="#055163"/>
+
+      <SolidColorBrush x:Key="ComboBoxItemForegroundPressed" Color="#000000"/>
+      <SolidColorBrush x:Key="ComboBoxItemForegroundSelected" Color="#EEEEEE"/>
+      <SolidColorBrush x:Key="ComboBoxItemForegroundSelectedPointerOver" Color="#FFFFFF"/>
+      <SolidColorBrush x:Key="ComboBoxItemForegroundSelectedPressed" Color="#FFFFFF"/>
+      
+      <SolidColorBrush x:Key="TreeViewItemBackgroundPointerOver" Color="#acd0d4"/>
+      <SolidColorBrush x:Key="TreeViewItemBackgroundPressed" Color="#95b4b8"/>
+      <SolidColorBrush x:Key="TreeViewItemBackgroundSelected" Color="#0891B2"/>
+      <SolidColorBrush x:Key="TreeViewItemBackgroundSelectedPointerOver" Color="#077994"/>
+      <SolidColorBrush x:Key="TreeViewItemBackgroundSelectedPressed" Color="#055163"/>
+      
+      <SolidColorBrush x:Key="TreeViewItemForegroundPointerOver" Color="#000000"/>
+      <SolidColorBrush x:Key="TreeViewItemForegroundPressed" Color="#000000"/>
+      <SolidColorBrush x:Key="TreeViewItemForegroundSelected" Color="#EEEEEE"/>
+      <SolidColorBrush x:Key="TreeViewItemForegroundSelectedPointerOver" Color="#FFFFFF"/>
+      <SolidColorBrush x:Key="TreeViewItemForegroundSelectedPressed" Color="#FFFFFF"/>
+      <!--Color x:Key="TreeViewItemTargetMovementHighlightColor">#22000000</Color-->
+
+      <!-- value below sets hover variable popup max width -->
+      <x:Double x:Key="FlyoutThemeMaxWidth">720</x:Double>
+    </ResourceDictionary>
+  </ResourceDictionary.ThemeDictionaries>
+</ResourceDictionary>

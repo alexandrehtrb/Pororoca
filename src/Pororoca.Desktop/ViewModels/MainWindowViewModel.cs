@@ -152,6 +152,14 @@ public sealed partial class MainWindowViewModel : ViewModelBase, ICollectionOrga
     public partial bool IsThemeAmazonianNight { get; set; }
     public ReactiveCommand<RxVoid, RxVoid> SwitchToAmazonianNightThemeCmd { get; }
 
+    [Reactive]
+    public partial bool IsThemeOcean { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SwitchToOceanThemeCmd { get; }
+
+    [Reactive]
+    public partial bool IsThemeBrazilwood { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SwitchToBrazilwoodThemeCmd { get; }
+
     #endregion
 
     #region GLOBAL OPTIONS
@@ -275,6 +283,8 @@ public sealed partial class MainWindowViewModel : ViewModelBase, ICollectionOrga
         SwitchToPampaThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Pampa));
         SwitchToDarkThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Dark));
         SwitchToAmazonianNightThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.AmazonianNight));
+        SwitchToOceanThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Ocean));
+        SwitchToBrazilwoodThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Brazilwood));
         UpdateMenuSelectedTheme();
         #endregion
 
@@ -454,6 +464,8 @@ public sealed partial class MainWindowViewModel : ViewModelBase, ICollectionOrga
         IsThemeDark = PororocaThemeManager.CurrentTheme == PororocaTheme.Dark;
         IsThemePampa = PororocaThemeManager.CurrentTheme == PororocaTheme.Pampa;
         IsThemeAmazonianNight = PororocaThemeManager.CurrentTheme == PororocaTheme.AmazonianNight;
+        IsThemeOcean = PororocaThemeManager.CurrentTheme == PororocaTheme.Ocean;
+        IsThemeBrazilwood = PororocaThemeManager.CurrentTheme == PororocaTheme.Brazilwood;
     }
 
     #endregion

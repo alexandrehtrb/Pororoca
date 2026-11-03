@@ -14,6 +14,8 @@ public enum PororocaTheme
     Pampa = 2,
     AmazonianNight = 3,
     Light2 = 4,
+    Ocean = 5,
+    Brazilwood = 6,
 }
 
 public static class PororocaThemeManager
@@ -23,6 +25,8 @@ public static class PororocaThemeManager
     public static readonly ThemeVariant Dark = ThemeVariant.Dark;
     public static readonly ThemeVariant Pampa = new("Pampa", ThemeVariant.Light);
     public static readonly ThemeVariant AmazonianNight = new("AmazonianNight", ThemeVariant.Dark);
+    public static readonly ThemeVariant Ocean = new("Ocean", ThemeVariant.Light);
+    public static readonly ThemeVariant Brazilwood = new("Brazilwood", ThemeVariant.Dark);
 
     private static PororocaTheme currentThemeField;
 
@@ -64,6 +68,8 @@ public static class PororocaThemeManager
             PororocaTheme.Dark => Dark,
             PororocaTheme.Pampa => Pampa,
             PororocaTheme.AmazonianNight => AmazonianNight,
+            PororocaTheme.Ocean => Ocean,
+            PororocaTheme.Brazilwood => Brazilwood,
             _ => AmazonianNight
         };
 

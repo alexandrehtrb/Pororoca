@@ -7,5 +7,7 @@
     <ResourceInclude Source="/Styles/Accents/Dark.xaml"/>
     <ResourceInclude Source="/Styles/Accents/Pampa.xaml"/>
     <ResourceInclude Source="/Styles/Accents/AmazonianNight.xaml"/>
+    <ResourceInclude Source="/Styles/Accents/Ocean.xaml"/>
+    <ResourceInclude Source="/Styles/Accents/Brazilwood.xaml"/>
   </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

@@ -152,6 +152,34 @@
                 </Image>
               </MenuItem.Icon>
             </MenuItem>
+            <MenuItem
+                x:Name="topMenuItemOptionsThemeOcean"
+                Header="{Binding i18n.TopMenuTheme.Ocean, Mode=OneWay}"
+                Command="{Binding SwitchToOceanThemeCmd, Mode=OneWay}">
+              <MenuItem.Icon>
+                <Image
+                    IsVisible="{Binding IsThemeOcean, Mode=OneWay}"
+                    Classes="MenuItemCheckMark">
+                  <Image.Source>
+                    <DrawingImage Drawing="{StaticResource IconCheckOnMenuItem}"/>
+                  </Image.Source>
+                </Image>
+              </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem
+                x:Name="topMenuItemOptionsThemeBrazilwood"
+                Header="{Binding i18n.TopMenuTheme.Brazilwood, Mode=OneWay}"
+                Command="{Binding SwitchToBrazilwoodThemeCmd, Mode=OneWay}">
+              <MenuItem.Icon>
+                <Image
+                    IsVisible="{Binding IsThemeBrazilwood, Mode=OneWay}"
+                    Classes="MenuItemCheckMark">
+                  <Image.Source>
+                    <DrawingImage Drawing="{StaticResource IconCheckOnMenuItem}"/>
+                  </Image.Source>
+                </Image>
+              </MenuItem.Icon>
+            </MenuItem>
           </MenuItem>
           <MenuItem
               x:Name="topMenuItemOptionsLanguage"
