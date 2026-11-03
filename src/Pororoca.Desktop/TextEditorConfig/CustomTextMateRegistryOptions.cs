@@ -1,6 +1,7 @@
 using Avalonia.Platform;
 using TextMateSharp.Grammars;
 using TextMateSharp.Internal.Grammars.Reader;
+using TextMateSharp.Internal.Themes.Reader;
 using TextMateSharp.Internal.Types;
 using TextMateSharp.Registry;
 using TextMateSharp.Themes;
@@ -15,10 +16,17 @@ internal class CustomTextMateRegistryOptions : IRegistryOptions
 
     private readonly RegistryOptions defaultOptions;
 
-    public CustomTextMateRegistryOptions(ThemeName defaultTheme) =>
-        this.defaultOptions = new(defaultTheme);
+    private readonly ThemeName defaultTheme;
 
-    public IRawTheme GetDefaultTheme() => this.defaultOptions.GetDefaultTheme();
+    public CustomTextMateRegistryOptions(ThemeName defaultTheme) =>
+        this.defaultOptions = new(this.defaultTheme = defaultTheme);
+
+    public IRawTheme GetDefaultTheme() => this.defaultTheme switch
+    {
+        ThemeName.QuietLight => LoadCustomQuietLightTheme(),
+        ThemeName.Red => LoadCustomRedTheme(),
+        _ => this.defaultOptions.GetDefaultTheme()
+    };        
 
     public IRawGrammar GetGrammar(string scopeName) =>
         scopeName == pororocaJsonGrammarName ?
@@ -34,8 +42,12 @@ internal class CustomTextMateRegistryOptions : IRegistryOptions
         pororocaJsonGrammarName :
         this.defaultOptions.GetScopeByLanguageId(langId);
 
-    public IRawTheme LoadTheme(ThemeName themeName) =>
-        this.defaultOptions.LoadTheme(themeName);
+    public IRawTheme LoadTheme(ThemeName themeName) => themeName switch
+    {
+        ThemeName.QuietLight => LoadCustomQuietLightTheme(),
+        ThemeName.Red => LoadCustomRedTheme(),
+        _ => this.defaultOptions.LoadTheme(themeName)
+    };
 
     public Language GetLanguageByExtension(string extension) =>
         this.defaultOptions.GetLanguageByExtension(extension);
@@ -52,5 +64,21 @@ internal class CustomTextMateRegistryOptions : IRegistryOptions
         using var stream = AssetLoader.Open(tmLangUri);
         using StreamReader sr = new(stream);
         return GrammarReader.ReadGrammarSync(sr);
+    }
+
+    private static IRawTheme LoadCustomQuietLightTheme()
+    {
+        Uri tmThemeUri = new($"avares://Pororoca.Desktop/Assets/TextMateThemes/Custom-Quiet-Light-Theme.json");
+        using var stream = AssetLoader.Open(tmThemeUri);
+        using StreamReader sr = new(stream);
+        return ThemeReader.ReadThemeSync(sr);
+    }
+
+    private static IRawTheme LoadCustomRedTheme()
+    {
+        Uri tmThemeUri = new($"avares://Pororoca.Desktop/Assets/TextMateThemes/Custom-Red-Theme.json");
+        using var stream = AssetLoader.Open(tmThemeUri);
+        using StreamReader sr = new(stream);
+        return ThemeReader.ReadThemeSync(sr);
     }
 }
