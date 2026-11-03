@@ -445,6 +445,10 @@ public sealed partial class MainWindowViewModel : ViewModelBase, ICollectionOrga
         IsLanguageThai = lang == Language.Thai;
         IsLanguageTurkish = lang == Language.Turkish;
         IsLanguageUkrainian = lang == Language.Ukrainian;
+        foreach (var col in CollectionsGroupViewDataCtx.Items)
+        {
+            col.EnvironmentsGroupVm.UpdateSelectedEnvironmentName();
+        }
     }
 
     #endregion

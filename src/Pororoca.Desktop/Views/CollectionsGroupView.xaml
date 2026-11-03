@@ -189,10 +189,7 @@
                   IsVisible="{Binding !HotKeys.HasMultipleItemsSelected, Mode=OneWay}"/>
             </ContextMenu>
           </StackPanel.ContextMenu>
-          <TextBlock Text="{Binding i18n.CollectionsGroup.Environments, Mode=OneWay}"/>
-          <TextBlock
-              Foreground="{DynamicResource CurrentEnvironmentLabelColor}"
-              Text="{Binding SelectedEnvironmentName}"/>
+          <TextBlock Text="{Binding SelectedEnvironmentName, Mode=OneWay}"/>
         </StackPanel>
       </TreeDataTemplate>
       <DataTemplate DataType="{x:Type vm:HttpRequestViewModel}">

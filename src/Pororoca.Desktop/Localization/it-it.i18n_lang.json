@@ -30,7 +30,7 @@
   "CollectionScopedAuth/Title": "Autenticazione a livello di collezione",
   "CollectionScopedRequestHeaders/Title": "Intestazioni a livello di collezione",
   "CollectionsGroup/CollectionScopedAuth": "Autenticazione",
-  "CollectionsGroup/Environments": "Ambienti",
+  "CollectionsGroup/Environments": "Ambienti  ({0})",
   "CollectionsGroup/Variables": "Variabili",
   "CollectionVariables/AddVariable": "Aggiungi variabile",
   "CollectionVariables/RemoveVariable": "Rimuovi variabile",

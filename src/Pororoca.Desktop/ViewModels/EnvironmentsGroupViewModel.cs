@@ -139,7 +139,7 @@ public sealed partial class EnvironmentsGroupViewModel : CollectionOrganizationI
     {
         var selectedEnv = Items.FirstOrDefault(i => i.IsCurrentEnvironment);
         SelectedEnvironmentName = selectedEnv is not null ?
-                                  '(' + selectedEnv.Name + ')' :
+                                  string.Format(Localizer.Instance.CollectionsGroup.Environments, selectedEnv.Name) :
                                   null;
     }
 

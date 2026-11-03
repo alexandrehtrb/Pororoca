@@ -30,7 +30,7 @@
   "CollectionScopedAuth/Title": "Авторизация на уровне коллекции",
   "CollectionScopedRequestHeaders/Title": "Заголовки на уровне коллекции",
   "CollectionsGroup/CollectionScopedAuth": "Auth",
-  "CollectionsGroup/Environments": "Окружения",
+  "CollectionsGroup/Environments": "Окружения  ({0})",
   "CollectionsGroup/Variables": "Переменные",
   "CollectionVariables/AddVariable": "Добавить переменную",
   "CollectionVariables/RemoveVariable": "Удалить переменную",

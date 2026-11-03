@@ -42,7 +42,6 @@
       <Color x:Key="MainWindowDarkerBackgroundColor">#CFFAFE</Color>
       <Color x:Key="MainWindowSidebarColor">#CFFAFE</Color>
       <Color x:Key="MainWindowSeparatorsColor">#CFFAFE</Color>
-      <Color x:Key="CurrentEnvironmentLabelColor">#000000</Color>
       <Color x:Key="ListBoxBackgroundColor">#CFFAFE</Color>
       <Color x:Key="ListBoxItemSelectedBackgroundColor">#3ea9c3</Color>
       <Color x:Key="ResultsListBoxItemSelectedBackgroundColor">#fcfcfc</Color>

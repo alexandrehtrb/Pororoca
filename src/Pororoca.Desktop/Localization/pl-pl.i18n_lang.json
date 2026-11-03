@@ -30,7 +30,7 @@
   "CollectionScopedAuth/Title": "Autoryzacja na poziomie kolekcji",
   "CollectionScopedRequestHeaders/Title": "Nagłówki żądań na poziomie kolekcji",
   "CollectionsGroup/CollectionScopedAuth": "Autoryzacja",
-  "CollectionsGroup/Environments": "Środowiska",
+  "CollectionsGroup/Environments": "Środowiska  ({0})",
   "CollectionsGroup/Variables": "Zmienne",
   "CollectionVariables/AddVariable": "Dodaj zmienną",
   "CollectionVariables/RemoveVariable": "Usuń zmienną",

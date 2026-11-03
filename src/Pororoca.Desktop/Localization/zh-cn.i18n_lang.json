@@ -30,7 +30,7 @@
   "CollectionScopedAuth/Title": "Collection-scoped 授权",
   "CollectionScopedRequestHeaders/Title": "Collection-scoped 请求标头",
   "CollectionsGroup/CollectionScopedAuth": "授权",
-  "CollectionsGroup/Environments": "环境",
+  "CollectionsGroup/Environments": "环境  ({0})",
   "CollectionsGroup/Variables": "变量",
   "CollectionVariables/AddVariable": "添加变量",
   "CollectionVariables/RemoveVariable": "移除变量",

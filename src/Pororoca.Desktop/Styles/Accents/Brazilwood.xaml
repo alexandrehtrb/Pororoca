@@ -18,7 +18,6 @@
       <Color x:Key="MainWindowDarkerBackgroundColor">#19010C</Color>
       <Color x:Key="MainWindowSidebarColor">#19010C</Color>
       <Color x:Key="MainWindowSeparatorsColor">#19010C</Color>
-      <Color x:Key="CurrentEnvironmentLabelColor">Linen</Color>
       <Color x:Key="ListBoxBackgroundColor">Black</Color>
       <Color x:Key="ListBoxItemSelectedBackgroundColor">#562F10</Color>
       <Color x:Key="ResultsListBoxItemSelectedBackgroundColor">#292929</Color>
