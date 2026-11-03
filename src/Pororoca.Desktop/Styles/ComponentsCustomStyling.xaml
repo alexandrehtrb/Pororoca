@@ -7,7 +7,7 @@
     xmlns:b="using:Pororoca.Desktop.Behaviors"
     xmlns:AvaloniaEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit">
 
-  <Style Selector="TreeView TextBlock">
+  <Style Selector="TreeViewItem TextBlock">
     <Setter
         Property="FontSize"
         Value="14"/>
@@ -17,6 +17,57 @@
     <Setter
         Property="Padding"
         Value="0,0,12,0"/>
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+  </Style>
+
+  <Style Selector="TreeViewItem:pointerover > TextBlock">
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource TreeViewItemForegroundPointerOver}"/>
+  </Style>
+
+  <Style Selector="TreeViewItem:pointerover > StackPanel > TextBlock">
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource TreeViewItemForegroundPointerOver}"/>
+  </Style>
+
+  <Style Selector="TreeViewItem:pressed > TextBlock">
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource TreeViewItemForegroundPressed}"/>
+  </Style>
+
+  <Style Selector="TreeViewItem:pressed > StackPanel > TextBlock">
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource TreeViewItemForegroundPressed}"/>
+  </Style>
+
+  <Style Selector="TreeViewItem:selected > TextBlock">
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource TreeViewItemForegroundSelected}"/>
+  </Style>
+
+  <Style Selector="TreeViewItem:selected > StackPanel > TextBlock">
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource TreeViewItemForegroundSelected}"/>
+  </Style>
+
+  <Style Selector="TreeViewItem:selected:pressed > TextBlock">
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource TreeViewItemForegroundSelectedPressed}"/>
+  </Style>
+
+  <Style Selector="TreeViewItem:selected:pressed > StackPanel > TextBlock">
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource TreeViewItemForegroundSelectedPressed}"/>
   </Style>
 
   <Style Selector="TreeViewItem.TargetHighlight">

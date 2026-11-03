@@ -73,17 +73,19 @@ public static class PororocaThemeManager
         // due to new color palette system
         // https://docs.avaloniaui.net/docs/styling/themes#creating-custom-color-palettes
         // https://github.com/Mbucari/AvaloniaThemeColorChanger/blob/master/AvaloniaThemeColorChanger/AvaloniaTheme.cs
+        // https://github.com/AvaloniaUI/Avalonia/discussions/12042#discussioncomment-6366474
         var fluentTheme = Application.Current!.Styles.OfType<FluentTheme>().Single();
         var baseThemeVariant = themeVariant == ThemeVariant.Light || themeVariant == ThemeVariant.Dark ?
                                themeVariant : themeVariant.InheritVariant!;
+        var accentColor = GetResource<Color>("SystemAccentColor");
         if (fluentTheme.Palettes.TryGetValue(baseThemeVariant, out var colorPaletteResources))
         {
-            colorPaletteResources.Accent = GetResource<Color>("SystemAccentColor");
+            colorPaletteResources.Accent = accentColor;
         }
         else
         {
             colorPaletteResources = new();
-            colorPaletteResources.Accent = GetResource<Color>("SystemAccentColor");
+            colorPaletteResources.Accent = accentColor;
             fluentTheme.Palettes.Add(baseThemeVariant, colorPaletteResources);
         }
 
