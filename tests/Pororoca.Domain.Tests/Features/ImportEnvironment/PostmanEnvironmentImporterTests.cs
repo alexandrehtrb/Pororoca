@@ -61,7 +61,7 @@ public static class PostmanEnvironmentImporterTests
     private static PostmanEnvironment CreateTestPostmanEnvironment() =>
         new()
         {
-            Id = testEnvId,
+            Id = testEnvId.ToString(),
             Name = testEnvName,
             Scope = "environment",
             ExportedAt = "2021-04-01T00:57:06.703Z",

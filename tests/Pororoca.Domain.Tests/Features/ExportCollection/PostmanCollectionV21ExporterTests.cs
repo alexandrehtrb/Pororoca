@@ -434,7 +434,7 @@ public static class PostmanCollectionV21ExporterTests
     private static void AssertConvertedCollection(PostmanCollectionV21? postmanCollection)
     {
         Assert.NotNull(postmanCollection);
-        Assert.Equal(testGuid, postmanCollection!.Info!.Id);
+        Assert.Equal(testGuid, Guid.Parse(postmanCollection!.Info!.Id!));
         Assert.Equal(testName, postmanCollection.Info.Name);
         Assert.Equal("https://schema.getpostman.com/json/collection/v2.1.0/collection.json", postmanCollection.Info.Schema);
         Assert.Equal(2, postmanCollection.Items.Length);

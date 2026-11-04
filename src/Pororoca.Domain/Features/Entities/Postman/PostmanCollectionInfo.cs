@@ -7,7 +7,7 @@ namespace Pororoca.Domain.Features.Entities.Postman;
 internal class PostmanCollectionInfo
 {
     [JsonPropertyName("_postman_id")]
-    public Guid Id { get; set; }
+    public string? Id { get; set; }
 
     public string Name { get; set; }
 
