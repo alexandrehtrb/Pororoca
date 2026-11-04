@@ -68,6 +68,7 @@ public sealed partial class UITestsRunnerWindowViewModel : ViewModelBase
             new(nameof(SwitchThemesUITest), new SwitchThemesUITest()),
             new(nameof(EditableTextBlockUITest), new EditableTextBlockUITest()),
             new(nameof(CollectionAndCollectionFolderUITest), new CollectionAndCollectionFolderUITest()),
+            new(nameof(EnvironmentsUITest), new EnvironmentsUITest()),
             new(nameof(TreeCopyAndPasteItemsUITest), new TreeCopyAndPasteItemsUITest()),
             new(nameof(TreeCutAndPasteItemsUITest), new TreeCutAndPasteItemsUITest()),
             new(nameof(TreeDeleteItemsUITest), new TreeDeleteItemsUITest()),
