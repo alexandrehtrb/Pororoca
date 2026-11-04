@@ -30,7 +30,7 @@
   "CollectionScopedAuth/Title": "Автентифікація на рівні колекції",
   "CollectionScopedRequestHeaders/Title": "Заголовки запитів на рівні колекції",
   "CollectionsGroup/CollectionScopedAuth": "Автентифікація",
-  "CollectionsGroup/Environments": "Середовища  ({0})",
+  "CollectionsGroup/Environments": "Середовища",
   "CollectionsGroup/Variables": "Змінні",
   "CollectionVariables/AddVariable": "Додати змінну",
   "CollectionVariables/RemoveVariable": "Видалити змінну",

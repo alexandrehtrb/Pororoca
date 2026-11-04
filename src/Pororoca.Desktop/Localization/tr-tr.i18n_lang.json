@@ -30,7 +30,7 @@
   "CollectionScopedAuth/Title": "Koleksiyon kapsamındaki kimlik doğrulama",
   "CollectionScopedRequestHeaders/Title": "Koleksiyon kapsamındaki istek başlıkları",
   "CollectionsGroup/CollectionScopedAuth": "Kimlik doğrulama",
-  "CollectionsGroup/Environments": "Ortamlar  ({0})",
+  "CollectionsGroup/Environments": "Ortamlar",
   "CollectionsGroup/Variables": "Değişkenler",
   "CollectionVariables/AddVariable": "Değişken ekle",
   "CollectionVariables/RemoveVariable": "Değişkeni kaldır",

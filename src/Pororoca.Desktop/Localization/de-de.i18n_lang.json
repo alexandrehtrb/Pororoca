@@ -30,7 +30,7 @@
   "CollectionScopedAuth/Title": "Sammlungsscoped Auth",
   "CollectionScopedRequestHeaders/Title": "Anforderungsheader für Sammelanforderungen",
   "CollectionsGroup/CollectionScopedAuth": "Auth",
-  "CollectionsGroup/Environments": "Umgebungen  ({0})",
+  "CollectionsGroup/Environments": "Umgebungen",
   "CollectionsGroup/Variables": "Variablen",
   "CollectionVariables/AddVariable": "Variable hinzufügen",
   "CollectionVariables/RemoveVariable": "Variable entfernen",

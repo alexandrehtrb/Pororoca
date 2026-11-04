@@ -30,7 +30,7 @@
   "CollectionScopedAuth/Title": "การยืนยันตัวตนระดับคอลเล็กชัน",
   "CollectionScopedRequestHeaders/Title": "ส่วนหัวคำขอระดับคอลเล็กชัน",
   "CollectionsGroup/CollectionScopedAuth": "การยืนยันตัวตน",
-  "CollectionsGroup/Environments": "สภาพแวดล้อม  ({0})",
+  "CollectionsGroup/Environments": "สภาพแวดล้อม",
   "CollectionsGroup/Variables": "ตัวแปร",
   "CollectionVariables/AddVariable": "เพิ่มตัวแปร",
   "CollectionVariables/RemoveVariable": "ลบตัวแปร",

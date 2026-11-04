@@ -139,8 +139,8 @@ public sealed partial class EnvironmentsGroupViewModel : CollectionOrganizationI
     {
         var selectedEnv = Items.FirstOrDefault(i => i.IsCurrentEnvironment);
         SelectedEnvironmentName = selectedEnv is not null ?
-                                  string.Format(Localizer.Instance.CollectionsGroup.Environments, selectedEnv.Name) :
-                                  null;
+                                  Localizer.Instance.CollectionsGroup.Environments + "  (" + selectedEnv.Name + ")" :
+                                  Localizer.Instance.CollectionsGroup.Environments;
     }
 
     public IEnumerable<PororocaEnvironment> ToEnvironments() =>

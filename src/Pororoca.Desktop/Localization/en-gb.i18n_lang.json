@@ -30,7 +30,7 @@
   "CollectionScopedAuth/Title": "Collection-scoped auth",
   "CollectionScopedRequestHeaders/Title": "Collection-scoped request headers",
   "CollectionsGroup/CollectionScopedAuth": "Auth",
-  "CollectionsGroup/Environments": "Environments  ({0})",
+  "CollectionsGroup/Environments": "Environments",
   "CollectionsGroup/Variables": "Variables",
   "CollectionVariables/AddVariable": "Add variable",
   "CollectionVariables/RemoveVariable": "Remove variable",
