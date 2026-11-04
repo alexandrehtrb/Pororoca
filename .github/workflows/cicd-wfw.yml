@@ -163,7 +163,7 @@ jobs:
 
     - name: Report unit tests coverage
       if: ${{ inputs.postUnitTestsCoverageInPR }}
-      uses: danielpalme/ReportGenerator-GitHub-Action@5.5.11
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.5.12
       with:
         reports: TestResults/*.cobertura.xml
         targetdir: TestResults
