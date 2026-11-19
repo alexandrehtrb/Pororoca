@@ -6,6 +6,7 @@ namespace Pororoca.Test.Tests;
 [JsonSerializable(typeof(Dictionary<string, int>))]
 [JsonSerializable(typeof(TestServerWebSocketMessage))]
 [JsonSerializable(typeof(Fruta[]))]
+[JsonSerializable(typeof(ReactorStatus))]
 [JsonSourceGenerationOptions(
     WriteIndented = false,
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,

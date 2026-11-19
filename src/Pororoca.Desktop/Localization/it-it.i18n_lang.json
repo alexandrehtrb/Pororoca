@@ -201,6 +201,7 @@
   "HttpResponse/SectionTitle": "Risposta",
   "HttpResponse/SectionTitleFailedFormat": "Risposta: Fallita ({0})",
   "HttpResponse/SectionTitleSuccessfulFormat": "Risposta: {0} ({1})",
+  "HttpResponse/SectionTitleReceivingStreamFormat": "Ricevendo flusso… {0}",
   "ImportExportCurlCommandLineDialog/ImportErrorMessage": "Comando cURL non valido.\\nControlla la presenza di errori e riprova.",
   "ImportExportCurlCommandLineDialog/InputWatermark": "Inserisci qui il comando cURL",
   "ImportExportCurlCommandLineDialog/ExportTitle": "Pororoca - Esporta come cURL",

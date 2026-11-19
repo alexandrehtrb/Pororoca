@@ -201,6 +201,7 @@
   "HttpResponse/SectionTitle": "Відповідь",
   "HttpResponse/SectionTitleFailedFormat": "Відповідь: помилка ({0})",
   "HttpResponse/SectionTitleSuccessfulFormat": "Відповідь: {0} ({1})",
+  "HttpResponse/SectionTitleReceivingStreamFormat": "Отримуємо потік… {0}",
   "ImportExportCurlCommandLineDialog/ImportErrorMessage": "Недійсна команда cURL. Перевірте її на помилки та спробуйте ще раз.",
   "ImportExportCurlCommandLineDialog/InputWatermark": "Вставте сюди командний рядок cURL",
   "ImportExportCurlCommandLineDialog/ExportTitle": "Поророка - Експорт як cURL",

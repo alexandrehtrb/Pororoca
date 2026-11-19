@@ -201,6 +201,7 @@
   "HttpResponse/SectionTitle",
   "HttpResponse/SectionTitleFailedFormat",
   "HttpResponse/SectionTitleSuccessfulFormat",
+  "HttpResponse/SectionTitleReceivingStreamFormat",
   "ImportExportCurlCommandLineDialog/ImportErrorMessage",
   "ImportExportCurlCommandLineDialog/InputWatermark",
   "ImportExportCurlCommandLineDialog/ExportTitle",

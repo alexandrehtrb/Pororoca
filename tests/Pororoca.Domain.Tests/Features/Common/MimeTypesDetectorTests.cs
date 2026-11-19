@@ -80,4 +80,16 @@ public static class MimeTypesDetectorTests
     public static void Should_detect_that_is_not_text_content_when_content_type_is_not_text(string contentType) =>
         Assert.False(MimeTypesDetector.IsTextContent(contentType));
 
+    [Theory]
+    [InlineData("image/jpeg", false)]
+    [InlineData("application/pdf", false)]
+    [InlineData("application/json", false)]
+    [InlineData("text/event-stream", true)]
+    [InlineData("application/x-ndjson", true)]
+    [InlineData("application/jsonl", true)]
+    public static void Should_correctly_detect_streamed_content_types(string contentType, bool isStreamed)
+    {
+        if (isStreamed) Assert.True(MimeTypesDetector.IsStreamedContent(contentType));
+        else Assert.False(MimeTypesDetector.IsStreamedContent(contentType));
+    }
 }

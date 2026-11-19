@@ -33,7 +33,7 @@ public static class HttpRepeaterTests
         var response1 = await MakeExampleResponseAsync(HttpStatusCode.OK, null);
         var response2 = await MakeExampleResponseAsync(HttpStatusCode.Accepted, null);
         var response3 = await MakeExampleResponseAsync(HttpStatusCode.NotAcceptable, null);
-        requester.RequestAsync(colEffVars, colScopedAuth, colScopedReqHeaders, baseReq, Arg.Any<CancellationToken>())
+        requester.RequestAsync(colEffVars, colScopedAuth, colScopedReqHeaders, baseReq, true, Arg.Any<CancellationToken>())
                  .Returns(Task.FromResult(response1), Task.FromResult(response2), Task.FromResult(response3));
 
         // WHEN
@@ -83,17 +83,17 @@ public static class HttpRepeaterTests
 
         var response1 = await MakeExampleResponseAsync(HttpStatusCode.OK, null);
         var req1EffVars = Arg.Is<IEnumerable<PororocaVariable>>(il => il.Any(v => v.Key == "Var2" && v.Value == "123"));
-        requester.RequestAsync(req1EffVars, colScopedAuth, colScopedReqHeaders, baseReq, Arg.Any<CancellationToken>())
+        requester.RequestAsync(req1EffVars, colScopedAuth, colScopedReqHeaders, baseReq, true, Arg.Any<CancellationToken>())
                  .Returns(Task.FromResult(response1));
 
         var response2 = await MakeExampleResponseAsync(HttpStatusCode.Accepted, null);
         var req2EffVars = Arg.Is<IEnumerable<PororocaVariable>>(il => il.Any(v => v.Key == "Var2" && v.Value == "456"));
-        requester.RequestAsync(req2EffVars, colScopedAuth, colScopedReqHeaders, baseReq, Arg.Any<CancellationToken>())
+        requester.RequestAsync(req2EffVars, colScopedAuth, colScopedReqHeaders, baseReq, true, Arg.Any<CancellationToken>())
                  .Returns(Task.FromResult(response2));
 
         var response3 = await MakeExampleResponseAsync(null, new TaskCanceledException());
         var req3EffVars = Arg.Is<IEnumerable<PororocaVariable>>(il => il.Any(v => v.Key == "Var2" && v.Value == "789"));
-        requester.RequestAsync(req3EffVars, colScopedAuth, colScopedReqHeaders, baseReq, Arg.Any<CancellationToken>())
+        requester.RequestAsync(req3EffVars, colScopedAuth, colScopedReqHeaders, baseReq, true, Arg.Any<CancellationToken>())
                  .Returns(Task.FromResult(response3));
 
         // WHEN
@@ -141,17 +141,17 @@ public static class HttpRepeaterTests
 
         var response1 = await MakeExampleResponseAsync(HttpStatusCode.OK, null);
         var req1EffVars = Arg.Is<IEnumerable<PororocaVariable>>(il => il.Any(v => v.Key == "Var2" && v.Value == "123"));
-        requester.RequestAsync(req1EffVars, colScopedAuth, colScopedReqHeaders, baseReq, Arg.Any<CancellationToken>())
+        requester.RequestAsync(req1EffVars, colScopedAuth, colScopedReqHeaders, baseReq, true, Arg.Any<CancellationToken>())
                  .Returns(Task.FromResult(response1));
 
         var response2 = await MakeExampleResponseAsync(HttpStatusCode.Accepted, null);
         var req2EffVars = Arg.Is<IEnumerable<PororocaVariable>>(il => il.Any(v => v.Key == "Var2" && v.Value == "456"));
-        requester.RequestAsync(req2EffVars, colScopedAuth, colScopedReqHeaders, baseReq, Arg.Any<CancellationToken>())
+        requester.RequestAsync(req2EffVars, colScopedAuth, colScopedReqHeaders, baseReq, true, Arg.Any<CancellationToken>())
                  .Returns(Task.FromResult(response2));
 
         var response3 = await MakeExampleResponseAsync(null, new TaskCanceledException());
         var req3EffVars = Arg.Is<IEnumerable<PororocaVariable>>(il => il.Any(v => v.Key == "Var2" && v.Value == "789"));
-        requester.RequestAsync(req3EffVars, colScopedAuth, colScopedReqHeaders, baseReq, Arg.Any<CancellationToken>())
+        requester.RequestAsync(req3EffVars, colScopedAuth, colScopedReqHeaders, baseReq, true, Arg.Any<CancellationToken>())
                  .Returns(Task.FromResult(response3));
 
         // WHEN

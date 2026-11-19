@@ -1,11 +1,14 @@
+using System.Diagnostics;
 using System.Net;
-using ReactiveUI.Primitives;
+using System.Text;
+using Avalonia.Threading;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Desktop.Localization;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using ReactiveUI;
+using ReactiveUI.Primitives;
 using ReactiveUI.SourceGenerators;
 using static Pororoca.Desktop.Localization.TimeTextFormatter;
 using static Pororoca.Domain.Features.Common.HttpStatusCodeFormatter;
@@ -17,6 +20,8 @@ namespace Pororoca.Desktop.ViewModels;
 public sealed partial class HttpResponseViewModel : ViewModelBase
 {
     private PororocaHttpResponse? res;
+    private CancellationToken? cancellationToken;
+    private Action? setRequestFinishedAction;
     private string? environmentUsedForRequest;
     private readonly CollectionViewModel colVm;
     private string? requestName;
@@ -70,11 +75,11 @@ public sealed partial class HttpResponseViewModel : ViewModelBase
         ExecuteCapturesCmd = ReactiveCommand.Create(ExecuteResponseCaptures);
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
 
-        UpdateWithResponse(string.Empty, this.res, null);
+        UpdateWithResponse(string.Empty, this.res, null, null, CancellationToken.None);
     }
 
     private void OnLanguageChanged() =>
-        UpdateWithResponse(this.requestName ?? string.Empty, this.res, this.responseCaptures);
+        UpdateWithResponse(this.requestName ?? string.Empty, this.res, this.responseCaptures, this.setRequestFinishedAction, this.cancellationToken);
 
     private string GenerateDefaultResponseInitialFileName(string fileExtensionWithoutDot)
     {
@@ -156,10 +161,12 @@ public sealed partial class HttpResponseViewModel : ViewModelBase
         IsDisableTlsVerificationVisible = false;
     }
 
-    public void UpdateWithResponse(string requestName, PororocaHttpResponse? res, IEnumerable<HttpResponseCaptureViewModel>? responseCaptures)
+    public void UpdateWithResponse(string requestName, PororocaHttpResponse? res, IEnumerable<HttpResponseCaptureViewModel>? responseCaptures, Action? setRequestFinishedAction, CancellationToken? cancellationToken)
     {
         this.requestName = requestName;
         this.responseCaptures = responseCaptures;
+        this.cancellationToken = cancellationToken;
+        this.setRequestFinishedAction = setRequestFinishedAction;
 
         if (res != null && res.Successful)
         {
@@ -169,20 +176,39 @@ public sealed partial class HttpResponseViewModel : ViewModelBase
                 // this is because the user might change the environment after the response was received,
                 // and we need to preserve the name of the environment used for the request
                 this.environmentUsedForRequest = this.colVm.CurrentEnvironmentVm?.Name;
+
+                // this below is to avoid spawning more than one server-sent event listener action
+                // if the user changes the app language whilst receiving server-sent events.
+                if (res.IsStreamed)
+                {
+                    Dispatcher.UIThread.Post(async () => await UpdateResponseBodyWithServerSentEventsAsync(res, (CancellationToken)cancellationToken!));
+                }
             }
-            ResponseStatusCodeElapsedTimeTitle = FormatSuccessfulResponseTitle(res.ElapsedTime, (HttpStatusCode)res.StatusCode!);
+
             UpdateHeadersAndTrailers(res.Headers, res.Trailers);
             // response content type needs to be always set first, because when the content is updated,
             // it triggers the syntax update, that checks the content type
             // if content type is set after, the syntax will not change after content is updated
             ResponseRawContentType = res.ContentType;
-            ResponseRawContent = res.CanDisplayTextBody ?
-                                 res.GetBodyAsPrettyText(Localizer.Instance.HttpResponse.BodyCouldNotReadAsUTF8) :
-                                 string.Format(Localizer.Instance.HttpResponse.BodyContentBinaryNotShown, res.GetBodyAsBinary()!.Length);
-            IsSaveResponseBodyToFileVisible = res.HasBody;
-            IsExportLogFileVisible = true;
-            IsDisableTlsVerificationVisible = false;
-            ExecuteResponseCaptures();
+
+            if (res.IsStreamed)
+            {
+                ResponseStatusCodeElapsedTimeTitle = FormatReceivingStreamResponseTitle((HttpStatusCode)res.StatusCode!);                
+                IsSaveResponseBodyToFileVisible = false;
+                IsExportLogFileVisible = false;
+                IsDisableTlsVerificationVisible = false;
+            }
+            else
+            {
+                ResponseStatusCodeElapsedTimeTitle = FormatSuccessfulResponseTitle(res.ElapsedTime, (HttpStatusCode)res.StatusCode!);
+                ResponseRawContent = res.CanDisplayTextBody ?
+                                     res.GetBodyAsPrettyText(Localizer.Instance.HttpResponse.BodyCouldNotReadAsUTF8) :
+                                     string.Format(Localizer.Instance.HttpResponse.BodyContentBinaryNotShown, res.GetBodyAsBinary()!.Length);
+                IsSaveResponseBodyToFileVisible = res.HasBody;
+                IsExportLogFileVisible = true;
+                IsDisableTlsVerificationVisible = false;
+                ExecuteResponseCaptures();
+            }
         }
         else if (res != null && !res.WasCancelled) // Not success, but also not cancelled. If cancelled, do nothing.
         {
@@ -225,6 +251,50 @@ public sealed partial class HttpResponseViewModel : ViewModelBase
             {
                 tableItems.Add(new(tableItems, true, kvp.Key, kvp.Value));
             }
+        }
+    }
+
+    private async Task UpdateResponseBodyWithServerSentEventsAsync(PororocaHttpResponse res, CancellationToken cancellationToken)
+    {
+        // initial setup of TextDocument
+        ResponseRawContentTextDocument = new();
+        this.cancellationToken = cancellationToken;
+        try
+        {
+            // Scenario 1: The Stream is already completed.
+            // This may happen in repeaters. The user clicks on an HttpRepetitionResult
+            // to see the response body, but it completed even before this response was
+            // the one selected and being watched.
+            // In this case, it's not necessary to drain the StreamedBodyReader;
+            // just use the BinaryBody that already contains the full response body.
+            if (res.HasBody)
+            {
+                // if the stream is already completed, then just set the complete binary body
+                // into the response body text document
+                ResponseRawContentTextDocument.Insert(0, res.GetBodyAsString());
+            }
+            else
+            {
+                // Scenario 2: The Stream is ongoing.
+                // This is the default for most cases. The user is on HttpRequestView screen,
+                // clicks on Send, and the Stream starts to arrive.
+                // Each received part must be appended to the current text document.
+                // Let's drain the stream as the parts arrive.
+                await foreach (string part in res.StreamedBodyReader!.ReadAllAsync(cancellationToken))
+                {
+                    ResponseRawContentTextDocument.Insert(ResponseRawContentTextDocument.TextLength, part);
+                }
+            }
+        }
+        catch
+        {
+        }
+        finally
+        {
+            ResponseStatusCodeElapsedTimeTitle = FormatSuccessfulResponseTitle(res.ElapsedTime, (HttpStatusCode)res.StatusCode!);
+            IsSaveResponseBodyToFileVisible = true;
+            IsExportLogFileVisible = true;
+            this.setRequestFinishedAction?.Invoke();
         }
     }
 
@@ -271,6 +341,10 @@ public sealed partial class HttpResponseViewModel : ViewModelBase
         string.Format(Localizer.Instance.HttpResponse.SectionTitleSuccessfulFormat,
                       FormatHttpStatusCodeText(statusCode),
                       FormatTimeText(elapsedTime));
+
+    private static string FormatReceivingStreamResponseTitle(HttpStatusCode statusCode) =>
+        string.Format(Localizer.Instance.HttpResponse.SectionTitleReceivingStreamFormat,
+                      FormatHttpStatusCodeText(statusCode));
 
     private static string FormatFailedResponseTitle(TimeSpan elapsedTime) =>
         string.Format(Localizer.Instance.HttpResponse.SectionTitleFailedFormat,

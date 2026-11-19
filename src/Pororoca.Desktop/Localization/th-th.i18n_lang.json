@@ -201,6 +201,7 @@
   "HttpResponse/SectionTitle": "การตอบสนอง",
   "HttpResponse/SectionTitleFailedFormat": "การตอบสนอง: ล้มเหลว ({0})",
   "HttpResponse/SectionTitleSuccessfulFormat": "การตอบสนอง: {0} ({1})",
+  "HttpResponse/SectionTitleReceivingStreamFormat": "กำลังรับสตรีม… {0}",
   "ImportExportCurlCommandLineDialog/ImportErrorMessage": "คำสั่ง cURL ไม่ถูกต้อง ตรวจสอบข้อผิดพลาดแล้วลองอีกครั้ง",
   "ImportExportCurlCommandLineDialog/InputWatermark": "แทรกบรรทัดคำสั่ง cURL ที่นี่",
   "ImportExportCurlCommandLineDialog/ExportTitle": "Pororoca - ส่งออกเป็น cURL",

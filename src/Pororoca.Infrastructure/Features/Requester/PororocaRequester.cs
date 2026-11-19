@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Requester;
@@ -16,11 +17,11 @@ public sealed class PororocaRequester : IPororocaRequester
     {
     }
 
-    public async Task<PororocaHttpResponse> RequestAsync(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, List<PororocaKeyValueParam>? collectionScopedReqHeaders, PororocaHttpRequest req, CancellationToken cancellationToken = default)
+    public async Task<PororocaHttpResponse> RequestAsync(IEnumerable<PororocaVariable> effectiveVars, PororocaRequestAuth? collectionScopedAuth, List<PororocaKeyValueParam>? collectionScopedReqHeaders, PororocaHttpRequest req, bool waitForEntireBodyIfStreamed, CancellationToken cancellationToken = default)
     {
         PororocaHttpRequest? resolvedReq = null;
         HttpRequestMessage? reqMsg = null;
-        HttpResponseMessage? resMsg;
+        HttpResponseMessage? resMsg = null;
         Stopwatch sw = new();
         DateTimeOffset? startedAt = null;
         try
@@ -36,20 +37,42 @@ public sealed class PororocaRequester : IPororocaRequester
                 var httpClient = PororocaHttpClientProvider.Singleton.Provide(DisableSslVerification, resolvedAuth);
                 startedAt = DateTimeOffset.Now;
                 sw.Start();
-                resMsg = await httpClient.SendAsync(reqMsg!, cancellationToken);
-                sw.Stop();
-                reqMsg?.Dispose();
-                var res = await PororocaHttpResponse.SuccessfulAsync(resolvedReq!, (DateTimeOffset)startedAt!, sw.Elapsed, resMsg);
-                // PororocaHttpResponse.SuccessfulAsync uses HttpResponseMessage, so we need to dispose it only after line above
-                resMsg?.Dispose();
-                return res;
+                // The response body can be read later,
+                // even with the HttpCompletionOption.ResponseHeadersRead below.
+                resMsg = await httpClient.SendAsync(reqMsg!, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+                bool isStreamed = MimeTypesDetector.IsStreamedContent(resMsg.Content.Headers.ContentType?.MediaType);
+                // Explaining `waitForEntireBodyIfStreamed`:
+                // For HttpRequest: the response should be streamed, in case of SSE or NDJSON.
+                // For HttpRepeater: the response should wait until the entire response body is received,
+                // to respect the repeater's options (maxdop, sequences, etc.).
+                if (isStreamed && !waitForEntireBodyIfStreamed)
+                {
+                    // Do not dispose HttpResponseMessage here.
+                    // The Stream reception thread will dispose it at the end.
+                    sw.Stop();
+                    reqMsg?.Dispose();
+                    return await PororocaHttpResponse.SuccessfulStreamingAsync(resolvedReq!, (DateTimeOffset)startedAt!, sw, resMsg, cancellationToken);
+                }
+                else
+                {
+                    reqMsg?.Dispose();
+                    var res = await PororocaHttpResponse.SuccessfulCompletedAsync(resolvedReq!, (DateTimeOffset)startedAt!, sw, resMsg, cancellationToken);
+                    // PororocaHttpResponse.SuccessfulCompletedAsync uses HttpResponseMessage, so we need to dispose it only after line above
+                    resMsg?.Dispose();
+                    return res;
+                }
             }
         }
         catch (Exception ex)
         {
             startedAt ??= DateTimeOffset.Now;
             sw.Stop();
-            reqMsg?.Dispose();
+            try
+            {
+                reqMsg?.Dispose();
+                resMsg?.Dispose();
+            }
+            catch { }
             return PororocaHttpResponse.Failed(resolvedReq, (DateTimeOffset)startedAt!, sw.Elapsed, ex);
         }
     }

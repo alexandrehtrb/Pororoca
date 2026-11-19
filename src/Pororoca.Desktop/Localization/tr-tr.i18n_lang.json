@@ -201,6 +201,7 @@
   "HttpResponse/SectionTitle": "Yanıt",
   "HttpResponse/SectionTitleFailedFormat": "Yanıt: Başarısız ({0})",
   "HttpResponse/SectionTitleSuccessfulFormat": "Yanıt: {0} ({1})",
+  "HttpResponse/SectionTitleReceivingStreamFormat": "Etkinlikleri alıyoruz… {0}",
   "ImportExportCurlCommandLineDialog/ImportErrorMessage": "Geçersiz cURL komutu. Hataları kontrol edip yeniden deneyin.",
   "ImportExportCurlCommandLineDialog/InputWatermark": "cURL komut satırını buraya yazın",
   "ImportExportCurlCommandLineDialog/ExportTitle": "Pororoca - cURL olarak dışa aktar",

@@ -1,6 +1,9 @@
+using System.Buffers;
 using System.Collections.Frozen;
+using System.Diagnostics;
 using System.Net;
 using System.Text;
+using System.Threading.Channels;
 using System.Xml;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.VariableCapture;
@@ -22,7 +25,7 @@ public sealed class PororocaHttpResponse
 
     public DateTimeOffset StartedAtUtc { get; }
 
-    public TimeSpan ElapsedTime { get; }
+    public TimeSpan ElapsedTime { get; private set; }
 
     public DateTimeOffset ReceivedAt => StartedAtUtc + ElapsedTime;
 
@@ -38,7 +41,11 @@ public sealed class PororocaHttpResponse
 
     public PororocaHttpResponseMultipartPart[]? MultipartParts { get; internal set; }
 
-    private readonly byte[]? binaryBody;
+    public readonly bool IsStreamed;
+
+    private volatile byte[]? binaryBody;
+
+    public ChannelReader<string>? StreamedBodyReader { get; private set; }
 
     private XmlDocument? cachedXmlDoc;
     private XmlNamespaceManager? cachedXmlNsm;
@@ -89,7 +96,7 @@ public sealed class PororocaHttpResponse
                 {
                     try
                     {
-                        return string.Format(nonUtf8BodyMessageToShow, GetBodyAsBinary()!.Length);
+                        return string.Format(nonUtf8BodyMessageToShow, this.binaryBody.Length);
                     }
                     catch
                     {
@@ -175,6 +182,59 @@ public sealed class PororocaHttpResponse
         return null;
     }
 
+    private void StartReadingStreamedBody(HttpResponseMessage responseMessage, Stopwatch sw, CancellationToken cancellationToken)
+    {
+        if (this.binaryBody != null)
+        {
+            throw new InvalidOperationException("This method should be used only on streamed responses. If there is a full binary body, use SuccessfulCompletedAsync().");
+        }
+        else
+        {
+            Channel<string> channel = Channel.CreateUnbounded<string>(new UnboundedChannelOptions()
+            {
+                SingleWriter = true,
+                SingleReader = true
+            });
+            StreamedBodyReader = channel.Reader;
+            _ = Task.Factory.StartNew(async () =>
+            {
+                var bodyStreamFromHttp = await responseMessage.Content.ReadAsStreamAsync(cancellationToken);
+
+                byte[] buffer = ArrayPool<byte>.Shared.Rent(4096);
+                using MemoryStream accumulator = new(4096);
+                sw.Start();
+                try
+                {
+                    while (bodyStreamFromHttp.CanRead)
+                    {
+                        int numBytesRead = await bodyStreamFromHttp.ReadAsync(buffer, cancellationToken);
+                        if (numBytesRead > 0)
+                        {
+                            await accumulator.WriteAsync(buffer, 0, numBytesRead, cancellationToken);
+                            string s = Encoding.UTF8.GetString(buffer, 0, numBytesRead);
+                            await channel.Writer.WriteAsync(s, cancellationToken);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                catch { }
+                sw.Stop();
+                try
+                {
+                    responseMessage.Dispose();
+                }
+                catch { }
+                channel.Writer.Complete();
+                ArrayPool<byte>.Shared.Return(buffer);
+                this.binaryBody = accumulator.ToArray();
+                ElapsedTime = ElapsedTime + sw.Elapsed;
+            }, TaskCreationOptions.LongRunning);
+        }
+    }
+
     public string? CaptureValue(PororocaHttpResponseValueCapture capture)
     {
         if (capture.Type == PororocaHttpResponseValueCaptureType.Header)
@@ -223,19 +283,29 @@ public sealed class PororocaHttpResponse
         }
     }
 
-    public static async Task<PororocaHttpResponse> SuccessfulAsync(PororocaHttpRequest resolvedReq, DateTimeOffset startedAt, TimeSpan elapsedTime, HttpResponseMessage responseMessage)
+    private static (FrozenDictionary<string, string>? Headers, FrozenDictionary<string, string>? Trailers) MakeHeadersAndTrailersTables(HttpResponseMessage responseMessage)
     {
-        // the binaryBody needs to be read before making the table of headers,
-        // otherwise, the Content-Length header disappears for some reason (???)
-        byte[] binaryBody = await responseMessage.Content.ReadAsByteArrayAsync();
-
         var nonContentHeaders = responseMessage.Headers;
         var contentHeaders = responseMessage.Content.Headers;
-
         var headers = nonContentHeaders.Concat(contentHeaders);
         var trailers = responseMessage.TrailingHeaders;
 
-        PororocaHttpResponse res = new(resolvedReq, startedAt, elapsedTime, responseMessage.StatusCode, MakeKvTable(headers), MakeKvTable(trailers), binaryBody);
+        var headersTable = headers.Any() ? MakeKvTable(headers) : null;
+        var trailersTable = trailers.Any() ? MakeKvTable(trailers) : null;
+
+        return (headersTable, trailersTable);
+    }
+
+    public static async Task<PororocaHttpResponse> SuccessfulCompletedAsync(PororocaHttpRequest resolvedReq, DateTimeOffset startedAt, Stopwatch sw, HttpResponseMessage responseMessage, CancellationToken cancellationToken)
+    {
+        // The binaryBody needs to be read before making the table of headers,
+        // otherwise, the Content-Length header disappears for some reason (???)
+        byte[] binaryBody = await responseMessage.Content.ReadAsByteArrayAsync(cancellationToken);
+        sw.Stop();
+
+        var (headers, trailers) = MakeHeadersAndTrailersTables(responseMessage);
+
+        PororocaHttpResponse res = new(resolvedReq, startedAt, sw.Elapsed, responseMessage.StatusCode, headers, trailers, binaryBody);
 
         if (res.ContentType?.StartsWith("multipart") == true)
         {
@@ -246,10 +316,22 @@ public sealed class PororocaHttpResponse
         return res;
     }
 
+    public static async Task<PororocaHttpResponse> SuccessfulStreamingAsync(PororocaHttpRequest resolvedReq, DateTimeOffset startedAt, Stopwatch sw, HttpResponseMessage responseMessage, CancellationToken cancellationToken)
+    {
+        // TODO: Support streamed responses for all kinds of bodies,
+        // not just text-based.
+
+        var (headers, trailers) = MakeHeadersAndTrailersTables(responseMessage);
+
+        PororocaHttpResponse res = new(resolvedReq, startedAt, sw.Elapsed, responseMessage.StatusCode, headers, trailers);
+        res.StartReadingStreamedBody(responseMessage, sw, cancellationToken);
+        return res;
+    }
+
     public static PororocaHttpResponse Failed(PororocaHttpRequest? resolvedReq, DateTimeOffset startedAt, TimeSpan elapsedTime, Exception ex) =>
         new(resolvedReq, startedAt, elapsedTime, ex);
 
-    internal PororocaHttpResponse(PororocaHttpRequest? resolvedReq, DateTimeOffset startedAt, TimeSpan elapsedTime, HttpStatusCode httpStatusCode, FrozenDictionary<string, string> headers, FrozenDictionary<string, string> trailers, byte[] binaryBody)
+    internal PororocaHttpResponse(PororocaHttpRequest? resolvedReq, DateTimeOffset startedAt, TimeSpan elapsedTime, HttpStatusCode httpStatusCode, FrozenDictionary<string, string>? headers, FrozenDictionary<string, string>? trailers, byte[] binaryBody)
     {
         ResolvedRequest = resolvedReq;
         StartedAtUtc = startedAt;
@@ -258,7 +340,21 @@ public sealed class PororocaHttpResponse
         StatusCode = httpStatusCode;
         Headers = headers;
         Trailers = trailers;
+        this.IsStreamed = false;
         this.binaryBody = binaryBody;
+    }
+
+    internal PororocaHttpResponse(PororocaHttpRequest? resolvedReq, DateTimeOffset startedAt, TimeSpan elapsedTime, HttpStatusCode httpStatusCode, FrozenDictionary<string, string>? headers, FrozenDictionary<string, string>? trailers)
+    {
+        ResolvedRequest = resolvedReq;
+        StartedAtUtc = startedAt;
+        ElapsedTime = elapsedTime;
+        Successful = true;
+        StatusCode = httpStatusCode;
+        Headers = headers;
+        Trailers = trailers;
+        this.IsStreamed = true;
+        this.binaryBody = null;
     }
 
     private PororocaHttpResponse(PororocaHttpRequest? resolvedReq, DateTimeOffset startedAt, TimeSpan elapsedTime, Exception exception)

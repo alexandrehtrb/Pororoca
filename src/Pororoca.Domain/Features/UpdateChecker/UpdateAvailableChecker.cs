@@ -26,7 +26,7 @@ public static class UpdateAvailableChecker
         {
             CancellationTokenSource cts = new(TimeSpan.FromSeconds(20));
             var req = GenerateGetLatestReleaseReq(currentVersion);
-            var res = await requester.RequestAsync([], null, null, req, cts.Token);
+            var res = await requester.RequestAsync([], null, null, req, true, cts.Token);
             if (res.Successful && res.StatusCode == System.Net.HttpStatusCode.OK && res.HasBody)
             {
                 using MemoryStream ms = new(res.GetBodyAsBinary()!);

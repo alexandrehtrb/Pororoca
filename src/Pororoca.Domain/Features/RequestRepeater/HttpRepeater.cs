@@ -167,7 +167,11 @@ public static class HttpRepeater
         }
         else
         {
-            var res = await requester.RequestAsync(effectiveVars, collectionScopedAuth, collectionScopedRequestHeaders, baseReq, cancellationToken);
+            // The option `waitForEntireBodyIfStreamed: true` means that
+            // it will wait until the whole response body is received.
+            // "Why not just use StreamedBodyReader and read it to the end?"
+            // Answer: to avoid spawning new threads, MemoryStream and other stuff.
+            var res = await requester.RequestAsync(effectiveVars, collectionScopedAuth, collectionScopedRequestHeaders, baseReq, waitForEntireBodyIfStreamed: true, cancellationToken);
             channelWriter.TryWrite(new(inputLine, res, null));
         }
 

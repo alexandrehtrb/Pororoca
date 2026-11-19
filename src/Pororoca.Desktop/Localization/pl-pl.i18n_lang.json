@@ -201,6 +201,7 @@
   "HttpResponse/SectionTitle": "Odpowiedź",
   "HttpResponse/SectionTitleFailedFormat": "Odpowiedź: Niepowodzenie ({0})",
   "HttpResponse/SectionTitleSuccessfulFormat": "Odpowiedź: {0} ({1})",
+  "HttpResponse/SectionTitleReceivingStreamFormat": "Odbieramy strumień… {0}",
   "ImportExportCurlCommandLineDialog/ImportErrorMessage": "Nieprawidłowe polecenie cURL.\\nSprawdź, czy nie ma błędów i spróbuj ponownie.",
   "ImportExportCurlCommandLineDialog/InputWatermark": "Wstaw tutaj wiersz polecenia cURL",
   "ImportExportCurlCommandLineDialog/ExportTitle": "Pororoca - Eksportuj jako cURL",

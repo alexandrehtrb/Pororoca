@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
@@ -8,6 +9,8 @@ namespace Pororoca.Domain.Tests.Features.Entities.Pororoca.Repetition;
 
 public static class PororocaHttpRepetitionTests
 {
+    private static readonly Stopwatch testSw = new();
+
     public static IEnumerable<object[]> GetAllTestInputDatas()
     {
         yield return new object[] { new PororocaRepetitionInputData(PororocaRepetitionInputDataType.RawJsonArray, "[]", null) };
@@ -84,7 +87,7 @@ public static class PororocaHttpRepetitionTests
     {
         // GIVEN
         var httpRes = PororocaHttpResponseTests.CreateTestHttpResponseMessage(body, contentType, null, statusCode);
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, TimeSpan.Zero, httpRes);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testSw, httpRes, CancellationToken.None);
         var repRes = new PororocaHttpRepetitionResult(null, res, null);
 
         // WHEN AND THEN
@@ -120,7 +123,7 @@ public static class PororocaHttpRepetitionTests
     {
         // GIVEN
         var httpRes = PororocaHttpResponseTests.CreateTestHttpResponseMessage(body, contentType, null, statusCode);
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, TimeSpan.Zero, httpRes);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testSw, httpRes, CancellationToken.None);
         var repRes = new PororocaHttpRepetitionResult(null, res, null);
 
         // WHEN AND THEN

@@ -272,7 +272,7 @@ public sealed partial class HttpRepeaterViewModel : CollectionOrganizationItemVi
         set
         {
             this.RaiseAndSetIfChanged(ref field, value);
-            ResponseDataCtx.UpdateWithResponse(this.nameOfBaseHttpRequestUsed ?? "MyReq", value?.Result?.Response, null);
+            ResponseDataCtx.UpdateWithResponse(this.nameOfBaseHttpRequestUsed ?? "MyReq", value?.Result?.Response, null, () => IsRepetitionRunning = false, this.cancellationTokenSource?.Token);
             InputLineTableVm.Items.Clear();
             if (value?.Result.InputLine is not null)
             {

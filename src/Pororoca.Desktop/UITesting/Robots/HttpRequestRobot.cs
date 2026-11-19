@@ -57,6 +57,7 @@ public sealed class HttpRequestRobot : BaseNamedRobot
     internal TextEditor ResBodyRawContent => GetChildView<TextEditor>("ResponseBodyRawContentEditor")!;
     internal Button ResAddCaptureHeader => GetChildView<Button>("btResCaptureAddHeaderCapture")!;
     internal Button ResAddCaptureBody => GetChildView<Button>("btResCaptureAddBodyCapture")!;
+    internal Button ResBodyExportLogToFile => GetChildView<Button>("btResExportLogFile")!;
     internal Button ResBodySaveToFile => GetChildView<Button>("btResBodySaveToFile")!;
     internal Button ResDisableTlsVerification => GetChildView<Button>("btResDisableTlsVerification")!;
     internal ProgressBar ResProgressBar => GetChildView<ProgressBar>("pbResProgressBar")!;
@@ -254,6 +255,12 @@ public sealed class HttpRequestRobot : BaseNamedRobot
         await ReqBodyMode.Select(ReqBodyModeOptionGraphQl);
         await ReqBodyGraphQlQuery.ClearAndTypeText(query);
         await ReqBodyGraphQlVariables.ClearAndTypeText(variables);
+    }
+
+    internal async Task ClickOnSend()
+    {
+        await SendOrCancel.RaiseClickEvent();
+        await Task.Delay(1000);
     }
 
     internal async Task ClickOnSendAndWaitForResponse()

@@ -1,10 +1,14 @@
 using System.Globalization;
 using System.Net;
+using System.Net.ServerSentEvents;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
+using Pororoca.TestServer.Configurations;
 
 namespace Pororoca.TestServer.Endpoints;
 
@@ -21,6 +25,7 @@ public static class TestEndpoints
         app.MapGet("test/get/trailers", TestGetTrailers);
         app.MapGet("test/get/multipartformdata", TestGetMultipartFormData);
         app.MapGet("test/get/multiparttextonly", TestGetMultipartTextOnly);
+        app.MapGet("test/get/server-sent-events", TestGetServerSentEvents);
         app.MapQuery("test/query/fruits", TestQueryFruits);
         app.MapGet("test/auth", TestAuthHeader);
         app.MapGet("test/http1websocket", (Delegate)TestHttp1WebSocket);
@@ -134,6 +139,64 @@ public static class TestEndpoints
                 Stream = new MemoryStream("{\"msg\":\"ciao\"}"u8.ToArray())
             }
         };
+
+    private static async Task<IResult> TestGetServerSentEvents([FromQuery(Name = "durationInSeconds")] int durationInSeconds, CancellationToken reqCancellationToken)
+    {
+        CancellationTokenSource ctsMaxLifetime = new(TimeSpan.FromSeconds(durationInSeconds + 0.7));
+        var cts = CancellationTokenSource.CreateLinkedTokenSource(ctsMaxLifetime.Token, reqCancellationToken);
+        IAsyncEnumerable<SseItem<String>> events = ProduceServerSentEvents(durationInSeconds, cts.Token);
+        return Results.ServerSentEvents(events);
+    }
+
+    private static async IAsyncEnumerable<SseItem<String>> ProduceServerSentEvents(
+        int durationInSeconds,
+        [EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        for (int i = 1; i <= durationInSeconds; i++)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                yield return new SseItem<string>("bye", eventType: "cancellationRequested");
+                break;
+            }
+
+            await Task.Delay(1000, CancellationToken.None);
+
+            if (cancellationToken.IsCancellationRequested)
+            {
+                yield return new SseItem<string>("bye", eventType: "cancellationRequested");
+                break;
+            }
+
+            if (i % 3 == 0)
+            {
+                yield return new SseItem<string>(DateTimeOffset.Now.ToString("O"), eventType: "dateTimeSync");
+            }
+            else
+            {
+                int temp = Random.Shared.Next(400, 500);
+                float pressure = Random.Shared.Next(10000, 25000) / 100f;
+                string? warning = (temp, pressure) switch
+                {
+                    (> 470, > 240f) => "TEMPERATURE_AND_PRESSURE_TOO_HIGH",
+                    (_, > 240f) => "PRESSURE_TOO_HIGH",
+                    (_, < 120f) => "PRESSURE_TOO_LOW",
+                    (> 470, _) => "TEMPERATURE_TOO_HIGH",
+                    (< 420, _) => "TEMPERATURE_TOO_LOW",
+                    _ => null
+                };
+                StringBuilder sb = new("{");
+                sb.Append($"\"tempInC\":{temp},");
+                sb.Append($"\"pressureInKPa\":{pressure.ToString("0.00", CultureInfo.InvariantCulture)}");
+                if (warning != null)
+                {
+                    sb.Append($",\"warning\":\"{warning}\"");
+                }
+                sb.Append('}');
+                yield return new SseItem<string>(sb.ToString(), eventType: "reactorStats");
+            }
+        }
+    }
 
     #endregion
 

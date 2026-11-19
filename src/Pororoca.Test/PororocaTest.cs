@@ -150,7 +150,7 @@ public sealed class PororocaTest
         else
         {
             var requester = PororocaRequester.Singleton;
-            var res = await requester.RequestAsync(effectiveVars, Collection.CollectionScopedAuth, Collection.CollectionScopedRequestHeaders, req, cancellationToken);
+            var res = await requester.RequestAsync(effectiveVars, Collection.CollectionScopedAuth, Collection.CollectionScopedRequestHeaders, req, waitForEntireBodyIfStreamed: false, cancellationToken);
             CaptureResponseValues(req, res);
             return res;
         }

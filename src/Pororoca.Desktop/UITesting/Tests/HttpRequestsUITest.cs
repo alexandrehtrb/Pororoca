@@ -93,6 +93,7 @@ public sealed partial class HttpRequestsUITest : PororocaUITest
             await TestPostFormDataBody(cancellationToken);
             await TestBasicAuth(cancellationToken);
             await TestBearerAuth(cancellationToken);
+            await TestStreamedResponse(cancellationToken);
         }
 
         if (OperatingSystem.IsLinux())

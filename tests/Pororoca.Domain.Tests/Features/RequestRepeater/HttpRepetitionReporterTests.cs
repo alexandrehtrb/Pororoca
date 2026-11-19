@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -12,6 +13,8 @@ namespace Pororoca.Domain.Tests.Features.RequestRepeater;
 
 public static class HttpRepetitionReporterTests
 {
+    private static readonly Stopwatch testSw = new();
+
     [Fact]
     public static async Task Should_produce_report_with_various_results_and_without_input_lines_properly()
     {
@@ -119,7 +122,7 @@ public static class HttpRepetitionReporterTests
         {
             using var resMsg = CreateTestHttpResponseMessage("oi", "text/plain", null);
             resMsg.StatusCode = (HttpStatusCode)statusCode!;
-            return await PororocaHttpResponse.SuccessfulAsync(null!, startedAt, elapsedTime, resMsg);
+            return await PororocaHttpResponse.SuccessfulCompletedAsync(null!, startedAt, testSw, resMsg, CancellationToken.None);
         }
     }
 }

@@ -920,7 +920,7 @@
             IsIndeterminate="True"
             Margin="12,0,12,24"
             HorizontalAlignment="Stretch"
-            IsVisible="{Binding IsSendRequestProgressBarVisible, Mode=OneWay}"/>
+            IsVisible="{Binding IsRequesting, Mode=OneWay}"/>
       </Grid>
     </Grid>
   </Grid>

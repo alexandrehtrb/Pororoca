@@ -238,9 +238,6 @@ public sealed partial class HttpRequestViewModel : CollectionOrganizationItemVie
 
     private CancellationTokenSource? sendRequestCancellationTokenSourceField;
 
-    [Reactive]
-    public partial bool IsSendRequestProgressBarVisible { get; set; }
-
     #endregion
 
     #region RESPONSE
@@ -432,10 +429,17 @@ public sealed partial class HttpRequestViewModel : CollectionOrganizationItemVie
         }
     }
 
-    public void CancelRequest() =>
+    public void CancelRequest()
+    {
+        // for normal requests:
         // CancellationToken will cause a failed PororocaResponse,
-        // therefore is not necessary to here call method ShowNotSendingRequestUI()
+        // updating response as failed / cancelled.
         this.sendRequestCancellationTokenSourceField!.Cancel();
+        // for streamed responses:
+        // we must cancel the token to stop streaming and
+        // also set IsRequesting = false.
+        IsRequesting = false;
+    }
 
     public async Task SendRequestAsync()
     {
@@ -449,10 +453,12 @@ public sealed partial class HttpRequestViewModel : CollectionOrganizationItemVie
         }
         else
         {
-            ShowSendingRequestUI();
+            IsRequesting = true;
             var res = await SendRequestAsync(generatedReq, effectiveVars);
-            ResponseDataCtx.UpdateWithResponse(Name, res, ResCapturesTableVm.Items);
-            ShowNotSendingRequestUI();
+            ResponseDataCtx.UpdateWithResponse(Name, res, ResCapturesTableVm.Items, () => IsRequesting = false, this.sendRequestCancellationTokenSourceField?.Token);
+            // Streamed responses keep going;
+            // others are already finished.
+            IsRequesting = res.IsStreamed;
         }
     }
 
@@ -525,18 +531,6 @@ public sealed partial class HttpRequestViewModel : CollectionOrganizationItemVie
         }
     }
 
-    private void ShowSendingRequestUI()
-    {
-        IsRequesting = true;
-        IsSendRequestProgressBarVisible = true;
-    }
-
-    private void ShowNotSendingRequestUI()
-    {
-        IsRequesting = false;
-        IsSendRequestProgressBarVisible = false;
-    }
-
     private Task<PororocaHttpResponse> SendRequestAsync(PororocaHttpRequest generatedReq, IEnumerable<PororocaVariable> effectiveVars)
     {
         this.sendRequestCancellationTokenSourceField = new();
@@ -544,7 +538,7 @@ public sealed partial class HttpRequestViewModel : CollectionOrganizationItemVie
         // Awaiting the request.RequestAsync() here, or simply returning its Task,
         // causes the UI to freeze for a few seconds, especially when performing the first request to a server.
         // That is why we are invoking the code to run in a new thread, like below.
-        return Task.Run(async () => await this.requester.RequestAsync(effectiveVars, Collection.CollectionScopedAuth, Collection.CollectionScopedRequestHeaders, generatedReq, this.sendRequestCancellationTokenSourceField.Token));
+        return Task.Run(async () => await this.requester.RequestAsync(effectiveVars, Collection.CollectionScopedAuth, Collection.CollectionScopedRequestHeaders, generatedReq, waitForEntireBodyIfStreamed: false, this.sendRequestCancellationTokenSourceField.Token));
     }
 
     #endregion

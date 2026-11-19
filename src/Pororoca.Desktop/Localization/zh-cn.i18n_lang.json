@@ -201,6 +201,7 @@
   "HttpResponse/SectionTitle": "响应",
   "HttpResponse/SectionTitleFailedFormat": "响应：失败 ({0})",
   "HttpResponse/SectionTitleSuccessfulFormat": "响应：{0} ({1})",
+  "HttpResponse/SectionTitleReceivingStreamFormat": "我们正在接收数据流… {0}",
   "ImportExportCurlCommandLineDialog/ImportErrorMessage": "无效的 cURL 命令。请检查错误并重试。",
   "ImportExportCurlCommandLineDialog/InputWatermark": "在此处插入 cURL 命令行",
   "ImportExportCurlCommandLineDialog/ExportTitle": "Pororoca - 导出为 cURL",
