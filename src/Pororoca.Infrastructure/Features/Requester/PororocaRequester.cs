@@ -56,7 +56,11 @@ public sealed class PororocaRequester : IPororocaRequester
                 else
                 {
                     reqMsg?.Dispose();
-                    var res = await PororocaHttpResponse.SuccessfulCompletedAsync(resolvedReq!, (DateTimeOffset)startedAt!, sw, resMsg, cancellationToken);
+                    // The binaryBody needs to be read before making the table of headers,
+                    // otherwise, the Content-Length header disappears for some reason (???)
+                    byte[] binaryBody = await resMsg.Content.ReadAsByteArrayAsync(cancellationToken);
+                    sw.Stop();
+                    var res = await PororocaHttpResponse.SuccessfulCompletedAsync(resolvedReq!, (DateTimeOffset)startedAt!, sw.Elapsed, resMsg, binaryBody);
                     // PororocaHttpResponse.SuccessfulCompletedAsync uses HttpResponseMessage, so we need to dispose it only after line above
                     resMsg?.Dispose();
                     return res;

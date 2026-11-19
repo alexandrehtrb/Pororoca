@@ -87,7 +87,8 @@ public static class PororocaHttpRepetitionTests
     {
         // GIVEN
         var httpRes = PororocaHttpResponseTests.CreateTestHttpResponseMessage(body, contentType, null, statusCode);
-        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testSw, httpRes, CancellationToken.None);
+        byte[] binaryBody = await httpRes.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, TimeSpan.Zero, httpRes, binaryBody);
         var repRes = new PororocaHttpRepetitionResult(null, res, null);
 
         // WHEN AND THEN
@@ -123,7 +124,8 @@ public static class PororocaHttpRepetitionTests
     {
         // GIVEN
         var httpRes = PororocaHttpResponseTests.CreateTestHttpResponseMessage(body, contentType, null, statusCode);
-        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testSw, httpRes, CancellationToken.None);
+        byte[] binaryBody = await httpRes.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, TimeSpan.Zero, httpRes, binaryBody);
         var repRes = new PororocaHttpRepetitionResult(null, res, null);
 
         // WHEN AND THEN

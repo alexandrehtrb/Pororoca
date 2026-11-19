@@ -296,16 +296,14 @@ public sealed class PororocaHttpResponse
         return (headersTable, trailersTable);
     }
 
-    public static async Task<PororocaHttpResponse> SuccessfulCompletedAsync(PororocaHttpRequest resolvedReq, DateTimeOffset startedAt, Stopwatch sw, HttpResponseMessage responseMessage, CancellationToken cancellationToken)
+    public static async Task<PororocaHttpResponse> SuccessfulCompletedAsync(PororocaHttpRequest resolvedReq, DateTimeOffset startedAt, TimeSpan elapsedTime, HttpResponseMessage responseMessage, byte[] binaryBody)
     {
         // The binaryBody needs to be read before making the table of headers,
         // otherwise, the Content-Length header disappears for some reason (???)
-        byte[] binaryBody = await responseMessage.Content.ReadAsByteArrayAsync(cancellationToken);
-        sw.Stop();
 
         var (headers, trailers) = MakeHeadersAndTrailersTables(responseMessage);
 
-        PororocaHttpResponse res = new(resolvedReq, startedAt, sw.Elapsed, responseMessage.StatusCode, headers, trailers, binaryBody);
+        PororocaHttpResponse res = new(resolvedReq, startedAt, elapsedTime, responseMessage.StatusCode, headers, trailers, binaryBody);
 
         if (res.ContentType?.StartsWith("multipart") == true)
         {
