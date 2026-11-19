@@ -68,7 +68,7 @@
 
 - Removed ReactiveUI references on i18n source generator.
 - Migrated to ReactiveUI source generators.
-- Adopted Central Package Management.
+- Adopted Central Package Management and `Directory.Build.props`.
 - Migrated solution file to `.slnx`.
 - UI tests can now be stopped during execution.
 - Removed `global.json` file from root directory.
