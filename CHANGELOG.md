@@ -1,5 +1,6 @@
 # Changelog
 
+* [4.0.0](#400-2026-11-19)
 * [3.11.1](#3111-2026-10-28)
 * [3.11.0](#3110-2026-10-14)
 * [3.10.3](#3103-2026-09-30)
@@ -51,6 +52,38 @@
 * [1.2.0](#120-2022-04-10)
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
+
+## [4.0.0](https://github.com/alexandrehtrb/Pororoca/tree/4.0.0) (2026-11-19)
+
+### Features
+
+- Update to .NET 10.
+- Update to Avalonia 12.1.
+- Wayland support for Linux.
+- Added support for streamed responses: Server-Sent Events (SSE) and NDJSON.
+- New colour themes: Ocean and Brazilwood.
+- Added Andika font for better rendering Cyrillic characters.
+
+### Refactors
+
+- Removed ReactiveUI references on i18n source generator.
+- Migrated to ReactiveUI source generators.
+- Adopted Central Package Management.
+- Migrated solution file to `.slnx`.
+- UI tests can now be stopped during execution.
+- Removed `global.json` file from root directory.
+
+### Others
+
+- Improved text editor colour contrast on Pampa theme.
+- Accept null and invalid ids on Postman collections and environments.
+- Updated `System.Threading.RateLimiting` code from .NET repository.
+- Update to NSIS 3.13.
+
+### Breaking Changes
+
+- Dropped support for Windows 7. The last version with support is 3.11.1.
+- `Pororoca.Test` now requires .NET 10 or higher.
 
 ## [3.11.1](https://github.com/alexandrehtrb/Pororoca/tree/3.11.1) (2026-10-28)
 
