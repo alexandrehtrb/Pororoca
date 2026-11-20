@@ -59,14 +59,18 @@
 
 - Update to .NET 10.
 - Update to Avalonia 12.1.
-- Wayland support for Linux.
+- Wayland support for Linux. (issues #53, #142)
 - Added support for streamed responses: Server-Sent Events (SSE) and NDJSON.
 - New colour themes: Ocean and Brazilwood.
 - Added Andika font for better rendering Cyrillic characters.
 
+### Bug fixes
+
+- CPU usage now stays low after making requests. (issue #166)
+
 ### Refactors
 
-- Removed ReactiveUI references on i18n source generator.
+- Removed ReactiveUI references from i18n source generator.
 - Migrated to ReactiveUI source generators.
 - Adopted Central Package Management and `Directory.Build.props`.
 - Migrated solution file to `.slnx`.
@@ -84,6 +88,8 @@
 
 - Dropped support for Windows 7. The last version with support is 3.11.1.
 - `Pororoca.Test` now requires .NET 10 or higher.
+- The current environment label is no longer highlighted with a different colour. 
+- Consider using emojis on environments names.
 
 ## [3.11.1](https://github.com/alexandrehtrb/Pororoca/tree/3.11.1) (2026-10-28)
 
