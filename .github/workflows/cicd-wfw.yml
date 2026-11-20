@@ -338,7 +338,6 @@ jobs:
       env:
         ALEXANDREHTRB_GPG_PUBLIC_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PUBLIC_KEY }}
         ALEXANDREHTRB_GPG_PRIVATE_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PRIVATE_KEY }}
-        ALEXANDREHTRB_GPG_KEY_FINGERPRINT: ${{ secrets.ALEXANDREHTRB_GPG_KEY_FINGERPRINT }}
         ALEXANDREHTRB_GPG_KEYGRIP: ${{ secrets.ALEXANDREHTRB_GPG_KEYGRIP }}
         ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD: ${{ secrets.ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD }}
 
@@ -440,11 +439,13 @@ jobs:
         if ($env:WIN_X86_PORTABLE -eq 'true')  { $arr += "./out/win-x86-portable/Pororoca.exe" ; };
 
         $pfxFilePath = Join-Path (Get-Location) "certs" "cert.pfx"
-
+        
         foreach ($exeFilePath in $arr)
         {
           signtool sign /f $pfxFilePath /fd SHA256 /p $env:ALEXANDREHTRB_PFX_FILE_PASSWORD /t http://timestamp.digicert.com $exeFilePath
         }
+        # don't delete the certificate file yet, it'll be used afterwards 
+        # for signing the installer and the uninstaller
       env:
         ALEXANDREHTRB_PFX_FILE_PASSWORD: ${{ secrets.ALEXANDREHTRB_PFX_FILE_PASSWORD }}
         WIN_X64_PORTABLE: ${{ inputs.produceDesktopWinX64Portable }}
@@ -574,7 +575,7 @@ jobs:
         }
 
         # let's delete the certificate file now, won't be used afterwards
-        Remove-Item $pfxAbsoluteFilePath -Force -Recurse -ErrorAction Ignore
+        Remove-Item $pfxAbsoluteFilePath -Force -ErrorAction Ignore
       env:
         ALEXANDREHTRB_PFX_FILE_PASSWORD: ${{ secrets.ALEXANDREHTRB_PFX_FILE_PASSWORD }}
         WIN_X64_INSTALLER: ${{ inputs.produceDesktopWinX64Installer }}
@@ -658,57 +659,57 @@ jobs:
     # https://blog.packagecloud.io/how-to-gpg-sign-and-verify-deb-packages-and-apt-repositories/
     # https://purplefloyd.wordpress.com/2009/02/05/signing-deb-packages/
     # TODO: Fix this, it's not working, error: 'gpg: no valid OpenPGP data found.'
-    - name: Verify Debian / Ubuntu package signature (NOT WORKING)
-      if: ${{ false && inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
-      shell: pwsh # !!!
-      run: |
-        # Install debsig-verify
-
-        sudo apt install debsig-verify
-
-        # Import public key
-        $keyId = "${env:ALEXANDREHTRB_GPG_KEY_FINGERPRINT}"
-        $keyringDirPath = "/usr/share/debsig/keyrings/${keyId}"
-        [void](mkdir $keyringDirPath)
-        $publicKeyFilePath = Join-Path (Get-Location) "certs" "public-key.gpg"
-
-        sudo gpg --no-default-keyring `
-            --keyring "/usr/share/debsig/keyrings/${keyId}/debsig.gpg" `
-            --import $publicKeyFilePath
-
-        # Create debsig-verify policy for public key
-
-        sudo mkdir "/etc/debsig/policies/${keyId}/"
-
-        $policyXml = @"
-        <?xml version="1.0"?>
-        <!DOCTYPE Policy SYSTEM "https://www.debian.org/debsig/1.0/policy.dtd">
-        <Policy xmlns="https://www.debian.org/debsig/1.0/">
-          <Origin Name="test" id="${keyId}" Description="Test package"/>
-          <Selection>
-            <Required Type="origin" File="debsig.gpg" id="${keyId}"/>
-          </Selection>
-          <Verification MinOptional="0">
-            <Required Type="origin" File="debsig.gpg" id="${keyId}"/>
-          </Verification>
-        </Policy>
-        "@
-        $tempPolicyFilePath = Join-Path (Get-Location) "certs" "policy.pol"
-        echo $policyXml >> $tempPolicyFilePath
-        $policyXmlFilePath = "/etc/debsig/policies/${keyId}/policy.pol"
-        sudo cp $tempPolicyFilePath $policyXmlFilePath
-
-        # Write-Host "XML policy file path: ${policyXmlFilePath}" 
-        # Write-Host "XML policy:`n$(Get-Content $policyXmlFilePath)" 
-
-        # Verify package signature
-        Write-Host "Verifying deb package signature..."
-        $debFilePath = "./out/Pororoca_${env:VERSION_NAME}_amd64.deb"
-        debsig-verify $debFilePath
-      env:
-        ALEXANDREHTRB_GPG_PUBLIC_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PUBLIC_KEY }}
-        ALEXANDREHTRB_GPG_KEY_FINGERPRINT: ${{ secrets.ALEXANDREHTRB_GPG_KEY_FINGERPRINT }}
-
+    # - name: Verify Debian / Ubuntu package signature (NOT WORKING)
+    #   if: ${{ false && inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
+    #   shell: pwsh # !!!
+    #   run: |
+    #     # Install debsig-verify
+    # 
+    #     sudo apt install debsig-verify
+    # 
+    #     # Import public key
+    #     $keyId = "${env:ALEXANDREHTRB_GPG_KEY_FINGERPRINT}"
+    #     $keyringDirPath = "/usr/share/debsig/keyrings/${keyId}"
+    #     [void](mkdir $keyringDirPath)
+    #     $publicKeyFilePath = Join-Path (Get-Location) "certs" "public-key.gpg"
+    # 
+    #     sudo gpg --no-default-keyring `
+    #         --keyring "/usr/share/debsig/keyrings/${keyId}/debsig.gpg" `
+    #         --import $publicKeyFilePath
+    # 
+    #     # Create debsig-verify policy for public key
+    # 
+    #     sudo mkdir "/etc/debsig/policies/${keyId}/"
+    # 
+    #     $policyXml = @"
+    #     <?xml version="1.0"?>
+    #     <!DOCTYPE Policy SYSTEM "https://www.debian.org/debsig/1.0/policy.dtd">
+    #     <Policy xmlns="https://www.debian.org/debsig/1.0/">
+    #       <Origin Name="test" id="${keyId}" Description="Test package"/>
+    #       <Selection>
+    #         <Required Type="origin" File="debsig.gpg" id="${keyId}"/>
+    #       </Selection>
+    #       <Verification MinOptional="0">
+    #         <Required Type="origin" File="debsig.gpg" id="${keyId}"/>
+    #       </Verification>
+    #     </Policy>
+    #     "@
+    #     $tempPolicyFilePath = Join-Path (Get-Location) "certs" "policy.pol"
+    #     echo $policyXml >> $tempPolicyFilePath
+    #     $policyXmlFilePath = "/etc/debsig/policies/${keyId}/policy.pol"
+    #     sudo cp $tempPolicyFilePath $policyXmlFilePath
+    # 
+    #     # Write-Host "XML policy file path: ${policyXmlFilePath}" 
+    #     # Write-Host "XML policy:`n$(Get-Content $policyXmlFilePath)" 
+    # 
+    #     # Verify package signature
+    #     Write-Host "Verifying deb package signature..."
+    #     $debFilePath = "./out/Pororoca_${env:VERSION_NAME}_amd64.deb"
+    #     debsig-verify $debFilePath
+    #   env:
+    #     ALEXANDREHTRB_GPG_PUBLIC_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PUBLIC_KEY }}
+    #     ALEXANDREHTRB_GPG_KEY_FINGERPRINT: ${{ secrets.ALEXANDREHTRB_GPG_KEY_FINGERPRINT }}
+     
     # code below taken from:
     # https://github.com/PowerShell/PowerShell/pull/26337
     # https://github.com/PowerShell/PowerShell/blob/master/tools/packaging/packaging.psm1
@@ -776,33 +777,33 @@ jobs:
         ALEXANDREHTRB_GPG_KEY_NAME: ${{ secrets.ALEXANDREHTRB_GPG_KEY_NAME }}
         ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD: ${{ secrets.ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD }}
 
-    - name: Verify RHEL and SUSE packages signatures
-      if: ${{ inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
-      shell: pwsh
-      run: |
-        # Import public key to RPM
-        Write-Host "Importing public key to RPM..."
-        $certsDir = Join-Path (Get-Location) "certs"
-        $publicKeyFilePath = Join-Path $certsDir "public-key.gpg"
-        rpm --import $publicKeyFilePath
-
-        # Write-Host "Listing RPM imported public keys..."
-        rpm -qa gpg-pubkey*
-
-        # Check signatures
-        $distros = @("SUSE", "RHEL")
-        foreach ($distro in $distros)
-        {
-          Write-Host "Verifying ${distro} RPM package signature..."
-          $rpmFilePath = "./out/Pororoca-${env:VERSION_NAME}-1.${distro}.x86_64.rpm"
-          
-          # Sign with passphrase from a file
-          rpm -K --verbose $rpmFilePath         
-        }
-
-        Remove-Item "./certs/" -Force -Recurse -ErrorAction Ignore
-      env:
-        ALEXANDREHTRB_GPG_PUBLIC_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PUBLIC_KEY }}
+    # - name: Verify RHEL and SUSE packages signatures
+    #   if: ${{ inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
+    #   shell: pwsh
+    #   run: |
+    #     # Import public key to RPM
+    #     Write-Host "Importing public key to RPM..."
+    #     $certsDir = Join-Path (Get-Location) "certs"
+    #     $publicKeyFilePath = Join-Path $certsDir "public-key.gpg"
+    #     rpm --import $publicKeyFilePath
+    # 
+    #     # Write-Host "Listing RPM imported public keys..."
+    #     # rpm -qa gpg-pubkey*
+    # 
+    #     # Check signatures
+    #     $distros = @("SUSE", "RHEL")
+    #     foreach ($distro in $distros)
+    #     {
+    #       Write-Host "Verifying ${distro} RPM package signature..."
+    #       $rpmFilePath = "./out/Pororoca-${env:VERSION_NAME}-1.${distro}.x86_64.rpm"
+    #       
+    #       # Sign with passphrase from a file
+    #       rpm -K --verbose $rpmFilePath         
+    #     }
+    # 
+    #     Remove-Item "./certs/" -Force -Recurse -ErrorAction Ignore
+    #   env:
+    #     ALEXANDREHTRB_GPG_PUBLIC_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PUBLIC_KEY }}
 
     # finished CD steps - desktop
 
