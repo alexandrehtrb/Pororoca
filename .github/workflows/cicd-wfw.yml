@@ -777,33 +777,33 @@ jobs:
         ALEXANDREHTRB_GPG_KEY_NAME: ${{ secrets.ALEXANDREHTRB_GPG_KEY_NAME }}
         ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD: ${{ secrets.ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD }}
 
-    # - name: Verify RHEL and SUSE packages signatures
-    #   if: ${{ inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
-    #   shell: pwsh
-    #   run: |
-    #     # Import public key to RPM
-    #     Write-Host "Importing public key to RPM..."
-    #     $certsDir = Join-Path (Get-Location) "certs"
-    #     $publicKeyFilePath = Join-Path $certsDir "public-key.gpg"
-    #     rpm --import $publicKeyFilePath
-    # 
-    #     # Write-Host "Listing RPM imported public keys..."
-    #     # rpm -qa gpg-pubkey*
-    # 
-    #     # Check signatures
-    #     $distros = @("SUSE", "RHEL")
-    #     foreach ($distro in $distros)
-    #     {
-    #       Write-Host "Verifying ${distro} RPM package signature..."
-    #       $rpmFilePath = "./out/Pororoca-${env:VERSION_NAME}-1.${distro}.x86_64.rpm"
-    #       
-    #       # Sign with passphrase from a file
-    #       rpm -K --verbose $rpmFilePath         
-    #     }
-    # 
-    #     Remove-Item "./certs/" -Force -Recurse -ErrorAction Ignore
-    #   env:
-    #     ALEXANDREHTRB_GPG_PUBLIC_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PUBLIC_KEY }}
+    - name: Verify RHEL and SUSE packages signatures
+      if: ${{ inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
+      shell: pwsh
+      run: |
+        # Import public key to RPM
+        Write-Host "Importing public key to RPM..."
+        $certsDir = Join-Path (Get-Location) "certs"
+        $publicKeyFilePath = Join-Path $certsDir "public-key.gpg"
+        sudo rpm --import $publicKeyFilePath
+    
+        # Write-Host "Listing RPM imported public keys..."
+        # rpm -qa gpg-pubkey*
+    
+        # Check signatures
+        $distros = @("SUSE", "RHEL")
+        foreach ($distro in $distros)
+        {
+          Write-Host "Verifying ${distro} RPM package signature..."
+          $rpmFilePath = "./out/Pororoca-${env:VERSION_NAME}-1.${distro}.x86_64.rpm"
+          
+          # Sign with passphrase from a file
+          rpm -K --verbose $rpmFilePath         
+        }
+    
+        Remove-Item "./certs/" -Force -Recurse -ErrorAction Ignore
+      env:
+        ALEXANDREHTRB_GPG_PUBLIC_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PUBLIC_KEY }}
 
     # finished CD steps - desktop
 
