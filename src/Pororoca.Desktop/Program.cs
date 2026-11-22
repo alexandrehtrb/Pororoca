@@ -75,11 +75,15 @@ public static class Program
                 }
             });
 
+        // DISABLING WAYLAND SUPPORT (2026-11-22)
+        // Reason: it's not mature yet and doesn't work on older computers.
+        // Wayland uses Mesa (https://mesa3d.org/), which only works on computers with modern SIMD.
+        // Modern SIMD is not available on older computers (SSE3, SSSE3, SSE4.1 SSE4.2, AVX, AVX512).
         // https://docs.avaloniaui.net/docs/platform-specific-guides/linux#enabling-the-wayland-backend
-        if (OperatingSystem.IsLinux() && Environment.GetEnvironmentVariable("WAYLAND_DISPLAY") is not null)
+        /*if (OperatingSystem.IsLinux() && Environment.GetEnvironmentVariable("WAYLAND_DISPLAY") is not null)
         {
             builder = builder.UseWayland();
-        }
+        }*/
 
         return builder;
     }
