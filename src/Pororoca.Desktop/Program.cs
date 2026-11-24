@@ -83,7 +83,7 @@ public static class Program
         // https://docs.avaloniaui.net/docs/platform-specific-guides/linux#enabling-the-wayland-backend
         if (OperatingSystem.IsLinux()
            && Environment.GetEnvironmentVariable("WAYLAND_DISPLAY") is not null
-           && args != null && args.Contains("--wayland"))
+           && args != null && (args.Contains("--wayland") || args.Contains("-wayland")))
         {
             builder = builder.UseWayland();
         }
