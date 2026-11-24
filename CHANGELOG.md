@@ -78,6 +78,7 @@
 
 ### Others
 
+- Icon for macOS now follows Big Sur style.
 - Improved text editor colour contrast on Pampa theme.
 - Accept null and invalid ids on Postman collections and environments.
 - Updated `System.Threading.RateLimiting` code from .NET repository.
