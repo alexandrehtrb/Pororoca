@@ -5,24 +5,24 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- for desktop project -->
-    <PackageVersion Include="Avalonia" Version="12.1.6" />
-    <PackageVersion Include="Avalonia.Desktop" Version="12.1.6" />
-    <PackageVersion Include="Avalonia.Themes.Fluent" Version="12.1.6" />
+    <PackageVersion Include="Avalonia" Version="12.2.0" />
+    <PackageVersion Include="Avalonia.Desktop" Version="12.2.0" />
+    <PackageVersion Include="Avalonia.Themes.Fluent" Version="12.2.0" />
     <PackageVersion Include="Avalonia.Controls.DataGrid" Version="12.1.2" />
     <!--PackageVersion Include="Avalonia.Wayland" Version="12.1.6" /-->
-    <PackageVersion Include="Xaml.Behaviors.Interactions.DragAndDrop.DataGrid" Version="12.1.5" />
-    <PackageVersion Include="Xaml.Behaviors.Interactions.DragAndDrop" Version="12.1.5" />
-    <PackageVersion Include="Xaml.Behaviors.Interactions.Draggable" Version="12.1.5" />
-    <PackageVersion Include="Xaml.Behaviors.Interactions.Custom" Version="12.1.5" />
-    <PackageVersion Include="Xaml.Behaviors.Avalonia" Version="12.1.5" />
-    <PackageVersion Include="Xaml.Behaviors.Interactivity" Version="12.1.5" />
-    <PackageVersion Include="Xaml.Behaviors.Interactions" Version="12.1.5" />
+    <PackageVersion Include="Xaml.Behaviors.Interactions.DragAndDrop.DataGrid" Version="12.2.0" />
+    <PackageVersion Include="Xaml.Behaviors.Interactions.DragAndDrop" Version="12.2.0" />
+    <PackageVersion Include="Xaml.Behaviors.Interactions.Draggable" Version="12.2.0" />
+    <PackageVersion Include="Xaml.Behaviors.Interactions.Custom" Version="12.2.0" />
+    <PackageVersion Include="Xaml.Behaviors.Avalonia" Version="12.2.0" />
+    <PackageVersion Include="Xaml.Behaviors.Interactivity" Version="12.2.0" />
+    <PackageVersion Include="Xaml.Behaviors.Interactions" Version="12.2.0" />
     <PackageVersion Include="AlexandreHtrb.AvaloniaUITest" Version="12.0.0" />
     <PackageVersion Include="Avalonia.AvaloniaEdit" Version="12.0.0" />
     <PackageVersion Include="AvaloniaEdit.TextMate" Version="12.0.0" />
     <PackageVersion Include="TextMateSharp.Grammars" Version="2.0.5" />
-    <PackageVersion Include="ReactiveUI.Avalonia" Version="12.1.7" />
-    <PackageVersion Include="ReactiveUI.SourceGenerators" Version="6.0.0" />
+    <PackageVersion Include="ReactiveUI.Avalonia" Version="12.1.9" />
+    <PackageVersion Include="ReactiveUI.SourceGenerators" Version="7.1.0" />
     <PackageVersion Include="MessageBox.Avalonia" Version="12.1.0" />
     <!-- for i18n src gen project -->
     <PackageVersion Include="System.Text.Json" Version="11.0.0" />
