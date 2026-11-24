@@ -33,7 +33,7 @@ public static class Program
             // Bug NullReferenceException Avalonia.Rendering.Composition.Compositor.RequestCompositionUpdate
             // https://github.com/AvaloniaUI/Avalonia/issues/15226
             // This is fixed on Avalonia 11.2.0
-            BuildAvaloniaApp()
+            BuildAvaloniaApp(args)
             .StartWithClassicDesktopLifetime(args);
         }
         catch (Exception ex)
@@ -54,7 +54,7 @@ public static class Program
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.
-    public static AppBuilder BuildAvaloniaApp()
+    public static AppBuilder BuildAvaloniaApp(string[] args)
     {
         var builder = AppBuilder.Configure<App>()
             .UsePlatformDetect()
@@ -75,15 +75,18 @@ public static class Program
                 }
             });
 
-        // DISABLING WAYLAND SUPPORT (2026-11-22)
+        // EXPERIMENTAL WAYLAND SUPPORT (2026-11-24)
         // Reason: it's not mature yet and doesn't work on older computers.
         // Wayland uses Mesa (https://mesa3d.org/), which only works on computers with modern SIMD.
         // Modern SIMD is not available on older computers (SSE3, SSSE3, SSE4.1 SSE4.2, AVX, AVX512).
+        // To run Pororoca with Wayland, type on Linux console: ./Pororoca --wayland
         // https://docs.avaloniaui.net/docs/platform-specific-guides/linux#enabling-the-wayland-backend
-        /*if (OperatingSystem.IsLinux() && Environment.GetEnvironmentVariable("WAYLAND_DISPLAY") is not null)
+        if (OperatingSystem.IsLinux()
+           && Environment.GetEnvironmentVariable("WAYLAND_DISPLAY") is not null
+           && args != null && args.Contains("--wayland"))
         {
             builder = builder.UseWayland();
-        }*/
+        }
 
         return builder;
     }

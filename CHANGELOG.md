@@ -1,6 +1,6 @@
 # Changelog
 
-* [4.0.0](#400-2026-11-22)
+* [4.0.0](#400-2026-11-24)
 * [3.11.1](#3111-2026-10-28)
 * [3.11.0](#3110-2026-10-14)
 * [3.10.3](#3103-2026-09-30)
@@ -53,11 +53,12 @@
 * [1.1.0](#110-2022-03-20)
 * [1.0.0](#100-2022-03-08)
 
-## [4.0.0](https://github.com/alexandrehtrb/Pororoca/tree/4.0.0) (2026-11-22)
+## [4.0.0](https://github.com/alexandrehtrb/Pororoca/tree/4.0.0) (2026-11-24)
 
 ### Features
 
 - Update to .NET 10 and Avalonia 12.1. (issue #171)
+- Experimental Wayland support on Linux. (read more about it in issue #53)
 - Added support for streamed responses: Server-Sent Events (SSE) and NDJSON.
 - New colour themes: Ocean and Brazilwood.
 - Added Andika font for better rendering Cyrillic characters.
