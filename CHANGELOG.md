@@ -57,7 +57,7 @@
 
 ### Features
 
-- Update to .NET 10 and Avalonia 12.1. (issue #171)
+- Update to .NET 10 and Avalonia 12.2. (issue #171)
 - Experimental Wayland support on Linux. (read more about it in issue #53)
 - Added support for streamed responses: Server-Sent Events (SSE) and NDJSON.
 - New colour themes: Ocean and Brazilwood.
