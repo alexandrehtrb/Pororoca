@@ -26,6 +26,7 @@ public sealed class HttpRequestView : UserControl
 
         var httpReqRawBodyEditor = this.FindControl<TextEditor>("teReqBodyRawContent")!;
         this.httpReqRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(httpReqRawBodyEditor, true, ProvideVariableResolver);
+        httpReqRawBodyEditor.EnableXmlFolding();
         httpReqRawBodyEditor.TextArea.TextEntering += (sender, e) => TextEditorConfiguration.OnTextEnteringInEditorWithVariables(httpReqRawBodyEditor, e, ref this.httpReqRawBodyCompletionWindow);
         httpReqRawBodyEditor.TextArea.TextEntered += (sender, e) => TextEditorConfiguration.OnTextEnteredInEditorWithVariables(httpReqRawBodyEditor, e, ProvideVariableResolver, ref this.httpReqRawBodyCompletionWindow, (sender, e) => this.httpReqRawBodyCompletionWindow = null);
 
@@ -34,6 +35,7 @@ public sealed class HttpRequestView : UserControl
 
         var httpResRawBodyEditor = this.FindControl<TextEditor>("ResponseBodyRawContentEditor")!;
         this.httpResRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(httpResRawBodyEditor!, false, null);
+        httpResRawBodyEditor.EnableXmlFolding();
         httpResRawBodyEditor.DocumentChanged += OnResponseRawBodyEditorDocumentChanged;
     }
 

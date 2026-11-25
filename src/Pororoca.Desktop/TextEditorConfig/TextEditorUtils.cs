@@ -1,11 +1,40 @@
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
+using AvaloniaEdit.Folding;
 using AvaloniaEdit.TextMate;
 
 namespace Pororoca.Desktop.TextEditorConfig;
 
 internal static class TextEditorUtils
 {
+    /// <summary>
+    /// Enables XML folding in the editor. Folds are recalculated whenever the document is replaced or its text changes.
+    /// Content that is not XML produces no foldings.
+    /// </summary>
+    internal static void EnableXmlFolding(this TextEditor editor)
+    {
+        var foldingStrategy = new XmlFoldingStrategy();
+        FoldingManager? foldingManager = null;
+
+        void UpdateFoldings()
+        {
+            if (foldingManager is not null)
+                foldingStrategy.UpdateFoldings(foldingManager, editor.Document);
+        }
+
+        void InstallFoldingManager()
+        {
+            if (foldingManager is not null)
+                FoldingManager.Uninstall(foldingManager);
+            foldingManager = FoldingManager.Install(editor.TextArea);
+            UpdateFoldings();
+        }
+
+        editor.DocumentChanged += (_, _) => InstallFoldingManager();
+        editor.TextChanged += (_, _) => UpdateFoldings();
+        InstallFoldingManager();
+    }
+
     internal static void SetEditorRawContent(this TextEditor editor, string updatedContent)
     {
         if (updatedContent != editor.Text)
