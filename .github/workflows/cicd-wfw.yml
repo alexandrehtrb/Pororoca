@@ -823,7 +823,7 @@ jobs:
             $rpmbuildSpecFilePath = Join-Path $rpmbuildSpecsDir "${distro}.spec"
             Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/${distro}_${arch}.spec" -Destination $rpmbuildSpecFilePath
             rpmbuild -bb -v --define "_topdir ${rpmbuildMainDir}" --buildroot "${rpmbuildMainDir}/BUILDROOT" $rpmbuildSpecFilePath
-            ls -R $rpmbuildMainDir
+            # ls -R $rpmbuildMainDir
             Copy-Item -Path "${rpmbuildRpmsDir}/${arch}/Pororoca-${env:VERSION_NAME}-1.${arch}.rpm" -Destination "./out/Pororoca-${env:VERSION_NAME}-1.${distro}.${arch}.rpm"
           }
           Remove-Item $OUTPUT_FOLDER -Force -Recurse -ErrorAction Ignore
