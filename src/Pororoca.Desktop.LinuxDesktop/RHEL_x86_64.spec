@@ -1,4 +1,4 @@
-# This spec file is for Red Hat Enterprise Linux (RHEL), Fedora, CentOS, Rocky Linux and Alma Linux.
+# This spec file is for x86_64 Red Hat Enterprise Linux (RHEL), Fedora, CentOS, Rocky Linux and Alma Linux.
 
 # .NET Linux required packages: https://github.com/dotnet/core/blob/main/release-notes/10.0/os-packages.json
 # Specifically for RHEL: https://learn.microsoft.com/en-us/dotnet/core/install/linux-fedora?tabs=dotnet10#dependencies

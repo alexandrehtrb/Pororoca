@@ -1,4 +1,4 @@
-# This spec file is for SUSE (openSUSE, SLES and SLED).
+# This spec file is for x86_64 SUSE (openSUSE, SLES and SLED).
 
 # .NET Linux required packages: https://github.com/dotnet/core/blob/main/release-notes/10.0/os-packages.json
 # Specifically for SUSE: https://learn.microsoft.com/en-us/dotnet/core/install/linux-opensuse?tabs=dotnet10

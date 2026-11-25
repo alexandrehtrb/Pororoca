@@ -45,7 +45,7 @@ on:
         required: false
         default: false
         type: boolean
-      produceDesktopMacOSX:
+      produceDesktopMacOSX64:
         required: false
         default: false
         type: boolean
@@ -64,7 +64,27 @@ on:
       produceDesktopWinX86Installer:
         required: false
         default: false
+        type: boolean        
+      produceDesktopLinuxPortableArm64:
+        required: false
+        default: false
         type: boolean
+      produceDesktopLinuxInstallersArm64:
+        required: false
+        default: false
+        type: boolean
+      produceDesktopMacOSArm64:
+        required: false
+        default: false
+        type: boolean
+      produceDesktopWinArm64Portable:
+        required: false
+        default: false
+        type: boolean
+      produceDesktopWinArm64Installer:
+        required: false
+        default: false
+        type: boolean      
       dotnetVersion:
         required: false
         default: '10.0.404'
@@ -75,7 +95,7 @@ on:
         type: string
       cyclonedxDotnetVersion:
         required: false
-        default: '6.3.1'
+        default: '6.3.2'
         type: string
 
 jobs:
@@ -111,7 +131,7 @@ jobs:
     # Invoke-WebRequest https://nsis.sourceforge.io/mediawiki/images/7/7f/EnVar_plugin.zip -OutFile C:\WINDOWS\Temp\EnVar_plugin.zip
     # Expand-Archive "C:\WINDOWS\Temp\EnVar_plugin.zip" -DestinationPath "C:\Program Files (x86)\NSIS" -Force
     - name: Install NSIS
-      if: ${{ inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Installer }}
+      if: ${{ inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Installer || inputs.produceDesktopWinArm64Installer }}
       shell: pwsh
       run: |
         # UserAgent "Wget/1.21.1 (linux-gnu)" is required to avoid SourceForge thinking it's an automated browser
@@ -253,7 +273,7 @@ jobs:
     # start CD steps - desktop
 
     - name: Fetch PFX certificate and add Windows SignTool to PATH
-      if: ${{ inputs.runCD && (inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer || inputs.produceDesktopWinArm64Portable || inputs.produceDesktopWinArm64Installer) }}
       shell: pwsh
       run: |
         # Create certs directory
@@ -276,7 +296,7 @@ jobs:
         ALEXANDREHTRB_PFX_FILE_PASSWORD: ${{ secrets.ALEXANDREHTRB_PFX_FILE_PASSWORD }}
 
     - name: Import GPG public and private keys
-      if: ${{ inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxInstallersX64 || inputs.produceDesktopLinuxInstallersArm64) }}
       shell: pwsh
       run: |
         # Create certs directory
@@ -342,7 +362,7 @@ jobs:
         ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD: ${{ secrets.ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD }}
 
     - name: Read desktop program version
-      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxPortableX64 || inputs.produceDesktopLinuxInstallersX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxPortableX64 || inputs.produceDesktopLinuxInstallersX64 || inputs.produceDesktopMacOSX64 || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer || inputs.produceDesktopLinuxPortableArm64 || inputs.produceDesktopLinuxInstallersArm64 || inputs.produceDesktopMacOSArm64 || inputs.produceDesktopWinArm64Portable || inputs.produceDesktopWinArm64Installer) }}
       shell: pwsh
       run: |
         ([XML]$desktopCsprojXml = Get-Content ./src/Pororoca.Desktop/Pororoca.Desktop.csproj)
@@ -350,24 +370,29 @@ jobs:
         echo "VERSION_NAME=${versionName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Generate Pororoca.Desktop SBOM file
-      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxPortableX64 || inputs.produceDesktopLinuxInstallersX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxPortableX64 || inputs.produceDesktopLinuxInstallersX64 || inputs.produceDesktopMacOSX64 || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer || inputs.produceDesktopLinuxPortableArm64 || inputs.produceDesktopLinuxInstallersArm64 || inputs.produceDesktopMacOSArm64 || inputs.produceDesktopWinArm64Portable || inputs.produceDesktopWinArm64Installer) }}
       shell: pwsh
       run: dotnet CycloneDX ./src/Pororoca.Desktop/Pororoca.Desktop.csproj --configuration Release -o ./out/ -fn sbom_pororoca_desktop.json -sv $env:VERSION_NAME -F UnsafeJson
 
     - name: Generate Pororoca Desktop dlls
-      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxPortableX64 || inputs.produceDesktopLinuxInstallersX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxPortableX64 || inputs.produceDesktopLinuxInstallersX64 || inputs.produceDesktopMacOSX64 || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer || inputs.produceDesktopLinuxPortableArm64 || inputs.produceDesktopLinuxInstallersArm64 || inputs.produceDesktopMacOSArm64 || inputs.produceDesktopWinArm64Portable || inputs.produceDesktopWinArm64Installer) }}
       shell: pwsh
       run: |
         $arr = @()
         # Installer first, then portable, elsewise the compilation produces bad executables
         # https://github.com/dotnet/runtime/issues/128569
-        if ($env:LINUX_X64_INSTALLER -eq 'true'){ $arr += @{ rid="linux-x64"; outputFolder="./out/linux-x64-installer" ; packaging="linux-installers"   } };
-        if ($env:LINUX_X64_PORTABLE -eq 'true') { $arr += @{ rid="linux-x64"; outputFolder="./out/linux-x64-portable"  ; packaging="portable"   } };
-        if ($env:OSX -eq 'true')                { $arr += @{   rid="osx-x64"; outputFolder="./out/osx-x64"             ; packaging="osx-app"   } };
-        if ($env:WIN_X64_INSTALLER -eq 'true')  { $arr += @{   rid="win-x64"; outputFolder="./out/win-x64-installer"   ; packaging="nsis"   } };
-        if ($env:WIN_X64_PORTABLE -eq 'true')   { $arr += @{   rid="win-x64"; outputFolder="./out/win-x64-portable"    ; packaging="portable"   } };
-        if ($env:WIN_X86_INSTALLER -eq 'true')  { $arr += @{   rid="win-x86"; outputFolder="./out/win-x86-installer"   ; packaging="nsis"   } };
-        if ($env:WIN_X86_PORTABLE -eq 'true')   { $arr += @{   rid="win-x86"; outputFolder="./out/win-x86-portable"    ; packaging="portable"   } };
+        if ($env:LINUX_X64_INSTALLER -eq 'true')  { $arr += @{   rid="linux-x64"; outputFolder="./out/linux-x64-installer"   ; packaging="linux-installers"   } };
+        if ($env:LINUX_X64_PORTABLE -eq 'true')   { $arr += @{   rid="linux-x64"; outputFolder="./out/linux-x64-portable"    ; packaging="portable"   } };
+        if ($env:MACOS_X64 -eq 'true')            { $arr += @{     rid="osx-x64"; outputFolder="./out/osx-x64"               ; packaging="osx-app"   } };
+        if ($env:WIN_X64_INSTALLER -eq 'true')    { $arr += @{     rid="win-x64"; outputFolder="./out/win-x64-installer"     ; packaging="nsis"   } };
+        if ($env:WIN_X64_PORTABLE -eq 'true')     { $arr += @{     rid="win-x64"; outputFolder="./out/win-x64-portable"      ; packaging="portable"   } };
+        if ($env:WIN_X86_INSTALLER -eq 'true')    { $arr += @{     rid="win-x86"; outputFolder="./out/win-x86-installer"     ; packaging="nsis"   } };
+        if ($env:WIN_X86_PORTABLE -eq 'true')     { $arr += @{     rid="win-x86"; outputFolder="./out/win-x86-portable"      ; packaging="portable"   } };        
+        if ($env:LINUX_ARM64_INSTALLER -eq 'true'){ $arr += @{ rid="linux-arm64"; outputFolder="./out/linux-arm64-installer" ; packaging="linux-installers"   } };
+        if ($env:LINUX_ARM64_PORTABLE -eq 'true') { $arr += @{ rid="linux-arm64"; outputFolder="./out/linux-arm64-portable"  ; packaging="portable"   } };
+        if ($env:MACOS_ARM64 -eq 'true')          { $arr += @{   rid="osx-arm64"; outputFolder="./out/osx-arm64"             ; packaging="osx-app"   } };
+        if ($env:WIN_ARM64_INSTALLER -eq 'true')  { $arr += @{   rid="win-arm64"; outputFolder="./out/win-arm64-installer"   ; packaging="nsis"   } };
+        if ($env:WIN_ARM64_PORTABLE -eq 'true')   { $arr += @{   rid="win-arm64"; outputFolder="./out/win-arm64-portable"    ; packaging="portable"   } };
 
         foreach ($artifact in $arr)
         {
@@ -422,21 +447,28 @@ jobs:
         ENABLE_UI_TESTING: ${{ inputs.enableUITesting }}
         LINUX_X64_PORTABLE: ${{ inputs.produceDesktopLinuxPortableX64 }}
         LINUX_X64_INSTALLER: ${{ inputs.produceDesktopLinuxInstallersX64 }}
-        OSX: ${{ inputs.produceDesktopMacOSX }}
+        MACOS_X64: ${{ inputs.produceDesktopMacOSX64 }}
         WIN_X64_PORTABLE: ${{ inputs.produceDesktopWinX64Portable }}
         WIN_X64_INSTALLER: ${{ inputs.produceDesktopWinX64Installer }}
         WIN_X86_PORTABLE: ${{ inputs.produceDesktopWinX86Portable }}
-        WIN_X86_INSTALLER: ${{ inputs.produceDesktopWinX86Installer }}
+        WIN_X86_INSTALLER: ${{ inputs.produceDesktopWinX86Installer }}        
+        LINUX_ARM64_PORTABLE: ${{ inputs.produceDesktopLinuxPortableArm64 }}
+        LINUX_ARM64_INSTALLER: ${{ inputs.produceDesktopLinuxInstallersArm64 }}
+        MACOS_ARM64: ${{ inputs.produceDesktopMacOSArm64 }}
+        WIN_ARM64_PORTABLE: ${{ inputs.produceDesktopWinArm64Portable }}
+        WIN_ARM64_INSTALLER: ${{ inputs.produceDesktopWinArm64Installer }}
 
     - name: Sign Pororoca executable files for Windows
-      if: ${{ inputs.runCD && (inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer || inputs.produceDesktopWinArm64Portable || inputs.produceDesktopWinArm64Installer) }}
       shell: pwsh
       run: |
         $arr = @()
-        if ($env:WIN_X64_INSTALLER -eq 'true') { $arr += "./out/win-x64-installer/Pororoca.exe"; };
-        if ($env:WIN_X64_PORTABLE -eq 'true')  { $arr += "./out/win-x64-portable/Pororoca.exe" ; };
-        if ($env:WIN_X86_INSTALLER -eq 'true') { $arr += "./out/win-x86-installer/Pororoca.exe"; };
-        if ($env:WIN_X86_PORTABLE -eq 'true')  { $arr += "./out/win-x86-portable/Pororoca.exe" ; };
+        if ($env:WIN_X64_INSTALLER -eq 'true')   { $arr += "./out/win-x64-installer/Pororoca.exe"; };
+        if ($env:WIN_X64_PORTABLE -eq 'true')    { $arr += "./out/win-x64-portable/Pororoca.exe" ; };
+        if ($env:WIN_X86_INSTALLER -eq 'true')   { $arr += "./out/win-x86-installer/Pororoca.exe"; };
+        if ($env:WIN_X86_PORTABLE -eq 'true')    { $arr += "./out/win-x86-portable/Pororoca.exe" ; };
+        if ($env:WIN_ARM64_INSTALLER -eq 'true') { $arr += "./out/win-arm64-installer/Pororoca.exe"; };
+        if ($env:WIN_ARM64_PORTABLE -eq 'true')  { $arr += "./out/win-arm64-portable/Pororoca.exe" ; };
 
         $pfxFilePath = Join-Path (Get-Location) "certs" "cert.pfx"
         
@@ -452,42 +484,61 @@ jobs:
         WIN_X64_INSTALLER: ${{ inputs.produceDesktopWinX64Installer }}
         WIN_X86_PORTABLE: ${{ inputs.produceDesktopWinX86Portable }}
         WIN_X86_INSTALLER: ${{ inputs.produceDesktopWinX86Installer }}
+        WIN_ARM64_PORTABLE: ${{ inputs.produceDesktopWinArm64Portable }}
+        WIN_ARM64_INSTALLER: ${{ inputs.produceDesktopWinArm64Installer }}
 
     - name: Make Pororoca.app structure (Mac OSX only)
-      if: ${{ inputs.runCD && inputs.produceDesktopMacOSX }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopMacOSX64 || inputs.produceDesktopMacOSArm64) }}
       shell: pwsh
       run: |
-        $OUTPUT_FOLDER = "./out/osx-x64";
-        $TEMP_APP_OUTPUT_FOLDER = $OUTPUT_FOLDER + "_app"
-        
-        [void](mkdir "$TEMP_APP_OUTPUT_FOLDER")
-        [void](mkdir "$TEMP_APP_OUTPUT_FOLDER/Contents")
-        [void](mkdir "$TEMP_APP_OUTPUT_FOLDER/Contents/MacOS")
-        [void](mkdir "$TEMP_APP_OUTPUT_FOLDER/Contents/Resources")
-        Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/Info.plist" -Destination "$TEMP_APP_OUTPUT_FOLDER/Contents/"
-        Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/pororoca.icns" -Destination "$TEMP_APP_OUTPUT_FOLDER/Contents/Resources/"        
-        Copy-Item -Force -Recurse -Path "$OUTPUT_FOLDER/*" -Destination "$TEMP_APP_OUTPUT_FOLDER/Contents/MacOS/"
-        
-        Remove-Item -Recurse -Force -Path "$OUTPUT_FOLDER/*"
-        [void](mkdir "$OUTPUT_FOLDER/Pororoca.app")
-        Copy-Item -Force -Recurse -Path "$TEMP_APP_OUTPUT_FOLDER/*" -Destination "$OUTPUT_FOLDER/Pororoca.app/"
-        Remove-Item -Recurse -Force -Path $TEMP_APP_OUTPUT_FOLDER
+        $arr = @()
+        if ($env:MACOS_X64 -eq 'true')   { $arr += "./out/osx-x64"; };
+        if ($env:MACOS_ARM64 -eq 'true') { $arr += "./out/osx-arm64"; };        
+        foreach ($OUTPUT_FOLDER in $arr)
+        {
+            $TEMP_APP_OUTPUT_FOLDER = $OUTPUT_FOLDER + "_app"
+            
+            [void](mkdir "$TEMP_APP_OUTPUT_FOLDER")
+            [void](mkdir "$TEMP_APP_OUTPUT_FOLDER/Contents")
+            [void](mkdir "$TEMP_APP_OUTPUT_FOLDER/Contents/MacOS")
+            [void](mkdir "$TEMP_APP_OUTPUT_FOLDER/Contents/Resources")
+            Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/Info.plist" -Destination "$TEMP_APP_OUTPUT_FOLDER/Contents/"
+            Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/pororoca.icns" -Destination "$TEMP_APP_OUTPUT_FOLDER/Contents/Resources/"        
+            Copy-Item -Force -Recurse -Path "$OUTPUT_FOLDER/*" -Destination "$TEMP_APP_OUTPUT_FOLDER/Contents/MacOS/"
+            
+            Remove-Item -Recurse -Force -Path "$OUTPUT_FOLDER/*"
+            [void](mkdir "$OUTPUT_FOLDER/Pororoca.app")
+            Copy-Item -Force -Recurse -Path "$TEMP_APP_OUTPUT_FOLDER/*" -Destination "$OUTPUT_FOLDER/Pororoca.app/"
+            Remove-Item -Recurse -Force -Path $TEMP_APP_OUTPUT_FOLDER        
+        }        
+      env:
+        MACOS_X64: ${{ inputs.produceDesktopMacOSX64 }}
+        MACOS_ARM64: ${{ inputs.produceDesktopMacOSARM64 }}
 
     # so Linux users can create desktop launchers
     - name: Copy logo (Linux portable only)
-      if: ${{ inputs.runCD && inputs.produceDesktopLinuxPortableX64 }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxPortableX64 || inputs.produceDesktopLinuxPortableArm64) }}
       shell: pwsh
       run: |
-        $OUTPUT_FOLDER = "./out/linux-x64-portable"
-        Copy-Item -Path "./misc/pororoca.png" -Destination $OUTPUT_FOLDER
+        $arr = @()
+        if ($env:LINUX_X64_PORTABLE -eq 'true')   { $arr += "./out/linux-x64-portable"; };
+        if ($env:LINUX_ARM64_PORTABLE -eq 'true') { $arr += "./out/linux-arm64-portable"; };        
+        foreach ($OUTPUT_FOLDER in $arr)
+        {
+          Copy-Item -Path "./misc/pororoca.png" -Destination $OUTPUT_FOLDER
+        }
+      env:
+        LINUX_X64_PORTABLE: ${{ inputs.produceDesktopLinuxPortableX64 }}
+        LINUX_ARM64_PORTABLE: ${{ inputs.produceDesktopLinuxPortableARM64 }}
 
     - name: Copy icon for Windows installer
-      if: ${{ inputs.runCD && (inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Installer) }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Installer || inputs.produceDesktopWinArm64Installer) }}
       shell: pwsh
       run: |
         $arr = @()
         if ($env:WIN_X64_INSTALLER -eq 'true') { $arr += @{ outputFolder="./out/win-x64-installer" } };
         if ($env:WIN_X86_INSTALLER -eq 'true') { $arr += @{ outputFolder="./out/win-x86-installer" } };
+        if ($env:WIN_ARM64_INSTALLER -eq 'true') { $arr += @{ outputFolder="./out/win-arm64-installer" } };
         foreach ($artifact in $arr)
         {
           $OUTPUT_FOLDER = $artifact.outputFolder
@@ -496,9 +547,10 @@ jobs:
       env:
         WIN_X64_INSTALLER: ${{ inputs.produceDesktopWinX64Installer }}
         WIN_X86_INSTALLER: ${{ inputs.produceDesktopWinX86Installer }}
+        WIN_ARM64_INSTALLER: ${{ inputs.produceDesktopWinArm64Installer }}
 
     - name: Copy licence
-      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxPortableX64 || inputs.produceDesktopLinuxInstallersX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxPortableX64 || inputs.produceDesktopLinuxInstallersX64 || inputs.produceDesktopMacOSX64 || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer || inputs.produceDesktopLinuxPortableArm64 || inputs.produceDesktopLinuxInstallersArm64 || inputs.produceDesktopMacOSArm64 || inputs.produceDesktopWinArm64Portable || inputs.produceDesktopWinArm64Installer) }}
       shell: pwsh
       run: |
         $arr = @(Get-ChildItem "./out/" -Directory | Select FullName)
@@ -508,24 +560,25 @@ jobs:
         }
 
     - name: Compress package
-      if: ${{ inputs.runCD && (inputs.produceTestServerLinuxX64 || inputs.produceDesktopLinuxPortableX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX86Portable) }}
+      if: ${{ inputs.runCD && (inputs.produceTestServerLinuxX64 || inputs.produceDesktopLinuxPortableX64 || inputs.produceDesktopMacOSX64 || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX86Portable || inputs.produceDesktopLinuxPortableArm64 || inputs.produceDesktopMacOSArm64 || inputs.produceDesktopWinArm64Portable) }}
       shell: pwsh
       run: |
         $arr = @()
         if ($env:TESTSERVER_LINUX_X64 -eq 'true'){ $arr += @{ rid="testserver-linux-x64"; outputFolder="./out/testserver-linux-x64"} };
         if ($env:LINUX_X64_PORTABLE -eq 'true')  { $arr += @{ rid="linux-x64"; outputFolder="./out/linux-x64-portable"} };
-        if ($env:OSX -eq 'true')                 { $arr += @{ rid="osx-x64"; outputFolder="./out/osx-x64"           } };
+        if ($env:MACOS_X64 -eq 'true')           { $arr += @{ rid="osx-x64"; outputFolder="./out/osx-x64"           } };
         if ($env:WIN_X64_PORTABLE -eq 'true')    { $arr += @{ rid="win-x64"; outputFolder="./out/win-x64-portable"  } };
         if ($env:WIN_X86_PORTABLE -eq 'true')    { $arr += @{ rid="win-x86"; outputFolder="./out/win-x86-portable"  } };
+        if ($env:LINUX_ARM64_PORTABLE -eq 'true')  { $arr += @{ rid="linux-arm64"; outputFolder="./out/linux-arm64-portable"} };
+        if ($env:MACOS_ARM64 -eq 'true')           { $arr += @{ rid="osx-arm64"; outputFolder="./out/osx-arm64"           } };
+        if ($env:WIN_ARM64_PORTABLE -eq 'true')    { $arr += @{ rid="win-arm64"; outputFolder="./out/win-arm64-portable"  } };
 
         foreach ($artifact in $arr)
         {
           $OUTPUT_FOLDER = $artifact.outputFolder
 
-          $zipName = if ($artifact.rid -like "win*")            { "Pororoca_${env:VERSION_NAME}_$($artifact.rid)_portable.zip" }
-                     elseif ($artifact.rid -like "osx*")        { "Pororoca_${env:VERSION_NAME}_osx.zip" }
-                     elseif ($artifact.rid -like "testserver*") { "PororocaTestServer_${env:VERSION_NAME}_linux-x64.zip" }
-                     else                                       { "Pororoca_${env:VERSION_NAME}_$($artifact.rid)_portable.zip" }
+          $zipName = if ($artifact.rid -like "testserver*") { "PororocaTestServer_${env:VERSION_NAME}_linux-x64.zip" }
+                     else                                   { "Pororoca_${env:VERSION_NAME}_$($artifact.rid)_portable.zip" }
 
           if ($IsWindows) {
             Compress-Archive -CompressionLevel Optimal -Path "${OUTPUT_FOLDER}/*" -DestinationPath "./out/${zipName}"
@@ -540,17 +593,21 @@ jobs:
       env:
         TESTSERVER_LINUX_X64: ${{ inputs.produceTestServerLinuxX64 }}
         LINUX_X64_PORTABLE: ${{ inputs.produceDesktopLinuxPortableX64 }}
-        OSX: ${{ inputs.produceDesktopMacOSX }}
+        MACOS_X64: ${{ inputs.produceDesktopMacOSX64 }}
         WIN_X64_PORTABLE: ${{ inputs.produceDesktopWinX64Portable }}
         WIN_X86_PORTABLE: ${{ inputs.produceDesktopWinX86Portable }}
+        LINUX_ARM64_PORTABLE: ${{ inputs.produceDesktopLinuxPortableArm64 }}
+        MACOS_ARM64: ${{ inputs.produceDesktopMacOSArm64 }}
+        WIN_ARM64_PORTABLE: ${{ inputs.produceDesktopWinArm64Portable }}
 
     - name: Make installer for Windows
-      if: ${{ inputs.runCD && (inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Installer) }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Installer || inputs.produceDesktopWinArm64Installer) }}
       shell: pwsh
       run: |
         $arr = @()
-        if ($env:WIN_X64_INSTALLER -eq 'true') { $arr += @{ rid="win-x64"; outputFolder="./out/win-x64-installer" } };
-        if ($env:WIN_X86_INSTALLER -eq 'true') { $arr += @{ rid="win-x86"; outputFolder="./out/win-x86-installer" } };
+        if ($env:WIN_X64_INSTALLER -eq 'true')   { $arr += @{ rid="win-x64";   outputFolder="./out/win-x64-installer" } };
+        if ($env:WIN_X86_INSTALLER -eq 'true')   { $arr += @{ rid="win-x86";   outputFolder="./out/win-x86-installer" } };
+        if ($env:WIN_ARM64_INSTALLER -eq 'true') { $arr += @{ rid="win-arm64"; outputFolder="./out/win-arm64-installer" } };
 
         $pfxAbsoluteFilePath = Join-Path (Get-Location) "certs" "cert.pfx"
 
@@ -580,59 +637,69 @@ jobs:
         ALEXANDREHTRB_PFX_FILE_PASSWORD: ${{ secrets.ALEXANDREHTRB_PFX_FILE_PASSWORD }}
         WIN_X64_INSTALLER: ${{ inputs.produceDesktopWinX64Installer }}
         WIN_X86_INSTALLER: ${{ inputs.produceDesktopWinX86Installer }}
+        WIN_ARM64_INSTALLER: ${{ inputs.produceDesktopWinARM64Installer }}
 
     - name: Make Debian / Ubuntu package
-      if: ${{ inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxInstallersX64 || inputs.produceDesktopLinuxInstallersArm64) }}
       shell: pwsh
       run: |
-        $OUTPUT_FOLDER = "./out/linux-x64-installer";
-        $debPackageName = "Pororoca_${env:VERSION_NAME}_amd64.deb";
-        [void](mkdir "./out/deb")
-        # Debian control file
-        [void](mkdir "./out/deb/DEBIAN")
-        Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/control" -Destination "./out/deb/DEBIAN"
-        # Starter script
-        [void](mkdir "./out/deb/usr")
-        [void](mkdir "./out/deb/usr/bin")
-        Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/pororoca.sh" -Destination "./out/deb/usr/bin/pororoca"
-        chmod +x "./out/deb/usr/bin/pororoca" # set executable permissions to starter script
-        # Other files
-        [void](mkdir "./out/deb/usr/lib")
-        [void](mkdir "./out/deb/usr/lib/pororoca")
-        Copy-Item -Path "$OUTPUT_FOLDER/*" -Destination "./out/deb/usr/lib/pororoca" -Recurse -Force
-        chmod -R a+rX "./out/deb/usr/lib/pororoca/" # set read permissions to all files
-        chmod +x "./out/deb/usr/lib/pororoca/Pororoca" # set executable permissions to main executable
-        # Desktop shortcut
-        [void](mkdir "./out/deb/usr/share")
-        [void](mkdir "./out/deb/usr/share/applications")
-        Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/Pororoca.desktop" -Destination "./out/deb/usr/share/applications/Pororoca.desktop"
-        # Desktop icon
-        # A 32x32 px XPM file in /usr/share/pixmaps/ (using 1024x1024 px PNG instead, like VS Code uses for its icon)
-        [void](mkdir "./out/deb/usr/share/pixmaps")
-        Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/pororoca_icon_1024px.png" -Destination "./out/deb/usr/share/pixmaps/pororoca.png"
-        # Hicolor icons
-        [void](mkdir "./out/deb/usr/share/icons")
-        [void](mkdir "./out/deb/usr/share/icons/hicolor")
-        foreach ($imgSize in @(16, 32, 48, 64, 128, 256, 512))
+        $arr = @()
+        if ($env:LINUX_X64_INSTALLER -eq 'true')   { $arr += @{ suffix="amd64";   outputFolder="./out/linux-x64-installer" } };
+        if ($env:LINUX_ARM64_INSTALLER -eq 'true') { $arr += @{ suffix="arm64";   outputFolder="./out/linux-arm64-installer" } };
+        foreach ($target in $arr)
         {
-          # A square ZxZ px PNG file in /usr/share/icons/hicolor/ZxZ/apps/
-          [void](mkdir "./out/deb/usr/share/icons/hicolor/${imgSize}x${imgSize}")
-          [void](mkdir "./out/deb/usr/share/icons/hicolor/${imgSize}x${imgSize}/apps")
-          Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/pororoca_icon_${imgSize}px.png" -Destination "./out/deb/usr/share/icons/hicolor/${imgSize}x${imgSize}/apps/pororoca.png"
+          $OUTPUT_FOLDER = $target.outputFolder;
+          $debPackageName = "Pororoca_${env:VERSION_NAME}_$($target.suffix).deb";
+          [void](mkdir "./out/deb")
+          # Debian control file
+          [void](mkdir "./out/deb/DEBIAN")
+          Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/control_$($target.suffix)" -Destination "./out/deb/DEBIAN"
+          # Starter script
+          [void](mkdir "./out/deb/usr")
+          [void](mkdir "./out/deb/usr/bin")
+          Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/pororoca.sh" -Destination "./out/deb/usr/bin/pororoca"
+          chmod +x "./out/deb/usr/bin/pororoca" # set executable permissions to starter script
+          # Other files
+          [void](mkdir "./out/deb/usr/lib")
+          [void](mkdir "./out/deb/usr/lib/pororoca")
+          Copy-Item -Path "$OUTPUT_FOLDER/*" -Destination "./out/deb/usr/lib/pororoca" -Recurse -Force
+          chmod -R a+rX "./out/deb/usr/lib/pororoca/" # set read permissions to all files
+          chmod +x "./out/deb/usr/lib/pororoca/Pororoca" # set executable permissions to main executable
+          # Desktop shortcut
+          [void](mkdir "./out/deb/usr/share")
+          [void](mkdir "./out/deb/usr/share/applications")
+          Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/Pororoca.desktop" -Destination "./out/deb/usr/share/applications/Pororoca.desktop"
+          # Desktop icon
+          # A 32x32 px XPM file in /usr/share/pixmaps/ (using 1024x1024 px PNG instead, like VS Code uses for its icon)
+          [void](mkdir "./out/deb/usr/share/pixmaps")
+          Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/pororoca_icon_1024px.png" -Destination "./out/deb/usr/share/pixmaps/pororoca.png"
+          # Hicolor icons
+          [void](mkdir "./out/deb/usr/share/icons")
+          [void](mkdir "./out/deb/usr/share/icons/hicolor")
+          foreach ($imgSize in @(16, 32, 48, 64, 128, 256, 512))
+          {
+            # A square ZxZ px PNG file in /usr/share/icons/hicolor/ZxZ/apps/
+            [void](mkdir "./out/deb/usr/share/icons/hicolor/${imgSize}x${imgSize}")
+            [void](mkdir "./out/deb/usr/share/icons/hicolor/${imgSize}x${imgSize}/apps")
+            Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/pororoca_icon_${imgSize}px.png" -Destination "./out/deb/usr/share/icons/hicolor/${imgSize}x${imgSize}/apps/pororoca.png"
+          }
+          # Optionally, an SVG file in /usr/share/icons/hicolor/scalable/apps/
+          [void](mkdir "./out/deb/usr/share/icons/hicolor/scalable")
+          [void](mkdir "./out/deb/usr/share/icons/hicolor/scalable/apps")
+          Copy-Item -Path "./misc/pororoca_logo.svg" -Destination "./out/deb/usr/share/icons/hicolor/scalable/apps/pororoca.svg"
+          # Make .deb file
+          dpkg-deb --root-owner-group --build "./out/deb/" "./out/${debPackageName}"
+          Remove-Item "./out/deb" -Force -Recurse -ErrorAction Ignore
+          # Don't delete the output folder, it will be reused for RPM packages
         }
-        # Optionally, an SVG file in /usr/share/icons/hicolor/scalable/apps/
-        [void](mkdir "./out/deb/usr/share/icons/hicolor/scalable")
-        [void](mkdir "./out/deb/usr/share/icons/hicolor/scalable/apps")
-        Copy-Item -Path "./misc/pororoca_logo.svg" -Destination "./out/deb/usr/share/icons/hicolor/scalable/apps/pororoca.svg"
-        # Make .deb file
-        dpkg-deb --root-owner-group --build "./out/deb/" "./out/${debPackageName}"
-        Remove-Item "./out/deb" -Force -Recurse -ErrorAction Ignore
-        # Don't delete the output folder, it will be reused for RPM packages
+      env:
+        LINUX_X64_INSTALLER: ${{ inputs.produceDesktopLinuxInstallersX64 }}
+        LINUX_ARM64_INSTALLER: ${{ inputs.produceDesktopLinuxInstallersArm64 }}
     
     # code below taken from:
     # https://github.com/git-ecosystem/git-credential-manager/blob/6847fba88b5adfd631e6a1163c91c2b316f52701/.github/workflows/release.yml
     - name: Sign Debian / Ubuntu package
-      if: ${{ inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxInstallersX64 || inputs.produceDesktopLinuxInstallersArm64)}}
       shell: bash # !!!
       run: |
         # Install debsigs
@@ -649,11 +716,20 @@ jobs:
 
         # Sign .deb file
         keyId="$(echo -n $ALEXANDREHTRB_GPG_KEY_FINGERPRINT | tail -c 16)"
-        debFilePath="./out/Pororoca_${VERSION_NAME}_amd64.deb"
-        echo "Signing deb package..."
-        debsigs --sign=origin --default-key=$keyId $debFilePath
+        
+        $arr = @()
+        if ($env:LINUX_X64_INSTALLER -eq 'true')   { $arr += "amd64"; };
+        if ($env:LINUX_ARM64_INSTALLER -eq 'true') { $arr += "arm64"; };
+        foreach ($suffix in $arr)
+        {
+          debFilePath="./out/Pororoca_${VERSION_NAME}_${suffix}.deb"
+          echo "Signing deb package..."
+          debsigs --sign=origin --default-key=$keyId $debFilePath
+        }        
       env:
         ALEXANDREHTRB_GPG_KEY_FINGERPRINT: ${{ secrets.ALEXANDREHTRB_GPG_KEY_FINGERPRINT }}
+        LINUX_X64_INSTALLER: ${{ inputs.produceDesktopLinuxInstallersX64 }}
+        LINUX_ARM64_INSTALLER: ${{ inputs.produceDesktopLinuxInstallersArm64 }}
 
     # code below taken from:
     # https://blog.packagecloud.io/how-to-gpg-sign-and-verify-deb-packages-and-apt-repositories/
@@ -715,34 +791,46 @@ jobs:
     # https://github.com/PowerShell/PowerShell/blob/master/tools/packaging/packaging.psm1
     # https://janikvonrotz.ch/2019/03/20/the-final-rpm-packaging-guide/
     - name: Make RHEL and SUSE packages
-      if: ${{ inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
+      if: ${{ inputs.runCD && (inputs.produceDesktopLinuxInstallersX64 || inputs.produceDesktopLinuxInstallersArm64) }}
       shell: pwsh
       run: |
-        # rpmbuild comes pre-installed on Ubuntu runners
-        rpmbuild --version
-        $OUTPUT_FOLDER = "./out/linux-x64-installer";
-        $rpmbuildMainDir = Join-Path $env:HOME "rpmbuild"
-        $rpmbuildSpecsDir = Join-Path $rpmbuildMainDir "SPECS"
-        $rpmbuildBuildRootDir = Join-Path $rpmbuildMainDir "BUILDROOT"
-        $rpmbuildRpmsDir = Join-Path $rpmbuildMainDir "RPMS"
-        [void](mkdir $rpmbuildMainDir $rpmbuildSpecsDir $rpmbuildBuildRootDir $rpmbuildRpmsDir)
-        $rpmStagingDir = Join-Path $env:HOME "rpmstaging"
-        $rpmStagingBinariesDir = Join-Path $rpmStagingDir "binaries"
-        $rpmStagingOthersDir = Join-Path $rpmStagingDir "others"
-        [void](mkdir $rpmStagingDir $rpmStagingBinariesDir $rpmStagingOthersDir)
-        Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/*" -Destination $rpmStagingOthersDir -Recurse -Force
-        Copy-Item -Path "./misc/pororoca_logo.svg" -Destination "${rpmStagingOthersDir}/pororoca_logo.svg"
-        Copy-Item -Path "$OUTPUT_FOLDER/*" -Destination $rpmStagingBinariesDir -Recurse -Force
-        
-        $distros = @("SUSE", "RHEL")
-        foreach ($distro in $distros)
+        $arr = @()
+        if ($env:LINUX_X64_INSTALLER -eq 'true')   { $arr += @{ suffix="x86_64";  outputFolder="./out/linux-x64-installer" } };
+        if ($env:LINUX_ARM64_INSTALLER -eq 'true') { $arr += @{ suffix="aarch64"; outputFolder="./out/linux-arm64-installer" } };
+        foreach ($target in $arr)
         {
-          $rpmbuildSpecFilePath = Join-Path $rpmbuildSpecsDir "${distro}.spec"
-          Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/${distro}.spec" -Destination $rpmbuildSpecFilePath
-          rpmbuild -bb -v --define "_topdir ${rpmbuildMainDir}" --buildroot "${rpmbuildMainDir}/BUILDROOT" $rpmbuildSpecFilePath
-          Copy-Item -Path "${rpmbuildRpmsDir}/x86_64/Pororoca-${env:VERSION_NAME}-1.x86_64.rpm" -Destination "./out/Pororoca-${env:VERSION_NAME}-1.${distro}.x86_64.rpm"
+          $OUTPUT_FOLDER = $target.outputFolder;
+          $arch = $target.suffix;
+          
+          # rpmbuild comes pre-installed on Ubuntu runners
+          rpmbuild --version
+          $rpmbuildMainDir = Join-Path $env:HOME "rpmbuild"
+          $rpmbuildSpecsDir = Join-Path $rpmbuildMainDir "SPECS"
+          $rpmbuildBuildRootDir = Join-Path $rpmbuildMainDir "BUILDROOT"
+          $rpmbuildRpmsDir = Join-Path $rpmbuildMainDir "RPMS"
+          Remove-Item $rpmbuildMainDir -Force -Recurse -ErrorAction Ignore
+          [void](mkdir $rpmbuildMainDir $rpmbuildSpecsDir $rpmbuildBuildRootDir $rpmbuildRpmsDir)
+          $rpmStagingDir = Join-Path $env:HOME "rpmstaging"
+          $rpmStagingBinariesDir = Join-Path $rpmStagingDir "binaries"
+          $rpmStagingOthersDir = Join-Path $rpmStagingDir "others"
+          [void](mkdir $rpmStagingDir $rpmStagingBinariesDir $rpmStagingOthersDir)
+          Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/*" -Destination $rpmStagingOthersDir -Recurse -Force
+          Copy-Item -Path "./misc/pororoca_logo.svg" -Destination "${rpmStagingOthersDir}/pororoca_logo.svg"
+          Copy-Item -Path "$OUTPUT_FOLDER/*" -Destination $rpmStagingBinariesDir -Recurse -Force
+          
+          $distros = @("SUSE", "RHEL")
+          foreach ($distro in $distros)
+          {
+            $rpmbuildSpecFilePath = Join-Path $rpmbuildSpecsDir "${distro}.spec"
+            Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/${distro}_${arch}.spec" -Destination $rpmbuildSpecFilePath
+            rpmbuild -bb -v --define "_topdir ${rpmbuildMainDir}" --buildroot "${rpmbuildMainDir}/BUILDROOT" $rpmbuildSpecFilePath
+            Copy-Item -Path "${rpmbuildRpmsDir}/${arch}/Pororoca-${env:VERSION_NAME}-1.${arch}.rpm" -Destination "./out/Pororoca-${env:VERSION_NAME}-1.${distro}.${arch}.rpm"
+          }
+          Remove-Item $OUTPUT_FOLDER -Force -Recurse -ErrorAction Ignore
         }
-        Remove-Item $OUTPUT_FOLDER -Force -Recurse -ErrorAction Ignore
+      env:
+        LINUX_X64_INSTALLER: ${{ inputs.produceDesktopLinuxInstallersX64 }}
+        LINUX_ARM64_INSTALLER: ${{ inputs.produceDesktopLinuxInstallersArm64 }}
 
     # code below taken from:
     # https://oneuptime.com/blog/post/2026-03-04-sign-verify-rpm-packages-gpg-rhel-9/view
@@ -763,19 +851,27 @@ jobs:
         echo "${env:ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD}" | gpg --batch --passphrase-fd 0 --pinentry-mode loopback --sign --armor /dev/null 2>/dev/null
         $env:GPG_TTY="$(tty)"
 
-        $distros = @("SUSE", "RHEL")
-        foreach ($distro in $distros)
+        $arr = @()
+        if ($env:LINUX_X64_INSTALLER -eq 'true')   { $arr += "x86_64";  }
+        if ($env:LINUX_ARM64_INSTALLER -eq 'true') { $arr += "aarch64"; }
+        foreach ($arch in $arr)
         {
-          Write-Host "Signing ${distro} RPM package..."
-
-          $rpmFilePath = "./out/Pororoca-${env:VERSION_NAME}-1.${distro}.x86_64.rpm"
+          $distros = @("SUSE", "RHEL")
+          foreach ($distro in $distros)
+          {
+            Write-Host "Signing ${distro} RPM package..."
           
-          # Sign with passphrase from a file
-          rpm --addsign $rpmFilePath
+            $rpmFilePath = "./out/Pororoca-${env:VERSION_NAME}-1.${distro}.${arch}.rpm"
+            
+            # Sign with passphrase from a file
+            rpm --addsign $rpmFilePath
+          }
         }
       env:
         ALEXANDREHTRB_GPG_KEY_NAME: ${{ secrets.ALEXANDREHTRB_GPG_KEY_NAME }}
         ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD: ${{ secrets.ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD }}
+        LINUX_X64_INSTALLER: ${{ inputs.produceDesktopLinuxInstallersX64 }}
+        LINUX_ARM64_INSTALLER: ${{ inputs.produceDesktopLinuxInstallersArm64 }}
 
     - name: Verify RHEL and SUSE packages signatures
       if: ${{ inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
@@ -785,25 +881,30 @@ jobs:
         Write-Host "Importing public key to RPM..."
         $certsDir = Join-Path (Get-Location) "certs"
         $publicKeyFilePath = Join-Path $certsDir "public-key.gpg"
-        sudo rpm --import $publicKeyFilePath
-    
+        sudo rpm --import $publicKeyFilePath    
         # Write-Host "Listing RPM imported public keys..."
-        # rpm -qa gpg-pubkey*
-    
+        # rpm -qa gpg-pubkey*    
         # Check signatures
-        $distros = @("SUSE", "RHEL")
-        foreach ($distro in $distros)
+        $arr = @()
+        if ($env:LINUX_X64_INSTALLER -eq 'true')   { $arr += "x86_64";  }
+        if ($env:LINUX_ARM64_INSTALLER -eq 'true') { $arr += "aarch64"; }
+        foreach ($arch in $arr)
         {
-          Write-Host "Verifying ${distro} RPM package signature..."
-          $rpmFilePath = "./out/Pororoca-${env:VERSION_NAME}-1.${distro}.x86_64.rpm"
-          
-          # Sign with passphrase from a file
-          rpm -K --verbose $rpmFilePath         
-        }
-    
+          $distros = @("SUSE", "RHEL")
+          foreach ($distro in $distros)
+          {
+            Write-Host "Verifying ${distro} RPM package signature..."
+            $rpmFilePath = "./out/Pororoca-${env:VERSION_NAME}-1.${distro}.${arch}.rpm"
+            
+            # Sign with passphrase from a file
+            rpm -K --verbose $rpmFilePath         
+          }
+        }    
         Remove-Item "./certs/" -Force -Recurse -ErrorAction Ignore
       env:
         ALEXANDREHTRB_GPG_PUBLIC_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PUBLIC_KEY }}
+        LINUX_X64_INSTALLER: ${{ inputs.produceDesktopLinuxInstallersX64 }}
+        LINUX_ARM64_INSTALLER: ${{ inputs.produceDesktopLinuxInstallersArm64 }}
 
     # finished CD steps - desktop
 

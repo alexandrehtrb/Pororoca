@@ -36,21 +36,25 @@ function Get-RuntimesToPublishFor
 	# osx-arm64 doesn't work for some reason,
 	# but osx-x64 works on macOS with Apple Silicon (arm64)
 	$unixRuntimes = @(`
-		'linux-x64_portable' `
-		,'linux-x64_installers' `
+		#'linux-x64_portable' `
+		#,'linux-x64_installers' `
 		#,'linux-arm64' `
-		,'osx-x64' `
-		#,'osx-arm64' `
+		'osx-x64' `
+		,'osx-arm64' `
 	)
 	$windowsRuntimes = @(`
 		#'win7-x64' `
 		#,'win7-x86' `
 		'win-x64_portable' `
+		,'win-arm64_portable' `
+		,'osx-x64' `
+		,'osx-arm64' `
 		#,'win-x86_portable' `
 		#,'win-arm_portable' `
 		#,'win-arm64_portable' `
 
-		,'win-x64_installer' `
+		#,'win-x64_installer' `
+		#,'win-arm64_installer' `
 		#,'win-x86_installer' `
 		#,'win-arm_installer' `
 		#,'win-arm64_installer' `
@@ -445,7 +449,7 @@ function Generate-SBOM
 		[string]$versionName
     )
 
-	dotnet CycloneDX ./src/Pororoca.Desktop/Pororoca.Desktop.csproj -o $outputFolder -f sbom.json -sv $versionName --json
+	dotnet CycloneDX ./src/Pororoca.Desktop/Pororoca.Desktop.csproj --configuration Release -o $outputFolder -fn sbom.json -sv $versionName -F UnsafeJson
 }
 
 function Compress-Package

@@ -97,7 +97,10 @@ jobs:
       producePororocaTestNuget: true
       produceDesktopLinuxPortableX64: true
       produceDesktopLinuxInstallersX64: true
-      produceDesktopMacOSX: true
+      produceDesktopMacOSX64: true
+      produceDesktopLinuxPortableArm64: true
+      produceDesktopLinuxInstallersArm64: true
+      produceDesktopMacOSArm64: true
 
   win_installer_portable:
     needs: draft_github_release
@@ -112,3 +115,5 @@ jobs:
       produceDesktopWinX86Installer: true
       produceDesktopWinX64Portable: true
       produceDesktopWinX86Portable: true
+      produceDesktopWinArm64Installer: true
+      produceDesktopWinArm64Portable: true

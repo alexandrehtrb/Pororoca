@@ -20,7 +20,8 @@
     <PackageVersion Include="AlexandreHtrb.AvaloniaUITest" Version="12.0.0" />
     <PackageVersion Include="Avalonia.AvaloniaEdit" Version="12.0.0" />
     <PackageVersion Include="AvaloniaEdit.TextMate" Version="12.0.0" />
-    <PackageVersion Include="TextMateSharp.Grammars" Version="2.0.5" />
+    <PackageVersion Include="TextMateSharp" Version="3.0.0-preview.1" />
+    <PackageVersion Include="TextMateSharp.Grammars" Version="3.0.0-preview.1" />
     <PackageVersion Include="ReactiveUI.Avalonia" Version="12.1.9" />
     <PackageVersion Include="ReactiveUI.SourceGenerators" Version="7.1.0" />
     <PackageVersion Include="MessageBox.Avalonia" Version="12.1.0" />

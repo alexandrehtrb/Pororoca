@@ -25,7 +25,7 @@
     <EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
     <!-- trimming properties end -->
     <ApplicationIcon>Assets/pororoca_icon.ico</ApplicationIcon>
-    <Version>4.0.0</Version>
+    <Version>0.0.1</Version><!-- TODO: SET CORRECT VERSION -->
     <FileVersion>$(Version)</FileVersion>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <Copyright>AlexandreHTRB</Copyright>
@@ -102,6 +102,7 @@
     <!--Condition below is needed to remove AvaloniaUI.DiagnosticsSupport package from build output in Release configuration.-->
     <PackageReference Include="Avalonia.AvaloniaEdit"/>
     <PackageReference Include="AvaloniaEdit.TextMate"/>
+    <PackageReference Include="TextMateSharp"/>
     <PackageReference Include="TextMateSharp.Grammars"/>
     <PackageReference Include="ReactiveUI.Avalonia"/>
     <PackageReference Include="ReactiveUI.SourceGenerators" PrivateAssets="all"/>
