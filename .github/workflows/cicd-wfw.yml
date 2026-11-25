@@ -931,17 +931,27 @@ jobs:
       uses: actions/upload-artifact@v7
       with:
         compression-level: 0 # artifacts already compressed
-        name: 'produced_artifacts_win.zip'
+        name: 'produced_artifacts_windows.zip'
         path: './out/'
         overwrite: true
         
-    - name: Upload artifacts to workflow results (Linux machine)
+    - name: Upload artifacts to workflow results (Linux x64 machine)
       # no need if uploading to release
-      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) && (inputs.os == 'ubuntu-latest') }}
+      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) && (inputs.os == 'ubuntu-26.04') }}
       uses: actions/upload-artifact@v7
       with:
         compression-level: 0 # artifacts already compressed
-        name: 'produced_artifacts_linux.zip'
+        name: 'produced_artifacts_linux_x64.zip'
+        path: './out/'
+        overwrite: true
+    
+    - name: Upload artifacts to workflow results (Linux arm64 machine)
+      # no need if uploading to release
+      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) && (inputs.os == 'ubuntu-26.04-arm') }}
+      uses: actions/upload-artifact@v7
+      with:
+        compression-level: 0 # artifacts already compressed
+        name: 'produced_artifacts_linux_arm64.zip'
         path: './out/'
         overwrite: true
 
