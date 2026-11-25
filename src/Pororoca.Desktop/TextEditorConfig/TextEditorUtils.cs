@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Folding;
@@ -7,32 +8,71 @@ namespace Pororoca.Desktop.TextEditorConfig;
 
 internal static class TextEditorUtils
 {
+    internal const string XmlSyntaxLangId = "xml";
+
+    // shared by all editors: the strategy keeps no per-editor state
+    private static readonly XmlFoldingStrategy XmlFoldingStrategy = new();
+    private static readonly ConditionalWeakTable<TextEditor, FoldingManager> XmlFoldingManagers = new();
+
     /// <summary>
-    /// Enables XML folding in the editor. Folds are recalculated whenever the document is replaced or its text changes.
-    /// Content that is not XML produces no foldings.
+    /// Installs XML folding on the editor when enabled, and removes it when disabled.
+    /// While enabled, folds are recalculated whenever the document is replaced or its text changes.
     /// </summary>
-    internal static void EnableXmlFolding(this TextEditor editor)
+    internal static void SetEditorXmlFolding(this TextEditor editor, bool enabled)
     {
-        var foldingStrategy = new XmlFoldingStrategy();
-        FoldingManager? foldingManager = null;
-
-        void UpdateFoldings()
+        if (enabled)
         {
-            if (foldingManager is not null)
-                foldingStrategy.UpdateFoldings(foldingManager, editor.Document);
-        }
+            editor.DocumentChanged -= OnEditorDocumentChangedForXmlFolding;
+            editor.DocumentChanged += OnEditorDocumentChangedForXmlFolding;
+            editor.TextChanged -= OnEditorTextChangedForXmlFolding;
+            editor.TextChanged += OnEditorTextChangedForXmlFolding;
 
-        void InstallFoldingManager()
+            if (!XmlFoldingManagers.TryGetValue(editor, out _))
+                InstallXmlFoldingManager(editor);
+        }
+        else
         {
-            if (foldingManager is not null)
-                FoldingManager.Uninstall(foldingManager);
-            foldingManager = FoldingManager.Install(editor.TextArea);
-            UpdateFoldings();
+            editor.DocumentChanged -= OnEditorDocumentChangedForXmlFolding;
+            editor.TextChanged -= OnEditorTextChangedForXmlFolding;
+            UninstallXmlFoldingManager(editor);
         }
+    }
 
-        editor.DocumentChanged += (_, _) => InstallFoldingManager();
-        editor.TextChanged += (_, _) => UpdateFoldings();
-        InstallFoldingManager();
+    private static void OnEditorDocumentChangedForXmlFolding(object? sender, EventArgs e)
+    {
+        // the document was replaced, so the folding manager must be bound to the new one
+        var editor = (TextEditor)sender!;
+        if (XmlFoldingManagers.TryGetValue(editor, out _))
+        {
+            UninstallXmlFoldingManager(editor);
+            InstallXmlFoldingManager(editor);
+        }
+    }
+
+    private static void OnEditorTextChangedForXmlFolding(object? sender, EventArgs e) =>
+        UpdateXmlFoldings((TextEditor)sender!);
+
+    private static void InstallXmlFoldingManager(TextEditor editor)
+    {
+        var foldingManager = FoldingManager.Install(editor.TextArea);
+        XmlFoldingManagers.Remove(editor);
+        XmlFoldingManagers.Add(editor, foldingManager);
+        UpdateXmlFoldings(editor);
+    }
+
+    private static void UninstallXmlFoldingManager(TextEditor editor)
+    {
+        if (XmlFoldingManagers.TryGetValue(editor, out var foldingManager))
+        {
+            FoldingManager.Uninstall(foldingManager);
+            XmlFoldingManagers.Remove(editor);
+        }
+    }
+
+    private static void UpdateXmlFoldings(TextEditor editor)
+    {
+        if (XmlFoldingManagers.TryGetValue(editor, out var foldingManager))
+            XmlFoldingStrategy.UpdateFoldings(foldingManager, editor.Document);
     }
 
     internal static void SetEditorRawContent(this TextEditor editor, string updatedContent)
@@ -76,7 +116,7 @@ internal static class TextEditorUtils
         else if (contentType.Contains("json"))
             return "jsonc";
         else if (contentType.Contains("xml"))
-            return "xml";
+            return XmlSyntaxLangId;
         else if (contentType.Contains("html"))
             return "html";
         else if (contentType.Contains("javascript"))

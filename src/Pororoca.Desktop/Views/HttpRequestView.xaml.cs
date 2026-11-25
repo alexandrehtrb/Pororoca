@@ -12,11 +12,13 @@ namespace Pororoca.Desktop.Views;
 
 public sealed class HttpRequestView : UserControl
 {
+    private readonly TextEditor httpReqRawBodyEditor;
     private readonly AvaloniaEdit.TextMate.TextMate.Installation httpReqRawBodyEditorTextMateInstallation;
     private string? currentHttpReqRawBodySyntaxLangId;
 
     private CompletionWindow? httpReqRawBodyCompletionWindow;
 
+    private readonly TextEditor httpResRawBodyEditor;
     private readonly AvaloniaEdit.TextMate.TextMate.Installation httpResRawBodyEditorTextMateInstallation;
     private string? currentHttpResRawBodySyntaxLangId;
 
@@ -24,19 +26,18 @@ public sealed class HttpRequestView : UserControl
     {
         InitializeComponent();
 
-        var httpReqRawBodyEditor = this.FindControl<TextEditor>("teReqBodyRawContent")!;
+        this.httpReqRawBodyEditor = this.FindControl<TextEditor>("teReqBodyRawContent")!;
+        var httpReqRawBodyEditor = this.httpReqRawBodyEditor;
         this.httpReqRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(httpReqRawBodyEditor, true, ProvideVariableResolver);
-        httpReqRawBodyEditor.EnableXmlFolding();
         httpReqRawBodyEditor.TextArea.TextEntering += (sender, e) => TextEditorConfiguration.OnTextEnteringInEditorWithVariables(httpReqRawBodyEditor, e, ref this.httpReqRawBodyCompletionWindow);
         httpReqRawBodyEditor.TextArea.TextEntered += (sender, e) => TextEditorConfiguration.OnTextEnteredInEditorWithVariables(httpReqRawBodyEditor, e, ProvideVariableResolver, ref this.httpReqRawBodyCompletionWindow, (sender, e) => this.httpReqRawBodyCompletionWindow = null);
 
         var httpReqRawContentTypeSelector = this.FindControl<AutoCompleteBox>("acbReqBodyRawContentType")!;
         httpReqRawContentTypeSelector.SelectionChanged += OnRequestBodyRawContentTypeChanged;
 
-        var httpResRawBodyEditor = this.FindControl<TextEditor>("ResponseBodyRawContentEditor")!;
-        this.httpResRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(httpResRawBodyEditor!, false, null);
-        httpResRawBodyEditor.EnableXmlFolding();
-        httpResRawBodyEditor.DocumentChanged += OnResponseRawBodyEditorDocumentChanged;
+        this.httpResRawBodyEditor = this.FindControl<TextEditor>("ResponseBodyRawContentEditor")!;
+        this.httpResRawBodyEditorTextMateInstallation = TextEditorConfiguration.Setup(this.httpResRawBodyEditor, false, null);
+        this.httpResRawBodyEditor.DocumentChanged += OnResponseRawBodyEditorDocumentChanged;
     }
 
     private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
@@ -93,14 +94,18 @@ public sealed class HttpRequestView : UserControl
         var vm = (HttpRequestViewModel)DataContext!;
         var resVm = vm.ResponseDataCtx;
         this.httpResRawBodyEditorTextMateInstallation.SetEditorSyntax(ref this.currentHttpResRawBodySyntaxLangId, resVm.ResponseRawContentType);
+        this.httpResRawBodyEditor.SetEditorXmlFolding(this.currentHttpResRawBodySyntaxLangId == TextEditorUtils.XmlSyntaxLangId);
     }
 
     #endregion
 
     #region HELPERS
 
-    private void ApplySelectedRequestRawContentSyntax(string? requestRawContentType) =>
+    private void ApplySelectedRequestRawContentSyntax(string? requestRawContentType)
+    {
         this.httpReqRawBodyEditorTextMateInstallation.SetEditorSyntax(ref this.currentHttpReqRawBodySyntaxLangId, requestRawContentType);
+        this.httpReqRawBodyEditor.SetEditorXmlFolding(this.currentHttpReqRawBodySyntaxLangId == TextEditorUtils.XmlSyntaxLangId);
+    }
 
     // IMPORTANTE: este método deve retornar um CollectionViewModel,
     // e não simplesmente uma coleção, pois senão não vai atualizar
