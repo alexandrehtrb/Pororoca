@@ -653,7 +653,7 @@ jobs:
           [void](mkdir "./out/deb")
           # Debian control file
           [void](mkdir "./out/deb/DEBIAN")
-          Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/control_$($target.suffix)" -Destination "./out/deb/DEBIAN"
+          Copy-Item -Path "./src/Pororoca.Desktop.LinuxDesktop/control_$($target.suffix)" -Destination "./out/deb/DEBIAN/control"
           # Starter script
           [void](mkdir "./out/deb/usr")
           [void](mkdir "./out/deb/usr/bin")
