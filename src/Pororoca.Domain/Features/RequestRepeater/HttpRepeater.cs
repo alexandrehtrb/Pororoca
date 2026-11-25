@@ -1,9 +1,9 @@
 using System.Threading.Channels;
+using System.Threading.RateLimiting;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Pororoca.Domain.Features.Requester;
-using System.Threading.RateLimiting;
 
 namespace Pororoca.Domain.Features.RequestRepeater;
 
@@ -167,7 +167,11 @@ public static class HttpRepeater
         }
         else
         {
-            var res = await requester.RequestAsync(effectiveVars, collectionScopedAuth, collectionScopedRequestHeaders, baseReq, cancellationToken);
+            // The option `waitForEntireBodyIfStreamed: true` means that
+            // it will wait until the whole response body is received.
+            // "Why not just use StreamedBodyReader and read it to the end?"
+            // Answer: to avoid spawning new threads, MemoryStream and other stuff.
+            var res = await requester.RequestAsync(effectiveVars, collectionScopedAuth, collectionScopedRequestHeaders, baseReq, waitForEntireBodyIfStreamed: true, cancellationToken);
             channelWriter.TryWrite(new(inputLine, res, null));
         }
 
@@ -196,8 +200,8 @@ public static class HttpRepeater
             Window = TimeSpan.FromSeconds(1),
             SegmentsPerWindow = 40, // 25ms each
             AutoReplenishment = true,
-            PermitLimit = (int) rep.MaxRatePerSecond,
-            QueueLimit = (int) rep.MaxDop!
+            PermitLimit = (int)rep.MaxRatePerSecond,
+            QueueLimit = (int)rep.MaxDop!
         });
 
     public static TimeSpan EstimateRemainingTime(int total, int numberExecuted, TimeSpan elapsedSoFar) =>

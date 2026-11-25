@@ -45,7 +45,7 @@ public static class InsomniaCollectionV4Importer
 
             // Always generating new id, in case user imports the same collection twice
             // This is to avoid overwriting when saving user collections
-            var wrkspace = (InsomniaCollectionV4Workspace) (insomniaCollection.Resources.First(r => r is InsomniaCollectionV4Workspace));
+            var wrkspace = (InsomniaCollectionV4Workspace)(insomniaCollection.Resources.First(r => r is InsomniaCollectionV4Workspace));
             PororocaCollection myCol = new(
                 Guid.NewGuid(),
                 wrkspace.Name,

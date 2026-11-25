@@ -1,12 +1,12 @@
 using Pororoca.Domain.Features.Entities.Pororoca;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class CollectionScopedAuthViewModel : CollectionOrganizationItemViewModel
+public sealed partial class CollectionScopedAuthViewModel : CollectionOrganizationItemViewModel
 {
     [Reactive]
-    public RequestAuthViewModel AuthVm { get; set; } // TODO: Remove InheritedFromCollection option
+    public partial RequestAuthViewModel AuthVm { get; set; } // TODO: Remove InheritedFromCollection option
 
     public CollectionScopedAuthViewModel(CollectionViewModel parentVm,
                                          PororocaCollection col) : base(parentVm, string.Empty) =>

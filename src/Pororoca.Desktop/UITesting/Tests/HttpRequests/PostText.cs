@@ -2,8 +2,11 @@ namespace Pororoca.Desktop.UITesting.Tests;
 
 public sealed partial class HttpRequestsUITest : PororocaUITest
 {
-    private async Task TestPostRawTextBody()
+    private async Task TestPostRawTextBody(CancellationToken cancellationToken)
     {
+        if (cancellationToken.IsCancellationRequested)
+            return;
+
         await HttpRobot.HttpMethod.Select("POST");
         await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/post/txt");
         await HttpRobot.SetRawBody("text/xml", "<XML><MyValue>{{SpecialValue1}}</MyValue></XML>");

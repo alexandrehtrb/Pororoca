@@ -2,13 +2,9 @@
 
   <PropertyGroup>
     <RootNamespace>Pororoca.Domain</RootNamespace>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <DebugType>embedded</DebugType>
-    <EnablePreviewFeatures>True</EnablePreviewFeatures>
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-    <!-- Licence also available at https://github.com/alexandrehtrb/Pororoca/LICENCE.md -->    
+    <IsTrimmable>True</IsTrimmable>
+    <IsAotCompatible>False</IsAotCompatible>
+    <!-- Licence also available at https://github.com/alexandrehtrb/Pororoca/LICENCE.md -->
   </PropertyGroup>
 
 </Project>

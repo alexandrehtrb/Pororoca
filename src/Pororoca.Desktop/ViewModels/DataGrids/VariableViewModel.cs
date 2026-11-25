@@ -1,24 +1,22 @@
 using System.Collections.ObjectModel;
-using System.Reactive;
-using Pororoca.Desktop.Controls;
+using ReactiveUI.Primitives;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using static Pororoca.Domain.Features.VariableResolution.PororocaPredefinedVariableEvaluator;
 
 namespace Pororoca.Desktop.ViewModels.DataGrids;
 
-public sealed class VariableViewModel : ViewModelBase
+public sealed partial class VariableViewModel : ViewModelBase
 {
     private readonly ObservableCollection<VariableViewModel> parentCollection;
 
-    private bool enabledField;
     public bool Enabled
     {
-        get => this.enabledField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.enabledField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // GAMBIARRA!!!
             // Precisamos invalidar a renderização dos textos sempre que uma variável muda 
             // de estado (ativa / inativa) ou de chave, pois essas mudanças podem alterar
@@ -60,13 +58,13 @@ public sealed class VariableViewModel : ViewModelBase
     }
 
     [Reactive]
-    public bool IsSecret { get; set; }
+    public partial bool IsSecret { get; set; }
 
-    public ReactiveCommand<Unit, Unit> RemoveVariableCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> RemoveVariableCmd { get; }
 
-    public ReactiveCommand<Unit, Unit> MoveVariableUpCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> MoveVariableUpCmd { get; }
 
-    public ReactiveCommand<Unit, Unit> MoveVariableDownCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> MoveVariableDownCmd { get; }
 
     public VariableViewModel(ObservableCollection<VariableViewModel> parentCollection, PororocaVariable v)
         : this(parentCollection, v.Enabled, v.Key, v.Value ?? string.Empty, v.IsSecret)

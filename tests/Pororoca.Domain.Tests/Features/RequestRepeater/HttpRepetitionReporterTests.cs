@@ -119,7 +119,8 @@ public static class HttpRepetitionReporterTests
         {
             using var resMsg = CreateTestHttpResponseMessage("oi", "text/plain", null);
             resMsg.StatusCode = (HttpStatusCode)statusCode!;
-            return await PororocaHttpResponse.SuccessfulAsync(null!, startedAt, elapsedTime, resMsg);
+            byte[] binaryBody = await resMsg.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+            return await PororocaHttpResponse.SuccessfulCompletedAsync(null!, startedAt, elapsedTime, resMsg, binaryBody);
         }
     }
 }

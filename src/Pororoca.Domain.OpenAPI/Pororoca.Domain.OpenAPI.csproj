@@ -1,19 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <RootNamespace>Pororoca.Domain</RootNamespace>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <DebugType>embedded</DebugType>
-    <EnablePreviewFeatures>True</EnablePreviewFeatures>
+    <IsTrimmable>True</IsTrimmable>
+    <IsAotCompatible>False</IsAotCompatible>
     <!-- Licence also available at https://github.com/alexandrehtrb/Pororoca/LICENCE.md -->
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Pororoca.Domain\Pororoca.Domain.csproj"/>
-    <PackageReference Include="Microsoft.OpenApi" Version="3.10.2" />
-    <PackageReference Include="Microsoft.OpenApi.YamlReader" Version="3.10.2" />
+    <PackageReference Include="Microsoft.OpenApi"/>
+    <PackageReference Include="Microsoft.OpenApi.YamlReader"/>
   </ItemGroup>
 
 </Project>

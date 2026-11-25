@@ -4,7 +4,6 @@ using System.Threading.Channels;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Pororoca.Test.Tests;
 
@@ -37,7 +36,7 @@ public sealed class PororocaTestLibraryRepetitionTests
         this.pororocaTest.SetCollectionVariable("MyInt", "123");
 
         this.output.WriteLine("Simple repetition started");
-        var channelReader = await this.pororocaTest.StartHttpRepetitionAsync("REPETITION HTTP1 SIMPLE");
+        var channelReader = await this.pororocaTest.StartHttpRepetitionAsync("REPETITION HTTP1 SIMPLE", TestContext.Current.CancellationToken);
 
         await AssertSimpleRepetitionAsync(channelReader);
     }
@@ -105,7 +104,7 @@ public sealed class PororocaTestLibraryRepetitionTests
         this.pororocaTest.SetCollectionVariable("KEY_123", "123");
 
         this.output.WriteLine("Sequential repetition started");
-        var channelReader = await this.pororocaTest.StartHttpRepetitionAsync("REPETITION HTTP1 SEQUENTIAL FROM RAW JSON ARRAY");
+        var channelReader = await this.pororocaTest.StartHttpRepetitionAsync("REPETITION HTTP1 SEQUENTIAL FROM RAW JSON ARRAY", TestContext.Current.CancellationToken);
 
         await AssertSequentialRepetitionAsync(channelReader);
     }
@@ -142,7 +141,7 @@ public sealed class PororocaTestLibraryRepetitionTests
         this.pororocaTest.SetCollectionVariable("InputDataDir", GetTestFilesDir());
 
         this.output.WriteLine("Sequential repetition started");
-        var channelReader = await this.pororocaTest.StartHttpRepetitionAsync("REPETITION HTTP1 SEQUENTIAL FROM FILE");
+        var channelReader = await this.pororocaTest.StartHttpRepetitionAsync("REPETITION HTTP1 SEQUENTIAL FROM FILE", TestContext.Current.CancellationToken);
 
         await AssertSequentialRepetitionAsync(channelReader);
     }
@@ -260,7 +259,7 @@ public sealed class PororocaTestLibraryRepetitionTests
         this.pororocaTest.SetCollectionVariable("KEY_123", "123");
 
         this.output.WriteLine("Random repetition started");
-        var channelReader = await this.pororocaTest.StartHttpRepetitionAsync("REPETITION HTTP1 RANDOM FROM RAW JSON ARRAY");
+        var channelReader = await this.pororocaTest.StartHttpRepetitionAsync("REPETITION HTTP1 RANDOM FROM RAW JSON ARRAY", TestContext.Current.CancellationToken);
 
         await AssertRandomRepetitionAsync(channelReader);
     }
@@ -297,7 +296,7 @@ public sealed class PororocaTestLibraryRepetitionTests
         this.pororocaTest.SetCollectionVariable("InputDataDir", GetTestFilesDir());
 
         this.output.WriteLine("Random repetition started");
-        var channelReader = await this.pororocaTest.StartHttpRepetitionAsync("REPETITION HTTP1 RANDOM FROM FILE");
+        var channelReader = await this.pororocaTest.StartHttpRepetitionAsync("REPETITION HTTP1 RANDOM FROM FILE", TestContext.Current.CancellationToken);
 
         await AssertRandomRepetitionAsync(channelReader);
     }

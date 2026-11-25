@@ -6,7 +6,7 @@ namespace Pororoca.Domain.Features.Entities.Postman;
 
 internal class PostmanEnvironment
 {
-    public Guid Id { get; set; }
+    public string? Id { get; set; }
 
     public string Name { get; set; }
 

@@ -13,7 +13,7 @@ public static class PostmanEnvironmentExporter
     internal static PostmanEnvironment ConvertToPostmanEnvironment(PororocaEnvironment env) =>
         new()
         {
-            Id = env.Id,
+            Id = env.Id.ToString(),
             Name = env.Name,
             Values = env.Variables
                         .Select(v => new PostmanEnvironmentVariable()

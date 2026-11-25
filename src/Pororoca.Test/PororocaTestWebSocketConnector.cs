@@ -22,7 +22,7 @@ public sealed class PororocaTestWebSocketConnector : WebSocketClientSideConnecto
     {
         this.varResolver = varResolver;
         this.connection = connection;
-        this.OnConnectionChanged = onConnectionChanged;
+        OnConnectionChanged = onConnectionChanged;
     }
 
     public Task SendMessageAsync(string msgName)
@@ -47,7 +47,7 @@ public sealed class PororocaTestWebSocketConnector : WebSocketClientSideConnecto
         {
             throw new Exception($"Error: Could not send WebSocket client message. Cause: '{validationErrorCode}'.");
         }
-        else if (!TryTranslateClientMessage(effectiveVars, msg, out byte[]? resolvedMsgBytes, out FileStream? resolvedStreamToSend, out string? translationErrorCode))
+        else if (!TryTranslateClientMessage(effectiveVars, msg, out byte[]? resolvedMsgBytes, out var resolvedStreamToSend, out string? translationErrorCode))
         {
             throw new Exception($"Error: Could not send WebSocket client message. Cause: '{translationErrorCode}'.");
         }

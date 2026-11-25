@@ -152,7 +152,7 @@
             Name="tbContentFileSrcPath"
             HorizontalContentAlignment="Left"
             VerticalContentAlignment="Center"
-            Watermark="{Binding i18n.WebSocketClientMessage.ContentFileSrcPathWatermark, Mode=OneWay}"
+            PlaceholderText="{Binding i18n.WebSocketClientMessage.ContentFileSrcPathWatermark, Mode=OneWay}"
             Classes="SingleLine"
             DefinitionSet="{Binding PororocaVarSyntaxHighlightingDefinitionSet, Mode=OneWay}"
             Text="{Binding ContentFileSrcPath, Mode=TwoWay}">

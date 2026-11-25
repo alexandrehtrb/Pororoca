@@ -16,7 +16,7 @@ public static class PororocaWebSocketConnectionTests
             Url: "myurl",
             Headers: [new(true, "k1", "v1"), new(true, "k2", "v2")],
             CustomAuth: MakeBasicAuth("usr", "pwd"),
-            CompressionOptions: new(13,true,11,false),
+            CompressionOptions: new(13, true, 11, false),
             Subprotocols: [new(true, "subptc1", null), new(true, "subptc3", null)],
             ClientMessages: [
                 new(PororocaWebSocketMessageType.Text,

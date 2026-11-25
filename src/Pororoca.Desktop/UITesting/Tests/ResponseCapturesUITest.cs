@@ -42,7 +42,7 @@ public sealed partial class ResponseCapturesUITest : PororocaUITest
         }
     }
 
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
         await TopMenuRobot.CreateNewCollection();
         await ColRobot.Name.Edit("COL1");
@@ -66,10 +66,10 @@ public sealed partial class ResponseCapturesUITest : PororocaUITest
             //AppendToLog($"Selecting HTTP version {version}.");
             await HttpRobot.SetHttpVersion(version);
 
-            await TestCaptureResponseHeader(false);
-            await TestCaptureResponseJsonBody(hasActiveEnvironment: false, discard: false);
-            await TestCaptureResponseJsonBody(hasActiveEnvironment: false, discard: true);
-            await TestCaptureResponseXmlBody(false);
+            await TestCaptureResponseHeader(false, cancellationToken);
+            await TestCaptureResponseJsonBody(hasActiveEnvironment: false, discard: false, cancellationToken);
+            await TestCaptureResponseJsonBody(hasActiveEnvironment: false, discard: true, cancellationToken);
+            await TestCaptureResponseXmlBody(false, cancellationToken);
         }
 
         await TreeRobot.Select("COL1");
@@ -85,10 +85,10 @@ public sealed partial class ResponseCapturesUITest : PororocaUITest
             //AppendToLog($"Selecting HTTP version {version}.");
             await HttpRobot.SetHttpVersion(version);
 
-            await TestCaptureResponseHeader(true);
-            await TestCaptureResponseJsonBody(hasActiveEnvironment: true, discard: false);
-            await TestCaptureResponseJsonBody(hasActiveEnvironment: true, discard: true);
-            await TestCaptureResponseXmlBody(true);
+            await TestCaptureResponseHeader(true, cancellationToken);
+            await TestCaptureResponseJsonBody(hasActiveEnvironment: true, discard: false, cancellationToken);
+            await TestCaptureResponseJsonBody(hasActiveEnvironment: true, discard: true, cancellationToken);
+            await TestCaptureResponseXmlBody(true, cancellationToken);
         }
 
         if (OperatingSystem.IsLinux())

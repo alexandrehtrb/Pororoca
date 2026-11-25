@@ -24,7 +24,7 @@ public static partial class CurlRequestImporter
     internal static List<KeyValuePair<string, string>> ParseCurlCommandLineParams(string cmdLine)
     {
         string singleLined = CmdMultiLineRegex.Replace(cmdLine, " ");
-        ReadOnlySpan<char> singleLinedAsSpan = singleLined.AsSpan();
+        var singleLinedAsSpan = singleLined.AsSpan();
 
         var mc = CmdLineKvpsRegex.Matches(singleLined);
         List<KeyValuePair<string, string>> kvps = new(mc.Count);
@@ -37,14 +37,14 @@ public static partial class CurlRequestImporter
             {
                 valueStartIndex += lastSpaces;
             }
-            ReadOnlySpan<char> value = ParseValueOfCmdLineArgument(singleLinedAsSpan, key, valueStartIndex, out int valueEndIndex);
+            var value = ParseValueOfCmdLineArgument(singleLinedAsSpan, key, valueStartIndex, out int valueEndIndex);
             string? valueStr;
             // after reading the part to remove, we can now clean and unescape strings
-            if (value != null && value.Length >= 2 && value[0] == '\'' && value[^1] == '\'')
+            if (value != Span<char>.Empty && value.Length >= 2 && value[0] == '\'' && value[^1] == '\'')
             {
                 valueStr = value[1..^1].ToString().Replace("\\'", "'");
             }
-            else if (value != null && value.Length >= 2 && value[0] == '"' && value[^1] == '"')
+            else if (value != Span<char>.Empty && value.Length >= 2 && value[0] == '"' && value[^1] == '"')
             {
                 valueStr = value[1..^1].ToString().Replace("\\\"", "\"");
             }

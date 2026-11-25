@@ -933,6 +933,27 @@
         "contentType": "application/json",
         "rawContent": "{\r\n  \"familia\": \"malva\"\r\n}"
       }
-    }
+    },
+    {
+      "requestType": "http",
+      "name": "SERVER-SENT EVENTS HTTP1",
+      "httpVersion": 1.1,
+      "httpMethod": "GET",
+      "url": "{{BaseUrl}}/test/get/server-sent-events?durationInSeconds={{DURATION_IN_SECONDS}}"
+    },
+    {
+      "requestType": "http",
+      "name": "SERVER-SENT EVENTS HTTP2",
+      "httpVersion": 2.0,
+      "httpMethod": "GET",
+      "url": "{{BaseUrlHttps}}/test/get/server-sent-events?durationInSeconds={{DURATION_IN_SECONDS}}"
+    },
+    {
+      "requestType": "http",
+      "name": "SERVER-SENT EVENTS HTTP3",
+      "httpVersion": 3.0,
+      "httpMethod": "GET",
+      "url": "{{BaseUrlHttps}}/test/get/server-sent-events?durationInSeconds={{DURATION_IN_SECONDS}}"
+    },
   ]
 }

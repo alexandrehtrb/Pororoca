@@ -1,0 +1,47 @@
+<Project>
+  <PropertyGroup>
+    <!-- Enable central package management, https://learn.microsoft.com/en-us/nuget/consume-packages/Central-Package-Management -->
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- for desktop project -->
+    <PackageVersion Include="Avalonia" Version="12.2.0" />
+    <PackageVersion Include="Avalonia.Desktop" Version="12.2.0" />
+    <PackageVersion Include="Avalonia.Themes.Fluent" Version="12.2.0" />
+    <PackageVersion Include="Avalonia.Controls.DataGrid" Version="12.1.2" />
+    <PackageVersion Include="Avalonia.Wayland" Version="12.2.0" />
+    <PackageVersion Include="Xaml.Behaviors.Interactions.DragAndDrop.DataGrid" Version="12.2.0" />
+    <PackageVersion Include="Xaml.Behaviors.Interactions.DragAndDrop" Version="12.2.0" />
+    <PackageVersion Include="Xaml.Behaviors.Interactions.Draggable" Version="12.2.0" />
+    <PackageVersion Include="Xaml.Behaviors.Interactions.Custom" Version="12.2.0" />
+    <PackageVersion Include="Xaml.Behaviors.Avalonia" Version="12.2.0" />
+    <PackageVersion Include="Xaml.Behaviors.Interactivity" Version="12.2.0" />
+    <PackageVersion Include="Xaml.Behaviors.Interactions" Version="12.2.0" />
+    <PackageVersion Include="AlexandreHtrb.AvaloniaUITest" Version="12.0.0" />
+    <PackageVersion Include="Avalonia.AvaloniaEdit" Version="12.0.0" />
+    <PackageVersion Include="AvaloniaEdit.TextMate" Version="12.0.0" />
+    <PackageVersion Include="TextMateSharp.Grammars" Version="2.0.5" />
+    <PackageVersion Include="ReactiveUI.Avalonia" Version="12.1.9" />
+    <PackageVersion Include="ReactiveUI.SourceGenerators" Version="7.1.0" />
+    <PackageVersion Include="MessageBox.Avalonia" Version="12.1.0" />
+    <!-- for i18n src gen project -->
+    <PackageVersion Include="System.Text.Json" Version="11.0.0" />
+    <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="11.0.0" />
+    <PackageVersion Include="System.Text.Encodings.Web" Version="11.0.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="5.3.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.3.0" />
+    <!-- for OpenAPI project -->
+    <PackageVersion Include="Microsoft.OpenApi" Version="3.11.1" />
+    <PackageVersion Include="Microsoft.OpenApi.YamlReader" Version="3.11.1" />
+    <!-- for test projects -->
+    <PackageVersion Include="NSubstitute" Version="6.2.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.12.0" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.12.0" />
+    <PackageVersion Include="xunit.v3" Version="4.0.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.1" />
+    <PackageVersion Include="coverlet.collector" Version="10.1.1" />
+    <!-- for test server -->
+    <PackageVersion Include="Serilog.AspNetCore" Version="11.0.0" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="11.0.1" />
+  </ItemGroup>
+</Project>

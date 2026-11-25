@@ -2,8 +2,11 @@ namespace Pororoca.Desktop.UITesting.Tests;
 
 public sealed partial class HttpRequestsUITest : PororocaUITest
 {
-    private async Task TestTrailers()
+    private async Task TestTrailers(CancellationToken cancellationToken)
     {
+        if (cancellationToken.IsCancellationRequested)
+            return;
+
         if (HttpRobot.HttpVersion.SelectedItem is string httpVersion && httpVersion.StartsWith("HTTP/1"))
             return; // only HTTP/2 and HTTP/3 have trailers
 

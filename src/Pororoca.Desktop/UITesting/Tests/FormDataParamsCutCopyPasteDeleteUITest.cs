@@ -22,7 +22,7 @@ public sealed partial class FormDataParamsCutCopyPasteDeleteUITest : PororocaUIT
         HttpRobot = new(RootView.FindControl<HttpRequestView>("httpReqView")!);
     }
 
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
         PororocaHttpRequestFormDataParam[] fps;
 

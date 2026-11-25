@@ -23,7 +23,6 @@
       <Color x:Key="MainWindowDarkerBackgroundColor">Black</Color>
       <Color x:Key="MainWindowSidebarColor">Black</Color>
       <Color x:Key="MainWindowSeparatorsColor">Black</Color>
-      <Color x:Key="CurrentEnvironmentLabelColor">#99E3D5</Color>
       <Color x:Key="ListBoxBackgroundColor">Black</Color>
       <Color x:Key="ListBoxItemSelectedBackgroundColor">#562F10</Color>
       <Color x:Key="ResultsListBoxItemSelectedBackgroundColor">#292929</Color>

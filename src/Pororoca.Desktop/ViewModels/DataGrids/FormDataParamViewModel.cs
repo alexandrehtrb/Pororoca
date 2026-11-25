@@ -1,34 +1,34 @@
 using System.Collections.ObjectModel;
-using System.Reactive;
+using ReactiveUI.Primitives;
 using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Pororoca.Desktop.ViewModels.DataGrids;
 
-public sealed class FormDataParamViewModel : ViewModelBase
+public sealed partial class FormDataParamViewModel : ViewModelBase
 {
     private readonly ObservableCollection<FormDataParamViewModel> parentCollection;
 
     public PororocaHttpRequestFormDataParamType ParamType { get; init; }
 
     [Reactive]
-    public bool Enabled { get; set; }
+    public partial bool Enabled { get; set; }
 
     [Reactive]
-    public string Type { get; set; }
+    public partial string Type { get; set; }
 
     [Reactive]
-    public string Key { get; set; }
+    public partial string Key { get; set; }
 
     [Reactive]
-    public string Value { get; set; }
+    public partial string Value { get; set; }
 
     [Reactive]
-    public string ContentType { get; set; }
+    public partial string ContentType { get; set; }
 
-    public ReactiveCommand<Unit, Unit> RemoveParamCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> RemoveParamCmd { get; }
 
     public FormDataParamViewModel(ObservableCollection<FormDataParamViewModel> parentCollection, PororocaHttpRequestFormDataParam p)
     {

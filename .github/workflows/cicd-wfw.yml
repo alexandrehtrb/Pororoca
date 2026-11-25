@@ -65,6 +65,18 @@ on:
         required: false
         default: false
         type: boolean
+      dotnetVersion:
+        required: false
+        default: '10.0.404'
+        type: string
+      nsisVersion:
+        required: false
+        default: '3.13'
+        type: string
+      cyclonedxDotnetVersion:
+        required: false
+        default: '6.3.1'
+        type: string
 
 jobs:
   cicd:
@@ -74,18 +86,49 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         fetch-depth: 1
 
     - name: Install .NET
-      uses: actions/setup-dotnet@v5
+      uses: actions/setup-dotnet@v6
       with:
-        dotnet-version: 8.0.427
-
-    # GitHub Actions Windows Runners come with NSIS pre-installed
-    # https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md
-    # No need to install here
+        dotnet-version: ${{ inputs.dotnetVersion }}
+    
+    - name: Add global.json file dynamically
+      shell: pwsh
+      run: ('{"sdk":{"version":"' + ${env:DOTNET_VERSION} + '"},"test":{"runner":"Microsoft.Testing.Platform"}}') >> global.json
+      env:
+        DOTNET_VERSION: ${{ inputs.dotnetVersion }}
+    
+    # GitHub Actions Windows 2022 Runners come with NSIS pre-installed, 
+    # but windows-2025 and later need manual NSIS installation.
+    # Taken from: https://github.com/repolevedavaj/install-nsis/blob/main/action.yml
+    # NSIS long string patch
+    # Invoke-WebRequest https://deac-riga.dl.sourceforge.net/project/nsis/NSIS%203/${{ inputs.nsis-version }}/nsis-${{ inputs.nsis-version }}-strlen_8192.zip?viasf=1 -OutFile C:\WINDOWS\Temp\nsis-${{ inputs.nsis-version }}-strlen_8192.zip
+    # Expand-Archive "C:\WINDOWS\Temp\nsis-${{ inputs.nsis-version }}-strlen_8192.zip" -DestinationPath "C:\Program Files (x86)\NSIS" -Force
+    # NSIS Envar plugin
+    # Invoke-WebRequest https://nsis.sourceforge.io/mediawiki/images/7/7f/EnVar_plugin.zip -OutFile C:\WINDOWS\Temp\EnVar_plugin.zip
+    # Expand-Archive "C:\WINDOWS\Temp\EnVar_plugin.zip" -DestinationPath "C:\Program Files (x86)\NSIS" -Force
+    - name: Install NSIS
+      if: ${{ inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Installer }}
+      shell: pwsh
+      run: |
+        # UserAgent "Wget/1.21.1 (linux-gnu)" is required to avoid SourceForge thinking it's an automated browser
+        # https://stackoverflow.com/a/69552948
+        Invoke-WebRequest -UserAgent "Wget/1.21.1 (linux-gnu)" "https://sourceforge.net/projects/nsis/files/NSIS%203/${{ env.NSIS_VERSION }}/nsis-${{ env.NSIS_VERSION }}-setup.exe/download" -OutFile "C:\WINDOWS\Temp\nsis-${{ env.NSIS_VERSION }}-setup.exe"
+        $process = Start-Process "C:\WINDOWS\Temp\nsis-${{ env.NSIS_VERSION }}-setup.exe" -ArgumentList "/S" -Wait -PassThru
+        $exitCode = $process.ExitCode
+          if ($exitCode -eq 0) {
+              Write-Host "NSIS installation ran successfully."
+          } else {
+              Write-Host "NSIS installation failed with exit code $exitCode."
+              exit $exitCode
+          }
+        echo "C:\Program Files (x86)\NSIS\Bin" | Out-File -FilePath "$env:GITHUB_PATH" -Append
+        echo "C:\Program Files (x86)\NSIS" | Out-File -FilePath "$env:GITHUB_PATH" -Append
+      env:
+        NSIS_VERSION: ${{ inputs.nsisVersion }}
 
     - name: Restore solution
       run: dotnet restore --nologo --verbosity quiet
@@ -116,13 +159,13 @@ jobs:
       run: dotnet build --no-restore --configuration Release --nologo --verbosity quiet
 
     - name: Execute unit tests
-      run: dotnet test --no-build --configuration Release --nologo --verbosity quiet --filter FullyQualifiedName!~Pororoca.Test.Tests --collect:"XPlat Code Coverage" --results-directory ./TestResults/
+      run: dotnet run --no-build --configuration Release --project ".\tests\Pororoca.Domain.Tests\Pororoca.Domain.Tests.csproj" -- --coverage --coverage-output-format cobertura --results-directory "./TestResults/" --progress off
 
     - name: Report unit tests coverage
       if: ${{ inputs.postUnitTestsCoverageInPR }}
-      uses: danielpalme/ReportGenerator-GitHub-Action@5.5.10
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.6.0
       with:
-        reports: TestResults/**/coverage.cobertura.xml
+        reports: TestResults/*.cobertura.xml
         targetdir: TestResults
         reporttypes: JsonSummary
         assemblyfilters: +Pororoca.Domain;+Pororoca.Domain.OpenAPI        
@@ -154,9 +197,12 @@ jobs:
     # finished CI steps
 
     # CD
-    - name: Install CycloneDX SBOM tool
+    - name: Install Dotnet CycloneDX SBOM tool
       if: ${{ inputs.runCD }}
-      run: dotnet tool install --global CycloneDX
+      shell: pwsh
+      run: dotnet tool install --global CycloneDX --version $env:CYCLONEDX_DOTNET_VERSION
+      env:
+        CYCLONEDX_DOTNET_VERSION: ${{ inputs.cyclonedxDotnetVersion }}
 
     # start CD steps - NuGet
 
@@ -171,7 +217,7 @@ jobs:
     - name: Generate Pororoca.Test SBOM file
       if: ${{ inputs.runCD && inputs.producePororocaTestNuget }}
       shell: pwsh
-      run: dotnet CycloneDX ./src/Pororoca.Test/Pororoca.Test.csproj -o ./out/ -fn sbom_pororoca_test.json -sv $env:NUGET_VERSION_NAME -F UnsafeJson
+      run: dotnet CycloneDX ./src/Pororoca.Test/Pororoca.Test.csproj --configuration Release -o ./out/ -fn sbom_pororoca_test.json -sv $env:NUGET_VERSION_NAME -F UnsafeJson
 
     - name: Pack NuGet
       if: ${{ inputs.runCD && inputs.producePororocaTestNuget }}
@@ -292,7 +338,6 @@ jobs:
       env:
         ALEXANDREHTRB_GPG_PUBLIC_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PUBLIC_KEY }}
         ALEXANDREHTRB_GPG_PRIVATE_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PRIVATE_KEY }}
-        ALEXANDREHTRB_GPG_KEY_FINGERPRINT: ${{ secrets.ALEXANDREHTRB_GPG_KEY_FINGERPRINT }}
         ALEXANDREHTRB_GPG_KEYGRIP: ${{ secrets.ALEXANDREHTRB_GPG_KEYGRIP }}
         ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD: ${{ secrets.ALEXANDREHTRB_GPG_PRIVATE_KEY_PASSWORD }}
 
@@ -307,7 +352,7 @@ jobs:
     - name: Generate Pororoca.Desktop SBOM file
       if: ${{ inputs.runCD && (inputs.produceDesktopLinuxPortableX64 || inputs.produceDesktopLinuxInstallersX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
       shell: pwsh
-      run: dotnet CycloneDX ./src/Pororoca.Desktop/Pororoca.Desktop.csproj -o ./out/ -fn sbom_pororoca_desktop.json -sv $env:VERSION_NAME -F UnsafeJson
+      run: dotnet CycloneDX ./src/Pororoca.Desktop/Pororoca.Desktop.csproj --configuration Release -o ./out/ -fn sbom_pororoca_desktop.json -sv $env:VERSION_NAME -F UnsafeJson
 
     - name: Generate Pororoca Desktop dlls
       if: ${{ inputs.runCD && (inputs.produceDesktopLinuxPortableX64 || inputs.produceDesktopLinuxInstallersX64 || inputs.produceDesktopMacOSX || inputs.produceDesktopWinX64Portable || inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Portable || inputs.produceDesktopWinX86Installer) }}
@@ -342,6 +387,7 @@ jobs:
           --verbosity quiet `
           --nologo `
           --configuration Release `
+          -p:TreatWarningsAsErrors=False `
           -p:PublishSingleFile=$PUBLISH_SINGLE_FILE `
           -p:PublishForInstallOnWindows=$WINDOWS_INSTALLER_RELEASE `
           -p:PublishForInstallOnLinux=$LINUX_INSTALLER_RELEASE `
@@ -353,7 +399,7 @@ jobs:
           # let's copy the msquic.dll file next to the generated .exe
           if ($artifact.rid -like "*win*")
           {
-            Copy-Item -Path "./src/Pororoca.Desktop/bin/Release/net8.0/$($artifact.rid)/msquic.dll" -Destination $OUTPUT_FOLDER
+            Copy-Item -Path "./src/Pororoca.Desktop/bin/Release/net10.0/$($artifact.rid)/msquic.dll" -Destination $OUTPUT_FOLDER
           }
 
           # rename executable
@@ -393,11 +439,13 @@ jobs:
         if ($env:WIN_X86_PORTABLE -eq 'true')  { $arr += "./out/win-x86-portable/Pororoca.exe" ; };
 
         $pfxFilePath = Join-Path (Get-Location) "certs" "cert.pfx"
-
+        
         foreach ($exeFilePath in $arr)
         {
           signtool sign /f $pfxFilePath /fd SHA256 /p $env:ALEXANDREHTRB_PFX_FILE_PASSWORD /t http://timestamp.digicert.com $exeFilePath
         }
+        # don't delete the certificate file yet, it'll be used afterwards 
+        # for signing the installer and the uninstaller
       env:
         ALEXANDREHTRB_PFX_FILE_PASSWORD: ${{ secrets.ALEXANDREHTRB_PFX_FILE_PASSWORD }}
         WIN_X64_PORTABLE: ${{ inputs.produceDesktopWinX64Portable }}
@@ -431,7 +479,7 @@ jobs:
       shell: pwsh
       run: |
         $OUTPUT_FOLDER = "./out/linux-x64-portable"
-        Copy-Item -Path "./pororoca.png" -Destination $OUTPUT_FOLDER
+        Copy-Item -Path "./misc/pororoca.png" -Destination $OUTPUT_FOLDER
 
     - name: Copy icon for Windows installer
       if: ${{ inputs.runCD && (inputs.produceDesktopWinX64Installer || inputs.produceDesktopWinX86Installer) }}
@@ -527,7 +575,7 @@ jobs:
         }
 
         # let's delete the certificate file now, won't be used afterwards
-        Remove-Item $pfxAbsoluteFilePath -Force -Recurse -ErrorAction Ignore
+        Remove-Item $pfxAbsoluteFilePath -Force -ErrorAction Ignore
       env:
         ALEXANDREHTRB_PFX_FILE_PASSWORD: ${{ secrets.ALEXANDREHTRB_PFX_FILE_PASSWORD }}
         WIN_X64_INSTALLER: ${{ inputs.produceDesktopWinX64Installer }}
@@ -611,57 +659,57 @@ jobs:
     # https://blog.packagecloud.io/how-to-gpg-sign-and-verify-deb-packages-and-apt-repositories/
     # https://purplefloyd.wordpress.com/2009/02/05/signing-deb-packages/
     # TODO: Fix this, it's not working, error: 'gpg: no valid OpenPGP data found.'
-    - name: Verify Debian / Ubuntu package signature (NOT WORKING)
-      if: ${{ false && inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
-      shell: pwsh # !!!
-      run: |
-        # Install debsig-verify
-
-        sudo apt install debsig-verify
-
-        # Import public key
-        $keyId = "${env:ALEXANDREHTRB_GPG_KEY_FINGERPRINT}"
-        $keyringDirPath = "/usr/share/debsig/keyrings/${keyId}"
-        [void](mkdir $keyringDirPath)
-        $publicKeyFilePath = Join-Path (Get-Location) "certs" "public-key.gpg"
-
-        sudo gpg --no-default-keyring `
-            --keyring "/usr/share/debsig/keyrings/${keyId}/debsig.gpg" `
-            --import $publicKeyFilePath
-
-        # Create debsig-verify policy for public key
-
-        sudo mkdir "/etc/debsig/policies/${keyId}/"
-
-        $policyXml = @"
-        <?xml version="1.0"?>
-        <!DOCTYPE Policy SYSTEM "https://www.debian.org/debsig/1.0/policy.dtd">
-        <Policy xmlns="https://www.debian.org/debsig/1.0/">
-          <Origin Name="test" id="${keyId}" Description="Test package"/>
-          <Selection>
-            <Required Type="origin" File="debsig.gpg" id="${keyId}"/>
-          </Selection>
-          <Verification MinOptional="0">
-            <Required Type="origin" File="debsig.gpg" id="${keyId}"/>
-          </Verification>
-        </Policy>
-        "@
-        $tempPolicyFilePath = Join-Path (Get-Location) "certs" "policy.pol"
-        echo $policyXml >> $tempPolicyFilePath
-        $policyXmlFilePath = "/etc/debsig/policies/${keyId}/policy.pol"
-        sudo cp $tempPolicyFilePath $policyXmlFilePath
-
-        # Write-Host "XML policy file path: ${policyXmlFilePath}" 
-        # Write-Host "XML policy:`n$(Get-Content $policyXmlFilePath)" 
-
-        # Verify package signature
-        Write-Host "Verifying deb package signature..."
-        $debFilePath = "./out/Pororoca_${env:VERSION_NAME}_amd64.deb"
-        debsig-verify $debFilePath
-      env:
-        ALEXANDREHTRB_GPG_PUBLIC_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PUBLIC_KEY }}
-        ALEXANDREHTRB_GPG_KEY_FINGERPRINT: ${{ secrets.ALEXANDREHTRB_GPG_KEY_FINGERPRINT }}
-
+    # - name: Verify Debian / Ubuntu package signature (NOT WORKING)
+    #   if: ${{ false && inputs.runCD && inputs.produceDesktopLinuxInstallersX64 }}
+    #   shell: pwsh # !!!
+    #   run: |
+    #     # Install debsig-verify
+    # 
+    #     sudo apt install debsig-verify
+    # 
+    #     # Import public key
+    #     $keyId = "${env:ALEXANDREHTRB_GPG_KEY_FINGERPRINT}"
+    #     $keyringDirPath = "/usr/share/debsig/keyrings/${keyId}"
+    #     [void](mkdir $keyringDirPath)
+    #     $publicKeyFilePath = Join-Path (Get-Location) "certs" "public-key.gpg"
+    # 
+    #     sudo gpg --no-default-keyring `
+    #         --keyring "/usr/share/debsig/keyrings/${keyId}/debsig.gpg" `
+    #         --import $publicKeyFilePath
+    # 
+    #     # Create debsig-verify policy for public key
+    # 
+    #     sudo mkdir "/etc/debsig/policies/${keyId}/"
+    # 
+    #     $policyXml = @"
+    #     <?xml version="1.0"?>
+    #     <!DOCTYPE Policy SYSTEM "https://www.debian.org/debsig/1.0/policy.dtd">
+    #     <Policy xmlns="https://www.debian.org/debsig/1.0/">
+    #       <Origin Name="test" id="${keyId}" Description="Test package"/>
+    #       <Selection>
+    #         <Required Type="origin" File="debsig.gpg" id="${keyId}"/>
+    #       </Selection>
+    #       <Verification MinOptional="0">
+    #         <Required Type="origin" File="debsig.gpg" id="${keyId}"/>
+    #       </Verification>
+    #     </Policy>
+    #     "@
+    #     $tempPolicyFilePath = Join-Path (Get-Location) "certs" "policy.pol"
+    #     echo $policyXml >> $tempPolicyFilePath
+    #     $policyXmlFilePath = "/etc/debsig/policies/${keyId}/policy.pol"
+    #     sudo cp $tempPolicyFilePath $policyXmlFilePath
+    # 
+    #     # Write-Host "XML policy file path: ${policyXmlFilePath}" 
+    #     # Write-Host "XML policy:`n$(Get-Content $policyXmlFilePath)" 
+    # 
+    #     # Verify package signature
+    #     Write-Host "Verifying deb package signature..."
+    #     $debFilePath = "./out/Pororoca_${env:VERSION_NAME}_amd64.deb"
+    #     debsig-verify $debFilePath
+    #   env:
+    #     ALEXANDREHTRB_GPG_PUBLIC_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PUBLIC_KEY }}
+    #     ALEXANDREHTRB_GPG_KEY_FINGERPRINT: ${{ secrets.ALEXANDREHTRB_GPG_KEY_FINGERPRINT }}
+     
     # code below taken from:
     # https://github.com/PowerShell/PowerShell/pull/26337
     # https://github.com/PowerShell/PowerShell/blob/master/tools/packaging/packaging.psm1
@@ -737,11 +785,11 @@ jobs:
         Write-Host "Importing public key to RPM..."
         $certsDir = Join-Path (Get-Location) "certs"
         $publicKeyFilePath = Join-Path $certsDir "public-key.gpg"
-        rpm --import $publicKeyFilePath
-
+        sudo rpm --import $publicKeyFilePath
+    
         # Write-Host "Listing RPM imported public keys..."
-        rpm -qa gpg-pubkey*
-
+        # rpm -qa gpg-pubkey*
+    
         # Check signatures
         $distros = @("SUSE", "RHEL")
         foreach ($distro in $distros)
@@ -752,7 +800,7 @@ jobs:
           # Sign with passphrase from a file
           rpm -K --verbose $rpmFilePath         
         }
-
+    
         Remove-Item "./certs/" -Force -Recurse -ErrorAction Ignore
       env:
         ALEXANDREHTRB_GPG_PUBLIC_KEY: ${{ secrets.ALEXANDREHTRB_GPG_PUBLIC_KEY }}
@@ -762,7 +810,7 @@ jobs:
     # start upload CD artifacts
 
     - name: Upload artifacts to release
-      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == true) }}
+      if: ${{ inputs.runCD && inputs.uploadArtifactsToRelease }}
       shell: pwsh
       run: |
         $outputFiles = $(Get-ChildItem ./out/ | Select FullName)
@@ -773,9 +821,12 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    # actions/upload-artifact@v7 allows uploading zip without double-zip,
+    # but only one file at a time
+    # https://github.com/actions/upload-artifact/issues/766
     - name: Upload artifacts to workflow results (Windows machine)
       # no need if uploading to release
-      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) && (inputs.os == 'windows-2022') }} # TODO: Switch to windows-latest and install NSIS
+      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) && (inputs.os == 'windows-latest') }}
       uses: actions/upload-artifact@v7
       with:
         compression-level: 0 # artifacts already compressed

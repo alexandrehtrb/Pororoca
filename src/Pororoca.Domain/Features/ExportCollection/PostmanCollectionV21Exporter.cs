@@ -19,7 +19,7 @@ public static class PostmanCollectionV21Exporter
         {
             Info = new()
             {
-                Id = col.Id,
+                Id = col.Id.ToString(),
                 Name = col.Name,
                 Schema = PostmanCollectionV21.SchemaUrl
             },

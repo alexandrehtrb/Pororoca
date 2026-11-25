@@ -13,7 +13,7 @@ namespace Pororoca.Desktop.Views;
 public sealed class HttpRepeaterView : UserControl
 {
     private readonly AvaloniaEdit.TextMate.TextMate.Installation rawInputDataEditorTextMateInstallation;
-    private string? currentRawInputDataSyntaxLangId;
+    private readonly string? currentRawInputDataSyntaxLangId;
 
     private CompletionWindow? rawInputDataCompletionWindow;
 

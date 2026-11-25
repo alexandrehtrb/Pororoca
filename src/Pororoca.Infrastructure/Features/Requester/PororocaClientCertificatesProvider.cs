@@ -16,7 +16,7 @@ internal static class PororocaClientCertificatesProvider
     // I) PKCS#12 certificates
     // .pfx and .p12 certificates include the private key and are password-protected files.
     private static X509Certificate2 LoadPkcs12CertificateFromFile(PororocaRequestAuthClientCertificate cc) =>
-        new(cc.CertificateFilePath, cc.FilePassword);
+        X509CertificateLoader.LoadPkcs12FromFile(cc.CertificateFilePath, cc.FilePassword);
 
     // II) PEM certificates:
     // .cer, .crt, .pem certificates may include the private key and are Base64 clear-text files;
@@ -38,7 +38,13 @@ internal static class PororocaClientCertificatesProvider
         // work around for Windows (WinApi) problems with PEMS, still in .NET 5
         if (OperatingSystem.IsWindows())
         {
+            // Don't use X509CertificateLoader.LoadCertificate() here,
+            // as it causes a CryptographicException and doesn't load the certificate correctly.
+            // https://github.com/dotnet/runtime/issues/112258
+            // Ignore the deprecation warning.
+#pragma warning disable SYSLIB0057
             return new(pemCert.Export(X509ContentType.Pkcs12));
+#pragma warning restore SYSLIB0057
         }
         else
         {

@@ -1,8 +1,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Pororoca.Domain.Features.Entities.Insomnia;
-using static Pororoca.Domain.Features.Entities.Insomnia.InsomniaCollectionV4Resource;
 using static Pororoca.Domain.Features.Common.JsonConfiguration;
+using static Pororoca.Domain.Features.Entities.Insomnia.InsomniaCollectionV4Resource;
 
 namespace Pororoca.Domain.Features.Common;
 
@@ -35,7 +35,7 @@ public sealed class InsomniaResourceJsonConverter : JsonConverter<InsomniaCollec
         {
             return null;
         }
-        
+
         // The custom converters cannot be used below, otherwise, a recursive call will happen
         // and a StackOverflowExcpetion will arise
         return resourceTypeStr switch

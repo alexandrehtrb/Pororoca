@@ -1,11 +1,11 @@
 using System.Collections.ObjectModel;
-using System.Reactive;
+using ReactiveUI.Primitives;
 using Avalonia.Threading;
 using MsBox.Avalonia.Enums;
 using Pororoca.Desktop.HotKeys;
 using Pororoca.Desktop.Localization;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 #if DEBUG || UI_TESTS_ENABLED
 using Pororoca.Desktop.UITesting;
 using Pororoca.Desktop.UITesting.Tests;
@@ -13,13 +13,13 @@ using Pororoca.Desktop.UITesting.Tests;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class UITestViewModel : ViewModelBase
+public sealed partial class UITestViewModel : ViewModelBase
 {
     [Reactive]
-    public bool Include { get; set; }
+    public partial bool Include { get; set; }
 
     [Reactive]
-    public string? Name { get; set; }
+    public partial string? Name { get; set; }
 
 #if DEBUG || UI_TESTS_ENABLED
     public UITest Test { get; }
@@ -33,21 +33,28 @@ public sealed class UITestViewModel : ViewModelBase
 #endif
 }
 
-public sealed class UITestsRunnerWindowViewModel : ViewModelBase
+public sealed partial class UITestsRunnerWindowViewModel : ViewModelBase
 {
     public static readonly UITestsRunnerWindowViewModel Instance = new();
 
-    [Reactive]
-    public int ActionsWaitingTimeInMs { get; set; }
+#if DEBUG || UI_TESTS_ENABLED
+    private CancellationTokenSource? cancellationTokenSource;
+#endif
 
     [Reactive]
-    public bool TestFilesFolderFound { get; set; }
+    public partial bool IsRunningTests { get; set; }
+
+    [Reactive]
+    public partial int ActionsWaitingTimeInMs { get; set; }
+
+    [Reactive]
+    public partial bool TestFilesFolderFound { get; set; }
 
     public ObservableCollection<UITestViewModel> Tests { get; }
 
-    public ReactiveCommand<Unit, Unit> SelectAllTestsCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> SelectAllTestsCmd { get; }
 
-    public ReactiveCommand<Unit, Unit> DeselectAllTestsCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> DeselectAllTestsCmd { get; }
 
     private UITestsRunnerWindowViewModel()
     {
@@ -61,11 +68,13 @@ public sealed class UITestsRunnerWindowViewModel : ViewModelBase
             new(nameof(SwitchThemesUITest), new SwitchThemesUITest()),
             new(nameof(EditableTextBlockUITest), new EditableTextBlockUITest()),
             new(nameof(CollectionAndCollectionFolderUITest), new CollectionAndCollectionFolderUITest()),
+            new(nameof(EnvironmentsUITest), new EnvironmentsUITest()),
             new(nameof(TreeCopyAndPasteItemsUITest), new TreeCopyAndPasteItemsUITest()),
             new(nameof(TreeCutAndPasteItemsUITest), new TreeCutAndPasteItemsUITest()),
             new(nameof(TreeDeleteItemsUITest), new TreeDeleteItemsUITest()),
             new(nameof(HttpRequestValidationsUITest), new HttpRequestValidationsUITest()),
             new(nameof(HttpRequestsUITest), new HttpRequestsUITest()),
+            new(nameof(BadSslUITest), new BadSslUITest()),
             new(nameof(VariablesCutCopyPasteDeleteUITest), new VariablesCutCopyPasteDeleteUITest()),
             new(nameof(HeadersCutCopyPasteDeleteUITest), new HeadersCutCopyPasteDeleteUITest()),
             new(nameof(UrlEncodedParamsCutCopyPasteDeleteUITest), new UrlEncodedParamsCutCopyPasteDeleteUITest()),
@@ -120,6 +129,8 @@ public sealed class UITestsRunnerWindowViewModel : ViewModelBase
     internal void RunTests() => Dispatcher.UIThread.Post(async () => await RunTestsAsync());
 
 #if DEBUG || UI_TESTS_ENABLED
+    internal void StopTests() => this.cancellationTokenSource?.Cancel();
+
     private async Task RunTestsAsync()
     {
         /*
@@ -140,8 +151,11 @@ public sealed class UITestsRunnerWindowViewModel : ViewModelBase
 
         var waitingTimeBetweenActions = TimeSpan.FromMilliseconds(ActionsWaitingTimeInMs);
         var tests = Tests.Where(t => t.Include).Select(t => t.Test).ToArray();
+        this.cancellationTokenSource = new();
 
-        string resultsLog = await UITestsRunner.RunTestsAsync(waitingTimeBetweenActions, tests);
+        IsRunningTests = true;
+        string resultsLog = await UITestsRunner.RunTestsAsync(waitingTimeBetweenActions, this.cancellationTokenSource.Token, tests);
+        IsRunningTests = false;
 
         // restoring the items' tree after the tests
         foreach (var item in bkupedItems)
@@ -157,6 +171,8 @@ public sealed class UITestsRunnerWindowViewModel : ViewModelBase
             buttons: ButtonEnum.Ok);
     }
 #else
+    internal void StopTests(){}
+
     private Task RunTestsAsync() => Task.CompletedTask;
 #endif
 }

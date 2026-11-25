@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net;
 using System.Text;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
@@ -9,7 +10,7 @@ namespace Pororoca.Domain.Tests.Features.Entities.Pororoca.Http;
 
 public static class PororocaHttpResponseTests
 {
-    private static readonly TimeSpan testElapsedTime = TimeSpan.FromSeconds(4);
+    private static readonly TimeSpan testElapsedTime = TimeSpan.FromSeconds(1.0);
 
     [Fact]
     public static async Task Should_return_success_true_and_the_status_code_if_successful()
@@ -18,7 +19,8 @@ public static class PororocaHttpResponseTests
         using var resMsg = CreateTestHttpResponseMessage("oi", "text/plain", "inline");
 
         // WHEN
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg);
+        byte[] binaryBody = await resMsg.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg, binaryBody);
 
         // THEN
         Assert.True(res.Successful);
@@ -46,7 +48,8 @@ public static class PororocaHttpResponseTests
         using var resMsg = CreateTestHttpResponseMessage("oi", "text/plain", "inline");
 
         // WHEN
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg);
+        byte[] binaryBody = await resMsg.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg, binaryBody);
 
         // THEN
         Assert.NotNull(res.Headers);
@@ -88,10 +91,13 @@ public static class PororocaHttpResponseTests
         using var resMsg = CreateTestHttpResponseMessage(null, null, null);
 
         // WHEN
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg);
+        byte[] binaryBody = await resMsg.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg, binaryBody);
 
         // THEN
         Assert.False(res.HasBody);
+        Assert.False(res.IsStreamed);
+        Assert.Null(res.StreamedBodyReader);
     }
 
     [Fact]
@@ -101,10 +107,13 @@ public static class PororocaHttpResponseTests
         using var resMsg = CreateTestHttpResponseMessage("oi", null, null);
 
         // WHEN
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg);
+        byte[] binaryBody = await resMsg.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg, binaryBody);
 
         // THEN
         Assert.True(res.HasBody);
+        Assert.False(res.IsStreamed);
+        Assert.Null(res.StreamedBodyReader);
     }
 
     [Theory]
@@ -117,7 +126,8 @@ public static class PororocaHttpResponseTests
         using var resMsg = CreateTestHttpResponseMessage("{\"id\":1}", contentType, null);
 
         // WHEN
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg);
+        byte[] binaryBody = await resMsg.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg, binaryBody);
 
         // THEN
         Assert.Equal(contentType, res.ContentType);
@@ -133,7 +143,8 @@ public static class PororocaHttpResponseTests
         using var resMsg = CreateTestHttpResponseMessage("{\"id\":1}", contentType, null);
 
         // WHEN
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg);
+        byte[] binaryBody = await resMsg.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg, binaryBody);
 
         // THEN
         Assert.True(res.CanDisplayTextBody);
@@ -148,7 +159,8 @@ public static class PororocaHttpResponseTests
         using var resMsg = CreateTestHttpResponseMessage("{\"id\":1}", contentType, null);
 
         // WHEN
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg);
+        byte[] binaryBody = await resMsg.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg, binaryBody);
 
         // THEN
         Assert.False(res.CanDisplayTextBody);
@@ -161,7 +173,8 @@ public static class PororocaHttpResponseTests
         using var resMsg = CreateTestHttpResponseMessage(null, null, null);
 
         // WHEN
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg);
+        byte[] binaryBody = await resMsg.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg, binaryBody);
 
         // THEN
         Assert.Null(res.GetBodyAsPrettyText(null));
@@ -174,7 +187,8 @@ public static class PororocaHttpResponseTests
         using var resMsg = CreateTestHttpResponseMessage("oi", "text/plain", null);
 
         // WHEN
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg);
+        byte[] binaryBody = await resMsg.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg, binaryBody);
 
         // THEN
         Assert.Equal("oi", res.GetBodyAsPrettyText(null));
@@ -187,7 +201,8 @@ public static class PororocaHttpResponseTests
         using var resMsg = CreateTestHttpResponseMessage("{\"id\":1}", "application/json", null);
 
         // WHEN
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg);
+        byte[] binaryBody = await resMsg.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg, binaryBody);
 
         // THEN
         Assert.Equal("{" + Environment.NewLine + "  \"id\": 1" + Environment.NewLine + "}", res.GetBodyAsPrettyText(null));
@@ -200,7 +215,8 @@ public static class PororocaHttpResponseTests
         using var resMsg = CreateTestHttpResponseMessage("<A><B>qwerty</B></A>", "text/xml", null);
 
         // WHEN
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg);
+        byte[] binaryBody = await resMsg.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg, binaryBody);
 
         // THEN
         Assert.Equal("<A>" + Environment.NewLine + "  <B>qwerty</B>" + Environment.NewLine + "</A>", res.GetBodyAsPrettyText(null));
@@ -215,7 +231,8 @@ public static class PororocaHttpResponseTests
         using var resMsg = CreateTestHttpResponseMessage(content, null, null);
 
         // WHEN
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg);
+        byte[] binaryBody = await resMsg.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg, binaryBody);
 
         // THEN
         if (content == null)
@@ -238,7 +255,8 @@ public static class PororocaHttpResponseTests
         using var resMsg = CreateTestHttpResponseMessage("oi", "text/plain", contentDisposition);
 
         // WHEN
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg);
+        byte[] binaryBody = await resMsg.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg, binaryBody);
 
         // THEN
         Assert.Equal(expectedFileName, res.GetContentDispositionFileName());
@@ -255,7 +273,8 @@ public static class PororocaHttpResponseTests
         using var resMsg = CreateTestHttpResponseMessage("oi", "text/plain", contentDisposition);
 
         // WHEN
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg);
+        byte[] binaryBody = await resMsg.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg, binaryBody);
 
         // THEN
         Assert.Null(res.GetContentDispositionFileName());
@@ -275,7 +294,8 @@ public static class PororocaHttpResponseTests
         };
 
         // WHEN
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg);
+        byte[] binaryBody = await resMsg.Content!.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg, binaryBody);
 
         // THEN
         Assert.NotNull(res.MultipartParts);
@@ -309,7 +329,8 @@ public static class PororocaHttpResponseTests
         };
 
         // WHEN
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg);
+        byte[] binaryBody = await resMsg.Content!.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg, binaryBody);
 
         // THEN
         Assert.NotNull(res.MultipartParts);
@@ -331,6 +352,44 @@ public static class PororocaHttpResponseTests
     }
 
     [Fact]
+    public static async Task Should_read_streamed_response_correctly()
+    {
+        // GIVEN
+        StringBuilder sb = new();
+        sb.Append('A', 4096);
+        sb.Append('B', 4096); // 4096 = buffer size in bytes
+        sb.Append('C', 1550);
+        
+        using var resMsg = CreateTestHttpResponseMessage(sb.ToString(), "text/event-stream", null, HttpStatusCode.OK);
+
+        // WHEN
+        var res = await PororocaHttpResponse.SuccessfulStreamingAsync(null!, DateTimeOffset.Now, new Stopwatch(), resMsg, CancellationToken.None);
+
+        // THEN
+        Assert.True(res.Successful);
+        Assert.Equal(HttpStatusCode.OK, res.StatusCode);
+        Assert.True(res.IsStreamed);
+        Assert.NotNull(res.StreamedBodyReader);
+
+        List<string> accumulatedParts = new();
+        await foreach (string part in res.StreamedBodyReader.ReadAllAsync(TestContext.Current.CancellationToken))
+        {
+            accumulatedParts.Add(part);
+        }
+
+        Assert.Equal(3, accumulatedParts.Count);
+        string lineOfA = new(Enumerable.Repeat('A', 4096).ToArray());
+        Assert.Equal(lineOfA, accumulatedParts[0]);
+        string lineOfB = new(Enumerable.Repeat('B', 4096).ToArray());
+        Assert.Equal(lineOfB, accumulatedParts[1]);
+        string lineOfC = new(Enumerable.Repeat('C', 1550).ToArray());
+        Assert.Equal(lineOfC, accumulatedParts[2]);
+
+        Assert.Equal(sb.ToString(), res.GetBodyAsString());
+        Assert.Equal(sb.ToString(), res.GetBodyAsPrettyText());
+    }
+
+    [Fact]
     public static async Task Should_capture_response_header_correctly()
     {
         // GIVEN
@@ -338,7 +397,8 @@ public static class PororocaHttpResponseTests
         PororocaHttpResponseValueCapture capture = new(PororocaHttpResponseValueCaptureType.Header, "MyVar", "Header1", null);
 
         // WHEN
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg);
+        byte[] binaryBody = await resMsg.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg, binaryBody);
 
         // THEN
         Assert.Equal("Value1", res.CaptureValue(capture));
@@ -352,7 +412,8 @@ public static class PororocaHttpResponseTests
         PororocaHttpResponseValueCapture capture = new(PororocaHttpResponseValueCaptureType.Body, "MyVar", null, "$.id");
 
         // WHEN
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg);
+        byte[] binaryBody = await resMsg.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg, binaryBody);
 
         // THEN
         Assert.Equal("1", res.CaptureValue(capture));
@@ -366,7 +427,8 @@ public static class PororocaHttpResponseTests
         PororocaHttpResponseValueCapture capture = new(PororocaHttpResponseValueCaptureType.Body, "MyVar", null, "/A/B");
 
         // WHEN
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg);
+        byte[] binaryBody = await resMsg.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, testElapsedTime, resMsg, binaryBody);
 
         // THEN
         Assert.Equal("100", res.CaptureValue(capture));

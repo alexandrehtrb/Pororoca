@@ -1,11 +1,11 @@
 using Pororoca.Desktop.ViewModels;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.Entities.Pororoca.WebSockets;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Pororoca.Desktop.HotKeys;
 
-public sealed class ClipboardArea : ViewModelBase
+public sealed partial class ClipboardArea : ViewModelBase
 {
     internal static readonly ClipboardArea Instance = new();
 
@@ -14,13 +14,13 @@ public sealed class ClipboardArea : ViewModelBase
     internal List<CollectionOrganizationItemViewModel>? ItemsMarkedForCut { get; set; }
 
     [Reactive]
-    public bool CanPasteEnvironment { get; private set; }
+    public partial bool CanPasteEnvironment { get; private set; }
 
     [Reactive]
-    public bool CanPasteCollectionFolderOrRequest { get; private set; }
+    public partial bool CanPasteCollectionFolderOrRequest { get; private set; }
 
     [Reactive]
-    public bool CanPasteWebSocketClientMessage { get; private set; }
+    public partial bool CanPasteWebSocketClientMessage { get; private set; }
 
     public bool OnlyHasCopiesOfWebSocketClientMessages =>
         this.copiedDomainObjs.TrueForAll(x => x is PororocaWebSocketClientMessage);

@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
-using System.Reactive;
+using ReactiveUI.Primitives;
 using Avalonia.Controls;
 using Pororoca.Desktop.HotKeys;
 using ReactiveUI;
@@ -17,12 +17,12 @@ public abstract class BaseDataGridWithOperationsViewModel<VM, D> : ViewModelBase
 
     public ConcurrentDictionary<VM, bool> SelectedItems { get; }
 
-    public ReactiveCommand<Unit, Unit> AddNewCmd { get; }
-    public ReactiveCommand<Unit, Unit> CutCmd { get; }
-    public ReactiveCommand<Unit, Unit> CopyCmd { get; }
-    public ReactiveCommand<Unit, Unit> PasteCmd { get; }
-    public ReactiveCommand<Unit, Unit> DuplicateCmd { get; }
-    public ReactiveCommand<Unit, Unit> DeleteCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> AddNewCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> CutCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> CopyCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> PasteCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> DuplicateCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> DeleteCmd { get; }
 
     protected BaseDataGridWithOperationsViewModel(List<D>? initialValues = null)
     {

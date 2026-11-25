@@ -10,6 +10,7 @@ using AvaloniaEdit.TextMate;
 using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Domain.Features.VariableResolution;
+using ReactiveUI.Primitives;
 using static Pororoca.Domain.Features.VariableResolution.PororocaPredefinedVariableEvaluator;
 
 namespace Pororoca.Desktop.TextEditorConfig;
@@ -41,9 +42,10 @@ internal static class TextEditorConfiguration
         editor.Options.EnableEmailHyperlinks = true;
         editor.Options.EnableHyperlinks = true;
         editor.TextArea.IndentationStrategy = new AvaloniaEdit.Indentation.DefaultIndentationStrategy();
-        editor.GetObservable(Visual.BoundsProperty).Subscribe(bounds => editor.TextArea.Width = bounds.Width);
+        SubscribeExtensions.Subscribe(editor.GetObservable(Visual.BoundsProperty), bounds => editor.TextArea.Width = bounds.Width);
         editor.TextArea.RightClickMovesCaret = true;
         editor.TextArea.TextView.LinkTextForegroundBrush = PororocaThemeManager.TextEditorHyperlinkForegroundBrush;
+        editor.TextArea.SelectionBrush = PororocaThemeManager.TextEditorSelectionHighlightBrush;
 
         var textMateInstallation = editor.InstallTextMate(DefaultRegistryOptions.Value!, false);
         // the line below must be added only after the TextMate installation above
@@ -54,7 +56,6 @@ internal static class TextEditorConfiguration
             PororocaVariableColorizingTransformer pororocaVarLineTransformer = new(varResolverObtainer);
             invalidateTextEditorsAreasCallbacks.Add(editor.TextArea.TextView.Redraw);
             editor.TextArea.TextView.LineTransformers.Add(pororocaVarLineTransformer);
-            editor.TextArea.SelectionBrush = PororocaThemeManager.TextEditorSelectionHighlightBrush;
             editor.PointerHover += (sender, e) => OnTextEditorPointerHover(sender, e, varResolverObtainer!);
             editor.PointerHoverStopped += OnTextEditorPointerHoverStopped;
         }

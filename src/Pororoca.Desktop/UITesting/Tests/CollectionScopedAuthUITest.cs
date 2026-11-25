@@ -33,7 +33,7 @@ public sealed partial class CollectionScopedAuthUITest : PororocaUITest
         HttpRobot = new(RootView.FindControl<HttpRequestView>("httpReqView")!);
     }
 
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
         await TopMenuRobot.CreateNewCollection();
         await ColRobot.Name.Edit("COL1");

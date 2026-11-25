@@ -1,15 +1,15 @@
-using System.Reactive;
+using ReactiveUI.Primitives;
 using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.Converters;
 using Pororoca.Desktop.ExportImport;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.TranslateRequest;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class RequestAuthViewModel : ViewModelBase
+public sealed partial class RequestAuthViewModel : ViewModelBase
 {
     internal CollectionViewModel Collection { get; }
     internal PororocaVariableSyntaxHighlightingDefinitionSet PororocaVarSyntaxHighlightingDefinitionSet { get; }
@@ -18,13 +18,12 @@ public sealed class RequestAuthViewModel : ViewModelBase
 
     private readonly Action clearInvalidWarningsCallback;
 
-    private int authModeSelectedIndexField;
     public int AuthModeSelectedIndex
     {
-        get => this.authModeSelectedIndexField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.authModeSelectedIndexField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasValidationProblem)
                 this.clearInvalidWarningsCallback();
@@ -39,50 +38,48 @@ public sealed class RequestAuthViewModel : ViewModelBase
     #region REQUEST AUTH BASIC
 
     [Reactive]
-    public string? BasicAuthLogin { get; set; }
+    public partial string? BasicAuthLogin { get; set; }
 
     [Reactive]
-    public string? BasicAuthPassword { get; set; }
+    public partial string? BasicAuthPassword { get; set; }
 
     #endregion
 
     #region REQUEST AUTH BEARER
 
     [Reactive]
-    public string? BearerAuthToken { get; set; }
+    public partial string? BearerAuthToken { get; set; }
 
     #endregion
 
     #region REQUEST AUTH CLIENT CERTIFICATE
 
     [Reactive]
-    public int ClientCertificateTypeSelectedIndex { get; set; }
+    public partial int ClientCertificateTypeSelectedIndex { get; set; }
 
     private PororocaRequestAuthClientCertificateType? ClientCertificateType =>
         ClientCertificateTypeMapping.MapIndexToEnum(ClientCertificateTypeSelectedIndex);
 
     #region REQUEST AUTH CLIENT CERTIFICATE PKCS12
 
-    private string? clientCertificateAuthPkcs12CertificateFilePathField;
     public string? ClientCertificateAuthPkcs12CertificateFilePath
     {
-        get => this.clientCertificateAuthPkcs12CertificateFilePathField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.clientCertificateAuthPkcs12CertificateFilePathField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasClientCertificateAuthPkcs12CertificateFilePathProblem)
                 this.clearInvalidWarningsCallback();
         }
     }
 
-    private string? clientCertificateAuthPkcs12FilePasswordField;
     public string? ClientCertificateAuthPkcs12FilePassword
     {
-        get => this.clientCertificateAuthPkcs12FilePasswordField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.clientCertificateAuthPkcs12FilePasswordField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasClientCertificateAuthPkcs12FilePasswordProblem)
                 this.clearInvalidWarningsCallback();
@@ -90,37 +87,35 @@ public sealed class RequestAuthViewModel : ViewModelBase
     }
 
     [Reactive]
-    public bool HasClientCertificateAuthPkcs12CertificateFilePathProblem { get; set; }
+    public partial bool HasClientCertificateAuthPkcs12CertificateFilePathProblem { get; set; }
 
     [Reactive]
-    public bool HasClientCertificateAuthPkcs12FilePasswordProblem { get; set; }
+    public partial bool HasClientCertificateAuthPkcs12FilePasswordProblem { get; set; }
 
-    public ReactiveCommand<Unit, Unit> SearchClientCertificatePkcs12FileCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> SearchClientCertificatePkcs12FileCmd { get; }
 
     #endregion
 
     #region REQUEST AUTH CLIENT CERTIFICATE PEM
 
-    private string? clientCertificateAuthPemCertificateFilePathField;
     public string? ClientCertificateAuthPemCertificateFilePath
     {
-        get => this.clientCertificateAuthPemCertificateFilePathField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.clientCertificateAuthPemCertificateFilePathField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasClientCertificateAuthPemCertificateFilePathProblem)
                 this.clearInvalidWarningsCallback();
         }
     }
 
-    private string? clientCertificateAuthPemPrivateKeyFilePathField;
     public string? ClientCertificateAuthPemPrivateKeyFilePath
     {
-        get => this.clientCertificateAuthPemPrivateKeyFilePathField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.clientCertificateAuthPemPrivateKeyFilePathField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasClientCertificateAuthPemPrivateKeyFilePathProblem)
                 this.clearInvalidWarningsCallback();
@@ -128,17 +123,17 @@ public sealed class RequestAuthViewModel : ViewModelBase
     }
 
     [Reactive]
-    public bool HasClientCertificateAuthPemCertificateFilePathProblem { get; set; }
+    public partial bool HasClientCertificateAuthPemCertificateFilePathProblem { get; set; }
 
     [Reactive]
-    public bool HasClientCertificateAuthPemPrivateKeyFilePathProblem { get; set; }
+    public partial bool HasClientCertificateAuthPemPrivateKeyFilePathProblem { get; set; }
 
     [Reactive]
-    public string? ClientCertificateAuthPemFilePassword { get; set; }
+    public partial string? ClientCertificateAuthPemFilePassword { get; set; }
 
-    public ReactiveCommand<Unit, Unit> SearchClientCertificatePemCertFileCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> SearchClientCertificatePemCertFileCmd { get; }
 
-    public ReactiveCommand<Unit, Unit> SearchClientCertificatePemPrivateKeyFileCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> SearchClientCertificatePemPrivateKeyFileCmd { get; }
 
     #endregion
 
@@ -146,52 +141,48 @@ public sealed class RequestAuthViewModel : ViewModelBase
 
     #region REQUEST AUTH WINDOWS
 
-    private bool windowsAuthUseCurrentUserField;
     public bool WindowsAuthUseCurrentUser
     {
-        get => this.windowsAuthUseCurrentUserField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.windowsAuthUseCurrentUserField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasWindowsAuthLoginProblem || HasWindowsAuthPasswordProblem || HasWindowsAuthDomainProblem)
                 this.clearInvalidWarningsCallback();
         }
     }
 
-    private string? windowsAuthLoginField;
     public string? WindowsAuthLogin
     {
-        get => this.windowsAuthLoginField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.windowsAuthLoginField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasWindowsAuthLoginProblem)
                 this.clearInvalidWarningsCallback();
         }
     }
 
-    private string? windowsAuthPasswordField;
     public string? WindowsAuthPassword
     {
-        get => this.windowsAuthPasswordField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.windowsAuthPasswordField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasWindowsAuthPasswordProblem)
                 this.clearInvalidWarningsCallback();
         }
     }
 
-    private string? windowsAuthDomainField;
     public string? WindowsAuthDomain
     {
-        get => this.windowsAuthDomainField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.windowsAuthDomainField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasWindowsAuthDomainProblem)
                 this.clearInvalidWarningsCallback();
@@ -199,13 +190,13 @@ public sealed class RequestAuthViewModel : ViewModelBase
     }
 
     [Reactive]
-    public bool HasWindowsAuthLoginProblem { get; set; }
+    public partial bool HasWindowsAuthLoginProblem { get; set; }
 
     [Reactive]
-    public bool HasWindowsAuthPasswordProblem { get; set; }
+    public partial bool HasWindowsAuthPasswordProblem { get; set; }
 
     [Reactive]
-    public bool HasWindowsAuthDomainProblem { get; set; }
+    public partial bool HasWindowsAuthDomainProblem { get; set; }
 
     #endregion
 

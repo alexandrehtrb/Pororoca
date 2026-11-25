@@ -2,8 +2,11 @@ namespace Pororoca.Desktop.UITesting.Tests;
 
 public sealed partial class ResponseCapturesUITest : PororocaUITest
 {
-    private async Task TestCaptureResponseJsonBody(bool hasActiveEnvironment, bool discard)
+    private async Task TestCaptureResponseJsonBody(bool hasActiveEnvironment, bool discard, CancellationToken cancellationToken)
     {
+        if (cancellationToken.IsCancellationRequested)
+            return;
+
         await HttpRobot.HttpMethod.Select("GET");
         await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/get/json");
         await HttpRobot.SetEmptyBody();

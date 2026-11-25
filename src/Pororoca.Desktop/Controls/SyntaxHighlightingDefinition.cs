@@ -92,160 +92,130 @@ public sealed class SyntaxHighlightingDefinition : INotifyPropertyChanged, IDisp
     /// </summary>
     public bool IsValid { get; private set; }
 
-    /// <summary>
-    /// Get or set background brush of the definition.
-    /// </summary>
-    private IBrush? backgroundField;
     public IBrush? Background
     {
-        get => this.backgroundField;
+        get;
         set
         {
-            if (ReferenceEquals(this.backgroundField, value))
+            if (ReferenceEquals(field, value))
                 return;
             this.backgroundPropertyChangedHandlerToken?.Dispose();
             if (value is AvaloniaObject aobj)
             {
                 this.backgroundPropertyChangedHandlerToken = new(aobj, nameof(AvaloniaObject.PropertyChanged), OnBrushPropertyChanged);
             }
-            this.backgroundField = value;
+            field = value;
             Validate();
             OnPropertyChanged(nameof(Background));
         }
     }
 
-    /// <summary>
-    /// Get or set font family of the definition.
-    /// </summary>
-    private FontFamily? fontFamilyField;
     public FontFamily? FontFamily
     {
-        get => this.fontFamilyField;
+        get;
         set
         {
-            if (this.fontFamilyField?.Equals(value) ?? value is null)
+            if (field?.Equals(value) ?? value is null)
                 return;
-            this.fontFamilyField = value;
+            field = value;
             Validate();
             OnPropertyChanged(nameof(FontFamily));
         }
     }
 
-    /// <summary>
-    /// Get or set font size of the definition.
-    /// </summary>
-    private double fontSizeField = double.NaN;
     public double FontSize
     {
-        get => this.fontSizeField;
+        get;
         set
         {
             if (double.IsInfinity(value) || value <= 0)
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (AreFontSizesEqual(this.fontSizeField, value))
+            if (AreFontSizesEqual(field, value))
                 return;
-            this.fontSizeField = value;
+            field = value;
             Validate();
             OnPropertyChanged(nameof(FontSize));
         }
-    }
+    } = double.NaN;
 
-    /// <summary>
-    /// Get or set font style of the definition.
-    /// </summary>
-    private FontStyle? fontStyleField;
     public FontStyle? FontStyle
     {
-        get => this.fontStyleField;
+        get;
         set
         {
-            if (this.fontStyleField == value)
+            if (field == value)
                 return;
-            this.fontStyleField = value;
+            field = value;
             Validate();
             OnPropertyChanged(nameof(FontStyle));
         }
     }
 
-    /// <summary>
-    /// Get or set font weight of the definition.
-    /// </summary>
-    private FontWeight? fontWeightField;
     public FontWeight? FontWeight
     {
-        get => this.fontWeightField;
+        get;
         set
         {
-            if (this.fontWeightField == value)
+            if (field == value)
                 return;
-            this.fontWeightField = value;
+            field = value;
             Validate();
             OnPropertyChanged(nameof(FontWeight));
         }
     }
 
-    /// <summary>
-    /// Get or set foreground brush of the definition.
-    /// </summary>
-    private IBrush? foregroundField;
     public IBrush? Foreground
     {
-        get => this.foregroundField;
+        get;
         set
         {
-            if (ReferenceEquals(this.foregroundField, value))
+            if (ReferenceEquals(field, value))
                 return;
             this.foregroundPropertyChangedHandlerToken?.Dispose();
             if (value is AvaloniaObject aobj)
             {
                 this.foregroundPropertyChangedHandlerToken = new(aobj, nameof(AvaloniaObject.PropertyChanged), OnBrushPropertyChanged);
             }
-            this.foregroundField = value;
+            field = value;
             Validate();
             OnPropertyChanged(nameof(Foreground));
         }
     }
 
-    private Func<Match, int>? regexMatchIdMapperField;
     public Func<Match, int>? RegexMatchIdMapper
     {
-        get => this.regexMatchIdMapperField;
+        get;
         set
         {
-            if (this.regexMatchIdMapperField == value)
+            if (field == value)
                 return;
-            this.regexMatchIdMapperField = value;
+            field = value;
             Validate();
             OnPropertyChanged(nameof(RegexMatchIdMapper));
         }
     }
 
-    private Func<int, IBrush>? regexMatchIdForegroundMapperField;
     public Func<int, IBrush>? RegexMatchIdForegroundMapper
     {
-        get => this.regexMatchIdForegroundMapperField;
+        get;
         set
         {
-            if (this.regexMatchIdForegroundMapperField == value)
+            if (field == value)
                 return;
-            this.regexMatchIdForegroundMapperField = value;
+            field = value;
             Validate();
             OnPropertyChanged(nameof(RegexMatchIdForegroundMapper));
         }
     }
 
-    /// <summary>
-    /// Get or set text decorations of the definition.
-    /// </summary>
-    private TextDecorationCollection? textDecorationsField;
     public TextDecorationCollection? TextDecorations
     {
-        get => this.textDecorationsField;
+        get;
         set
         {
-            if (this.textDecorationsField == value)
+            if (field == value)
                 return;
-            this.textDecorationsField = value;
+            field = value;
             Validate();
             OnPropertyChanged(nameof(TextDecorations));
         }

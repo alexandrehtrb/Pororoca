@@ -33,7 +33,7 @@ public sealed class TreeCopyAndPasteItemsUITest : PororocaUITest
         RepeaterRobot = new(RootView.FindControl<HttpRepeaterView>("httpRepView")!);
     }
 
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
         // create a collection with many different items
         await TopMenuRobot.CreateNewCollection();

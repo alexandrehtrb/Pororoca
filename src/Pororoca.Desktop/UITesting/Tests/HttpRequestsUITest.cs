@@ -45,7 +45,7 @@ public sealed partial class HttpRequestsUITest : PororocaUITest
         }
     }
 
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
         await TopMenuRobot.CreateNewCollection();
         await ColRobot.Name.Edit("COL1");
@@ -78,46 +78,28 @@ public sealed partial class HttpRequestsUITest : PororocaUITest
             AppendToLog($"Selecting HTTP version {version}.");
             await HttpRobot.SetHttpVersion(version);
 
-            await TestQueryByHeaders();
-            await TestQueryByBody();
-            await TestGetTextResponse();
-            await TestGetJsonResponse();
-            await TestGetBinaryResponse();
-            await TestHeaders();
-            await TestTrailers();
-            await TestPostEmptyBody();
-            await TestPostRawJsonBody();
-            await TestPostRawTextBody();
-            await TestPostFileBody();
-            await TestPostUrlEncodedBody();
-            await TestPostFormDataBody();
-            await TestBasicAuth();
-            await TestBearerAuth();
+            await TestQueryByHeaders(cancellationToken);
+            await TestQueryByBody(cancellationToken);
+            await TestGetTextResponse(cancellationToken);
+            await TestGetJsonResponse(cancellationToken);
+            await TestGetBinaryResponse(cancellationToken);
+            await TestHeaders(cancellationToken);
+            await TestTrailers(cancellationToken);
+            await TestPostEmptyBody(cancellationToken);
+            await TestPostRawJsonBody(cancellationToken);
+            await TestPostRawTextBody(cancellationToken);
+            await TestPostFileBody(cancellationToken);
+            await TestPostUrlEncodedBody(cancellationToken);
+            await TestPostFormDataBody(cancellationToken);
+            await TestBasicAuth(cancellationToken);
+            await TestBearerAuth(cancellationToken);
+            await TestStreamedResponse(cancellationToken);
         }
 
         if (OperatingSystem.IsLinux())
         {
-            // reenable TLS verification for BadSSL requests
+            // reenable TLS verification
             await TopMenuRobot.SwitchTlsVerification(true);
-        }
-
-        // badssl.com uses only HTTP/1.1
-        await HttpRobot.SetHttpVersion(1.1m);
-        try
-        {
-            AppendToLog("Running self-signed and client certificates tests (HTTP/1.1 only).");
-            await TestSelfSigned();
-            await TestClientCertificatePkcs12Auth();
-            await TestClientCertificatePemConjoinedUnencryptedAuth();
-            await TestClientCertificatePemConjoinedEncryptedAuth();
-            await TestClientCertificatePemSeparateUnencryptedAuth();
-            await TestClientCertificatePemSeparateEncryptedAuth();
-        }
-        catch (Exception ex)
-        {
-            // badssl.com sometimes is unstable, that is why we are wrapping with a try-catch
-            AppendToLog("Bad SSL test failed.");
-            AppendToLog(ex.ToString());
         }
     }
 

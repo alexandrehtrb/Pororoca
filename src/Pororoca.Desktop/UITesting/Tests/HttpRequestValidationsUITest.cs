@@ -28,7 +28,7 @@ public sealed class HttpRequestValidationsUITest : PororocaUITest
         HttpRobot = new(RootView.FindControl<HttpRequestView>("httpReqView")!);
     }
 
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
         // create a collection with many different items
         await TopMenuRobot.CreateNewCollection();

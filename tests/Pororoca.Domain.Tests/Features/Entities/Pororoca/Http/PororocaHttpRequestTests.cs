@@ -1,7 +1,7 @@
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
 using Xunit;
-using static Pororoca.Domain.Features.Entities.Pororoca.PororocaRequestAuth;
 using static Pororoca.Domain.Features.Entities.Pororoca.Http.PororocaHttpRequestBody;
+using static Pororoca.Domain.Features.Entities.Pororoca.PororocaRequestAuth;
 
 namespace Pororoca.Domain.Tests.Features.Entities.Pororoca.Http;
 

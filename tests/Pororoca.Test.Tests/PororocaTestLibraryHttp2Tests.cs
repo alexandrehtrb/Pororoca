@@ -24,7 +24,7 @@ public sealed class PororocaTestLibraryHttp2Tests
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
         Assert.Equal("application/json; charset=utf-8", res.ContentType);
 
-        var jsonObj = res.GetJsonBodyAs<Dictionary<string, int>>();
+        var jsonObj = res.GetJsonBodyAs(TestsJsonSrcGenContext.Default.DictionaryStringInt32);
         Assert.NotNull(jsonObj);
         Assert.Contains(new KeyValuePair<string, int>("id", 1), jsonObj);
     }
@@ -38,7 +38,7 @@ public sealed class PororocaTestLibraryHttp2Tests
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);
         Assert.Equal("application/json; charset=utf-8", res.ContentType);
 
-        var jsonObj = res.GetJsonBodyAs<Dictionary<string, int>>();
+        var jsonObj = res.GetJsonBodyAs(TestsJsonSrcGenContext.Default.DictionaryStringInt32);
         Assert.NotNull(jsonObj);
         Assert.Contains(new KeyValuePair<string, int>("id", 1), jsonObj);
     }
@@ -57,7 +57,7 @@ public sealed class PororocaTestLibraryHttp2Tests
         Assert.NotNull(res.Trailers);
         Assert.Equal("MyTrailerValue", res.Trailers["mytrailer"]);
 
-        var jsonObj = res.GetJsonBodyAs<Dictionary<string, int>>();
+        var jsonObj = res.GetJsonBodyAs(TestsJsonSrcGenContext.Default.DictionaryStringInt32);
         Assert.NotNull(jsonObj);
         Assert.Contains(new KeyValuePair<string, int>("id", 1), jsonObj);
     }

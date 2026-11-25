@@ -3,16 +3,13 @@
   <PropertyGroup>
     <AssemblyName>PororocaTestServer</AssemblyName>
     <RootNamespace>Pororoca.TestServer</RootNamespace>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
     <EnableCompressionInSingleFile>True</EnableCompressionInSingleFile>
     <PublishReadyToRun>true</PublishReadyToRun>
     <NoWarn>AD0001</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.0.0" />
+    <PackageReference Include="Serilog.AspNetCore"/>
+    <PackageReference Include="Swashbuckle.AspNetCore"/>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\src\Pororoca.Infrastructure\Features\WebSockets\*.cs" />

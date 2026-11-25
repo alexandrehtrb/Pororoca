@@ -68,7 +68,7 @@ jobs:
     uses: ./.github/workflows/cicd-wfw.yml
     secrets: inherit
     with:
-      os: windows-2022 # running on Windows because we need NSIS. TODO: 'windows-2025' and later does not contain NSIS, we need to install manually
+      os: windows-latest
       runCD: true
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
       produceDesktopWinX64Installer: ${{ inputs.win_x64_installer }}

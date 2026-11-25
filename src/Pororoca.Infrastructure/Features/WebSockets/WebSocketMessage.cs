@@ -49,7 +49,7 @@ public sealed class WebSocketMessage
     public WebSocketMessageDirection Direction { get; }
     public WebSocketMessageType Type { get; }
     internal bool DisableCompression { get; }
-    public bool CanBeSavedToFile => this.Bytes != null || this.BytesStream is MemoryStream;
+    public bool CanBeSavedToFile => Bytes != null || BytesStream is MemoryStream;
     public long Length { get; }
 
 #if DEBUG
@@ -124,13 +124,6 @@ public sealed class WebSocketMessage
         JsonSerializer.Deserialize(Bytes.AsSpan(), jsonTypeInfo)! :
         BytesStream is MemoryStream ms ?
         JsonSerializer.Deserialize(ms.ToArray(), jsonTypeInfo)! :
-        throw new NotSupportedException("Parsing available only for MemoryStreams.");
-
-    public T ReadAsUtf8Json<T>(JsonSerializerOptions opts) =>
-        Bytes is not null ?
-        JsonSerializer.Deserialize<T>(Bytes.AsSpan(), opts)! :
-        BytesStream is MemoryStream ms ?
-        JsonSerializer.Deserialize<T>(ms.ToArray(), opts)! :
         throw new NotSupportedException("Parsing available only for MemoryStreams.");
 
     public string FormatForLogging() => Type switch

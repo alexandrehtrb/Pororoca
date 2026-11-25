@@ -13,14 +13,24 @@ public sealed class CollectionsGroupViewModel : CollectionOrganizationItemParent
 
     public ObservableCollection<CollectionOrganizationItemViewModel> CollectionGroupSelectedItems { get; }
 
-    private CollectionOrganizationItemViewModel? collectionGroupSelectedItemField;
     public CollectionOrganizationItemViewModel? CollectionGroupSelectedItem
     {
-        get => this.collectionGroupSelectedItemField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.collectionGroupSelectedItemField, value);
-            this.onCollectionsGroupItemSelected(this.collectionGroupSelectedItemField);
+            try
+            {
+                this.RaiseAndSetIfChanged(ref field, value);
+            }
+            catch (InvalidOperationException)
+            {
+                // for some reason, the method above causes an InvalidOperationException
+                // during the TreeDeleteItemsUITest, when deleting several items selected in a tree,
+                // a collection and various inner elements. I don't know the reason.
+                // The operation still works correctly, nevertheless.
+                // This bug does not happen on Avalonia 11.0.5.
+            }
+            this.onCollectionsGroupItemSelected(field);
         }
     }
 

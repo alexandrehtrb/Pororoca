@@ -1,38 +1,38 @@
 using Pororoca.Desktop.Localization;
 using Pororoca.Domain.Features.Common;
 using Pororoca.Infrastructure.Features.WebSockets;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class WebSocketExchangedMessageViewModel : ViewModelBase
+public sealed partial class WebSocketExchangedMessageViewModel : ViewModelBase
 {
     [Reactive]
-    public bool IsFromServer { get; set; }
+    public partial bool IsFromServer { get; set; }
 
     [Reactive]
-    public bool IsFromClient { get; set; }
+    public partial bool IsFromClient { get; set; }
 
     [Reactive]
-    public string? OriginDescription { get; set; }
+    public partial string? OriginDescription { get; set; }
 
     [Reactive]
-    public string? MessageSizeDescription { get; set; }
+    public partial string? MessageSizeDescription { get; set; }
 
     [Reactive]
-    public string? InstantDescription { get; set; }
+    public partial string? InstantDescription { get; set; }
 
     [Reactive]
-    public string? ShortInstantDescription { get; set; }
+    public partial string? ShortInstantDescription { get; set; }
 
     [Reactive]
-    public string? TypeDescription { get; set; }
+    public partial string? TypeDescription { get; set; }
 
     [Reactive]
-    public string? TextContent { get; set; }
+    public partial string? TextContent { get; set; }
 
     [Reactive]
-    public bool IsJsonTextContent { get; set; }
+    public partial bool IsJsonTextContent { get; set; }
 
     public byte[]? Bytes
     {

@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Pororoca.Desktop.HotKeys;
+using Pororoca.Desktop.ViewModels;
 using Pororoca.Desktop.Views;
 
 namespace Pororoca.Desktop.UITesting.Robots;
@@ -10,7 +11,7 @@ public sealed class ItemsTreeRobot : BaseRobot
 
     private TreeView Tree => GetChildView<TreeView>("itemsTree")!;
 
-    internal Task Select(string pathSeparatedBySlashes) => Tree.Select(pathSeparatedBySlashes);
+    internal Task<CollectionOrganizationItemViewModel> Select(string pathSeparatedBySlashes) => Tree.Select(pathSeparatedBySlashes);
 
     internal Task SelectMultiple(params string[] pathsSeparatedBySlashes) => Tree.SelectMultiple(pathsSeparatedBySlashes);
 

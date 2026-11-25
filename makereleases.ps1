@@ -156,7 +156,7 @@ function Run-UnitTests
 
 	Write-Host "Running unit tests..." -ForegroundColor DarkYellow
 	$stopwatch.Restart()
-	dotnet test --configuration Release --nologo --verbosity quiet --filter FullyQualifiedName!~Pororoca.Test.Tests
+	dotnet run --project ".\tests\Pororoca.Domain.Tests\Pororoca.Domain.Tests.csproj" --configuration Release -- --progress off
 	$stopwatch.Stop()
 	Write-Host "Solution tests run ($($stopwatch.Elapsed.TotalSeconds.ToString("#"))s)." -ForegroundColor DarkGreen
 }
@@ -296,6 +296,7 @@ function Publish-PororocaDesktop
 		--verbosity quiet `
 		--nologo `
 		--configuration Release `
+		-p:TreatWarningsAsErrors=False `
 		-p:PublishSingleFile=${publishSingleFileArg} `
 		-p:PublishForInstallOnWindows=${isInstallOnWindowsReleaseArg} `
 		-p:PublishForInstallOnLinux=${IsInstallOnLinuxReleaseArg} `
@@ -307,7 +308,7 @@ function Publish-PororocaDesktop
 	if ($dotnetRid -like "*win*")
 	{
 		# let's copy the msquic.dll file next to the generated .exe
-		Copy-Item -Path "./src/Pororoca.Desktop/bin/Release/net8.0/${dotnetRid}/msquic.dll" `
+		Copy-Item -Path "./src/Pororoca.Desktop/bin/Release/net10.0/${dotnetRid}/msquic.dll" `
 			  	  -Destination $outputFolder
 	}
 }
@@ -407,7 +408,7 @@ function Copy-LogoIfLinux
 	if ($runtime -like "*linux*")
 	{
 		# Copy logo for users to create launchers
-		Copy-Item -Path "./pororoca.png" `
+		Copy-Item -Path "./misc/pororoca.png" `
 			  -Destination $outputFolder
 	}
 }

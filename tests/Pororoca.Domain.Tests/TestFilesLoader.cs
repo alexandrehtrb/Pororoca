@@ -1,6 +1,5 @@
-global using static Pororoca.Domain.Tests.TestFilesLoader;
 global using static Pororoca.Domain.Features.Common.JsonUtils;
-
+global using static Pororoca.Domain.Tests.TestFilesLoader;
 using System.Text;
 
 namespace Pororoca.Domain.Tests;

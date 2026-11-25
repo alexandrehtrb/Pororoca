@@ -503,6 +503,7 @@ public static class MimeTypesDetector
             new("js", "text/ecmascript"),
             new("js", "text/javascript"),
             new("json", "application/json"), // JavaScript Object Notation (JSON)
+            new("json", "application/jsonl"), // JSON Lines
             new("json", "application/problem+json"),
             new("json", "application/fhir+json"),
             new("json", "application/json-patch+json"),
@@ -1094,6 +1095,7 @@ public static class MimeTypesDetector
             new("twd", "application/vnd.simtech-mindmapper"), // SimTech MindMapper
             new("txd", "application/vnd.genomatix.tuxedo"), // Genomatix Tuxedo Framework
             new("txf", "application/vnd.mobius.txf"), // Mobius Management Systems - Topic Index File
+            new("txt", "text/event-stream"),
             // --> Moved to first position: new("txt", "text/plain"), // Text File <--
             new("ufd", "application/vnd.ufdl"), // Universal Forms Description Language
             new("uil", "text/x-uil"),
@@ -1345,4 +1347,10 @@ public static class MimeTypesDetector
         contentType is null ||
         textMimeTypesIndicators.Any(mt =>
             contentType.Contains(mt, StringComparison.InvariantCultureIgnoreCase));
+
+    public static bool IsStreamedContent(string? contentType) =>
+        !String.IsNullOrEmpty(contentType) &&
+          (contentType.Contains("text/event-stream")
+        || contentType.Contains("application/x-ndjson")
+        || contentType.Contains("application/jsonl"));
 }

@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml.MarkupExtensions;
 using Pororoca.Desktop.UITesting.Robots;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Desktop.Views;
@@ -32,7 +31,7 @@ public sealed partial class WebSocketsValidationsUITest : PororocaUITest
         WsRobot = new(RootView.FindControl<WebSocketConnectionView>("wsConnView")!);
     }
 
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
         //validate http version
 
@@ -122,7 +121,7 @@ public sealed partial class WebSocketsValidationsUITest : PororocaUITest
         await WsRobot.ClickOnConnectAndWaitForConnection();
         WsRobot.DisableTlsVerification.AssertIsHidden();
         WsRobot.ConnectionRequestException.AssertIsVisible();
-        WsRobot.ConnectionRequestException.AssertContainsText( "'101' was expected");
+        WsRobot.ConnectionRequestException.AssertContainsText("'101' was expected");
 
         await TopMenuRobot.SwitchTlsVerification(true);
     }

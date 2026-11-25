@@ -1,25 +1,25 @@
 using System.Collections.ObjectModel;
-using System.Reactive;
+using ReactiveUI.Primitives;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Pororoca.Desktop.ViewModels.DataGrids;
 
-public sealed class KeyValueParamViewModel : ViewModelBase
+public sealed partial class KeyValueParamViewModel : ViewModelBase
 {
     private readonly ObservableCollection<KeyValueParamViewModel> parentCollection;
 
     [Reactive]
-    public bool Enabled { get; set; }
+    public partial bool Enabled { get; set; }
 
     [Reactive]
-    public string Key { get; set; }
+    public partial string Key { get; set; }
 
     [Reactive]
-    public string Value { get; set; }
+    public partial string Value { get; set; }
 
-    public ReactiveCommand<Unit, Unit> RemoveParamCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> RemoveParamCmd { get; }
 
     public KeyValueParamViewModel(ObservableCollection<KeyValueParamViewModel> parentCollection, PororocaKeyValueParam p)
         : this(parentCollection, p.Enabled, p.Key, p.Value ?? string.Empty)

@@ -1,4 +1,4 @@
-using System.Reactive;
+using ReactiveUI.Primitives;
 using Pororoca.Desktop.ViewModels.DataGrids;
 using Pororoca.Domain.Features.Entities.Pororoca;
 using ReactiveUI;
@@ -7,7 +7,7 @@ namespace Pororoca.Desktop.ViewModels;
 
 public sealed class CollectionScopedRequestHeadersViewModel : CollectionOrganizationItemViewModel
 {
-    public ReactiveCommand<Unit, Unit> GoBackCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> GoBackCmd { get; }
 
     public RequestHeadersDataGridViewModel RequestHeadersTableVm { get; }
 

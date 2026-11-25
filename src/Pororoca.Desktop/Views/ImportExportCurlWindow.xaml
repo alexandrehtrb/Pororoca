@@ -12,7 +12,6 @@
     x:Class="Pororoca.Desktop.Views.ImportExportCurlWindow"
     x:CompileBindings="True"
     x:DataType="vm:ImportExportCurlWindowViewModel"
-    FontFamily="{StaticResource DefaultFontFamily}"
     Icon="/Assets/pororoca_icon.ico"
     Title="{Binding Title, Mode=OneWay}">
 
@@ -35,7 +34,7 @@
 
     <TextBox
       Name="tbCurlCommandLine"
-      Watermark="{Binding i18n.ImportExportCurlCommandLineDialog.InputWatermark, Mode=OneWay}"
+      PlaceholderText="{Binding i18n.ImportExportCurlCommandLineDialog.InputWatermark, Mode=OneWay}"
       HorizontalAlignment="Stretch"
       Height="320"
       IsReadOnly="{Binding IsExporting, Mode=OneWay}"

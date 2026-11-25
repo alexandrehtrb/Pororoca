@@ -1,13 +1,16 @@
-using Xunit;
-using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
+using System.Diagnostics;
 using System.Net;
-using Pororoca.Domain.Tests.Features.Entities.Pororoca.Http;
 using Pororoca.Domain.Features.Entities.Pororoca.Http;
+using Pororoca.Domain.Features.Entities.Pororoca.Repetition;
+using Pororoca.Domain.Tests.Features.Entities.Pororoca.Http;
+using Xunit;
 
 namespace Pororoca.Domain.Tests.Features.Entities.Pororoca.Repetition;
 
 public static class PororocaHttpRepetitionTests
 {
+    private static readonly Stopwatch testSw = new();
+
     public static IEnumerable<object[]> GetAllTestInputDatas()
     {
         yield return new object[] { new PororocaRepetitionInputData(PororocaRepetitionInputDataType.RawJsonArray, "[]", null) };
@@ -84,7 +87,8 @@ public static class PororocaHttpRepetitionTests
     {
         // GIVEN
         var httpRes = PororocaHttpResponseTests.CreateTestHttpResponseMessage(body, contentType, null, statusCode);
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, TimeSpan.Zero, httpRes);
+        byte[] binaryBody = await httpRes.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, TimeSpan.Zero, httpRes, binaryBody);
         var repRes = new PororocaHttpRepetitionResult(null, res, null);
 
         // WHEN AND THEN
@@ -120,7 +124,8 @@ public static class PororocaHttpRepetitionTests
     {
         // GIVEN
         var httpRes = PororocaHttpResponseTests.CreateTestHttpResponseMessage(body, contentType, null, statusCode);
-        var res = await PororocaHttpResponse.SuccessfulAsync(null!, DateTimeOffset.Now, TimeSpan.Zero, httpRes);
+        byte[] binaryBody = await httpRes.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken);
+        var res = await PororocaHttpResponse.SuccessfulCompletedAsync(null!, DateTimeOffset.Now, TimeSpan.Zero, httpRes, binaryBody);
         var repRes = new PororocaHttpRepetitionResult(null, res, null);
 
         // WHEN AND THEN

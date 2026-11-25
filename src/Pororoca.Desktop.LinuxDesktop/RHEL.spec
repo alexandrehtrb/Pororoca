@@ -1,7 +1,7 @@
 # This spec file is for Red Hat Enterprise Linux (RHEL), Fedora, CentOS, Rocky Linux and Alma Linux.
 
-# .NET Linux required packages: https://github.com/dotnet/core/blob/main/release-notes/8.0/os-packages.md
-# Specifically for RHEL: https://learn.microsoft.com/en-us/dotnet/core/install/linux-fedora?tabs=dotnet8#dependencies
+# .NET Linux required packages: https://github.com/dotnet/core/blob/main/release-notes/10.0/os-packages.json
+# Specifically for RHEL: https://learn.microsoft.com/en-us/dotnet/core/install/linux-fedora?tabs=dotnet10#dependencies
 # Avalonia required packages: https://docs.avaloniaui.net/tools/parcel/packaging-for-linux#avalonia-specific-dependencies
 
 # package compression algorithm and level
@@ -16,7 +16,7 @@
 %global __requires_exclude liblttng-ust.so.
 
 Name:       Pororoca
-Version:    3.11.1
+Version:    4.0.0
 Release:    1%{?dist}
 Summary:    This is Pororoca, an HTTP testing tool.
 License:    GPLv3+
@@ -30,7 +30,6 @@ Requires: libstdc++
 Requires: libicu
 Requires: openssl-libs
 Requires: tzdata
-Requires: zlib
 Requires: libICE
 Requires: libSM
 Requires: fontconfig
@@ -50,7 +49,8 @@ mkdir -p %{buildroot}/usr/bin
 cp ~/rpmstaging/others/pororoca.sh %{buildroot}/usr/bin/pororoca
 chmod 755 %{buildroot}/usr/bin/pororoca
 mkdir -p %{buildroot}/usr/lib/pororoca
-install -m 666 -D ~/rpmstaging/binaries/* -t %{buildroot}/usr/lib/pororoca/
+cp -r ~/rpmstaging/binaries/* %{buildroot}/usr/lib/pororoca/
+find %{buildroot}/usr/lib/pororoca/ -type f -exec chmod 666 {} \;
 chmod +x %{buildroot}/usr/lib/pororoca/Pororoca
 mkdir -p %{buildroot}/usr/share/applications
 install -m 666 ~/rpmstaging/others/Pororoca.desktop %{buildroot}/usr/share/applications/Pororoca.desktop

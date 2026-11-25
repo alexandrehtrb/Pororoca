@@ -33,7 +33,7 @@ public sealed partial class HttpRepeaterUITest : PororocaUITest
         RepeaterRobot = new(RootView.FindControl<HttpRepeaterView>("httpRepView")!);
     }
 
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
         await TopMenuRobot.CreateNewCollection();
         await ColRobot.Name.Edit("COL1");
@@ -64,6 +64,9 @@ public sealed partial class HttpRepeaterUITest : PororocaUITest
         await TreeRobot.Select("COL1");
         await ColRobot.AddRepeater.ClickOn();
 
+        if (cancellationToken.IsCancellationRequested)
+            return;
+
         await RepeaterRobot.Name.Edit("REPSIMPLE");
         await RepeaterRobot.BaseHttpRequest.Select("HTTPREQ");
         await RepeaterRobot.TabControlRepetition.Select(RepeaterRobot.TabItemRepetitionMode);
@@ -87,6 +90,9 @@ public sealed partial class HttpRepeaterUITest : PororocaUITest
         RepeaterRobot.SaveAllResponses.AssertIsVisible();
         RepeaterRobot.ExportAllLogs.AssertIsVisible();
 
+        if (cancellationToken.IsCancellationRequested)
+            return;
+
         await RepeaterRobot.Name.Edit("REPSEQUENTIAL");
         await RepeaterRobot.BaseHttpRequest.Select("HTTPREQ");
         await RepeaterRobot.TabControlRepetition.Select(RepeaterRobot.TabItemRepetitionMode);
@@ -109,6 +115,9 @@ public sealed partial class HttpRepeaterUITest : PororocaUITest
         RepeaterRobot.ExportReport.AssertIsVisible();
         RepeaterRobot.SaveAllResponses.AssertIsVisible();
         RepeaterRobot.ExportAllLogs.AssertIsVisible();
+
+        if (cancellationToken.IsCancellationRequested)
+            return;
 
         await RepeaterRobot.Name.Edit("REPRANDOM");
         await RepeaterRobot.BaseHttpRequest.Select("HTTPREQ");

@@ -1,5 +1,5 @@
 using System.Collections.ObjectModel;
-using System.Reactive;
+using ReactiveUI.Primitives;
 using AvaloniaEdit.Document;
 using Pororoca.Desktop.Controls;
 using Pororoca.Desktop.Converters;
@@ -13,14 +13,14 @@ using Pororoca.Domain.Features.TranslateRequest;
 using Pororoca.Domain.Features.VariableResolution;
 using Pororoca.Infrastructure.Features.Requester;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 using static Pororoca.Domain.Features.Common.AvailablePororocaRequestSelectionOptions;
 using static Pororoca.Domain.Features.Common.HttpVersionFormatter;
 using static Pororoca.Domain.Features.Entities.Pororoca.Http.PororocaHttpRequestBody;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
+public sealed partial class HttpRequestViewModel : CollectionOrganizationItemViewModel
 {
     #region REQUEST
 
@@ -30,13 +30,13 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     // To preserve the state of the last shown request tab
     [Reactive]
-    public int RequestTabsSelectedIndex { get; set; }
+    public partial int RequestTabsSelectedIndex { get; set; }
 
     #region REQUEST HTTP METHOD
     public ObservableCollection<string> RequestMethodSelectionOptions { get; }
 
     [Reactive]
-    public int RequestMethodSelectedIndex { get; set; }
+    public partial int RequestMethodSelectedIndex { get; set; }
 
     private HttpMethod RequestMethod =>
         AvailableHttpMethods[RequestMethodSelectedIndex];
@@ -59,7 +59,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     }
 
     [Reactive]
-    public bool HasRequestUrlValidationProblem { get; set; }
+    public partial bool HasRequestUrlValidationProblem { get; set; }
 
     #endregion
 
@@ -67,13 +67,12 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     public ObservableCollection<string> RequestHttpVersionSelectionOptions { get; }
 
-    private int requestHttpVersionSelectedIndexField;
     public int RequestHttpVersionSelectedIndex
     {
-        get => this.requestHttpVersionSelectedIndexField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.requestHttpVersionSelectedIndexField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasRequestHttpVersionValidationProblem)
                 ClearInvalidRequestWarnings();
@@ -84,7 +83,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         AvailableHttpVersionsForHttp[RequestHttpVersionSelectedIndex];
 
     [Reactive]
-    public bool HasRequestHttpVersionValidationProblem { get; set; }
+    public partial bool HasRequestHttpVersionValidationProblem { get; set; }
 
     #endregion
 
@@ -93,10 +92,10 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     private string? invalidRequestMessageErrorCode;
 
     [Reactive]
-    public bool IsInvalidRequestMessageVisible { get; set; }
+    public partial bool IsInvalidRequestMessageVisible { get; set; }
 
     [Reactive]
-    public string? InvalidRequestMessage { get; set; }
+    public partial string? InvalidRequestMessage { get; set; }
 
     #endregion
 
@@ -109,7 +108,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #region REQUEST BODY
 
     [Reactive]
-    public int RequestBodyModeSelectedIndex { get; set; }
+    public partial int RequestBodyModeSelectedIndex { get; set; }
 
     public PororocaHttpRequestBodyMode? RequestBodyMode =>
         HttpRequestBodyModeMapping.MapIndexToEnum(RequestBodyModeSelectedIndex);
@@ -118,13 +117,12 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST BODY RAW
 
-    private string? requestRawContentTypeField;
     public string? RequestRawContentType
     {
-        get => this.requestRawContentTypeField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.requestRawContentTypeField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasRequestRawContentTypeValidationProblem)
                 ClearInvalidRequestWarnings();
@@ -132,10 +130,10 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     }
 
     [Reactive]
-    public bool HasRequestRawContentTypeValidationProblem { get; set; }
+    public partial bool HasRequestRawContentTypeValidationProblem { get; set; }
 
     [Reactive]
-    public TextDocument? RequestRawContentTextDocument { get; set; }
+    public partial TextDocument? RequestRawContentTextDocument { get; set; }
 
     public string? RequestRawContent
     {
@@ -147,13 +145,12 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     #region REQUEST BODY FILE
 
-    private string? requestFileContentTypeField;
     public string? RequestFileContentType
     {
-        get => this.requestFileContentTypeField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.requestFileContentTypeField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasRequestFileContentTypeValidationProblem)
                 ClearInvalidRequestWarnings();
@@ -161,15 +158,14 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     }
 
     [Reactive]
-    public bool HasRequestFileContentTypeValidationProblem { get; set; }
+    public partial bool HasRequestFileContentTypeValidationProblem { get; set; }
 
-    private string? requestBodyFileSrcPathField;
     public string? RequestBodyFileSrcPath
     {
-        get => this.requestBodyFileSrcPathField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.requestBodyFileSrcPathField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             // clear invalid warnings if user starts typing to fix them
             if (HasRequestBodyFileSrcPathValidationProblem)
                 ClearInvalidRequestWarnings();
@@ -177,9 +173,9 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     }
 
     [Reactive]
-    public bool HasRequestBodyFileSrcPathValidationProblem { get; set; }
+    public partial bool HasRequestBodyFileSrcPathValidationProblem { get; set; }
 
-    public ReactiveCommand<Unit, Unit> SearchRequestBodyRawFileCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> SearchRequestBodyRawFileCmd { get; }
 
     #endregion
 
@@ -198,10 +194,10 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #region REQUEST BODY GRAPHQL
 
     [Reactive]
-    public string? RequestBodyGraphQlQuery { get; set; }
+    public partial string? RequestBodyGraphQlQuery { get; set; }
 
     [Reactive]
-    public string? RequestBodyGraphQlVariables { get; set; }
+    public partial string? RequestBodyGraphQlVariables { get; set; }
 
     #endregion
 
@@ -210,7 +206,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #region REQUEST AUTH
 
     [Reactive]
-    public RequestAuthViewModel RequestAuthDataCtx { get; set; }
+    public partial RequestAuthViewModel RequestAuthDataCtx { get; set; }
 
     #endregion
 
@@ -219,10 +215,10 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     #region SEND OR CANCEL REQUEST
 
     [Reactive]
-    public string SendOrCancelRequestButtonText { get; set; }
+    public partial string SendOrCancelRequestButtonText { get; set; }
 
     [Reactive]
-    public string SendOrCancelRequestButtonToolTip { get; set; }
+    public partial string SendOrCancelRequestButtonToolTip { get; set; }
 
     private bool isRequestingField;
     public bool IsRequesting
@@ -242,15 +238,12 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
 
     private CancellationTokenSource? sendRequestCancellationTokenSourceField;
 
-    [Reactive]
-    public bool IsSendRequestProgressBarVisible { get; set; }
-
     #endregion
 
     #region RESPONSE
 
     [Reactive]
-    public HttpResponseViewModel ResponseDataCtx { get; set; }
+    public partial HttpResponseViewModel ResponseDataCtx { get; set; }
 
     #region RESPONSE CAPTURES
 
@@ -266,7 +259,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     {
         #region COLLECTION ORGANIZATION
         Localizer.Instance.SubscribeToLanguageChange(OnLanguageChanged);
-        NameEditableVm.Icon = EditableTextBlockIcon.HttpRequest;
+        NameEditableVm!.Icon = EditableTextBlockIcon.HttpRequest;
         Collection = col;
         PororocaVarSyntaxHighlightingDefinitionSet = Collection.PororocaVarSyntaxHighlightingDefinitionSet;
         #endregion
@@ -284,7 +277,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         int reqHttpVersionSelectionIndex = RequestHttpVersionSelectionOptions.IndexOf(FormatHttpVersion(req.HttpVersion));
         RequestHttpVersionSelectedIndex = reqHttpVersionSelectionIndex >= 0 ? reqHttpVersionSelectionIndex : 0;
 
-        RequestHeadersTableVm = new(this.Collection, req.Headers);
+        RequestHeadersTableVm = new(Collection, req.Headers);
         #endregion
 
         #region REQUEST BODY
@@ -318,7 +311,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         #endregion
 
         #region RESPONSE
-        ResponseDataCtx = new(this.Collection);
+        ResponseDataCtx = new(Collection);
         #region RESPONSE CAPTURES
         ResCapturesTableVm = new(req.ResponseCaptures);
         #endregion
@@ -342,16 +335,16 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
     protected override void OnNameUpdated(string newName)
     {
         // IMPORTANT: always update list of http reqs paths after renaming HTTP request
-        this.Collection.RemoveHttpRequestPathFromList(GetRequestPathInCollection());
+        Collection.RemoveHttpRequestPathFromList(GetRequestPathInCollection());
         base.OnNameUpdated(newName);
-        this.Collection.AddHttpRequestPathToList(GetRequestPathInCollection());
+        Collection.AddHttpRequestPathToList(GetRequestPathInCollection());
     }
 
     public override void DeleteThis()
     {
         base.DeleteThis();
         // IMPORTANT: always update list of http reqs paths after renaming HTTP request
-        this.Collection.RemoveHttpRequestPathFromList(GetRequestPathInCollection());
+        Collection.RemoveHttpRequestPathFromList(GetRequestPathInCollection());
     }
 
     public string GetRequestPathInCollection()
@@ -436,27 +429,36 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         }
     }
 
-    public void CancelRequest() =>
+    public void CancelRequest()
+    {
+        // for normal requests:
         // CancellationToken will cause a failed PororocaResponse,
-        // therefore is not necessary to here call method ShowNotSendingRequestUI()
+        // updating response as failed / cancelled.
         this.sendRequestCancellationTokenSourceField!.Cancel();
+        // for streamed responses:
+        // we must cancel the token to stop streaming and
+        // also set IsRequesting = false.
+        IsRequesting = false;
+    }
 
     public async Task SendRequestAsync()
     {
         ClearInvalidRequestWarnings();
         var generatedReq = ToHttpRequest();
-        var effectiveVars = ((IPororocaVariableResolver)this.Collection).GetEffectiveVariables();
-        if (!this.requester.IsValidRequest(effectiveVars, this.Collection.CollectionScopedAuth, generatedReq, out string? errorCode))
+        var effectiveVars = ((IPororocaVariableResolver)Collection).GetEffectiveVariables();
+        if (!this.requester.IsValidRequest(effectiveVars, Collection.CollectionScopedAuth, generatedReq, out string? errorCode))
         {
             this.invalidRequestMessageErrorCode = errorCode;
             ShowInvalidRequestWarnings();
         }
         else
         {
-            ShowSendingRequestUI();
+            IsRequesting = true;
             var res = await SendRequestAsync(generatedReq, effectiveVars);
-            ResponseDataCtx.UpdateWithResponse(Name, res, ResCapturesTableVm.Items);
-            ShowNotSendingRequestUI();
+            ResponseDataCtx.UpdateWithResponse(Name, res, ResCapturesTableVm.Items, () => IsRequesting = false, this.sendRequestCancellationTokenSourceField?.Token);
+            // Streamed responses keep going;
+            // others are already finished.
+            IsRequesting = res.IsStreamed;
         }
     }
 
@@ -529,18 +531,6 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         }
     }
 
-    private void ShowSendingRequestUI()
-    {
-        IsRequesting = true;
-        IsSendRequestProgressBarVisible = true;
-    }
-
-    private void ShowNotSendingRequestUI()
-    {
-        IsRequesting = false;
-        IsSendRequestProgressBarVisible = false;
-    }
-
     private Task<PororocaHttpResponse> SendRequestAsync(PororocaHttpRequest generatedReq, IEnumerable<PororocaVariable> effectiveVars)
     {
         this.sendRequestCancellationTokenSourceField = new();
@@ -548,7 +538,7 @@ public sealed class HttpRequestViewModel : CollectionOrganizationItemViewModel
         // Awaiting the request.RequestAsync() here, or simply returning its Task,
         // causes the UI to freeze for a few seconds, especially when performing the first request to a server.
         // That is why we are invoking the code to run in a new thread, like below.
-        return Task.Run(async () => await this.requester.RequestAsync(effectiveVars, this.Collection.CollectionScopedAuth, this.Collection.CollectionScopedRequestHeaders, generatedReq, this.sendRequestCancellationTokenSourceField.Token));
+        return Task.Run(async () => await this.requester.RequestAsync(effectiveVars, Collection.CollectionScopedAuth, Collection.CollectionScopedRequestHeaders, generatedReq, waitForEntireBodyIfStreamed: false, this.sendRequestCancellationTokenSourceField.Token));
     }
 
     #endregion

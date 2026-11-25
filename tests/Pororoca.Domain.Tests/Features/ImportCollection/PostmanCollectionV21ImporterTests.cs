@@ -809,7 +809,7 @@ public static class PostmanCollectionV21ImporterTests
         {
             Info = new()
             {
-                Id = testGuid,
+                Id = testGuid.ToString(),
                 Name = testName,
                 Schema = "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
             },

@@ -18,7 +18,7 @@ public sealed class PororocaTestLibraryClientCertificatesTests
     [Fact]
     public async Task Should_receive_error_when_client_certificate_is_not_provided()
     {
-        var res = await this.pororocaTest.SendHttpRequestAsync("No cert provided");
+        var res = await this.pororocaTest.SendHttpRequestAsync("No cert provided", TestContext.Current.CancellationToken);
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.BadRequest, res.StatusCode);
@@ -34,7 +34,7 @@ public sealed class PororocaTestLibraryClientCertificatesTests
     [InlineData("PEM cert with separate encrypted private key")]
     public async Task Should_be_successful_when_client_certificate_is_provided(string reqName)
     {
-        var res = await this.pororocaTest.SendHttpRequestAsync(reqName);
+        var res = await this.pororocaTest.SendHttpRequestAsync(reqName, TestContext.Current.CancellationToken);
 
         Assert.NotNull(res);
         Assert.Equal(HttpStatusCode.OK, res.StatusCode);

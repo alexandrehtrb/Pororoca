@@ -40,7 +40,7 @@ public sealed class UpdateAvailableCheckerTests
         // GIVEN
         var currentVersion = Version.Parse("1.0.0");
         var res = MockGetLatestReleaseResponseFailed();
-        this.requester.RequestAsync([], null, null, Arg.Any<PororocaHttpRequest>(), Arg.Any<CancellationToken>())
+        this.requester.RequestAsync([], null, null, Arg.Any<PororocaHttpRequest>(), true, Arg.Any<CancellationToken>())
                       .Returns(res);
         GitHubGetReleaseResponse? callbackBody = null;
         void callback(GitHubGetReleaseResponse x) => callbackBody = x;
@@ -50,7 +50,7 @@ public sealed class UpdateAvailableCheckerTests
 
         // THEN
         Assert.Null(callbackBody);
-        await this.requester.ReceivedWithAnyArgs().RequestAsync(null!, null, null, null!, default);
+        await this.requester.ReceivedWithAnyArgs().RequestAsync(null!, null, null, null!, true, TestContext.Current.CancellationToken);
     }
 
     [Theory]
@@ -61,7 +61,7 @@ public sealed class UpdateAvailableCheckerTests
         // GIVEN
         var currentVersion = Version.Parse("1.0.0");
         var res = MockGetLatestReleaseResponseSuccess(latestVersion);
-        this.requester.RequestAsync([], null, null, Arg.Any<PororocaHttpRequest>(), Arg.Any<CancellationToken>())
+        this.requester.RequestAsync([], null, null, Arg.Any<PororocaHttpRequest>(), true, Arg.Any<CancellationToken>())
                       .Returns(res);
         GitHubGetReleaseResponse? callbackBody = null;
         void callback(GitHubGetReleaseResponse x) => callbackBody = x;
@@ -71,7 +71,7 @@ public sealed class UpdateAvailableCheckerTests
 
         // THEN
         Assert.Null(callbackBody);
-        await this.requester.ReceivedWithAnyArgs().RequestAsync(null!, null, null, null!, default);
+        await this.requester.ReceivedWithAnyArgs().RequestAsync(null!, null, null, null!, true, TestContext.Current.CancellationToken);
     }
 
     [Theory]
@@ -83,7 +83,7 @@ public sealed class UpdateAvailableCheckerTests
         // GIVEN
         var currentVersion = Version.Parse("1.0.0");
         var res = MockGetLatestReleaseResponseSuccess(latestVersion);
-        this.requester.RequestAsync([], null, null, Arg.Any<PororocaHttpRequest>(), Arg.Any<CancellationToken>())
+        this.requester.RequestAsync([], null, null, Arg.Any<PororocaHttpRequest>(), true, Arg.Any<CancellationToken>())
                       .Returns(res);
         GitHubGetReleaseResponse? callbackBody = null;
         void callback(GitHubGetReleaseResponse x) => callbackBody = x;
@@ -96,7 +96,7 @@ public sealed class UpdateAvailableCheckerTests
         Assert.Equal("https://github.com/alexandrehtrb/Pororoca/releases/tag/" + latestVersion, callbackBody.HtmlUrl);
         Assert.Equal(latestVersion, callbackBody.VersionName);
         Assert.Equal("markdown description here", callbackBody.Description);
-        await this.requester.ReceivedWithAnyArgs().RequestAsync(null!, null, null, null!, default);
+        await this.requester.ReceivedWithAnyArgs().RequestAsync(null!, null, null, null!, true, TestContext.Current.CancellationToken);
     }
 
     private static PororocaHttpResponse MockGetLatestReleaseResponseSuccess(string version)

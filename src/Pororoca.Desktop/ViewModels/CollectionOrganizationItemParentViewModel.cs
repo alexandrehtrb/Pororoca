@@ -1,19 +1,20 @@
 using System.Collections.ObjectModel;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Pororoca.Desktop.ViewModels;
 
 public interface ICollectionOrganizationItemParentViewModel
 {
+    bool IsExpanded { get; set; }
     void MoveSubItemUp(CollectionOrganizationItemViewModel colItemVm);
     void MoveSubItemDown(CollectionOrganizationItemViewModel colItemVm);
     void DeleteSubItem(CollectionOrganizationItemViewModel item);
 }
 
-public abstract class CollectionOrganizationItemParentViewModel<T> : CollectionOrganizationItemViewModel, ICollectionOrganizationItemParentViewModel where T : CollectionOrganizationItemViewModel
+public abstract partial class CollectionOrganizationItemParentViewModel<T> : CollectionOrganizationItemViewModel, ICollectionOrganizationItemParentViewModel where T : CollectionOrganizationItemViewModel
 {
     [Reactive]
-    public bool IsExpanded { get; set; }
+    public partial bool IsExpanded { get; set; }
 
     public abstract ObservableCollection<T> Items { get; }
 

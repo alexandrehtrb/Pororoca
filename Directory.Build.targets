@@ -1,0 +1,15 @@
+<Project>
+  <!-- Fix for SkiaSharp including .pdb files in output -->
+  <!-- Strip native debug symbols (.pdb) that some NuGet packages ship under runtimes/<rid>/native/
+       (e.g. SkiaSharp.NativeAssets.Win32 >= 3.119.2 ships libSkiaSharp.pdb).
+       CopyDebugSymbolFilesFromPackages=false only stops them being COPIED to output; they still
+       leak into deps.json as native assets via @(RuntimeTargetsCopyLocalItems)/@(NativeCopyLocalItems),
+       which feed GenerateDepsFile. Remove them right after package assets are resolved so they are
+       absent from both deps.json and the (single-file self-extract) payload. -->
+  <Target Name="RemovePackageNativePdbsFromDeps" AfterTargets="ResolvePackageAssets">
+    <ItemGroup>
+      <RuntimeTargetsCopyLocalItems Remove="@(RuntimeTargetsCopyLocalItems)" Condition="'%(Extension)' == '.pdb'" />
+      <NativeCopyLocalItems Remove="@(NativeCopyLocalItems)" Condition="'%(Extension)' == '.pdb'" />
+    </ItemGroup>
+  </Target>
+</Project>

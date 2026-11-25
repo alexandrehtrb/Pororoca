@@ -1,45 +1,43 @@
-using System.Reactive;
+using ReactiveUI.Primitives;
 using Pororoca.Desktop.Converters;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class EditableTextBlockViewModel : ViewModelBase
+public sealed partial class EditableTextBlockViewModel : ViewModelBase
 {
     private readonly Action<string> onNameUpdated;
 
     [Reactive]
-    public bool HasIcon { get; private set; }
+    public partial bool HasIcon { get; private set; }
 
-    private EditableTextBlockIcon? iconField;
     public EditableTextBlockIcon? Icon
     {
-        get => this.iconField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.iconField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             HasIcon = value is not null;
         }
     }
 
     [Reactive]
-    public string Txt { get; set; }
+    public partial string Txt { get; set; }
 
-    private bool isEditingField;
     public bool IsEditing
     {
-        get => this.isEditingField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.isEditingField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             OnIsEditingChanged?.Invoke(value);
         }
     }
 
     public Action<bool>? OnIsEditingChanged { get; set; }
 
-    public ReactiveCommand<Unit, Unit> EditOrApplyTxtChangeCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> EditOrApplyTxtChangeCmd { get; }
 
     public EditableTextBlockViewModel(string name, Action<string> onNameUpdated)
     {

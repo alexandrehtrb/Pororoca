@@ -94,7 +94,7 @@ public sealed class LocalizationSourceGenerator : IIncrementalGenerator
 
     private static string BuildCodeForLocalizerClass(string assemblyName, ImmutableArray<Language> langs, List<(string ctx, string[] ctxKeys)> contextsWithKeys)
     {
-        StringBuilder sb = new($"using ReactiveUI;\nnamespace {assemblyName}.Localization;\npublic sealed class Localizer\n{{");
+        StringBuilder sb = new($"namespace {assemblyName}.Localization;\npublic sealed class Localizer\n{{");
         foreach (string ctx in contextsWithKeys.Select(x => x.ctx))
         {
             sb.AppendLine($"\n\tpublic {ctx}Context {ctx} {{ get; }} = new();");
@@ -159,7 +159,17 @@ public sealed class LocalizationSourceGenerator : IIncrementalGenerator
 
     private static string BuildCodeForContextsClasses(string assemblyName, List<(string ctx, string[] ctxKeys)> contextsWithKeys)
     {
-        StringBuilder sb = new($"using ReactiveUI;\nnamespace {assemblyName}.Localization;\n");
+        StringBuilder sb = new($"using System.ComponentModel;\nusing System.Runtime.CompilerServices;\nnamespace {assemblyName}.Localization;\n\n");
+        
+        sb.AppendLine("public abstract class BaseLocalizationContext : INotifyPropertyChanged\n{");
+        sb.AppendLine("\tpublic event PropertyChangedEventHandler PropertyChanged;\n");
+        sb.AppendLine("\tprotected void OnPropertyChanged([CallerMemberName] string propertyName = null)\n\t{\n\t\tif (PropertyChanged != null)\n\t\t{\n\t\t\t PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));\n\t\t}\n\t}\n");
+        sb.AppendLine("\tprotected void ChangeProperty(ref string field, string value, [CallerMemberName] string propertyName = null)\n\t{");
+        sb.AppendLine("\t\tif (field != value)\n\t\t{");
+        sb.AppendLine("\t\t\tfield = value;");
+        sb.AppendLine("\t\t\tOnPropertyChanged(propertyName);\n\t\t}\n\t}");
+        sb.AppendLine("}\n");
+        
         foreach (var (ctx, ctxKeys) in contextsWithKeys)
         {
             sb.AppendLine(BuildCodeForContextClass(ctx, ctxKeys));
@@ -169,13 +179,13 @@ public sealed class LocalizationSourceGenerator : IIncrementalGenerator
 
     private static string BuildCodeForContextClass(string ctx, string[] contextKeys)
     {
-        StringBuilder sb = new($"public sealed class {ctx}Context : ReactiveObject\n{{");
+        StringBuilder sb = new($"public sealed class {ctx}Context : BaseLocalizationContext\n{{");
 
         foreach (string key in contextKeys)
         {
             string keyField = key.ToLower() + "Field";
             sb.AppendLine($"\n\tprivate string {keyField};");
-            sb.AppendLine($"\tpublic string {key} {{ get => this.{keyField}; set => this.RaiseAndSetIfChanged(ref this.{keyField}, value); }}");
+            sb.AppendLine($"\tpublic string {key} {{ get => this.{keyField}; set => ChangeProperty(ref this.{keyField}, value); }}");
         }
 
         sb.AppendLine("}");

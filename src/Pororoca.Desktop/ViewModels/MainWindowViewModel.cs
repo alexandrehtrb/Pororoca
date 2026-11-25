@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using System.Reactive;
+using ReactiveUI.Primitives;
 using System.Reflection;
 using Avalonia.Threading;
 using MsBox.Avalonia.Enums;
@@ -14,36 +14,38 @@ using Pororoca.Domain.Features.Entities.Pororoca;
 using Pororoca.Domain.Features.UpdateChecker;
 using Pororoca.Infrastructure.Features.Requester;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Pororoca.Desktop.ViewModels;
 
-public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganizationItemParentViewModel
+public sealed partial class MainWindowViewModel : ViewModelBase, ICollectionOrganizationItemParentViewModel
 {
     #region COLLECTIONS ORGANIZATION
+
+    public bool IsExpanded { get; set; }
 
     private volatile Task? loadUserCollectionsTask;
 
     [Reactive]
-    public CollectionsGroupViewModel CollectionsGroupViewDataCtx { get; set; }
+    public partial CollectionsGroupViewModel CollectionsGroupViewDataCtx { get; set; }
 
-    public ReactiveCommand<Unit, Unit> AddNewCollectionCmd { get; }
-    public ReactiveCommand<Unit, Unit> ImportCollectionsFromFileCmd { get; }
-
-    [Reactive]
-    public bool IsTopRightLabelVisible { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> AddNewCollectionCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> ImportCollectionsFromFileCmd { get; }
 
     [Reactive]
-    public string TopRightLabelText { get; set; }
+    public partial bool IsTopRightLabelVisible { get; set; }
 
-    public ReactiveCommand<Unit, Unit> SaveAllCmd { get; }
+    [Reactive]
+    public partial string TopRightLabelText { get; set; }
+
+    public ReactiveCommand<RxVoid, RxVoid> SaveAllCmd { get; }
 
     // This property exists to cause an update on PVSHTextBlocks inside DataGrids
     // and ToolTips (URL, input file paths).
     // It's an int, but it could be anything.
     // DON'T REMOVE.
     [Reactive]
-    public int EffectiveVariablesMayHaveChanged { get; set; } = 0;
+    public partial int EffectiveVariablesMayHaveChanged { get; set; } = 0;
 
     #endregion
 
@@ -82,48 +84,48 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     #region LANGUAGE
 
     [Reactive]
-    public bool IsLanguagePortuguese { get; set; }
-    public ReactiveCommand<Unit, Unit> SelectLanguagePortuguesCmd { get; }
+    public partial bool IsLanguagePortuguese { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SelectLanguagePortuguesCmd { get; }
 
     [Reactive]
-    public bool IsLanguageEnglish { get; set; }
-    public ReactiveCommand<Unit, Unit> SelectLanguageEnglishCmd { get; }
+    public partial bool IsLanguageEnglish { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SelectLanguageEnglishCmd { get; }
 
     [Reactive]
-    public bool IsLanguageRussian { get; set; }
-    public ReactiveCommand<Unit, Unit> SelectLanguageRussianCmd { get; }
+    public partial bool IsLanguageRussian { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SelectLanguageRussianCmd { get; }
 
     [Reactive]
-    public bool IsLanguageItalian { get; set; }
-    public ReactiveCommand<Unit, Unit> SelectLanguageItalianCmd { get; }
+    public partial bool IsLanguageItalian { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SelectLanguageItalianCmd { get; }
 
     [Reactive]
-    public bool IsLanguageSimplifiedChinese { get; set; }
-    public ReactiveCommand<Unit, Unit> SelectLanguageSimplifiedChineseCmd { get; }
+    public partial bool IsLanguageSimplifiedChinese { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SelectLanguageSimplifiedChineseCmd { get; }
 
     [Reactive]
-    public bool IsLanguageGerman { get; set; }
-    public ReactiveCommand<Unit, Unit> SelectLanguageGermanCmd { get; }
+    public partial bool IsLanguageGerman { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SelectLanguageGermanCmd { get; }
 
     [Reactive]
-    public bool IsLanguageSpanish { get; set; }
-    public ReactiveCommand<Unit, Unit> SelectLanguageSpanishCmd { get; }
+    public partial bool IsLanguageSpanish { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SelectLanguageSpanishCmd { get; }
 
     [Reactive]
-    public bool IsLanguagePolish { get; set; }
-    public ReactiveCommand<Unit, Unit> SelectLanguagePolishCmd { get; }
+    public partial bool IsLanguagePolish { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SelectLanguagePolishCmd { get; }
 
     [Reactive]
-    public bool IsLanguageThai { get; set; }
-    public ReactiveCommand<Unit, Unit> SelectLanguageThaiCmd { get; }
+    public partial bool IsLanguageThai { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SelectLanguageThaiCmd { get; }
 
     [Reactive]
-    public bool IsLanguageTurkish { get; set; }
-    public ReactiveCommand<Unit, Unit> SelectLanguageTurkishCmd { get; }
+    public partial bool IsLanguageTurkish { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SelectLanguageTurkishCmd { get; }
 
     [Reactive]
-    public bool IsLanguageUkrainian { get; set; }
-    public ReactiveCommand<Unit, Unit> SelectLanguageUkrainianCmd { get; }
+    public partial bool IsLanguageUkrainian { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SelectLanguageUkrainianCmd { get; }
 
 
     #endregion
@@ -131,41 +133,48 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     #region THEMES
 
     [Reactive]
-    public bool IsThemeLight { get; set; }
-    public ReactiveCommand<Unit, Unit> SwitchToLightThemeCmd { get; }
+    public partial bool IsThemeLight { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SwitchToLightThemeCmd { get; }
 
     [Reactive]
-    public bool IsThemeLight2 { get; set; }
-    public ReactiveCommand<Unit, Unit> SwitchToLight2ThemeCmd { get; }
+    public partial bool IsThemeLight2 { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SwitchToLight2ThemeCmd { get; }
 
     [Reactive]
-    public bool IsThemeDark { get; set; }
-    public ReactiveCommand<Unit, Unit> SwitchToDarkThemeCmd { get; }
+    public partial bool IsThemeDark { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SwitchToDarkThemeCmd { get; }
 
     [Reactive]
-    public bool IsThemePampa { get; set; }
-    public ReactiveCommand<Unit, Unit> SwitchToPampaThemeCmd { get; }
+    public partial bool IsThemePampa { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SwitchToPampaThemeCmd { get; }
 
     [Reactive]
-    public bool IsThemeAmazonianNight { get; set; }
-    public ReactiveCommand<Unit, Unit> SwitchToAmazonianNightThemeCmd { get; }
+    public partial bool IsThemeAmazonianNight { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SwitchToAmazonianNightThemeCmd { get; }
+
+    [Reactive]
+    public partial bool IsThemeOcean { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SwitchToOceanThemeCmd { get; }
+
+    [Reactive]
+    public partial bool IsThemeBrazilwood { get; set; }
+    public ReactiveCommand<RxVoid, RxVoid> SwitchToBrazilwoodThemeCmd { get; }
 
     #endregion
 
     #region GLOBAL OPTIONS
 
-    private bool isSslVerificationDisabledField;
     public bool IsSslVerificationDisabled
     {
-        get => this.isSslVerificationDisabledField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.isSslVerificationDisabledField, value);
+            this.RaiseAndSetIfChanged(ref field, value);
             PororocaRequester.Singleton.DisableSslVerification = value;
         }
     }
 
-    public ReactiveCommand<Unit, Unit> ToggleSSLVerificationCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> ToggleSSLVerificationCmd { get; }
 
     #endregion
 
@@ -173,43 +182,42 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
 
     private UserPreferences? UserPrefs { get; set; }
 
-
-    private bool autoCheckForUpdatesEnabledField;
     public bool AutoCheckForUpdatesEnabled
     {
-        get => this.autoCheckForUpdatesEnabledField;
+        get;
         set
         {
-            this.RaiseAndSetIfChanged(ref this.autoCheckForUpdatesEnabledField, value);
-            if (UserPrefs != null)
-            {
-                UserPrefs.AutoCheckForUpdates = value;
-            }
+            this.RaiseAndSetIfChanged(ref field, value);
+            UserPrefs?.AutoCheckForUpdates = value;
         }
     }
 
-    public ReactiveCommand<Unit, Unit> ToggleAutoCheckForUpdatesCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> ToggleAutoCheckForUpdatesCmd { get; }
 
     #endregion
 
     #region UI TESTS
 
     [Reactive]
-    public bool IsRunUITestsVisible { get; set; } =
+    public partial bool IsRunUITestsVisible { get; set; } =
 #if DEBUG || UI_TESTS_ENABLED
         true;
 #else
         false;
 #endif
 
-    public ReactiveCommand<Unit, Unit> RunUITestsCmd { get; }
+    public UITestsRunnerWindowViewModel UITestsVm => UITestsRunnerWindowViewModel.Instance;
+
+    public ReactiveCommand<RxVoid, RxVoid> RunUITestsCmd { get; }
+
+    public ReactiveCommand<RxVoid, RxVoid> StopUITestsCmd { get; }
 
     #endregion
 
     #region VERSION NAME
 
     [Reactive]
-    public string VersionName { get; set; }
+    public partial string VersionName { get; set; }
 
     #endregion
 
@@ -219,11 +227,11 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     private const string DocsWebSiteUrl = "https://pororoca.io/docs";
     private const string DonationsPageUrl = "https://github.com/alexandrehtrb/Pororoca/discussions/159";
 
-    public ReactiveCommand<Unit, Unit> OpenDocsInWebBrowserCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> OpenDocsInWebBrowserCmd { get; }
 
-    public ReactiveCommand<Unit, Unit> OpenGitHubRepoInWebBrowserCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> OpenGitHubRepoInWebBrowserCmd { get; }
 
-    public ReactiveCommand<Unit, Unit> OpenDonationsPageInWebBrowserCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> OpenDonationsPageInWebBrowserCmd { get; }
 
     #endregion
 
@@ -275,6 +283,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         SwitchToPampaThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Pampa));
         SwitchToDarkThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Dark));
         SwitchToAmazonianNightThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.AmazonianNight));
+        SwitchToOceanThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Ocean));
+        SwitchToBrazilwoodThemeCmd = ReactiveCommand.Create(() => SwitchToTheme(PororocaTheme.Brazilwood));
         UpdateMenuSelectedTheme();
         #endregion
 
@@ -289,7 +299,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         #endregion
 
         #region UI TESTS
-        RunUITestsCmd = ReactiveCommand.CreateFromTask(RunUITestsAsync);
+        RunUITestsCmd = ReactiveCommand.CreateFromTask(OpenUITestsDialogAsync);
+        StopUITestsCmd = ReactiveCommand.Create(UITestsVm.StopTests);
         #endregion
 
         #region VERSION NAME
@@ -413,7 +424,7 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
             IsTopRightLabelVisible = true;
             await Task.Delay(3000);
             IsTopRightLabelVisible = false;
-        }        
+        }
     }
 
     #endregion
@@ -434,6 +445,10 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         IsLanguageThai = lang == Language.Thai;
         IsLanguageTurkish = lang == Language.Turkish;
         IsLanguageUkrainian = lang == Language.Ukrainian;
+        foreach (var col in CollectionsGroupViewDataCtx.Items)
+        {
+            col.EnvironmentsGroupVm.UpdateSelectedEnvironmentName();
+        }
     }
 
     #endregion
@@ -453,6 +468,8 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
         IsThemeDark = PororocaThemeManager.CurrentTheme == PororocaTheme.Dark;
         IsThemePampa = PororocaThemeManager.CurrentTheme == PororocaTheme.Pampa;
         IsThemeAmazonianNight = PororocaThemeManager.CurrentTheme == PororocaTheme.AmazonianNight;
+        IsThemeOcean = PororocaThemeManager.CurrentTheme == PororocaTheme.Ocean;
+        IsThemeBrazilwood = PororocaThemeManager.CurrentTheme == PororocaTheme.Brazilwood;
     }
 
     #endregion
@@ -631,14 +648,17 @@ public sealed class MainWindowViewModel : ViewModelBase, ICollectionOrganization
     #region UI TESTS
 
 #if DEBUG || UI_TESTS_ENABLED
-    private Task RunUITestsAsync()
+    private Task OpenUITestsDialogAsync()
     {
         Pororoca.Desktop.Views.UITestsRunnerWindow uiTestsRunnerWindow = new();
         uiTestsRunnerWindow.Show(Pororoca.Desktop.Views.MainWindow.Instance!);
         return Task.CompletedTask;
     }
+
+    private void StopUITests() => UITestsRunnerWindowViewModel.Instance.StopTests();
+
 #else
-    private Task RunUITestsAsync() => Task.CompletedTask;
+    private Task OpenUITestsDialogAsync() => Task.CompletedTask;
 #endif
 
     #endregion

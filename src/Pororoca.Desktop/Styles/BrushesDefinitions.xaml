@@ -52,7 +52,16 @@
     <SolidColorBrush x:Key="MainWindowSidebarTabItemForegroundBrush" Color="{DynamicResource SystemBaseMediumHighColor}"/>
     <SolidColorBrush x:Key="MainWindowSidebarTabItemHoverForegroundBrush" Color="{DynamicResource SystemBaseHighColor}"/>
     <SolidColorBrush x:Key="MainWindowSidebarTabItemSelectedForegroundBrush" Color="{DynamicResource SystemBaseHighColor}"/>
+    <!--
+    lines below are necessary because for some weird reason, 
+    some brushes do not update when changing themes, 
+    especially when changing between dark themes.
+    -->
     <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrush" Color="{DynamicResource SystemBaseMediumHighColor}"/>
+    <SolidColorBrush x:Key="DataGridRowSelectedBackgroundBrush" Color="{DynamicResource SystemAccentColor}"/>
+    <SolidColorBrush x:Key="DataGridRowSelectedHoveredBackgroundBrush" Color="{DynamicResource SystemAccentColor}"/>
+    <SolidColorBrush x:Key="DataGridRowSelectedUnfocusedBackgroundBrush" Color="{DynamicResource SystemAccentColor}"/>
+    <SolidColorBrush x:Key="DataGridRowSelectedHoveredUnfocusedBackgroundBrush" Color="{DynamicResource SystemAccentColor}"/>
     <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked" Color="{DynamicResource SystemBaseHighColor}"/>
     <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPointerOver" Color="{DynamicResource SystemBaseHighColor}"/>
     <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPressed" Color="{DynamicResource SystemBaseLowColor}"/>

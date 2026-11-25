@@ -2,8 +2,11 @@ namespace Pororoca.Desktop.UITesting.Tests;
 
 public sealed partial class HttpRequestsUITest : PororocaUITest
 {
-    private async Task TestQueryByHeaders()
+    private async Task TestQueryByHeaders(CancellationToken cancellationToken)
     {
+        if (cancellationToken.IsCancellationRequested)
+            return;
+
         await HttpRobot.HttpMethod.Select("QUERY");
         await HttpRobot.Url.ClearAndTypeText("{{BaseUrl}}/test/query/fruits");
         await HttpRobot.SetEmptyBody();

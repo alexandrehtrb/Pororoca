@@ -16,7 +16,7 @@ public sealed class EditableTextBlockUITest : PororocaUITest
         TopMenuRobot = new(RootView);
     }
 
-    public override async Task RunAsync()
+    public override async Task RunAsync(CancellationToken cancellationToken)
     {
         await TopMenuRobot.CreateNewCollection();
 
