@@ -465,7 +465,7 @@ jobs:
         [void](mkdir "$TEMP_APP_OUTPUT_FOLDER/Contents/MacOS")
         [void](mkdir "$TEMP_APP_OUTPUT_FOLDER/Contents/Resources")
         Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/Info.plist" -Destination "$TEMP_APP_OUTPUT_FOLDER/Contents/"
-        Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/pororoca_big_sur_style.icns" -Destination "$TEMP_APP_OUTPUT_FOLDER/Contents/Resources/"        
+        Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/pororoca.icns" -Destination "$TEMP_APP_OUTPUT_FOLDER/Contents/Resources/"        
         Copy-Item -Force -Recurse -Path "$OUTPUT_FOLDER/*" -Destination "$TEMP_APP_OUTPUT_FOLDER/Contents/MacOS/"
         
         Remove-Item -Recurse -Force -Path "$OUTPUT_FOLDER/*"

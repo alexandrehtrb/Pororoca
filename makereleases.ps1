@@ -387,7 +387,7 @@ function Make-AppFolderIfMacOS
 		[void](mkdir "$tempAppOutputFolder/Contents/Resources")
 		Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/Info.plist" `
 				  -Destination "$tempAppOutputFolder/Contents/"
-		Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/pororoca_big_sur_style.icns" `
+		Copy-Item -Path "./src/Pororoca.Desktop.MacOSX/pororoca.icns" `
 				  -Destination "$tempAppOutputFolder/Contents/Resources/"
 		Copy-Item -Force -Recurse -Path "$outputFolder/*" -Destination "$tempAppOutputFolder/Contents/MacOS/"
 		Remove-Item -Recurse -Force -Path "$outputFolder/*"
