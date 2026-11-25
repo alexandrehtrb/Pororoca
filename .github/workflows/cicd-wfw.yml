@@ -717,7 +717,7 @@ jobs:
         # Sign .deb file
         keyId="$(echo -n $ALEXANDREHTRB_GPG_KEY_FINGERPRINT | tail -c 16)"
         
-        arr = ()
+        arr=()
         if [ "$LINUX_X64_INSTALLER" -eq "true" ]; then arr+=("amd64"); fi
         if [ "$LINUX_ARM64_INSTALLER" -eq "true" ]; then arr+=("arm64"); fi
         
