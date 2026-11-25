@@ -65,19 +65,28 @@ on:
         type: boolean
 
 jobs:
-  nuget_linux_osx:
-    if: ${{ inputs.nuget || inputs.linux_x64_portable || inputs.linux_x64_installers || inputs.macos_x64 || inputs.linux_arm64_portable || inputs.linux_arm64_installers || inputs.macos_arm64 }}
+  nuget_linux_osx_x64:
+    if: ${{ inputs.nuget || inputs.linux_x64_portable || inputs.linux_x64_installers || inputs.macos_x64 }}
     uses: ./.github/workflows/cicd-wfw.yml
     secrets: inherit
     with:
-      os: ubuntu-latest
+      os: ubuntu-26.04
       runCD: true
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
       producePororocaTestNuget: ${{ inputs.nuget }}
       produceTestServerLinuxX64: ${{ inputs.testServer_linux_x64 }}
       produceDesktopLinuxPortableX64: ${{ inputs.linux_x64_portable }}
       produceDesktopLinuxInstallersX64: ${{ inputs.linux_x64_installers }}
-      produceDesktopMacOSX64: ${{ inputs.macos_x64 }}      
+      produceDesktopMacOSX64: ${{ inputs.macos_x64 }}
+  
+  nuget_linux_osx_arm64:
+    if: ${{ inputs.nuget || inputs.linux_arm64_portable || inputs.linux_arm64_installers || inputs.macos_arm64 }}
+    uses: ./.github/workflows/cicd-wfw.yml
+    secrets: inherit
+    with:
+      os: ubuntu-26.04-arm
+      runCD: true
+      enableUITesting: ${{ inputs.enableDesktopUITesting }}   
       produceDesktopLinuxPortableArm64: ${{ inputs.linux_arm64_portable }}
       produceDesktopLinuxInstallersArm64: ${{ inputs.linux_arm64_installers }}
       produceDesktopMacOSArm64: ${{ inputs.macos_arm64 }}

@@ -83,12 +83,12 @@ jobs:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PR_NUMBER: ${{ github.event.number }}
 
-  nuget_linux_osx:
+  nuget_linux_osx_x64:
     needs: draft_github_release
     uses: ./.github/workflows/cicd-wfw.yml
     secrets: inherit
     with:
-      os: ubuntu-latest
+      os: ubuntu-26.04
       postUnitTestsCoverageInPR: true
       prNumber: ${{ github.event.number }}
       runCD: true
@@ -98,6 +98,16 @@ jobs:
       produceDesktopLinuxPortableX64: true
       produceDesktopLinuxInstallersX64: true
       produceDesktopMacOSX64: true
+
+  nuget_linux_osx_arm64:
+    needs: draft_github_release
+    uses: ./.github/workflows/cicd-wfw.yml
+    secrets: inherit
+    with:
+      os: ubuntu-26.04-arm
+      runCD: true
+      uploadArtifactsToRelease: true
+      enableUITesting: false
       produceDesktopLinuxPortableArm64: true
       produceDesktopLinuxInstallersArm64: true
       produceDesktopMacOSArm64: true
