@@ -925,13 +925,23 @@ jobs:
     # actions/upload-artifact@v7 allows uploading zip without double-zip,
     # but only one file at a time
     # https://github.com/actions/upload-artifact/issues/766
-    - name: Upload artifacts to workflow results (Windows machine)
+    - name: Upload artifacts to workflow results (Windows x64 machine)
       # no need if uploading to release
-      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) && (inputs.os == 'windows-latest') }}
+      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) && (inputs.os == 'windows-2025') }}
       uses: actions/upload-artifact@v7
       with:
         compression-level: 0 # artifacts already compressed
-        name: 'produced_artifacts_windows.zip'
+        name: 'produced_artifacts_windows_x64.zip'
+        path: './out/'
+        overwrite: true
+        
+    - name: Upload artifacts to workflow results (Windows arm64 machine)
+      # no need if uploading to release
+      if: ${{ inputs.runCD && (inputs.uploadArtifactsToRelease == false) && (inputs.os == 'windows-11-arm') }}
+      uses: actions/upload-artifact@v7
+      with:
+        compression-level: 0 # artifacts already compressed
+        name: 'produced_artifacts_windows_arm64.zip'
         path: './out/'
         overwrite: true
         

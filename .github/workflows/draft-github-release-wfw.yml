@@ -112,12 +112,12 @@ jobs:
       produceDesktopLinuxInstallersArm64: true
       produceDesktopMacOSArm64: true
 
-  win_installer_portable:
+  win_installer_portable_x64:
     needs: draft_github_release
     uses: ./.github/workflows/cicd-wfw.yml
     secrets: inherit
     with:
-      os: windows-latest
+      os: windows-2025
       runCD: true
       uploadArtifactsToRelease: true
       enableUITesting: false
@@ -125,5 +125,15 @@ jobs:
       produceDesktopWinX86Installer: true
       produceDesktopWinX64Portable: true
       produceDesktopWinX86Portable: true
+
+  win_installer_portable_arm64:
+    needs: draft_github_release
+    uses: ./.github/workflows/cicd-wfw.yml
+    secrets: inherit
+    with:
+      os: windows-11-arm
+      runCD: true
+      uploadArtifactsToRelease: true
+      enableUITesting: false
       produceDesktopWinArm64Installer: true
       produceDesktopWinArm64Portable: true

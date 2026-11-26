@@ -91,17 +91,26 @@ jobs:
       produceDesktopLinuxInstallersArm64: ${{ inputs.linux_arm64_installers }}
       produceDesktopMacOSArm64: ${{ inputs.macos_arm64 }}
 
-  win_installer_portable:
-    if: ${{ inputs.win_x64_installer || inputs.win_x86_installer || inputs.win_x64_portable || inputs.win_x86_portable || inputs.win_arm64_installer || inputs.win_arm86_installer }}
+  win_installer_portable_x64:
+    if: ${{ inputs.win_x64_installer || inputs.win_x86_installer || inputs.win_x64_portable || inputs.win_x86_portable }}
     uses: ./.github/workflows/cicd-wfw.yml
     secrets: inherit
     with:
-      os: windows-latest
+      os: windows-2025
       runCD: true
       enableUITesting: ${{ inputs.enableDesktopUITesting }}
       produceDesktopWinX64Installer: ${{ inputs.win_x64_installer }}
       produceDesktopWinX86Installer: ${{ inputs.win_x86_installer }}
       produceDesktopWinX64Portable: ${{ inputs.win_x64_portable }}
-      produceDesktopWinX86Portable: ${{ inputs.win_x86_portable }}      
+      produceDesktopWinX86Portable: ${{ inputs.win_x86_portable }}
+
+  win_installer_portable_arm64:
+    if: ${{ inputs.win_arm64_installer || inputs.win_arm86_installer }}
+    uses: ./.github/workflows/cicd-wfw.yml
+    secrets: inherit
+    with:
+      os: windows-11-arm
+      runCD: true
+      enableUITesting: ${{ inputs.enableDesktopUITesting }}   
       produceDesktopWinArm64Installer: ${{ inputs.win_arm64_installer }}
       produceDesktopWinArm64Portable: ${{ inputs.win_arm64_portable }}
